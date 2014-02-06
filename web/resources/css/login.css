@@ -1,0 +1,50 @@
+@charset "utf-8";
+/**RESET**/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: Arial, Helvetica, sans-serif; vertical-align: baseline;}
+:focus {outline: 0;}
+ol, ul {list-style: none;}
+strong {font-weight: bold;}
+/* CSS Document */
+body {background-color:#84A7CA; margin:0 auto;}
+.clear {display:block;clear:both;}
+.central {min-height: 100%; width: 950px; margin: 0 auto;}
+.block_left {display:block; width:410px; float:left;}
+.block_left_top {display:block; width:409px; height:264px; margin-bottom:4px; background:url(../images/LogoArteComCiencia.png) no-repeat #fff 34px 20px;}
+.block_left_midtop {display:block; width:409px; height:194px; background-color:#fff; margin-bottom:4px;}
+.block_left_midtop  p {padding:29px; text-align:justify;}
+.block_left_midbot{display:block; width:409px; height:80px; background-color:#fff; margin-bottom:4px;}
+.block_left_midbot p{padding:29px; text-align:justify;}
+.block_left_bot {display:block; width:409px; height:240px; background-color:#fff; margin-bottom:4px;}
+.companies_logos {display:block; width:372px; height:138px; background:url(../images/companies_logos.png) no-repeat 28px 12px;}
+.block_right {display:block; width:341px; float:left;}
+.login_box {display:block; width:410px; height:366px; margin:146px 0px 0px 146px; background-image:url(../images/login_box.png);}
+.open_name {display: block; font-weight:bold; font-size:18px; padding-top:122px; margin-bottom:30px;}
+.login_open {width:290px; height:100px; margin-left:48px;}
+.login_open p {float:left; margin-right:20px; margin-bottom:10px;}
+.login_open input[type="text"],.login_open input[type="password"] {width:200px; margin-bottom:9px;}
+.lost_password {text-decoration:underline; color:#000; display:block; margin-left:140px; padding-top:15px;font-size:12px;}
+.new_password_link{text-decoration:underline; color:#000;display:block; font-size:12px; width:230px}
+.secret_question_link{text-decoration:underline; color:#000;display:block; padding-top:15px;font-size:12px;width:200px}
+.button_back{display:block; margin:15px 0px 0px 230px; height:24px; cursor:pointer;background:url(../images/button_back.png);width:65px }
+.button_verify{background:url(../images/button_verify.png);width:73px;cursor:pointer}
+.button_send{background:url(../images/button_send.png);cursor:pointer;width:64px}
+.button_change{cursor:pointer;background:url(../images/button_change.png);width:65px}
+.enter_login {display:block; margin-left:230px; height:24px; cursor:pointer;background:url(../images/button_ok.png);width:35px}
+.link_register {display:block; color:#fff; font-size:20px; width:240px; margin-left:400px; margin-top:16px;}
+.link_register a {display:block; color:#000; margin-left:24px; margin-top:8px; text-decoration:none; border:1px solid #000; background-color: #fff; width:150px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
+.link_curriculum_finder {float:left; color:#fff; font-size:20px; width:280px; margin-left:80px;}
+.link_curriculum_finder a {display:block; color:#000; margin-left:60px; margin-top:8px; text-decoration:none; border:1px solid #000; background-color: #fff; width:150px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
+.bottom {display:block; height:93px; background:url(../images/bgfooter.png); margin-top:-44px; z-index:1; position:relative; }
+.bottom ul {position: relative; left: 150px;}
+.bottom_menu {padding: 42px 0px 0px 30px; width: 900px; text-align:right; font-size: 12px;}
+.bottom_menu li {display: inline; padding:0 0.4em; margin:0 auto; width:auto; background:none; border-right: 1px #000 solid; float:left;}
+.bottom_menu li a {color: #000;}
+.msg{font-size:11px;color:red;display:block;margin:-26px 0px 8px 0px}
+.new_pass{font-size:12px;margin-top:5px;float:left;width:76px;font-weight:bold}
+.secret_question{font-size:12px;font-weight:bold;float:left;}
+.powered_guigoh {background:url(../images/guigoh-logo.png) no-repeat right; display:block; width:956px; height:20px; padding-right: 34px; }
+.find_curriculum{text-decoration: none; margin:100px 87px 0 0; color:white; float:right; border:1px solid}
+.curriculum_finder_button{float:right; margin-top: -12px;color:#000; text-decoration:none; border:1px solid #000; background-color: #fff; width:140px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
+
+
+

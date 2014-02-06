@@ -1,0 +1,739 @@
+<ui:composition template="/resources/themes/default/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Profile</ui:define>
+    <ui:define name="scripts">
+        <link rel="shortcut icon" href="img/favicon.ico"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/wizard.css"></link>
+        <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
+        <link rel="stylesheet" href="/resources/css/jquery-multiselect-2.0.css" />
+        <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
+        <script src="/resources/js/jquery.mask.js"></script>
+        <script src="/resources/js/jquery-multiselect-2.0.js"></script>
+        <script src="/resources/js/locales/jquery-multiselect-2_pt.js"></script>
+        <script type="text/javascript" src="/resources/js/wizard.js"></script>
+        <script type="text/javascript" src="/resources/js/profile.js"></script>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/css/profile.css"></link>
+        <script type="text/javascript">
+            var books = #{profileBean.wizardProfileBean.books};
+            var musics = #{profileBean.wizardProfileBean.musics};
+            var movies = #{profileBean.wizardProfileBean.movies};
+            var sports = #{profileBean.wizardProfileBean.sports};
+            var hobbies = #{profileBean.wizardProfileBean.hobbies};
+            var occupations = #{profileBean.wizardProfileBean.occupations};
+            var experiencesLocation = #{profileBean.wizardProfileBean.experencesLocation};
+            var educationName = #{profileBean.wizardProfileBean.educationName};
+            var educationLocation = #{profileBean.wizardProfileBean.educationLocation};
+        </script>
+        <style type="text/css">
+            .multiselect {
+                width: 600px;
+                height: 200px;
+                margin-bottom: 70px;
+            }
+            #locales { padding-bottom:16px; }
+            div.debug_uiControls {
+                margin-top: 16px;
+            }
+            div.debug_log {
+                height: 100px;
+                overflow: auto;
+                border: 1px solid black;
+                padding: 8px;
+                margin-top: 16px;
+            }
+            .example-container {
+                overflow:visible;
+                width:100%;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewParam name="id" value="#{profileBean.id}" />
+            <f:event type="preRenderComponent" listener="#{profileBean.init()}"/>
+        </f:metadata>
+
+        <div id="content_box">
+            <div class="profile_menu">
+                <ul>
+                    <li class="social_profile" ><a tab="social" class="widget_profile" href="/">Perfil</a></li>
+                    <li class="social_curriculum" ><a tab="curriculum" class="widget_curriculum" href="/">Curriculum</a></li>
+                    <!--<li class="social_multimedia" ><a class="widget_multimedia" href="/">Multimídias</a></li>
+                    <li class="social_network" ><a class="widget_network" href="/">Rede de Amigos</a></li>-->
+                </ul>
+
+            </div>
+
+            <div class="tab" id="tab_social">
+                <h:panelGroup id="main_social">
+                    <h:form>
+                        <h:panelGroup id="panel1">
+                            <h:panelGroup id="profile1" rendered="#{profileBean.profileEdit1 == false}">
+                                <div class="profile_info" >
+                                    <div class="profile_avatar" style="background:url('#{profileBean.socialProfile.photo}') no-repeat center center;background-size:77px;">
+                                        <p class="resume">#{profileBean.socialProfile.description}</p>
+                                    </div>
+                                    <p class="name">#{profileBean.socialProfile.name}</p>
+                                    <p class="occupation">#{profileBean.socialProfile.occupationsId.name}</p>
+                                    <p class="email">#{profileBean.socialProfile.users.username}</p>
+                                    <h:panelGroup rendered="#{(profileBean.id != null) and (!profileBean.friendStatus.equals('Myself'))}">
+                                        <h:commandButton id="add_contact" styleClass="button_add_friend" rendered="#{profileBean.friendStatus.equals('Uninvited')}" value="Adicionar" action="#{profileBean.addFriend}"></h:commandButton>
+                                        <h:commandButton id="contact_added" styleClass="button_added_friend" rendered="#{profileBean.friendStatus.equals('Invited')}" value="Adicionado"></h:commandButton>
+                                        <h:commandButton id="contact_friend" styleClass="button_friend" rendered="#{profileBean.friendStatus.equals('Accepted')}" value="Amigo"></h:commandButton>
+                                        <p class="messageButton" name="#{profileBean.socialProfile.name}" socialprofileid="#{profileBean.socialProfile.socialProfileId}">+ Mensagem</p>
+                                    </h:panelGroup>
+                                    <h:commandLink styleClass="button_profile1" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}" value="editar" action="#{profileBean.execute()}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit1}" value="true"/>
+                                        <f:ajax event="action" render="panel1"></f:ajax>
+                                    </h:commandLink>
+                                </div>
+                                <h:panelGroup id="recommend_panel" rendered="#{profileBean.recommendPanel}">
+                                    <h:inputText id="searchFriends" value="#{profileBean.friendInputSearch}" autocomplete="off">
+                                        <f:ajax listener="#{profileBean.searchFriendEvent()}" execute="searchFriends" render="friends" event="keyup"/>
+                                    </h:inputText>
+                                    <h:selectOneMenu id ="friends" value="#{profileBean.receiver}">
+                                        <f:selectItems value="#{profileBean.friendList}" var="friends" itemValue="#{friends.tokenFriend2.username}" itemLabel="#{friends.tokenFriend2.socialProfile.name}" />
+                                    </h:selectOneMenu>
+                                    <h:inputTextarea value="#{profileBean.recommenderMessage}"></h:inputTextarea>
+                                    <h:commandButton value="enviar" action="#{profileBean.recommendFriend()}" ></h:commandButton>
+                                </h:panelGroup>
+
+                                <div class="profile_objects">
+                                    <p class="objects_name">Objetos Educacionais</p>
+                                    <div class="objects">
+                                        <p class="objects_info">Não há publicações nesse perfil.</p>
+                                        <div class="objects_documents"></div>
+                                        <div class="objects_images"></div>
+                                        <div class="objects_videos"></div>
+                                        <div class="objects_audios"></div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="profile1_edit" rendered="#{profileBean.profileEdit1 == true}">
+                                <div class="profile_info" >
+                                    <div class="profile_avatar" style="background:url('#{profileBean.socialProfile.photo}') no-repeat center center;background-size:77px;">
+                                        <p class="resume"><h:inputTextarea value="#{profileBean.socialProfile.description}"></h:inputTextarea></p>
+                                        <Button id ="alter_img" class="change_avatar" >Alterar</Button>
+
+
+                                    </div>
+                                    <span ></span>
+                                    <p class="name"><h:inputText value="#{profileBean.socialProfile.name}"></h:inputText></p>
+                                    <h:panelGroup>
+                                        <p class="occupation_edit">ÁREA DE OCUPAÇÃO</p>
+                                        <h:selectOneMenu class="occupation_menu" value="#{profileBean.socialProfile.occupationsId.occupationsTypeId.id}">
+                                            <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
+                                            <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
+                                            <f:ajax render="occupation" event="valueChange" listener="#{profileBean.wizardProfileBean.loadOccupations()}"/>
+                                        </h:selectOneMenu>
+
+                                        <h:inputText id="occupation" class="occupation_edit_name" value="#{profileBean.socialProfile.occupationsId.name}" disabled="#{profileBean.socialProfile.occupationsId.occupationsTypeId.id == 0}"></h:inputText>
+                                    </h:panelGroup>
+                                    <h:commandLink styleClass="button_profile1" value="salvar" action="#{profileBean.saveSocialProfile()}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit1}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel1"></f:ajax>
+                                    </h:commandLink >
+                                </div>
+                                <div class="profile_objects">
+                                    <p class="objects_name">Objetos Educacionais</p>
+                                    <div class="objects">
+                                        <p class="objects_info">Não há publicações nesse perfil.</p>
+                                        <div class="objects_documents"></div>
+                                        <div class="objects_images"></div>
+                                        <div class="objects_videos"></div>
+                                        <div class="objects_audios"></div>
+                                    </div>
+
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+                    <span class="clear"></span>
+                    <div class="profile_interests" >
+                        <p class="interests" >Temas de Interesse</p>
+                        <hr class="line" />
+                        <h:form>
+                            <h:panelGroup id="panel2">
+                                <h:panelGroup id="profile2" rendered="#{profileBean.profileEdit2 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit2}" value="true"/>
+                                        <f:ajax event="action" render="panel2"></f:ajax>
+                                    </h:commandLink>
+                                    <ul class="theme_buttons">
+                                        <ui:repeat value="#{profileBean.themesList}" var="themes">
+                                            <li ><a>#{themes.name}</a></li>
+                                        </ui:repeat>
+                                    </ul>
+                                </h:panelGroup>
+                                <h:panelGroup id="profile2_edit" rendered="#{profileBean.profileEdit2 == true}">
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.saveThemes()}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit2}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel2"></f:ajax>
+                                    </h:commandLink >
+                                    <div class="multiselect_box">
+                                        <h:selectManyListbox id="multiselect" class="multiselect"  value="#{profileBean.wizardProfileBean.multiThemeList}">
+                                            <f:selectItems value="#{profileBean.wizardProfileBean.themesListAll}" var="themes" itemValue="#{themes.id}" itemLabel="#{themes.name}" />
+                                        </h:selectManyListbox>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                    <span class="clear"></span>
+                    <div class="profile_cultural" >
+                        <p class="cultural" >Interesses Culturais</p>
+                        <hr class="line" />
+                        <h:form>
+                            <h:panelGroup id="panel3">
+                                <h:panelGroup id="profile3" rendered="#{profileBean.profileEdit3 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit3}" value="true"/>
+                                        <f:ajax event="action" render="panel3"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="int_cultural">
+                                        <span class="icon_book"></span>
+                                        <font>Livros</font>
+                                        <li class="cultural_item">
+                                            <ui:repeat rendered="#{!profileBean.booksList.isEmpty()}"  value="#{profileBean.booksList}" var="books">
+                                                <p>#{books.name}</p>
+                                            </ui:repeat>
+                                            <h:panelGroup rendered="#{profileBean.booksList.isEmpty()}">
+                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                            </h:panelGroup>    
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_music"></span>
+                                        <font>Música</font>
+                                        <li class="cultural_item">
+                                            <ui:repeat rendered="#{!profileBean.musicsList.isEmpty()}"  value="#{profileBean.musicsList}" var="music">
+                                                <p>#{music.name}</p>
+                                            </ui:repeat>
+                                            <h:panelGroup rendered="#{profileBean.musicsList.isEmpty()}">
+                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                            </h:panelGroup>    
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_movie"></span>
+                                        <font>Filmes</font>
+                                        <li class="cultural_item">
+                                            <ui:repeat rendered="#{!profileBean.moviesList.isEmpty()}"  value="#{profileBean.moviesList}" var="movies">
+                                                <p>#{movies.name}</p>
+                                            </ui:repeat>
+                                            <h:panelGroup rendered="#{profileBean.moviesList.isEmpty()}">
+                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                            </h:panelGroup>    
+                                        </li>
+                                    </ul>
+                                </h:panelGroup>
+                                <h:panelGroup id="profile3_edit" rendered="#{profileBean.profileEdit3 == true}">
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.saveCulture()}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit3}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel3"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="int_cultural">
+                                        <span class="icon_book"></span>
+                                        <font>Livros</font>
+                                        <li class="cultural_item">
+                                            <h:panelGroup>
+                                                <h:inputText id="books1" value="#{profileBean.booksList[0]}" class="request_form_books books1">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="books2" value="#{profileBean.booksList[1]}" class="request_form_books books2">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="books3" value="#{profileBean.booksList[2]}" class="request_form_books books3">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_music"></span>
+                                        <font>Música</font>
+                                        <li class="cultural_item">
+                                            <h:panelGroup>
+                                                <h:inputText id="musics1" value="#{profileBean.musicsList[0]}" class="request_form_music musics1">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="musics2" value="#{profileBean.musicsList[1]}" class="request_form_music musics2">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="musics3" value="#{profileBean.musicsList[2]}" class="request_form_music musics3">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_movie"></span>
+                                        <font>Filmes</font>
+                                        <li class="cultural_item">
+                                            <h:panelGroup>
+                                                <h:inputText id="movies1" value="#{profileBean.moviesList[0]}" class="request_form_cine movies1">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="movies2" value="#{profileBean.moviesList[1]}" class="request_form_cine movies2">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>  
+                                            <h:panelGroup>
+                                                <h:inputText id="movies3" value="#{profileBean.moviesList[2]}" class="request_form_cine movies3">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>   
+                                        </li>
+                                    </ul>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div> 
+                    <div class="profile_sports" >
+                        <p class="sports_hobbies" >Esportes e Hobbies</p>
+                        <hr class="line" />
+                        <h:form>
+                            <h:panelGroup id="panel4">
+                                <h:panelGroup id="profile4" rendered="#{profileBean.profileEdit4 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit4}" value="true"/>
+                                        <f:ajax event="action" render="panel4"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="int_cultural">
+                                        <span class="icon_sports"></span>
+                                        <font>Esportes</font>
+                                        <li class="cultural_item">
+                                            <ui:repeat rendered="#{!profileBean.sportsList.isEmpty()}"  value="#{profileBean.sportsList}" var="sports">
+                                                <p>#{sports.name}</p>
+                                            </ui:repeat>
+                                            <h:panelGroup rendered="#{profileBean.sportsList.isEmpty()}">
+                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                            </h:panelGroup>    
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_hobbies"></span>
+                                        <font>Hobbies</font>
+                                        <li class="cultural_item">
+                                            <ui:repeat rendered="#{!profileBean.hobbiesList.isEmpty()}"  value="#{profileBean.hobbiesList}" var="hobby">
+                                                <p>#{hobby.name}</p>
+                                            </ui:repeat>
+                                            <h:panelGroup rendered="#{profileBean.hobbiesList.isEmpty()}">
+                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                            </h:panelGroup>    
+                                        </li>
+                                    </ul>
+                                </h:panelGroup>
+                                <h:panelGroup id="profile4_edit" rendered="#{profileBean.profileEdit4 == true}">
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.saveSportsHobbies()}">
+                                        <f:setPropertyActionListener target="#{profileBean.profileEdit4}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel4"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="int_cultural">
+                                        <span class="icon_sports"></span>
+                                        <font>Esportes</font>
+                                        <li class="cultural_item">
+                                            <h:panelGroup>
+                                                <h:inputText id="sports1" value="#{profileBean.sportsList[0]}" class="request_form_sports sports1">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="sports2" value="#{profileBean.sportsList[1]}" class="request_form_sports sports2">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>  
+                                            <h:panelGroup>
+                                                <h:inputText id="sports3" value="#{profileBean.sportsList[2]}" class="request_form_sports sports3">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>  
+                                        </li>
+                                        <span class="clear"></span>
+                                        <span class="icon_hobbies"></span>
+                                        <font>Hobbies</font>
+                                        <li class="cultural_item">
+                                            <h:panelGroup>
+                                                <h:inputText id="hobbies1" value="#{profileBean.hobbiesList[0]}" class="request_form_hobbies hobbies1">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <h:inputText id="hobbies2" value="#{profileBean.hobbiesList[1]}" class="request_form_hobbies hobbies2">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>  
+                                            <h:panelGroup>
+                                                <h:inputText id="hobbies3" value="#{profileBean.hobbiesList[2]}" class="request_form_hobbies hobbies3">
+                                                    <f:converter converterId="InterestsConverter"></f:converter>
+                                                </h:inputText>
+                                            </h:panelGroup>   
+                                        </li>
+                                    </ul>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+            </div>
+
+          
+                <div id="tab_curriculum" class="tab">
+                    <div class="curriculum_info" >
+                        <div class="profile_avatar" style="background:url('#{profileBean.socialProfile.photo}') no-repeat center center;background-size:77px;">
+                        </div>
+                        <p class="name">#{profileBean.socialProfile.name}</p>
+                        <p class="occupation">#{profileBean.socialProfile.occupationsId.name}</p>
+                        <p class="email">#{profileBean.socialProfile.users.username}</p>
+                    </div>
+                    <div class="curriculum_info_left" >
+                        <h:form>
+                            <h:panelGroup id="panel_curriculum1">
+                                <h:panelGroup id="curriculum1" rendered="#{profileBean.curriculumEdit1 == false}" >
+                                    <h:commandLink styleClass="button_curriculum1" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit1}" value="true"/>
+                                        <f:ajax event="action" render="panel_curriculum1"></f:ajax>
+                                    </h:commandLink >
+                                    <h:commandLink id="button_pdf" class="button_download" action="#{profileBean.downloadPDF()}" value="Baixar PDF">
+                                         
+                                    </h:commandLink>
+                                    <font class="availability">Escolaridade: <span>#{profileBean.socialProfile.scholarityId.description}</span></font>
+                                    <font class="phone_number">Sexo: <span>#{(profileBean.socialProfile.gender.equals('M')) ? 'Masculino' : 'Feminino'}</span></font>
+                                    <font class="availability">Disponibilidade: <span>#{profileBean.socialProfile.availabilityId.description}</span></font>
+                                    <font class="phone_number">Telefone: <span>#{profileBean.socialProfile.phone}</span></font>
+
+                                </h:panelGroup>
+                                <h:panelGroup id="curriculum1_edit" rendered="#{profileBean.curriculumEdit1 == true}">
+                                    <h:commandLink styleClass="button_curriculum1" value="salvar" action="#{profileBean.saveSocialProfile()}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit1}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel_curriculum1"></f:ajax>
+                                    </h:commandLink >
+                                    <font class="scholarity">Escolaridade: <span>
+                                            <h:selectOneMenu value="#{profileBean.socialProfile.scholarityId.id}">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.scholarityList}" var="scholarity" itemValue="#{scholarity.id}" itemLabel="#{scholarity.description}" />
+                                            </h:selectOneMenu>
+                                        </span> </font>
+                                    <font class="gender">Sexo: <span>
+                                            <h:selectOneMenu value="#{profileBean.socialProfile.gender}">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="" />
+                                                <f:selectItem itemLabel = "Masculino" itemValue="M" />
+                                                <f:selectItem itemLabel = "Feminino" itemValue="F" />
+                                            </h:selectOneMenu>
+                                        </span> </font>
+                                    <font class="availability">Disponibilidade: <span>
+                                            <h:selectOneMenu value="#{profileBean.socialProfile.availabilityId.id}">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.availabitityListAll}" var="availabitity" itemValue="#{availabitity.id}" itemLabel="#{availabitity.description}" />
+                                            </h:selectOneMenu>
+                                        </span> </font>
+                                    <font class="phone_number">Telefone: <span><h:inputText id="phone" value="#{profileBean.socialProfile.phone}" class="request_phone phone"/></span></font>
+
+
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div> 	                       
+                    <span class="clear"></span>
+
+                    <div class="curriculum_address" >
+                        <span class="curriculum_icon_address"> </span> 
+                        <font class="address" >Endereço</font>
+                        <hr class="line2" />
+                        <h:form>
+                            <h:panelGroup id="panel_curriculum2">
+                                <h:panelGroup id="curriculum2" rendered="#{profileBean.curriculumEdit2 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit2}" value="true"/>
+                                        <f:ajax event="action" render="panel_curriculum2"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="text_curriculum">
+                                        <li class="text_left"><p>#{profileBean.socialProfile.address}, #{profileBean.socialProfile.complement}</p><p><h:outputText value="Nº" rendered="#{!(profileBean.socialProfile.number.length() == 0)}"></h:outputText> #{profileBean.socialProfile.number} - #{profileBean.socialProfile.neighborhood}</p></li>
+                                        <li class="text_right"><p>#{profileBean.socialProfile.cityId.name}, #{profileBean.socialProfile.stateId.name}, #{profileBean.socialProfile.countryId.name}</p><p>CEP: #{profileBean.socialProfile.zipcode}</p></li>
+                                    </ul>
+
+                                </h:panelGroup>
+                                <h:panelGroup id="curriculum2_edit" rendered="#{profileBean.curriculumEdit2 == true}" >
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.saveAddress()}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit2}" value="false"/>
+                                        <f:ajax execute="@form" event="action" render="panel_curriculum2"></f:ajax>
+                                    </h:commandLink >
+                                    <h:panelGroup styleClass="curriculum_edit_box">
+                                        <h:panelGrid class="curriculum2_edit_box_grid" columns="6">
+                                            <span class="edit_label">Endereço: </span><h:inputText id="address" value="#{profileBean.socialProfile.address}" class="request_form_street"/>
+                                            <span class="edit_label">Complemento: </span><h:inputText id="complement" value="#{profileBean.socialProfile.complement}" class="request_form_complement"/>
+                                            <h:outputText></h:outputText>
+                                            <h:outputText></h:outputText>
+                                            <span class="edit_label">Número: </span><h:inputText id="number" value="#{profileBean.socialProfile.number}" class="request_form_number"/>
+                                            <span class="edit_label">Bairro: </span><h:inputText id="neighborhood" value="#{profileBean.socialProfile.neighborhood}" class="request_form_district"/>
+                                            <span class="edit_label">CEP: </span><h:inputText id="zipcode" value="#{profileBean.socialProfile.zipcode}" class="request_form_cep zipcode"/>
+                                            <span class="edit_label">País: </span>
+                                            <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryId}" class="request_form_country">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                                <f:ajax event="valueChange" render="state city" listener="#{profileBean.wizardProfileBean.loadState}"/>
+                                            </h:selectOneMenu>
+
+                                            <span class="edit_label">Estado: </span>
+                                            <h:selectOneMenu id="state" value="#{profileBean.wizardProfileBean.stateId}" class="request_form_state">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.stateList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
+                                                <f:ajax event="valueChange" render="city" listener="#{profileBean.wizardProfileBean.loadCity()}"/>
+                                            </h:selectOneMenu>
+
+                                            <span class="edit_label">Cidade: </span>
+                                            <h:selectOneMenu id="city" value="#{profileBean.wizardProfileBean.cityId}" class="request_form_city">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
+                                            </h:selectOneMenu>
+                                            
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                    <span class="clear"></span> 
+                    <div class="curriculum_education" >
+                        <span class="curriculum_icon_educ"> </span> 				
+                        <font class="education" >Educação</font>
+                        <hr class="line2" />
+                        <h:form>
+                            <h:panelGroup id="panel_curriculum3">
+                                <h:panelGroup id="curriculum3" rendered="#{profileBean.curriculumEdit3 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit3}" value="true"/>
+                                        <f:ajax event="action" render="panel_curriculum3"></f:ajax>
+                                    </h:commandLink>
+                                    <ul class="text_curriculum">
+                                        <ui:repeat value="#{profileBean.educationsList}" var="education">
+                                            <li class="text_left"><p></p><p>#{education.locationId.name}</p><p>#{education.nameId.name}</p></li>
+                                            <li class="text_right">
+                                                <p> 
+                                                    <h:outputText value="#{education.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{education.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText>
+                                                </p>
+                                            </li>
+                                            <span class="clear"></span>
+                                        </ui:repeat>
+                                    </ul>
+
+                                </h:panelGroup>
+                                <h:panelGroup id="curriculum3_edit" rendered="#{profileBean.curriculumEdit3 == true}">
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.execute()}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit3}" value="false"/>
+                                        <f:ajax event="action" render="panel_curriculum3"></f:ajax>
+                                    </h:commandLink>
+                                    <h:panelGroup styleClass="curriculum_edit_box">
+                                        <h:panelGrid class="curriculum3_edit_box_grid" columns="6">
+                                            <span class="edit_label">Nome do curso: </span>
+                                            <h:inputText id="education_name" value="#{profileBean.wizardProfileBean.education.nameId.name}"  class="request_form_course educationName"
+                                                         required="true" requiredMessage="* O campo 'NOME DO CURSO' é obrigatório">
+                                                <f:validateBean disabled="true"/>
+                                            </h:inputText>
+                                            <span class="edit_label">Período: </span>
+                                            <h:inputText id="dateBeginEducation" value="#{profileBean.wizardProfileBean.educationDataBegin}" 
+                                                         label="Date Begin" styleClass="date" class="request_form_period_begin dateMMyyyy">
+                                                
+                                            </h:inputText>
+                                            <span class="edit_label"> Até </span>
+                                            <h:inputText id="dateEndEducation" value="#{profileBean.wizardProfileBean.educationDataEnd}" 
+                                                         label="Date End" styleClass="date" class="request_form_period_end dateMMyyyy">
+                                                
+                                            </h:inputText>
+                                            <span class="edit_label">Instituição de Ensino: </span>
+                                            <h:inputText id="educationLocation" value="#{profileBean.wizardProfileBean.education.locationId.name}" class="request_form_institution educationLocation"
+                                                         required="true" requiredMessage="* O campo 'INSTITUIÇÃO DE ENSINO' é obrigatório">
+                                                <f:validateBean disabled="true"/>
+                                            </h:inputText>   
+                                            <span class="edit_label">País: </span>
+                                            <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryEducationId}" class="request_form_country"
+                                                             required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                                <f:ajax event="valueChange" render="stateEducation" listener="#{profileBean.wizardProfileBean.loadStateEducaitons()}"/>
+                                            </h:selectOneMenu>
+                                            <span class="edit_label">Estado: </span>
+                                            <h:selectOneMenu id="stateEducation" value="#{profileBean.wizardProfileBean.stateEducationId}" class="request_form_state"
+                                                             required="true" requiredMessage="* O campo 'ESTADO' é obrigatório">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.stateEducationList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
+                                            </h:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:commandLink class="button_add" value="Adicionar" action="#{profileBean.addEducations()}">
+                                        <f:ajax execute="@form" event="action" render="@form"/>
+                                    </h:commandLink>
+
+
+                                    <h:panelGroup id="listEducations">
+                                        
+                                        <ul class="text_curriculum">
+                                            <li><h:messages errorClass="error" infoClass="info"></h:messages></li>
+                                            <li></li>
+                                            <br/>
+                                            <ui:repeat value="#{profileBean.educationsList}" var="education" rendered="#{profileBean.educationsList.size() > 0}">
+                                                <li class="text_left"><p></p><p>#{education.locationId.name}</p><p>#{education.nameId.name}</p></li>
+                                                <li class="text_right">
+                                                    <p> 
+                                                        <h:outputText value="#{education.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{education.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText>
+                                                        <h:commandButton id ="remove_education" styleClass="remove_button" value="x" action="#{profileBean.removeEducation(education)}">
+                                                            <f:ajax execute="remove_education" render="@form"/>
+                                                        </h:commandButton>
+                                                    </p>
+                                                </li>
+
+
+                                            </ui:repeat>
+                                        </ul>
+
+                                    </h:panelGroup>
+
+
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                    <span class="clear"></span>
+                    <div class="curriculum_experience" >
+                        <span class="curriculum_icon_exp"> </span> 				
+                        <font class="experience" >Experiência</font>
+                        <hr class="line2" />
+                        <h:form>
+                            <h:panelGroup id="panel_curriculum4">
+                                <h:panelGroup id="curriculum4" rendered="#{profileBean.curriculumEdit4 == false}">
+                                    <h:commandLink styleClass="button" value="editar" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit4}" value="true"/>
+                                        <f:ajax event="action" render="panel_curriculum4"></f:ajax>
+                                    </h:commandLink >
+                                    <ul class="text_curriculum">
+                                        <ui:repeat value="#{profileBean.experiencesList}" var="experience">
+                                            <li class="text_left"><p></p><p>#{experience.locationId.name}</p><p>#{experience.nameId.name}</p></li>
+                                            <li class="text_right"><p> <h:outputText value="#{experience.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{experience.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText></p></li>
+
+
+                                        </ui:repeat>
+                                    </ul>
+
+                                    <span class="clear"></span>
+                                </h:panelGroup>
+                                <h:panelGroup id="curriculum4_edit" rendered="#{profileBean.curriculumEdit4 == true}">
+                                    <h:commandLink styleClass="button" value="salvar" action="#{profileBean.execute()}">
+                                        <f:setPropertyActionListener target="#{profileBean.curriculumEdit4}" value="false"/>
+                                        <f:ajax event="action" render="panel_curriculum4"></f:ajax>
+                                    </h:commandLink >
+                                    <h:panelGroup styleClass="curriculum_edit_box">
+                                        
+                                        <h:panelGrid styleClass="curriculum4_edit_box_grid" columns="6">
+                                            
+                                            <span class="edit_label">Área da atividade</span>
+                                            <h:selectOneMenu value="#{profileBean.wizardProfileBean.experience.nameId.occupationsTypeId.id}"
+                                                              requiredMessage="* O campo 'ÁREA DA ATIVIDADE' é obrigatório"
+                                                             class="request_form_areaactivity">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="" />  
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
+                                            </h:selectOneMenu>
+                                            <h:outputText></h:outputText>
+                                            <h:outputText></h:outputText>
+                                            <h:outputText></h:outputText>
+                                            <h:outputText></h:outputText>
+                                          
+                                            
+        
+                                            <span class="edit_label">Nome da Atividade: </span>
+                                            <h:inputText id="activity" value="#{profileBean.wizardProfileBean.experience.nameId.name}" class="request_form_activity activity"
+                                                         required="true" requiredMessage="* O campo 'NOME DA ATIVIDADE' é obrigatório">
+                                                <f:validateBean disabled="true"/>
+                                            </h:inputText>
+                                            <span class="edit_label">Período: </span>
+                                            <h:inputText id="dateBeginExperience" value="#{profileBean.wizardProfileBean.experienceDataBegin}" 
+                                                         label="Date Begin" styleClass="date" class="request_form_period_begin dateMMyyyy">
+                                                
+                                            </h:inputText>
+                                            <span class="edit_label">Até</span>
+                                            <h:inputText id="dateEndExperience" value="#{profileBean.wizardProfileBean.experienceDataEnd}" 
+                                                         label="Date End" styleClass="date" class="request_form_period_end dateMMyyyy">
+                                                
+                                            </h:inputText>
+                                            <span class="edit_label">Nome da Empresa: </span>
+                                            <h:inputText class="request_form_business experiencesLocation" value="#{profileBean.wizardProfileBean.experience.locationId.name}"
+                                                         required="true" requiredMessage="* O campo 'NOME DA EMPRESA' é obrigatório">
+                                                <f:validateBean disabled="true"/>
+                                            </h:inputText>
+                                            <span class="edit_label">País: </span>
+                                            <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryExperienceId}" class="request_form_country"
+                                                             required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.countryExperienceList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                                <f:ajax event="valueChange" render="stateExperience" listener="#{profileBean.wizardProfileBean.loadStateExperiences()}"/>
+                                            </h:selectOneMenu>
+
+                                            <span class="edit_label">Estado: </span>
+                                            <h:selectOneMenu id="stateExperience" value="#{profileBean.wizardProfileBean.stateExperienceId}" class="request_form_state"
+                                                             required="true" requiredMessage="* O campo 'ESTADO' é obrigatório">
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                <f:selectItems value="#{profileBean.wizardProfileBean.stateExperienceList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
+                                            </h:selectOneMenu>
+                                        </h:panelGrid>
+                                    </h:panelGroup>
+                                    <h:commandLink class="button_add" value="Adicionar" action="#{profileBean.addExperiences()}">
+                                        <f:ajax execute="@form" event="action" render="@form"/>
+                                    </h:commandLink>
+
+
+                                    <h:panelGroup id="listExperiences">
+
+
+                                        <ul class="text_curriculum">
+                                            <li><h:messages errorClass="error" infoClass="info"></h:messages></li>
+                                            <li></li>
+                                            <br/>
+                                            <ui:repeat value="#{profileBean.experiencesList}" var="experience" rendered="#{profileBean.experiencesList.size() > 0}">
+                                                <li class="text_left"><p></p><p>#{experience.locationId.name}</p><p>#{experience.nameId.name}</p></li>
+                                                <li class="text_right">
+                                                    <p> 
+                                                        <h:outputText value="#{experience.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{experience.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText>
+                                                        <h:commandButton id ="remove_experiences" styleClass="remove_button" value="x" action="#{profileBean.removeExperience(experience)}">
+                                                            <f:ajax event="action" execute="remove_experiences" render="@form"/>
+                                                        </h:commandButton>
+                                                    </p>
+                                                </li>
+                                                <br/><br/>
+
+                                            </ui:repeat>
+
+                                        </ul>
+
+
+                                    </h:panelGroup>
+
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:form>
+                    </div>
+                    <span class="clear"></span>
+                </div>
+          
+
+        </div>
+
+        <div id="dialog-form" class="dialog" title="Alterar Imagem">
+            <fieldset>
+                <form action="Upload" method="POST" enctype="multipart/form-data">
+                    <label>Selecione a foto:</label>
+                    <input type="file" name="file" id="filechoose" />
+                    <input type="submit" />
+                </form>
+            </fieldset>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,141 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.guigoh.primata.bean;
+
+import com.guigoh.primata.bo.FriendsBO;
+import com.guigoh.primata.bo.MessengerMessagesBO;
+import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.entity.Friends;
+import com.guigoh.primata.entity.MessengerMessages;
+import com.guigoh.primata.entity.SocialProfile;
+import com.guigoh.primata.entity.Users;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ *
+ * @author IPTI
+ */
+@ViewScoped
+@ManagedBean(name = "messagesBean")
+public class MessagesBean {
+
+    private Users user;
+    private List<SocialProfile> contactsList;
+    private List<MessengerMessages> messagesList;
+    private SocialProfile contactSocialProfile;
+    private SocialProfile socialProfile;
+    private Boolean isCurriculum;
+
+    public void init() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            user = new Users();
+            SocialProfileBO spBO = new SocialProfileBO();
+            contactSocialProfile = new SocialProfile();
+            messagesList = new ArrayList<MessengerMessages>();
+            loadUserCookie();
+            socialProfile = spBO.findSocialProfile(user.getToken());
+            loadContacts();
+        }
+    }
+
+    private void loadContacts() {
+        MessengerMessagesBO mmBO = new MessengerMessagesBO();
+        SocialProfileBO spBO = new SocialProfileBO();
+        contactsList = new ArrayList<SocialProfile>();
+        contactsList = mmBO.getAllContacts(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
+
+    }
+
+    private void loadUserCookie() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().trim().equalsIgnoreCase("user")) {
+                    user.setUsername(cookie.getValue());
+                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
+                    user.setToken(cookie.getValue());
+                }
+            }
+        }
+    }
+    
+    public void getCurriculumMessages(){
+        isCurriculum = true;
+        MessengerMessagesBO mmBO = new MessengerMessagesBO();
+        SocialProfileBO spBO = new SocialProfileBO();
+        messagesList = mmBO.getAllCurriculumMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
+    }
+    
+    public String goToProfile(Integer id) {
+        return "/primata/profile/viewProfile.xhtml?id=" + id;
+    }
+
+    public void getMessages(Integer socialProfileId) {
+        isCurriculum = false;
+        MessengerMessagesBO mmBO = new MessengerMessagesBO();
+        SocialProfileBO spBO = new SocialProfileBO();
+        messagesList = mmBO.getAllMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
+        contactSocialProfile = spBO.findSocialProfileBySocialProfileId(socialProfileId);
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public List<SocialProfile> getContactsList() {
+        return contactsList;
+    }
+
+    public void setContactsList(List<SocialProfile> contactsList) {
+        this.contactsList = contactsList;
+    }
+
+    public List<MessengerMessages> getMessagesList() {
+        return messagesList;
+    }
+
+    public void setMessagesList(List<MessengerMessages> messagesList) {
+        this.messagesList = messagesList;
+    }
+
+    public SocialProfile getContactSocialProfile() {
+        return contactSocialProfile;
+    }
+
+    public void setContactSocialProfile(SocialProfile contactSocialProfile) {
+        this.contactSocialProfile = contactSocialProfile;
+    }
+
+    public SocialProfile getSocialProfile() {
+        return socialProfile;
+    }
+
+    public void setSocialProfile(SocialProfile socialProfile) {
+        this.socialProfile = socialProfile;
+    }
+
+    public Boolean getIsCurriculum() {
+        return isCurriculum;
+    }
+
+    public void setIsCurriculum(Boolean isCurriculum) {
+        this.isCurriculum = isCurriculum;
+    }
+    
+    
+}

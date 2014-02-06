@@ -1,0 +1,74 @@
+<ui:composition template="/resources/themes/default/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Home</ui:define>
+    <ui:define name="content">
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/home.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/theme.css"></link>
+        <script type="text/javascript" src="/resources/js/theme.js"></script>
+        <script type="text/javascript">
+            var theme_id = #{themeBean.id};
+        </script>
+        <f:metadata>
+            <f:viewParam name="id" value="#{themeBean.id}" />
+            <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
+        </f:metadata>
+        <script type="text/javascript" src="/resources/js/home.js"></script>
+        <h:form>
+            <h:outputText styleClass="theme_title" value="#{themeBean.interest.name}"></h:outputText>
+            <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
+                <f:selectItem itemLabel = "Tags..." itemValue="" />
+                <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
+                <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
+            </h:selectOneMenu>
+            <h:inputText id="search" styleClass="general_search_input" value="#{themeBean.generalSearch}" autocomplete="off">
+                <f:ajax listener="#{themeBean.generalSearchEvent()}" execute="search" render="theme_box" event="keyup"/>
+            </h:inputText>
+            <input type="button" value="" title="Pesquisar em contatos" class="general_search_submit" />
+            <h:panelGroup id="theme_box" styleClass="theme_box">	
+                <h:form>
+                    <h:panelGroup styleClass="discussion_topics_box">
+                        <h:outputText styleClass="discussion_topics_title" value="LISTA DE DISCUSSÃO"></h:outputText>
+                        <h:link styleClass="discussion_topic_new" outcome="/primata/discussion/createTopic.xhtml" >
+                            <f:param name="id" value="#{themeBean.id}" />
+                            <f:param name="files" value="0" />
+                        </h:link>
+                        <h:panelGroup styleClass="discussion_topics">
+                            <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">
+                                <h:panelGroup styleClass="discussion_topic">
+                                    <h:link styleClass="discussion_topic_link" outcome="/primata/discussion/viewTopic.xhtml">
+                                        <f:param name="id" value="#{discussionTopic.id}" />
+                                        <f:param name="files" value="0" />
+                                        <h:outputText styleClass="discussion_topic_user_photo" style="background:url('#{discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:outputText>
+                                        <h:outputText styleClass="discussion_topic_user_title" value="#{discussionTopic.title}"></h:outputText>
+                                    </h:link>
+                                    <h:outputText styleClass="discussion_topic_user_sendTime" value="#{discussionTopic.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
+                                    <h:outputText styleClass="discussion_topic_clock"></h:outputText>
+                                    <br/>
+                                    <h:outputText value="por" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
+                                    <h:outputText styleClass="discussion_topic_description" value="#{discussionTopic.body}"></h:outputText>
+                                    <ui:repeat value="#{discussionTopic.tagsCollection}" var="tag">
+                                        <h:outputText styleClass="discussion_topic_tag" value="##{tag.name}"></h:outputText>
+                                    </ui:repeat>
+                                    <h:outputText styleClass="discussion_topic_answers" value="#{discussionTopic.discussionTopicMsgCollection.size()} respostas"></h:outputText>
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup styleClass="publication_objects_box">
+                        <h:outputText styleClass="publication_objects_title" value="OBJETOS EDUCACIONAIS"></h:outputText>
+                        <h:panelGroup styleClass="publication_objects">
+
+                        </h:panelGroup>
+                        <a class="publication_new_object" href="/ts/submit.do" ></a>
+                    </h:panelGroup> 
+                </h:form>
+                <span class="clear"></span>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>

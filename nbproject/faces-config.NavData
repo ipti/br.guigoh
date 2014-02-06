@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="primata/home.xhtml" x="369" y="108" zoom="true"/>
+        <Node id="primata/users/register.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="primata/profile/wizardProfile.xhtml" x="650" y="300" zoom="false"/>
+        <Node id="primata/login/default.xhtml" x="400" y="300" zoom="false"/>
+        <Node id="primata/profile/editProfile.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="*" x="650" y="150" zoom="true"/>
+        <Node id="primata/profile/viewProfile.xhtml" x="51" y="111" zoom="true"/>
+        <Node id="primata/login/index.xhtml" x="400" y="450" zoom="true"/>
+        <Node id="primata/auth/login.xhtml" x="150" y="300" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

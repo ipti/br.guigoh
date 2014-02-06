@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="shortcut icon" href="img/favicon.ico"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/general.css"></link>
+        <script src="/resources/js/jquery-1.9.1.js"></script>
+        <ui:insert name="scripts"></ui:insert>
+        <script type="text/javascript">
+            var logged_social_profile_id = #{headerBean.socialProfile.socialProfileId};
+        </script>
+        <script type="text/javascript" src="/resources/js/messenger.js"></script>
+        <title><ui:insert name="title"></ui:insert></title>
+    </h:head>
+    <body>
+        <ui:include src="/resources/themes/default/header.xhtml"></ui:include>
+        <div id="content" >
+            <ui:insert name="content"></ui:insert>
+        </div>
+        <div class="curriculum_container">
+            <ul class="curriculum_pop_ups">
+
+            </ul>
+        </div>
+        <div class="messenger_container">
+            <div class="messenger">
+                <span>Amigos<strong>(0)</strong></span>
+                <ul id="messenger_friends"></ul>
+            </div>
+            <ul class="messenger_boxes"></ul>
+        </div>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-41792178-1', 'guigoh.com');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

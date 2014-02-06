@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+    </h:head>
+    <f:metadata>
+        <f:event type="preRenderComponent" listener="#{headerBean.init()}"/>
+    </f:metadata>
+    <h:form>
+        <body>
+            <div id="general">
+                <div id="menu">
+                    <ul class="top_menu">
+                        <h:outputText styleClass="registered_users_quantity" rendered="#{headerBean.adminOK}" value="#{headerBean.registeredUsersCount} usuários cadastrados | #{headerBean.registeredUsersOnline} on-line |"></h:outputText>
+                        <!--<li class="first"><a href="/">Administrador</a></li>
+                        <li ><span></span><a href="/">Idioma</a></li>
+                        <li ><span></span><a href="/">Reportar Erros</a></li>
+                        <li ><span></span><a href="/">Sobre</a></li>
+                        <li ><span></span><a href="/">Ajuda</a></li>-->
+                        <li class="first"><h:commandLink action="/primata/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.adminOK || headerBean.reviserOK}">Admin</h:commandLink></li>
+                        <li class="first"><h:commandLink action="#{authBean.logout()}">Sair</h:commandLink></li>
+                    </ul>
+                    <div class="mid_menu">
+                        <a href="/"><span class="img_logo"></span></a>
+                        <ul>
+                            <li class="menu home" ><a href="/primata/home.xhtml">Inicio</a></li>
+                            <li class="menu profile" ><a href="/primata/profile/viewProfile.xhtml">Perfil</a></li>
+                            <li class="menu contacts" ><a href="/primata/friends/viewFriends.xhtml">Contatos</a></li>
+                            <li class="menu environment" ><a href="/ts">Ambiente de Publicação</a></li>   
+                        </ul>
+                        <div class="log_menu">
+                            <p class="welcome">Bem Vindo,</p>
+                            <a id="user_name" href="/primata/profile/viewProfile.xhtml">#{headerBean.socialProfile.name}</a>
+                            <a href="/primata/profile/viewProfile.xhtml"><img src="#{headerBean.socialProfile.photo}" class="img_avatar"/></a>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </body>
+    </h:form>
+</html>

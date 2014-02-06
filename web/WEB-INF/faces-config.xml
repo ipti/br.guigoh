@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
+
+    <application></application>
+    <lifecycle>
+        <phase-listener>com.guigoh.primata.bean.AuthorizeListener</phase-listener>
+    </lifecycle>
+
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>islogged</from-outcome>
+            <to-view-id>/primata/home.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/primata/auth/login.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>profile</from-outcome>
+            <to-view-id>/primata/profile/viewProfile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>email</from-outcome>
+            <to-view-id>/primata/users/confirmEmail.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule> 
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>wizard</from-outcome>
+            <to-view-id>/primata/profile/wizardProfile.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>   
+</faces-config>

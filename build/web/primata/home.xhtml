@@ -1,0 +1,56 @@
+<ui:composition template="/resources/themes/default/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Home</ui:define>
+    <ui:define name="content">
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/home.css"></link>
+        <f:metadata>
+            <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
+        </f:metadata>
+        <script type="text/javascript" src="/resources/js/home.js"></script>
+        <h:form>
+            <h:outputText styleClass="home_title" value="Início"></h:outputText>
+            <div class="home_box">
+                <h:panelGroup styleClass="left_column">
+                    <h:panelGroup styleClass="interest_themes_label_box">
+                        <h:outputText styleClass="interest_themes_label" value="TEMAS DE INTERESSE"></h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup styleClass="interest_themes">
+                        <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
+                            <h:link styleClass="interest_theme" outcome="/primata/theme/theme.xhtml?id=#{theme.id}">
+                                <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.md5(theme.name)}.png')"></h:outputText>
+                                <h:outputText styleClass="theme_label" value="#{theme.name}"></h:outputText>
+                            </h:link>
+                        </ui:repeat>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup styleClass="middle_column">
+                    <h:outputText styleClass="last_objects_label" value="ÚLTIMOS OBJETOS EDUCACIONAIS PUBLICADOS"/>
+                    <a class="publish_new_object" href="/ts/submit.do" ></a>
+                    <div id="list_objects" class="list_objects"></div>
+                    <h:panelGroup styleClass="more_objects">
+                        <span id="more_objects_label">+ mais</span>
+                        <span id="more_objects_icon"></span>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup styleClass="right_column">
+                    <h:outputText styleClass="network_news" value="NOVIDADES NA REDE"/>
+                    <h:panelGroup class="user_feed">
+                        <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
+                            <h:link styleClass="publisher_image" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
+                            <h:panelGroup styleClass="text_feed">
+                                <h:link styleClass="user_news_name" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" value="#{newActivity.socialProfile.name}"></h:link>
+                                <h:outputText value="criou o tópico" rendered="#{newActivity.type.equals('T')}"/>
+                                <h:outputText value="comentou no tópico" rendered="#{newActivity.type.equals('M')}"/>
+                                <h:outputText styleClass="social_news_name" value="&quot;#{newActivity.title}&quot;"/>
+                            </h:panelGroup>
+                        </ui:repeat>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <span class="clear"></span>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

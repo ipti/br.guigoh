@@ -1,0 +1,208 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML class=no_js lang=pt id=facebook><HEAD><TITLE id=pageTitle>Atualize seu navegador | Facebook</TITLE>
+<META charset=utf-8>
+<SCRIPT>function envFlush(a){function b(c){for(var d in a)c[d]=a[d];}if(window.requireLazy){requireLazy(['Env'],b);}else{Env=window.Env||{};b(Env);}}envFlush({"user":"0","locale":"pt_BR","method":"GET","svn_rev":835869,"tier":"","push_phase":"V3","pkg_cohort":"EXP1:DEFAULT","vip":"31.13.73.17","www_base":"http:\/\/www.facebook.com\/","fb_dtsg":"AQAugzsw","ajaxpipe_token":"AXgKig6NqM6xaq2h","lhsh":"eAQGfDCih","tracking_domain":"https:\/\/pixel.facebook.com","cookie_count_limit":9,"retry_ajax_on_network_error":"1","fbid_emoticons":"1"});</SCRIPT>
+
+<SCRIPT>CavalryLogger=false;</SCRIPT>
+<NOSCRIPT>
+<META http-equiv=refresh 
+content="0; URL=/unsupportedbrowser?_fb_noscript=1"></NOSCRIPT>
+<META content="noodp, noydir" name=robots>
+<META id=meta_referrer content=default name=referrer><LINK media=handheld 
+href="https://www.facebook.com/unsupportedbrowser" rel=alternate><LINK 
+href="https://fbstatic-a.akamaihd.net/rsrc.php/yS/r/_wdO2ASxT5b.ico" 
+rel="shortcut icon"><NOSCRIPT>
+<META http-equiv=X-Frame-Options content=deny></NOSCRIPT><LINK 
+href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yN/r/LiCls5J3gY8.css" 
+rel=stylesheet><LINK 
+href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/y8/r/NJNsCaKgf-y.css" 
+rel=stylesheet><LINK 
+href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yF/r/eRT2uCcQv6u.css" 
+rel=stylesheet><LINK 
+href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yt/r/HL1842jTvgZ.css" 
+rel=stylesheet>
+<SCRIPT src="" crossorigin="anonymous"></SCRIPT>
+
+<SCRIPT>window.Bootloader && Bootloader.done(["KVIO4"]);</SCRIPT>
+
+<SCRIPT>new (require("ServerJS"))().handle({"require":[["removeArrayReduce"],["markJSEnabled"],["lowerDomain"],["URLFragmentPrelude"],["Primer"]],"define":[["BanzaiConfig",[],{"MAX_WAIT":60000,"MAX_SIZE":10000,"COMPRESSION_THRESHOLD":800,"gks":{"jslogger":true,"miny_compression":true,"boosted_posts":true,"time_spent":true,"time_spent_bit_array":true,"time_spent_debug":true,"useraction":true,"videos":true}},7],["URLFragmentPreludeConfig",[],{"hRedirect":false,"incorporateQuicklingFragment":true},137]]})</SCRIPT>
+
+<META content="MSHTML 6.00.3790.4904" name=GENERATOR></HEAD>
+<BODY class="unsupportedBrowser fbx UIPage_LoggedOut ie6 win Locale_pt_BR">
+<DIV class=-cx-PRIVATE-fbLayout__root>
+<DIV class="pam fbPageBanner hidden_elem uiBoxYellow noborder" 
+id=outdatedBrowserBanner style="TEXT-ALIGN: center">
+<DIV class=fbPageBannerInner><I class="mrm img sp_lw2tz9 sx_da2158" 
+style="VERTICAL-ALIGN: bottom"></I><SPAN class="pts fsl fwb">Para uma melhor 
+experiência no Facebook, <A href="http://m.facebook.com/">mude para o nosso site 
+básico</A> ou <A href="https://www.facebook.com/unsupportedbrowser">atualize seu 
+navegador</A>.</SPAN></DIV></DIV>
+<DIV id=pagelet_bluebar data-referrer="pagelet_bluebar">
+<DIV id=blueBarHolder>
+<DIV id=blueBar>
+<DIV>
+<DIV class=loggedout_menubar_container>
+<DIV class="clearfix loggedout_menubar"><A class=lfloat 
+title="Ir para a página inicial do Facebook" href="https://www.facebook.com/"><I 
+class="fb_logo img sp_e2gpgs sx_584554"><U>Logotipo do Facebook</U></I></A>
+<DIV class="menu_login_container rfloat">
+<FORM id=login_form 
+onsubmit="return window.Event &amp;&amp; Event.__inlineSubmit &amp;&amp; Event.__inlineSubmit(this,event)" 
+action=https://www.facebook.com/login.php?login_attempt=1 method=post><INPUT 
+type=hidden value=AVrXzO2V name=lsd autocomplete="off">
+<TABLE cellSpacing=0>
+  <TBODY>
+  <TR>
+    <TD class=html7magic><LABEL for=email>E-mail ou telefone</LABEL></TD>
+    <TD class=html7magic><LABEL for=pass>Senha</LABEL></TD></TR>
+  <TR>
+    <TD><INPUT class=inputtext id=email tabIndex=1 name=email></TD>
+    <TD><INPUT class=inputtext id=pass tabIndex=2 type=password name=pass></TD>
+    <TD><LABEL class="uiButton uiButtonConfirm" id=loginbutton for=u_0_1><INPUT id=u_0_1 tabIndex=4 type=submit value=Entrar></LABEL></TD></TR>
+  <TR>
+    <TD class=login_form_label_field>
+      <DIV>
+      <DIV class="uiInputLabel clearfix"><INPUT class=uiInputLabelCheckbox 
+      id=persist_box tabIndex=3 type=checkbox value=1 name=persistent><LABEL 
+      for=persist_box>Mantenha-me conectado</LABEL></DIV><INPUT type=hidden 
+      value=0 name=default_persistent></DIV></TD>
+    <TD class=login_form_label_field><A 
+      href="http://www.facebook.com/recover/initiate" rel=nofollow>Esqueceu sua 
+      senha?</A></TD></TR></TBODY></TABLE><INPUT id=next type=hidden 
+value=https://www.facebook.com/unsupportedbrowser name=next 
+autocomplete="off"><INPUT id=u_0_0 type=hidden name=timezone 
+autocomplete="off"><INPUT type=hidden value=081155_4sUm name=lgnrnd><INPUT 
+id=lgnjs type=hidden value=n name=lgnjs><INPUT id=locale type=hidden value=pt_BR 
+name=locale autocomplete="off"></FORM></DIV></DIV></DIV></DIV></DIV></DIV></DIV>
+<DIV class=uiContextualLayerParent id=globalContainer>
+<DIV class="fb_content clearfix" id=content>
+<DIV class=UIFullPage_Container>
+<DIV class="pvl unsupportedBrowserPage">
+<DIV class="pam unsupportedBrowserBox uiBoxWhite">
+<H1 
+class="ptl pbm -cx-PRIVATE-fbMarketingText__huge -cx-PRIVATE-fbMarketingText__dark -cx-PRIVATE-fbMarketingText__bold">Atualize 
+seu navegador</H1>
+<DIV 
+class="pvm phl unsupportedBrowserText -cx-PRIVATE-fbMarketingText__small -cx-PRIVATE-fbMarketingText__normal -cx-PRIVATE-fbMarketingText__regular">Você 
+está usando uma versão do Internet Explorer que não é suportada pelo 
+Facebook.<BR>Para uma melhor experiência, acesse um desses sites e obtenha a 
+versão mais recente do seu navegador preferido:</DIV><A 
+class="mvl pvm phl unsupportedBrowserBrowser" 
+onmouseover='LinkshimAsyncLink.swap(this, "http:\/\/windows.microsoft.com\/en-US\/internet-explorer\/downloads\/ie");' 
+onclick='LinkshimAsyncLink.swap(this, "http:\/\/www.facebook.com\/l.php?u=http\u00253A\u00252F\u00252Fwindows.microsoft.com\u00252Fen-US\u00252Finternet-explorer\u00252Fdownloads\u00252Fie&amp;h=7AQEpx3Pz&amp;s=1");' 
+href="http://www.facebook.com/l.php?u=http%3A%2F%2Fwindows.microsoft.com%2Fen-US%2Finternet-explorer%2Fdownloads%2Fie&amp;h=7AQEpx3Pz&amp;s=1" 
+target=_blank rel=nofollow><I class="img sp_abrk6f sx_865209"></I>
+<DIV 
+class="-cx-PRIVATE-fbMarketingText__large -cx-PRIVATE-fbMarketingText__bold">Internet 
+Explorer</DIV></A><A class="mvl pvm phl unsupportedBrowserBrowser" 
+onmouseover='LinkshimAsyncLink.swap(this, "https:\/\/www.mozilla.org\/products\/download.html");' 
+onclick='LinkshimAsyncLink.swap(this, "http:\/\/www.facebook.com\/l.php?u=https\u00253A\u00252F\u00252Fwww.mozilla.org\u00252Fproducts\u00252Fdownload.html&amp;h=-AQEKniti&amp;s=1");' 
+href="http://www.facebook.com/l.php?u=https%3A%2F%2Fwww.mozilla.org%2Fproducts%2Fdownload.html&amp;h=-AQEKniti&amp;s=1" 
+target=_blank rel=nofollow><I class="img sp_abrk6f sx_207a39"></I>
+<DIV 
+class="-cx-PRIVATE-fbMarketingText__large -cx-PRIVATE-fbMarketingText__bold">Mozilla 
+Firefox</DIV></A><A class="mvl pvm phl unsupportedBrowserBrowser" 
+onmouseover='LinkshimAsyncLink.swap(this, "http:\/\/www.google.com\/chrome\/");' 
+onclick='LinkshimAsyncLink.swap(this, "http:\/\/www.facebook.com\/l.php?u=http\u00253A\u00252F\u00252Fwww.google.com\u00252Fchrome\u00252F&amp;h=iAQHhz7zH&amp;s=1");' 
+href="http://www.facebook.com/l.php?u=http%3A%2F%2Fwww.google.com%2Fchrome%2F&amp;h=iAQHhz7zH&amp;s=1" 
+target=_blank rel=nofollow><IMG class=img height=170 alt="" 
+src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/y6/r/Rv99Vzk9qsR.png" 
+width=170>
+<DIV 
+class="-cx-PRIVATE-fbMarketingText__large -cx-PRIVATE-fbMarketingText__bold">Google 
+Chrome</DIV></A></DIV><A class="mtl unsupportedBrowserMobile" 
+href="https://www.facebook.com/mobile">
+<DIV class=clearfix><I 
+class="-cx-PRIVATE-uiImageBlock__image -cx-PRIVATE-uiImageBlock__largeimage lfloat img sp_abrk6f sx_bed0bc"></I>
+<DIV class=-cx-PRIVATE-uiFlexibleBlock__flexiblecontent>
+<DIV class=-cx-PRIVATE-uiInlineBlock__root>
+<DIV class="-cx-PRIVATE-uiInlineBlock__root -cx-PRIVATE-uiInlineBlock__middle" 
+style="HEIGHT: 78px"></DIV>
+<DIV class="-cx-PRIVATE-uiInlineBlock__root -cx-PRIVATE-uiInlineBlock__middle">
+<DIV 
+class="mbs -cx-PRIVATE-fbMarketingText__small -cx-PRIVATE-fbMarketingText__bold">Obtenha 
+o Facebook para seu celular</DIV>
+<DIV class=-cx-PRIVATE-fbMarketingText__light>Fique conectado a qualquer hora, 
+em qualquer lugar.</DIV></DIV></DIV></DIV></DIV></A></DIV></DIV></DIV>
+<DIV id=pageFooter data-referrer="page_footer">
+<DIV id=contentCurve></DIV>
+<DIV aria-label="Links para sites do Facebook" role="contentinfo">
+<TABLE class="uiGrid navigationGrid" cellSpacing=0 cellPadding=0>
+  <TBODY>
+  <TR>
+    <TD class=hLeft><A title="Confira o Facebook Móvel." 
+      href="http://www.facebook.com/mobile/?ref=pf">Celular</A></TD>
+    <TD class="hLeft plm"><A title="Encontre qualquer pessoa na Web." 
+      href="http://www.facebook.com/find-friends?ref=pf">Localizar amigos</A></TD>
+    <TD class="hLeft plm"><A 
+      title="Incorporar um atalho do Facebook em seu site." 
+      href="http://www.facebook.com/badges/?ref=pf">Atalhos</A></TD>
+    <TD class="hLeft plm"><A title="Navegue no nosso diretório de pessoas." 
+      href="http://www.facebook.com/directory/people/">Pessoas</A></TD>
+    <TD class="hLeft plm"><A title="Pesquisar nosso diretório de páginas." 
+      href="http://www.facebook.com/directory/pages/">Páginas</A></TD>
+    <TD class="hLeft plm"><A title="Navegue pelo nosso diretório de locais." 
+      href="http://www.facebook.com/directory/places/">Locais</A></TD>
+    <TD class="hLeft plm"><A 
+      title="Confira a central de aplicativos do Facebook." 
+      href="http://www.facebook.com/appcenter/?ref=pf">Aplicativos</A></TD>
+    <TD class="hLeft plm"><A title="Confira os jogos do Facebook." 
+      href="http://www.facebook.com/appcenter/category/games/?ref=pf">Jogos</A></TD>
+    <TD class="hLeft plm"><A title="Check out Facebook music apps." 
+      href="http://www.facebook.com/appcenter/category/music/?ref=pf">Música</A></TD></TR>
+  <TR>
+    <TD class=hLeft><A 
+      title="Leia nosso blog, descubra a central de recursos e encontre oportunidades de trabalho." 
+      accessKey=8 href="http://www.facebook.com/facebook">Sobre</A></TD>
+    <TD class="hLeft plm"><A title="Anuncie no Facebook." 
+      href="http://www.facebook.com/campaign/landing.php?placement=pflo&amp;campaign_id=402047449186&amp;extra_1=auto">Criar 
+      anúncio</A></TD>
+    <TD class="hLeft plm"><A title="Criar uma página" 
+      href="http://www.facebook.com/pages/create/?ref_type=sitefooter">Criar 
+      página</A></TD>
+    <TD class="hLeft plm"><A title="Desenvolver em nossa plataforma." 
+      href="http://developers.facebook.com/?ref=pf">Desenvolvedores</A></TD>
+    <TD class="hLeft plm"><A 
+      title="Dê um passo adiante na sua carreira em nossa incrível empresa." 
+      href="http://www.facebook.com/careers/?ref=pf">Carreiras</A></TD>
+    <TD class="hLeft plm"><A 
+      title="Saiba mais sobre sua privacidade e o Facebook." 
+      href="http://www.facebook.com/privacy/explanation">Privacidade</A></TD>
+    <TD class="hLeft plm"><A title="Saiba mais sobre cookies e o Facebook" 
+      href="http://www.facebook.com/help/cookies">Cookies</A></TD>
+    <TD class="hLeft plm"><A title="Consulte nossos termos e políticas." 
+      accessKey=9 href="http://www.facebook.com/policies/?ref=pf">Termos</A></TD>
+    <TD class="hLeft plm"><A title="Acesse nossa Central de ajuda." 
+      accessKey=0 
+  href="http://www.facebook.com/help/?ref=pf">Ajuda</A></TD></TR></TBODY></TABLE></DIV>
+<DIV class="mvl copyright">
+<DIV class="fsm fwn fcg"><SPAN>Facebook © 2013</SPAN> · <A 
+title="Use o Facebook em outro idioma." 
+href="https://www.facebook.com/ajax/intl/language_dialog.php?uri=https%3A%2F%2Fwww.facebook.com%2Funsupportedbrowser" 
+rel=dialog role="button">Português (Brasil)</A></DIV></DIV></DIV></DIV></DIV>
+<SCRIPT type=text/javascript data-signature="1">/*<![CDATA[*/function si_cj(m){setTimeout(function(){new Image().src="https:\/\/error.facebook.com\/common\/scribe_endpoint.php?c=si_clickjacking&t=6690"+"&m="+m;},5000);}if(top!=self && !false){try{if(parent!=top){throw 1;}var si_cj_d=["apps.facebook.com","\/pages\/","apps.beta.facebook.com"];var href=top.location.href.toLowerCase();for(var i=0;i<si_cj_d.length;i++){if (href.indexOf(si_cj_d[i])>=0){throw 1;}}si_cj("3 ");}catch(e){si_cj("1 \t");window.document.write("\u003Cstyle>body * {display:none !important;}\u003C\/style>\u003Ca href=\"#\" onclick=\"top.location.href=window.location.href\" style=\"display:block !important;padding:10px\">\u003Ci class=\"img sp_lw2tz9 sx_ebe2a1\" style=\"display:block !important\">\u003C\/i>Acesse Facebook.com\u003C\/a>");/*KXv9J4RW*/}}/*]]>*/</SCRIPT>
+
+<SCRIPT>Bootloader.setResourceMap({"X\/Fq6":{"type":"css","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y2\/r\/FWqeARFGRvA.css"},"opZU1":{"type":"css","permanent":1,"crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yt\/r\/HL1842jTvgZ.css"},"VDymv":{"type":"css","permanent":1,"crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/ya\/r\/_4I-PF7Q8Ii.css"},"pf9qn":{"type":"css","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yF\/r\/eRT2uCcQv6u.css"},"Suk8h":{"type":"css","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yN\/r\/LiCls5J3gY8.css"},"APMdc":{"type":"css","permanent":1,"crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yM\/r\/1F2Et6cNoVE.css"},"dgcj4":{"type":"css","permanent":1,"crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y8\/r\/NJNsCaKgf-y.css"}});Bootloader.setResourceMap({"cNca2":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yv\/r\/OHUUx9tXXmr.js"},"oE4Do":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yq\/r\/MDwOqV08JHh.js"},"2ma5f":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yA\/r\/DpvUNDehyjp.js"},"QPUJc":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yw\/r\/x_kDPlWm4mm.js"},"\/jR89":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y7\/r\/YvnxgEDNP-h.js"},"+h1d2":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y2\/r\/afH9UmU63NI.js"},"iXSbu":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yv\/r\/CdG_emYhJ4r.js"},"wxq+C":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yz\/r\/txu_0oLuD1H.js"},"MqSmz":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yH\/r\/ghlEJgSKAee.js"},"AtxWD":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yU\/r\/RXieOTwv9ZN.js"},"H42Jh":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y3\/r\/ppwOo4BAmlb.js"},"bwsMw":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y_\/r\/hwOyT9fmfZV.js"},"zwdh3":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yX\/r\/XJ9BurUEZn2.js"},"zyFOp":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y-\/r\/sHx45baQNJv.js"},"Rs18G":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/ys\/r\/t80qJDlUD7e.js"},"WWEkE":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/ya\/r\/A5A2hZugiar.js"},"0WRb2":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yi\/r\/B-XzocgjnIJ.js"},"QowCX":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yb\/r\/YXsN-7XlQLU.js"},"\/vuZw":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yo\/r\/EzJGk5r_uIg.js"},"91AHJ":{"type":"js","crossOrigin":1,"src":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/yr\/r\/wVwlYJkiyzl.js"}});
+Bootloader.enableBootload({"PhotoTagger":{"resources":["zwdh3","dgcj4","WWEkE","0WRb2","+h1d2","91AHJ"],"module":true},"AsyncDOM":{"resources":["zwdh3"],"module":true},"HighContrastMode":{"resources":["zwdh3"],"module":true},"Toggler":{"resources":["zwdh3","dgcj4","WWEkE"],"module":true},"TagTokenizer":{"resources":["zwdh3","\/jR89","91AHJ","dgcj4","WWEkE","APMdc"],"module":true},"PhotoTagApproval":{"resources":["zwdh3","+h1d2","91AHJ"],"module":true},"ErrorSignal":{"resources":["zwdh3","cNca2"],"module":true},"AsyncResponse":{"resources":["zwdh3"],"module":true},"VideoRotate":{"resources":["zwdh3","H42Jh"],"module":true},"PhotoSnowlift":{"resources":["zwdh3","WWEkE","dgcj4","QPUJc","+h1d2"],"module":true},"fb-photos-snowlift-css":{"resources":["APMdc","dgcj4"]},"FbdDialogProvider":{"resources":["\/vuZw","zwdh3","bwsMw"],"module":true},"trackReferrer":{"resources":[],"module":true},"PhotoPivot":{"resources":["zwdh3","+h1d2","WWEkE","dgcj4","QPUJc","2ma5f"],"module":true},"Event":{"resources":["zwdh3"],"module":true},"AsyncDialog":{"resources":["zwdh3","WWEkE","dgcj4","QPUJc"],"module":true},"DOM":{"resources":["zwdh3"],"module":true},"SpotlightShareViewer":{"resources":["zwdh3","WWEkE","X\/Fq6","zyFOp"],"module":true},"Input":{"resources":["zwdh3"],"module":true},"ConfirmationDialog":{"resources":["zwdh3","WWEkE","oE4Do"],"module":true},"Dialog":{"resources":["zwdh3","dgcj4","WWEkE"],"module":true},"IframeShim":{"resources":["zwdh3","WWEkE","MqSmz"],"module":true},"PhotosButtonTooltips":{"resources":["zwdh3","WWEkE","dgcj4","Rs18G"],"module":true},"SnowliftPicCropper":{"resources":["zwdh3","dgcj4","WWEkE","+h1d2","QowCX","APMdc","wxq+C"],"module":true},"Live":{"resources":["zwdh3","QPUJc"],"module":true},"DimensionTracking":{"resources":["zwdh3"],"module":true},"Tooltip":{"resources":["zwdh3","WWEkE","dgcj4"],"module":true},"legacy:detect-broken-proxy-cache":{"resources":["zwdh3"]},"PhotoInlineEditor":{"resources":["zwdh3","+h1d2","WWEkE","dgcj4","91AHJ","AtxWD"],"module":true},"AsyncRequest":{"resources":["zwdh3"],"module":true},"React":{"resources":["QPUJc","zwdh3"],"module":true},"PhotoTags":{"resources":["zwdh3","+h1d2","dgcj4","91AHJ"],"module":true},"fb-photos-snowlift-fullscreen-css":{"resources":["VDymv"]},"Form":{"resources":["zwdh3","WWEkE"],"module":true}});</SCRIPT>
+
+<SCRIPT>require("InitialJSLoader").loadOnDOMContentReady(["zwdh3","WWEkE","iXSbu"]);</SCRIPT>
+
+<SCRIPT>
+Bootloader.configurePage(["Suk8h","dgcj4","pf9qn","opZU1"]);
+Bootloader.done(["jDr+c"]);
+
+
+require("InitialJSLoader").handleServerJS({"require":[["PixelRatio","startDetecting",[],[1]],["PostLoadJS","loadAndRequire",[],["DimensionTracking"]],["PostLoadJS","loadAndCall",[],["HighContrastMode","init",[{"currentState":"0","spacerImage":"https:\/\/fbstatic-a.akamaihd.net\/rsrc.php\/v2\/y4\/r\/-PAXP-deijE.gif"}]]],["ScriptPath","set",[],["WebUnsupportedBrowserController","5b31b5a3"]],["ClickRefLogger"],["userAction","setUATypeConfig",[],[{"ua:n":false,"ua:i":false,"ua:d":false,"ua:e":false}]],["ScriptPathState","setUserURISampleRate",[],[0.0002]],["userAction","setCustomSampleConfig",[],[{"ua:n":{"test":{"ua_id":{"test":true}}},"ua:i":{"snowlift":{"action":{"open":false,"close":false}},"canvas":{"action":{"mouseover":false,"mouseout":false}}}}]],["UserActionHistory"],["TinyViewport"],["WebStorageMonster","schedule",[],[false]],["AsyncRequestNectarLogging"],["LoginFormController","init",["m_0_0","m_0_1"],[{"__m":"m_0_0"},{"__m":"m_0_1"}]],["FlipDirectionOnKeypress"]],"define":[["FbtraceForcedByServer",[],{"forced":false},140],["ServerNonce",[],{"ServerNonce":"LgZOQ87Bg-nC0cJoXn5XF2"},141]],"elements":[["m_0_0","login_form",2],["m_0_1","loginbutton",2],["m_0_2","login_form",2]]});
+
+onloadRegister_DEPRECATED(function (){try {document.execCommand("BackgroundImageCache", false, true);} catch (ignored) {}});
+onloadRegister_DEPRECATED(function (){$("u_0_0").value = tz_calculate(1370445115)});
+onloadRegister_DEPRECATED(function (){try { $("email").focus(); } catch (_ignore) { }});
+onafterloadRegister_DEPRECATED(function (){Bootloader.loadComponents(["legacy:detect-broken-proxy-cache"], function(){ detect_broken_proxy_cache("0", "c_user") });});
+</SCRIPT>
+<!-- BigPipe construction and first response -->
+<SCRIPT>var bigPipe = new (require("BigPipe"))({"lid":0,"forceFinish":true});</SCRIPT>
+
+<SCRIPT>bigPipe.onPageletArrive({"id":"first_response","phase":0,"jsmods":{},"is_last":true,"css":["Suk8h","dgcj4","pf9qn","opZU1"],"bootloadable":{},"resource_map":{},"js":["zwdh3","WWEkE","iXSbu"]})</SCRIPT>
+
+<SCRIPT>bigPipe.onPageletArrive({"id":"","phase":1,"jsmods":{},"is_last":true,"css":["Suk8h","dgcj4","pf9qn","opZU1"],"bootloadable":{},"resource_map":{},"js":["zwdh3","WWEkE","iXSbu"],"the_end":true})</SCRIPT>
+</BODY></HTML>

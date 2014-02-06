@@ -1,0 +1,34 @@
+@charset "utf-8";
+/**RESET**/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: Arial, Helvetica, sans-serif; vertical-align: baseline;}
+:focus {outline: 0;}
+ol, ul {list-style: none;}
+strong {font-weight: bold;}
+/* CSS Document */
+body {background-color:#84A7CA; margin:0 auto;}
+.clear {display:block;clear:both;}
+.central {min-height: 100%; width: 950px; margin: 0 auto;}
+.block_top_l {display:block; float:left; width:374px; height:264px; position: absolute; margin-top:48px; margin-left:-82px; background:url(../images/b_top.png) no-repeat;}
+.block_central {display:block; width:900px; height:900px; background-color:#fff; margin-left:84px;}
+.block_top_r {display:block; width:654px; height:136px; margin-left:246px; margin-top:-52px; background:url(../images/bgtop.png) repeat-x;}
+.block_top_r h1 {padding:72px 0px 0px 68px; font-weight:bold; font-size:18px;}
+.register_user {display:block; padding:70px; width:550px;}
+.register_user span {display:block; float: left; margin: 0px 72px 28px 0px;}
+.register_user p {margin-left:8px;}
+.register_user input {width:190px;}
+.register_user select {width:194px;}
+.form_idioms {width:194px;}
+.form_institutions {width:208px;;}
+.check_box {width:194px;}
+.check_box input {width:20px; float:left;}
+.check_box p {width:240px;}
+.form_button {width:160px; padding-left:52px;}
+.form_button input {cursor:pointer; width:60px; height:26px; float:left; border:1px #666 solid; border-radius:4px; margin-left:10px;}
+.bottom {display:block; height:118px; background:url(../images/bgfooter.png); margin-top:-44px; z-index:1; position:relative; }
+.bottom_menu {padding: 42px 0px 0px 740px; width: 430px; text-align:right; font-size: 12px;}
+.bottom_menu li {display: inline; padding:0 0.4em; margin:0 auto; width:auto; background:none; border-right: 1px #000 solid; float:left;}
+.bottom_menu li a {color: #000;}
+.powered_guigoh {background:url(../images/guigoh-logo.png) no-repeat right; display:block; width:380px; height:20px; padding-right: 34px; }
+.info {color: green; font-weight: bold}
+.error {color: red; font-weight: bold}
+.button_back {cursor:pointer; width:60px; height:26px; float:right; border:1px #666 solid; border-radius:4px; margin:-54px 120px;}
