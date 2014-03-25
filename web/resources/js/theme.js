@@ -36,9 +36,9 @@ $(document).ready(function(){
                         var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+object_title+'</h2></a>';
                         var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                         if(typeof lastobject.picture_url != 'undefined'){
-                            var thumb = '<span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span></a>';
                         }else{
-                            var thumb = '<span class="thumb_public"></span>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span class="thumb_public"></span></a>';
                         }
                         var author = ' <div class="autor_public">por <a href="">'+lastobject.submitter_login+'</a></div>';
                         var tagList = lastobject.tags.split(',');
