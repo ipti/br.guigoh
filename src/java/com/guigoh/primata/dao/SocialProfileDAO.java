@@ -308,40 +308,76 @@ public class SocialProfileDAO implements Serializable {
                 socialProfile.setUsers(usersNew);
             }
             if (stateIdNew != null) {
-                stateIdNew = em.getReference(stateIdNew.getClass(), stateIdNew.getId());
-                socialProfile.setStateId(stateIdNew);
+                if (stateIdNew.getId() == 0){
+                    socialProfile.setStateId(null);
+                }else{
+                    stateIdNew = em.getReference(stateIdNew.getClass(), stateIdNew.getId());
+                    socialProfile.setStateId(stateIdNew);
+                }
             }
             if (occupationsIdNew != null) {
-                occupationsIdNew = em.getReference(occupationsIdNew.getClass(), occupationsIdNew.getId());
-                socialProfile.setOccupationsId(occupationsIdNew);
+                if (occupationsIdNew.getId() == 0){
+                    socialProfile.setOccupationsId(null);
+                }else{
+                    occupationsIdNew = em.getReference(occupationsIdNew.getClass(), occupationsIdNew.getId());
+                    socialProfile.setOccupationsId(occupationsIdNew);
+                }
             }
             if (countryIdNew != null) {
-                countryIdNew = em.getReference(countryIdNew.getClass(), countryIdNew.getId());
-                socialProfile.setCountryId(countryIdNew);
+                if (countryIdNew.getId() == 0){
+                    socialProfile.setCountryId(null);
+                }else{
+                    countryIdNew = em.getReference(countryIdNew.getClass(), countryIdNew.getId());
+                    socialProfile.setCountryId(countryIdNew);
+                }
             }
             if (cityIdNew != null) {
-                cityIdNew = em.getReference(cityIdNew.getClass(), cityIdNew.getId());
-                socialProfile.setCityId(cityIdNew);
+                if (cityIdNew.getId() == 0){
+                    socialProfile.setCityId(null);
+                }else{
+                    cityIdNew = em.getReference(cityIdNew.getClass(), cityIdNew.getId());
+                    socialProfile.setCityId(cityIdNew);
+                }
             }
             if (availabilityIdNew != null) {
-                availabilityIdNew = em.getReference(availabilityIdNew.getClass(), availabilityIdNew.getId());
-                socialProfile.setAvailabilityId(availabilityIdNew);
+                if (availabilityIdNew.getId() == 0){
+                    socialProfile.setAvailabilityId(null);
+                }else{
+                    availabilityIdNew = em.getReference(availabilityIdNew.getClass(), availabilityIdNew.getId());
+                    socialProfile.setAvailabilityId(availabilityIdNew);
+                }
             }
             if (socialProfileVisibilityNew != null) {
-                socialProfileVisibilityNew = em.getReference(socialProfileVisibilityNew.getClass(), socialProfileVisibilityNew.getSocialProfileId());
-                socialProfile.setSocialProfileVisibility(socialProfileVisibilityNew);
+                if (socialProfileVisibilityNew.getSocialProfileId() == 0){
+                    socialProfile.setSocialProfileVisibility(null);
+                }else{
+                    socialProfileVisibilityNew = em.getReference(socialProfileVisibilityNew.getClass(), socialProfileVisibilityNew.getSocialProfileId());
+                    socialProfile.setSocialProfileVisibility(socialProfileVisibilityNew);
+                }
             }
             if (subnetworkIdNew != null) {
-                subnetworkIdNew = em.getReference(subnetworkIdNew.getClass(), subnetworkIdNew.getId());
-                socialProfile.setSubnetworkId(subnetworkIdNew);
+                if (subnetworkIdNew.getId() == 0){
+                    socialProfile.setSubnetworkId(null);
+                }else{
+                    subnetworkIdNew = em.getReference(subnetworkIdNew.getClass(), subnetworkIdNew.getId());
+                    socialProfile.setSubnetworkId(subnetworkIdNew);
+                }
             }
             if (languageIdNew != null) {
-                languageIdNew = em.getReference(languageIdNew.getClass(), languageIdNew.getId());
-                socialProfile.setLanguageId(languageIdNew);
+                if (languageIdNew.getId() == 0){
+                    socialProfile.setLanguageId(null);
+                }else{
+                    languageIdNew = em.getReference(languageIdNew.getClass(), languageIdNew.getId());
+                    socialProfile.setLanguageId(languageIdNew);
+                }
             }
             if (scholarityIdNew != null) {
-                scholarityIdNew = em.getReference(scholarityIdNew.getClass(), scholarityIdNew.getId());
-                socialProfile.setScholarityId(scholarityIdNew);
+                if (scholarityIdNew.getId() == 0){
+                    socialProfile.setScholarityId(null);
+                }else{
+                    scholarityIdNew = em.getReference(scholarityIdNew.getClass(), scholarityIdNew.getId());
+                    socialProfile.setScholarityId(scholarityIdNew);
+                }
             }
             Collection<Interests> attachedInterestsCollectionNew = new ArrayList<Interests>();
             for (Interests interestsCollectionNewInterestsToAttach : interestsCollectionNew) {

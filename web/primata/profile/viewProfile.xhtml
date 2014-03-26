@@ -408,7 +408,7 @@
                                          
                                     </h:commandLink>
                                     <font class="availability">Escolaridade: <span>#{profileBean.socialProfile.scholarityId.description}</span></font>
-                                    <font class="phone_number">Sexo: <span>#{(profileBean.socialProfile.gender.equals('M')) ? 'Masculino' : 'Feminino'}</span></font>
+                                    <font class="phone_number">Sexo: <span>#{(profileBean.socialProfile.gender == 'M') ? 'Masculino' : (profileBean.socialProfile.gender == 'F') ? 'Feminino' : ''}</span></font>
                                     <font class="availability">Disponibilidade: <span>#{profileBean.socialProfile.availabilityId.description}</span></font>
                                     <font class="phone_number">Telefone: <span>#{profileBean.socialProfile.phone}</span></font>
 
@@ -426,7 +426,7 @@
                                         </span> </font>
                                     <font class="gender">Sexo: <span>
                                             <h:selectOneMenu value="#{profileBean.socialProfile.gender}">
-                                                <f:selectItem itemLabel = "Selecione..." itemValue="" />
+                                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
                                                 <f:selectItem itemLabel = "Masculino" itemValue="M" />
                                                 <f:selectItem itemLabel = "Feminino" itemValue="F" />
                                             </h:selectOneMenu>
