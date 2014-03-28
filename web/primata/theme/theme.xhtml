@@ -19,7 +19,7 @@
         <h:form>
             <h:outputText styleClass="theme_title" value="#{themeBean.interest.name}"></h:outputText>
             <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
-                <f:selectItem itemLabel = "Tags..." itemValue="" />
+                <f:selectItem itemLabel = "Tags" itemValue="" />
                 <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
                 <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
             </h:selectOneMenu>

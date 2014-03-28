@@ -2,13 +2,13 @@ navigator.userLanguage = 'pt';
 
 $(document).ready(function(){
     $(document).on('focus', '.general_search_input', function(){
-        if($('.general_search_input').val() == "pesquise tópicos ou objetos educacionais..."){
+        if($('.general_search_input').val() == "pesquise tópicos ou objetos educacionais"){
             $('.general_search_input').val("");
         }
     });
     $(document).on('focusout', '.general_search_input', function(){
         if($('.general_search_input').val() == ""){
-            $('.general_search_input').val("pesquise tópicos ou objetos educacionais...");
+            $('.general_search_input').val("pesquise tópicos ou objetos educacionais");
         }
     });
     loadAll();

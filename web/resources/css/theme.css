@@ -11,7 +11,7 @@
 .general_search_submit {border: 1px solid #969696; border-radius: 2px; background:url(../images/magnifer.png) no-repeat; width: 24px; height: 24px; float:right; margin: -25px 19px 0px 0px;}
 .general_search_input {width: 290px; height: 20px; margin: -25px 42px 0px 0px; border-radius: 2px; border: 1px solid #969696; box-shadow:inset 1px 1px 8px #bcbbbb; float:right;color:gray;text-indent:3px}
 .tags{border-radius: 2px; border: 1px solid #969696; box-shadow:inset 1px 1px 8px #bcbbbb;float:right;height:25px;margin:-25px 350px;width:150px}
-.discussion_topics_box{padding: 30px 20px;float:left;width:650px;border-right:1px solid #B2B6B1}
+.discussion_topics_box{padding: 30px 20px;float:left;width:650px;}
 .discussion_topics{display:block;margin:70px 0 0 0}
 .discussion_topic{display:block;height:125px}
 .discussion_topics_title{font-weight:bold;display:block;font-size:14px;margin-bottom:15px}

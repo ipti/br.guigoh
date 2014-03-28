@@ -26,7 +26,7 @@ public class ThemeBean {
     
     private Integer id;
     private Interests interest;
-    private String generalSearch = "pesquise tópicos ou objetos educacionais...";
+    private String generalSearch = "pesquise tópicos ou objetos educacionais";
     private List<DiscussionTopic> discussionTopicList;
     private List<Tags> tagList;
     private String tagSelected = "";
@@ -58,7 +58,7 @@ public class ThemeBean {
     
     public void generalSearchEvent() {
         System.out.println(tagSelected);
-        if(generalSearch.equals("pesquise tópicos ou objetos educacionais...")){
+        if(generalSearch.equals("pesquise tópicos ou objetos educacionais")){
             generalSearch = "";
         }
         DiscussionTopicBO dtBO = new DiscussionTopicBO();
