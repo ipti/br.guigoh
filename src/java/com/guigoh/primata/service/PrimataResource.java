@@ -463,6 +463,7 @@ public class PrimataResource extends Thread {
             JSONObject friend = new JSONObject();
             friend.put("id", friendsOnlineList.get(i).getSocialProfileId());
             friend.put("name", friendsOnlineList.get(i).getName());
+            friend.put("photo", socialProfileBO.findSocialProfileBySocialProfileId(friendsOnlineList.get(i).getSocialProfileId()).getPhoto());
             friend.put("online", "true");
             friendList.put(i, friend);
         }
@@ -470,6 +471,7 @@ public class PrimataResource extends Thread {
             JSONObject friend = new JSONObject();
             friend.put("id", friendsOfflineList.get(i).getSocialProfileId());
             friend.put("name", friendsOfflineList.get(i).getName());
+            friend.put("photo", socialProfileBO.findSocialProfileBySocialProfileId(friendsOfflineList.get(i).getSocialProfileId()).getPhoto());
             friend.put("online", "false");
             friendList.put(friendsOnlineList.size() + i, friend);
         }
