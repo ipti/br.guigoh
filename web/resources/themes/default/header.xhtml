@@ -11,14 +11,28 @@
             <div id="general">
                 <div id="menu">
                     <ul class="top_menu">
-                        <h:outputText styleClass="registered_users_quantity" rendered="#{headerBean.adminOK}" value="#{headerBean.registeredUsersCount} usuários cadastrados | #{headerBean.registeredUsersOnline} on-line |"></h:outputText>
-                        <!--<li class="first"><a href="/">Administrador</a></li>
-                        <li ><span></span><a href="/">Idioma</a></li>
-                        <li ><span></span><a href="/">Reportar Erros</a></li>
-                        <li ><span></span><a href="/">Sobre</a></li>
-                        <li ><span></span><a href="/">Ajuda</a></li>-->
-                        <li class="first"><h:commandLink action="/primata/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.adminOK || headerBean.reviserOK}">Admin</h:commandLink></li>
-                        <li class="first"><h:commandLink action="#{authBean.logout()}">Sair</h:commandLink></li>
+                        <h:panelGroup styleClass="logoutContainer">
+                            <h:outputText styleClass="registered_users_quantity" rendered="#{headerBean.adminOK}" value="#{headerBean.registeredUsersCount} usuários cadastrados | #{headerBean.registeredUsersOnline} on-line |"></h:outputText>
+                            <!--<li class="first"><a href="/">Administrador</a></li>
+                            <li ><span></span><a href="/">Idioma</a></li>
+                            <li ><span></span><a href="/">Reportar Erros</a></li>
+                            <li ><span></span><a href="/">Sobre</a></li>
+                            <li ><span></span><a href="/">Ajuda</a></li>-->
+                            <li class="first"><h:commandLink action="/primata/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.adminOK || headerBean.reviserOK}">Admin</h:commandLink></li>
+                            <li class="first"><h:commandLink action="#{authBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
+                        </h:panelGroup>
+                        <h:panelGrid styleClass="localeLogon" columns="3">
+                            <h:commandLink  id="ptBR" action="#{localeBean.changeToPTBR()}">
+                                <h:graphicImage  value="../resources/images/ptBR.gif" style="border:0"/>
+                            </h:commandLink>
+                            <h:commandLink id="enUS" action="#{localeBean.changeToENUS()}">
+                                <h:graphicImage  value="../resources/images/enUS.png" style="border:0"/>
+                            </h:commandLink>
+                            <h:commandLink id="frFR" action="#{localeBean.changeToFRFR()}">
+                                <h:graphicImage  value="../resources/images/frFR.png" style="border:0"/>
+                            </h:commandLink>
+                        </h:panelGrid>
+
                     </ul>
                     <div class="mid_menu">
                         <a href="/"><span class="img_logo"></span></a>
