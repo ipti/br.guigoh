@@ -19,4 +19,9 @@ public class LanguageBO implements Serializable {
         LanguageDAO languageDAO = new LanguageDAO();
         return languageDAO.findLanguageEntities();
     }
+    
+    public Language findById(Integer id){
+        LanguageDAO languageDAO = new LanguageDAO();
+        return languageDAO.findLanguage(id);
+    }
 }

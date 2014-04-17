@@ -11,17 +11,18 @@
         </f:metadata>
         <script type="text/javascript" src="/resources/js/home.js"></script>
         <h:form>
-            <h:outputText styleClass="home_title" value="Início"></h:outputText>
+            <h:outputText styleClass="home_title" value="#{localeBean.getString('Início')}"></h:outputText>
             <div class="home_box">
                 <h:panelGroup styleClass="left_column">
                     <h:panelGroup styleClass="interest_themes_label_box">
-                        <h:outputText styleClass="interest_themes_label" value="TEMAS DE INTERESSE"></h:outputText>
+                        <h:outputText styleClass="interest_themes_label" value="#{localeBean.getString('TEMAS DE INTERESSE')}"></h:outputText>
                     </h:panelGroup>
                     <h:panelGroup styleClass="interest_themes">
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
                             <h:link styleClass="interest_theme" outcome="/primata/theme/theme.xhtml?id=#{theme.id}">
                                 <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.md5(theme.name)}.png')"></h:outputText>
-                                <h:outputText styleClass="theme_label" value="#{theme.name}"></h:outputText>
+                                <ui:param name="themeName" value="#{theme.name}" />
+                                <h:outputText styleClass="theme_label" value="#{localeBean.getString(themeName)}"></h:outputText>
                             </h:link>
                         </ui:repeat>
                     </h:panelGroup>

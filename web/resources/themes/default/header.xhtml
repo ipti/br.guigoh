@@ -23,13 +23,13 @@
                         </h:panelGroup>
                         <h:panelGrid styleClass="localeLogon" columns="3">
                             <h:commandLink  id="ptBR" action="#{localeBean.changeToPTBR()}">
-                                <h:graphicImage  value="../resources/images/ptBR.gif" style="border:0"/>
+                                <h:graphicImage  value="/../resources/images/ptBR.gif" />
                             </h:commandLink>
                             <h:commandLink id="enUS" action="#{localeBean.changeToENUS()}">
-                                <h:graphicImage  value="../resources/images/enUS.png" style="border:0"/>
+                                <h:graphicImage  value="/../resources/images/enUS.png" />
                             </h:commandLink>
                             <h:commandLink id="frFR" action="#{localeBean.changeToFRFR()}">
-                                <h:graphicImage  value="../resources/images/frFR.png" style="border:0"/>
+                                <h:graphicImage  value="/../resources/images/frFR.png" />
                             </h:commandLink>
                         </h:panelGrid>
 
@@ -37,13 +37,13 @@
                     <div class="mid_menu">
                         <a href="/"><span class="img_logo"></span></a>
                         <ul>
-                            <li class="menu home" ><a href="/primata/home.xhtml">Inicio</a></li>
-                            <li class="menu profile" ><a href="/primata/profile/viewProfile.xhtml">Perfil</a></li>
-                            <li class="menu contacts" ><a href="/primata/friends/viewFriends.xhtml">Contatos</a></li>
-                            <li class="menu environment" ><a href="/ts">Ambiente de Publicação</a></li>   
+                            <li class="menu home" ><a href="/primata/home.xhtml">#{localeBean.getString('Início')}</a></li>
+                            <li class="menu profile" ><a href="/primata/profile/viewProfile.xhtml">#{localeBean.getString('Perfil')}</a></li>
+                            <li class="menu contacts" ><a href="/primata/friends/viewFriends.xhtml">#{localeBean.getString('Contatos')}</a></li>
+                            <li class="menu environment" ><a href="/ts">#{localeBean.getString('Ambiente de Publicação')}</a></li>   
                         </ul>
                         <div class="log_menu">
-                            <p class="welcome">Bem Vindo,</p>
+                            <p class="welcome">#{localeBean.getString('Bem Vindo')},</p>
                             <a id="user_name" href="/primata/profile/viewProfile.xhtml">#{headerBean.socialProfile.name}</a>
                             <a href="/primata/profile/viewProfile.xhtml"><img src="#{headerBean.socialProfile.photo}" class="img_avatar"/></a>
                         </div>

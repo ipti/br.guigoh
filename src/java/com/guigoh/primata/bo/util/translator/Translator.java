@@ -4,8 +4,6 @@
  */
 package com.guigoh.primata.bo.util.translator;
 
-import com.guigoh.primata.bo.util.*;
-import java.io.InputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,6 +17,7 @@ public class Translator {
     private Locale locale;
     
     public Translator (){
+        
     }
 
     public void setLocalePTBR() {
