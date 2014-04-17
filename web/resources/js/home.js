@@ -8,6 +8,16 @@ $(document).ready(function(){
                 lastobjects = new Array(lastobjects);
                 $('.more_objects').css('display','none');
             }else{
+                alert(locale);
+                var enviadoPor = "Enviado por ";
+                        var em = "em ";
+                        if(locale == "enUS"){
+                            enviadoPor = "Submitted By ";
+                            em = "in ";
+                        } else if(locale == "frFR"){
+                            enviadoPor = "Soumis par ";
+                            em = "en ";
+                        }
                 var count = 10;
                 if(lastobjects.length < count){
                     $('.more_objects').css('display','none');
@@ -23,8 +33,8 @@ $(document).ready(function(){
                         }else{
                             var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span class="thumb_public"></span></a>';
                         }
-                        var author = ' <div class="autor_public">Enviado por <span>'+lastobject.submitter_login+' </span></div>';
-                        var theme = '<div class="theme_public"> em <span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
+                        var author = ' <div class="autor_public">'+enviadoPor+'<span>'+lastobject.submitter_login+' </span></div>';
+                        var theme = '<div class="theme_public"> '+em+'<span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
                         //var desc = '<h4>Lorem ipsum dolor sit amet, consectetuer ad</h4>';
                         html.append(thumb).append(time).append(title).append(author).append(theme);
                         $('#list_objects').append(html);
@@ -43,8 +53,8 @@ $(document).ready(function(){
                             var html = $('<div class="public_tec"></div>');
                             var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+lastobject.title+'</h2></a>';
                             var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
-                            var author = ' <div class="autor_public">Enviado por <span>'+lastobject.submitter_login+'</span></div>';
-                            var theme = '<div class="theme_public"> em <span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
+                            var author = ' <div class="autor_public">'+enviadoPor+' <span>'+lastobject.submitter_login+'</span></div>';
+                            var theme = '<div class="theme_public"> '+em+' <span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
                             //var desc = '<h4>Lorem ipsum dolor sit amet, consectetuer ad</h4>';
                             html.append(thumb).append(time).append(title).append(author).append(theme);
                             $('#list_objects').append(html);

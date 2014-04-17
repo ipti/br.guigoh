@@ -82,4 +82,16 @@ public final class LocaleBean {
             trans.setLocaleFRFR();
         }
     }
+    
+    public String getLocaleAcronym(){
+        if (cr.getTag("locale").equals("enUS")) {
+            return "enUS";
+        } else if (cr.getTag("locale").equals("ptBR")){
+            return "ptBR";
+        } else if (cr.getTag("locale").equals("frFR")){
+            return "frFR";
+        } else{
+            return "";
+        }
+    }
 }
