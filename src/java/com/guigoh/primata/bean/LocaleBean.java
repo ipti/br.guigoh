@@ -47,7 +47,7 @@ public final class LocaleBean {
             }
         }
         socialProfile = socialProfileBO.findSocialProfile(token);
-        String acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+        acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
         if(acronym.equals("ptBR")){
             changeToPTBR();
         }else if (acronym.equals("enUS")){
@@ -67,6 +67,7 @@ public final class LocaleBean {
         cr.editarTag("locale", "ptBR");
         socialProfile.setLanguageId(languageBO.findByAcronym("ptBR"));
         socialProfileBO.edit(socialProfile);
+        acronym = "ptBR";
         return "";
     }
     
@@ -74,6 +75,7 @@ public final class LocaleBean {
         cr.editarTag("locale", "enUS");
         socialProfile.setLanguageId(languageBO.findByAcronym("enUS"));
         socialProfileBO.edit(socialProfile);
+        acronym = "enUS";
         return "";
     }
     
@@ -81,6 +83,7 @@ public final class LocaleBean {
         cr.editarTag("locale", "frFR");
         socialProfile.setLanguageId(languageBO.findByAcronym("frFR"));
         socialProfileBO.edit(socialProfile);
+        acronym = "frFR";
         return "";
     }
     
@@ -93,16 +96,9 @@ public final class LocaleBean {
             trans.setLocaleFRFR();
         }
     }
-    
-    public String getLocaleAcronym(){
-        if (cr.getTag("locale").equals("enUS")) {
-            return "enUS";
-        } else if (cr.getTag("locale").equals("ptBR")){
-            return "ptBR";
-        } else if (cr.getTag("locale").equals("frFR")){
-            return "frFR";
-        } else{
-            return "";
-        }
+
+    public String getAcronym() {
+        return acronym;
     }
+    
 }

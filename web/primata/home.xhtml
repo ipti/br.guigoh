@@ -9,9 +9,7 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
         </f:metadata>
-        <script type="text/javascript">
-            var locale = #{localeBean.localeAcronym};
-        </script>
+        <h:inputHidden id="localeAcronym" value="#{localeBean.acronym}"/>
         <script type="text/javascript" src="/resources/js/home.js"></script>
         <h:form>
             <h:outputText styleClass="home_title" value="#{localeBean.getString('Início')}"></h:outputText>

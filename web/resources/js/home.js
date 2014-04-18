@@ -8,6 +8,7 @@ $(document).ready(function(){
                 lastobjects = new Array(lastobjects);
                 $('.more_objects').css('display','none');
             }else{
+                locale = $("#localeAcronym").val();
                 var enviadoPor = "Enviado por ";
                         var em = "em ";
                         if(locale == "enUS"){
