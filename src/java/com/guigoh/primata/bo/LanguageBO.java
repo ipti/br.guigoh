@@ -24,4 +24,9 @@ public class LanguageBO implements Serializable {
         LanguageDAO languageDAO = new LanguageDAO();
         return languageDAO.findLanguage(id);
     }
+    
+    public Language findByAcronym(String acronym){
+        LanguageDAO languageDAO = new LanguageDAO();
+        return languageDAO.findLanguageByAcronym(acronym);
+    }
 }
