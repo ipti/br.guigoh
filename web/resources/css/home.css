@@ -21,14 +21,14 @@ strong {font-weight: bold;}
 .network_news{font-size:14px;font-weight:bold;margin:0 0 32px;display:block}
 .publisher_image{float:left; margin-right: 6px;height:77px;width:77px;background:url(../images/avatar.png) no-repeat;background-size:77px}
 .text_feed { font-size: 11px; display:block;height:77px;margin:0 0 40px 0}   
-.more_objects{float:right;cursor:pointer;margin:10px 0 20px 0;width:80px}
-#more_objects_icon{margin:6px 0 0 10px;float:right;width:17px;height:9px;background:url(../images/plus.png) no-repeat}
+.more_objects{float:right;cursor:pointer;margin:10px 0 20px 0;width:80px;display:none}
+#more_objects_icon{margin:6px 0 0 10px;float:right;width:17px;height:9px;background:url(../images/plus.png) no-repeat;}
 .user_news_name {color:black;text-decoration: underline; display:block;margin-bottom:5px}
 .social_news_name {display:block;margin: 2px 4px 0px 4px;}
 .theme_news_name {margin-left: 4px;}
 .user_feed { display: block; width: 240px; height: 77px; margin-bottom: 40px; }
 .list_objects{clear:both;float:left}
-
+#oe_loading_gif{display:block;margin:30px auto}
 .public_tec{clear:both;float:left;;margin-bottom:80px}
 .public_tec h2 {width:160px;font-size:15px;float: left; color: black; margin: 0px 40px 6px 0px; font-weight: bold}
 .public_tec h3 {color: #939598; float: left; font-size:11px;margin:3px 0 20px 0}

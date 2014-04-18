@@ -13,7 +13,7 @@ body {background-color:#84A7CA; margin:0 auto;}
 .block_left_midtop {display:block; width:409px; height:194px; background-color:#fff; margin-bottom:4px;}
 .block_left_midtop  p {padding:29px; text-align:justify;}
 .block_left_midbot{display:block; width:409px; height:80px; background-color:#fff; margin-bottom:4px;}
-.block_left_midbot p{padding:29px; text-align:justify;}
+.block_left_midbot p{padding:29px 0 29px 29px; text-align:justify;float:left}
 .block_left_bot {display:block; width:409px; height:240px; background-color:#fff; margin-bottom:4px;}
 .companies_logos {display:block; width:372px; height:138px; background:url(../images/companies_logos.png) no-repeat 28px 12px;}
 .block_right {display:block; width:341px; float:left;}
@@ -44,7 +44,7 @@ body {background-color:#84A7CA; margin:0 auto;}
 .secret_question{font-size:12px;font-weight:bold;float:left;}
 .powered_guigoh {background:url(../images/guigoh-logo.png) no-repeat right; display:block; width:956px; height:20px; padding-right: 34px; }
 .find_curriculum{text-decoration: none; margin:100px 87px 0 0; color:white; float:right; border:1px solid}
-.curriculum_finder_button{float:right; margin-top: -12px;color:#000; text-decoration:none; border:1px solid #000; background-color: #fff; width:140px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
+.curriculum_finder_button{float:right; margin: 17px 10px 0 0;color:#000; text-decoration:none; border:1px solid #000; background-color: #fff; width:140px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
 
 
 
