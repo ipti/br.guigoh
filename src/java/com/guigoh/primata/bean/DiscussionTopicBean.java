@@ -35,7 +35,7 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 @ManagedBean(name = "discussionTopicBean")
 public class DiscussionTopicBean implements Serializable{
-
+ 
     final TimeZone timeZone = TimeZone.getDefault();
     public static final char ACTIVE = 'A';
     public static final char DISABLED = 'D';

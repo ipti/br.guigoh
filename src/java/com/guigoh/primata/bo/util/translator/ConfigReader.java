@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -32,7 +33,7 @@ import org.xml.sax.SAXException;
  *
  * @author ipti
  */
-public class ConfigReader {
+public class ConfigReader implements Serializable{
 
     File xml;
     static Document doc = null;
