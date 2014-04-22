@@ -11,6 +11,7 @@ import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicMsg;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.NewActivity;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,7 +26,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ViewScoped
 @ManagedBean(name = "homeBean")
-public class HomeBean {
+public class HomeBean implements Serializable{
 
     List<Interests> interestThemesList = new ArrayList<Interests>();
     List<NewActivity> newActivityList = new ArrayList();

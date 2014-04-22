@@ -10,8 +10,10 @@ import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Language;
 import com.guigoh.primata.entity.SocialProfile;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +21,9 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author ipti004
  */
-@RequestScoped
+@SessionScoped
 @ManagedBean(name = "localeBean")
-public final class LocaleBean {
+public class LocaleBean implements Serializable{
 
     private Translator trans = new Translator();
     private ConfigReader cr = new ConfigReader();
@@ -97,6 +99,11 @@ public final class LocaleBean {
         }
     }
 
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
+    }
+
+    
     public String getAcronym() {
         return acronym;
     }
