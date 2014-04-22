@@ -15,6 +15,7 @@ import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Tags;
 import com.guigoh.primata.entity.Users;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,7 +34,7 @@ import javax.servlet.http.HttpSession;
  */
 @SessionScoped
 @ManagedBean(name = "discussionTopicBean")
-public class DiscussionTopicBean {
+public class DiscussionTopicBean implements Serializable{
 
     final TimeZone timeZone = TimeZone.getDefault();
     public static final char ACTIVE = 'A';

@@ -10,6 +10,7 @@ import com.guigoh.primata.bo.TagsBO;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.Tags;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -22,7 +23,7 @@ import javax.faces.context.FacesContext;
  */
 @ViewScoped
 @ManagedBean(name = "themeBean")
-public class ThemeBean {
+public class ThemeBean implements Serializable{
     
     private Integer id;
     private Interests interest;
