@@ -2,13 +2,14 @@ $(document).ready(function(){
     $.ajax({
         type:"GET",
         url:"/webresources/primata/lastreviewobjects",
+        cache: true,
         success:function(lastobjects){
+            $("#oe_loading_gif").hide();
             lastobjects = eval(lastobjects);
             if(!(lastobjects instanceof Array)){
                 lastobjects = new Array(lastobjects);
-                $('.more_objects').css('display','none');
             }else{
-                alert(locale);
+                locale = $("#localeAcronym").val();
                 var enviadoPor = "Enviado por ";
                         var em = "em ";
                         if(locale == "enUS"){
@@ -19,8 +20,8 @@ $(document).ready(function(){
                             em = "en ";
                         }
                 var count = 10;
-                if(lastobjects.length < count){
-                    $('.more_objects').css('display','none');
+                if(lastobjects.length > count){
+                    $('.more_objects').css('display','block');
                 }
                 for(var i=0;i<count;i++){
                     if(lastobjects[i] != null){

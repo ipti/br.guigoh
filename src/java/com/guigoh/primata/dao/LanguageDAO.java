@@ -197,6 +197,17 @@ public class LanguageDAO implements Serializable {
         }
     }
 
+    public Language findLanguageByAcronym(String acronym){
+        EntityManager em = getEntityManager();
+        try {
+            Language language = (Language) em.createNativeQuery("select * from primata_language "
+                    + "where acronym = '" + acronym + "'", Language.class).getSingleResult();
+            return language;
+        } finally {
+            em.close();
+        }
+    }
+    
     public int getLanguageCount() {
         EntityManager em = getEntityManager();
         try {

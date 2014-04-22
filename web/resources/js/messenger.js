@@ -1,3 +1,7 @@
+locale = $("#localeAcronym").val();
+var sendMessageButton = "";
+locale == "enUS" ? sendMessageButton = "send" : locale == "frFR" ? sendMessageButton = "envoyer" : sendMessageButton = "enviar";
+
 $(document).ready(function(){
     getCurriculumMessages();
     messengerFriends();
@@ -52,7 +56,7 @@ function getMessages(){
                             success: function(history){
                                 for (var i=0;i<history.length;i++){
                                     if($('#msg_'+friend.id).length==0){
-                                        $('.messenger_boxes').append("<li id='msg_"+friend.id+"'><span>"+friend.name+"</span><span id='close'></span><span id='history'></span><div id='messages'></div><div id='messageInputs'><input id='textmessage_"+friend.id+"' class='textmessage' type='text' value=''></input><input type='hidden' class='flaghistory' value='1'/><input socialprofileid="+friend.id+" id='sendMessage' type='button' value='enviar'></input></div></li>");
+                                        $('.messenger_boxes').append("<li id='msg_"+friend.id+"'><span>"+friend.name+"</span><span id='close'></span><span id='history'></span><div id='messages'></div><div id='messageInputs'><input id='textmessage_"+friend.id+"' class='textmessage' type='text' value=''></input><input type='hidden' class='flaghistory' value='1'/><input socialprofileid="+friend.id+" id='sendMessage' type='button' value='"+sendMessageButton+"'></input></div></li>");
                                     }
                                     $('#msg_'+friend.id+' #messages').append("<p>"+history[i].name +": "+history[i].message+"</p>");
                                     $('#msg_'+friend.id+' #messages').scrollTop($('#msg_'+friend.id+' #messages').prop("scrollHeight"));
@@ -131,7 +135,7 @@ function closeMessengerBox(){
 function openMessengerBox(){
     var name = $(this).attr('name');
     var socialProfileId = $(this).attr('socialprofileid');
-    var createbox = "<li id='msg_"+socialProfileId+"'><span class='messenger_photo'></span><span class='messenger_title'>"+name+"</span><span id='close' socialprofileid='"+socialProfileId+"'></span><span id='history' socialprofileid='"+socialProfileId+"'></span><div id='messages'></div><div id='messageInputs'><input id='textmessage_"+socialProfileId+"' class='textmessage' type='text' value=''></input><input type='hidden' class='flaghistory' value='1'/><input socialprofileid="+socialProfileId+" id='sendMessage' type='button' value='enviar'></input></div></li>";
+    var createbox = "<li id='msg_"+socialProfileId+"'><span class='messenger_photo'></span><span class='messenger_title'>"+name+"</span><span id='close' socialprofileid='"+socialProfileId+"'></span><span id='history' socialprofileid='"+socialProfileId+"'></span><div id='messages'></div><div id='messageInputs'><input id='textmessage_"+socialProfileId+"' class='textmessage' type='text' value=''></input><input type='hidden' class='flaghistory' value='1'/><input socialprofileid="+socialProfileId+" id='sendMessage' type='button' value='"+sendMessageButton+"'></input></div></li>";
     if($('#msg_'+socialProfileId).length>0){
         if( $('#msg_'+socialProfileId).css('visibility') == "hidden"){
             $('#msg_'+socialProfileId).css('visibility','visible');
