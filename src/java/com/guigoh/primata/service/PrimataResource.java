@@ -40,7 +40,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import org.json.*;
+import org.codehaus.jettison.json.*;
 
 /**
  * REST Web Service

@@ -7,7 +7,7 @@ package com.guigoh.primata.bo.util;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import org.json.*;
+import org.codehaus.jettison.json.*;
 
 /**
  *
