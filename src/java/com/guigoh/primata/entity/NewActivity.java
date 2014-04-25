@@ -4,6 +4,7 @@
  */
 package com.guigoh.primata.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @author ipti004
  */
 
-public class NewActivity {
+public class NewActivity implements Serializable{
     
     private int id;
     private SocialProfile socialProfile;

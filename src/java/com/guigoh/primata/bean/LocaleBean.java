@@ -17,25 +17,24 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author ipti004
  */
-@SessionScoped
+@SessionScoped 
 @ManagedBean(name = "localeBean")
-public class LocaleBean implements Serializable{
+public class LocaleBean implements Serializable {
 
     private Translator trans = new Translator();
     private ConfigReader cr = new ConfigReader();
     private String acronym = "";
     private String token = "";
-    
     private SocialProfile socialProfile;
-    
     private LanguageBO languageBO = new LanguageBO();
     private SocialProfileBO socialProfileBO = new SocialProfileBO();
+
     
-            
     public LocaleBean() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
@@ -50,51 +49,49 @@ public class LocaleBean implements Serializable{
         }
         socialProfile = socialProfileBO.findSocialProfile(token);
         acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
-        if(acronym.equals("ptBR")){
+        if (acronym.equals("ptBR")) {
             changeToPTBR();
-        }else if (acronym.equals("enUS")){
+        } else if (acronym.equals("enUS")) {
             changeToENUS();
-        }else if(acronym.equals("frFR")){
+        } else if (acronym.equals("frFR")) {
             changeToFRFR();
         }
-            
+
     }
 
     public String getString(String string) {
         getLocale();
         return trans.getWord(string);
     }
-    
-    public String changeToPTBR(){
+
+    public String changeToPTBR() {
         cr.editarTag("locale", "ptBR");
         socialProfile.setLanguageId(languageBO.findByAcronym("ptBR"));
         socialProfileBO.edit(socialProfile);
         acronym = "ptBR";
-        return "";
+        return "/primata/theme/theme.xhtml?faces-redirect=true&includeViewParams=true";
     }
-    
-    public String changeToENUS(){
+
+    public void changeToENUS() {
         cr.editarTag("locale", "enUS");
         socialProfile.setLanguageId(languageBO.findByAcronym("enUS"));
         socialProfileBO.edit(socialProfile);
         acronym = "enUS";
-        return "";
     }
-    
-    public String changeToFRFR(){
+
+    public void changeToFRFR() {
         cr.editarTag("locale", "frFR");
         socialProfile.setLanguageId(languageBO.findByAcronym("frFR"));
         socialProfileBO.edit(socialProfile);
         acronym = "frFR";
-        return "";
     }
-    
-    public void getLocale(){
+
+    public void getLocale() {
         if (cr.getTag("locale").equals("enUS")) {
             trans.setLocaleENUS();
-        } else if (cr.getTag("locale").equals("ptBR")){
+        } else if (cr.getTag("locale").equals("ptBR")) {
             trans.setLocalePTBR();
-        } else if (cr.getTag("locale").equals("frFR")){
+        } else if (cr.getTag("locale").equals("frFR")) {
             trans.setLocaleFRFR();
         }
     }
@@ -103,9 +100,7 @@ public class LocaleBean implements Serializable{
         this.acronym = acronym;
     }
 
-    
     public String getAcronym() {
         return acronym;
     }
-    
 }

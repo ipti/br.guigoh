@@ -1,16 +1,4 @@
 $(document).ready(function(){
-    $(document).on('focus', '.general_search_input', function(){
-        if($('.general_search_input').val() == "pesquise tópicos ou objetos educacionais"){
-            $('.general_search_input').val("");
-            $('.general_search_input').css("color", "black");
-        }
-    });
-    $(document).on('focusout', '.general_search_input', function(){
-        if($('.general_search_input').val() == ""){
-            $('.general_search_input').val("pesquise tópicos ou objetos educacionais");
-            $('.general_search_input').css("color", "gray");
-        }
-    });
     
     if($(".discussion_topics_box").height() >= $(".publication_objects_box").height()){
         $(".discussion_topics_box").css("border-right","1px solid #B2B6B1");

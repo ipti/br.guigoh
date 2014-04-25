@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
     </h:head>
     <f:metadata>
@@ -22,13 +23,13 @@
                             <li class="first"><h:commandLink action="#{authBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
                         </h:panelGroup>
                         <h:panelGrid styleClass="localeLogon" columns="3">
-                            <h:commandLink  id="ptBR" action="#{localeBean.changeToPTBR()}">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR()}">
                                 <h:graphicImage  value="/resources/images/ptBR.gif" />
                             </h:commandLink>
-                            <h:commandLink id="enUS" action="#{localeBean.changeToENUS()}">
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS()}">
                                 <h:graphicImage  value="/resources/images/enUS.png" />
                             </h:commandLink>
-                            <h:commandLink id="frFR" action="#{localeBean.changeToFRFR()}">
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR()}">
                                 <h:graphicImage  value="/resources/images/frFR.png" />
                             </h:commandLink>
                         </h:panelGrid>
@@ -52,4 +53,9 @@
             </div>
         </body>
     </h:form>
+    <script type="text/javascript">
+        function redirect(){
+            window.location = window.location;
+        }
+    </script>
 </html>

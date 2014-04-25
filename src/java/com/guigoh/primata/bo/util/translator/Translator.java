@@ -4,6 +4,7 @@
  */
 package com.guigoh.primata.bo.util.translator;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -11,7 +12,7 @@ import java.util.ResourceBundle;
  *
  * @author ipti
  */
-public class Translator {
+public class Translator implements Serializable{
 
     private ResourceBundle translation;
     private Locale locale;

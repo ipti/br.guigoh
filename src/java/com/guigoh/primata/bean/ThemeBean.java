@@ -27,7 +27,7 @@ public class ThemeBean implements Serializable{
     
     private Integer id;
     private Interests interest;
-    private String generalSearch = "pesquise tópicos ou objetos educacionais";
+    private String generalSearch = "";
     private List<DiscussionTopic> discussionTopicList;
     private List<Tags> tagList;
     private String tagSelected = "";
@@ -58,10 +58,6 @@ public class ThemeBean implements Serializable{
     }
     
     public void generalSearchEvent() {
-        System.out.println(tagSelected);
-        if(generalSearch.equals("pesquise tópicos ou objetos educacionais")){
-            generalSearch = "";
-        }
         DiscussionTopicBO dtBO = new DiscussionTopicBO();
         discussionTopicList = new ArrayList<DiscussionTopic>();
         discussionTopicList = dtBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, id);

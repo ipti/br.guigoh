@@ -17,9 +17,10 @@
         </f:metadata>
         <script type="text/javascript" src="/resources/js/home.js"></script>
         <h:form>
-            <h:outputText styleClass="theme_title" value="#{themeBean.interest.name}"></h:outputText>
+            <ui:param name="themeName" value="#{themeBean.interest.name}" />
+            <h:outputText styleClass="theme_title" value="#{localeBean.getString(themeName)}"></h:outputText>
             <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
-                <f:selectItem itemLabel = "Tags" itemValue="" />
+                <f:selectItem itemLabel = "#{localeBean.getString('Tags')}" itemValue="" />
                 <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
                 <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
             </h:selectOneMenu>
@@ -30,7 +31,7 @@
             <h:panelGroup id="theme_box" styleClass="theme_box">	
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
-                        <h:outputText styleClass="discussion_topics_title" value="LISTA DE DISCUSSÃO"></h:outputText>
+                        <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('LISTA DE DISCUSSÃO')}"></h:outputText>
                         <h:link styleClass="discussion_topic_new" outcome="/primata/discussion/createTopic.xhtml" >
                             <f:param name="id" value="#{themeBean.id}" />
                             <f:param name="files" value="0" />
@@ -49,18 +50,18 @@
                                     </h:outputText>
                                     <h:outputText styleClass="discussion_topic_clock"></h:outputText>
                                     <br/>
-                                    <h:outputText value="por" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
+                                    <h:outputText value="#{localeBean.getString('por')}" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
                                     <h:outputText styleClass="discussion_topic_description" value="#{discussionTopic.body}"></h:outputText>
                                     <ui:repeat value="#{discussionTopic.tagsCollection}" var="tag">
                                         <h:outputText styleClass="discussion_topic_tag" value="##{tag.name}"></h:outputText>
                                     </ui:repeat>
-                                    <h:outputText styleClass="discussion_topic_answers" value="#{discussionTopic.discussionTopicMsgCollection.size()} respostas"></h:outputText>
+                                    <h:outputText styleClass="discussion_topic_answers" value="#{discussionTopic.discussionTopicMsgCollection.size()} #{localeBean.getString('respostas')}"></h:outputText>
                                 </h:panelGroup>
                             </ui:repeat>
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup styleClass="publication_objects_box">
-                        <h:outputText styleClass="publication_objects_title" value="OBJETOS EDUCACIONAIS"></h:outputText>
+                        <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('OBJETOS EDUCACIONAIS')}"></h:outputText>
                         <h:panelGroup styleClass="publication_objects">
 
                         </h:panelGroup>
