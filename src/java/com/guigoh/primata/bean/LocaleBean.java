@@ -50,11 +50,11 @@ public class LocaleBean implements Serializable {
         socialProfile = socialProfileBO.findSocialProfile(token);
         acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
         if (acronym.equals("ptBR")) {
-            changeToPTBR();
+            changeToPTBR("");
         } else if (acronym.equals("enUS")) {
-            changeToENUS();
+            changeToENUS("");
         } else if (acronym.equals("frFR")) {
-            changeToFRFR();
+            changeToFRFR("");
         }
 
     }
@@ -64,26 +64,28 @@ public class LocaleBean implements Serializable {
         return trans.getWord(string);
     }
 
-    public String changeToPTBR() {
-        cr.editarTag("locale", "ptBR");
+    public String changeToPTBR(String url) {
+        cr.editarTag("locale", "ptBR"); 
         socialProfile.setLanguageId(languageBO.findByAcronym("ptBR"));
         socialProfileBO.edit(socialProfile);
         acronym = "ptBR";
-        return "/primata/theme/theme.xhtml?faces-redirect=true&includeViewParams=true";
+        return url+"?faces-redirect=true&includeViewParams=true";
     }
 
-    public void changeToENUS() {
+    public String changeToENUS(String url) {
         cr.editarTag("locale", "enUS");
         socialProfile.setLanguageId(languageBO.findByAcronym("enUS"));
         socialProfileBO.edit(socialProfile);
         acronym = "enUS";
+        return url+"?faces-redirect=true&includeViewParams=true";
     }
 
-    public void changeToFRFR() {
+    public String changeToFRFR(String url) {
         cr.editarTag("locale", "frFR");
         socialProfile.setLanguageId(languageBO.findByAcronym("frFR"));
         socialProfileBO.edit(socialProfile);
         acronym = "frFR";
+        return url+"?faces-redirect=true&includeViewParams=true";
     }
 
     public void getLocale() {

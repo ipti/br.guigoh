@@ -22,14 +22,15 @@
                             <li class="first"><h:commandLink action="/primata/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.adminOK || headerBean.reviserOK}">Admin</h:commandLink></li>
                             <li class="first"><h:commandLink action="#{authBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
                         </h:panelGroup>
+                        <ui:param name="url" value="#{request.servletPath}"/>
                         <h:panelGrid styleClass="localeLogon" columns="3">
-                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR()}">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR(url)}">
                                 <h:graphicImage  value="/resources/images/ptBR.gif" />
                             </h:commandLink>
-                            <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS()}">
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS(url)}">
                                 <h:graphicImage  value="/resources/images/enUS.png" />
                             </h:commandLink>
-                            <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR()}">
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR(url)}">
                                 <h:graphicImage  value="/resources/images/frFR.png" />
                             </h:commandLink>
                         </h:panelGrid>
