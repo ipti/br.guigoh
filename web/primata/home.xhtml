@@ -15,7 +15,7 @@
             <div class="home_box">
                 <h:panelGroup styleClass="left_column">
                     <h:panelGroup styleClass="interest_themes_label_box">
-                        <h:outputText styleClass="interest_themes_label" value="#{localeBean.getString('TEMAS DE INTERESSE')}"></h:outputText>
+                        <h:outputText styleClass="interest_themes_label" value="#{localeBean.getString('Temas de interesse').toUpperCase()}"></h:outputText>
                     </h:panelGroup>
                     <h:panelGroup styleClass="interest_themes">
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
@@ -28,7 +28,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="middle_column">
-                    <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('ÚLTIMOS OBJETOS EDUCACIONAIS PUBLICADOS')}"/>
+                    <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('Últimos objetos educacionais publicados').toUpperCase()}"/>
                     <a class="publish_new_object" href="/ts/submit.do" ></a>
                     <div id="list_objects" class="list_objects">
                         <img id='oe_loading_gif' src='/../resources/images/loading.gif'/>
@@ -39,7 +39,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="right_column">
-                    <h:outputText styleClass="network_news" value="#{localeBean.getString('NOVIDADES NA REDE')}"/>
+                    <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>
                     <h:panelGroup class="user_feed">
                         <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
                             <h:link styleClass="publisher_image" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>

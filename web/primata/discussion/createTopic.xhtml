@@ -21,17 +21,18 @@
             <f:event type="preRenderComponent" listener="#{discussionTopicBean.init()}"/>
         </f:metadata>
         <h:form prependId="false">
-            <h:outputText styleClass="theme_title" value="#{discussionTopicBean.theme.name}"></h:outputText>
+            <ui:param name="theme" value="#{discussionTopicBean.theme.name}"/>
+            <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
             <h:panelGroup styleClass="create_topic_box">
                 <h:panelGroup styleClass="bread_path">
                     <h:link outcome="/primata/home.xhtml">Home</h:link> > 
-                    <h:link outcome="/primata/theme/theme.xhtml?id=#{discussionTopicBean.theme.id}">Temas de interesse: #{discussionTopicBean.theme.name}</h:link> > 
-                    <h:outputText value="Novo tópico"></h:outputText>
+                    <h:link outcome="/primata/theme/theme.xhtml?id=#{discussionTopicBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
+                    <h:outputText value="#{localeBean.getString('Novo tópico')}"></h:outputText>
                 </h:panelGroup>
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{discussionTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{discussionTopicBean.socialProfile.name}"></h:link>
-                <h:outputText styleClass="topic_title_label" value="Assunto:"></h:outputText>
-                <h:inputText styleClass="new_title" value="#{discussionTopicBean.discussionTopic.title}" required="true" requiredMessage="Título é obrigatório"></h:inputText>
+                <h:outputText styleClass="topic_title_label" value="#{localeBean.getString('Assunto')}:"></h:outputText>
+                <h:inputText styleClass="new_title" value="#{discussionTopicBean.discussionTopic.title}" required="true" requiredMessage="#{localeBean.getString('Título é obrigatório')}"></h:inputText>
                 <h:inputTextarea styleClass="new_body" value="#{discussionTopicBean.discussionTopic.body}"></h:inputTextarea>
                 <h:commandLink styleClass="attach_button" action="#{discussionTopicBean.holdDiscussionTopic()}">
                     <f:ajax event="action" execute="@form" render="@form"></f:ajax>
@@ -66,15 +67,15 @@
                 <span class="clear"/>
             </h:panelGroup>
         </h:form>
-        <div id="dialog-form" class="dialog" title="Adicionar Arquivo">
+        <div id="dialog-form" class="dialog" title="#{localeBean.getString('Adicionar arquivos')}">
             <fieldset>
                 <form action="UploadFile" method="POST" enctype="multipart/form-data">
-                    <label>Selecione o(s) arquivo(s):</label><br/>
+                    <br/>
                     <input type="file" name="file1" id="filechoose1" />
                     <input type="file" name="file2" id="filechoose2" />
                     <input type="file" name="file3" id="filechoose3" /><br/>
                     <input type="hidden" name="topic"  value="T"/>
-                    <input type="submit" />
+                    <input type="submit" value="#{localeBean.getString('Enviar arquivos')}"/>
                 </form>
             </fieldset>
         </div>

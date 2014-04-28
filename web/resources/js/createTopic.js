@@ -2,11 +2,26 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-navigator.userLanguage = 'pt';
-
+locale = $("localeAcronym").val();
+var inputLabelValue = "";
+var closeButton = "";   
 $(document).ready(function() {
+    if(locale == "ptBR"){
+        inputLabelValue = "Um título que descreva o assunto tratado no seu tópico...";
+        closeButton = "Fechar";
+    }
+    else if(locale == "enUS"){
+        inputLabelValue = "A title that describes the subject matter in your topic..."
+        closeButton = "Close";
+    }
+    else if(locale == "frFR"){
+        inputLabelValue = "Un titre qui décrit la matière dans votre sujet..."
+        closeButton = "Proche";
+    }
+    
+    $('.new_title').val(inputLabelValue);
     $(document).on('focus', '.new_title', function(){
-        if($('.new_title').val() == "Um título que descreva o assunto tratado no seu tópico..."){
+        if($('.new_title').val() == inputLabelValue){
             $('.new_title').css("color","black")
             $('.new_title').val("");
         }
@@ -14,7 +29,7 @@ $(document).ready(function() {
     $(document).on('focusout', '.new_title', function(){
         if($('.new_title').val() == ""){
             $('.new_title').css("color","#ccc")
-            $('.new_title').val("Um título que descreva o assunto tratado no seu tópico...");
+            $('.new_title').val(inputLabelValue);
         }
     });
     $(document).on('focus', '.tag_input', function(){
@@ -53,11 +68,8 @@ function loadAll(){
             backgroundColor: "#000", 
             opacity: 0.5
         },
-        buttons:{
-            "Close": function() {
-                $(this).dialog("close");
-            }
-        },
+        buttons:[{text: closeButton,click:function() {$(this).dialog("close");}
+            }],
         close: function(ev, ui) {
             $(this).hide();
         }

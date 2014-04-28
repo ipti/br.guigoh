@@ -17,12 +17,13 @@
             <f:event type="preRenderComponent" listener="#{viewTopicBean.init()}"/>
         </f:metadata>
         <h:form>
-            <h:outputText styleClass="theme_title" value="#{viewTopicBean.discussionTopic.themeId.name}"></h:outputText>
+            <ui:param name="theme" value="#{viewTopicBean.discussionTopic.themeId.name}"/>
+            <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
             <h:panelGroup styleClass="discussion_topics_box">
                 <h:panelGroup styleClass="bread_path">
                     <h:link outcome="/primata/home.xhtml">Home</h:link> > 
-                    <h:link outcome="/primata/theme/theme.xhtml?id=#{viewTopicBean.discussionTopic.themeId.id}">Temas de interesse: #{viewTopicBean.discussionTopic.themeId.name}</h:link> > 
-                    <h:outputText value="Tópico: &quot;#{viewTopicBean.discussionTopic.title}&quot;"></h:outputText>
+                    <h:link outcome="/primata/theme/theme.xhtml?id=#{viewTopicBean.discussionTopic.themeId.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
+                    <h:outputText value="#{localeBean.getString('Tópico')}: &quot;#{viewTopicBean.discussionTopic.title}&quot;"></h:outputText>
                 </h:panelGroup>
                 <h:panelGroup styleClass="discussion_topic_title_box">
                     <h:outputText styleClass="discussion_topic_title" value="#{viewTopicBean.discussionTopic.title}"></h:outputText>
@@ -98,21 +99,21 @@
                         <h:outputText styleClass="reply_attached_file" value="#{file.fileName}"></h:outputText>
                     </h:panelGroup>
                 </ui:repeat>
-                <h:link styleClass="back_link" outcome="/primata/theme/theme.xhtml?id=#{viewTopicBean.discussionTopic.themeId.id}" value="&lt;&lt; Voltar"></h:link>
+                <h:link styleClass="back_link" outcome="/primata/theme/theme.xhtml?id=#{viewTopicBean.discussionTopic.themeId.id}" value="&lt;&lt; #{localeBean.getString('Voltar')}"></h:link>
                 <span class="clear"></span>
             </h:panelGroup>
 
 
         </h:form>
-        <div id="dialog-form" class="dialog" title="Adicionar Arquivo">
+        <div id="dialog-form" class="dialog" title="#{localeBean.getString('Adicionar arquivos')}">
             <fieldset>
                 <form action="UploadFile" method="POST" enctype="multipart/form-data">
-                    <label>Selecione o(s) arquivo(s):</label><br/>
+                    <br/>
                     <input type="file" name="file1" id="filechoose" />
                     <input type="file" name="file2" id="filechoose" />
                     <input type="file" name="file3" id="filechoose" /><br/>
                     <input type="hidden" name="message"  value="M"/>
-                    <input type="submit" />
+                    <input type="submit" value="#{localeBean.getString('Enviar arquivos')}"/>
                 </form>
             </fieldset>
         </div>

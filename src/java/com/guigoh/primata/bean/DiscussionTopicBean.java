@@ -57,7 +57,6 @@ public class DiscussionTopicBean implements Serializable{
         if (!FacesContext.getCurrentInstance().isPostback()) {
             if (discussionTopic == null) {
                 discussionTopic = new DiscussionTopic();
-                discussionTopic.setTitle("Um título que descreva o assunto tratado no seu tópico...");
             }
             if (listDiscussionTopicFiles == null) {
                 listDiscussionTopicFiles = new ArrayList<DiscussionTopicFiles>();
@@ -67,7 +66,7 @@ public class DiscussionTopicBean implements Serializable{
                 tags = new ArrayList<Tags>();
             }
             tag = new Tags();
-            
+            tag.setName(tagInput);
             user = new Users();
             loadUserCookie();
             SocialProfileBO spBO = new SocialProfileBO();
@@ -125,6 +124,7 @@ public class DiscussionTopicBean implements Serializable{
                 tags.add(tag);
                 tag = new Tags();
                 tagInput = "#";
+                tag.setName(tagInput);
             }
         }
     }

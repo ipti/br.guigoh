@@ -20,7 +20,7 @@
             <ui:param name="themeName" value="#{themeBean.interest.name}" />
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(themeName)}"></h:outputText>
             <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
-                <f:selectItem itemLabel = "#{localeBean.getString('Tags')}" itemValue="" />
+                <f:selectItem itemLabel = "Tags" itemValue="" />
                 <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
                 <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
             </h:selectOneMenu>
@@ -31,7 +31,7 @@
             <h:panelGroup id="theme_box" styleClass="theme_box">	
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
-                        <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('LISTA DE DISCUSSÃO')}"></h:outputText>
+                        <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
                         <h:link styleClass="discussion_topic_new" outcome="/primata/discussion/createTopic.xhtml" >
                             <f:param name="id" value="#{themeBean.id}" />
                             <f:param name="files" value="0" />
@@ -61,7 +61,7 @@
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup styleClass="publication_objects_box">
-                        <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('OBJETOS EDUCACIONAIS')}"></h:outputText>
+                        <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('Objetos educacionais').toUpperCase()}"></h:outputText>
                         <h:panelGroup styleClass="publication_objects">
 
                         </h:panelGroup>

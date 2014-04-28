@@ -1,16 +1,6 @@
-navigator.userLanguage = 'pt';
+var locale = $("localeAcronym").val();
 
 $(document).ready(function(){
-    $(document).on('focus', '.general_search_input', function(){
-        if($('.general_search_input').val() == "pesquise tópicos ou objetos educacionais"){
-            $('.general_search_input').val("");
-        }
-    });
-    $(document).on('focusout', '.general_search_input', function(){
-        if($('.general_search_input').val() == ""){
-            $('.general_search_input').val("pesquise tópicos ou objetos educacionais");
-        }
-    });
     loadAll();
     jsf.ajax.addOnEvent(function(data){
         if (data.status === 'success') {
@@ -20,7 +10,10 @@ $(document).ready(function(){
 });
 
 function loadAll(){
-   
+    var closeButton = "";
+    if(locale == "ptBR"){closeButton = "Fechar"}
+    else if(locale == "enUS"){closeButton = "Close"}
+    else if(locale == "frFR"){closeButton = "Proche"}
     $( "#dialog-form" ).dialog({
         autoOpen: false,
         height: 400,
@@ -30,11 +23,8 @@ function loadAll(){
             backgroundColor: "#000", 
             opacity: 0.5
         },
-        buttons:{
-            "Close": function() {
-                $(this).dialog("close");
-            }
-        },
+        buttons:[{text: closeButton,click:function() {$(this).dialog("close");}
+            }],
         close: function(ev, ui) {
             $(this).hide();
         }
