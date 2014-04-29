@@ -22,14 +22,17 @@ strong {font-weight: bold;}
 .attached_file_box{display:block;margin:-20px 0 5px 30px;font-weight:bold;font-size:13px;width:500px}
 .tag_box{float:left;height:100px;width:350px;margin:0 0 0 108px}
 .post_topic_button{float:right;background:url('../images/button_post.png') no-repeat;width:94px;height:35px;margin-right:101px}
-.back_button{background:url('../images/button_back_1.png') no-repeat;width:82px;height:35px;margin:0 20px 40px 0;float:right;}
+.post_topic_button_container{text-decoration: none;border-radius:5px;width:94px;height:35px;margin:0 101px 0 0;float:right;background-color:#b9d331}
+#post_topic_icon{float:left;padding:4px;margin-top:1px;}
+.post_topic_label{color:black;font-size:13px;float:left;margin:10px 0 0 3px}
 .tags_selected{display:block;height:28px;margin:0 0 5px 0}
 .tag_selected{font-size:13px;font-weight:bold;margin-right:15px}
 .tag_input{border:0 none; border-radius:5px; width:200px; height:28px;margin:9px auto;color:#ccc;text-indent:10px}
 .tags_label{font-size:13px;font-weight:bold;margin-right:5px}
 .tag_submit{margin: 0 0 0 -30px;background:url('../images/plus_button.png') no-repeat;background-size:18px;border:0 none;cursor:pointer}
-
-
+.back_button_container{text-decoration: none;border-radius:5px;width:82px;height:35px;margin:0 20px 40px 0;float:right;background-color:#b9d331}
+#back_button_icon{float:left;padding:4px}
+.back_button_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
 .new_tags{margin:0px 0 20px 0px;border:0}
 .tag1{width: 150px;margin:0px 0 20px 10px;}
 .tag2{width: 150px;margin:0px 0 20px 10px;}

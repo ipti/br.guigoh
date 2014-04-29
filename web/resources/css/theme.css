@@ -15,7 +15,6 @@
 .discussion_topics{display:block;margin:70px 0 0 0}
 .discussion_topic{display:block;height:125px}
 .discussion_topics_title{font-weight:bold;display:block;font-size:14px;margin-bottom:15px}
-.discussion_topic_new{display:block;float:right;background:url(../images/new_topic_button.png) no-repeat;width:128px;height:35px}
 .discussion_topic_user_title{font-weight:bold}
 .discussion_topic_link{text-decoration:none;color:black}
 .discussion_topic_sender{color:black;text-decoration: underline;font-size:12px}
@@ -29,7 +28,10 @@
 .publication_objects{float:left;margin:50px 0 0}
 .publication_objects_title{font-weight:bold;display:block;font-size:14px;margin-bottom:15px}
 .publication_new_object{width:173px;height:51px;margin:0 0 30px 0;float:left;clear:both;background:url(../images/object_publication_button.png) no-repeat}
-
+.create_topic_container{float:right;width:128px;height:35px;background-color:#b9d331;border-radius:5px;text-decoration: none;}
+#create_topic_plus{float:left;padding:5px}
+.create_topic_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
+/* Guigoh antigo*/
 .public_tec{display:block;margin-bottom:50px}
 .public_tec h2{color:black; margin: 0 0 2px 0;font-size:12px;width:87px}
 .public_tec h3{font-size:12px;float:left;margin:1px 0 10px 0;width:70px !important}

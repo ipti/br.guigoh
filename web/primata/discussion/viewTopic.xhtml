@@ -89,8 +89,10 @@
                     <h:inputTextarea styleClass="new_reply" value="#{viewTopicBean.newReply}">
                     </h:inputTextarea>
                 </h:panelGroup>
-                <h:commandLink styleClass="reply_message">
+                <h:commandLink styleClass="reply_message_container">
                     <f:ajax render="@form" execute="@form" event="action"  listener="#{viewTopicBean.replyTopic}"></f:ajax>
+                    <img id="reply_message_icon" src="/resources/images/green-plus.png"/>
+                    <span class="reply_message_label">#{localeBean.getString('Postar')}</span>
                 </h:commandLink>
                 <ui:repeat value="#{viewTopicBean.newFilesList}" var="file">
                     <h:outputText styleClass="file_attach_image"></h:outputText>

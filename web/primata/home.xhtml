@@ -29,7 +29,10 @@
                 </h:panelGroup>
                 <h:panelGroup styleClass="middle_column">
                     <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('Últimos objetos educacionais publicados').toUpperCase()}"/>
-                    <a class="publish_new_object" href="/ts/submit.do" ></a>
+                    <a class="publish_new_object_container" href="/ts/submit.do">
+                        <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
+                        <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
+                    </a>
                     <div id="list_objects" class="list_objects">
                         <img id='oe_loading_gif' src='/../resources/images/loading.gif'/>
                     </div>

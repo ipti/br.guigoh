@@ -38,7 +38,10 @@
 .reply_sender_photo{float:left;width:77px;height:77px;margin:0 10px 10px 20px}
 .new_reply_box{width:850px;height:170px;display:block;margin:0 0 25px 0}
 .new_reply{width:700px;height:170px;display:block;resize:none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border:0}
-.reply_message{float:right;background:url('../images/button_post.png') no-repeat;width:94px;height:35px;margin-right:102px}
+.reply_message{background-color:#b9d331;border-radius:5px;float:right;background:url('../images/button_post.png') no-repeat;width:94px;height:35px;margin-right:102px}
+.reply_message_container{float:right;width:94px;height:35px;margin-right:102px;background-color:#b9d331;border-radius:5px;}
+#reply_message_icon{float:left;padding:4px;margin-top:1px;}
+.reply_message_label{color:black;font-size:13px;float:left;margin:10px 0 0 3px}
 .reply_attach_button{position:relative;cursor:pointer;float:right;width:29px;height:29px;background:url('../images/ico_attach_resp.png') no-repeat;margin:0 10px 0 0}
 .attached_file_box{display:block;margin:-20px 0 20px 150px;font-weight:bold;font-size:13px;width:500px}
 .clear {display:block;clear:both;}

@@ -60,10 +60,15 @@
                         </h:panelGroup>
                     </ui:repeat>
                 </h:panelGroup>
-                <h:commandLink styleClass="post_topic_button" action="#{discussionTopicBean.createTopic()}">
+                <h:commandLink styleClass="post_topic_button_container" action="#{discussionTopicBean.createTopic()}">
                     <f:ajax render="@form" execute="@form" event="action"></f:ajax>
+                    <img id="post_topic_icon" src="/resources/images/green-plus.png"/>
+                    <span class="post_topic_label">#{localeBean.getString('Postar')}</span>
                 </h:commandLink>
-                <h:link styleClass="back_button" outcome="/primata/theme/theme.xhtml?id=#{discussionTopicBean.theme.id}"></h:link>
+                <h:link styleClass="back_button_container" outcome="/primata/theme/theme.xhtml?id=#{discussionTopicBean.theme.id}"> 
+                    <img id="back_button_icon" src="/resources/images/back.png"/>
+                    <span class="back_button_label">#{localeBean.getString('Voltar')}</span>
+                </h:link>
                 <span class="clear"/>
             </h:panelGroup>
         </h:form>

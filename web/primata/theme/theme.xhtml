@@ -32,7 +32,9 @@
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
                         <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
-                        <h:link styleClass="discussion_topic_new" outcome="/primata/discussion/createTopic.xhtml" >
+                        <h:link styleClass="create_topic_container" outcome="/primata/discussion/createTopic.xhtml">
+                            <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
+                            <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                             <f:param name="id" value="#{themeBean.id}" />
                             <f:param name="files" value="0" />
                         </h:link>
@@ -65,7 +67,10 @@
                         <h:panelGroup styleClass="publication_objects">
 
                         </h:panelGroup>
-                        <a class="publication_new_object" href="/ts/submit.do" ></a>
+                        <a class="publish_new_object_container" href="/ts/submit.do">
+                            <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
+                            <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
+                        </a>
                     </h:panelGroup> 
                 </h:form>
                 <span class="clear"></span>
