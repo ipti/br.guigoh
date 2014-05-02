@@ -46,12 +46,12 @@ $(document).ready(function(){
                         }else{
                             object_title = lastobject.title;
                         }
-                        var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+object_title+'</h2></a>';
+                        var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><h2>'+object_title+'</h2></a>';
                         var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                         if(typeof lastobject.picture_url != 'undefined'){
-                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'" ><span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span></a>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'" ><span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span></a>';
                         }else{
-                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'" ><span class="thumb_public"></span></a>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'" ><span class="thumb_public"></span></a>';
                         }
                         var author = ' <div class="autor_public">por <span>'+lastobject.submitter_login+'</span></div>';
                         var tagList = lastobject.tags.split(',');
@@ -116,12 +116,12 @@ $(document).ready(function(){
                             }else{
                                 object_title = lastobject.title;
                             }
-                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+object_title+'</h2></a>';
+                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><h2>'+object_title+'</h2></a>';
                             var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                             if(typeof lastobject.picture_url != 'undefined'){
-                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span></a>';
+                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span></a>';
                             }else{
-                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span class="thumb_public"></span></a>';
+                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span class="thumb_public"></span></a>';
                             }
                             var author = ' <div class="autor_public">por <span>'+lastobject.submitter_login+'</span></div>';
                             var tags = '<div class="object_tags">#'+lastobject.tags+'</div>';
@@ -157,7 +157,7 @@ $(document).ready(function(){
                             }else{
                                 object_title = lastobject.title;
                             }
-                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+object_title+'</h2></a>';
+                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><h2>'+object_title+'</h2></a>';
                             var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                             if(typeof lastobject.picture_url != 'undefined'){
                                 var thumb = '<span style="background:url('+lastobject.picture_url+') no-repeat;background-size:77px" class="thumb_public"></span>';

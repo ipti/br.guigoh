@@ -27,12 +27,12 @@ $(document).ready(function(){
                     if(lastobjects[i] != null){
                         var lastobject = lastobjects[i];
                         var html = $('<div class="public_tec"></div>');
-                        var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+lastobject.title+'</h2></a>';
+                        var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><h2>'+lastobject.title+'</h2></a>';
                         var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                         if(typeof lastobject.picture_url != 'undefined'){
-                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span style="background:url('+lastobject.picture_url+') no-repeat;" class="thumb_public"></span></a>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span style="background:url('+lastobject.picture_url+') no-repeat;" class="thumb_public"></span></a>';
                         }else{
-                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span class="thumb_public"></span></a>';
+                            var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span class="thumb_public"></span></a>';
                         }
                         var author = ' <div class="autor_public">'+enviadoPor+'<span>'+lastobject.submitter_login+' </span></div>';
                         var theme = '<div class="theme_public"> '+em+'<span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
@@ -42,17 +42,18 @@ $(document).ready(function(){
                     }
                 }
                 $(document).on('click', '.more_objects', function(){
+                    locale = $("#localeAcronym").val();
                     count += 5;
                     for(var i=count-5;i<count;i++){
                         if(lastobjects[i] != null){
                             var lastobject = lastobjects[i];
                             if(typeof lastobject.picture_url != 'undefined'){
-                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span style="background:url('+lastobject.picture_url+') no-repeat;" class="thumb_public"></span></a>';
+                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span style="background:url('+lastobject.picture_url+') no-repeat;" class="thumb_public"></span></a>';
                             }else{
-                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><span class="thumb_public"></span></a>';
+                                var thumb = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><span class="thumb_public"></span></a>';
                             }
                             var html = $('<div class="public_tec"></div>');
-                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'"><h2>'+lastobject.title+'</h2></a>';
+                            var title = '<a href="/ts/social-tech.do?stid='+lastobject.id+'&lang='+locale.substring(0, 2)+'"><h2>'+lastobject.title+'</h2></a>';
                             var time = '<font class="clock_public"></font><h3>'+lastobject.to_char+'</h3>';
                             var author = ' <div class="autor_public">'+enviadoPor+' <span>'+lastobject.submitter_login+'</span></div>';
                             var theme = '<div class="theme_public"> '+em+' <span>'+lastobject.comunity+'</span><span class="clear"></span></div>';
