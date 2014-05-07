@@ -58,16 +58,16 @@ font {display:block; margin:4px 50px 0px -4px; float:left;}
 .icon_hobbies {display:block; height:22px; background:url(../images/icons_sports.png) no-repeat; background-position: 8px -37px;}
 
 /* Curriculum */
-.curriculum_info {float:left; width:620px; height:140px;}
-.curriculum_info_left {float:right; width:280px; padding-top:24px;}
-.button_download {text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; padding-top:4px; border-radius:2px; margin-left:142px; font-size:14px;}
-.availability {color:#818080; width:240px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
+.curriculum_info {float:left; width:500px; height:140px;}
+.curriculum_info_left {float:right; width:350px; padding-top:24px;}
+.button_download {text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:130px; height:21px; text-align:center; padding-top:4px; border-radius:2px; margin-left:200px; font-size:14px;}
+.availability {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
 .availability span {font-weight:lighter;}
-.gender {color:#818080; width:240px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
+.gender {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
 .gender span {font-weight:lighter;}
-.scholarity {color:#818080; width:240px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
+.scholarity {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
 .scholarity span {font-weight:lighter;}
-.phone_number {color:#818080; width:240px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
+.phone_number {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
 .phone_number span {font-weight:lighter;}
 .request_phone { width: 100px; }
 .line2 {margin-right: 20px;}
@@ -101,7 +101,7 @@ font {display:block; margin:4px 50px 0px -4px; float:left;}
 
 .multiselect_box{margin:25px 0px 0px 135px;display:block}
 
-.button_curriculum1{display: block; float: left; margin-left: -75px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
+.button_curriculum1{display: block; float: left; margin-left: -60px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
 .button_curriculum1:hover{background-color: #a94750;}
 
 .institutions{margin:24px 0px 10px 0px;}

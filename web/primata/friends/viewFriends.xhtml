@@ -14,19 +14,19 @@
                 <h:panelGroup rendered="#{!friendsBean.pendingList.isEmpty()}">
                     <div class="pending_box">
                         <font class="pending_box_title">
-                            <p>Contatos Pendentes</p>    
+                            <p>#{localeBean.getString('Contatos Pendentes')}</p>    
                         </font>
                         <hr class="line" />              
-                        <h1>Aceite ou rejeite contatos que lhe adicionaram na rede, logo abaixo:</h1>
+                        <h1>#{localeBean.getString('Aceite ou rejeite contatos que lhe adicionaram na rede, logo abaixo:')}</h1>
                         <div class="pending_box_block">
                             <ui:repeat value="#{friendsBean.pendingList}" var="pending">
                                 <h:link outcome="#{friendsBean.goToProfile(pending.tokenFriend2.socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{pending.tokenFriend2.socialProfile.photo}') no-repeat center center;background-size:77px;">
                                     <p class="name">#{pending.tokenFriend2.socialProfile.name}</p>
                                     <p class="occupation">#{pending.tokenFriend2.socialProfile.occupationsId.name}</p>
-                                    <h:commandButton id ="add_pending_friend" styleClass="button_accept" value="Aceitar" action="#{friendsBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
+                                    <h:commandButton id ="add_pending_friend" styleClass="button_accept" value="#{localeBean.getString('Aceitar')}" action="#{friendsBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
                                         <f:ajax execute="add_pending_friend" render="@form"/>
                                     </h:commandButton>
-                                    <h:commandButton id ="remove_pending_friend" styleClass="button_reject" value="Rejeitar" action="#{friendsBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
+                                    <h:commandButton id ="remove_pending_friend" styleClass="button_reject" value="#{localeBean.getString('Rejeitar')}" action="#{friendsBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
                                         <f:ajax execute="remove_pending_friend" render="@form"/>
                                     </h:commandButton>
                                 </h:link>
@@ -39,7 +39,7 @@
                 <h:panelGroup rendered="#{!friendsBean.acceptedList.isEmpty()}">
                     <div class="contacts_box">
                         <font class="contacts_box_title">
-                            <p>Contatos</p>    
+                            <p>#{localeBean.getString('Contatos')}</p>    
                         </font>
                         <hr class="contacts_line" />
                         <h:form class="contacts_search">
@@ -48,7 +48,7 @@
                             </h:inputText>
                             <input type="button" value="" title="Pesquisar em contatos" class="contacts_button_friends_submit" />
                             <span class="clear"></span>
-                            <h1>Para acessar o perfil, basta clicar na foto, nome ou ocupação do contato. Para procurar um amigo, digite no campo acima.</h1>
+                            <h1>#{localeBean.getString('Para acessar o perfil, basta clicar na foto, nome ou ocupação do contato. Para procurar um amigo, digite no campo acima.')}</h1>
                             <h:panelGroup id="friends">
                                 <div class="contacts_box_blocks">
                                     <ui:repeat value="#{friendsBean.acceptedList}" var="friend" >
@@ -61,7 +61,7 @@
                                                     <p class="name" >#{friend.tokenFriend2.socialProfile.name}</p>
                                                     <p class="occupation">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
                                                 </h:link>
-                                                <p class="messageButton" name="#{friend.tokenFriend2.socialProfile.name}" socialprofileid="#{friend.tokenFriend2.socialProfile.socialProfileId}">+ Mensagem</p>
+                                                <p class="messageButton" name="#{friend.tokenFriend2.socialProfile.name}" socialprofileid="#{friend.tokenFriend2.socialProfile.socialProfileId}">#{localeBean.getString('+ Mensagem')}</p>
                                             </div>   
                                         </div>
                                     </ui:repeat>
@@ -73,10 +73,10 @@
                 <span class="clear"></span>
                 <div class="find_box">
                     <font class="find_box_title">
-                        <p>Encontrar Contatos</p>    
+                        <p>#{localeBean.getString('Encontrar Contatos')}</p>    
                     </font>
                     <hr class="line" />
-                    <h1>Digite no campo ao lado o contato que você deseja procurar:</h1>
+                    <h1>#{localeBean.getString('Digite no campo ao lado o contato que você deseja procurar:')}</h1>
                     <h:form class="contacts_search">
                         <h:inputText id="searchUsers" value="#{friendsBean.userInputSearch}" styleClass="contacts_search_users_box" autocomplete="off">
                             <f:ajax listener="#{friendsBean.searchUsersEvent()}" execute="searchUsers" render="users" event="keyup"/>

@@ -23,7 +23,7 @@ strong {font-weight: bold;}
 .contacts_box {margin-left: 40px;}
 .contacts_box_title {display: block; width: 86px; position: relative; margin-top: 28px; padding: 10px 10px 10px 10px; border: 1px solid #969696; border-radius: 2px; background-color: #fff;}
 .contacts_box_title p {color: #cf7353; text-transform: uppercase; font-size: 15px; font-weight: bold;}
-.contacts_box h1 {margin: 40px 0px 30px 20px; color: #9d9d9d; text-transform: uppercase; font-size: 12px; font-style:italic;}
+.contacts_box h1 {margin: 40px 0px 30px 20px;width:810px; color: #9d9d9d; text-transform: uppercase; font-size: 12px; font-style:italic;}
 .contacts_box_block {display: block; width: 266px; float: left; margin: -1px 0px 0px -1px; border: 1px solid #969696; border-radius: 2px;}
 .contacts_box_blocks {width:822px; display:block; margin: 0px 0px 0px 24px;}
 .button_reject_close {display: block; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:19px; text-align:center; border-radius:2px; font-size:10px; float: right; margin: 10px 10px 0px 0px; cursor:pointer}
@@ -35,7 +35,7 @@ strong {font-weight: bold;}
 .contacts_button_users_submit {border: 1px solid #969696; border-radius: 2px; background:url(../images/magnifer.png) no-repeat; width: 24px; height: 24px; padding-top: 3px; float:right;margin: -68px 2px 0px 0px;}
 .contacts_button_friends_submit {border: 1px solid #969696; border-radius: 2px; background:url(../images/magnifer.png) no-repeat; width: 24px; height: 24px; float:right; margin: -14px -176px 0px 0px;}
 .find_box {margin: 0px 0px 40px 40px;}
-.find_box_title {display: block; width: 186px; position: relative; margin-top: 28px; padding: 10px 10px 10px 10px; border: 1px solid #969696; border-radius: 2px; background-color: #fff;}
+.find_box_title {display: block; width: 210px; position: relative; margin-top: 28px; padding: 10px 10px 10px 10px; border: 1px solid #969696; border-radius: 2px; background-color: #fff;}
 .find_box_title p {color: #cf7353; text-transform: uppercase; font-size: 15px; font-weight: bold;}
 .find_box h1 {margin: 40px 0px 50px 20px; color: #9d9d9d; text-transform: uppercase; font-size: 12px; font-style:italic;}
 .messageButton{float:right;margin:-40px 10px 0 0;font-size:12px;color:#818080;cursor:pointer}
