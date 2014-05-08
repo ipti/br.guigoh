@@ -4,6 +4,8 @@
  */
 navigator.userLanguage = 'pt';
 
+
+
 $(document).ready(function() {
     loadAll();
     jsf.ajax.addOnEvent(function(data){
