@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author ipti004
  */
-@SessionScoped 
+@SessionScoped
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {
 
@@ -34,7 +34,6 @@ public class LocaleBean implements Serializable {
     private LanguageBO languageBO = new LanguageBO();
     private SocialProfileBO socialProfileBO = new SocialProfileBO();
 
-    
     public LocaleBean() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
@@ -47,8 +46,10 @@ public class LocaleBean implements Serializable {
                 }
             }
         }
-        socialProfile = socialProfileBO.findSocialProfile(token);
-        acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+        if (!token.equals("")) {
+            socialProfile = socialProfileBO.findSocialProfile(token);
+            acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+        }
         if (acronym.equals("ptBR")) {
             changeToPTBR("");
         } else if (acronym.equals("enUS")) {
@@ -60,35 +61,41 @@ public class LocaleBean implements Serializable {
     }
 
     public String getString(String string) {
-        getLocale();
+        setLocale();
         return trans.getWord(string);
     }
 
     public String changeToPTBR(String url) {
-        cr.editarTag("locale", "ptBR"); 
-        socialProfile.setLanguageId(languageBO.findByAcronym("ptBR"));
-        socialProfileBO.edit(socialProfile);
+        cr.editarTag("locale", "ptBR");
+        if (!token.equals("")) {
+            socialProfile.setLanguageId(languageBO.findByAcronym("ptBR"));
+            socialProfileBO.edit(socialProfile);
+        }
         acronym = "ptBR";
-        return url+"?faces-redirect=true&includeViewParams=true";
+        return url + "?faces-redirect=true&includeViewParams=true";
     }
 
     public String changeToENUS(String url) {
         cr.editarTag("locale", "enUS");
-        socialProfile.setLanguageId(languageBO.findByAcronym("enUS"));
-        socialProfileBO.edit(socialProfile);
+        if (!token.equals("")) {
+            socialProfile.setLanguageId(languageBO.findByAcronym("enUS"));
+            socialProfileBO.edit(socialProfile);
+        }
         acronym = "enUS";
-        return url+"?faces-redirect=true&includeViewParams=true";
+        return url + "?faces-redirect=true&includeViewParams=true";
     }
 
     public String changeToFRFR(String url) {
         cr.editarTag("locale", "frFR");
-        socialProfile.setLanguageId(languageBO.findByAcronym("frFR"));
-        socialProfileBO.edit(socialProfile);
+        if (!token.equals("")) {
+            socialProfile.setLanguageId(languageBO.findByAcronym("frFR"));
+            socialProfileBO.edit(socialProfile);
+        }
         acronym = "frFR";
-        return url+"?faces-redirect=true&includeViewParams=true";
+        return url + "?faces-redirect=true&includeViewParams=true";
     }
 
-    public void getLocale() {
+    public void setLocale() {
         if (cr.getTag("locale").equals("enUS")) {
             trans.setLocaleENUS();
         } else if (cr.getTag("locale").equals("ptBR")) {
