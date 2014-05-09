@@ -63,85 +63,92 @@
                     <div id="content_box" >
                         <h:panelGroup id="firstPanel" rendered="#{wizardProfileBean.showpanel == 1}">
                             <div class="request_complete" >
-                                <h1 class="text_top_one"><strong> COMPLETE SEU CADASTRO </strong>  -  Preencha seu cadastro abaixo em 3 passos simples.</h1>
+                                <h1 class="text_top_one"><strong> #{localeBean.getString('Complete seu cadastro').toUpperCase()} </strong>  -  #{localeBean.getString('Preencha seu cadastro abaixo em 3 passos simples.')}</h1>
                                 <font class="request_line_one"></font>
                                 <span class="request_number_one"></span>
-                                <h2 class="text_mid_one" >INFORMAÇÕES BÁSICAS</h2>
+                                <h2 class="text_mid_one" >#{localeBean.getString('Informações básicas').toUpperCase()}</h2>
                             </div>
                             <span class="clear"></span>
 
                             <h:form class="request_form" prependId="false" > 
                                 <div class="profile_avatar" style="background:url('#{wizardProfileBean.socialProfile.photo}') no-repeat center center;">
-                                    <Button id ="alter_img" class="change_avatar" >Alterar</Button>
+                                    <Button id ="alter_img" class="change_avatar" >#{localeBean.getString('Alterar')}</Button>
 
                                 </div>
 
                                 <span class="clear"></span>
-                                <span>ÁREA DE OCUPAÇÃO</span>
+                                <span>#{localeBean.getString('Área de ocupação').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.socialProfile.occupationsId.occupationsTypeId.id}"
                                                  class="area_occupation">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
                                     <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
                                     <f:ajax render="occupation" event="valueChange" listener="#{wizardProfileBean.loadOccupations()}"/>
                                 </h:selectOneMenu>
-                                <h:messages errorClass="error error_font" ></h:messages>
                                 <br/>
-                                <span>OCUPAÇÃO</span>
+                                <h:messages errorClass="error error_font" ></h:messages>
+                                <span>#{localeBean.getString('Ocupação').toUpperCase()}</span>
                                 <h:inputText id="occupation" value="#{wizardProfileBean.socialProfile.occupationsId.name}" class="request_form_ocupation occupation" disabled="#{wizardProfileBean.socialProfile.occupationsId.occupationsTypeId.id == 0}"/>
-                                <span>ESCOLARIDADE</span>
+                                <br/>
+                                <span>#{localeBean.getString('Escolaridade').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.socialProfile.scholarityId.id}"
                                                  class="scholarity">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
-                                    <f:selectItems value="#{wizardProfileBean.scholarityList}" var="scholarity" itemValue="#{scholarity.id}" itemLabel="#{scholarity.description}" />
-                                </h:selectOneMenu>
-                                <span>SEXO</span>
-                                <h:selectOneMenu value="#{wizardProfileBean.socialProfile.gender}">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="" />
-                                    <f:selectItem itemLabel = "Masculino" itemValue="M" />
-                                    <f:selectItem itemLabel = "Feminino" itemValue="F" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
+                                    <ui:param name="scholarityDescription" value="#{scholarity.description}" />
+                                    <f:selectItems value="#{wizardProfileBean.scholarityList}" var="scholarity" itemValue="#{scholarity.id}" itemLabel="#{localeBean.getString(scholarityDescription)}" />
                                 </h:selectOneMenu>
                                 <br/>
-                                <span>TELEFONE</span><h:inputText id="phone" value="#{wizardProfileBean.socialProfile.phone}" class="request_form_phone phone"/>
-                                <span>DISPONIBILIDADE DE TRABALHO</span>
+                                <span>#{localeBean.getString('Sexo').toUpperCase()}</span>
+                                <h:selectOneMenu class="gender" value="#{wizardProfileBean.socialProfile.gender}">
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Masculino')}" itemValue="M" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Feminino')}" itemValue="F" />
+                                </h:selectOneMenu>
+                                <br/>
+                                <span>#{localeBean.getString('Telefone').toUpperCase()}</span>
+                                <h:inputText id="phone" value="#{wizardProfileBean.socialProfile.phone}" class="request_form_phone phone"/>
+                                <br/>
+                                <span>#{localeBean.getString('Disponibilidade de trabalho').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.socialProfile.availabilityId.id}" class="institutions">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
-                                    <f:selectItems value="#{wizardProfileBean.availabitityListAll}" var="availabitity" itemValue="#{availabitity.id}" itemLabel="#{availabitity.description}" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
+                                    <ui:param name="availabilityDescription" value="#{availabitity.description}"/>
+                                    <f:selectItems value="#{wizardProfileBean.availabitityListAll}" var="availabitity" itemValue="#{availabitity.id}" itemLabel="#{localeBean.getString(availabilityDescription)}" />
                                 </h:selectOneMenu>
 
-                                <p>ENDEREÇO</p>
-                                <span>ENDEREÇO</span><h:inputText id="address" value="#{wizardProfileBean.socialProfile.address}" class="request_form_street"/>
-                                <span>COMPLEMENTO</span><h:inputText id="complement" value="#{wizardProfileBean.socialProfile.complement}" class="request_form_complement"/>
-                                <span>NÚMERO</span><h:inputText id="number" value="#{wizardProfileBean.socialProfile.number}" class="request_form_number"/>
-                                <span>BAIRRO</span><h:inputText id="neighborhood" value="#{wizardProfileBean.socialProfile.neighborhood}" class="request_form_district"/>
-                                <span>CEP</span><h:inputText id="zipcode" value="#{wizardProfileBean.socialProfile.zipcode}" class="request_form_cep zipcode"/>
+                                <p>#{localeBean.getString('Endereço').toUpperCase()}</p>
+                                <span>#{localeBean.getString('Endereço').toUpperCase()}</span><h:inputText id="address" value="#{wizardProfileBean.socialProfile.address}" class="request_form_street"/>
+                                <span>#{localeBean.getString('Complemento').toUpperCase()}</span><h:inputText id="complement" value="#{wizardProfileBean.socialProfile.complement}" class="request_form_complement"/>
                                 <br/>
-                                <span>PÁIS</span>
+                                <span>#{localeBean.getString('Número').toUpperCase()}</span><h:inputText id="number" value="#{wizardProfileBean.socialProfile.number}" class="request_form_number"/>
+                                <span>#{localeBean.getString('Bairro').toUpperCase()}</span><h:inputText id="neighborhood" value="#{wizardProfileBean.socialProfile.neighborhood}" class="request_form_district"/>
+                                <span>#{localeBean.getString('CEP').toUpperCase()}</span><h:inputText id="zipcode" value="#{wizardProfileBean.socialProfile.zipcode}" class="request_form_cep zipcode"/>
+                                <br/>
+                                <span>#{localeBean.getString('País').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.countryId}" class="request_form_country">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                     <f:ajax event="valueChange" render="state city" listener="#{wizardProfileBean.loadState}"/>
                                 </h:selectOneMenu>
 
-                                <span>Estado</span>
+                                <span>#{localeBean.getString('Estado').toUpperCase()}</span>
                                 <h:selectOneMenu id="state" value="#{wizardProfileBean.stateId}" class="request_form_state">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.stateList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
                                     <f:ajax event="valueChange" render="city" listener="#{wizardProfileBean.loadCity()}"/>
                                 </h:selectOneMenu>
 
-                                <span>Cidade</span>
+                                <span>#{localeBean.getString('Cidade').toUpperCase()}</span>
                                 <h:selectOneMenu id="city" value="#{wizardProfileBean.cityId}" class="request_form_city">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
                                 </h:selectOneMenu>
 
-                                <p>FALE UM POUCO SOBRE VOCÊ</p>
+                                <p>#{localeBean.getString('Fale um pouco sobre você').toUpperCase()}</p>
                                 <h:inputTextarea value="#{wizardProfileBean.socialProfile.description}" class="request_form_text"/>
 
                                 <span class="clear"></span>    
                                 <ul class="request_button_green">
-                                    <li ><h:commandLink value="PULAR" action="#{wizardProfileBean.skip(1)}"/> </li>
-                                    <li ><h:commandLink value="PRÓXIMO" action="#{wizardProfileBean.editWizard(1)}">
+                                    <li ><h:commandLink value="#{localeBean.getString('Pular').toUpperCase()}" action="#{wizardProfileBean.skip(1)}"/> </li>
+                                    <li ><h:commandLink value="#{localeBean.getString('Próximo').toUpperCase()}" action="#{wizardProfileBean.editWizard(1)}">
                                             <f:setPropertyActionListener target="#{wizardProfileBean.showpanel}" value="2"/>
                                         </h:commandLink></li>
                                 </ul>
@@ -150,22 +157,23 @@
                         <h:panelGroup id="secondPanel" rendered="#{wizardProfileBean.showpanel == 2}">
                             <span class="clear"></span>
                             <div class="request_complete" >
-                                <h1 class="text_top_one"><strong> COMPLETE SEU CADASTRO </strong>  -  Preencha seu cadastro abaixo em 3 passos simples.</h1>
+                                <h1 class="text_top_one"><strong> #{localeBean.getString('Complete seu cadastro').toUpperCase()} </strong>  -  #{localeBean.getString('Preencha seu cadastro abaixo em 3 passos simples.')}</h1>
                                 <font class="request_line_two"></font>
                                 <span class="request_number_two"></span>
-                                <h2 class="text_mid_two" >INFORMAÇÕES COMPLEMENTARES</h2>
+                                <h2 class="text_mid_two" >#{localeBean.getString('Informações complementares').toUpperCase()}</h2>
                             </div>
                             <h:form class="request_form" prependId="false">
-                                <p>TEMAS DE INTERESSE* <text>(campo obrigatório)</text></p>
+                                <p>#{localeBean.getString('Temas de Interesse').toUpperCase()}* <text>(#{localeBean.getString('Campo obrigatório')})</text></p>
                                 <div>
                                     <h:selectManyListbox id="multiselect" class="multiselect"  value="#{wizardProfileBean.multiThemeList}">
-                                        <f:selectItems value="#{wizardProfileBean.themesListAll}" var="themes" itemValue="#{themes.id}" itemLabel="#{themes.name}" />
+                                        <ui:param name="theme" value="#{themes.name}"/>
+                                        <f:selectItems value="#{wizardProfileBean.themesListAll}" var="themes" itemValue="#{themes.id}" itemLabel="#{localeBean.getString(theme)}" />
                                     </h:selectManyListbox>
                                 </div>
                                 <span class="clear"></span>
-                                <p>INTERESSES CULTURAIS</p>
+                                <p>#{localeBean.getString('Interesses Culturais').toUpperCase()}</p>
 
-                                <span>Livros</span>
+                                <span>#{localeBean.getString('Livros')}</span>
                                 <h:panelGroup>
                                     <h:inputText id="books1" value="#{wizardProfileBean.booksList[0]}" class="request_form_books books1">
                                         <f:converter converterId="InterestsConverter"></f:converter>
@@ -182,7 +190,7 @@
                                     </h:inputText>
                                 </h:panelGroup>
                                 <br/>
-                                <span>Música</span>
+                                <span>#{localeBean.getString('Músicas')}</span>
                                 <h:panelGroup>
                                     <h:inputText id="musics1" value="#{wizardProfileBean.musicsList[0]}" class="request_form_music musics1">
                                         <f:converter converterId="InterestsConverter"></f:converter>
@@ -199,7 +207,7 @@
                                     </h:inputText>
                                 </h:panelGroup>
                                 <br/>
-                                <span>Cinema</span>
+                                <span>#{localeBean.getString('Filmes')}</span>
                                 <h:panelGroup>
                                     <h:inputText id="movies1" value="#{wizardProfileBean.moviesList[0]}" class="request_form_cine movies1">
                                         <f:converter converterId="InterestsConverter"></f:converter>
@@ -217,8 +225,8 @@
                                 </h:panelGroup> 
 
                                 <span class="clear"></span>
-                                <p>ESPORTES E HOBBIES</p>
-                                <span>Esportes</span>
+                                <p>#{localeBean.getString('Esportes e Hobbies').toUpperCase()}</p>
+                                <span>#{localeBean.getString('Esportes')}</span>
                                 <h:panelGroup>
                                     <h:inputText id="sports1" value="#{wizardProfileBean.sportsList[0]}" class="request_form_sports sports1">
                                         <f:converter converterId="InterestsConverter"></f:converter>
@@ -235,7 +243,7 @@
                                     </h:inputText>
                                 </h:panelGroup> 
                                 <br/>
-                                <span>Hobbies</span>
+                                <span>#{localeBean.getString('Hobbies')}</span>
                                 <h:panelGroup>
                                     <h:inputText id="hobbies1" value="#{wizardProfileBean.hobbiesList[0]}" class="request_form_hobbies hobbies1">
                                         <f:converter converterId="InterestsConverter"></f:converter>
@@ -255,15 +263,15 @@
                                 <span class="clear"></span>
                                 <ul class="request_button_orange">
                                     <li class="request_button_orange_back">
-                                        <h:commandLink value="VOLTAR" action="#{wizardProfileBean.editWizard(2)}">
+                                        <h:commandLink value="#{localeBean.getString('Voltar').toUpperCase()}" action="#{wizardProfileBean.editWizard(2)}">
                                             <f:setPropertyActionListener target="#{wizardProfileBean.showpanel}" value="1"/>
                                         </h:commandLink>
                                     </li>
                                     <li >
-                                        <h:commandLink value="PULAR" action="#{wizardProfileBean.skip(2)}"/> 
+                                        <h:commandLink value="#{localeBean.getString('Pular').toUpperCase()}" action="#{wizardProfileBean.skip(2)}"/> 
                                     </li>
                                     <li >
-                                        <h:commandLink value="PRÓXIMO" action="#{wizardProfileBean.editWizard(2)}">
+                                        <h:commandLink value="#{localeBean.getString('Próximo').toUpperCase()}" action="#{wizardProfileBean.editWizard(2)}">
                                             <f:setPropertyActionListener target="#{wizardProfileBean.showpanel}" value="3"/>
                                         </h:commandLink>
                                     </li>
@@ -273,50 +281,52 @@
                         <h:panelGroup id="thirdPanel" rendered="#{wizardProfileBean.showpanel == 3}">
                             <span class="clear"></span>
                             <div class="request_complete" >
-                                <h1 class="text_top_one"><strong> COMPLETE SEU CADASTRO </strong>  -  Preencha seu cadastro abaixo em 3 passos simples.</h1>
+                                <h1 class="text_top_one"><strong> #{localeBean.getString('Complete seu cadastro').toUpperCase()} </strong>  -  #{localeBean.getString('Preencha seu cadastro abaixo em 3 passos simples.')}</h1>
                                 <font class="request_line_three"></font>
                                 <span class="request_number_three"></span>
-                                <h2 class="text_mid_three" >INFORMAÇÕES COMPLEMENTARES</h2>
+                                <h2 class="text_mid_three" >#{localeBean.getString('Informações complementares').toUpperCase()}</h2>
                             </div>
                             <span class="clear"></span> 
                             <h:form prependId="false" class="request_form" >               
-                                <p>EDUCAÇÃO</p>
+                                <p>#{localeBean.getString('Educação').toUpperCase()}</p>
 
                                 <br></br>
-                                <span>NOME DO CURSO</span>
+                                <span>#{localeBean.getString('Nome do curso').toUpperCase()}</span>
                                 <h:inputText id="education_name" value="#{wizardProfileBean.education.nameId.name}"  class="request_form_course educationName"
-                                             required="true" requiredMessage="* O campo 'NOME DO CURSO' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo NOME DO CURSO é obrigatório')}">
                                     <f:validateBean disabled="true"/>
                                 </h:inputText>
-                                <span>PERÍODO</span>
+                                <br/>
+                                <span>#{localeBean.getString('Período').toUpperCase()}</span>
                                 <h:inputText id="dateBeginEducation" value="#{wizardProfileBean.educationDataBegin}" 
                                              label="Date Begin" styleClass="date" class="request_form_period_begin dateMMyyyy"
-                                             required="true" requiredMessage="* O campo 'PERÍODO' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo PERÍODO é obrigatório')}">
                                 </h:inputText>
-                                <span>ATÉ</span>
+                                <span>#{localeBean.getString('Até').toUpperCase()}</span>
                                 <h:inputText id="dateEndEducation" value="#{wizardProfileBean.educationDataEnd}" 
                                              label="Date End" styleClass="date" class="request_form_period_end dateMMyyyy">
-
                                 </h:inputText>
-                                <span>INSTITUIÇÃO DE ENSINO</span>
+                                <br/>
+                                <span>#{localeBean.getString('Instituição de Ensino').toUpperCase()}</span>
                                 <h:inputText id="educationLocation" value="#{wizardProfileBean.education.locationId.name}" class="request_form_institution educationLocation"
-                                             required="true" requiredMessage="* O campo 'INSTITUIÇÃO DE ENSINO' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo INSTITUIÇÃO DE ENSINO é obrigatório')}">
                                     <f:validateBean disabled="true"/>
                                 </h:inputText>   
-                                <span>PÁIS</span>
+                                <br/>
+                                <span>#{localeBean.getString('País').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.countryEducationId}" class="request_form_country"
-                                                 required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo PÁIS é obrigatório')}">
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                     <f:ajax event="valueChange" render="stateEducation" listener="#{wizardProfileBean.loadStateEducaitons()}"/>
                                 </h:selectOneMenu>
-                                <span>ESTADO</span>
+                                <span>#{localeBean.getString('Estado').toUpperCase()}</span>
                                 <h:selectOneMenu id="stateEducation" value="#{wizardProfileBean.stateEducationId}" class="request_form_state"
-                                                 required="true" requiredMessage="* O campo 'ESTADO' é obrigatório">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo ESTADO é obrigatório')}">
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.stateEducationList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
                                 </h:selectOneMenu>
-                                <h:commandLink class="button_add" value="Adicionar" action="#{wizardProfileBean.addEducations}">
+                                <h:commandLink class="button_add" value="#{localeBean.getString('Adicionar')}" action="#{wizardProfileBean.addEducations}">
                                     <f:ajax execute="@form" event="action" render="@form"/>
                                 </h:commandLink>
                                 <span class="clear"></span>
@@ -333,14 +343,14 @@
 
                                             <ui:repeat value="#{wizardProfileBean.educationsList}" var="education" rendered="#{!wizardProfileBean.educationsList.isEmpty()}">
                                                 <li>
-                                                    <span>CURSO:</span>
+                                                    <span>#{localeBean.getString('Curso').toUpperCase()}:</span>
                                                     <span>#{education.nameId.name}</span>
                                                     <br/>
-                                                    <span>INSTITUIÇÃO DE ENSINO:</span>
+                                                    <span>#{localeBean.getString('Instituição de Ensino').toUpperCase()}:</span>
                                                     <span>#{education.locationId.name}</span>
                                                     <br/>
                                                     <span class="education_data">
-                                                        <span>PERÍODO:</span>
+                                                        <span>#{localeBean.getString('Período').toUpperCase()}:</span>
                                                         <h:outputText value="#{education.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{education.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText>
                                                     </span>
                                                     <h:commandLink id="remove_education" styleClass="remove_button" value="x" action="#{wizardProfileBean.removeEducation(education)}">
@@ -354,54 +364,57 @@
                                 </font>
                             </h:form>
                             <h:form class="request_form" prependId="false">
-                                <p>EXPERIÊNCIA</p>
+                                <p>#{localeBean.getString('Experiência').toUpperCase()}</p>
                                 
                                 <br></br>
-                                <span>ÁREA DA ATIVIDADE</span>
+                                <span>#{localeBean.getString('Área da Atividade').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.experience.nameId.occupationsTypeId.id}"
-                                                 required="true" requiredMessage="* O campo 'ÁREA DA ATIVIDADE' é obrigatório"
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo AREA DA ATIVIDADE é obrigatório')}"
                                                  class="area_activity">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="" />  
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />  
                                     <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
                                 </h:selectOneMenu>
                                 <br/>
-                                <span>NOME DA ATIVIDADE</span>
+                                <span>#{localeBean.getString('Nome da Atividade').toUpperCase()}</span>
                                 <h:inputText id="activity" value="#{wizardProfileBean.experience.nameId.name}" class="request_form_activity activity"
-                                             required="true" requiredMessage="* O campo 'NOME DA ATIVIDADE' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo NOME DA ATIVIDADE é obrigatório')}">
                                     <f:validateBean disabled="true"/>
                                 </h:inputText>
-                                <span>PERÍODO</span>
+                                <br/>
+                                <span>#{localeBean.getString('Período').toUpperCase()}</span>
                                 <h:inputText id="dateBeginExperience" value="#{wizardProfileBean.experienceDataBegin}" 
                                              label="Date Begin" styleClass="date" class="request_form_period_begin dateMMyyyy"
-                                             required="true" requiredMessage="* O campo 'PERÍODO' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo PERÍODO é obrigatório')}">
 
                                 </h:inputText>
-                                <span>ATÉ</span>
+                                <span>#{localeBean.getString('Até').toUpperCase()}</span>
                                 <h:inputText id="dateEndExperience" value="#{wizardProfileBean.experienceDataEnd}" 
                                              label="Date End" styleClass="date" class="request_form_period_end dateMMyyyy">
 
                                 </h:inputText>
-                                <span>NOME DA EMPRESA</span>
+                                <br/>
+                                <span>#{localeBean.getString('Nome da Empresa').toUpperCase()}</span>
                                 <h:inputText class="request_form_business experiencesLocation" value="#{wizardProfileBean.experience.locationId.name}"
-                                             required="true" requiredMessage="* O campo 'NOME DA EMPRESA' é obrigatório">
+                                             required="true" requiredMessage="* #{localeBean.getString('O campo NOME DA EMPRESA é obrigatório')}">
                                     <f:validateBean disabled="true"/>
                                 </h:inputText>
-                                <span>PÁIS</span>
+                                <br/>
+                                <span>#{localeBean.getString('País').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.countryExperienceId}" class="request_form_country"
-                                                 required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo PAÍS é obrigatório')}">
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.countryExperienceList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                     <f:ajax event="valueChange" render="stateExperience" listener="#{wizardProfileBean.loadStateExperiences()}"/>
                                 </h:selectOneMenu>
 
-                                <span>ESTADO</span>
+                                <span>#{localeBean.getString('Estado').toUpperCase()}</span>
                                 <h:selectOneMenu id="stateExperience" value="#{wizardProfileBean.stateExperienceId}" class="request_form_state"
-                                                 required="true" requiredMessage="* O campo 'ESTADO' é obrigatório">
-                                    <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo ESTADO é obrigatório')}">
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                     <f:selectItems value="#{wizardProfileBean.stateExperienceList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
                                 </h:selectOneMenu>
 
-                                <h:commandLink class="button_add" value="Adicionar" action="#{wizardProfileBean.addExperiences}">
+                                <h:commandLink class="button_add" value="#{localeBean.getString('Adicionar')}" action="#{wizardProfileBean.addExperiences}">
                                     <f:ajax execute="@form" event="action" render="@form"/>
                                 </h:commandLink>
                                 <span class="clear"></span>
@@ -418,14 +431,14 @@
                                             
                                             <ui:repeat value="#{wizardProfileBean.experiencesList}" var="experience" rendered="#{!wizardProfileBean.experiencesList.isEmpty()}">
                                                 <li>
-                                                    <span>NOME DA ATIVIDADE:</span>
+                                                    <span>#{localeBean.getString('Nome da Atividade').toUpperCase()}:</span>
                                                     <span>#{experience.nameId.name}</span>
                                                     <br/>
-                                                    <span>NOME DA EMPRESA:</span>
+                                                    <span>#{localeBean.getString('Nome da Empresa').toUpperCase()}:</span>
                                                     <span>#{experience.locationId.name}</span>
                                                     <br/>
                                                     <span class="experiences_data">
-                                                        <span>PERÍODO:</span>
+                                                        <span>#{localeBean.getString('Período').toUpperCase()}:</span>
                                                         <h:outputText value="#{experience.dataBegin}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText> - <h:outputText value="#{experience.dataEnd}"><f:convertDateTime pattern="MM/yyyy"/></h:outputText>
                                                     </span>
                                                     <h:commandLink id="remove_experiences" styleClass="remove_button" value="x" action="#{wizardProfileBean.removeExperience(experience)}">
@@ -441,12 +454,12 @@
                                 <span class="clear"></span>
                                 <ul class="request_button_blue">
                                     <li class="request_button_blue_back">
-                                        <h:commandLink value="VOLTAR" action="#{wizardProfileBean.editWizard(3)}">
+                                        <h:commandLink value="#{localeBean.getString('Voltar').toUpperCase()}" action="#{wizardProfileBean.editWizard(3)}">
                                             <f:setPropertyActionListener target="#{wizardProfileBean.showpanel}" value="2"/>
                                         </h:commandLink>
                                     </li>
                                     <li >
-                                        <h:commandLink value="CONCLUIR" action="#{wizardProfileBean.skip(3)}"/>
+                                        <h:commandLink value="#{localeBean.getString('Concluir').toUpperCase()}" action="#{wizardProfileBean.skip(3)}"/>
                                     </li>
                                 </ul>
                             </h:form>
@@ -457,10 +470,9 @@
                 </div>  
             </h:panelGroup>
         </div>                    
-        <div id="dialog-form" class="dialogform" title="Alterar Imagem">
+        <div id="dialog-form" class="dialogform" title="#{localeBean.getString('Alterar imagem')}">
             <fieldset>
                 <form action="Upload" method="POST" enctype="multipart/form-data">
-                    <label>Selecione a foto:</label>
                     <input type="file" name="file" id="filechoose" />
                     <input type="submit" />
                 </form>

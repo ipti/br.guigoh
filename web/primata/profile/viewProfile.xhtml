@@ -545,7 +545,7 @@
                                     <h:panelGrid class="curriculum3_edit_box_grid" columns="6">
                                         <span class="edit_label">#{localeBean.getString('Nome do curso')}: </span>
                                         <h:inputText id="education_name" value="#{profileBean.wizardProfileBean.education.nameId.name}"  class="request_form_course educationName"
-                                                     required="true" requiredMessage="* O campo 'NOME DO CURSO' é obrigatório">
+                                                     required="true" requiredMessage="* #{localeBean.getString('O campo NOME DO CURSO é obrigatório')}">
                                             <f:validateBean disabled="true"/>
                                         </h:inputText>
                                         <span class="edit_label">#{localeBean.getString('Período')}: </span>
@@ -560,19 +560,19 @@
                                         </h:inputText>
                                         <span class="edit_label">#{localeBean.getString('Instituição de Ensino')}: </span>
                                         <h:inputText id="educationLocation" value="#{profileBean.wizardProfileBean.education.locationId.name}" class="request_form_institution educationLocation"
-                                                     required="true" requiredMessage="* O campo 'INSTITUIÇÃO DE ENSINO' é obrigatório">
+                                                     required="true" requiredMessage="* #{localeBean.getString('O campo INSTITUIÇÃO DE ENSINO é obrigatório')}">
                                             <f:validateBean disabled="true"/>
                                         </h:inputText>   
                                         <span class="edit_label">#{localeBean.getString('País')}: </span>
                                         <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryEducationId}" class="request_form_country"
-                                                         required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
+                                                         required="true" requiredMessage="* #{localeBean.getString('O campo PÁIS é obrigatório')}">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                             <f:selectItems value="#{profileBean.wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                             <f:ajax event="valueChange" render="stateEducation" listener="#{profileBean.wizardProfileBean.loadStateEducaitons()}"/>
                                         </h:selectOneMenu>
                                         <span class="edit_label">#{localeBean.getString('Estado')}: </span>
                                         <h:selectOneMenu id="stateEducation" value="#{profileBean.wizardProfileBean.stateEducationId}" class="request_form_state"
-                                                         required="true" requiredMessage="* O campo 'ESTADO' é obrigatório">
+                                                         required="true" requiredMessage="* #{localeBean.getString('O campo ESTADO é obrigatório')}">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                             <f:selectItems value="#{profileBean.wizardProfileBean.stateEducationList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
                                         </h:selectOneMenu>
@@ -645,7 +645,7 @@
 
                                         <span class="edit_label">#{localeBean.getString('Área da Atividade')}:</span>
                                         <h:selectOneMenu value="#{profileBean.wizardProfileBean.experience.nameId.occupationsTypeId.id}"
-                                                         requiredMessage="* O campo 'ÁREA DA ATIVIDADE' é obrigatório"
+                                                         requiredMessage="* #{localeBean.getString('O campo ÁREA DA ATIVIDADE é obrigatório')}"
                                                          class="request_form_areaactivity">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />  
                                             <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
@@ -659,7 +659,7 @@
 
                                         <span class="edit_label">#{localeBean.getString('Nome da Atividade')}: </span>
                                         <h:inputText id="activity" value="#{profileBean.wizardProfileBean.experience.nameId.name}" class="request_form_activity activity"
-                                                     required="true" requiredMessage="* O campo 'NOME DA ATIVIDADE' é obrigatório">
+                                                     required="true" requiredMessage="* #{localeBean.getString('O campo NOME DA ATIVIDADE é obrigatório')}">
                                             <f:validateBean disabled="true"/>
                                         </h:inputText>
                                         <span class="edit_label">#{localeBean.getString('Período')}: </span>
@@ -674,12 +674,12 @@
                                         </h:inputText>
                                         <span class="edit_label">#{localeBean.getString('Nome da Empresa')}: </span>
                                         <h:inputText class="request_form_business experiencesLocation" value="#{profileBean.wizardProfileBean.experience.locationId.name}"
-                                                     required="true" requiredMessage="* O campo 'NOME DA EMPRESA' é obrigatório">
+                                                     required="true" requiredMessage="* #{localeBean.getString('O campo NOME DA EMPRESA é obrigatório')}">
                                             <f:validateBean disabled="true"/>
                                         </h:inputText>
                                         <span class="edit_label">#{localeBean.getString('País')}: </span>
                                         <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryExperienceId}" class="request_form_country"
-                                                         required="true" requiredMessage="* O campo 'PÁIS' é obrigatório">
+                                                         required="true" requiredMessage="* #{localeBean.getString('O campo PAÍS é obrigatório')}">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                             <f:selectItems value="#{profileBean.wizardProfileBean.countryExperienceList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                             <f:ajax event="valueChange" render="stateExperience" listener="#{profileBean.wizardProfileBean.loadStateExperiences()}"/>
@@ -734,10 +734,9 @@
 
         </div>
 
-        <div id="dialog-form" class="dialog" title="Alterar Imagem">
+        <div id="dialog-form" class="dialog" title="#{localeBean.getString('Alterar imagem')}">
             <fieldset>
                 <form action="Upload" method="POST" enctype="multipart/form-data">
-                    <label>Selecione a foto:</label>
                     <input type="file" name="file" id="filechoose" />
                     <input type="submit" />
                 </form>

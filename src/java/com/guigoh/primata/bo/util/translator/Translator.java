@@ -27,6 +27,12 @@ public class Translator implements Serializable{
     public void setLocaleFRFR() {
         locale = new Locale("fr","FR");
     }
+    
+    public void setLocale(String acronym){
+        String acronymLang = acronym.substring(0,2);
+        String acronymCountry = acronym.substring(2,4);
+        locale = new Locale(acronymLang,acronymCountry);
+    }
 
     public String getWord(String keyword) {
         return ResourceBundle.getBundle("com.guigoh.primata.bo.util.translator.Labels", locale).getString(keyword);

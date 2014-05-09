@@ -15,12 +15,14 @@ import com.guigoh.primata.bo.ExperiencesBO;
 import com.guigoh.primata.bo.ExperiencesLocationBO;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.InterestsTypeBO;
+import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.OccupationsBO;
 import com.guigoh.primata.bo.OccupationsTypeBO;
 import com.guigoh.primata.bo.ScholarityBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
 import com.guigoh.primata.bo.util.AutocompleteValue;
+import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Availability;
 import com.guigoh.primata.entity.City;
@@ -357,7 +359,12 @@ public class WizardProfileBean implements Serializable {
                     educationDataBegin = "";
                     educationDataEnd = "";
                     loadEducations();
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Educação adicionada com sucesso!", null));
+                    LanguageBO langBO = new LanguageBO();
+                    String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+                    Translator trans = new Translator();
+                    trans.setLocale(acronym);
+                    String message = trans.getWord("Educação adicionada com sucesso!");
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
                 }
             }
         } catch (Exception e) {
@@ -435,7 +442,12 @@ public class WizardProfileBean implements Serializable {
                     experienceDataBegin = "";
                     experienceDataEnd = "";
                     loadExperiencies();
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Experiência adicionada com sucesso!", null));
+                    LanguageBO langBO = new LanguageBO();
+                    String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+                    Translator trans = new Translator();
+                    trans.setLocale(acronym);
+                    String message = trans.getWord("Experiência adicionada com sucesso!");
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
                 }
             }
         } catch (Exception e) {
@@ -781,7 +793,12 @@ public class WizardProfileBean implements Serializable {
             experiencesList.remove(exp);
             ExperiencesBO experiencesBO = new ExperiencesBO();
             experiencesBO.removeExperience(exp);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Experiência removida com sucesso!!", null));
+            LanguageBO langBO = new LanguageBO();
+            String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+            Translator trans = new Translator();
+            trans.setLocale(acronym);
+            String message = trans.getWord("Experiência removida com sucesso!");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -793,7 +810,12 @@ public class WizardProfileBean implements Serializable {
             educationsList.remove(edu);
             EducationsBO educationsBO = new EducationsBO();
             educationsBO.removeEducation(edu);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Educação removida com sucesso!!", null));
+            LanguageBO langBO = new LanguageBO();
+            String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+            Translator trans = new Translator();
+            trans.setLocale(acronym);
+            String message = trans.getWord("Educação removida com sucesso!");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
             e.printStackTrace();
         }
