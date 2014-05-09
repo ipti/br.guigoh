@@ -81,7 +81,8 @@
                                 <h:selectOneMenu value="#{wizardProfileBean.socialProfile.occupationsId.occupationsTypeId.id}"
                                                  class="area_occupation">
                                     <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
-                                    <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
+                                    <ui:param name="OccupationTypeName" value="#{occupationType.name}"/>
+                                    <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{localeBean.getString(OccupationTypeName)}" />
                                     <f:ajax render="occupation" event="valueChange" listener="#{wizardProfileBean.loadOccupations()}"/>
                                 </h:selectOneMenu>
                                 <br/>

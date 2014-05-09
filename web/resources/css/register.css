@@ -18,12 +18,12 @@ body {background-color:#84A7CA; margin:0 auto;}
 .register_user input {width:190px;}
 .register_user select {width:194px;}
 .form_idioms {width:194px;}
-.form_institutions {width:208px;;}
+.form_institutions {width:195px;}
 .check_box {width:194px;}
 .check_box input {width:20px; float:left;}
 .check_box p {width:240px;}
-.form_button {width:160px; padding-left:52px;}
-.form_button input {cursor:pointer; width:60px; height:26px; float:left; border:1px #666 solid; border-radius:4px; margin-left:10px;}
+.form_button {width:160px;}
+.form_button a {text-decoration:none;color:black;text-align:center;font-size:13px;cursor:pointer; width:60px; height:26px; float:left; border:1px #666 solid; border-radius:4px;}
 .bottom {display:block; height:118px; background:url(../images/bgfooter.png); margin-top:-44px; z-index:1; position:relative; }
 .bottom_menu {padding: 42px 0px 0px 740px; width: 430px; text-align:right; font-size: 12px;}
 .bottom_menu li {display: inline; padding:0 0.4em; margin:0 auto; width:auto; background:none; border-right: 1px #000 solid; float:left;}

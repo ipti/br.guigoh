@@ -10,6 +10,7 @@ import com.guigoh.primata.bo.CountryBO;
 import com.guigoh.primata.bo.EmailActivationBO;
 import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.NetworksBO;
+import com.guigoh.primata.bo.RoleBO;
 import com.guigoh.primata.bo.SecretQuestionBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
@@ -22,6 +23,7 @@ import com.guigoh.primata.entity.Country;
 import com.guigoh.primata.entity.EmailActivation;
 import com.guigoh.primata.entity.Language;
 import com.guigoh.primata.entity.Networks;
+import com.guigoh.primata.entity.Role;
 import com.guigoh.primata.entity.SecretQuestion;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.State;
@@ -71,12 +73,14 @@ public class RegisterBean implements Serializable {
     private List<Country> countryList;
     private List<City> cityList;
     private List<Language> languageList;
+    private List<Role> roleList;
     private List<Subnetwork> subnetworkList;
     private String usernameConfirm;
     private String passwordConfirm;
     private Integer countryId;
     private Integer stateId;
     private Integer cityId;
+    private Integer roleId;
     private Integer subnetworkId;
     private Integer languageId;
     private String confirmCode;
@@ -85,6 +89,7 @@ public class RegisterBean implements Serializable {
     private String panelStatus;
     private String newPassword;
     private String newPasswordConfirm;
+    private Boolean visitor;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -96,6 +101,7 @@ public class RegisterBean implements Serializable {
             stateList = new ArrayList<State>();
             countryList = getCountries();
             cityList = new ArrayList<City>();
+            roleList = new ArrayList<Role>();
             languageList = getLanguages();
             subnetworkList = getSubnetworks();
             usernameConfirm = "";
@@ -103,12 +109,14 @@ public class RegisterBean implements Serializable {
             countryId = 0;
             stateId = 0;
             cityId = 0;
+            roleId = 0;
             subnetworkId = 0;
             languageId = 0;
             confirmCode = "";
             confirmEmail = "";
             lastName = "";
             panelStatus = "";
+            visitor = false;
             loadDefault();
         }
     }
@@ -124,6 +132,9 @@ public class RegisterBean implements Serializable {
         CityBO cityBO = new CityBO();
         cityList = cityBO.findCitiesByStateId(stateId);
         cityId = cityBO.getCityByName(ARACAJU).getId();
+        
+        RoleBO roleBO = new RoleBO();
+        roleList = roleBO.getAll();
 
     }
 
@@ -245,10 +256,6 @@ public class RegisterBean implements Serializable {
         //
         AuthorizationBO authorizationBO = new AuthorizationBO();
         authorizationBO.create(authorization);
-    }
-
-    public String backToLogin() {
-        return "logout";
     }
 
     public String changePassword() throws Exception {
@@ -599,4 +606,30 @@ public class RegisterBean implements Serializable {
     public void setNewPasswordConfirm(String newPasswordConfirm) {
         this.newPasswordConfirm = newPasswordConfirm;
     }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+    public Boolean getVisitor() {
+        return visitor;
+    }
+
+    public void setVisitor(Boolean visitor) {
+        this.visitor = visitor;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+    
+    
 }
