@@ -119,12 +119,17 @@
                                 <a href="/">Termo de adesão</a>
                             </p>
                         </span> -->
-                        <span class="form_button">
-                            <h:commandLink id="button_save" action="#{registerBean.register()}" value="Salvar">
+                            
+
+                            <h:commandLink id="button_save" action="#{registerBean.register()}">
                                 <f:ajax event="blur" execute="button_save" render="@form"></f:ajax>
+                                <img id="button_save_icon" src="/resources/images/green-plus.png"/>
+                                <span class="button_save_label">#{localeBean.getString('Salvar')}</span>
                             </h:commandLink>
-                            <h:link outcome="/primata/auth/login.xhtml" styleClass="button_back" id="button_back"  value="Voltar"/>
-                        </span>
+                            <h:link outcome="/primata/auth/login.xhtml" styleClass="button_back" id="button_back">
+                                <img id="back_button_icon" src="/resources/images/back.png"/>
+                                <span class="back_button_label">#{localeBean.getString('Retornar')}</span>
+                            </h:link>
                     </h:form>
                 </font>
             </div>

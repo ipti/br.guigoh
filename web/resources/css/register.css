@@ -31,4 +31,10 @@ body {background-color:#84A7CA; margin:0 auto;}
 .powered_guigoh {background:url(../images/guigoh-logo.png) no-repeat right; display:block; width:380px; height:20px; padding-right: 34px; }
 .info {color: green; font-weight: bold}
 .error {color: red; font-weight: bold}
-.button_back {cursor:pointer; width:60px; height:26px; float:right; border:1px #666 solid; border-radius:4px; margin:-54px 120px;}
+.button_back {text-decoration: none;border-radius:5px;width:94px;height:35px;margin:0 20px 40px 0;float:right;background-color:#b9d331}
+#button_save_icon{float:left;padding:4px;margin-top:1px;}
+.button_save_label{color:black;font-size:13px;float:left;margin:10px 0 0 3px}
+.button_save{text-decoration: none;border-radius:5px;width:94px;height:35px;margin:0 101px 0 0;float:right;background-color:#b9d331}
+#back_button_icon{float:left;padding:4px}
+.back_button_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
+
