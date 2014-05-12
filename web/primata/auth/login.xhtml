@@ -33,12 +33,12 @@
                 </h:panelGrid>
             </h:form>
         </div>
-        
         <div class="central">
             <div class="block_left">
                 <h:form>
                     <font class="block_left_top"></font>
-                    <font class="block_left_midtop"><p>#{localeBean.getString('Arte com Ciência é um projeto desenvolvido numa parceria entre o Instituto de Pesquisas em Tecnologia e Inovação (IPTI),a Universidade Federal de Sergipe (UFS) e a Secretaria de Estado dda Educação de Sergipe (SEED-SE), com financiamento da Financiadora de Estudos e Projetos (FINEP).')}</p></font>
+                    <!-- <font class="block_left_midtop"><p>**HASHTAG**{localeBean.getString('Arte com Ciência é um projeto desenvolvido numa parceria entre o Instituto de Pesquisas em Tecnologia e Inovação (IPTI),a Universidade Federal de Sergipe (UFS) e a Secretaria de Estado dda Educação de Sergipe (SEED-SE), com financiamento da Financiadora de Estudos e Projetos (FINEP).')}</p></font> -->
+                    <font class="block_left_midtop"><p>Arte com Ciência é um projeto desenvolvido numa parceria entre o Instituto de Pesquisas em Tecnologia e Inovação (IPTI),a Universidade Federal de Sergipe (UFS) e a Secretaria de Estado dda Educação de Sergipe (SEED-SE), com financiamento da Financiadora de Estudos e Projetos (FINEP).</p></font>
                     <font class="block_left_midbot"><p>Buscar currículos no sistema:</p><h:commandLink styleClass="curriculum_finder_button" id="cmd_curriculum_finder" value="Currículos" action="/primata/curriculumFinder.xhtml?faces-redirect=true"/></font>
                     <font class="block_left_bot"><span class="companies_logos"></span></font>
                 </h:form>
@@ -66,7 +66,7 @@
                         </h:panelGroup>
 
                         <h:panelGroup id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
-                            <font class="open_name">Digite o e-mail de acesso ao guigoh</font>
+                            <font class="open_name">Digite o e-mail de acesso ao Guigoh</font>
                             <h:messages styleClass="msg"/>
                             <h:inputText  value="#{authBean.email}">
                                 <f:ajax execute="@this" event="keyup"/>
