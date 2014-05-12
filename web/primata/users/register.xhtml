@@ -7,6 +7,7 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>User Registration</title>
+        <link rel="shortcut icon" href="/resources/images/guigoh.png"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/register.css"></link>
     </h:head>
     <h:body>
@@ -72,13 +73,14 @@
                         <span class="form_institutions">
                             <p>Você pertence a algumas dessas instituições?</p>
                             <h:selectOneMenu value="#{registerBean.subnetworkId}">
+                                <f:ajax event="change" listener="#{registerBean.updateRole}" render="@form"/>
                                 <f:selectItem itemLabel = "Selecione..." itemValue="0" />
                                 <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
                             </h:selectOneMenu>
                         </span> 
                         <span class="form_institutions">
                             <p>Qual função você exerce na instituição?</p>
-                            <h:selectOneMenu value="#{registerBean.roleId}">
+                            <h:selectOneMenu value="#{registerBean.roleId}" disabled="#{registerBean.visitor}">
                                 <f:selectItem itemLabel = "Selecione..." itemValue="0" />
                                 <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
                             </h:selectOneMenu>
@@ -119,17 +121,16 @@
                                 <a href="/">Termo de adesão</a>
                             </p>
                         </span> -->
-                            
 
-                            <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
-                                <f:ajax event="blur" execute="button_save" render="@form"></f:ajax>
-                                <img id="button_save_icon" src="/resources/images/green-plus.png"/>
-                                <span class="button_save_label">#{localeBean.getString('Salvar')}</span>
-                            </h:commandLink>
-                            <h:link outcome="/primata/auth/login.xhtml" styleClass="button_back" id="button_back">
-                                <img id="back_button_icon" src="/resources/images/back.png"/>
-                                <span class="back_button_label">#{localeBean.getString('Retornar')}</span>
-                            </h:link>
+                        <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
+                            <f:ajax event="blur" execute="button_save" render="@form"></f:ajax>
+                            <img id="button_save_icon" src="/resources/images/green-plus.png"/>
+                            <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
+                        </h:commandLink>
+                        <h:link outcome="/primata/auth/login.xhtml" styleClass="button_back" id="button_back">
+                            <img id="back_button_icon" src="/resources/images/back.png"/>
+                            <font class="back_button_label">#{localeBean.getString('Retornar')}</font>
+                        </h:link>
                     </h:form>
                 </font>
             </div>

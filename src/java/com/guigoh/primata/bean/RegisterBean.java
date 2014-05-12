@@ -116,7 +116,7 @@ public class RegisterBean implements Serializable {
             confirmEmail = "";
             lastName = "";
             panelStatus = "";
-            visitor = false;
+            visitor = true;
             loadDefault();
         }
     }
@@ -132,7 +132,7 @@ public class RegisterBean implements Serializable {
         CityBO cityBO = new CityBO();
         cityList = cityBO.findCitiesByStateId(stateId);
         cityId = cityBO.getCityByName(ARACAJU).getId();
-        
+
         RoleBO roleBO = new RoleBO();
         roleList = roleBO.getAll();
 
@@ -181,6 +181,9 @@ public class RegisterBean implements Serializable {
                                 socialProfile.setLanguageId(language);
                                 Subnetwork subnetwork = new Subnetwork();
                                 subnetwork.setId(subnetworkId);
+                                Role role = new Role();
+                                role.setId(roleId);
+                                socialProfile.setRoleId(role);
                                 socialProfile.setSubnetworkId(subnetwork);
                                 socialProfile.setTokenId(user.getToken());
                                 socialProfile.setPhoto("/resources/images/avatar.png");
@@ -231,6 +234,10 @@ public class RegisterBean implements Serializable {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
             return "";
         }
+    }
+
+    public void updateRole() {
+        visitor = subnetworkId != 0 ? false : true;
     }
 
     private void automaticConfirm(Users user) {
@@ -630,6 +637,4 @@ public class RegisterBean implements Serializable {
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
-    
-    
 }
