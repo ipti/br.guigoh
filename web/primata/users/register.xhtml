@@ -121,7 +121,7 @@
                         </span> -->
                             
 
-                            <h:commandLink id="button_save" action="#{registerBean.register()}">
+                            <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
                                 <f:ajax event="blur" execute="button_save" render="@form"></f:ajax>
                                 <img id="button_save_icon" src="/resources/images/green-plus.png"/>
                                 <span class="button_save_label">#{localeBean.getString('Salvar')}</span>
