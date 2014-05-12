@@ -96,7 +96,7 @@ font {display:block; margin:4px 50px 0px -4px; float:left;}
 .button_profile1{display: block;  margin: -21px 0px 0px 378px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
 .button_profile1:hover {background-color: #a94750;}
 .occupation_edit{width: 100%; position: relative; top: 28px; left: 16px; color: #818080; font: 14px Arial, Helvetica, sans-serif; font-weight: lighter; font-size: 12px;display:block;width:294px}
-.occupation_menu{float:left;margin:35px 0px 0px 18px}
+.occupation_menu{float:left;margin:35px 0px 0px 18px;width:130px}
 .occupation_edit_name{float:left;margin:34px 0px 0px 5px;width:130px}
 
 .multiselect_box{margin:25px 0px 0px 135px;display:block}

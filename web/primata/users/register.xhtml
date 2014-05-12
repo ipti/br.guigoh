@@ -56,20 +56,6 @@
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
                         </span>
-                        <span class="form_idioms">
-                            <p>Idioma</p>
-                            <h:selectOneMenu value="#{registerBean.languageId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
-                                <f:selectItems value="#{registerBean.languageList}" var="languages" itemValue="#{languages.id}" itemLabel="#{languages.description}" />
-                            </h:selectOneMenu>
-                        </span>
-                        <span class="form_institutions">
-                            <p>Você pertence a algumas dessas instituições?</p>
-                            <h:selectOneMenu value="#{registerBean.subnetworkId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
-                                <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
-                            </h:selectOneMenu>
-                        </span>
                         <span>
                             <p>Pergunta Secreta</p>
                             <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
@@ -82,6 +68,27 @@
                             <h:inputText id="senha_answer" value="#{registerBean.user.secretAnswer}" required="true" requiredMessage="* O campo 'Resposta' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
+                        </span>
+                        <span class="form_institutions">
+                            <p>Você pertence a algumas dessas instituições?</p>
+                            <h:selectOneMenu value="#{registerBean.subnetworkId}">
+                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
+                            </h:selectOneMenu>
+                        </span> 
+                        <span class="form_institutions">
+                            <p>Qual função você exerce na instituição?</p>
+                            <h:selectOneMenu value="#{registerBean.roleId}">
+                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
+                            </h:selectOneMenu>
+                        </span>
+                        <span class="form_idioms">
+                            <p>Idioma</p>
+                            <h:selectOneMenu value="#{registerBean.languageId}">
+                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItems value="#{registerBean.languageList}" var="languages" itemValue="#{languages.id}" itemLabel="#{languages.description}" />
+                            </h:selectOneMenu>
                         </span>
                         <span>
                             <p>País</p>
@@ -106,21 +113,18 @@
                                 <f:selectItems value="#{registerBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
                             </h:selectOneMenu>
                         </span>
-                        <span class="check_box">
+                        <!--<span class="check_box">
                             <input type="checkbox" checked="true" class="term_box"></input>
                             <p>Li e aceito o 
                                 <a href="/">Termo de adesão</a>
                             </p>
-                        </span>
+                        </span> -->
                         <span class="form_button">
-                            <h:commandButton id="button_save" action="#{registerBean.register()}" value="Salvar">
+                            <h:commandLink id="button_save" action="#{registerBean.register()}" value="Salvar">
                                 <f:ajax event="blur" execute="button_save" render="@form"></f:ajax>
-                            </h:commandButton>
-
+                            </h:commandLink>
+                            <h:link outcome="/primata/auth/login.xhtml" styleClass="button_back" id="button_back"  value="Voltar"/>
                         </span>
-                    </h:form>
-                    <h:form>
-                        <h:commandButton styleClass="button_back" id="button_back" action="#{registerBean.backToLogin()}" value="Voltar"/>
                     </h:form>
                 </font>
             </div>
@@ -129,9 +133,6 @@
         <span class="clear"></span>
         <div class="bottom">
             <ul class="bottom_menu">
-                <li ><a href="/">Contato</a></li>
-                <li ><span></span><a href="/">Termos de Uso</a></li>
-                <li ><span></span><a href="/">Alguns direitos reservados</a></li>
                 <span class="powered_guigoh">Powered by</span>
             </ul>
         </div>

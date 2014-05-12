@@ -128,7 +128,8 @@
                                         <p class="occupation_edit">#{localeBean.getString('Área de ocupação').toUpperCase()}</p>
                                         <h:selectOneMenu class="occupation_menu" value="#{profileBean.socialProfile.occupationsId.occupationsTypeId.id}">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
-                                            <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
+                                            <ui:param name="OccupationTypeName" value="#{occupationType.name}"/>
+                                            <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{localeBean.getString(OccupationTypeName)}" />
                                             <f:ajax render="occupation" event="valueChange" listener="#{profileBean.wizardProfileBean.loadOccupations()}"/>
                                         </h:selectOneMenu>
 

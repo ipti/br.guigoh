@@ -59,6 +59,9 @@ entities = {
     @EntityResult(entityClass = Authorization.class)
 })
 public class SocialProfile implements Serializable {
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @ManyToOne
+    private Role roleId;
     @Column(name = "gender")
     private Character gender;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileId")
@@ -425,5 +428,13 @@ public class SocialProfile implements Serializable {
 
     public void setDiscussionTopicMsgCollection(Collection<DiscussionTopicMsg> discussionTopicMsgCollection) {
         this.discussionTopicMsgCollection = discussionTopicMsgCollection;
+    }
+
+    public Role getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Role roleId) {
+        this.roleId = roleId;
     }
 }
