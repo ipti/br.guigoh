@@ -9,12 +9,12 @@ body {background-color:#84A7CA; margin:0 auto;}
 .clear {display:block;clear:both;}
 .central {min-height: 100%; width: 950px; margin: 0 auto;}
 .block_left {display:block; width:410px; float:left;}
-.block_left_top {display:block; width:409px; height:264px; margin-bottom:4px; background:url(../images/LogoArteComCiencia.png) no-repeat #fff 34px 20px;}
-.block_left_midtop {display:block; width:409px; height:194px; background-color:#fff; margin-bottom:4px;}
+.block_left_top {display:block; width:435px; height:264px; margin-bottom:4px; background:url(../images/LogoArteComCiencia.png) no-repeat #fff 34px 20px;}
+.block_left_midtop {display:block; width:435px; height:194px; background-color:#fff; margin-bottom:4px;}
 .block_left_midtop  p {padding:29px; text-align:justify;}
-.block_left_midbot{display:block; width:409px; height:80px; background-color:#fff; margin-bottom:4px;}
+.block_left_midbot{display:block; width:435px; height:80px; background-color:#fff; margin-bottom:4px;}
 .block_left_midbot p{padding:29px 0 29px 29px; text-align:justify;float:left}
-.block_left_bot {display:block; width:409px; height:240px; background-color:#fff; margin-bottom:4px;}
+.block_left_bot {display:block; width:435px; height:240px; background-color:#fff; margin-bottom:4px;}
 .companies_logos {display:block; width:372px; height:138px; background:url(../images/companies_logos.png) no-repeat 28px 12px;}
 .block_right {display:block; width:341px; float:left;}
 .login_box {display:block; width:410px; height:366px; margin:146px 0px 0px 146px; background-image:url(../images/login_box.png);}
