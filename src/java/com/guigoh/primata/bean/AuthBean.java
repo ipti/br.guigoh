@@ -5,9 +5,11 @@
 package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.EmailActivationBO;
+import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.UsersBO;
 import com.guigoh.primata.bo.util.MailService;
+import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.entity.EmailActivation;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;

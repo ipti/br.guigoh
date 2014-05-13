@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -48,7 +49,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Joerlan Lima
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "registerBean")
 public class RegisterBean implements Serializable {
 
@@ -148,7 +149,7 @@ public class RegisterBean implements Serializable {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já existe.", null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && socialProfile.getName() != null
-                        && languageId != 0 && subnetworkId != 0 && secretQuestion.getId() != 0
+                        && languageId != 0 && secretQuestion.getId() != 0
                         && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
                     if (!user.getUsername().equals("") && !user.getPassword().equals("")) {
                         if (usernameConfirm.equals(user.getUsername())) {
@@ -183,8 +184,12 @@ public class RegisterBean implements Serializable {
                                 subnetwork.setId(subnetworkId);
                                 Role role = new Role();
                                 role.setId(roleId);
-                                socialProfile.setRoleId(role);
-                                socialProfile.setSubnetworkId(subnetwork);
+                                if(subnetworkId != 0){
+                                    socialProfile.setSubnetworkId(subnetwork);
+                                }
+                                if(roleId != 0){
+                                    socialProfile.setRoleId(role);
+                                }
                                 socialProfile.setTokenId(user.getToken());
                                 socialProfile.setPhoto("/resources/images/avatar.png");
                                 socialProfile.setName(socialProfile.getName() + " " + lastName);
@@ -195,13 +200,13 @@ public class RegisterBean implements Serializable {
                                         + "\n"
                                         + "Para concluir o processo será preciso que você clique no link abaixo para confirmar seu interesse.\n"
                                         + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                                //MailService.sendMail(mailtext, "Ativação de Conta", user.getUsername());
+                                MailService.sendMail(mailtext, "Ativação de Conta", user.getUsername());
                                 //Linha alterada
-                                user.setStatus(CONFIRMATION_ACCESS);
+                                user.setStatus(CONFIRMATION_PENDING);
                                 uBO.create(user);
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
-                                //emailActivationBO.create(emailactivation);
+                                emailActivationBO.create(emailactivation);
 
                                 //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!", null));
                                 registered = true;
@@ -224,7 +229,7 @@ public class RegisterBean implements Serializable {
         }
         if (registered) {
             //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Verifique o email cadastro para ativação do usuário, clique em voltar para ir para tela de login.", null));
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em voltar para ir para tela de login.", null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em retornar para ir à tela de login.", null));
             user = new Users();
             socialProfile = new SocialProfile();
             usernameConfirm = "";
@@ -240,8 +245,16 @@ public class RegisterBean implements Serializable {
         visitor = subnetworkId != 0 ? false : true;
     }
 
+    public String backToLogin() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
+        eraseCookie(request, response);
+        return "logout";
+    }
+
     private void automaticConfirm(Users user) {
-        user.setStatus(CONFIRMATION_ACCESS);
+        user.setStatus(CONFIRMATION_PENDING);
 
         NetworksBO networksBO = new NetworksBO();
         List<Networks> networksList = networksBO.getAll();
