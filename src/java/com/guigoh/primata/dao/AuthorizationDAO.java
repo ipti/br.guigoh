@@ -221,7 +221,7 @@ public class AuthorizationDAO implements Serializable {
         }
     }
     
-     public List<Authorization> findExperiencesByTokenId(Integer subnetwork) {
+     public List<Authorization> findAuthorizationsBySubnetwork(Integer subnetwork) {
         EntityManager em = getEntityManager();
         try {
             List<Authorization> authorizationList = (List<Authorization>) em.createNativeQuery("select a.* from primata_authorization a "

@@ -28,7 +28,7 @@ public class LocaleBean implements Serializable {
 
     private Translator trans = new Translator();
     private ConfigReader cr = new ConfigReader();
-    private String acronym = "";
+    private String acronym = "pt";
     private String token = "";
     private SocialProfile socialProfile;
     private LanguageBO languageBO = new LanguageBO();

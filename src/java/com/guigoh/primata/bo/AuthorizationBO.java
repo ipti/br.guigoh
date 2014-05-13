@@ -7,6 +7,7 @@ package com.guigoh.primata.bo;
 import com.guigoh.primata.dao.AuthorizationDAO;
 import com.guigoh.primata.entity.Authorization;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,11 +59,15 @@ public class AuthorizationBO implements Serializable {
     public List<Authorization> findAuthorizationByActive(Integer subnetwork) {
         try {
             AuthorizationDAO authorizationDAO = new AuthorizationDAO();
-            return authorizationDAO.findExperiencesByTokenId(subnetwork);
+            List<Authorization> authorizationList = authorizationDAO.findAuthorizationsBySubnetwork(subnetwork);
+            if (authorizationList == null) {
+                return new ArrayList<Authorization>();
+            }
+            return authorizationList;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; 
+        return new ArrayList<Authorization>(); 
     }
     
     
