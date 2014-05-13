@@ -2,116 +2,133 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
     <f:view contentType="text/html"/>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>User Registration</title>
+        <title>#{localeBean.getString('Cadastro de usuário')}</title>
         <link rel="shortcut icon" href="/resources/images/guigoh.png"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/register.css"></link>
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
+        <div>
+            <h:form>
+                <ui:param name="url" value="#{request.servletPath}"/>
+                <h:panelGrid styleClass="localeLogon" columns="3">
+                    <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR(url)}">
+                        <h:graphicImage  value="/resources/images/ptBR.gif" />
+                    </h:commandLink>
+                    <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS(url)}">
+                        <h:graphicImage  value="/resources/images/enUS.png" />
+                    </h:commandLink>
+                    <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR(url)}">
+                        <h:graphicImage  value="/resources/images/frFR.png" />
+                    </h:commandLink>
+                </h:panelGrid>
+            </h:form>
+        </div>
         <div class="central">
             <div class="block_central">
                 <font class="block_top_l"></font> 
                 <font class="block_top_r">
-                    <h1>Criar conta de usuário</h1>
+                    <h1>#{localeBean.getString('Criar conta de usuário')}</h1>
                     <h:form class="register_user">
                         <h:messages id="msg" errorClass="error" infoClass="info"/><br/>
                         <span>
-                            <p>Nome</p>
+                            <p>#{localeBean.getString('Nome')}</p>
                             <h:inputText id="user_name" value="#{registerBean.socialProfile.name}" required="true" requiredMessage="* O campo 'Nome' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
                         </span>
                         <span>
-                            <p>Sobrenome</p>
+                            <p>#{localeBean.getString('Sobrenome')}</p>
                             <h:inputText id="user_lastname" value="#{registerBean.lastName}" required="true" requiredMessage="* O campo 'Sobrenome' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
                         </span>
                         <span>
-                            <p>E-mail</p>
+                            <p>#{localeBean.getString('E-mail')}</p>
                             <h:inputText id="user_email" value="#{registerBean.user.username}" required="true" requiredMessage="* O campo 'E-mail' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
 
                             </h:inputText>
                         </span>
                         <span>
-                            <p>Confirme e-mail</p>
+                            <p>#{localeBean.getString('Confirme seu e-mail')}</p>
                             <h:inputText id="user_confirm" value="#{registerBean.usernameConfirm}" required="true" requiredMessage="* O campo 'Confirme e-mail' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
 
                             </h:inputText>
                         </span>
                         <span>
-                            <p>Senha</p>
+                            <p>#{localeBean.getString('Senha')}</p>
                             <h:inputSecret id="pass" value="#{registerBean.user.password}" required="true" requiredMessage="* O campo 'Senha' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
                         </span>
                         <span>
-                            <p>Confirme senha</p>
+                            <p>#{localeBean.getString('Confirme sua senha')}</p>
                             <h:inputSecret id="pass_confirm" value="#{registerBean.passwordConfirm}" required="true" requiredMessage="* O campo 'Confirme senha' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
                         </span>
                         <span>
-                            <p>Pergunta Secreta</p>
+                            <p>#{localeBean.getString('Pergunta secreta')}</p>
                             <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />  
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
                                 <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions.id}" itemLabel="#{questions.name}" />
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>Resposta</p>
+                            <p>#{localeBean.getString('Resposta')}</p>
                             <h:inputText id="senha_answer" value="#{registerBean.user.secretAnswer}" required="true" requiredMessage="* O campo 'Resposta' é necessário para o cadastro">
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
                         </span>
                         <span class="form_institutions">
-                            <p>Você pertence a algumas dessas instituições?</p>
+                            <p>#{localeBean.getString('Você pertence a algumas dessas instituições?')}</p>
                             <h:selectOneMenu value="#{registerBean.subnetworkId}">
                                 <f:ajax event="change" listener="#{registerBean.updateRole}" render="@form"/>
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
                             </h:selectOneMenu>
                         </span> 
                         <span class="form_institutions">
-                            <p>Qual função você exerce na instituição?</p>
+                            <p>#{localeBean.getString('Qual função você exerce na instituição?')}</p>
                             <h:selectOneMenu value="#{registerBean.roleId}" disabled="#{registerBean.visitor}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
                             </h:selectOneMenu>
                         </span>
                         <span class="form_idioms">
-                            <p>Idioma</p>
+                            <p>#{localeBean.getString('Idioma')}</p>
                             <h:selectOneMenu value="#{registerBean.languageId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.languageList}" var="languages" itemValue="#{languages.id}" itemLabel="#{languages.description}" />
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>País</p>
+                            <p>#{localeBean.getString('País')}</p>
                             <h:selectOneMenu value="#{registerBean.countryId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
                                 <f:ajax event="valueChange" render="state" listener="#{registerBean.loadState}"/>
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>Estado</p>
+                            <p>#{localeBean.getString('Estado')}</p>
                             <h:selectOneMenu id="state" value="#{registerBean.stateId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.stateList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
                                 <f:ajax event="valueChange" render="city" listener="#{registerBean.loadCity()}"/>
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>Cidade</p>
+                            <p>#{localeBean.getString('Cidade')}</p>
                             <h:selectOneMenu id="city" value="#{registerBean.cityId}">
-                                <f:selectItem itemLabel = "Selecione..." itemValue="0" />
+                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
                             </h:selectOneMenu>
                         </span>
