@@ -73,14 +73,14 @@
                         <span class="form_institutions">
                             <p>Você pertence a algumas dessas instituições?</p>
                             <h:selectOneMenu value="#{registerBean.subnetworkId}">
-                                <f:ajax event="change" listener="#{registerBean.updateRole}" render="@form"/>
+                                <f:ajax execute="@this" event="change" listener="#{registerBean.updateRole}" render="role"/>
                                 <f:selectItem itemLabel = "Selecione..." itemValue="0" />
                                 <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
                             </h:selectOneMenu>
                         </span> 
                         <span class="form_institutions">
                             <p>Qual função você exerce na instituição?</p>
-                            <h:selectOneMenu value="#{registerBean.roleId}" disabled="#{registerBean.visitor}">
+                            <h:selectOneMenu value="#{registerBean.roleId}" disabled="#{registerBean.visitor}"  id="role">
                                 <f:selectItem itemLabel = "Selecione..." itemValue="0" />
                                 <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
                             </h:selectOneMenu>
