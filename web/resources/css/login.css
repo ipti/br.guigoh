@@ -19,19 +19,20 @@ body {background-color:#84A7CA; margin:0 auto;}
 .block_right {display:block; width:341px; float:left;}
 .login_box {display:block; width:410px; height:366px; margin:146px 0px 0px 146px; background-image:url(../images/login_box.png);}
 .open_name {display: block; font-weight:bold; font-size:18px; padding-top:122px; margin-bottom:30px;}
-.login_open {width:290px; height:100px; margin-left:48px;}
-.login_open p {float:left; margin-right:20px; margin-bottom:10px;}
+.login_open {width:350px; height:100px; margin-left:48px;}
+.login_open p {float:left; width:100px; margin-bottom:10px;}
 .login_open input[type="text"],.login_open input[type="password"] {width:200px; margin-bottom:9px;}
-.lost_password {text-decoration:underline; color:#000; display:block; margin-left:140px; padding-top:15px;font-size:12px;}
+.lost_password {text-decoration:underline; color:#000; display:block; margin-left:140px; margin-top:15px;font-size:12px;}
 .new_password_link{text-decoration:underline; color:#000;display:block; font-size:12px; width:230px}
-.secret_question_link{text-decoration:underline; color:#000;display:block; padding-top:15px;font-size:12px;width:200px}
+.secret_question_link{text-decoration:underline; color:#000;display:block; margin-top:15px;font-size:12px;width:200px}
 .button_back{display:block; margin:15px 0px 0px 230px; height:24px; cursor:pointer;background:url(../images/button_back.png);width:65px }
 .button_verify{background:url(../images/button_verify.png);width:73px;cursor:pointer}
 .button_send{background:url(../images/button_send.png);cursor:pointer;width:64px}
 .button_change{cursor:pointer;background:url(../images/button_change.png);width:65px}
-.enter_login {display:block; margin-left:230px; height:24px; cursor:pointer;background:url(../images/button_ok.png);width:35px}
+.enter_login {display:block; margin-left:270px; height:24px; cursor:pointer;background:url(../images/button_ok.png);width:35px}
 .link_register {display:block; color:#fff; font-size:20px; width:240px; margin-left:400px; margin-top:16px;}
-.link_register a {display:block; color:#000; margin-left:24px; margin-top:8px; text-decoration:none; border:1px solid #000; background-color: #fff; width:150px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
+#cmd_register_icon{float:right}
+.link_register a {background-color:#fff;border:1px solid black;display:block; color:#000; margin-left:24px; margin-top:8px; text-decoration:none; width:150px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
 .link_curriculum_finder {float:left; color:#fff; font-size:20px; width:280px; margin-left:80px;}
 .link_curriculum_finder a {display:block; color:#000; margin-left:60px; margin-top:8px; text-decoration:none; border:1px solid #000; background-color: #fff; width:150px; height:36px; text-align:center; font-size:20px; font-weight:bold; border-radius:6px; padding-top:8px; }
 .bottom {display:block; height:93px; background:url(../images/bgfooter.png); margin-top:-44px; z-index:1; position:relative; }

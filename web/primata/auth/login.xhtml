@@ -50,6 +50,7 @@
                             <font class="open_name">#{localeBean.getString('Entrar')}</font>
                             <h:messages styleClass="msg"/>
                             <p>#{localeBean.getString('E-mail')}</p><h:inputText id="nome_login" styleClass="name" value="#{authBean.user.username}"/>
+                            <br/>
                             <p>#{localeBean.getString('Senha')}</p><h:inputSecret id="senha_login" styleClass="password" value="#{authBean.user.password}"/>
                             <h:commandButton id="cmd_login" styleClass="enter_login" action="#{authBean.login()}"/>
                             <h:commandLink action="#{authBean.recoverAccount('recover_pass')}" class="lost_password" value="#{localeBean.getString('Esqueceu sua senha?')}">
@@ -134,7 +135,12 @@
                     </h:form>
                 </span>
                 <h:form>
-                    <font class="link_register">#{localeBean.getString('Ainda não é membro?')}<h:commandLink id="cmd_register" value="#{localeBean.getString('Cadastre-se')}" action="/primata/users/register.xhtml?faces-redirect=true"/></font>
+
+                    <font class="link_register">#{localeBean.getString('Ainda não é membro?')}
+                        <h:commandLink id="cmd_register" action="/primata/users/register.xhtml?faces-redirect=true">
+                            <span class="cmd_register_label">#{localeBean.getString('Cadastre-se')}</span>
+                        </h:commandLink>
+                    </font>
                 </h:form>
 
             </div>

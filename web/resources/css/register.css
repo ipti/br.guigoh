@@ -14,7 +14,7 @@ body {background-color:#84A7CA; margin:0 auto;}
 .block_top_r h1 {padding:72px 0px 0px 68px; font-weight:bold; font-size:18px;}
 .register_user {display:block; padding:70px; width:550px;}
 .register_user span {display:block; float: left; margin: 0px 72px 28px 0px;}
-.register_user p {margin-left:8px;}
+.register_user p {margin-left:2px;}
 .register_user input {width:190px;}
 .register_user select {width:194px;}
 .form_idioms {width:194px;}
