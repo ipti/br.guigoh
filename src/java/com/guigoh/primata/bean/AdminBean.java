@@ -77,10 +77,10 @@ public class AdminBean implements Serializable {
     private void holdAuthorization() {
         AuthorizationBO authorizationBO = new AuthorizationBO();
         authorization = authorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
-        if (authorization.getRoles().equals(ADMIN)){
+        if (authorization.getRoles().equals(ADMIN)) {
             admin = true;
         }
-        if (authorization.getRoles().equals(REVISER)){
+        if (authorization.getRoles().equals(REVISER)) {
             reviser = true;
         }
     }
@@ -96,7 +96,9 @@ public class AdminBean implements Serializable {
 
     private void getAllUsers() {
         AuthorizationBO authorizationBO = new AuthorizationBO();
-        authorizationList = authorizationBO.findAuthorizationByActive(socialProfile.getSubnetworkId().getId());
+        if (socialProfile.getSubnetworkId() != null) {
+            authorizationList = authorizationBO.findAuthorizationByActive(socialProfile.getSubnetworkId().getId());
+        }
     }
 
     public void submitSelections() {
@@ -175,7 +177,4 @@ public class AdminBean implements Serializable {
     public void setReviser(boolean Reviser) {
         this.reviser = Reviser;
     }
-
-    
-    
 }
