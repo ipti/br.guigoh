@@ -139,7 +139,7 @@ public class RegisterBean implements Serializable {
 
     }
 
-    public String register() throws Exception {
+    public void register() throws Exception {
         FacesContext context = FacesContext.getCurrentInstance();
         Boolean registered = false;
         try {
@@ -184,10 +184,10 @@ public class RegisterBean implements Serializable {
                                 subnetwork.setId(subnetworkId);
                                 Role role = new Role();
                                 role.setId(roleId);
-                                if(subnetworkId != 0){
+                                if (subnetworkId != 0) {
                                     socialProfile.setSubnetworkId(subnetwork);
                                 }
-                                if(roleId != 0){
+                                if (roleId != 0) {
                                     socialProfile.setRoleId(role);
                                 }
                                 socialProfile.setTokenId(user.getToken());
@@ -207,37 +207,25 @@ public class RegisterBean implements Serializable {
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
                                 emailActivationBO.create(emailactivation);
-
-                                //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!", null));
-                                registered = true;
+                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em retornar para ir à tela de login.", null));
+                                user = new Users();
+                                socialProfile = new SocialProfile();
+                                usernameConfirm = "";
+                                passwordConfirm = "";
                             } else {
-
                                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'Senha' e 'Confirme senha' devem ser iguais", null));
-                                return "";
                             }
                         } else {
                             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais", null));
-                            return "";
                         }
                     }
+                } else {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
                 }
             }
         } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao realizar o cadastro. Tente novamente.", null));
             e.printStackTrace();
-            return "";
-        }
-        if (registered) {
-            //context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Verifique o email cadastro para ativação do usuário, clique em voltar para ir para tela de login.", null));
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em retornar para ir à tela de login.", null));
-            user = new Users();
-            socialProfile = new SocialProfile();
-            usernameConfirm = "";
-            passwordConfirm = "";
-            return "";
-        } else {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
-            return "";
         }
     }
 

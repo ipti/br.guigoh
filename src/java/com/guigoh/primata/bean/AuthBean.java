@@ -10,6 +10,7 @@ import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.UsersBO;
 import com.guigoh.primata.bo.util.MailService;
 import com.guigoh.primata.bo.util.translator.ConfigReader;
+import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.EmailActivation;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
@@ -43,10 +44,15 @@ public class AuthBean implements Serializable {
     private Users userToRecover;
     private String password;
     private String passwordConfirm;
+    private ConfigReader cr;
+    private Translator trans;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
+            cr = new ConfigReader();
+            trans = new Translator();
+            trans.setLocale(cr.getTag("locale"));
             loginStatus = "login";
             userToRecover = new Users();
             email = "";
@@ -82,9 +88,10 @@ public class AuthBean implements Serializable {
                 return "islogged";
             }
         }
+        String message = "Login incorreto";
+        message = trans.getWord(message);
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Login incorreto!", null));
-        
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message+"!", null));
         return "";
     }
 
@@ -145,11 +152,11 @@ public class AuthBean implements Serializable {
                 SocialProfileBO spBO = new SocialProfileBO();
                 SocialProfile socialProfile = spBO.findSocialProfile(userToRecover.getToken());
                 String mailText = "Olá " + socialProfile.getName() + "!\n"
-                                        + "\n"
-                                        + "Recebemos uma solicitação de recuperação de conta através desse e-mail. Caso não tenha sido você, ignore-a.\n"
-                                        + "\n"
-                                        + "Para concluir o processo, será preciso que você clique no link abaixo.\n"
-                                        + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
+                        + "\n"
+                        + "Recebemos uma solicitação de recuperação de conta através desse e-mail. Caso não tenha sido você, ignore-a.\n"
+                        + "\n"
+                        + "Para concluir o processo, será preciso que você clique no link abaixo.\n"
+                        + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, "Account Recovery", userToRecover.getUsername());
                 emailActivationBO.create(emailactivation);
                 loginStatus = "pass_sent";
@@ -213,7 +220,7 @@ public class AuthBean implements Serializable {
         }
         return stemp;
     }
-    
+
     public Users getUser() {
         return user;
     }

@@ -83,7 +83,8 @@
                         <h:panelGroup id="secret_question_panel" rendered="#{authBean.loginStatus.equals('question')}">
                             <font class="open_name">#{localeBean.getString('Responda sua pergunta secreta')}</font>
                             <h:messages styleClass="msg"/>
-                            <h:outputText styleClass="secret_question" value="#{authBean.userToRecover.secretQuestionId.name}"/><br/>
+                            <ui:param value="#{authBean.userToRecover.secretQuestionId.name}" name="secretQuestionIdName"/>
+                            <h:outputText styleClass="secret_question" value="#{localeBean.getString(secretQuestionIdName)}"/><br/>
                             <h:inputText value="#{authBean.secretAnswer}">
                                 <f:ajax execute="@this" event="keyup"/>
                             </h:inputText>
