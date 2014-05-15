@@ -3,7 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Ver Tópico</ui:define>
+    <ui:param name="theme" value="#{viewTopicBean.discussionTopic.themeId.name}"/>
+    <ui:define name="title">#{localeBean.getString(theme)} - #{viewTopicBean.discussionTopic.title}</ui:define>
     <ui:define name="scripts">
         <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
         <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
@@ -17,7 +18,6 @@
             <f:event type="preRenderComponent" listener="#{viewTopicBean.init()}"/>
         </f:metadata>
         <h:form>
-            <ui:param name="theme" value="#{viewTopicBean.discussionTopic.themeId.name}"/>
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
             <h:panelGroup styleClass="discussion_topics_box">
                 <h:panelGroup styleClass="bread_path">

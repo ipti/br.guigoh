@@ -13,27 +13,27 @@
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
-        <div>
-            <h:form>
-                <ui:param name="url" value="#{request.servletPath}"/>
-                <h:panelGrid styleClass="localeLogon" columns="3">
-                    <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
-                        <h:graphicImage  value="/resources/images/ptBR.gif" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
-                        <h:graphicImage  value="/resources/images/enUS.png" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
-                        <h:graphicImage  value="/resources/images/frFR.png" />
-                    </h:commandLink>
-                </h:panelGrid>
-            </h:form>
-        </div>
         <div class="central">
             <div class="block_central">
                 <font class="block_top_l"></font> 
                 <font class="block_top_r">
                     <h1>#{localeBean.getString('Criar conta de usuário')}</h1>
+                    <div class="flags">
+                        <h:form>
+                            <ui:param name="url" value="#{request.servletPath}"/>
+                            <h:panelGrid styleClass="localeLogon" columns="3">
+                                <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                    <h:graphicImage  value="/resources/images/ptBR.gif" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                    <h:graphicImage  value="/resources/images/enUS.png" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                    <h:graphicImage  value="/resources/images/frFR.png" />
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </h:form>
+                    </div>
                     <h:form class="register_user">
                         <h:messages id="msg" errorClass="error" infoClass="info"/><br/>
                         <span>

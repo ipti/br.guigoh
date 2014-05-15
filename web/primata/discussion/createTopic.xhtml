@@ -3,7 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Criar tópico</ui:define>
+    <ui:param name="theme" value="#{discussionTopicBean.theme.name}"/>
+    <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
     <ui:define name="scripts">
         <script src="/resources/js/jquery-1.9.1.js"></script>
         <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
@@ -21,7 +22,6 @@
             <f:event type="preRenderComponent" listener="#{discussionTopicBean.init()}"/>
         </f:metadata>
         <h:form prependId="false">
-            <ui:param name="theme" value="#{discussionTopicBean.theme.name}"/>
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
             <h:panelGroup styleClass="create_topic_box">
                 <h:panelGroup styleClass="bread_path">
