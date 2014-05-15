@@ -13,71 +13,70 @@
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
-        <div>
-            <h:form>
-                <ui:param name="url" value="#{request.servletPath}"/>
-                <h:panelGrid styleClass="localeLogon" columns="3">
-                    <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR(url)}">
-                        <h:graphicImage  value="/resources/images/ptBR.gif" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS(url)}">
-                        <h:graphicImage  value="/resources/images/enUS.png" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR(url)}">
-                        <h:graphicImage  value="/resources/images/frFR.png" />
-                    </h:commandLink>
-                </h:panelGrid>
-            </h:form>
-        </div>
         <div class="central">
             <div class="block_central">
                 <font class="block_top_l"></font> 
                 <font class="block_top_r">
                     <h1>#{localeBean.getString('Criar conta de usuário')}</h1>
+                    <div class="flags">
+                        <h:form>
+                            <ui:param name="url" value="#{request.servletPath}"/>
+                            <h:panelGrid styleClass="localeLogon" columns="3">
+                                <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                    <h:graphicImage  value="/resources/images/ptBR.gif" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                    <h:graphicImage  value="/resources/images/enUS.png" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                    <h:graphicImage  value="/resources/images/frFR.png" />
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </h:form>
+                    </div>
                     <h:form class="register_user">
                         <h:messages id="msg" errorClass="error" infoClass="info"/><br/>
                         <span>
-                            <p>#{localeBean.getString('Nome')}</p>
+                            <p>#{localeBean.getString('Nome')}*</p>
                             <h:inputText id="user_name" value="#{registerBean.socialProfile.name}">
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Sobrenome')}</p>
+                            <p>#{localeBean.getString('Sobrenome')}*</p>
                             <h:inputText id="user_lastname" value="#{registerBean.lastName}" >
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('E-mail')}</p>
+                            <p>#{localeBean.getString('E-mail')}*</p>
                             <h:inputText id="user_email" value="#{registerBean.user.username}" >
                                 <f:validateBean disabled="true"/>
 
                             </h:inputText>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Confirme seu e-mail')}</p>
+                            <p>#{localeBean.getString('Confirme seu e-mail')}*</p>
                             <!-- Não precisa de required nem requiredMessage. A verificação é feita no bean -->
                             <h:inputText id="user_confirm" value="#{registerBean.usernameConfirm}" >
                                 <f:validateBean disabled="true"/>
-
                             </h:inputText>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Senha')}</p>
+                            <p>#{localeBean.getString('Senha')}*</p>
                             <h:inputSecret id="pass" value="#{registerBean.user.password}">
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Confirme sua senha')}</p>
+                            <p>#{localeBean.getString('Confirme sua senha')}*</p>
                             <!-- Não precisa de required nem requiredMessage. A verificação é feita no bean -->
                             <h:inputSecret id="pass_confirm" value="#{registerBean.passwordConfirm}" >
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Pergunta secreta')}</p>
+                            <p>#{localeBean.getString('Pergunta secreta')}*</p>
                             <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
                                 <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
                                 <ui:param value="#{questions.name}" name="questionsName" />
@@ -85,7 +84,7 @@
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Resposta')}</p>
+                            <p>#{localeBean.getString('Resposta')}*</p>
                             <h:inputText id="senha_answer" value="#{registerBean.user.secretAnswer}"  >
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
@@ -107,7 +106,7 @@
                             </h:selectOneMenu>
                         </span>
                         <span class="form_idioms">
-                            <p>#{localeBean.getString('Idioma')}</p>
+                            <p>#{localeBean.getString('Idioma')}*</p>
                             <h:selectOneMenu value="#{registerBean.languageId}">
                                 <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <ui:param value="#{languages.description}" name="languagesDescription"/>
@@ -115,7 +114,7 @@
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('País')}</p>
+                            <p>#{localeBean.getString('País')}*</p>
                             <h:selectOneMenu value="#{registerBean.countryId}">
                                 <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <ui:param value="#{countries.name}" name="countriesName"/>
@@ -124,7 +123,7 @@
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Estado')}</p>
+                            <p>#{localeBean.getString('Estado')}*</p>
                             <h:selectOneMenu id="state" value="#{registerBean.stateId}">
                                 <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.stateList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
@@ -132,7 +131,7 @@
                             </h:selectOneMenu>
                         </span>
                         <span>
-                            <p>#{localeBean.getString('Cidade')}</p>
+                            <p>#{localeBean.getString('Cidade')}*</p>
                             <h:selectOneMenu id="city" value="#{registerBean.cityId}">
                                 <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                 <f:selectItems value="#{registerBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />

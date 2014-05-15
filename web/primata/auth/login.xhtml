@@ -18,22 +18,7 @@
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{authBean.init()}"/>
-        <div>
-            <h:form>
-                <ui:param name="url" value="#{request.servletPath}"/>
-                <h:panelGrid styleClass="localeLogon" columns="3">
-                    <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR(url)}">
-                        <h:graphicImage  value="/resources/images/ptBR.gif" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS(url)}">
-                        <h:graphicImage  value="/resources/images/enUS.png" />
-                    </h:commandLink>
-                    <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR(url)}">
-                        <h:graphicImage  value="/resources/images/frFR.png" />
-                    </h:commandLink>
-                </h:panelGrid>
-            </h:form>
-        </div>
+
         <div class="central">
             <div class="block_left">
                 <h:form>
@@ -44,6 +29,22 @@
                 </h:form>
             </div>
             <div class="block_right">
+                <div class="flags">
+                    <h:form>
+                        <ui:param name="url" value="#{request.servletPath}"/>
+                        <h:panelGrid styleClass="localeLogon" columns="3">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                <h:graphicImage  value="/resources/images/ptBR.gif" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                <h:graphicImage  value="/resources/images/enUS.png" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                <h:graphicImage  value="/resources/images/frFR.png" />
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </h:form>
+                </div>
                 <span class="login_box">
                     <h:form id="login_form" styleClass="login_open">
                         <h:panelGroup id="login_panel" rendered="#{authBean.loginStatus.equals('login')}">
@@ -52,7 +53,7 @@
                             <p>#{localeBean.getString('E-mail')}</p><h:inputText id="nome_login" styleClass="name" value="#{authBean.user.username}"/>
                             <br/>
                             <p>#{localeBean.getString('Senha')}</p><h:inputSecret id="senha_login" styleClass="password" value="#{authBean.user.password}"/>
-                            <h:commandButton id="cmd_login" styleClass="enter_login" action="#{authBean.login()}"/>
+                            <h:commandButton styleClass="button_ok" value="OK" action="#{authBean.login()}"/>
                             <h:commandLink action="#{authBean.recoverAccount('recover_pass')}" class="lost_password" value="#{localeBean.getString('Esqueceu sua senha?')}">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandLink>
@@ -61,7 +62,7 @@
                             <font class="open_name">#{localeBean.getString('O que deseja fazer?')}</font>
                             <h:commandLink class="new_password_link" action="#{authBean.recoverAccount('new_pass_email')}" value="#{localeBean.getString('Mande uma nova senha para meu e-mail.')}"></h:commandLink>
                             <h:commandLink class="secret_question_link" action="#{authBean.recoverAccount('secret_question')}" value="#{localeBean.getString('Responder minha pergunta secreta.')}"></h:commandLink>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('login')}">
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
@@ -73,10 +74,10 @@
                                 <f:ajax execute="@this" event="keyup"/>
                             </h:inputText>
                             <br/>
-                            <h:commandButton styleClass="button_verify" action="#{authBean.loadQuestion()}">
+                            <h:commandButton styleClass="button_verify" value="#{localeBean.getString('Verificar')}" action="#{authBean.loadQuestion()}">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandButton>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('recover_pass')}">
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
@@ -90,10 +91,10 @@
                                 <f:ajax execute="@this" event="keyup"/>
                             </h:inputText>
                             <br/>
-                            <h:commandButton action="#{authBean.checkAnswer}" styleClass="button_send">
+                            <h:commandButton action="#{authBean.checkAnswer}" styleClass="button_change" value="OK">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandButton>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('secret_question')}">
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('secret_question')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
@@ -105,17 +106,17 @@
                                 <f:ajax execute="@this" event="keyup"/>
                             </h:inputText>
                             <br/>
-                            <h:commandButton action="#{authBean.sendPassToEmail}" styleClass="button_send">
+                            <h:commandButton action="#{authBean.sendPassToEmail}" styleClass="button_send" value="#{localeBean.getString('Enviar')}">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandButton>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('recover_pass')}">
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
 
                         <h:panelGroup id="pass_sent_panel" rendered="#{authBean.loginStatus.equals('pass_sent')}">
                             <font class="open_name">#{localeBean.getString('Verifique seu e-mail')}</font>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('login')}">
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
@@ -127,8 +128,8 @@
                             <h:inputSecret value="#{authBean.password}"/><br/>
                             <h:outputText class="new_pass" value="#{localeBean.getString('confirmar :')}"/>
                             <h:inputSecret value="#{authBean.passwordConfirm}"/><br/>
-                            <h:commandButton action="#{authBean.changePassword}" styleClass="button_change"/>
-                            <h:commandButton class="button_back" action="#{authBean.recoverAccount('login')}">
+                            <h:commandButton action="#{authBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>

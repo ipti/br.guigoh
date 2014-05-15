@@ -157,10 +157,9 @@ public class RegisterBean implements Serializable {
                 message = trans.getWord(message);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
             } else {
-                if (user.getUsername() != null && user.getPassword() != null && socialProfile.getName() != null
-                        && languageId != 0 && secretQuestion.getId() != 0
+                if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
+                        && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
                         && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
-                    if (!user.getUsername().equals("") && !user.getPassword().equals("")) {
                         if (usernameConfirm.equals(user.getUsername())) {
 
                             if (passwordConfirm.equals(user.getPassword())) {
@@ -219,6 +218,7 @@ public class RegisterBean implements Serializable {
                                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, success, null));
                                 user = new Users();
                                 socialProfile = new SocialProfile();
+                                lastName = "";
                                 usernameConfirm = "";
                                 passwordConfirm = "";
                             } else {
@@ -231,7 +231,7 @@ public class RegisterBean implements Serializable {
                             message = trans.getWord(message);
                             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
                         }
-                    }
+                    
                 } else {
                     message = "Não foi possível realizar o cadastro. Verifique os campos abaixo.";
                     message = trans.getWord(message);

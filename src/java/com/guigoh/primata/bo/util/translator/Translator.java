@@ -15,18 +15,6 @@ import java.util.ResourceBundle;
 public class Translator implements Serializable{
 
     private Locale locale;
- 
-    public void setLocalePTBR() {
-        locale = new Locale("pt","BR");
-    }
-    
-    public void setLocaleENUS() {
-        locale = new Locale("en","US");
-    }
-    
-    public void setLocaleFRFR() {
-        locale = new Locale("fr","FR");
-    }
     
     public void setLocale(String acronym){
         String acronymLang = acronym.substring(0,2);
