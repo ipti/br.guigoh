@@ -17,6 +17,8 @@ import com.guigoh.primata.bo.StateBO;
 import com.guigoh.primata.bo.SubnetworkBO;
 import com.guigoh.primata.bo.UsersBO;
 import com.guigoh.primata.bo.util.MailService;
+import com.guigoh.primata.bo.util.translator.ConfigReader;
+import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.City;
 import com.guigoh.primata.entity.Country;
@@ -39,7 +41,6 @@ import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -83,7 +84,7 @@ public class RegisterBean implements Serializable {
     private Integer cityId;
     private Integer roleId;
     private Integer subnetworkId;
-    private Integer languageId;
+    private Integer languageId;    
     private String confirmCode;
     private String confirmEmail;
     private String lastName;
@@ -91,6 +92,8 @@ public class RegisterBean implements Serializable {
     private String newPassword;
     private String newPasswordConfirm;
     private Boolean visitor;
+    private ConfigReader cr;
+    private Translator trans;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -118,6 +121,9 @@ public class RegisterBean implements Serializable {
             lastName = "";
             panelStatus = "";
             visitor = true;
+            cr = new ConfigReader();
+            trans = new Translator();
+            trans.setLocale(cr.getTag("locale"));
             loadDefault();
         }
     }
@@ -142,11 +148,14 @@ public class RegisterBean implements Serializable {
     public void register() throws Exception {
         FacesContext context = FacesContext.getCurrentInstance();
         Boolean registered = false;
+        String message;
         try {
             UsersBO uBO = new UsersBO();
             Users usertest = uBO.findUsers(user);
             if (usertest.getToken() != null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já existe.", null));
+                message = "Usuário já existe.";
+                message = trans.getWord(message);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && socialProfile.getName() != null
                         && languageId != 0 && secretQuestion.getId() != 0
@@ -193,38 +202,46 @@ public class RegisterBean implements Serializable {
                                 socialProfile.setTokenId(user.getToken());
                                 socialProfile.setPhoto("/resources/images/avatar.png");
                                 socialProfile.setName(socialProfile.getName() + " " + lastName);
+                                String accountActivation = "Ativação de Conta";
+                                String mailtext = "Olá, " + socialProfile.getName() + "!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\n" + "Para concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\nhttp://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                                 //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario
-                                String mailtext = "Olá " + socialProfile.getName() + "\n"
-                                        + "\n"
-                                        + "Obrigado pelo seu interesse em se registrar no Arte com ciência.\n"
-                                        + "\n"
-                                        + "Para concluir o processo será preciso que você clique no link abaixo para confirmar seu interesse.\n"
-                                        + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                                MailService.sendMail(mailtext, "Ativação de Conta", user.getUsername());
+                                //mailtext = trans.getWord(mailtext);
+                                accountActivation = trans.getWord(accountActivation);
+                                MailService.sendMail(mailtext, accountActivation, user.getUsername());
                                 //Linha alterada
                                 user.setStatus(CONFIRMATION_PENDING);
                                 uBO.create(user);
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
                                 emailActivationBO.create(emailactivation);
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em retornar para ir à tela de login.", null));
+                                String success = "Usuário registrado com sucesso! Clique em retornar para ir à tela de login.";
+                                success = trans.getWord(success);
+                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, success, null));
                                 user = new Users();
                                 socialProfile = new SocialProfile();
                                 usernameConfirm = "";
                                 passwordConfirm = "";
                             } else {
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'Senha' e 'Confirme senha' devem ser iguais", null));
+                                message = "Os campos 'Senha' e 'Confirme senha' devem ser iguais.";
+                                message = trans.getWord(message);
+                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
                             }
                         } else {
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais", null));
+                            message = "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais.";
+                            message = trans.getWord(message);
+                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
                         }
                     }
                 } else {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
+                    message = "Não foi possível realizar o cadastro. Verifique os campos abaixo.";
+                    message = trans.getWord(message);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
                 }
             }
         } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao realizar o cadastro. Tente novamente.", null));
+            message = "Ocorreu um erro ao realizar o cadastro. Tente novamente.";
+            message = trans.getWord(message);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
             e.printStackTrace();
         }
     }
@@ -271,6 +288,7 @@ public class RegisterBean implements Serializable {
         EmailActivationBO eBO = new EmailActivationBO();
         EmailActivation eA = eBO.findEmailActivationByUsername(confirmEmail);
         Users userToRecover = uBO.findUsers(confirmEmail);
+        String message;
         if (newPassword.equals(newPasswordConfirm)) {
             userToRecover.setPassword(md5(newPassword + SALT));
             uBO.edit(userToRecover);
@@ -278,7 +296,9 @@ public class RegisterBean implements Serializable {
             return "logout";
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível alterar a senha, digite os dois campos iguais.", null));
+            message = "Não foi possível alterar a senha. Os campos devem ser iguais.";
+            message = trans.getWord(message);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
             return "";
         }
     }
