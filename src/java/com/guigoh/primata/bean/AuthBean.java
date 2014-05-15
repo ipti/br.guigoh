@@ -193,7 +193,9 @@ public class AuthBean implements Serializable {
             return "";
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Resposta incorreta!", null));
+            String message = "Resposta incorreta!";
+            message = trans.getWord(message);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
             return "";
         }
     }

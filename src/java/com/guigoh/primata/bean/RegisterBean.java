@@ -202,9 +202,10 @@ public class RegisterBean implements Serializable {
                                 socialProfile.setPhoto("/resources/images/avatar.png");
                                 socialProfile.setName(socialProfile.getName() + " " + lastName);
                                 String accountActivation = "Ativação de Conta";
-                                String mailtext = "Olá, " + socialProfile.getName() + "!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\n" + "Para concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\nhttp://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                                //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario
-                                //mailtext = trans.getWord(mailtext);
+                                String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
+                                mailtext = trans.getWord(mailtext);
+                                mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                                //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                                 accountActivation = trans.getWord(accountActivation);
                                 MailService.sendMail(mailtext, accountActivation, user.getUsername());
                                 //Linha alterada

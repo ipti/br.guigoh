@@ -71,7 +71,7 @@
                             <font class="open_name">#{localeBean.getString('Digite o e-mail de acesso ao Guigoh')}</font>
                             <h:messages styleClass="msg"/>
                             <h:inputText  value="#{authBean.email}">
-                                <f:ajax execute="@this" event="keyup"/>
+                                <f:ajax execute="@this" render="@form"/>
                             </h:inputText>
                             <br/>
                             <h:commandButton styleClass="button_verify" value="#{localeBean.getString('Verificar')}" action="#{authBean.loadQuestion()}">
