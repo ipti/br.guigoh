@@ -24,13 +24,13 @@
                         </h:panelGroup>
                         <ui:param name="url" value="#{request.servletPath}"/>
                         <h:panelGrid styleClass="localeLogon" columns="3">
-                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeToPTBR(url)}">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
                                 <h:graphicImage  value="/resources/images/ptBR.gif" />
                             </h:commandLink>
-                            <h:commandLink styleClass="enUS" action="#{localeBean.changeToENUS(url)}">
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
                                 <h:graphicImage  value="/resources/images/enUS.png" />
                             </h:commandLink>
-                            <h:commandLink styleClass="frFR" action="#{localeBean.changeToFRFR(url)}">
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
                                 <h:graphicImage  value="/resources/images/frFR.png" />
                             </h:commandLink>
                         </h:panelGrid>

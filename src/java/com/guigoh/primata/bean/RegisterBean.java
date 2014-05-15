@@ -148,10 +148,9 @@ public class RegisterBean implements Serializable {
             if (usertest.getToken() != null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já existe.", null));
             } else {
-                if (user.getUsername() != null && user.getPassword() != null && socialProfile.getName() != null
-                        && languageId != 0 && secretQuestion.getId() != 0
+                if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
+                        && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
                         && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
-                    if (!user.getUsername().equals("") && !user.getPassword().equals("")) {
                         if (usernameConfirm.equals(user.getUsername())) {
 
                             if (passwordConfirm.equals(user.getPassword())) {
@@ -210,6 +209,7 @@ public class RegisterBean implements Serializable {
                                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário Registrado com sucesso!. Clique em retornar para ir à tela de login.", null));
                                 user = new Users();
                                 socialProfile = new SocialProfile();
+                                lastName = "";
                                 usernameConfirm = "";
                                 passwordConfirm = "";
                             } else {
@@ -218,7 +218,7 @@ public class RegisterBean implements Serializable {
                         } else {
                             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais", null));
                         }
-                    }
+                    
                 } else {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
                 }
