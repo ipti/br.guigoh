@@ -15,10 +15,10 @@ body {height:100%; background-color: #84A7CA; margin: 0 auto;}
 .top_menu li a {color: #fff;}
 .mid_menu {display:block; height: 110px; width: 950px; background-color:#E9EDE2; margin: 20px 20px 20px 0px; position: relative; border-top-left-radius: 30px;-webkit-box-shadow: 0 8px 6px -6px gray; -moz-box-shadow: 0 8px 6px -6px gray;  box-shadow: 0 8px 6px -6px gray; border-bottom: 1px solid #919191;}
 .img_logo {background:url(../images/logo.png); position: absolute; top: 10px; left: 40px; width:198px; height:88px; cursor: pointer;}
-.mid_menu ul {position: absolute; top: -12px; right: 256px; cursor: pointer; height: 122px;}
-.menu {display: inline-block; text-align: center; font: 14px Tahoma, Geneva, sans-serif ; color: #666666; width:100px; height:58px ; position: relative; background:url(../images/icons_menu.png) top no-repeat; margin-left:-3px; top: 14px;}
+.mid_menu ul {position: absolute; right: 256px; cursor: pointer; height: 122px;}
+.menu {display: inline; float:left; text-align: center; font: 14px Tahoma, Geneva, sans-serif ; color: #666666; width:100px; height:58px ; background:url(../images/icons_menu.png) top no-repeat; top: 14px;}
 .mid_menu li {border-left: solid 1px #cccccc;height: 111px;}
-.menu a {text-decoration: none; color:#666666; width: 98px; height: 40px; position: absolute; padding-top: 68px; text-align: center; right: 0px;}
+.menu a {text-decoration: none; color:#666666;padding:70px 0 25px 0;display:block}
 .home {background-position: 0px 0px;}
 .home:hover {background-position: 0px -111px;}
 .profile {background-position: -100px 0px;}

@@ -4,7 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
-    <ui:define name="scripts">
+    <ui:define name="content">
         <link rel="shortcut icon" href="img/favicon.ico"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/wizard.css"></link>
         <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
@@ -13,8 +13,8 @@
         <script src="/resources/js/jquery.mask.js"></script>
         <script src="/resources/js/jquery-multiselect-2.0.js"></script>
         <script src="/resources/js/locales/jquery-multiselect-2_pt.js"></script>
-        <script type="text/javascript" src="/resources/js/wizard.js"></script>
         <script type="text/javascript" src="/resources/js/profile.js"></script>
+        <script type="text/javascript" src="/resources/js/wizard.js"></script>
         <link type="text/css" rel="stylesheet" media="all" href="/resources/css/profile.css"></link>
         <script type="text/javascript">
             var books = #{profileBean.wizardProfileBean.books};
@@ -49,9 +49,6 @@
                 width:100%;
             }
         </style>
-    </ui:define>
-    <ui:define name="content">
-
         <f:metadata>
             <f:viewParam name="id" value="#{profileBean.id}" />
             <f:event type="preRenderComponent" listener="#{profileBean.init()}"/>
