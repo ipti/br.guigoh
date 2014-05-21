@@ -58,7 +58,7 @@ public class HeaderBean implements Serializable {
             SocialProfileBO socialProfileBO = new SocialProfileBO();
             socialProfile = socialProfileBO.findSocialProfile(socialProfile.getTokenId());
             socialProfile.setName(socialProfile.getName().split(" ")[0]);
-        }
+        } 
     }
 
     private void holdAuthorization() {
@@ -68,18 +68,18 @@ public class HeaderBean implements Serializable {
             if (authorization.getRoles().equals(ADMIN)) {
                 adminOK = true;
             }
-            if (authorization.getRoles().equals(REVISER)){
+            if (authorization.getRoles().equals(REVISER)) {
                 reviserOK = true;
             }
         }
     }
-    
-    private void getRegisteredUsersQuantity(){
+
+    private void getRegisteredUsersQuantity() {
         UsersBO uBO = new UsersBO();
         MessengerStatusBO msBO = new MessengerStatusBO();
         registeredUsersCount = uBO.getRegisteredUsersQuantity();
         registeredUsersOnline = msBO.getUsersOnline();
-        if(registeredUsersOnline == 0){
+        if (registeredUsersOnline == 0) {
             registeredUsersOnline++;
         }
     }
@@ -115,7 +115,6 @@ public class HeaderBean implements Serializable {
     public void setReviserOK(Boolean reviserOK) {
         this.reviserOK = reviserOK;
     }
-    
 
     public Integer getRegisteredUsersCount() {
         return registeredUsersCount;
@@ -132,6 +131,4 @@ public class HeaderBean implements Serializable {
     public void setRegisteredUsersOnline(Long registeredUsersOnline) {
         this.registeredUsersOnline = registeredUsersOnline;
     }
-    
-    
 }

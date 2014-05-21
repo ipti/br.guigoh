@@ -41,6 +41,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -53,7 +54,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author IPTI
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "profileBean")
 public class ProfileBean implements Serializable {
 

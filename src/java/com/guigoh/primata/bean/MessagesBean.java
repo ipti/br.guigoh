@@ -11,10 +11,12 @@ import com.guigoh.primata.entity.Friends;
 import com.guigoh.primata.entity.MessengerMessages;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -24,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author IPTI
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "messagesBean")
-public class MessagesBean {
+public class MessagesBean implements Serializable{
 
     private Users user;
     private List<SocialProfile> contactsList;

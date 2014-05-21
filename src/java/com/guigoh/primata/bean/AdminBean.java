@@ -6,6 +6,7 @@ package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.AuthorizationBO;
 import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.SocialProfile;
 import java.io.Serializable;
@@ -13,12 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -41,6 +39,8 @@ public class AdminBean implements Serializable {
     private List<SocialProfile> listSocialProfile;
     private List<Authorization> authorizationList;
     private Map<Integer, Boolean> checked;
+    private AuthorizationBO authorizationBO;
+    private SocialProfileBO socialProfileBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -49,33 +49,22 @@ public class AdminBean implements Serializable {
             listSocialProfile = new ArrayList<SocialProfile>();
             authorizationList = new ArrayList<Authorization>();
             checked = new HashMap<Integer, Boolean>();
+            socialProfileBO = new SocialProfileBO();
+            authorizationBO = new AuthorizationBO();
             admin = false;
             reviser = false;
-            holdSocialProfile();
-            holdAuthorization();
-            securityAdmin();
-            getAllUsers();
+            getLoggedSocialProfile();
+            getUserRole();
+            checkAuthorization();
+            getPendingUsers();
         }
     }
 
-    private void holdSocialProfile() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    socialProfile.setTokenId(cookie.getValue());
-                    break;
-                }
-            }
-            SocialProfileBO socialProfileBO = new SocialProfileBO();
-            socialProfile = socialProfileBO.findSocialProfile(socialProfile.getTokenId());
-        }
+    private void getLoggedSocialProfile(){
+        socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
     }
-
-    private void holdAuthorization() {
-        AuthorizationBO authorizationBO = new AuthorizationBO();
+    
+    private void getUserRole() {
         authorization = authorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
         if (authorization.getRoles().equals(ADMIN)) {
             admin = true;
@@ -85,17 +74,13 @@ public class AdminBean implements Serializable {
         }
     }
 
-    private void securityAdmin() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
-
-        if (!authorization.getRoles().equals(ADMIN) && !authorization.getRoles().equals(REVISER)) {
-            nh.handleNavigation(facesContext, null, "islogged");
+    private void checkAuthorization() {
+        if (!admin && !reviser) {
+            FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "islogged");
         }
     }
 
-    private void getAllUsers() {
-        AuthorizationBO authorizationBO = new AuthorizationBO();
+    private void getPendingUsers() {
         if (socialProfile.getSubnetworkId() != null) {
             authorizationList = authorizationBO.findAuthorizationByActive(socialProfile.getSubnetworkId().getId());
         }
@@ -110,16 +95,14 @@ public class AdminBean implements Serializable {
                 }
             }
             checked.clear();
-            AuthorizationBO authorizationBO = new AuthorizationBO();
             for (Authorization authorizations : checkedItems) {
                 authorizations.setStatus(FIRST_ACCESS);
                 authorizationBO.edit(authorizations);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        getAllUsers();
+        getPendingUsers();
     }
 
     public Authorization getAuthorization() {

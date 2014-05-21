@@ -6,6 +6,7 @@ package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.AuthorizationBO;
 import com.guigoh.primata.bo.UsersBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Users;
 import javax.faces.application.NavigationHandler;
@@ -15,6 +16,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -34,20 +36,9 @@ public class AuthorizeListener implements PhaseListener {
         boolean isEmailPage = context.getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1 ? true : false;
         // Obtém a sessão atual
         // Resgata o nome do usuário logado
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
         Users user = new Users();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                }
-                if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
         Boolean firstAccess = false;
         Boolean activeAccess = false;
         Boolean inactiveAccess = false;
@@ -74,9 +65,9 @@ public class AuthorizeListener implements PhaseListener {
         // Verifica se o usuário não está na página de registro
         if (!isRegisterPage) {
             if (!isEmailPage) {
-                if ((!isLoginPage && pending) || 
-                        (!isLoginPage && confirmed && inactiveAccess) || 
-                        !isLoginPage && confirmed && pendingAccess) {
+                if ((!isLoginPage && pending)
+                        || (!isLoginPage && confirmed && inactiveAccess)
+                        || !isLoginPage && confirmed && pendingAccess) {
                     NavigationHandler nh = context.getApplication().getNavigationHandler();
                     nh.handleNavigation(context, null, "email");
                 }
@@ -87,6 +78,7 @@ public class AuthorizeListener implements PhaseListener {
                     nh.handleNavigation(context, null, "wizard");
                 }
             }
+
             if (user.getUsername() != null) {
                 // Verifica se o usuário está logado e se não está na página de login
                 if (!isLoginPage && ((user.getUsername().equals("")) || (user.getUsername().isEmpty()))) {
@@ -98,6 +90,11 @@ public class AuthorizeListener implements PhaseListener {
                     // redirecionado para a página inicial
                     NavigationHandler nh = context.getApplication().getNavigationHandler();
                     nh.handleNavigation(context, null, "islogged");
+                }
+            } else {
+                if (!isLoginPage) {
+                    NavigationHandler nh = context.getApplication().getNavigationHandler();
+                    nh.handleNavigation(context, null, "logout");
                 }
             }
         }
