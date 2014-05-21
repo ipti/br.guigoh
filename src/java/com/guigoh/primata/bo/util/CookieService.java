@@ -7,6 +7,7 @@ package com.guigoh.primata.bo.util;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -14,8 +15,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CookieService {
 
+    private static HttpServletRequest request;
+    private static HttpServletResponse response;
+
     public static String getCookie(String name) {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         Cookie[] cookies = request.getCookies();
         String value = null;
         if (cookies != null) {
@@ -27,5 +31,29 @@ public class CookieService {
             }
         }
         return value;
+    }
+
+    public static void eraseCookie() {
+        request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                cookies[i].setValue("");
+                cookies[i].setPath("/");
+                cookies[i].setMaxAge(0);
+                cookies[i].setDomain(".guigoh.com");
+                response.addCookie(cookies[i]);
+            }
+        }
+    }
+
+    public static void addCookie(String key, String value) {
+        response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        Cookie cookie = new Cookie(key, value);
+        cookie.setDomain(".guigoh.com");
+        cookie.setPath("/");
+        cookie.setMaxAge(86400);
+        response.addCookie(cookie);
     }
 }

@@ -21,7 +21,6 @@ import com.guigoh.primata.bo.OccupationsTypeBO;
 import com.guigoh.primata.bo.ScholarityBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
-import com.guigoh.primata.bo.util.AutocompleteValue;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Availability;
@@ -103,7 +102,6 @@ public class WizardProfileBean implements Serializable {
     private List<Interests> themesListFixo;
     private Educations education;
     private Experiences experience;
-    private List<AutocompleteValue> response;
     private List<Integer> booksAddList;
     private List<Integer> musicsAddList;
     private List<Integer> moviesAddList;
@@ -154,7 +152,6 @@ public class WizardProfileBean implements Serializable {
             themesListFixo = new ArrayList<Interests>();
             education = new Educations();
             experience = new Experiences();
-            response = new ArrayList<AutocompleteValue>();
             booksAddList = new ArrayList<Integer>();
             musicsAddList = new ArrayList<Integer>();
             moviesAddList = new ArrayList<Integer>();
@@ -1122,14 +1119,6 @@ public class WizardProfileBean implements Serializable {
 
     public void setExperience(Experiences experience) {
         this.experience = experience;
-    }
-
-    public List<AutocompleteValue> getResponse() {
-        return response;
-    }
-
-    public void setResponse(List<AutocompleteValue> response) {
-        this.response = response;
     }
 
     public List<Integer> getBooksAddList() {
