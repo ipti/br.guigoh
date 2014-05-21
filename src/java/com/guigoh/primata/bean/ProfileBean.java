@@ -11,6 +11,8 @@ import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.InterestsTypeBO;
 import com.guigoh.primata.bo.OccupationsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.translator.ConfigReader;
+import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.dao.exceptions.PreexistingEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.Availability;
@@ -28,7 +30,6 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.*;
@@ -36,16 +37,13 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,6 +85,8 @@ public class ProfileBean implements Serializable {
     private Boolean curriculumEdit4;
     private Boolean edit;
     private WizardProfileBean wizardProfileBean;
+    private ConfigReader cr;
+    private Translator trans;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -94,7 +94,9 @@ public class ProfileBean implements Serializable {
             wizardProfileBean = new WizardProfileBean();
             wizardProfileBean.init();
             socialProfile = new SocialProfile();
-
+            cr = new ConfigReader();
+            trans = new Translator();
+            trans.setLocale(cr.getTag("locale"));
             interestsList = new ArrayList<Interests>();
             interestsTypeList = new ArrayList<InterestsType>();
             themesList = new ArrayList<Interests>();
@@ -246,8 +248,9 @@ public class ProfileBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             experiencesList.remove(exp);
             ExperiencesBO experiencesBO = new ExperiencesBO();
-            experiencesBO.removeExperience(exp);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Experiência removida com sucesso!!", null));
+            experiencesBO.removeExperience(exp);            
+            String message = trans.getWord("Experiência removida com sucesso!");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -259,7 +262,8 @@ public class ProfileBean implements Serializable {
             educationsList.remove(edu);
             EducationsBO educationsBO = new EducationsBO();
             educationsBO.removeEducation(edu);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Educação removida com sucesso!!", null));
+            String message = trans.getWord("Educação removida com sucesso!");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
             e.printStackTrace();
         }

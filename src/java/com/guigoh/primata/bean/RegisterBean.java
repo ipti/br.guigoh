@@ -167,7 +167,6 @@ public class RegisterBean implements Serializable {
 
                                 user.setPassword(md5(user.getPassword() + SALT));
                                 user.setSecretQuestionId(secretQuestion);
-                                user.setStatus(CONFIRMATION_PENDING);
 
                                 EmailActivation emailactivation = new EmailActivation();
                                 emailactivation.setUsername(user.getUsername());
@@ -201,19 +200,19 @@ public class RegisterBean implements Serializable {
                                 socialProfile.setTokenId(user.getToken());
                                 socialProfile.setPhoto("/resources/images/avatar.png");
                                 socialProfile.setName(socialProfile.getName() + " " + lastName);
-                                String accountActivation = "Ativação de Conta";
-                                String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
-                                mailtext = trans.getWord(mailtext);
-                                mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                                //String accountActivation = "Ativação de Conta";
+                                //String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
+                                //mailtext = trans.getWord(mailtext);
+                                //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                                 //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
-                                accountActivation = trans.getWord(accountActivation);
-                                MailService.sendMail(mailtext, accountActivation, user.getUsername());
+                                //accountActivation = trans.getWord(accountActivation);
+                                //MailService.sendMail(mailtext, accountActivation, user.getUsername());
                                 //Linha alterada
-                                user.setStatus(CONFIRMATION_PENDING);
+                                user.setStatus(CONFIRMATION_ACCESS);
                                 uBO.create(user);
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
-                                emailActivationBO.create(emailactivation);
+                                //emailActivationBO.create(emailactivation);
                                 String success = "Usuário registrado com sucesso! Clique em retornar para ir à tela de login.";
                                 success = trans.getWord(success);
                                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, success, null));
@@ -260,7 +259,6 @@ public class RegisterBean implements Serializable {
     }
 
     private void automaticConfirm(Users user) {
-        user.setStatus(CONFIRMATION_PENDING);
 
         NetworksBO networksBO = new NetworksBO();
         List<Networks> networksList = networksBO.getAll();
