@@ -12,7 +12,8 @@
         <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
         <script src="/resources/js/jquery.mask.js"></script>
         <script src="/resources/js/jquery-multiselect-2.0.js"></script>
-        <script src="/resources/js/locales/jquery-multiselect-2_pt.js"></script>
+        <script src="/resources/js/jquery-multiselect-2_pt.js"></script>
+        <script src="/resources/js/jquery-multiselect-2_fr.js"></script>
         <script type="text/javascript" src="/resources/js/profile.js"></script>
         <script type="text/javascript" src="/resources/js/wizard.js"></script>
         <link type="text/css" rel="stylesheet" media="all" href="/resources/css/profile.css"></link>
@@ -203,7 +204,7 @@
                                                 <p>#{books.name}</p>
                                             </ui:repeat>
                                             <h:panelGroup rendered="#{profileBean.booksList.isEmpty()}">
-                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                                <p>#{localeBean.getString('Complete seu cadastro. Adicione interesses culturais ')}<a href="/">#{localeBean.getString('clicando aqui')}</a>.</p>
                                             </h:panelGroup>    
                                         </li>
                                         <span class="clear"></span>
@@ -214,7 +215,7 @@
                                                 <p>#{music.name}</p>
                                             </ui:repeat>
                                             <h:panelGroup rendered="#{profileBean.musicsList.isEmpty()}">
-                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                                <p>#{localeBean.getString('Complete seu cadastro. Adicione interesses culturais ')}<a href="/">#{localeBean.getString('clicando aqui')}</a>.</p>
                                             </h:panelGroup>    
                                         </li>
                                         <span class="clear"></span>
@@ -225,7 +226,7 @@
                                                 <p>#{movies.name}</p>
                                             </ui:repeat>
                                             <h:panelGroup rendered="#{profileBean.moviesList.isEmpty()}">
-                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                                <p>#{localeBean.getString('Complete seu cadastro. Adicione interesses culturais ')}<a href="/">#{localeBean.getString('clicando aqui')}</a>.</p>
                                             </h:panelGroup>    
                                         </li>
                                     </ul>
@@ -318,7 +319,7 @@
                                                 <p>#{sports.name}</p>
                                             </ui:repeat>
                                             <h:panelGroup rendered="#{profileBean.sportsList.isEmpty()}">
-                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                                <p>#{localeBean.getString('Complete seu cadastro. Adicione interesses culturais ')}<a href="/">#{localeBean.getString('clicando aqui')}</a>.</p>
                                             </h:panelGroup>    
                                         </li>
                                         <span class="clear"></span>
@@ -329,7 +330,7 @@
                                                 <p>#{hobby.name}</p>
                                             </ui:repeat>
                                             <h:panelGroup rendered="#{profileBean.hobbiesList.isEmpty()}">
-                                                <p>Complete seu cadastro, adicione interesses culturais <a href="/">clicando aqui.</a></p>
+                                                <p>#{localeBean.getString('Complete seu cadastro. Adicione interesses culturais ')}<a href="/">#{localeBean.getString('clicando aqui')}</a>.</p>
                                             </h:panelGroup>    
                                         </li>
                                     </ul>
@@ -486,7 +487,8 @@
                                         <span class="edit_label">#{localeBean.getString('País')}: </span>
                                         <h:selectOneMenu value="#{profileBean.wizardProfileBean.countryId}" class="request_form_country">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                            <f:selectItems value="#{profileBean.wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                            <ui:param name="countryName" value="#{countries.name}"></ui:param>
+                                            <f:selectItems value="#{profileBean.wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{localeBean.getString(countryName)}" />
                                             <f:ajax event="valueChange" render="state city" listener="#{profileBean.wizardProfileBean.loadState}"/>
                                         </h:selectOneMenu>
 
@@ -612,7 +614,7 @@
                 <span class="clear"></span>
                 <div class="curriculum_experience" >
                     <span class="curriculum_icon_exp"> </span> 				
-                    <font class="experience" >Experiência</font>
+                    <font class="experience" >#{localeBean.getString('Experiência')}</font>
                     <hr class="line2" />
                     <h:form>
                         <h:panelGroup id="panel_curriculum4">

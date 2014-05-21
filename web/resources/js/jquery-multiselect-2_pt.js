@@ -35,7 +35,7 @@
         //itemsFiltered_plural_few: ...
         selectAll: 'Selecionar todos',
         deselectAll: 'Desselecionar todos',
-        search: 'Opções de pesquisa',
+        search: 'Pesquisar',
         collapseGroup: 'Ocultar grupo',
         expandGroup: 'Expandir grupo',
         selectAllGroup: 'Selecionar grupo',
