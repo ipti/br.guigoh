@@ -50,7 +50,6 @@ public class AuthBean implements Serializable {
     private ConfigReader cr;
     private Translator trans;
     private UsersBO uBO;
-    private String message;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -73,9 +72,7 @@ public class AuthBean implements Serializable {
             CookieService.addCookie("token", registeredUser.getToken());
             return "islogged";
         }
-        message = "Login incorreto";
-        message = trans.getWord(message);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message + "!", null));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
         return "";
     }
 
@@ -88,7 +85,7 @@ public class AuthBean implements Serializable {
         loginStatus = status;
     }
 
-    public String sendPassToEmail() {
+    public String sendPassToEmail() {        
         try {
             userToRecover = uBO.findUsers(email);
             if (userToRecover != null && userToRecover.getStatus().equals("CA")) {
@@ -98,20 +95,20 @@ public class AuthBean implements Serializable {
                 EmailActivationBO emailActivationBO = new EmailActivationBO();
                 SocialProfileBO spBO = new SocialProfileBO();
                 SocialProfile socialProfile = spBO.findSocialProfile(userToRecover.getToken());
-                String mailText = "Olá " + socialProfile.getName() + "!\n"
+                String mailText = trans.getWord("Olá, ") + socialProfile.getName() + "!\n"
                         + "\n"
                         + "Recebemos uma solicitação de recuperação de conta através desse e-mail. Caso não tenha sido você, ignore-a.\n"
                         + "\n"
                         + "Para concluir o processo, será preciso que você clique no link abaixo.\n"
                         + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
-                MailService.sendMail(mailText, "Account Recovery", userToRecover.getUsername());
+                MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
                 emailActivationBO.create(emailactivation);
                 loginStatus = "pass_sent";
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail não cadastrado/autorizado no guigoh.", null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
             }
         } catch (EmailException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível enviar para este e-mail. Verifique sua conexão.", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível enviar este e-mail. Verifique sua conexão."), null));
         }
         return "";
     }
@@ -121,7 +118,7 @@ public class AuthBean implements Serializable {
         if (userToRecover != null) {
             loginStatus = "question";
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "E-mail incorreto!", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail incorreto!"), null));
         }
         return "";
     }
@@ -130,9 +127,7 @@ public class AuthBean implements Serializable {
         if (secretAnswer.equals(userToRecover.getSecretAnswer())) {
             loginStatus = "success";
         } else {
-            message = "Resposta incorreta!";
-            message = trans.getWord(message);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Resposta incorreta!"), null));
         }
         return "";
     }
@@ -143,7 +138,7 @@ public class AuthBean implements Serializable {
             uBO.edit(userToRecover);
             return "logout";
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível alterar a senha, digite os dois campos iguais.", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));
             return "";
         }
 
