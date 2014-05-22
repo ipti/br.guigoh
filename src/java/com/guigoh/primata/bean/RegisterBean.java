@@ -148,14 +148,11 @@ public class RegisterBean implements Serializable {
     public void register() throws Exception {
         FacesContext context = FacesContext.getCurrentInstance();
         Boolean registered = false;
-        String message;
         try {
             UsersBO uBO = new UsersBO();
             Users usertest = uBO.findUsers(user);
             if (usertest.getToken() != null) {
-                message = "Usuário já existe.";
-                message = trans.getWord(message);
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
                         && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
@@ -213,35 +210,25 @@ public class RegisterBean implements Serializable {
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
                                 //emailActivationBO.create(emailactivation);
-                                String success = "Usuário registrado com sucesso! Clique em retornar para ir à tela de login.";
-                                success = trans.getWord(success);
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, success, null));
+                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
                                 user = new Users();
                                 socialProfile = new SocialProfile();
                                 lastName = "";
                                 usernameConfirm = "";
                                 passwordConfirm = "";
                             } else {
-                                message = "Os campos 'Senha' e 'Confirme senha' devem ser iguais.";
-                                message = trans.getWord(message);
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
                             }
                         } else {
-                            message = "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais.";
-                            message = trans.getWord(message);
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
                         }
                     
                 } else {
-                    message = "Não foi possível realizar o cadastro. Verifique os campos abaixo.";
-                    message = trans.getWord(message);
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível realizar o cadastro. Verifique os campos abaixo."), null));
                 }
             }
         } catch (Exception e) {
-            message = "Ocorreu um erro ao realizar o cadastro. Tente novamente.";
-            message = trans.getWord(message);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
             e.printStackTrace();
         }
     }
@@ -295,9 +282,7 @@ public class RegisterBean implements Serializable {
             return "logout";
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
-            message = "Não foi possível alterar a senha. Os campos devem ser iguais.";
-            message = trans.getWord(message);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os campos devem ser iguais."), null));
             return "";
         }
     }
