@@ -60,7 +60,7 @@
                         </h:panelGroup>
                         <h:panelGroup id="recover_pass_panel"  rendered="#{authBean.loginStatus.equals('recover_pass')}">
                             <font class="open_name">#{localeBean.getString('O que deseja fazer?')}</font>
-                            <h:commandLink class="new_password_link" action="#{authBean.recoverAccount('new_pass_email')}" value="#{localeBean.getString('Mande uma nova senha para meu e-mail.')}"></h:commandLink>
+                            <h:commandLink class="new_password_link" action="#{authBean.recoverAccount('new_pass_email')}" value="#{localeBean.getString('Recuperar minha conta através do e-mail.')}"></h:commandLink>
                             <h:commandLink class="secret_question_link" action="#{authBean.recoverAccount('secret_question')}" value="#{localeBean.getString('Responder minha pergunta secreta.')}"></h:commandLink>
                             <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
                                 <f:ajax execute="@this" render="@form" />

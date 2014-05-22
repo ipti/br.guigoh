@@ -88,19 +88,14 @@ public class AuthBean implements Serializable {
     public String sendPassToEmail() {        
         try {
             userToRecover = uBO.findUsers(email);
-            if (userToRecover != null && userToRecover.getStatus().equals("CA")) {
+            if (userToRecover.getUsername() != null && userToRecover.getStatus().equals("CA")) {
                 EmailActivation emailactivation = new EmailActivation();
                 emailactivation.setUsername(userToRecover.getUsername());
                 emailactivation.setCode(MD5Generator.generate(userToRecover.getUsername() + RandomGenerator.generate(5)));
                 EmailActivationBO emailActivationBO = new EmailActivationBO();
                 SocialProfileBO spBO = new SocialProfileBO();
                 SocialProfile socialProfile = spBO.findSocialProfile(userToRecover.getToken());
-                String mailText = trans.getWord("Olá, ") + socialProfile.getName() + "!\n"
-                        + "\n"
-                        + "Recebemos uma solicitação de recuperação de conta através desse e-mail. Caso não tenha sido você, ignore-a.\n"
-                        + "\n"
-                        + "Para concluir o processo, será preciso que você clique no link abaixo.\n"
-                        + "\n http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
+                String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
                 emailActivationBO.create(emailactivation);
                 loginStatus = "pass_sent";
@@ -115,7 +110,7 @@ public class AuthBean implements Serializable {
 
     public String loadQuestion() {
         userToRecover = uBO.findUsers(email);
-        if (userToRecover != null) {
+        if (userToRecover.getUsername() != null) {
             loginStatus = "question";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail incorreto!"), null));
