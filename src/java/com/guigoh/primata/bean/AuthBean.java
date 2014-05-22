@@ -18,17 +18,10 @@ import com.guigoh.primata.entity.EmailActivation;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.mail.EmailException;
 
 /**

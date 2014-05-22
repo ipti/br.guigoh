@@ -14,7 +14,8 @@ strong {font-weight: bold;}
 .topic_creator_photo{float:left;width:77px;height:77px;margin:25px 10px 10px 20px}
 .topic_creator_name{color:black;float:left;font-size:12px;text-decoration:underline;margin:110px 0 40px -87px;width:77px;}
 .topic_title_label{font-size:13px;font-weight:bold;display:block}
-.new_title {border:0 none; border-radius:5px; width:700px; height:28px;margin:9px auto;color:#ccc;text-indent:10px}
+.new_title {border:0 none; border-radius:5px; width:700px; height:28px;color:#ccc;margin:9px auto;text-indent:10px}
+.msg{font-size:11px;color:red;display:block;margin:5px 0px 0px 0px}
 .new_body{width:700px;height:170px;resize:none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;text-indent:10px;border:0;margin:10px 0 25px}
 .attach_button{position:relative;cursor:pointer;float:right;width:29px;height:29px;background:url('../images/ico_attach_resp.png') no-repeat;margin:10px 69px 0 0}
 .files_box{float:right;height:100px;width:350px;margin:0 101px 0 0}
