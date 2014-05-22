@@ -28,7 +28,6 @@ import com.guigoh.primata.entity.OccupationsType;
 import com.guigoh.primata.entity.Scholarity;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.State;
-import com.guigoh.primata.entity.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.*;
