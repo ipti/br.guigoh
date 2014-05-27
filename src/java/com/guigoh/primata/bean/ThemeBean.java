@@ -28,13 +28,17 @@ public class ThemeBean implements Serializable{
     
     private Integer id;
     private Interests interest;
-    private String generalSearch = "";
+    private String generalSearch;
     private List<DiscussionTopic> discussionTopicList;
     private List<Tags> tagList;
-    private String tagSelected = "";
+    private String tagSelected;
+    private DiscussionTopicBO dtBO;
     
     public void init(){
         if(!FacesContext.getCurrentInstance().isPostback()){
+            generalSearch = "";
+            tagSelected = "";
+            dtBO = new DiscussionTopicBO();
             loadInterest();
             discussionTopicList = new ArrayList<DiscussionTopic>();
             tagList = new ArrayList<Tags>();
@@ -54,12 +58,10 @@ public class ThemeBean implements Serializable{
     }
     
     private void loadDiscussionTopics(){
-        DiscussionTopicBO dtBO = new DiscussionTopicBO();
         discussionTopicList = dtBO.findDiscussionTopicsByTheme(id);
     }
     
     public void generalSearchEvent() {
-        DiscussionTopicBO dtBO = new DiscussionTopicBO();
         discussionTopicList = new ArrayList<DiscussionTopic>();
         discussionTopicList = dtBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, id);
     }

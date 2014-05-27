@@ -6,6 +6,7 @@ package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Language;
@@ -26,32 +27,25 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {
 
-    private Translator trans = new Translator();
-    private ConfigReader cr = new ConfigReader();
+    private Translator trans;
+    private ConfigReader cr;
     private String acronym = "ptBR";
     private String token = "";
     private SocialProfile socialProfile;
-    private LanguageBO languageBO = new LanguageBO();
-    private SocialProfileBO socialProfileBO = new SocialProfileBO();
+    private LanguageBO languageBO;
+    private SocialProfileBO socialProfileBO;
 
-    public LocaleBean() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+    public LocaleBean(){
+        trans = new Translator();
+        cr = new ConfigReader();
+        languageBO = new LanguageBO();
+        socialProfileBO = new SocialProfileBO();
+        token = CookieService.getCookie("token");
         if (!token.equals("")) {
             socialProfile = socialProfileBO.findSocialProfile(token);
             acronym = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
         }
         changeLocale("", acronym);
-
     }
 
     public String getString(String string) {
@@ -68,8 +62,7 @@ public class LocaleBean implements Serializable {
         acronym = locale;
         return url + "?faces-redirect=true&includeViewParams=true";
     }
-
-
+    
     public void setLocale() {
         trans.setLocale(cr.getTag("locale"));
     }

@@ -5,10 +5,8 @@
 package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.DiscussionTopicBO;
-import com.guigoh.primata.bo.DiscussionTopicMsgBO;
 import com.guigoh.primata.bo.InterestsBO;
-import com.guigoh.primata.entity.DiscussionTopic;
-import com.guigoh.primata.entity.DiscussionTopicMsg;
+import com.guigoh.primata.bo.util.MD5Generator;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.NewActivity;
 import java.io.Serializable;
@@ -27,7 +25,7 @@ import javax.faces.bean.ViewScoped;
  */
 @SessionScoped
 @ManagedBean(name = "homeBean")
-public class HomeBean implements Serializable{
+public class HomeBean implements Serializable {
 
     List<Interests> interestThemesList = new ArrayList<Interests>();
     List<NewActivity> newActivityList = new ArrayList();
@@ -51,23 +49,8 @@ public class HomeBean implements Serializable{
         newActivityList = dtBO.getLastActivities();
     }
 
-    public static String md5(String input) {
-        String md5 = null;
-        if (null == input) {
-            return null;
-        }
-        try {
-            //Create MessageDigest object for MD5
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            //Update input string in message digest
-            digest.update(input.getBytes(), 0, input.length());
-            //Converts message digest value in base 16 (hex) 
-            md5 = new BigInteger(1, digest.digest()).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-
-            e.printStackTrace();
-        }
-        return md5;
+    public String getMD5(String value) {
+        return MD5Generator.generate(value);
     }
 
     public List<Interests> getInterestThemesList() {
@@ -85,6 +68,4 @@ public class HomeBean implements Serializable{
     public void setNewActivityList(List<NewActivity> newActivityList) {
         this.newActivityList = newActivityList;
     }
-    
-    
 }

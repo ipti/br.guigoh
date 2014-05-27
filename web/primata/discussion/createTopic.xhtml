@@ -34,7 +34,7 @@
                 <h:outputText styleClass="topic_title_label" value="#{localeBean.getString('Assunto')}:"></h:outputText>
                 <h:inputText styleClass="new_title" value="#{discussionTopicBean.discussionTopic.title}" required="true" requiredMessage="#{localeBean.getString('Título é obrigatório')}"></h:inputText>
                 <h:inputTextarea styleClass="new_body" value="#{discussionTopicBean.discussionTopic.body}"></h:inputTextarea>
-                <h:commandLink styleClass="attach_button" action="#{discussionTopicBean.holdDiscussionTopic()}">
+                <h:commandLink styleClass="attach_button">
                     <f:ajax event="action" execute="@form" render="@form"></f:ajax>
                 </h:commandLink>
                 <h:panelGroup id="tag_box" styleClass="tag_box">

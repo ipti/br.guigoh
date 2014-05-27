@@ -6,6 +6,7 @@ package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.FriendsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.dao.exceptions.PreexistingEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.Friends;
@@ -36,24 +37,30 @@ public class FriendsBean implements Serializable {
     private List<SocialProfile> socialProfileList;
     private String friendInputSearch = "";
     private String userInputSearch = "";
+    private SocialProfileBO spBO = new SocialProfileBO();
+    private FriendsBO friendsBO = new FriendsBO();
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();        
-            loadUserCookie();
-            SocialProfileBO spBO = new SocialProfileBO();
+            getCookie();
+            spBO = new SocialProfileBO();
+            friendsBO = new FriendsBO();
             userSocialProfile = spBO.findSocialProfile(user.getToken());
             loadFriends();
         }
     }
+    
+    private void getCookie(){
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+    }
 
     public void loadFriends() {
-        FriendsBO friendsBO = new FriendsBO();
         acceptedList = new ArrayList<Friends>();
         pendingList = new ArrayList<Friends>();
         acceptedList = friendsBO.findFriendsByToken(user.getToken());
         pendingList = friendsBO.findPendingFriendsByToken(user.getToken());
-        
         organizeFriendList(acceptedList);
         organizeFriendList(pendingList);
     }
@@ -64,58 +71,34 @@ public class FriendsBean implements Serializable {
 
     private void organizeFriendList(List<Friends> list){
         for(Friends friend : list){
-            /*friend.getTokenFriend1().getSocialProfile().setName(
-                        friend.getTokenFriend1().getSocialProfile().getName().split(" ")[0]);
-            friend.getTokenFriend2().getSocialProfile().setName(
-                        friend.getTokenFriend2().getSocialProfile().getName().split(" ")[0]);*/
             if (user.getToken().equals(friend.getTokenFriend2().getToken())){
-                Users user = friend.getTokenFriend1();
+                Users userFriend = friend.getTokenFriend1();
                 friend.setTokenFriend1(friend.getTokenFriend2());
-                friend.setTokenFriend2(user);
+                friend.setTokenFriend2(userFriend);
             }
         }
     }
             
     public void searchFriendEvent() {
-        FriendsBO friendBO = new FriendsBO();
         acceptedList = new ArrayList<Friends>();
-        acceptedList = friendBO.loadFriendSearchList(user.getToken(), friendInputSearch);
-        
+        acceptedList = friendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
         organizeFriendList(acceptedList);
     }
 
     public void searchUsersEvent() {
-        FriendsBO friendBO = new FriendsBO();
         socialProfileList = new ArrayList<SocialProfile>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = friendBO.loadUserSearchList(userInputSearch);
+            socialProfileList = friendsBO.loadUserSearchList(userInputSearch);
             
         }
     }
 
-    private void loadUserCookie() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
-    }
-
     public void removeFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        FriendsBO friendsBO = new FriendsBO();
         friendsBO.removeFriend(user, id);
         loadFriends();
     }
 
     public void acceptFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        FriendsBO friendsBO = new FriendsBO();
         friendsBO.acceptFriend(user, id);
         loadFriends();
     }

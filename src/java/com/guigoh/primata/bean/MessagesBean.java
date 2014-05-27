@@ -4,20 +4,17 @@
  */
 package com.guigoh.primata.bean;
 
-import com.guigoh.primata.bo.FriendsBO;
 import com.guigoh.primata.bo.MessengerMessagesBO;
 import com.guigoh.primata.bo.SocialProfileBO;
-import com.guigoh.primata.entity.Friends;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.MessengerMessages;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,46 +33,34 @@ public class MessagesBean implements Serializable{
     private SocialProfile contactSocialProfile;
     private SocialProfile socialProfile;
     private Boolean isCurriculum;
+    private SocialProfileBO spBO;
+    private MessengerMessagesBO mmBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
-            SocialProfileBO spBO = new SocialProfileBO();
+            spBO = new SocialProfileBO();
+            mmBO = new MessengerMessagesBO();
             contactSocialProfile = new SocialProfile();
             messagesList = new ArrayList<MessengerMessages>();
-            loadUserCookie();
+            getCookie();
             socialProfile = spBO.findSocialProfile(user.getToken());
             loadContacts();
         }
     }
 
     private void loadContacts() {
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        SocialProfileBO spBO = new SocialProfileBO();
         contactsList = new ArrayList<SocialProfile>();
         contactsList = mmBO.getAllContacts(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
-
     }
 
-    private void loadUserCookie() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
+    private void getCookie() {
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
     }
     
     public void getCurriculumMessages(){
         isCurriculum = true;
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        SocialProfileBO spBO = new SocialProfileBO();
         messagesList = mmBO.getAllCurriculumMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
     }
     
@@ -85,8 +70,6 @@ public class MessagesBean implements Serializable{
 
     public void getMessages(Integer socialProfileId) {
         isCurriculum = false;
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        SocialProfileBO spBO = new SocialProfileBO();
         messagesList = mmBO.getAllMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
         contactSocialProfile = spBO.findSocialProfileBySocialProfileId(socialProfileId);
     }
