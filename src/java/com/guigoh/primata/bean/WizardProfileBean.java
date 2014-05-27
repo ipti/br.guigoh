@@ -338,18 +338,16 @@ public class WizardProfileBean implements Serializable {
                 state.setId(stateEducationId);
                 education.setStateId(state);
                 education.setSocialProfile(socialProfile);
-                String educationDataBeginTemp = "01/" + educationDataBegin;
-                String educationDataEndTemp = "01/" + educationDataEnd;
-                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse(educationDataBeginTemp);
+                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + educationDataBegin);
                 education.setDataBegin(dataBegin);
-                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse(educationDataEndTemp);
+                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + educationDataEnd);
                 education.setDataEnd(dataEnd);
-                if (education.getDataBegin().after(education.getDataEnd())) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique as datas"), null));
-                    cont = false;
-                } else {
+                if (education.getDataBegin().before(education.getDataEnd())) {
                     education.setDataBegin(new Date(education.getDataBegin().getTime() + 600 * 60 * 1000));
                     education.setDataEnd(new Date(education.getDataEnd().getTime() + 600 * 60 * 1000));
+                } else {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique as datas"), null));
+                    cont = false;
                 }
                 if (cont == true) {
                     educationsBO.createInsert(education);
@@ -413,11 +411,9 @@ public class WizardProfileBean implements Serializable {
                 state.setId(stateExperienceId);
                 experience.setStateId(state);
                 experience.setSocialProfile(socialProfile);
-                String experienceDataBeginTemp = "01/" + experienceDataBegin;
-                String experienceDataEndTemp = "01/" + experienceDataEnd;
-                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse(experienceDataBeginTemp);
+                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + experienceDataBegin);
                 experience.setDataBegin(dataBegin);
-                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse(experienceDataEndTemp);
+                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + experienceDataEnd);
                 experience.setDataEnd(dataEnd);
                 if (experience.getDataBegin().after(experience.getDataEnd())) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique as datas"), null));
@@ -514,29 +510,28 @@ public class WizardProfileBean implements Serializable {
                 interestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
                 interestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
                 interestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
-            }
-            if (panel == 3) {
-            }
-            SocialProfileBO socialProfileBO = new SocialProfileBO();
+            } else {
+                SocialProfileBO socialProfileBO = new SocialProfileBO();
 
-            if (socialProfile.getAvailabilityId().getId() == 0) {
-                socialProfile.setAvailabilityId(null);
-            }
-            if (socialProfile.getScholarityId().getId() == 0) {
-                socialProfile.setScholarityId(null);
-            }
+                if (socialProfile.getAvailabilityId().getId() == 0) {
+                    socialProfile.setAvailabilityId(null);
+                }
+                if (socialProfile.getScholarityId().getId() == 0) {
+                    socialProfile.setScholarityId(null);
+                }
 
-            socialProfileBO.edit(socialProfile);
+                socialProfileBO.edit(socialProfile);
 
-            if (socialProfile.getAvailabilityId() == null) {
-                Availability availability = new Availability();
-                availability.setId(0);
-                socialProfile.setAvailabilityId(availability);
-            }
-            if (socialProfile.getScholarityId() == null) {
-                Scholarity scholarity = new Scholarity();
-                scholarity.setId(0);
-                socialProfile.setScholarityId(scholarity);
+                if (socialProfile.getAvailabilityId() == null) {
+                    Availability availability = new Availability();
+                    availability.setId(0);
+                    socialProfile.setAvailabilityId(availability);
+                }
+                if (socialProfile.getScholarityId() == null) {
+                    Scholarity scholarity = new Scholarity();
+                    scholarity.setId(0);
+                    socialProfile.setScholarityId(scholarity);
+                }
             }
             return "wizard";
         } catch (Exception e) {
