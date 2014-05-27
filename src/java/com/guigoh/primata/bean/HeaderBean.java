@@ -8,14 +8,12 @@ import com.guigoh.primata.bo.AuthorizationBO;
 import com.guigoh.primata.bo.MessengerStatusBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.UsersBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.SocialProfile;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -24,55 +22,44 @@ import javax.servlet.http.HttpServletRequest;
 @SessionScoped
 @ManagedBean(name = "headerBean")
 public class HeaderBean implements Serializable {
-
+    
     public static final String ADMIN = "AD";
     public static final String REVISER = "RE";
     private SocialProfile socialProfile;
     private Authorization authorization;
-    private Boolean adminOK;
-    private Boolean reviserOK;
+    private Boolean admin;
+    private Boolean reviser;
     private Integer registeredUsersCount;
     private Long registeredUsersOnline;
-
+    
     public void init() {
         socialProfile = new SocialProfile();
-        adminOK = false;
-        reviserOK = false;
-        holdSocialProfile();
-        holdAuthorization();
+        admin = false;
+        reviser = false;
+        loadSocialProfile();
+        loadAuthorization();
         getRegisteredUsersQuantity();
     }
-
-    private void holdSocialProfile() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    socialProfile.setTokenId(cookie.getValue());
-                    break;
-                }
-            }
-            SocialProfileBO socialProfileBO = new SocialProfileBO();
-            socialProfile = socialProfileBO.findSocialProfile(socialProfile.getTokenId());
-            socialProfile.setName(socialProfile.getName().split(" ")[0]);
-        } 
+    
+    private void loadSocialProfile() {
+        SocialProfileBO socialProfileBO = new SocialProfileBO();
+        socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        socialProfile.setName(socialProfile.getName().split(" ")[0]);
     }
-
-    private void holdAuthorization() {
+    
+    private void loadAuthorization() {
         AuthorizationBO authorizationBO = new AuthorizationBO();
         authorization = authorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
         if (authorization != null) {
             if (authorization.getRoles().equals(ADMIN)) {
-                adminOK = true;
+                admin = true;
             }
             if (authorization.getRoles().equals(REVISER)) {
-                reviserOK = true;
+                reviser = true;
             }
         }
     }
-
+    
     private void getRegisteredUsersQuantity() {
         UsersBO uBO = new UsersBO();
         MessengerStatusBO msBO = new MessengerStatusBO();
@@ -82,51 +69,51 @@ public class HeaderBean implements Serializable {
             registeredUsersOnline++;
         }
     }
-
+    
     public SocialProfile getSocialProfile() {
         return socialProfile;
     }
-
+    
     public void setSocialProfile(SocialProfile socialProfile) {
         this.socialProfile = socialProfile;
     }
-
+    
     public Authorization getAuthorization() {
         return authorization;
     }
-
+    
     public void setAuthorization(Authorization authorization) {
         this.authorization = authorization;
     }
-
-    public Boolean getAdminOK() {
-        return adminOK;
+    
+    public Boolean getAdmin() {
+        return admin;
     }
-
-    public void setAdminOK(Boolean adminOK) {
-        this.adminOK = adminOK;
+    
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
-
-    public Boolean getReviserOK() {
-        return reviserOK;
+    
+    public Boolean getReviser() {
+        return reviser;
     }
-
-    public void setReviserOK(Boolean reviserOK) {
-        this.reviserOK = reviserOK;
+    
+    public void setReviser(Boolean reviser) {
+        this.reviser = reviser;
     }
-
+    
     public Integer getRegisteredUsersCount() {
         return registeredUsersCount;
     }
-
+    
     public void setRegisteredUsersCount(Integer registeredUsersCount) {
         this.registeredUsersCount = registeredUsersCount;
     }
-
+    
     public Long getRegisteredUsersOnline() {
         return registeredUsersOnline;
     }
-
+    
     public void setRegisteredUsersOnline(Long registeredUsersOnline) {
         this.registeredUsersOnline = registeredUsersOnline;
     }

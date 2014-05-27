@@ -16,6 +16,9 @@ import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
 import com.guigoh.primata.bo.SubnetworkBO;
 import com.guigoh.primata.bo.UsersBO;
+import com.guigoh.primata.bo.util.CookieService;
+import com.guigoh.primata.bo.util.MD5Generator;
+import com.guigoh.primata.bo.util.RandomGenerator;
 import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
@@ -93,6 +96,15 @@ public class RegisterBean implements Serializable {
     private Boolean visitor;
     private ConfigReader cr;
     private Translator trans;
+    private CountryBO countryBO;
+    private StateBO stateBO;
+    private CityBO cityBO;
+    private RoleBO roleBO;
+    private SocialProfileBO socialProfileBO;
+    private UsersBO userBO;
+    private AuthorizationBO authorizationBO;
+    private NetworksBO networksBO;
+    private EmailActivationBO emailActivationBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -107,6 +119,14 @@ public class RegisterBean implements Serializable {
             roleList = new ArrayList<Role>();
             languageList = getLanguages();
             subnetworkList = getSubnetworks();
+            countryBO = new CountryBO();
+            stateBO = new StateBO();
+            cityBO = new CityBO();
+            roleBO = new RoleBO();
+            authorizationBO = new AuthorizationBO();
+            authorizationBO = new AuthorizationBO();
+            networksBO = new NetworksBO();
+            emailActivationBO = new EmailActivationBO();
             usernameConfirm = "";
             passwordConfirm = "";
             countryId = 0;
@@ -128,64 +148,47 @@ public class RegisterBean implements Serializable {
     }
 
     private void loadDefault() {
-        CountryBO countryBO = new CountryBO();
         countryId = countryBO.getCountryByName(BRAZIL).getId();
-
-        StateBO stateBO = new StateBO();
         stateList = stateBO.findStatesByCountryId(countryId);
         stateId = stateBO.getStateByName(SERGIPE).getId();
-
-        CityBO cityBO = new CityBO();
         cityList = cityBO.findCitiesByStateId(stateId);
         cityId = cityBO.getCityByName(ARACAJU).getId();
-
-        RoleBO roleBO = new RoleBO();
         roleList = roleBO.getAll();
 
     }
 
     public void register() throws Exception {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Boolean registered = false;
         try {
-            UsersBO uBO = new UsersBO();
-            Users usertest = uBO.findUsers(user);
-            if (usertest.getToken() != null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
+            Users userTest = userBO.findUsers(user);
+            if (userTest.getToken() != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
                         && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
                         && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
                         if (usernameConfirm.equals(user.getUsername())) {
-
                             if (passwordConfirm.equals(user.getPassword())) {
-                                user.setToken(md5(user.getUsername() + user.getPassword() + SALT));
-
-                                user.setPassword(md5(user.getPassword() + SALT));
+                                user.setToken(MD5Generator.generate(user.getUsername() + user.getPassword() + SALT));
+                                user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
                                 user.setSecretQuestionId(secretQuestion);
-
+                                Country country = new Country();
+                                State state = new State();
+                                City city = new City();
+                                Subnetwork subnetwork = new Subnetwork();
+                                Language language = new Language();
+                                Role role = new Role();
                                 EmailActivation emailactivation = new EmailActivation();
                                 emailactivation.setUsername(user.getUsername());
-                                emailactivation.setCode(md5(user.getUsername() + random(5)));
-                                EmailActivationBO emailActivationBO = new EmailActivationBO();
-
-
-                                SocialProfileBO socialProfileBO = new SocialProfileBO();
-                                Country country = new Country();
+                                emailactivation.setCode(MD5Generator.generate(user.getUsername() + RandomGenerator.generate(5)));
                                 country.setId(countryId);
                                 socialProfile.setCountryId(country);
-                                State state = new State();
                                 state.setId(stateId);
                                 socialProfile.setStateId(state);
-                                City city = new City();
                                 city.setId(cityId);
                                 socialProfile.setCityId(city);
-                                Language language = new Language();
                                 language.setId(languageId);
                                 socialProfile.setLanguageId(language);
-                                Subnetwork subnetwork = new Subnetwork();
                                 subnetwork.setId(subnetworkId);
-                                Role role = new Role();
                                 role.setId(roleId);
                                 if (subnetworkId != 0) {
                                     socialProfile.setSubnetworkId(subnetwork);
@@ -203,31 +206,31 @@ public class RegisterBean implements Serializable {
                                 //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                                 //accountActivation = trans.getWord(accountActivation);
                                 //MailService.sendMail(mailtext, accountActivation, user.getUsername());
-                                //Linha alterada
+                                //EmailActivationBO emailActivationBO = new EmailActivationBO();
+                                //emailActivationBO.create(emailactivation);
                                 user.setStatus(CONFIRMATION_ACCESS);
-                                uBO.create(user);
+                                userBO.create(user);
                                 automaticConfirm(user);
                                 socialProfileBO.create(socialProfile);
-                                //emailActivationBO.create(emailactivation);
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
                                 user = new Users();
                                 socialProfile = new SocialProfile();
                                 lastName = "";
                                 usernameConfirm = "";
                                 passwordConfirm = "";
                             } else {
-                                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
                             }
                         } else {
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
                         }
                     
                 } else {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível realizar o cadastro. Verifique os campos abaixo."), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível realizar o cadastro. Verifique os campos abaixo."), null));
                 }
             }
         } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
             e.printStackTrace();
         }
     }
@@ -237,21 +240,15 @@ public class RegisterBean implements Serializable {
     }
 
     public String backToLogin() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
-        eraseCookie(request, response);
+        CookieService.eraseCookie();
         return "logout";
     }
 
     private void automaticConfirm(Users user) {
-
-        NetworksBO networksBO = new NetworksBO();
         List<Networks> networksList = networksBO.getAll();
         Authorization authorization = new Authorization();
         authorization.setRoles(DEFAULT);
         authorization.setTokenId(user.getToken());
-        //Refazer
         if (networksList.size() > 2) {
             authorization.setNetwork("Guigoh");
         } else {
@@ -263,36 +260,21 @@ public class RegisterBean implements Serializable {
         } else if (networksList.get(0).getType().equals(PRIVATE)) {
             authorization.setStatus(PENDING_ACCESS);
         }
-        //
-        AuthorizationBO authorizationBO = new AuthorizationBO();
         authorizationBO.create(authorization);
     }
 
     public String changePassword() throws Exception {
-        UsersBO uBO = new UsersBO();
-        EmailActivationBO eBO = new EmailActivationBO();
-        EmailActivation eA = eBO.findEmailActivationByUsername(confirmEmail);
-        Users userToRecover = uBO.findUsers(confirmEmail);
-        String message;
+        EmailActivation emailActivation = emailActivationBO.findEmailActivationByUsername(confirmEmail);
+        Users userToRecover = userBO.findUsers(confirmEmail);
         if (newPassword.equals(newPasswordConfirm)) {
-            userToRecover.setPassword(md5(newPassword + SALT));
-            uBO.edit(userToRecover);
-            eBO.destroy(eA);
+            userToRecover.setPassword(MD5Generator.generate(newPassword + SALT));
+            userBO.edit(userToRecover);
+            emailActivationBO.destroy(emailActivation);
             return "logout";
         } else {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os campos devem ser iguais."), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os campos devem ser iguais."), null));
             return "";
         }
-    }
-
-    private String random(int max) {
-        Random random = new Random(System.currentTimeMillis());
-        String stemp = "";
-        for (int i = 0; i < max; ++i) {
-            stemp += random.nextInt(10);
-        }
-        return stemp;
     }
 
     public List<SecretQuestion> getQuestions() {
@@ -301,7 +283,6 @@ public class RegisterBean implements Serializable {
     }
 
     private List<Country> getCountries() {
-        CountryBO countryBO = new CountryBO();
         return countryBO.getAll();
     }
 
@@ -315,41 +296,18 @@ public class RegisterBean implements Serializable {
         return subnetworkBO.getAll();
     }
 
-    public static String md5(String input) {
-        String md5 = null;
-        if (null == input) {
-            return null;
-        }
-        try {
-            //Create MessageDigest object for MD5
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            //Update input string in message digest
-            digest.update(input.getBytes(), 0, input.length());
-            //Converts message digest value in base 16 (hex) 
-            md5 = new BigInteger(1, digest.digest()).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return md5;
-    }
-
     public void loadState() {
-        StateBO stateBO = new StateBO();
         stateList = stateBO.findStatesByCountryId(countryId);
     }
 
     public void loadCity() {
-        CityBO cityBO = new CityBO();
         cityList = cityBO.findCitiesByStateId(stateId);
     }
 
     public void authenticateUser() {
         try {
-            UsersBO usersBO = new UsersBO();
-            AuthorizationBO authorizationBO = new AuthorizationBO();
-            EmailActivationBO emailActivationBO = new EmailActivationBO();
             if (confirmEmail != null && confirmCode != null) {
-                Users userConfirm = usersBO.findUsers(confirmEmail);
+                Users userConfirm = userBO.findUsers(confirmEmail);
                 EmailActivation emailActivation = emailActivationBO.findEmailActivationByUsername(userConfirm.getUsername());
                 if (emailActivation.getUsername() != null) {
                     if (userConfirm.getStatus().equals("CA")) {
@@ -359,11 +317,8 @@ public class RegisterBean implements Serializable {
                     } else if (userConfirm != null) {
                         if (emailActivation.getCode().equals(confirmCode)) {
                             userConfirm.setStatus(CONFIRMATION_ACCESS);
-                            usersBO.edit(userConfirm);
-
+                            userBO.edit(userConfirm);
                             emailActivationBO.destroy(emailActivation);
-
-                            NetworksBO networksBO = new NetworksBO();
                             List<Networks> networksList = networksBO.getAll();
                             Authorization authorization = new Authorization();
                             authorization.setRoles(DEFAULT);
@@ -380,9 +335,7 @@ public class RegisterBean implements Serializable {
                             } else if (networksList.get(0).getType().equals(PRIVATE)) {
                                 authorization.setStatus(PENDING_ACCESS);
                             }
-                            //
                             authorizationBO.create(authorization);
-
                             panelStatus = "confirmed_email";
                         }
                     }
@@ -390,55 +343,23 @@ public class RegisterBean implements Serializable {
                     panelStatus = "active_email";
                 }
             } else {
-                Users users = getUserCookie();
-                if (users.getStatus() != null) {
-                    if (users.getStatus().equals("CP")) {
+                Users user = userBO.findUsers(CookieService.getCookie("user"));
+                if (user.getStatus() != null) {
+                    if (user.getStatus().equals("CP")) {
                         panelStatus = "check_email";
                     } else {
-                        Authorization authorization = authorizationBO.findAuthorizationByTokenId(users.getToken());
+                        Authorization authorization = authorizationBO.findAuthorizationByTokenId(user.getToken());
                         if (authorization.getStatus().equals("IC")) {
                             panelStatus = "inactive";
                         } else if (authorization.getStatus().equals("PC")) {
                             panelStatus = "pending";
                         }
                     }
-                    FacesContext facesContext = FacesContext.getCurrentInstance();
-                    HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-                    HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
-                    eraseCookie(request, response);
+                    CookieService.eraseCookie();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private Users getUserCookie() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    UsersBO usersBO = new UsersBO();
-                    user = usersBO.findUsers(cookie.getValue());
-                }
-
-            }
-        }
-        return user;
-    }
-
-    private void eraseCookie(HttpServletRequest req, HttpServletResponse resp) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                cookies[i].setValue("");
-                cookies[i].setPath("/");
-                cookies[i].setMaxAge(0);
-                cookies[i].setDomain(".guigoh.com");
-                resp.addCookie(cookies[i]);
-            }
         }
     }
 

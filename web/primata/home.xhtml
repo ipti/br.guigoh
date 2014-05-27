@@ -20,7 +20,7 @@
                     <h:panelGroup styleClass="interest_themes">
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
                             <h:link styleClass="interest_theme" outcome="/primata/theme/theme.xhtml?id=#{theme.id}">
-                                <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.md5(theme.name)}.png')"></h:outputText>
+                                <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.getMD5(theme.name)}.png')"></h:outputText>
                                 <ui:param name="themeName" value="#{theme.name}" />
                                 <h:outputText styleClass="theme_label" value="#{localeBean.getString(themeName)}"></h:outputText>
                             </h:link>

@@ -8,6 +8,7 @@ import com.guigoh.primata.bo.DiscussionTopicBO;
 import com.guigoh.primata.bo.DiscussionTopicFilesBO;
 import com.guigoh.primata.bo.DiscussionTopicMsgBO;
 import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicFiles;
@@ -48,12 +49,18 @@ public class ViewTopicBean implements Serializable {
     private SocialProfile socialProfile;
     private List<DiscussionTopicFiles> newFilesList;
     private int files;
+    private DiscussionTopicMsgBO dtmBO;
+    private DiscussionTopicBO dtBO;
+    private DiscussionTopicFilesBO dtfBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            DiscussionTopicBO dtBO = new DiscussionTopicBO();
-            DiscussionTopicMsgBO dtmBO = new DiscussionTopicMsgBO();
-            DiscussionTopicFilesBO dtfBO = new DiscussionTopicFilesBO();
+            dtBO = new DiscussionTopicBO();
+            dtmBO = new DiscussionTopicMsgBO();
+            dtfBO = new DiscussionTopicFilesBO();
+            user = new Users();
+            user.setUsername(CookieService.getCookie("user"));
+            user.setToken(CookieService.getCookie("token"));
             if (discussionTopic == null) {
                 discussionTopic = dtBO.findDiscussionTopicByID(discussionTopicID);
                 discussionTopic.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
@@ -64,48 +71,30 @@ public class ViewTopicBean implements Serializable {
                 }
                 newFilesList = new ArrayList<DiscussionTopicFiles>();
                 newReply = "";
-                user = new Users();
-                loadUserCookie();
                 SocialProfileBO spBO = new SocialProfileBO();
                 socialProfile = spBO.findSocialProfile(user.getToken());
-            } else if (discussionTopic.getId() != discussionTopicID){
+            } else if (discussionTopic.getId() != discussionTopicID) {
                 discussionTopic = dtBO.findDiscussionTopicByID(discussionTopicID);
                 discussionTopic.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
-
                 discussionTopicMsgList = dtmBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
                     dtm.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
                 newFilesList = new ArrayList<DiscussionTopicFiles>();
                 newReply = "";
-                user = new Users();
-                loadUserCookie();
                 SocialProfileBO spBO = new SocialProfileBO();
                 socialProfile = spBO.findSocialProfile(user.getToken());
             }
             loadSessionFiles();
         }
     }
-
-    private void loadUserCookie() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
+    
+    private HttpSession getSession(){
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getSession();
     }
-
     private void loadSessionFiles() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        HttpSession session = request.getSession();
+        HttpSession session = getSession();
         if (files == 1) {
             newFilesList = (List<DiscussionTopicFiles>) session.getAttribute("listDiscussionTopicFiles");
         } else {
@@ -116,8 +105,7 @@ public class ViewTopicBean implements Serializable {
 
     public void redirect(String filePath) {
         try {
-            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            externalContext.redirect(filePath.trim());
+            FacesContext.getCurrentInstance().getExternalContext().redirect(filePath.trim());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,11 +113,7 @@ public class ViewTopicBean implements Serializable {
 
     public void downloadFile(String filePath, String fileType) {
         File file = new File(filePath);
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        downloadFile(file, fileType, facesContext);
-    }
-
-    public void holdViewTopic() {
+        downloadFile(file, fileType, FacesContext.getCurrentInstance());
     }
 
     public static synchronized void downloadFile(File file, String mimeType, FacesContext facesContext) {
@@ -160,8 +144,6 @@ public class ViewTopicBean implements Serializable {
     public void replyTopic() throws RollbackFailureException, Exception {
         try {
             if (!newReply.equals("")) {
-                DiscussionTopicMsgBO dtmBO = new DiscussionTopicMsgBO();
-                DiscussionTopicFilesBO dtfBO = new DiscussionTopicFilesBO();
                 DiscussionTopicMsg discussionTopicMsg = new DiscussionTopicMsg();
                 discussionTopicMsg.setDiscussionTopicId(discussionTopic);
                 discussionTopicMsg.setReply(newReply);
@@ -177,9 +159,7 @@ public class ViewTopicBean implements Serializable {
                         discussionTopicMsg.getDiscussionTopicFilesList().add(dtf);
                     }
                 }
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-                HttpSession session = request.getSession();
+                HttpSession session = getSession();
                 session.removeAttribute("listDiscussionTopicFiles");
                 newFilesList = new ArrayList<DiscussionTopicFiles>();
                 discussionTopicMsgList.add(discussionTopicMsg);

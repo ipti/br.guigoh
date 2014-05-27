@@ -83,7 +83,7 @@
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_photo" style="background:url('#{viewTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_name" value="#{viewTopicBean.socialProfile.name}"></h:link>
                 <h:panelGroup styleClass="new_reply_box">
-                    <h:commandLink styleClass="reply_attach_button" action="#{viewTopicBean.holdViewTopic()}">
+                    <h:commandLink styleClass="reply_attach_button">
                         <f:ajax event="action" execute="@form" render="@form"></f:ajax>
                     </h:commandLink>
                     <h:inputTextarea styleClass="new_reply" value="#{viewTopicBean.newReply}">

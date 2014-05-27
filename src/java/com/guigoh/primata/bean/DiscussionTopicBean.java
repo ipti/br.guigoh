@@ -9,6 +9,7 @@ import com.guigoh.primata.bo.DiscussionTopicFilesBO;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.TagsBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicFiles;
 import com.guigoh.primata.entity.Interests;
@@ -23,7 +24,6 @@ import java.util.TimeZone;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -33,9 +33,8 @@ import javax.servlet.http.HttpSession;
  */
 @SessionScoped
 @ManagedBean(name = "discussionTopicBean")
-public class DiscussionTopicBean implements Serializable{
- 
-    final TimeZone timeZone = TimeZone.getDefault();
+public class DiscussionTopicBean implements Serializable {
+
     public static final char ACTIVE = 'A';
     public static final char DISABLED = 'D';
     public static final char WARNING = 'W';
@@ -43,72 +42,52 @@ public class DiscussionTopicBean implements Serializable{
     public static final char MSG = 'M';
     private DiscussionTopic discussionTopic;
     private List<Tags> tags;
-    private int themesID;
+    private Integer themesID;
     private Users user;
     private SocialProfile socialProfile;
     private Interests theme;
-    private List<DiscussionTopicFiles> listDiscussionTopicFiles;
-    private int files;
+    private List<DiscussionTopicFiles> discussionTopicFilesList;
+    private Integer files;
     private Tags tag;
     private String tagInput;
+    private InterestsBO interestsBO;
+    private SocialProfileBO socialProfileBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            if (discussionTopic == null) {
-                discussionTopic = new DiscussionTopic();
-            }
-            if (listDiscussionTopicFiles == null) {
-                listDiscussionTopicFiles = new ArrayList<DiscussionTopicFiles>();
-            }
+            discussionTopic = new DiscussionTopic();
+            discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
             tagInput = "#";
-            if (tags == null) {
-                tags = new ArrayList<Tags>();
-            }
+            tags = new ArrayList<Tags>();
             tag = new Tags();
             tag.setName(tagInput);
             user = new Users();
-            loadUserCookie();
-            SocialProfileBO spBO = new SocialProfileBO();
-            socialProfile = spBO.findSocialProfile(user.getToken());
-            InterestsBO interestsBO = new InterestsBO();
-
+            getCookie();
+            socialProfileBO = new SocialProfileBO();
+            socialProfile = socialProfileBO.findSocialProfile(user.getToken());
+            interestsBO = new InterestsBO();
             theme = interestsBO.findInterestsByID(themesID);
-
-            loadSessionFiles();
+            getSessionFiles();
         }
     }
 
-    private void loadUserCookie() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
+    private void getCookie(){
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+    }
+    
+    private HttpSession getSession(){
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        return request.getSession();
     }
 
-    private void loadSessionFiles() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-        HttpSession session = request.getSession();
+    private void getSessionFiles() {
+        HttpSession session = getSession();
         if (files == 1) {
-            listDiscussionTopicFiles = (List<DiscussionTopicFiles>) session.getAttribute("listDiscussionTopicFiles");
+            discussionTopicFilesList = (List<DiscussionTopicFiles>) session.getAttribute("listDiscussionTopicFiles");
         } else {
             session.removeAttribute("listDiscussionTopicFiles");
-            listDiscussionTopicFiles = new ArrayList<DiscussionTopicFiles>();
-        }
-    }
-
-    public void holdDiscussionTopic() {
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
+            discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
         }
     }
 
@@ -145,27 +124,22 @@ public class DiscussionTopicBean implements Serializable{
                 tagsBO.create(t);
                 tagsBO.createTagsDiscussionTopic(t, discussionTopic);
             }
-            if (listDiscussionTopicFiles != null) {
+            if (discussionTopicFilesList != null) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
-                for (DiscussionTopicFiles discussionTopicFiles : listDiscussionTopicFiles) {
+                for (DiscussionTopicFiles discussionTopicFiles : discussionTopicFilesList) {
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
                     discussionTopicFilesBO.create(discussionTopicFiles);
                 }
             }
-
             discussionTopic = new DiscussionTopic();
             tags = new ArrayList<Tags>();
-            listDiscussionTopicFiles = new ArrayList<DiscussionTopicFiles>();
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
-            HttpSession session = request.getSession();
+            discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
+            HttpSession session = getSession();
             session.removeAttribute("listDiscussionTopicFiles");
-
             FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themesID);
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 
@@ -177,11 +151,11 @@ public class DiscussionTopicBean implements Serializable{
         this.discussionTopic = discussionTopic;
     }
 
-    public int getThemesID() {
+    public Integer getThemesID() {
         return themesID;
     }
 
-    public void setThemesID(int themesID) {
+    public void setThemesID(Integer themesID) {
         this.themesID = themesID;
     }
 
@@ -234,19 +208,19 @@ public class DiscussionTopicBean implements Serializable{
     }
 
     public List<DiscussionTopicFiles> getListDiscussionTopicFiles() {
-        loadSessionFiles();
-        return listDiscussionTopicFiles;
+        getSessionFiles();
+        return discussionTopicFilesList;
     }
 
     public void setListDiscussionTopicFiles(List<DiscussionTopicFiles> listDiscussionTopicFiles) {
-        this.listDiscussionTopicFiles = listDiscussionTopicFiles;
+        this.discussionTopicFilesList = listDiscussionTopicFiles;
     }
 
-    public int getFiles() {
+    public Integer getFiles() {
         return files;
     }
 
-    public void setFiles(int files) {
+    public void setFiles(Integer files) {
         this.files = files;
     }
 }
