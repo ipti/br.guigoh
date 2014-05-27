@@ -18,7 +18,6 @@ import com.guigoh.primata.entity.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import javax.faces.bean.ManagedBean;
@@ -96,7 +95,6 @@ public class DiscussionTopicBean implements Serializable{
 
     private void loadSessionFiles() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        boolean isCrateTopicPage = facesContext.getViewRoot().getViewId().lastIndexOf("createTopic") > -1 ? true : false;
         HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
         HttpSession session = request.getSession();
         if (files == 1) {
@@ -143,9 +141,9 @@ public class DiscussionTopicBean implements Serializable{
             discussionTopic.setThemeId(theme);
             TagsBO tagsBO = new TagsBO();
             discussionTopicBO.create(discussionTopic);
-            for (Tags tag : tags) {
-                tagsBO.create(tag);
-                tagsBO.createTagsDiscussionTopic(tag, discussionTopic);
+            for (Tags t : tags) {
+                tagsBO.create(t);
+                tagsBO.createTagsDiscussionTopic(t, discussionTopic);
             }
             if (listDiscussionTopicFiles != null) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();

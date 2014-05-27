@@ -5,10 +5,7 @@
 package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.DiscussionTopicBO;
-import com.guigoh.primata.bo.DiscussionTopicMsgBO;
 import com.guigoh.primata.bo.InterestsBO;
-import com.guigoh.primata.entity.DiscussionTopic;
-import com.guigoh.primata.entity.DiscussionTopicMsg;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.NewActivity;
 import java.io.Serializable;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -64,7 +60,6 @@ public class HomeBean implements Serializable{
             //Converts message digest value in base 16 (hex) 
             md5 = new BigInteger(1, digest.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-
             e.printStackTrace();
         }
         return md5;
@@ -85,6 +80,5 @@ public class HomeBean implements Serializable{
     public void setNewActivityList(List<NewActivity> newActivityList) {
         this.newActivityList = newActivityList;
     }
-    
     
 }

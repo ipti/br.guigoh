@@ -5,7 +5,6 @@
 package com.guigoh.primata.bean;
 
 import com.guigoh.primata.bo.AuthorizationBO;
-import com.guigoh.primata.bo.MessengerMessagesBO;
 import com.guigoh.primata.bo.MessengerStatusBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.UsersBO;

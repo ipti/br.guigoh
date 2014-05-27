@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Complete seu cadastro</ui:define>
+    <ui:define name="title">#{localeBean.getString("Complete seu cadastro")}</ui:define>
     <ui:define name="scripts">
         <link rel="shortcut icon" href="img/favicon.ico"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/wizard.css"></link>
@@ -15,7 +15,6 @@
         <script src="/resources/js/jquery-multiselect-2.0.js"></script>
         <script src="/resources/js/jquery-multiselect-2_pt.js"></script>
         <script src="/resources/js/jquery-multiselect-2_fr.js"></script>
-        <script type="text/javascript" src="/resources/js/wizard.js"></script>
         <script type="text/javascript">
             var books = #{wizardProfileBean.books};
             var musics = #{wizardProfileBean.musics};
@@ -51,7 +50,7 @@
         </style>
     </ui:define>
     <ui:define name="content">
-
+        <script type="text/javascript" src="/resources/js/wizard.js"></script>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{wizardProfileBean.init()}"/>
         </f:metadata>
@@ -76,7 +75,7 @@
                                     <Button id ="alter_img" class="change_avatar" >#{localeBean.getString('Alterar')}</Button>
 
                                 </div>
-
+                                <h:messages errorClass="error error_font" ></h:messages>
                                 <span class="clear"></span>
                                 <span>#{localeBean.getString('Área de ocupação').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.socialProfile.occupationsId.occupationsTypeId.id}"
@@ -86,8 +85,7 @@
                                     <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{localeBean.getString(OccupationTypeName)}" />
                                     <f:ajax render="occupation" event="valueChange" listener="#{wizardProfileBean.loadOccupations()}"/>
                                 </h:selectOneMenu>
-                                <br/>
-                                <h:messages errorClass="error error_font" ></h:messages>
+                                <br/>                                
                                 <span>#{localeBean.getString('Ocupação').toUpperCase()}</span>
                                 <h:inputText id="occupation" value="#{wizardProfileBean.socialProfile.occupationsId.name}" class="request_form_ocupation occupation" disabled="#{wizardProfileBean.socialProfile.occupationsId.occupationsTypeId.id == 0}"/>
                                 <br/>
@@ -127,7 +125,8 @@
                                 <span>#{localeBean.getString('País').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.countryId}" class="request_form_country">
                                     <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                    <f:selectItems value="#{wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                    <ui:param name="countryName" value="#{countries.name}"/>
+                                    <f:selectItems value="#{wizardProfileBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{localeBean.getString(countryName)}" />
                                     <f:ajax event="valueChange" render="state city" listener="#{wizardProfileBean.loadState}"/>
                                 </h:selectOneMenu>
 
@@ -319,8 +318,9 @@
                                 <h:selectOneMenu value="#{wizardProfileBean.countryEducationId}" class="request_form_country"
                                                  required="true" requiredMessage="* #{localeBean.getString('O campo PÁIS é obrigatório')}">
                                     <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                    <f:selectItems value="#{wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
-                                    <f:ajax event="valueChange" render="stateEducation" listener="#{wizardProfileBean.loadStateEducaitons()}"/>
+                                    <ui:param name="countryName" value="#{countries.name}"/>
+                                    <f:selectItems value="#{wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{localeBean.getString(countryName)}" />
+                                    <f:ajax event="valueChange" render="stateEducation" listener="#{wizardProfileBean.loadStateEducations()}"/>
                                 </h:selectOneMenu>
                                 <span>#{localeBean.getString('Estado').toUpperCase()}</span>
                                 <h:selectOneMenu id="stateEducation" value="#{wizardProfileBean.stateEducationId}" class="request_form_state"
@@ -369,12 +369,13 @@
                                 <p>#{localeBean.getString('Experiência').toUpperCase()}</p>
                                 
                                 <br></br>
-                                <span>#{localeBean.getString('Área da Atividade').toUpperCase()}</span>
+                                <span>#{localeBean.getString('Área de Atividade').toUpperCase()}</span>
                                 <h:selectOneMenu value="#{wizardProfileBean.experience.nameId.occupationsTypeId.id}"
-                                                 required="true" requiredMessage="* #{localeBean.getString('O campo AREA DA ATIVIDADE é obrigatório')}"
+                                                 required="true" requiredMessage="* #{localeBean.getString('O campo ÁREA DE ATIVIDADE é obrigatório')}"
                                                  class="area_activity">
-                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />  
-                                    <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
+                                    <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />
+                                    <ui:param name="occupationTypeName" value="#{occupationType.name}"/>
+                                              <f:selectItems value="#{wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{localeBean.getString(occupationTypeName)}" />
                                 </h:selectOneMenu>
                                 <br/>
                                 <span>#{localeBean.getString('Nome da Atividade').toUpperCase()}</span>
@@ -405,7 +406,8 @@
                                 <h:selectOneMenu value="#{wizardProfileBean.countryExperienceId}" class="request_form_country"
                                                  required="true" requiredMessage="* #{localeBean.getString('O campo PAÍS é obrigatório')}">
                                     <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                    <f:selectItems value="#{wizardProfileBean.countryExperienceList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
+                                    <ui:param name="countryName" value="#{countries.name}"/>
+                                              <f:selectItems value="#{wizardProfileBean.countryExperienceList}" var="countries" itemValue="#{countries.id}" itemLabel="#{localeBean.getString(countryName)}" />
                                     <f:ajax event="valueChange" render="stateExperience" listener="#{wizardProfileBean.loadStateExperiences()}"/>
                                 </h:selectOneMenu>
 

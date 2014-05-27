@@ -29,11 +29,9 @@ import com.guigoh.primata.entity.Scholarity;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.State;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -159,11 +157,6 @@ public class CurriculumFinderBean implements Serializable{
     
     private List<OccupationsType> getOccupationTypes(){
         OccupationsTypeBO occupationsBO = new OccupationsTypeBO();
-        return occupationsBO.getAll();
-    }
-    
-    private List<Occupations> getOccupations(){
-        OccupationsBO occupationsBO = new OccupationsBO();
         return occupationsBO.getAll();
     }
     
@@ -414,6 +407,5 @@ public class CurriculumFinderBean implements Serializable{
     public void setExperienceTime(Integer experienceTime) {
         this.experienceTime = experienceTime;
     }
-    
     
 }

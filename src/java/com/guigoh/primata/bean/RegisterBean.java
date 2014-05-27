@@ -16,7 +16,6 @@ import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
 import com.guigoh.primata.bo.SubnetworkBO;
 import com.guigoh.primata.bo.UsersBO;
-import com.guigoh.primata.bo.util.MailService;
 import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;

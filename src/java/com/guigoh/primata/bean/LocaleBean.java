@@ -8,11 +8,9 @@ import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
-import com.guigoh.primata.entity.Language;
 import com.guigoh.primata.entity.SocialProfile;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -68,7 +66,6 @@ public class LocaleBean implements Serializable {
         acronym = locale;
         return url + "?faces-redirect=true&includeViewParams=true";
     }
-
 
     public void setLocale() {
         trans.setLocale(cr.getTag("locale"));
