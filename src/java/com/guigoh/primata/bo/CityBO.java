@@ -15,24 +15,36 @@ import java.util.List;
  */
 public class CityBO implements Serializable {
 
+    private CityDAO cityDAO;
+
+    public CityBO() {
+        cityDAO = new CityDAO();
+    }
+
     public List<City> getAll() {
-        CityDAO cityDAO = new CityDAO();
-        return cityDAO.findCityEntities();
+        try {
+            return cityDAO.findCityEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<City> findCitiesByStateId(Integer id) {
-        CityDAO cityDAO = new CityDAO();
-        return cityDAO.findCitysByCountryId(id);
+        try {
+            return cityDAO.findCitysByCountryId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    
 
     public City getCityByName(String cityName) {
         try {
-            CityDAO cityDAO = new CityDAO();
             return cityDAO.findCityByName(cityName);
         } catch (Exception e) {
             e.printStackTrace();
-            return new City();
         }
+        return new City();
     }
 }

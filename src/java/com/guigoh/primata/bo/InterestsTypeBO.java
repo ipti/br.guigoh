@@ -15,9 +15,14 @@ import java.util.List;
  */
 public class InterestsTypeBO implements Serializable {
 
+    private InterestsTypeDAO interestsTypeDAO;
+    
+    public InterestsTypeBO(){
+        interestsTypeDAO = new InterestsTypeDAO();
+    }
+    
     public List<InterestsType> findInterestsType() {
         try {
-            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
             return interestsTypeDAO.findInterestsTypeEntities();
         } catch (Exception e) {
         }
@@ -26,7 +31,6 @@ public class InterestsTypeBO implements Serializable {
 
     public InterestsType findInterestsTypeByName(String typeName) {
         try {
-            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
             return interestsTypeDAO.findInterestsTypeByName(typeName);
         } catch (Exception e) {
         }

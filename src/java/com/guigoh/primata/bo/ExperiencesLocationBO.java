@@ -14,22 +14,36 @@ import java.util.List;
  * @author Joe
  */
 public class ExperiencesLocationBO implements Serializable {
+    
+    private ExperiencesLocationDAO experiencesLocationDAO;
+    
+    public ExperiencesLocationBO(){
+        experiencesLocationDAO = new ExperiencesLocationDAO();
+    }
+    
     public List<ExperiencesLocation> getAll() {
-        ExperiencesLocationDAO experiencesLocationDAODAO = new ExperiencesLocationDAO();
-        return experiencesLocationDAODAO.findExperiencesLocationEntities();
+        try{
+        return experiencesLocationDAO.findExperiencesLocationEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void create(ExperiencesLocation experiencesLocationt) {
          try {
-            ExperiencesLocationDAO experiencesLocationDAODAO = new ExperiencesLocationDAO();
-           experiencesLocationDAODAO.create(experiencesLocationt);               
+           experiencesLocationDAO.create(experiencesLocationt);               
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public ExperiencesLocation findExperiencesLocationByName(ExperiencesLocation locationId) {
-         ExperiencesLocationDAO experiencesLocationDAODAO = new ExperiencesLocationDAO();
-        return experiencesLocationDAODAO.findExperiencesLocationByName(locationId);
+        try{
+        return experiencesLocationDAO.findExperiencesLocationByName(locationId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -5,11 +5,7 @@
 package com.guigoh.primata.bo;
 
 import com.guigoh.primata.dao.ExperiencesDAO;
-import com.guigoh.primata.dao.InterestsDAO;
 import com.guigoh.primata.entity.Experiences;
-import com.guigoh.primata.entity.ExperiencesPK;
-import com.guigoh.primata.entity.Interests;
-import com.guigoh.primata.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,41 +13,53 @@ import java.util.List;
  *
  * @author Joe
  */
-public class ExperiencesBO implements Serializable {   
-     public List<Experiences> findExperiencesByTokenId(String token_id) {
-        ExperiencesDAO experiencesDAO = new ExperiencesDAO();
-        return experiencesDAO.findExperiencesByTokenId(token_id);
+public class ExperiencesBO implements Serializable {
+
+    private ExperiencesDAO experiencesDAO;
+
+    public ExperiencesBO() {
+        experiencesDAO = new ExperiencesDAO();
     }
-     
-     public List<Experiences> getAll() {
-        ExperiencesDAO experiencesDAO = new ExperiencesDAO();
-        return experiencesDAO.findExperiencesEntities();
-    }
-     
-      public void create(Experiences experiences){
+
+    public List<Experiences> findExperiencesByTokenId(String token_id) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
-            experiencesDAO.create(experiences);               
+            return experiencesDAO.findExperiencesByTokenId(token_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Experiences> getAll() {
+        try {
+            return experiencesDAO.findExperiencesEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void create(Experiences experiences) {
+        try {
+            experiencesDAO.create(experiences);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-      
-      public void createInsert(Experiences experiences){
+
+    public void createInsert(Experiences experiences) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
-            experiencesDAO.createInsert(experiences);               
+            experiencesDAO.createInsert(experiences);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-      
-      public void removeExperience(Experiences exp){
-          try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+
+    public void removeExperience(Experiences exp) {
+        try {
             experiencesDAO.destroy(exp.getExperiencesPK());
         } catch (Exception e) {
             e.printStackTrace();
         }
-      }
+    }
 }

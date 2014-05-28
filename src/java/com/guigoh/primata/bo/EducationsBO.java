@@ -16,45 +16,61 @@ import java.util.List;
  * @author Joe
  */
 public class EducationsBO implements Serializable {
-    public List<Educations> findEducationsByTokenId(String token_id){
-        EducationsDAO educationsDAO = new EducationsDAO();
-        return educationsDAO.findEducationsByTokenId(token_id);
+
+    private EducationsDAO educationsDAO;
+
+    public EducationsBO() {
+        educationsDAO = new EducationsDAO();
     }
-    
-    public List<Educations> getAll() {
-        EducationsDAO educationsDAO = new EducationsDAO();
-        return educationsDAO.findEducationsEntities();
-    }
-    
-    public void create(Educations educations){
+
+    public List<Educations> findEducationsByTokenId(String token_id) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
-            educationsDAO.create(educations);               
+            return educationsDAO.findEducationsByTokenId(token_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Educations> getAll() {
+        try {
+            return educationsDAO.findEducationsEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void create(Educations educations) {
+        try {
+            educationsDAO.create(educations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void createInsert(Educations educations){
+
+    public void createInsert(Educations educations) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
-            educationsDAO.createInsert(educations);               
+            educationsDAO.createInsert(educations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Educations findEducationsByName(Educations educations) {
-        EducationsDAO educationsDAO = new EducationsDAO();
-        return educationsDAO.findEducationsByName(educations);
-    }
-    
-    public void removeEducation(Educations edu){
-          try {
-            EducationsDAO educationsDAO = new EducationsDAO();
-            educationsDAO.destroy(edu.getEducationsPK());               
+        try {
+            return educationsDAO.findEducationsByName(educations);
         } catch (Exception e) {
             e.printStackTrace();
         }
-      }
+        return null;
+    }
+
+    public void removeEducation(Educations edu) {
+        try {
+            educationsDAO.destroy(edu.getEducationsPK());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -16,19 +16,23 @@ import java.util.List;
  */
 public class AuthorizationBO implements Serializable {
 
+    private AuthorizationDAO authorizationDAO;
+
+    public AuthorizationBO() {
+        authorizationDAO = new AuthorizationDAO();
+    }
+
     public void create(Authorization authorization) {
         try {
-            AuthorizationDAO authorizationDAO = new AuthorizationDAO();
             authorizationDAO.create(authorization);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    
+
     public void edit(Authorization authorization) {
         try {
-            AuthorizationDAO authorizationDAO = new AuthorizationDAO();
             authorizationDAO.edit(authorization);
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,27 +42,24 @@ public class AuthorizationBO implements Serializable {
 
     public Authorization findAuthorizationByTokenId(String token_id) {
         try {
-            AuthorizationDAO authorizationDAO = new AuthorizationDAO();
             return authorizationDAO.findAuthorization(token_id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null; 
-    }
-    
-    public List<Authorization> getAll(){
-        try {
-            AuthorizationDAO authorizationDAO = new AuthorizationDAO();
-        return authorizationDAO.findAuthorizationEntities();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
+    public List<Authorization> getAll() {
+        try {
+            return authorizationDAO.findAuthorizationEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Authorization> findAuthorizationByActive(Integer subnetwork) {
         try {
-            AuthorizationDAO authorizationDAO = new AuthorizationDAO();
             List<Authorization> authorizationList = authorizationDAO.findAuthorizationsBySubnetwork(subnetwork);
             if (authorizationList == null) {
                 return new ArrayList<Authorization>();
@@ -67,8 +68,6 @@ public class AuthorizationBO implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new ArrayList<Authorization>(); 
+        return new ArrayList<Authorization>();
     }
-    
-    
 }
