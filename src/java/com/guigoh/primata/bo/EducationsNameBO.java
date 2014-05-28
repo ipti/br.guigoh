@@ -4,7 +4,6 @@
  */
 package com.guigoh.primata.bo;
 
-
 import com.guigoh.primata.dao.EducationsNameDAO;
 import com.guigoh.primata.entity.EducationsName;
 import java.io.Serializable;
@@ -16,21 +15,35 @@ import java.util.List;
  */
 public class EducationsNameBO implements Serializable {
 
-    public static void create(EducationsName educationsNamet) {
+    private EducationsNameDAO educationsNameDAO;
+
+    public EducationsNameBO() {
+        educationsNameDAO = new EducationsNameDAO();
+    }
+
+    public void create(EducationsName educationsName) {
         try {
-           EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
-           educationsNameDAO.create(educationsNamet);               
+            educationsNameDAO.create(educationsName);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public EducationsName findEducationsNameByName(EducationsName nameId) {
-         EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
-        return educationsNameDAO.findEducationsByName(nameId);
+        try {
+            return educationsNameDAO.findEducationsByName(nameId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
     public List<EducationsName> getAll() {
-        EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
-        return educationsNameDAO.findEducationsNameEntities();
+        try {
+            return educationsNameDAO.findEducationsNameEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

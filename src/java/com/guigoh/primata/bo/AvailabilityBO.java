@@ -14,10 +14,19 @@ import java.util.List;
  * @author Joe
  */
 public class AvailabilityBO implements Serializable {
-    
-    public List<Availability> getAll(){
-        AvailabilityDAO availabilityDAO = new AvailabilityDAO();
-        return availabilityDAO.findAvailabilityEntities();
+
+    private AvailabilityDAO availabilityDAO;
+
+    public AvailabilityBO() {
+        availabilityDAO = new AvailabilityDAO();
     }
-    
+
+    public List<Availability> getAll() {
+        try {
+            return availabilityDAO.findAvailabilityEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -14,19 +14,37 @@ import java.util.List;
  * @author Joe
  */
 public class LanguageBO implements Serializable {
-    
-    public List<Language> getAll(){
-        LanguageDAO languageDAO = new LanguageDAO();
-        return languageDAO.findLanguageEntities();
+
+    private LanguageDAO languageDAO;
+
+    public LanguageBO() {
+        languageDAO = new LanguageDAO();
     }
-    
-    public Language findById(Integer id){
-        LanguageDAO languageDAO = new LanguageDAO();
-        return languageDAO.findLanguage(id);
+
+    public List<Language> getAll() {
+        try {
+            return languageDAO.findLanguageEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    
-    public Language findByAcronym(String acronym){
-        LanguageDAO languageDAO = new LanguageDAO();
-        return languageDAO.findLanguageByAcronym(acronym);
+
+    public Language findById(Integer id) {
+        try {
+            return languageDAO.findLanguage(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Language findByAcronym(String acronym) {
+        try {
+            return languageDAO.findLanguageByAcronym(acronym);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -7,30 +7,46 @@ package com.guigoh.primata.bo;
 import com.guigoh.primata.dao.MessengerStatusDAO;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.MessengerStatus;
-import java.sql.Timestamp;
 
 /**
  *
  * @author IPTI
  */
 public class MessengerStatusBO {
-    
+
+    private MessengerStatusDAO messengerStatusDAO;
+
+    public MessengerStatusBO() {
+        messengerStatusDAO = new MessengerStatusDAO();
+    }
+
     public Double getServerTime() {
-        MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
-        return messengerStatusDAO.getServerTime();
+        try {
+            return messengerStatusDAO.getServerTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    
-    public Long getUsersOnline(){
-        MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
-        return messengerStatusDAO.getUsersOnline();
+
+    public Long getUsersOnline() {
+        try {
+            return messengerStatusDAO.getUsersOnline();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    
+
     public void pingUser(MessengerStatus ms) throws RollbackFailureException, Exception {
-        MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
-        if (messengerStatusDAO.findMessengerStatus(ms.getSocialProfileId()) == null) {
-            messengerStatusDAO.create(ms);
-        } else {
-            messengerStatusDAO.edit(ms);
+        try {
+            if (messengerStatusDAO.findMessengerStatus(ms.getSocialProfileId()) == null) {
+                messengerStatusDAO.create(ms);
+            } else {
+                messengerStatusDAO.edit(ms);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

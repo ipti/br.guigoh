@@ -13,10 +13,15 @@ import java.io.Serializable;
  * @author Joe
  */
 public class EmailActivationBO implements Serializable {
+    
+    private EmailActivationDAO emailActivationDAO;
+    
+    public EmailActivationBO(){
+        emailActivationDAO = new EmailActivationDAO();
+    }
 
     public void create(EmailActivation emailactivation) {
         try {
-            EmailActivationDAO emailActivationDAO = new EmailActivationDAO();
             emailActivationDAO.create(emailactivation);
         } catch (Exception e) {
             e.printStackTrace();
@@ -25,7 +30,6 @@ public class EmailActivationBO implements Serializable {
 
     public void destroy(EmailActivation emailactivation) {
         try {
-            EmailActivationDAO emailActivationDAO = new EmailActivationDAO();
             emailActivationDAO.destroy(emailactivation.getUsername());
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,7 +38,6 @@ public class EmailActivationBO implements Serializable {
 
     public EmailActivation findEmailActivationByUsername(String username) {
         try {
-            EmailActivationDAO emailActivationDAO = new EmailActivationDAO();
             return emailActivationDAO.findEmailActivationByUsername(username);
         } catch (Exception e) {
             e.printStackTrace();

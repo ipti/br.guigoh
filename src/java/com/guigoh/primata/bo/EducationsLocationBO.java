@@ -17,22 +17,36 @@ import java.util.List;
  * @author Joe
  */
 public class EducationsLocationBO implements Serializable {
+
+    EducationsLocationDAO educationsLocationDAO;
+
+    public EducationsLocationBO() {
+        educationsLocationDAO = new EducationsLocationDAO();
+    }
+
     public List<EducationsLocation> getAll() {
-        EducationsLocationDAO educationsNameDAO = new EducationsLocationDAO();
-        return educationsNameDAO.findEducationsLocationEntities();
+        try {
+            return educationsLocationDAO.findEducationsLocationEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void create(EducationsLocation educationsLocation) {
         try {
-           EducationsLocationDAO educationsNameDAO = new EducationsLocationDAO();
-           educationsNameDAO.create(educationsLocation);               
+            educationsLocationDAO.create(educationsLocation);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public EducationsLocation findEducationsLocationByName(EducationsLocation locationId) {
-        EducationsLocationDAO educationsNameDAO = new EducationsLocationDAO();
-        return educationsNameDAO.findEducationsByName(locationId);
+        try {
+            return educationsLocationDAO.findEducationsByName(locationId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
