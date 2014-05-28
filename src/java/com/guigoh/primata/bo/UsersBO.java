@@ -11,19 +11,22 @@ import java.util.List;
  */
 public class UsersBO implements Serializable {
 
+    private UsersDAO usersDAO;
+    
+    public UsersBO(){
+        usersDAO = new UsersDAO();
+    }
+
     public void create(Users users) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
             usersDAO.create(users);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public Users findUsers(Users users) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
             Users user = usersDAO.findUsers(users.getUsername());
             if (user == null) {
                 return new Users();
@@ -37,7 +40,6 @@ public class UsersBO implements Serializable {
 
     public Users findUsers(String username) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
             Users user = usersDAO.findUsers(username);
             if (user == null) {
                 return new Users();
@@ -48,10 +50,9 @@ public class UsersBO implements Serializable {
         }
         return new Users();
     }
-    
-    public Integer getRegisteredUsersQuantity(){
+
+    public Integer getRegisteredUsersQuantity() {
         try {
-            UsersDAO usersDAO = new UsersDAO();
             return usersDAO.getUsersCount();
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,15 +62,18 @@ public class UsersBO implements Serializable {
 
     public void edit(Users user) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
             usersDAO.edit(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-     public List<Users> getAll(){
-        UsersDAO usersDAO = new UsersDAO();
-        return usersDAO.findUsersEntities();
+
+    public List<Users> getAll() {
+        try {
+            return usersDAO.findUsersEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

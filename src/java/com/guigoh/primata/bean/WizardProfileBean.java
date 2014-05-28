@@ -323,7 +323,7 @@ public class WizardProfileBean implements Serializable {
 
                 if (educationsNamet == null) {
                     education.getNameId().setId(0);
-                    EducationsNameBO.create(education.getNameId());
+                    educationsNameBO.create(education.getNameId());
                     educationsNamet = educationsNameBO.findEducationsNameByName(education.getNameId());
                 }
 

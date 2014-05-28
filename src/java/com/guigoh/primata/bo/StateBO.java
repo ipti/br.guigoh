@@ -14,20 +14,33 @@ import java.util.List;
  * @author Joe
  */
 public class StateBO implements Serializable {
-    
-    public List<State> getAll(){
-        StateDAO stateDAO = new StateDAO();
-        return stateDAO.findStateEntities();
+
+    private StateDAO stateDAO;
+
+    public StateBO() {
+        stateDAO = new StateDAO();
     }
-    
-    public List<State> findStatesByCountryId(Integer id){
-        StateDAO stateDAO = new StateDAO();
-        return stateDAO.findStatesByCountryId(id);
+
+    public List<State> getAll() {
+        try {
+            return stateDAO.findStateEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    
+
+    public List<State> findStatesByCountryId(Integer id) {
+        try {
+            return stateDAO.findStatesByCountryId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public State getStateByName(String stateName) {
         try {
-            StateDAO stateDAO = new StateDAO();
             return stateDAO.findStateByName(stateName);
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,12 +16,23 @@ import java.util.List;
  */
 public class ScholarityBO implements Serializable {
 
+    private ScholarityDAO scholarityDAO;
+
+    public ScholarityBO() {
+        scholarityDAO = new ScholarityDAO();
+    }
+
     public List<Scholarity> getAll() {
-        ScholarityDAO scholarityDAO = new ScholarityDAO();
-        List<Scholarity> scholarityList = scholarityDAO.findScholarityEntities();
-        if (scholarityList == null) {
-            return new ArrayList<Scholarity>();
+        try {
+            List<Scholarity> scholarityList = scholarityDAO.findScholarityEntities();
+            if (scholarityList == null) {
+                return new ArrayList<Scholarity>();
+            } else {
+                return scholarityList;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return scholarityList;
+        return null;
     }
 }

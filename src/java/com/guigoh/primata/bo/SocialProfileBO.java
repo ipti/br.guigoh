@@ -19,14 +19,22 @@ import java.util.*;
  */
 public class SocialProfileBO implements Serializable {
 
+    private SocialProfileDAO socialProfileDAO;
+
+    public SocialProfileBO() {
+        socialProfileDAO = new SocialProfileDAO();
+    }
+
     public void create(SocialProfile socialProfile) throws PreexistingEntityException, RollbackFailureException, Exception {
-        SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
-        socialProfileDAO.create(socialProfile);
+        try {
+            socialProfileDAO.create(socialProfile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void edit(SocialProfile socialProfile) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
             socialProfileDAO.edit(socialProfile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,27 +43,26 @@ public class SocialProfileBO implements Serializable {
 
     public SocialProfile findSocialProfile(String id) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
             SocialProfile socialProfile = socialProfileDAO.findSocialProfile(id);
             if (socialProfile == null) {
                 return new SocialProfile();
+            } else {
+                return socialProfile;
             }
-            return socialProfile;
         } catch (Exception e) {
             e.printStackTrace();
             return new SocialProfile();
         }
-
     }
 
     public SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
             SocialProfile socialProfile = socialProfileDAO.findSocialProfile(id);
             if (socialProfile == null) {
                 return new SocialProfile();
+            } else {
+                return socialProfile;
             }
-            return socialProfile;
         } catch (Exception e) {
             e.printStackTrace();
             return new SocialProfile();
@@ -64,21 +71,34 @@ public class SocialProfileBO implements Serializable {
     }
 
     public List<SocialProfile> loadUserSearchList(SocialProfile socialProfile, Educations education, Integer experienceTime, Interests interest) {
-        SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
-        List<SocialProfile> usersList = socialProfileDAO.loadUserSearchList(socialProfile, education, experienceTime, interest);
-        if (usersList == null) {
-            return new ArrayList<SocialProfile>();
+        try {
+            List<SocialProfile> usersList = socialProfileDAO.loadUserSearchList(socialProfile, education, experienceTime, interest);
+            if (usersList == null) {
+                return new ArrayList<SocialProfile>();
+            } else {
+                return usersList;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return usersList;
+        return null;
     }
 
     public List<SocialProfile> getAll() {
-        SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
-        return socialProfileDAO.findSocialProfileEntities();
+        try {
+            return socialProfileDAO.findSocialProfileEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List getSocialProfileAuthorization(Integer subnetworkId) {
-        SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
-        return socialProfileDAO.loadAllSocialProfileAuthorization(subnetworkId);
+        try {
+            return socialProfileDAO.loadAllSocialProfileAuthorization(subnetworkId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
