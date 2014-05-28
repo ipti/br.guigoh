@@ -14,9 +14,19 @@ import java.util.List;
  * @author Joe
  */
 public class OccupationsTypeBO implements Serializable {
-    public List<OccupationsType> getAll(){
-        OccupationsTypeDAO occupationsDAO = new OccupationsTypeDAO();
-        return occupationsDAO.findOccupationsTypeEntities();
+
+    private OccupationsTypeDAO occupationsTypeDAO;
+
+    public OccupationsTypeBO() {
+        occupationsTypeDAO = new OccupationsTypeDAO();
     }
-    
+
+    public List<OccupationsType> getAll() {
+        try {
+            return occupationsTypeDAO.findOccupationsTypeEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

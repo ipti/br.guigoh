@@ -13,9 +13,19 @@ import java.util.List;
  * @author ipti004
  */
 public class RoleBO {
-    
-    public List<Role> getAll(){
-        RoleDAO roleDAO = new RoleDAO();
-        return roleDAO.findRoleEntities();
+
+    private RoleDAO roleDAO;
+
+    public RoleBO() {
+        roleDAO = new RoleDAO();
+    }
+
+    public List<Role> getAll() {
+        try {
+            return roleDAO.findRoleEntities();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

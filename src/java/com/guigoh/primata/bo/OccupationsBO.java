@@ -15,63 +15,77 @@ import java.util.List;
  * @author Joe
  */
 public class OccupationsBO implements Serializable {
-    
-    public Occupations findSocialProfile(Integer id){
-        OccupationsDAO occupationsDAO = new OccupationsDAO();
-        return occupationsDAO.findOccupations(id);
+
+    private OccupationsDAO occupationsDAO;
+
+    public OccupationsBO() {
+        occupationsDAO = new OccupationsDAO();
     }
-    
-    public List<Occupations> findOccupationsByType(Integer id){
-        OccupationsDAO occupationsDAO = new OccupationsDAO();
-        List<Occupations> occupationsList = occupationsDAO.findOccupationsByType(id);
-        if (occupationsList == null) {
-            return new ArrayList<Occupations>();
-        }
-        return occupationsList;
-    }
-    
-    public List<Occupations> getAll(){
-        OccupationsDAO occupationsDAO = new OccupationsDAO();
-        List<Occupations> occupationsList = occupationsDAO.findOccupationsEntities();
-        if (occupationsList == null) {
-            return new ArrayList<Occupations>();
-        }
-        return occupationsList;
-    }
-    
-    public Occupations findOccupationsByName(Occupations occupations){
+
+    public Occupations findSocialProfile(Integer id) {
         try {
-        OccupationsDAO occupationsDAO = new OccupationsDAO();
-        return occupationsDAO.findOccupationsByName(occupations);
+            return occupationsDAO.findOccupations(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Occupations> findOccupationsByType(Integer id) {
+        try {
+            List<Occupations> occupationsList = occupationsDAO.findOccupationsByType(id);
+            if (occupationsList == null) {
+                return new ArrayList<Occupations>();
+            }
+            return occupationsList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Occupations> getAll() {
+        try {
+            List<Occupations> occupationsList = occupationsDAO.findOccupationsEntities();
+            if (occupationsList == null) {
+                return new ArrayList<Occupations>();
+            }
+            return occupationsList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Occupations findOccupationsByName(Occupations occupations) {
+        try {
+            return occupationsDAO.findOccupationsByName(occupations);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new Occupations();
     }
-    
-    public Occupations findOccupationsByNameByType(Occupations occupations){
+
+    public Occupations findOccupationsByNameByType(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
             return occupationsDAO.findOccupationsByNameByType(occupations);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new Occupations();
     }
-    
-    public void create(Occupations occupations){
+
+    public void create(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
-            occupationsDAO.create(occupations);               
+            occupationsDAO.create(occupations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void createInsert(Occupations occupations){
+
+    public void createInsert(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
-            occupationsDAO.createInsert(occupations);               
+            occupationsDAO.createInsert(occupations);
         } catch (Exception e) {
             e.printStackTrace();
         }

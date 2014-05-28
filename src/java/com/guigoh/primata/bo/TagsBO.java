@@ -17,19 +17,23 @@ import java.util.List;
  */
 public class TagsBO implements Serializable {
 
+    private TagsDAO tagsDAO;
+
+    public TagsBO() {
+        tagsDAO = new TagsDAO();
+    }
+
     public void create(Tags tags) {
         try {
-            TagsDAO tagsDAO = new TagsDAO();
             tagsDAO.create(tags);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-     public void createTagsDiscussionTopic(Tags tags, DiscussionTopic discussionTopic) {
+
+    public void createTagsDiscussionTopic(Tags tags, DiscussionTopic discussionTopic) {
         try {
-            TagsDAO tagsDAO = new TagsDAO();
-            tagsDAO.createTagsDiscussionTopic(tags,discussionTopic);
+            tagsDAO.createTagsDiscussionTopic(tags, discussionTopic);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,7 +41,6 @@ public class TagsBO implements Serializable {
 
     public Tags findTagsByName(String tags) {
         try {
-            TagsDAO tagsDAO = new TagsDAO();
             Tags tagsT = tagsDAO.findTagsByName(tags);
             if (tagsT == null) {
                 return new Tags();
@@ -48,11 +51,10 @@ public class TagsBO implements Serializable {
         }
         return new Tags();
     }
-    
+
     public List<Tags> findTagsByText(String tags) {
         List<Tags> tagList = new ArrayList<Tags>();
         try {
-            TagsDAO tagsDAO = new TagsDAO();
             tagList = tagsDAO.findTagsByText(tags);
             if (tagList == null) {
                 return new ArrayList<Tags>();
@@ -62,11 +64,10 @@ public class TagsBO implements Serializable {
         }
         return tagList;
     }
-    
-    public List<Tags> getAllTags(){
+
+    public List<Tags> getAllTags() {
         List<Tags> tagList = new ArrayList<Tags>();
         try {
-            TagsDAO tagsDAO = new TagsDAO();
             tagList = tagsDAO.findTagsEntities();
             if (tagList == null) {
                 return new ArrayList<Tags>();

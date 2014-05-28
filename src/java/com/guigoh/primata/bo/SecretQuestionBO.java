@@ -14,10 +14,19 @@ import java.util.List;
  * @author Joe
  */
 public class SecretQuestionBO implements Serializable {
-    
-    public List<SecretQuestion> getAll(){
-        SecretQuestionDAO secretQuestionDAO = new SecretQuestionDAO();
-        return secretQuestionDAO.findSecretQuestionEntities();
+
+    private SecretQuestionDAO secretQuestionDAO;
+
+    public SecretQuestionBO() {
+        secretQuestionDAO = new SecretQuestionDAO();
     }
-    
+
+    public List<SecretQuestion> getAll() {
+        try {
+            return secretQuestionDAO.findSecretQuestionEntities();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
