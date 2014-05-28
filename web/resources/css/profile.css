@@ -19,6 +19,7 @@
 .profile_avatar p{width:360px; position: absolute; margin: 90px 0px 0px -10px; border: 1px solid #d1d1d1; border-radius: 2px; padding: 10px 10px 10px 10px; background-color:#dcdcdc; color:#797979;}
 .resume { font-size:12px; }
 .resume textarea{width:300px}
+.button_add_edit{float:right;margin: 20px 40px 10px 0px; padding-top: 2px; text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:62px; height:18px; text-align:center; border-radius:2px; font-size:12px; }
 .button_add_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; cursor:pointer; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
 .button_added_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
 .button_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
@@ -107,7 +108,7 @@ font {display:block; margin:4px 50px 0px -4px; float:left;}
 .institutions{margin:24px 0px 10px 0px;}
 
 .curriculum_edit_box{display:block;margin:35px 35px 30px 50px}
-.curriculum2_edit_box_grid input{margin:0px 20px 0px 0px}
+.curriculum2_edit_box_grid input{margin:0px 0px 0px 0px}
 .curriculum3_edit_box_grid input{margin:0px 25px 0px 0px}
 .curriculum4_edit_box_grid input{margin:0px 10px 0px 0px}
 .edit_label{font-size:12px;color:#818080}

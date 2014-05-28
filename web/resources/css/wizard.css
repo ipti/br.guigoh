@@ -28,7 +28,7 @@ strong {font-weight: bold;}
 .request_form_street {width: 228px;}
 .request_form_complement {width: 228px;}
 .request_form_number { width: 100px; }
-.request_form_district { width: 107px; margin-bottom: 16px; }
+.request_form_district { width: 107px; margin-bottom: 16px; display:block}
 .request_form_city { width: 90px;}
 .request_form_areaactivity { width: 236px;}
 .request_form_state { width: 92px; }

@@ -578,7 +578,7 @@
                                         </h:selectOneMenu>
                                     </h:panelGrid>
                                 </h:panelGroup>
-                                <h:commandLink class="button_add" value="#{localeBean.getString('Adicionar')}" action="#{profileBean.addEducations()}">
+                                <h:commandLink styleClass="button_add_edit" value="#{localeBean.getString('Adicionar')}" action="#{profileBean.addEducations()}">
                                     <f:ajax execute="@form" event="action" render="@form"/>
                                 </h:commandLink>
 
@@ -693,7 +693,7 @@
                                         </h:selectOneMenu>
                                     </h:panelGrid>
                                 </h:panelGroup>
-                                <h:commandLink class="button_add" value="#{localeBean.getString('Adicionar')}" action="#{profileBean.addExperiences()}">
+                                <h:commandLink styleClass="button_add_edit" value="#{localeBean.getString('Adicionar')}" action="#{profileBean.addExperiences()}">
                                     <f:ajax execute="@form" event="action" render="@form"/>
                                 </h:commandLink>
 
