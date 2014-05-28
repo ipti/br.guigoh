@@ -15,12 +15,12 @@ import com.guigoh.primata.bo.ExperiencesBO;
 import com.guigoh.primata.bo.ExperiencesLocationBO;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.InterestsTypeBO;
-import com.guigoh.primata.bo.LanguageBO;
 import com.guigoh.primata.bo.OccupationsBO;
 import com.guigoh.primata.bo.OccupationsTypeBO;
 import com.guigoh.primata.bo.ScholarityBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
+import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Availability;
@@ -59,9 +59,6 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean(name = "wizardProfileBean")
 public class WizardProfileBean implements Serializable {
 
-    public static final Integer FIRSTPANEL = 1;
-    public static final Integer SECONDPANEL = 2;
-    public static final Integer THIRDPANEL = 3;
     public static final String BRAZIL = "Brasil";
     public static final String SERGIPE = "Sergipe";
     private SocialProfile socialProfile;
@@ -74,7 +71,7 @@ public class WizardProfileBean implements Serializable {
     private List<EducationsLocation> educationsLocationListAll;
     private List<ExperiencesLocation> experiencesLocationListAll;
     private List<Availability> availabitityListAll;
-    private Integer showpanel = FIRSTPANEL;
+    private Integer showpanel;
     private List<Interests> interestsList;
     private List<Interests> themesList;
     private List<Interests> moviesList;
@@ -129,9 +126,12 @@ public class WizardProfileBean implements Serializable {
     private String educationDataEnd;
     private String experienceDataBegin;
     private String experienceDataEnd;
+    private ConfigReader cr;
+    private Translator trans;
 
     public void init() {
         if (socialProfile == null) {
+            showpanel = 1;
             interestsList = new ArrayList<Interests>();
             interestsTypeList = new ArrayList<InterestsType>();
             themesList = new ArrayList<Interests>();
@@ -171,6 +171,9 @@ public class WizardProfileBean implements Serializable {
             experiencesLocationListAll = new ArrayList<ExperiencesLocation>();
             multiThemeList = new Integer[6];
             scholarityList = new ArrayList<Scholarity>();
+            cr = new ConfigReader();
+            trans = new Translator();
+            trans.setLocale(cr.getTag("locale"));
             loadWizard();
         }
     }
@@ -219,7 +222,7 @@ public class WizardProfileBean implements Serializable {
         countryExperienceId = countryBO.getCountryByName(BRAZIL).getId();
         countryEducationId = countryBO.getCountryByName(BRAZIL).getId();
         loadStateExperiences();
-        loadStateEducaitons();
+        loadStateEducations();
         StateBO stateBO = new StateBO();
         stateExperienceId = stateBO.getStateByName(SERGIPE).getId();
         stateEducationId = stateBO.getStateByName(SERGIPE).getId();
@@ -294,11 +297,11 @@ public class WizardProfileBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             Boolean cont = true;
             if (countryEducationId == null) {
-                context.addMessage("education_name", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione o País", null));
+                context.addMessage("education_name", new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Selecione o País"), null));
                 cont = false;
             }
             if (stateEducationId == null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione o Estado", null));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Selecione o Estado"), null));
                 cont = false;
             }
             if ((education.getNameId().getName() != null && education.getNameId().getName().length() != 0
@@ -335,18 +338,16 @@ public class WizardProfileBean implements Serializable {
                 state.setId(stateEducationId);
                 education.setStateId(state);
                 education.setSocialProfile(socialProfile);
-                String educationDataBeginTemp = "01/" + educationDataBegin;
-                String educationDataEndTemp = "01/" + educationDataEnd;
-                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse(educationDataBeginTemp);
+                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + educationDataBegin);
                 education.setDataBegin(dataBegin);
-                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse(educationDataEndTemp);
+                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + educationDataEnd);
                 education.setDataEnd(dataEnd);
-                if (education.getDataBegin().after(education.getDataEnd())) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Verifique as datas", null));
-                    cont = false;
-                } else {
+                if (education.getDataBegin().before(education.getDataEnd())) {
                     education.setDataBegin(new Date(education.getDataBegin().getTime() + 600 * 60 * 1000));
                     education.setDataEnd(new Date(education.getDataEnd().getTime() + 600 * 60 * 1000));
+                } else {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique as datas"), null));
+                    cont = false;
                 }
                 if (cont == true) {
                     educationsBO.createInsert(education);
@@ -356,12 +357,7 @@ public class WizardProfileBean implements Serializable {
                     educationDataBegin = "";
                     educationDataEnd = "";
                     loadEducations();
-                    LanguageBO langBO = new LanguageBO();
-                    String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
-                    Translator trans = new Translator();
-                    trans.setLocale(acronym);
-                    String message = trans.getWord("Educação adicionada com sucesso!");
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Educação adicionada com sucesso!"), null));
                 }
             }
         } catch (Exception e) {
@@ -387,7 +383,7 @@ public class WizardProfileBean implements Serializable {
                 }
 
                 if (experience.getNameId().getOccupationsTypeId().getId() == 0) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "* O campo 'ÁREA DA ATIVIDADE' é obrigatório", null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("O campo ÁREA DE ATIVIDADE é obrigatório"), null));
                     cont = false;
                 }
                 OccupationsBO occupationsBO = new OccupationsBO();
@@ -401,28 +397,26 @@ public class WizardProfileBean implements Serializable {
                 experience.setNameId(occupationst);
                 experience.setLocationId(experiencesLocationt);
                 if (countryExperienceId == 0) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione a País", null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Selecione o país"), null));
                     cont = false;
                 }
                 Country country = new Country();
                 country.setId(countryExperienceId);
                 experience.setCountryId(country);
                 if (stateExperienceId == 0) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione o Estado", null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Selecione o estado"), null));
                     cont = false;
                 }
                 State state = new State();
                 state.setId(stateExperienceId);
                 experience.setStateId(state);
                 experience.setSocialProfile(socialProfile);
-                String experienceDataBeginTemp = "01/" + experienceDataBegin;
-                String experienceDataEndTemp = "01/" + experienceDataEnd;
-                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse(experienceDataBeginTemp);
+                Date dataBegin = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + experienceDataBegin);
                 experience.setDataBegin(dataBegin);
-                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse(experienceDataEndTemp);
+                Date dataEnd = new SimpleDateFormat("dd/MM/yyyy").parse("01/" + experienceDataEnd);
                 experience.setDataEnd(dataEnd);
                 if (experience.getDataBegin().after(experience.getDataEnd())) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Verifique as datas", null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique as datas"), null));
                     cont = false;
                 } else {
                     experience.setDataBegin(new Date(experience.getDataBegin().getTime() + 600 * 60 * 1000));
@@ -439,12 +433,7 @@ public class WizardProfileBean implements Serializable {
                     experienceDataBegin = "";
                     experienceDataEnd = "";
                     loadExperiencies();
-                    LanguageBO langBO = new LanguageBO();
-                    String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
-                    Translator trans = new Translator();
-                    trans.setLocale(acronym);
-                    String message = trans.getWord("Experiência adicionada com sucesso!");
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Experiência adicionada com sucesso!"), null));
                 }
             }
         } catch (Exception e) {
@@ -476,16 +465,16 @@ public class WizardProfileBean implements Serializable {
         }
     }
 
-    public String editWizard(int valor) {
+    public String editWizard(int panel) {
         try {
-            if (valor == 1) {
+            if (panel == 1) {
                 FacesContext context = FacesContext.getCurrentInstance();
                 Occupations occupationst = new Occupations();
                 OccupationsType occupationsType = new OccupationsType();
                 occupationst.setOccupationsTypeId(occupationsType);
                 if (!socialProfile.getOccupationsId().getName().equals("")) {
                     if (socialProfile.getOccupationsId().getOccupationsTypeId().getId() == 0) {
-                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione a 'ÁREA DE OCUPAÇÃO'", null));
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Selecione a área de ocupação"), null));
                         showpanel = 1;
                         return "";
                     }
@@ -506,7 +495,7 @@ public class WizardProfileBean implements Serializable {
                 socialProfile.getStateId().setId(stateId);
                 socialProfile.getCityId().setId(cityId);
             }
-            if (valor == 2) {
+            if (panel == 2) {
                 InterestsBO interestsBO = new InterestsBO();
                 interestsBO.destroyInterestsBySocialProfile(socialProfile);
                 interestsBO.createInterestsBySocialProfileByIds(multiThemeList, socialProfile);
@@ -521,29 +510,28 @@ public class WizardProfileBean implements Serializable {
                 interestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
                 interestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
                 interestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
-            }
-            if (valor == 3) {
-            }
-            SocialProfileBO socialProfileBO = new SocialProfileBO();
+            } else {
+                SocialProfileBO socialProfileBO = new SocialProfileBO();
 
-            if (socialProfile.getAvailabilityId().getId() == 0) {
-                socialProfile.setAvailabilityId(null);
-            }
-            if (socialProfile.getScholarityId().getId() == 0) {
-                socialProfile.setScholarityId(null);
-            }
+                if (socialProfile.getAvailabilityId().getId() == 0) {
+                    socialProfile.setAvailabilityId(null);
+                }
+                if (socialProfile.getScholarityId().getId() == 0) {
+                    socialProfile.setScholarityId(null);
+                }
 
-            socialProfileBO.edit(socialProfile);
+                socialProfileBO.edit(socialProfile);
 
-            if (socialProfile.getAvailabilityId() == null) {
-                Availability availability = new Availability();
-                availability.setId(0);
-                socialProfile.setAvailabilityId(availability);
-            }
-            if (socialProfile.getScholarityId() == null) {
-                Scholarity scholarity = new Scholarity();
-                scholarity.setId(0);
-                socialProfile.setScholarityId(scholarity);
+                if (socialProfile.getAvailabilityId() == null) {
+                    Availability availability = new Availability();
+                    availability.setId(0);
+                    socialProfile.setAvailabilityId(availability);
+                }
+                if (socialProfile.getScholarityId() == null) {
+                    Scholarity scholarity = new Scholarity();
+                    scholarity.setId(0);
+                    socialProfile.setScholarityId(scholarity);
+                }
             }
             return "wizard";
         } catch (Exception e) {
@@ -619,9 +607,9 @@ public class WizardProfileBean implements Serializable {
         }
     }
 
-    public String skip(int valor) {
+    public String skip(int panel) {
         try {
-            editWizard(valor);
+            editWizard(panel);
             AuthorizationBO authorizationBO = new AuthorizationBO();
             Authorization authorization = authorizationBO.findAuthorizationByTokenId(user.getToken());
             authorization.setStatus("AC");
@@ -687,7 +675,7 @@ public class WizardProfileBean implements Serializable {
         }
     }
 
-    public void loadStateEducaitons() {
+    public void loadStateEducations() {
         try {
             StateBO stateBO = new StateBO();
             stateEducationList = stateBO.findStatesByCountryId(countryEducationId);
@@ -790,12 +778,7 @@ public class WizardProfileBean implements Serializable {
             experiencesList.remove(exp);
             ExperiencesBO experiencesBO = new ExperiencesBO();
             experiencesBO.removeExperience(exp);
-            LanguageBO langBO = new LanguageBO();
-            String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
-            Translator trans = new Translator();
-            trans.setLocale(acronym);
-            String message = trans.getWord("Experiência removida com sucesso!");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Experiência removida com sucesso!"), null));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -807,12 +790,7 @@ public class WizardProfileBean implements Serializable {
             educationsList.remove(edu);
             EducationsBO educationsBO = new EducationsBO();
             educationsBO.removeEducation(edu);
-            LanguageBO langBO = new LanguageBO();
-            String acronym = langBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
-            Translator trans = new Translator();
-            trans.setLocale(acronym);
-            String message = trans.getWord("Educação removida com sucesso!");
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Educação removida com sucesso!"), null));
         } catch (Exception e) {
             e.printStackTrace();
         }

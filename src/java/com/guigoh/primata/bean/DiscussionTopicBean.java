@@ -120,9 +120,9 @@ public class DiscussionTopicBean implements Serializable {
             discussionTopic.setThemeId(theme);
             TagsBO tagsBO = new TagsBO();
             discussionTopicBO.create(discussionTopic);
-            for (Tags tag : tags) {
-                tagsBO.create(tag);
-                tagsBO.createTagsDiscussionTopic(tag, discussionTopic);
+            for (Tags t : tags) {
+                tagsBO.create(t);
+                tagsBO.createTagsDiscussionTopic(t, discussionTopic);
             }
             if (discussionTopicFilesList != null) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();

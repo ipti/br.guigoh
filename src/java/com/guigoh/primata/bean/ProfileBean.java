@@ -299,6 +299,9 @@ public class ProfileBean implements Serializable {
     private void organizeFriendList(List<Friends> list) {
         for (Friends friend : list) {
             if (user.getToken().equals(friend.getTokenFriend2().getToken())) {
+                /*
+                 * renomear user
+                 */
                 Users user = friend.getTokenFriend1();
                 friend.setTokenFriend1(friend.getTokenFriend2());
                 friend.setTokenFriend2(user);
@@ -519,7 +522,7 @@ public class ProfileBean implements Serializable {
         InterestsBO interestsBO = new InterestsBO();
         InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
         InterestsType interestsType = interestsTypeBO.findInterestsTypeByName(type);
-        Interests interestsTemp = new Interests();
+        Interests interestsTemp;        
         for (Interests interests : interestsList) {
             if (interests != null) {
                 interestsTemp = interestsBO.findInterestsByInterestsName(interests.getName());

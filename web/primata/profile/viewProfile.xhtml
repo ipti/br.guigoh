@@ -568,7 +568,7 @@
                                                          required="true" requiredMessage="* #{localeBean.getString('O campo PÁIS é obrigatório')}">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
                                             <f:selectItems value="#{profileBean.wizardProfileBean.countryEducationList}" var="countries" itemValue="#{countries.id}" itemLabel="#{countries.name}" />
-                                            <f:ajax event="valueChange" render="stateEducation" listener="#{profileBean.wizardProfileBean.loadStateEducaitons()}"/>
+                                            <f:ajax event="valueChange" render="stateEducation" listener="#{profileBean.wizardProfileBean.loadStateEducations()}"/>
                                         </h:selectOneMenu>
                                         <span class="edit_label">#{localeBean.getString('Estado')}: </span>
                                         <h:selectOneMenu id="stateEducation" value="#{profileBean.wizardProfileBean.stateEducationId}" class="request_form_state"
@@ -643,9 +643,9 @@
 
                                     <h:panelGrid styleClass="curriculum4_edit_box_grid" columns="6">
 
-                                        <span class="edit_label">#{localeBean.getString('Área da Atividade')}:</span>
+                                        <span class="edit_label">#{localeBean.getString('Área de Atividade')}:</span>
                                         <h:selectOneMenu value="#{profileBean.wizardProfileBean.experience.nameId.occupationsTypeId.id}"
-                                                         requiredMessage="* #{localeBean.getString('O campo ÁREA DA ATIVIDADE é obrigatório')}"
+                                                         requiredMessage="* #{localeBean.getString('O campo ÁREA DE ATIVIDADE é obrigatório')}"
                                                          class="request_form_areaactivity">
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />  
                                             <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
