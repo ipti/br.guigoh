@@ -12,14 +12,16 @@ import java.util.ResourceBundle;
  *
  * @author ipti
  */
-public class Translator implements Serializable{
+public class Translator implements Serializable {
 
     private Locale locale;
-    
-    public void setLocale(String acronym){
-        String acronymLang = acronym.substring(0,2);
-        String acronymCountry = acronym.substring(2,4);
-        locale = new Locale(acronymLang,acronymCountry);
+
+    public void setLocale(String acronym) {
+        if (acronym != null) {
+            String acronymLang = acronym.substring(0, 2);
+            String acronymCountry = acronym.substring(2, 4);
+            locale = new Locale(acronymLang, acronymCountry);
+        }
     }
 
     public String getWord(String keyword) {

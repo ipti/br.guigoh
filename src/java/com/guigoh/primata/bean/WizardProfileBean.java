@@ -20,7 +20,7 @@ import com.guigoh.primata.bo.OccupationsTypeBO;
 import com.guigoh.primata.bo.ScholarityBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.StateBO;
-import com.guigoh.primata.bo.util.translator.ConfigReader;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Availability;
@@ -126,7 +126,6 @@ public class WizardProfileBean implements Serializable {
     private String educationDataEnd;
     private String experienceDataBegin;
     private String experienceDataEnd;
-    private ConfigReader cr;
     private Translator trans;
 
     public void init() {
@@ -171,9 +170,8 @@ public class WizardProfileBean implements Serializable {
             experiencesLocationListAll = new ArrayList<ExperiencesLocation>();
             multiThemeList = new Integer[6];
             scholarityList = new ArrayList<Scholarity>();
-            cr = new ConfigReader();
             trans = new Translator();
-            trans.setLocale(cr.getTag("locale"));
+            trans.setLocale(CookieService.getCookie("locale"));
             loadWizard();
         }
     }

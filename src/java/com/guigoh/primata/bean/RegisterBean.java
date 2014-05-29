@@ -19,7 +19,6 @@ import com.guigoh.primata.bo.UsersBO;
 import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.bo.util.MD5Generator;
 import com.guigoh.primata.bo.util.RandomGenerator;
-import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.City;
@@ -94,7 +93,6 @@ public class RegisterBean implements Serializable {
     private String newPassword;
     private String newPasswordConfirm;
     private Boolean visitor;
-    private ConfigReader cr;
     private Translator trans;
     private CountryBO countryBO;
     private StateBO stateBO;
@@ -140,9 +138,8 @@ public class RegisterBean implements Serializable {
             lastName = "";
             panelStatus = "";
             visitor = true;
-            cr = new ConfigReader();
             trans = new Translator();
-            trans.setLocale(cr.getTag("locale"));
+            trans.setLocale(CookieService.getCookie("locale"));
             loadDefault();
         }
     }

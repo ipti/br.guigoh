@@ -11,7 +11,7 @@ import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.InterestsTypeBO;
 import com.guigoh.primata.bo.OccupationsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
-import com.guigoh.primata.bo.util.translator.ConfigReader;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.dao.exceptions.PreexistingEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
@@ -84,7 +84,6 @@ public class ProfileBean implements Serializable {
     private Boolean curriculumEdit4;
     private Boolean edit;
     private WizardProfileBean wizardProfileBean;
-    private ConfigReader cr;
     private Translator trans;
 
     public void init() {
@@ -93,9 +92,8 @@ public class ProfileBean implements Serializable {
             wizardProfileBean = new WizardProfileBean();
             wizardProfileBean.init();
             socialProfile = new SocialProfile();
-            cr = new ConfigReader();
             trans = new Translator();
-            trans.setLocale(cr.getTag("locale"));
+            trans.setLocale(CookieService.getCookie("locale"));
             interestsList = new ArrayList<Interests>();
             interestsTypeList = new ArrayList<InterestsType>();
             themesList = new ArrayList<Interests>();

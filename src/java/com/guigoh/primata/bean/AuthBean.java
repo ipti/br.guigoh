@@ -12,7 +12,6 @@ import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.bo.util.MD5Generator;
 import com.guigoh.primata.bo.util.MailService;
 import com.guigoh.primata.bo.util.RandomGenerator;
-import com.guigoh.primata.bo.util.translator.ConfigReader;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.entity.EmailActivation;
 import com.guigoh.primata.entity.SocialProfile;
@@ -40,16 +39,14 @@ public class AuthBean implements Serializable {
     private Users userToRecover;
     private String password;
     private String passwordConfirm;
-    private ConfigReader cr;
     private Translator trans;
     private UsersBO uBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
-            cr = new ConfigReader();
             trans = new Translator();
-            trans.setLocale(cr.getTag("locale"));
+            trans.setLocale(CookieService.getCookie("locale"));
             loginStatus = "login";
             userToRecover = new Users();
             email = "";

@@ -39,11 +39,13 @@ public class CookieService {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
-                cookies[i].setValue("");
-                cookies[i].setPath("/");
-                cookies[i].setMaxAge(0);
-                cookies[i].setDomain(".guigoh.com");
-                response.addCookie(cookies[i]);
+                if (!cookies[i].getName().equals("locale")) {
+                    cookies[i].setValue("");
+                    cookies[i].setPath("/");
+                    cookies[i].setMaxAge(0);
+                    cookies[i].setDomain(".guigoh.com");
+                    response.addCookie(cookies[i]);
+                }
             }
         }
     }
