@@ -4,9 +4,9 @@
  */
 package com.guigoh.primata.dao;
 
+import com.guigoh.primata.dao.exceptions.IllegalOrphanException;
 import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
-import com.guigoh.primata.entity.Interests;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -16,6 +16,9 @@ import com.guigoh.primata.entity.InterestsType;
 import com.guigoh.primata.entity.SocialProfile;
 import java.util.ArrayList;
 import java.util.Collection;
+import com.guigoh.primata.entity.DiscussionTopic;
+import com.guigoh.mandril.entity.EducationalObject;
+import com.guigoh.primata.entity.Interests;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,7 +27,7 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author Joe
+ * @author ipti008
  */
 public class InterestsDAO implements Serializable {
 
@@ -41,6 +44,12 @@ public class InterestsDAO implements Serializable {
         if (interests.getSocialProfileCollection() == null) {
             interests.setSocialProfileCollection(new ArrayList<SocialProfile>());
         }
+        if (interests.getDiscussionTopicCollection() == null) {
+            interests.setDiscussionTopicCollection(new ArrayList<DiscussionTopic>());
+        }
+        if (interests.getEducationalObjectCollection() == null) {
+            interests.setEducationalObjectCollection(new ArrayList<EducationalObject>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -56,6 +65,18 @@ public class InterestsDAO implements Serializable {
                 attachedSocialProfileCollection.add(socialProfileCollectionSocialProfileToAttach);
             }
             interests.setSocialProfileCollection(attachedSocialProfileCollection);
+            Collection<DiscussionTopic> attachedDiscussionTopicCollection = new ArrayList<DiscussionTopic>();
+            for (DiscussionTopic discussionTopicCollectionDiscussionTopicToAttach : interests.getDiscussionTopicCollection()) {
+                discussionTopicCollectionDiscussionTopicToAttach = em.getReference(discussionTopicCollectionDiscussionTopicToAttach.getClass(), discussionTopicCollectionDiscussionTopicToAttach.getId());
+                attachedDiscussionTopicCollection.add(discussionTopicCollectionDiscussionTopicToAttach);
+            }
+            interests.setDiscussionTopicCollection(attachedDiscussionTopicCollection);
+            Collection<EducationalObject> attachedEducationalObjectCollection = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionEducationalObjectToAttach : interests.getEducationalObjectCollection()) {
+                educationalObjectCollectionEducationalObjectToAttach = em.getReference(educationalObjectCollectionEducationalObjectToAttach.getClass(), educationalObjectCollectionEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollection.add(educationalObjectCollectionEducationalObjectToAttach);
+            }
+            interests.setEducationalObjectCollection(attachedEducationalObjectCollection);
             em.persist(interests);
             if (typeId != null) {
                 typeId.getInterestsCollection().add(interests);
@@ -64,6 +85,24 @@ public class InterestsDAO implements Serializable {
             for (SocialProfile socialProfileCollectionSocialProfile : interests.getSocialProfileCollection()) {
                 socialProfileCollectionSocialProfile.getInterestsCollection().add(interests);
                 socialProfileCollectionSocialProfile = em.merge(socialProfileCollectionSocialProfile);
+            }
+            for (DiscussionTopic discussionTopicCollectionDiscussionTopic : interests.getDiscussionTopicCollection()) {
+                Interests oldThemeIdOfDiscussionTopicCollectionDiscussionTopic = discussionTopicCollectionDiscussionTopic.getThemeId();
+                discussionTopicCollectionDiscussionTopic.setThemeId(interests);
+                discussionTopicCollectionDiscussionTopic = em.merge(discussionTopicCollectionDiscussionTopic);
+                if (oldThemeIdOfDiscussionTopicCollectionDiscussionTopic != null) {
+                    oldThemeIdOfDiscussionTopicCollectionDiscussionTopic.getDiscussionTopicCollection().remove(discussionTopicCollectionDiscussionTopic);
+                    oldThemeIdOfDiscussionTopicCollectionDiscussionTopic = em.merge(oldThemeIdOfDiscussionTopicCollectionDiscussionTopic);
+                }
+            }
+            for (EducationalObject educationalObjectCollectionEducationalObject : interests.getEducationalObjectCollection()) {
+                Interests oldThemeIdOfEducationalObjectCollectionEducationalObject = educationalObjectCollectionEducationalObject.getThemeId();
+                educationalObjectCollectionEducationalObject.setThemeId(interests);
+                educationalObjectCollectionEducationalObject = em.merge(educationalObjectCollectionEducationalObject);
+                if (oldThemeIdOfEducationalObjectCollectionEducationalObject != null) {
+                    oldThemeIdOfEducationalObjectCollectionEducationalObject.getEducationalObjectCollection().remove(educationalObjectCollectionEducationalObject);
+                    oldThemeIdOfEducationalObjectCollectionEducationalObject = em.merge(oldThemeIdOfEducationalObjectCollectionEducationalObject);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -80,7 +119,7 @@ public class InterestsDAO implements Serializable {
         }
     }
 
-    public void edit(Interests interests) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Interests interests) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -90,6 +129,30 @@ public class InterestsDAO implements Serializable {
             InterestsType typeIdNew = interests.getTypeId();
             Collection<SocialProfile> socialProfileCollectionOld = persistentInterests.getSocialProfileCollection();
             Collection<SocialProfile> socialProfileCollectionNew = interests.getSocialProfileCollection();
+            Collection<DiscussionTopic> discussionTopicCollectionOld = persistentInterests.getDiscussionTopicCollection();
+            Collection<DiscussionTopic> discussionTopicCollectionNew = interests.getDiscussionTopicCollection();
+            Collection<EducationalObject> educationalObjectCollectionOld = persistentInterests.getEducationalObjectCollection();
+            Collection<EducationalObject> educationalObjectCollectionNew = interests.getEducationalObjectCollection();
+            List<String> illegalOrphanMessages = null;
+            for (DiscussionTopic discussionTopicCollectionOldDiscussionTopic : discussionTopicCollectionOld) {
+                if (!discussionTopicCollectionNew.contains(discussionTopicCollectionOldDiscussionTopic)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain DiscussionTopic " + discussionTopicCollectionOldDiscussionTopic + " since its themeId field is not nullable.");
+                }
+            }
+            for (EducationalObject educationalObjectCollectionOldEducationalObject : educationalObjectCollectionOld) {
+                if (!educationalObjectCollectionNew.contains(educationalObjectCollectionOldEducationalObject)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EducationalObject " + educationalObjectCollectionOldEducationalObject + " since its themeId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (typeIdNew != null) {
                 typeIdNew = em.getReference(typeIdNew.getClass(), typeIdNew.getId());
                 interests.setTypeId(typeIdNew);
@@ -101,6 +164,20 @@ public class InterestsDAO implements Serializable {
             }
             socialProfileCollectionNew = attachedSocialProfileCollectionNew;
             interests.setSocialProfileCollection(socialProfileCollectionNew);
+            Collection<DiscussionTopic> attachedDiscussionTopicCollectionNew = new ArrayList<DiscussionTopic>();
+            for (DiscussionTopic discussionTopicCollectionNewDiscussionTopicToAttach : discussionTopicCollectionNew) {
+                discussionTopicCollectionNewDiscussionTopicToAttach = em.getReference(discussionTopicCollectionNewDiscussionTopicToAttach.getClass(), discussionTopicCollectionNewDiscussionTopicToAttach.getId());
+                attachedDiscussionTopicCollectionNew.add(discussionTopicCollectionNewDiscussionTopicToAttach);
+            }
+            discussionTopicCollectionNew = attachedDiscussionTopicCollectionNew;
+            interests.setDiscussionTopicCollection(discussionTopicCollectionNew);
+            Collection<EducationalObject> attachedEducationalObjectCollectionNew = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionNewEducationalObjectToAttach : educationalObjectCollectionNew) {
+                educationalObjectCollectionNewEducationalObjectToAttach = em.getReference(educationalObjectCollectionNewEducationalObjectToAttach.getClass(), educationalObjectCollectionNewEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollectionNew.add(educationalObjectCollectionNewEducationalObjectToAttach);
+            }
+            educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
+            interests.setEducationalObjectCollection(educationalObjectCollectionNew);
             interests = em.merge(interests);
             if (typeIdOld != null && !typeIdOld.equals(typeIdNew)) {
                 typeIdOld.getInterestsCollection().remove(interests);
@@ -120,6 +197,28 @@ public class InterestsDAO implements Serializable {
                 if (!socialProfileCollectionOld.contains(socialProfileCollectionNewSocialProfile)) {
                     socialProfileCollectionNewSocialProfile.getInterestsCollection().add(interests);
                     socialProfileCollectionNewSocialProfile = em.merge(socialProfileCollectionNewSocialProfile);
+                }
+            }
+            for (DiscussionTopic discussionTopicCollectionNewDiscussionTopic : discussionTopicCollectionNew) {
+                if (!discussionTopicCollectionOld.contains(discussionTopicCollectionNewDiscussionTopic)) {
+                    Interests oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic = discussionTopicCollectionNewDiscussionTopic.getThemeId();
+                    discussionTopicCollectionNewDiscussionTopic.setThemeId(interests);
+                    discussionTopicCollectionNewDiscussionTopic = em.merge(discussionTopicCollectionNewDiscussionTopic);
+                    if (oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic != null && !oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic.equals(interests)) {
+                        oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic.getDiscussionTopicCollection().remove(discussionTopicCollectionNewDiscussionTopic);
+                        oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic = em.merge(oldThemeIdOfDiscussionTopicCollectionNewDiscussionTopic);
+                    }
+                }
+            }
+            for (EducationalObject educationalObjectCollectionNewEducationalObject : educationalObjectCollectionNew) {
+                if (!educationalObjectCollectionOld.contains(educationalObjectCollectionNewEducationalObject)) {
+                    Interests oldThemeIdOfEducationalObjectCollectionNewEducationalObject = educationalObjectCollectionNewEducationalObject.getThemeId();
+                    educationalObjectCollectionNewEducationalObject.setThemeId(interests);
+                    educationalObjectCollectionNewEducationalObject = em.merge(educationalObjectCollectionNewEducationalObject);
+                    if (oldThemeIdOfEducationalObjectCollectionNewEducationalObject != null && !oldThemeIdOfEducationalObjectCollectionNewEducationalObject.equals(interests)) {
+                        oldThemeIdOfEducationalObjectCollectionNewEducationalObject.getEducationalObjectCollection().remove(educationalObjectCollectionNewEducationalObject);
+                        oldThemeIdOfEducationalObjectCollectionNewEducationalObject = em.merge(oldThemeIdOfEducationalObjectCollectionNewEducationalObject);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -144,7 +243,7 @@ public class InterestsDAO implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -155,6 +254,24 @@ public class InterestsDAO implements Serializable {
                 interests.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The interests with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            Collection<DiscussionTopic> discussionTopicCollectionOrphanCheck = interests.getDiscussionTopicCollection();
+            for (DiscussionTopic discussionTopicCollectionOrphanCheckDiscussionTopic : discussionTopicCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Interests (" + interests + ") cannot be destroyed since the DiscussionTopic " + discussionTopicCollectionOrphanCheckDiscussionTopic + " in its discussionTopicCollection field has a non-nullable themeId field.");
+            }
+            Collection<EducationalObject> educationalObjectCollectionOrphanCheck = interests.getEducationalObjectCollection();
+            for (EducationalObject educationalObjectCollectionOrphanCheckEducationalObject : educationalObjectCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Interests (" + interests + ") cannot be destroyed since the EducationalObject " + educationalObjectCollectionOrphanCheckEducationalObject + " in its educationalObjectCollection field has a non-nullable themeId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             InterestsType typeId = interests.getTypeId();
             if (typeId != null) {
@@ -227,7 +344,7 @@ public class InterestsDAO implements Serializable {
             em.close();
         }
     }
-
+    
     public List<Interests> findInterestsBySocialProfileId(Integer socialprofile_id) {
         EntityManager em = getEntityManager();
         try {
@@ -419,4 +536,5 @@ public class InterestsDAO implements Serializable {
             em.close();
         }
     }
+    
 }

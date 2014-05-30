@@ -4,6 +4,7 @@
  */
 package com.guigoh.primata.entity;
 
+import com.guigoh.mandril.entity.EducationalObject;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -34,6 +35,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "Tags.findById", query = "SELECT t FROM Tags t WHERE t.id = :id"),
     @NamedQuery(name = "Tags.findByName", query = "SELECT t FROM Tags t WHERE t.name = :name")})
 public class Tags implements Serializable {
+    @ManyToMany(mappedBy = "tagsCollection")
+    private Collection<EducationalObject> educationalObjectCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,6 +112,16 @@ public class Tags implements Serializable {
     @Override
     public String toString() {
         return "com.guigoh.primata.entity.Tags[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<EducationalObject> getEducationalObjectCollection() {
+        return educationalObjectCollection;
+    }
+
+    public void setEducationalObjectCollection(Collection<EducationalObject> educationalObjectCollection) {
+        this.educationalObjectCollection = educationalObjectCollection;
     }
     
 }

@@ -32,6 +32,7 @@ import com.guigoh.primata.entity.Educations;
 import com.guigoh.primata.entity.DiscussionTopicWarnings;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicMsg;
+import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.entity.SocialProfile;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -40,15 +41,15 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author ipti004
+ * @author ipti008
  */
 public class SocialProfileDAO implements Serializable {
-
-    private EntityManagerFactory emf = JPAUtil.getEMF();
     
+    private EntityManagerFactory emf = JPAUtil.getEMF();
+
     public SocialProfileDAO() {
     }
-
+    
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -71,6 +72,9 @@ public class SocialProfileDAO implements Serializable {
         }
         if (socialProfile.getDiscussionTopicMsgCollection() == null) {
             socialProfile.setDiscussionTopicMsgCollection(new ArrayList<DiscussionTopicMsg>());
+        }
+        if (socialProfile.getEducationalObjectCollection() == null) {
+            socialProfile.setEducationalObjectCollection(new ArrayList<EducationalObject>());
         }
         List<String> illegalOrphanMessages = null;
         Users usersOrphanCheck = socialProfile.getUsers();
@@ -181,6 +185,12 @@ public class SocialProfileDAO implements Serializable {
                 attachedDiscussionTopicMsgCollection.add(discussionTopicMsgCollectionDiscussionTopicMsgToAttach);
             }
             socialProfile.setDiscussionTopicMsgCollection(attachedDiscussionTopicMsgCollection);
+            Collection<EducationalObject> attachedEducationalObjectCollection = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionEducationalObjectToAttach : socialProfile.getEducationalObjectCollection()) {
+                educationalObjectCollectionEducationalObjectToAttach = em.getReference(educationalObjectCollectionEducationalObjectToAttach.getClass(), educationalObjectCollectionEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollection.add(educationalObjectCollectionEducationalObjectToAttach);
+            }
+            socialProfile.setEducationalObjectCollection(attachedEducationalObjectCollection);
             em.persist(socialProfile);
             if (socialProfileVisibility != null) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibility.getSocialProfile();
@@ -280,6 +290,15 @@ public class SocialProfileDAO implements Serializable {
                     oldSocialProfileIdOfDiscussionTopicMsgCollectionDiscussionTopicMsg = em.merge(oldSocialProfileIdOfDiscussionTopicMsgCollectionDiscussionTopicMsg);
                 }
             }
+            for (EducationalObject educationalObjectCollectionEducationalObject : socialProfile.getEducationalObjectCollection()) {
+                SocialProfile oldSocialProfileIdOfEducationalObjectCollectionEducationalObject = educationalObjectCollectionEducationalObject.getSocialProfileId();
+                educationalObjectCollectionEducationalObject.setSocialProfileId(socialProfile);
+                educationalObjectCollectionEducationalObject = em.merge(educationalObjectCollectionEducationalObject);
+                if (oldSocialProfileIdOfEducationalObjectCollectionEducationalObject != null) {
+                    oldSocialProfileIdOfEducationalObjectCollectionEducationalObject.getEducationalObjectCollection().remove(educationalObjectCollectionEducationalObject);
+                    oldSocialProfileIdOfEducationalObjectCollectionEducationalObject = em.merge(oldSocialProfileIdOfEducationalObjectCollectionEducationalObject);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -338,6 +357,8 @@ public class SocialProfileDAO implements Serializable {
             Collection<DiscussionTopic> discussionTopicCollectionNew = socialProfile.getDiscussionTopicCollection();
             Collection<DiscussionTopicMsg> discussionTopicMsgCollectionOld = persistentSocialProfile.getDiscussionTopicMsgCollection();
             Collection<DiscussionTopicMsg> discussionTopicMsgCollectionNew = socialProfile.getDiscussionTopicMsgCollection();
+            Collection<EducationalObject> educationalObjectCollectionOld = persistentSocialProfile.getEducationalObjectCollection();
+            Collection<EducationalObject> educationalObjectCollectionNew = socialProfile.getEducationalObjectCollection();
             List<String> illegalOrphanMessages = null;
             if (socialProfileVisibilityOld != null && !socialProfileVisibilityOld.equals(socialProfileVisibilityNew)) {
                 if (illegalOrphanMessages == null) {
@@ -392,6 +413,14 @@ public class SocialProfileDAO implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain DiscussionTopicMsg " + discussionTopicMsgCollectionOldDiscussionTopicMsg + " since its socialProfileId field is not nullable.");
+                }
+            }
+            for (EducationalObject educationalObjectCollectionOldEducationalObject : educationalObjectCollectionOld) {
+                if (!educationalObjectCollectionNew.contains(educationalObjectCollectionOldEducationalObject)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EducationalObject " + educationalObjectCollectionOldEducationalObject + " since its socialProfileId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -483,6 +512,13 @@ public class SocialProfileDAO implements Serializable {
             }
             discussionTopicMsgCollectionNew = attachedDiscussionTopicMsgCollectionNew;
             socialProfile.setDiscussionTopicMsgCollection(discussionTopicMsgCollectionNew);
+            Collection<EducationalObject> attachedEducationalObjectCollectionNew = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionNewEducationalObjectToAttach : educationalObjectCollectionNew) {
+                educationalObjectCollectionNewEducationalObjectToAttach = em.getReference(educationalObjectCollectionNewEducationalObjectToAttach.getClass(), educationalObjectCollectionNewEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollectionNew.add(educationalObjectCollectionNewEducationalObjectToAttach);
+            }
+            educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
+            socialProfile.setEducationalObjectCollection(educationalObjectCollectionNew);
             socialProfile = em.merge(socialProfile);
             if (socialProfileVisibilityNew != null && !socialProfileVisibilityNew.equals(socialProfileVisibilityOld)) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibilityNew.getSocialProfile();
@@ -640,6 +676,17 @@ public class SocialProfileDAO implements Serializable {
                     }
                 }
             }
+            for (EducationalObject educationalObjectCollectionNewEducationalObject : educationalObjectCollectionNew) {
+                if (!educationalObjectCollectionOld.contains(educationalObjectCollectionNewEducationalObject)) {
+                    SocialProfile oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject = educationalObjectCollectionNewEducationalObject.getSocialProfileId();
+                    educationalObjectCollectionNewEducationalObject.setSocialProfileId(socialProfile);
+                    educationalObjectCollectionNewEducationalObject = em.merge(educationalObjectCollectionNewEducationalObject);
+                    if (oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject != null && !oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject.equals(socialProfile)) {
+                        oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject.getEducationalObjectCollection().remove(educationalObjectCollectionNewEducationalObject);
+                        oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject = em.merge(oldSocialProfileIdOfEducationalObjectCollectionNewEducationalObject);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -716,6 +763,13 @@ public class SocialProfileDAO implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the DiscussionTopicMsg " + discussionTopicMsgCollectionOrphanCheckDiscussionTopicMsg + " in its discussionTopicMsgCollection field has a non-nullable socialProfileId field.");
+            }
+            Collection<EducationalObject> educationalObjectCollectionOrphanCheck = socialProfile.getEducationalObjectCollection();
+            for (EducationalObject educationalObjectCollectionOrphanCheckEducationalObject : educationalObjectCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the EducationalObject " + educationalObjectCollectionOrphanCheckEducationalObject + " in its educationalObjectCollection field has a non-nullable socialProfileId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -943,4 +997,5 @@ public class SocialProfileDAO implements Serializable {
             em.close();
         }
     }
+    
 }

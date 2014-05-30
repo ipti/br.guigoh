@@ -1,0 +1,20 @@
+
+#publish_environment_box{display: block; width: 900px; margin: 5px 0px 0px 24px;border:1px solid #ababab;overflow:hidden}
+#passoapasso{clear:both;height:110px;margin:15px 0;}
+.passo1,.passo2,.passo3{width:139px;margin:0 7px 15px 0;float:left;}
+.passo1 .img-passo,.passo2 .img-passo,.passo3 .img-passo{width:25px;height:25px;float:left;margin-right:10px;vertical-align:top;background:url(/../resources/images/numeros_pp.png) no-repeat;}
+.passo1 span,.passo2 span,.passo3 span{float:left;line-height:13px;width:100px;font-size:11px;}
+.passo2 .img-passo{background-position:0 -26px;}
+.passo3 .img-passo{background-position:0 -52px;}
+.passo1 .figuras,.passo2 .figuras,.passo3 .figuras{clear:both;margin:15px 25px;}
+.about-mandril{clear:both;margin:50px auto 20px;padding:20px;background-color:#82CFD7;}
+.about-mandril p{line-height:18px;font-size:14px;text-align:justify}
+.about-ts{margin:20px auto;padding:20px;background-color:#FFE9A4;}
+.about-ts p{line-height:18px;font-size:14px;text-align:justify}
+#register-educational_object{text-decoration: none;color:blue}
+#wrap-left h2{font-size:19px;}
+.cnt-left{width:475px;margin:15px auto 10px;padding-right:10px;float:left;border-right:1px solid #ababab;}
+#wrap-left{margin:10px 5px 10px 22px;}
+.cnt-right{width:400px;height:auto;float:right;margin:0 auto 10px;}
+#wrap-right{/*margin:10px 5px 10px 18px;*/}
+.publish_environment_title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}

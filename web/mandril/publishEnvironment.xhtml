@@ -1,0 +1,58 @@
+<ui:composition template="/resources/themes/default/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')}</ui:define>
+    <ui:define name="content">
+        <link rel="stylesheet" href="../resources/css/publishEnvironment.css" />
+        <f:metadata>
+            <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
+        </f:metadata>
+        <h:form>
+            <h:outputText styleClass="publish_environment_title" value="#{localeBean.getString('Ambiente de Publicação')}"></h:outputText>
+            <div id="publish_environment_box">
+                
+                <div class="cnt-right">
+                    <div id="wrap-right">
+                        <h5 class="title">Últimas publicadas</h5>
+                        <div id="lastest-published"></div>
+                    </div>
+                </div>
+
+                <div class="cnt-left">
+                    <div id="wrap-left">
+                        <div id="passoapasso">
+                            <div class="passo1">
+                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <span class="txt-pp">Preencher o formulário registro de Objetos Educacionais</span>
+                                <img src="../resources/images/seta_pp.png" class="figuras" alt="seta" />
+                            </div>
+                            <div class="passo2">
+                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <span class="txt-pp">Aguardar a leitura das informações pela equipe de revisores</span>
+                                <img src="../resources/images/oculos_pp1.png" class="figuras" alt="oculos" />
+                            </div>
+                            <div class="passo3">
+                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <span class="txt-pp">Sua experiência será publicada pelo administrador do Espaço</span>
+                                <img src="../resources/images/ts_pp.png" class="figuras" alt="imagem ts" />
+                            </div>
+                        </div>
+                        <h2><a id="register-educational_object" href="submitForm.xhtml">Publicar</a> um Objeto Educacional.</h2>
+                        <div class="about-mandril">
+                            <p><strong>Esse ambiente</strong> é uma maneira de compartilhar conhecimento on-line. Você pode submeter um objeto educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros. Então, compartilhe já o seu conhecimento!</p>
+                        </div>
+                        <div class="about-ts">
+                            <p>
+                                <strong>O que é um Objeto Educacional?</strong><br/>
+                                Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

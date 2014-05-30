@@ -4,6 +4,7 @@
  */
 package com.guigoh.primata.entity;
 
+import com.guigoh.mandril.entity.EducationalObject;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -59,6 +60,8 @@ entities = {
     @EntityResult(entityClass = Authorization.class)
 })
 public class SocialProfile implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileId")
+    private Collection<EducationalObject> educationalObjectCollection;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     @ManyToOne
     private Role roleId;
@@ -436,5 +439,15 @@ public class SocialProfile implements Serializable {
 
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<EducationalObject> getEducationalObjectCollection() {
+        return educationalObjectCollection;
+    }
+
+    public void setEducationalObjectCollection(Collection<EducationalObject> educationalObjectCollection) {
+        this.educationalObjectCollection = educationalObjectCollection;
     }
 }

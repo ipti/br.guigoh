@@ -12,22 +12,24 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.guigoh.primata.entity.DiscussionTopic;
-import com.guigoh.primata.entity.Tags;
 import java.util.ArrayList;
 import java.util.Collection;
+import com.guigoh.mandril.entity.EducationalObject;
+import com.guigoh.primata.entity.Tags;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.transaction.UserTransaction;
 
 /**
  *
- * @author Joe
+ * @author ipti008
  */
 public class TagsDAO implements Serializable {
 
     private EntityManagerFactory emf = JPAUtil.getEMF();
-
+    
     public TagsDAO() {
     }
 
@@ -39,6 +41,9 @@ public class TagsDAO implements Serializable {
         if (tags.getDiscussionTopicCollection() == null) {
             tags.setDiscussionTopicCollection(new ArrayList<DiscussionTopic>());
         }
+        if (tags.getEducationalObjectCollection() == null) {
+            tags.setEducationalObjectCollection(new ArrayList<EducationalObject>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -49,10 +54,20 @@ public class TagsDAO implements Serializable {
                 attachedDiscussionTopicCollection.add(discussionTopicCollectionDiscussionTopicToAttach);
             }
             tags.setDiscussionTopicCollection(attachedDiscussionTopicCollection);
+            Collection<EducationalObject> attachedEducationalObjectCollection = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionEducationalObjectToAttach : tags.getEducationalObjectCollection()) {
+                educationalObjectCollectionEducationalObjectToAttach = em.getReference(educationalObjectCollectionEducationalObjectToAttach.getClass(), educationalObjectCollectionEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollection.add(educationalObjectCollectionEducationalObjectToAttach);
+            }
+            tags.setEducationalObjectCollection(attachedEducationalObjectCollection);
             em.persist(tags);
             for (DiscussionTopic discussionTopicCollectionDiscussionTopic : tags.getDiscussionTopicCollection()) {
                 discussionTopicCollectionDiscussionTopic.getTagsCollection().add(tags);
                 discussionTopicCollectionDiscussionTopic = em.merge(discussionTopicCollectionDiscussionTopic);
+            }
+            for (EducationalObject educationalObjectCollectionEducationalObject : tags.getEducationalObjectCollection()) {
+                educationalObjectCollectionEducationalObject.getTagsCollection().add(tags);
+                educationalObjectCollectionEducationalObject = em.merge(educationalObjectCollectionEducationalObject);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -77,6 +92,8 @@ public class TagsDAO implements Serializable {
             Tags persistentTags = em.find(Tags.class, tags.getId());
             Collection<DiscussionTopic> discussionTopicCollectionOld = persistentTags.getDiscussionTopicCollection();
             Collection<DiscussionTopic> discussionTopicCollectionNew = tags.getDiscussionTopicCollection();
+            Collection<EducationalObject> educationalObjectCollectionOld = persistentTags.getEducationalObjectCollection();
+            Collection<EducationalObject> educationalObjectCollectionNew = tags.getEducationalObjectCollection();
             Collection<DiscussionTopic> attachedDiscussionTopicCollectionNew = new ArrayList<DiscussionTopic>();
             for (DiscussionTopic discussionTopicCollectionNewDiscussionTopicToAttach : discussionTopicCollectionNew) {
                 discussionTopicCollectionNewDiscussionTopicToAttach = em.getReference(discussionTopicCollectionNewDiscussionTopicToAttach.getClass(), discussionTopicCollectionNewDiscussionTopicToAttach.getId());
@@ -84,6 +101,13 @@ public class TagsDAO implements Serializable {
             }
             discussionTopicCollectionNew = attachedDiscussionTopicCollectionNew;
             tags.setDiscussionTopicCollection(discussionTopicCollectionNew);
+            Collection<EducationalObject> attachedEducationalObjectCollectionNew = new ArrayList<EducationalObject>();
+            for (EducationalObject educationalObjectCollectionNewEducationalObjectToAttach : educationalObjectCollectionNew) {
+                educationalObjectCollectionNewEducationalObjectToAttach = em.getReference(educationalObjectCollectionNewEducationalObjectToAttach.getClass(), educationalObjectCollectionNewEducationalObjectToAttach.getId());
+                attachedEducationalObjectCollectionNew.add(educationalObjectCollectionNewEducationalObjectToAttach);
+            }
+            educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
+            tags.setEducationalObjectCollection(educationalObjectCollectionNew);
             tags = em.merge(tags);
             for (DiscussionTopic discussionTopicCollectionOldDiscussionTopic : discussionTopicCollectionOld) {
                 if (!discussionTopicCollectionNew.contains(discussionTopicCollectionOldDiscussionTopic)) {
@@ -95,6 +119,18 @@ public class TagsDAO implements Serializable {
                 if (!discussionTopicCollectionOld.contains(discussionTopicCollectionNewDiscussionTopic)) {
                     discussionTopicCollectionNewDiscussionTopic.getTagsCollection().add(tags);
                     discussionTopicCollectionNewDiscussionTopic = em.merge(discussionTopicCollectionNewDiscussionTopic);
+                }
+            }
+            for (EducationalObject educationalObjectCollectionOldEducationalObject : educationalObjectCollectionOld) {
+                if (!educationalObjectCollectionNew.contains(educationalObjectCollectionOldEducationalObject)) {
+                    educationalObjectCollectionOldEducationalObject.getTagsCollection().remove(tags);
+                    educationalObjectCollectionOldEducationalObject = em.merge(educationalObjectCollectionOldEducationalObject);
+                }
+            }
+            for (EducationalObject educationalObjectCollectionNewEducationalObject : educationalObjectCollectionNew) {
+                if (!educationalObjectCollectionOld.contains(educationalObjectCollectionNewEducationalObject)) {
+                    educationalObjectCollectionNewEducationalObject.getTagsCollection().add(tags);
+                    educationalObjectCollectionNewEducationalObject = em.merge(educationalObjectCollectionNewEducationalObject);
                 }
             }
             em.getTransaction().commit();
@@ -135,6 +171,11 @@ public class TagsDAO implements Serializable {
             for (DiscussionTopic discussionTopicCollectionDiscussionTopic : discussionTopicCollection) {
                 discussionTopicCollectionDiscussionTopic.getTagsCollection().remove(tags);
                 discussionTopicCollectionDiscussionTopic = em.merge(discussionTopicCollectionDiscussionTopic);
+            }
+            Collection<EducationalObject> educationalObjectCollection = tags.getEducationalObjectCollection();
+            for (EducationalObject educationalObjectCollectionEducationalObject : educationalObjectCollection) {
+                educationalObjectCollectionEducationalObject.getTagsCollection().remove(tags);
+                educationalObjectCollectionEducationalObject = em.merge(educationalObjectCollectionEducationalObject);
             }
             em.remove(tags);
             em.getTransaction().commit();
@@ -197,7 +238,7 @@ public class TagsDAO implements Serializable {
             em.close();
         }
     }
-
+    
     public Tags findTagsByName(String tags) {
         EntityManager em = getEntityManager();
         try {
