@@ -21,10 +21,19 @@ import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
 import com.guigoh.primata.dao.JPAUtil;
+import com.guigoh.primata.entity.Interests;
+import com.guigoh.primata.entity.SocialProfile;
+import com.guigoh.primata.entity.Tags;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *

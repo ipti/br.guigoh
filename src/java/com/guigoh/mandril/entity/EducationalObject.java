@@ -9,6 +9,7 @@ import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Tags;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +25,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,6 +45,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
@@ -179,6 +187,14 @@ public class EducationalObject implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
     
 }
