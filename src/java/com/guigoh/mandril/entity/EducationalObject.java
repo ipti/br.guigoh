@@ -42,6 +42,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "status")
+    private String status;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -166,6 +171,14 @@ public class EducationalObject implements Serializable {
     @Override
     public String toString() {
         return "com.guigoh.primata.entity.EducationalObject[ id=" + id + " ]";
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }

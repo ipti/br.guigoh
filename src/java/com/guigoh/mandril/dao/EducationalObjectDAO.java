@@ -4,9 +4,9 @@
  */
 package com.guigoh.mandril.dao;
 
-import com.guigoh.primata.dao.exceptions.IllegalOrphanException;
-import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
-import com.guigoh.primata.dao.exceptions.RollbackFailureException;
+import com.guigoh.mandril.dao.exceptions.IllegalOrphanException;
+import com.guigoh.mandril.dao.exceptions.NonexistentEntityException;
+import com.guigoh.mandril.dao.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -28,7 +28,7 @@ import javax.transaction.UserTransaction;
 
 /**
  *
- * @author ipti008
+ * @author ipti004
  */
 public class EducationalObjectDAO implements Serializable {
 
