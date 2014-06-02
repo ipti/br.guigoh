@@ -4,22 +4,21 @@
  */
 package com.guigoh.mandril.dao;
 
-import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
-import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.mandril.entity.Author;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.dao.JPAUtil;
+import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
+import com.guigoh.primata.dao.exceptions.RollbackFailureException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
