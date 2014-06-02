@@ -369,4 +369,36 @@ public class EducationalObjectDAO implements Serializable {
         }
     }
     
+    public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
+                    + "where status = 'AC' and theme_id = "+theme_id, EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> getActiveEducationalObjects(){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
+                    + "where status = 'AC'", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> getPendingEducationalObjects(){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
+                    + "where status = 'PE'", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
 }
