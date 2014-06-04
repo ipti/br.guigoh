@@ -45,6 +45,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Size(max = 150)
+    @Column(name = "image")
+    private String image;
     @Basic(optional = false)
     @NotNull
     @Column(name = "date")
@@ -195,6 +198,14 @@ public class EducationalObject implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
     
 }
