@@ -4,15 +4,15 @@
  */
 package com.guigoh.primata.bean;
 
+import com.guigoh.mandril.bo.EducationalObjectBO;
+import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.bo.DiscussionTopicBO;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.util.MD5Generator;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.NewActivity;
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -27,11 +27,13 @@ import javax.faces.bean.SessionScoped;
 public class HomeBean implements Serializable {
 
     List<Interests> interestThemesList = new ArrayList<Interests>();
+    List<EducationalObject> educationalObjectList = new ArrayList<EducationalObject>();
     List<NewActivity> newActivityList = new ArrayList();
 
     public void init() {
         try {
             loadInterestThemes();
+            loadEducationalObjects();
             loadLastTopicActivities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,6 +43,12 @@ public class HomeBean implements Serializable {
     private void loadInterestThemes() {
         InterestsBO interestsBO = new InterestsBO();
         interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");
+    }
+    
+    private void loadEducationalObjects(){
+        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
+        educationalObjectList = educationalObjectBO.getAllActiveEducationalObjects();
+        
     }
 
     private void loadLastTopicActivities() {
@@ -67,4 +75,13 @@ public class HomeBean implements Serializable {
     public void setNewActivityList(List<NewActivity> newActivityList) {
         this.newActivityList = newActivityList;
     }
+
+    public List<EducationalObject> getEducationalObjectList() {
+        return educationalObjectList;
+    }
+
+    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
+        this.educationalObjectList = educationalObjectList;
+    }
+    
 }

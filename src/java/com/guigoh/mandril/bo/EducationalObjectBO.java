@@ -46,9 +46,18 @@ public class EducationalObjectBO {
         return null;
     }
     
-    public List<EducationalObject> getActiveEducationalObjects() {
+    public List<EducationalObject> getLatestFourActiveEducationalObjects() {
         try {
-            return educationalObjectDAO.getActiveEducationalObjects();
+            return educationalObjectDAO.getLatestFourActiveEducationalObjects();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<EducationalObject> getAllActiveEducationalObjects() {
+        try {
+            return educationalObjectDAO.getAllActiveEducationalObjects();
         } catch (Exception e) {
             e.printStackTrace();
         }

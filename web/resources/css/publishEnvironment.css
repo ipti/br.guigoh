@@ -10,11 +10,20 @@
 .about-mandril p{line-height:18px;font-size:14px;text-align:justify}
 .about-ts{margin:20px auto;padding:20px;background-color:#FFE9A4;}
 .about-ts p{line-height:18px;font-size:14px;text-align:justify}
-#register-educational_object{text-decoration: none;color:blue}
+#register_educational_object{text-decoration: none;color:blue}
 #wrap-left h2{font-size:19px;}
 .cnt-left{width:475px;margin:15px auto 10px;padding-right:10px;float:left;border-right:1px solid #ababab;}
 #wrap-left{margin:10px 5px 10px 22px;}
 .cnt-right{width:400px;height:auto;float:right;margin:0 auto 10px;}
-#wrap-right{/*margin:10px 5px 10px 18px;*/}
+#wrap-right{margin:0 15px 0 0}
 .publish_environment_title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}
 .title{font-size:14px;font-weight:bold;display:block;margin:30px 0 25px}
+.educational_object_image{width:100px;height:100px;float:left;margin-right:10px}
+.educational_object_name{display:block;font-size: 15px !important;margin-top:5px;text-decoration: none}
+.educational_object{display:block;width:385px;height:110px;margin-bottom:10px;border-bottom:1px solid lightgray;padding:5px 0 5px 5px}
+.educational_object_publisher{float:left}
+.educational_object_theme{float:left}
+.educational_object span{font-size:12px;color:black}
+.educational_object a{font-size:12px;color:black}
+.educational_object_label{font-weight:bold;float:left;margin-right:5px}
+.educational_object_date{float:left}

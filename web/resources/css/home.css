@@ -9,7 +9,7 @@ strong {font-weight: bold;}
 .home_title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}
 .home_box {display: block; width: 900px; margin: 5px 0px 0px 24px;border:1px solid #ababab;}
 .left_column{display: block; float: left; margin: 30px 0px 0px 0px; width: 240px;}
-.middle_column{display: block; float: left; width: 350px; padding: 30px 10px 0px 30px; border-right: 1px solid #b6b7b2;border-left: 1px solid #b6b7b2;}
+.middle_column{display: block; float: left; width: 360px; padding: 30px 10px 0px 20px; border-right: 1px solid #b6b7b2;border-left: 1px solid #b6b7b2;}
 .right_column{display: block; width: 250px; float: left; padding: 30px 0px 0px 15px;overflow: hidden;}
 .interest_themes_label_box{display:block;padding-bottom:30px}
 .interest_themes_label{font-weight: bold;font-size:14px;margin:0 0 25px 20px;}
@@ -30,14 +30,13 @@ strong {font-weight: bold;}
 .theme_news_name {margin-left: 4px;}
 .user_feed { display: block; width: 240px; height: 77px; margin-bottom: 40px; }
 .list_objects{clear:both;display:block}
-#oe_loading_gif{display:block;margin:30px auto}
-.public_tec{clear:both;float:left;;margin-bottom:80px}
-.public_tec h2 {width:160px;font-size:15px;float: left; color: black; margin: 0px 40px 6px 0px; font-weight: bold}
-.public_tec h3 {color: #939598; float: left; font-size:11px;margin:3px 0 20px 0}
-.public_tec h4 {clear: both; font-size: 13px; color: #939598; margin: 34px 0px 60px 0px; text-align: justify; }
-.clock_public {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
-.thumb_public {margin-right:10px;float:left; width: 120px; height: 120px; background:url(../images/Untitled-1.png) no-repeat;background-size:120px}
-.autor_public {font-size: 11px; color: #939598; float: left; margin-right:3px}
-.autor_public a {color:#939598;}
-.theme_public {font-size: 11px; color: #939598; float: left; }
-.theme_public a {color:#939598;}
+.educational_object_image{width:100px;height:100px;float:left;margin-right:15px}
+.educational_object_name{font-size:15px; text-decoration: none;float:left;color: black;font-weight: bold;}
+.educational_object{display:block;height:120px;margin-bottom:20px;padding:5px 0 5px 5px;border-bottom:1px solid lightgray}
+.educational_object_publisher{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
+.container_description{float:left;margin-top:7px}
+.educational_object_theme{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
+.educational_object_label_sended{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
+.educational_object_label_by{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
+.educational_object_date{display:block;font-size:11px;color:#939598;margin:2px 0 20px}
+.clock_icon {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
