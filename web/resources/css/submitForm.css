@@ -1,0 +1,12 @@
+/* 
+    Document   : submitForm
+    Created on : 05/06/2014, 11:30:13
+    Author     : ipti004
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.register_box{display:block;margin:75px auto 0;border:1px solid #ababab;border-radius:10px;width:600px;height:450px}
+.ctn-form_title{background-color:white;display:block;border-radius:10px 10px 0 0;height:60px}
+.form_title{}
+

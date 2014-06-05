@@ -1,14 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ui:composition template="/resources/themes/default/template.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="title">Formulário de Registro de Objetos Educacionais</ui:define>
+    <ui:define name="content">
+        <link rel="stylesheet" href="../resources/css/submitForm.css" />
+        <f:metadata>
+            <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
+        </f:metadata>
+        <h:form>
+            <h:panelGroup styleClass="register_box">
+                <h:panelGroup styleClass="ctn-form_title">
+                    <h:outputText styleClass="form_title" value="Formulário de Registro de Objetos Educacionais"/>
+                </h:panelGroup>
+            </h:panelGroup>
+            <div id="register-box" class="wizard-panel">
+                <div class="top">
+                    <div class="topleft"></div>
+                    <div class="topright"></div>
+
+                    <h1>Formulário de Registro de Objetos Educacionais</h1>
+                </div>
+                <div class="content">
+                    <div class="wrap">
+                        <div class="wizard-page">
+                            <form action="" id="form1">
+                                <p class="form-title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
+                                <p>
+                                    Você está prestes a publicar seu Objeto Educacional,
+                                    para que todos da Rede Arte com Ciência
+                                    possam conhecê-la e/ou reaplicá-la.
+                                </p>
+                                <p>
+                                    Todas os Objetos Educacionais publicados neste
+                                    Espaço seguem a
+                                    licença <strong>(CC) Creative Commons Atribuição-Compartilhamento
+                                        pela mesma Licença 3.0 Unported</strong>
+                                </p>
+                                <p>
+                                    Esta é uma forma de garantir sua autoria a respeito
+                                    do que for publicado, além de permitir o compartilhamento
+                                    de seu Objeto Educacional com os demais parceiros, que
+                                    terão o direito de reaplicá-la.
+                                </p>
+                                <p>
+                                    Para conhecer melhor os detalhes desta licença
+                                    <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt" title="">acesse a página do Creative Commons.</a>
+                                </p>
+
+                                <label class="highlight">
+                                    <input type="checkbox" name="license" class="radio" />
+                                    concordo com as regras definidas pela licença Creative Commons (CC)
+                                    Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para
+                                    disponibilizar a Tecnologia Social que estou prestes a publicar
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
