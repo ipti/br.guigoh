@@ -8,17 +8,22 @@
         <script type="text/javascript" src="../resources/js/educationalObject.js"/>
         <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
         <link rel="stylesheet" href="../resources/css/jquery.wysiwyg.css" type="text/css" />
+        <f:metadata>
+            <f:viewParam name="id" value="#{educationalObjectBean.educationalObjectID}" />
+            <f:event type="preRenderComponent" listener="#{educationalObjectBean.init()}"/>
+        </f:metadata>
         <input type="hidden" id="reviewObjectId"/>
         <h:outputText styleClass="educational-object-title" value="#{localeBean.getString('Objeto Educacional')}"/>
         <div class="educational-object-box">
             <div class="cnt-right">
                 <div id="wrap-right">
-                    Testando direita
+                    <img src="#{educationalObjectBean.educationalObject.image}"/>
+                    <br/>Testando imagem
                 </div>
             </div>
             <div class="cnt-left">
                 <div id="wrap-left">
-                    <h:outputText value="#{educationalObjectBean.educationalObjectBO}"/>
+                    <h3>#{educationalObjectBean.educationalObject.name}</h3>
                     <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">Recomendar este Objeto Educacional</a>
                     <div id="recommend-box">
                         <p>Email(s) do(s) destinatário(s):</p>
@@ -30,9 +35,9 @@
                         <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
                     </ul>
                     <h:panelGroup styleClass="educational-object-info">
-                        <p><strong>Tags: </strong>#{educationalObjectBean.educationalObjectBO}</p>
-                        <p><strong>Tema: </strong>#{educationalObjectBean.educationalObjectBO}</p>
-                        <p><strong>Publicado por: </strong>#{educationalObjectBean.educationalObjectBO}</p>    
+                        <p><strong>Tags: </strong>#{educationalObjectBean.educationalObject.tagsCollection}</p>
+                        <p><strong>Tema: </strong>#{educationalObjectBean.educationalObject.themeId.name}</p>
+                        <p><strong>Publicado por: </strong>#{educationalObjectBean.educationalObject.socialProfileId.name}</p>    
                     </h:panelGroup>
                     
                     <br/>
