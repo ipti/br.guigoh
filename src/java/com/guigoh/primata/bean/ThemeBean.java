@@ -4,6 +4,8 @@
  */
 package com.guigoh.primata.bean;
 
+import com.guigoh.mandril.bo.EducationalObjectBO;
+import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.bo.DiscussionTopicBO;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.TagsBO;
@@ -29,20 +31,24 @@ public class ThemeBean implements Serializable{
     private Interests interest;
     private String generalSearch;
     private List<DiscussionTopic> discussionTopicList;
+    private List<EducationalObject> educationalObjectList;
     private List<Tags> tagList;
     private String tagSelected;
     private DiscussionTopicBO dtBO;
+    private EducationalObjectBO eoBO;
     
     public void init(){
         if(!FacesContext.getCurrentInstance().isPostback()){
             generalSearch = "";
             tagSelected = "";
             dtBO = new DiscussionTopicBO();
+            eoBO = new EducationalObjectBO();
             loadInterest();
             discussionTopicList = new ArrayList<DiscussionTopic>();
             tagList = new ArrayList<Tags>();
             loadTags();
             loadDiscussionTopics();
+            loadEducationalObjectsByTheme();
         }
     }
     
@@ -60,9 +66,15 @@ public class ThemeBean implements Serializable{
         discussionTopicList = dtBO.findDiscussionTopicsByTheme(id);
     }
     
+    private void loadEducationalObjectsByTheme(){
+        educationalObjectList = eoBO.getActiveEducationalObjectsByTheme(id);
+    }
+    
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<DiscussionTopic>();
+        educationalObjectList = new ArrayList<EducationalObject>();
         discussionTopicList = dtBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, id);
+        educationalObjectList = eoBO.getEducationalObjectsByExpression(generalSearch, tagSelected, id);
     }
 
     public Integer getId() {
@@ -111,6 +123,14 @@ public class ThemeBean implements Serializable{
 
     public void setTagSelected(String tagSelected) {
         this.tagSelected = tagSelected;
+    }
+
+    public List<EducationalObject> getEducationalObjectList() {
+        return educationalObjectList;
+    }
+
+    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
+        this.educationalObjectList = educationalObjectList;
     }
     
 }

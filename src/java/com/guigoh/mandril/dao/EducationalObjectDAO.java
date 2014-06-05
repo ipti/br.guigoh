@@ -386,7 +386,7 @@ public class EducationalObjectDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
-                    + "where status = 'AC'", EducationalObject.class).getResultList();
+                    + "where status = 'AC' order by date desc", EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
@@ -397,8 +397,33 @@ public class EducationalObjectDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
-                    + "where status = 'PE'", EducationalObject.class).getResultList();
+                    + "where status = 'PE' order by date desc", EducationalObject.class).getResultList();
             return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+
+
+            String sql = "select distinct eo.* from mandril_educational_object eo ";
+            if (tag != null) {
+                if (!tag.equals("")) {
+                    sql += "join mandril_educational_object_tag eot on eo.id = eot.educational_object_id ";
+                }
+            }
+            sql += "where eo.theme_id = " + id + " and eo.status = 'AC' and "
+                    + "UPPER(eo.name) like '%" + expression.toUpperCase() + "%' ";
+            if (tag != null) {
+                if (!tag.equals("")) {
+                    sql += "and eot.tag_id = (select id from primata_tags where name = '" + tag + "') ";
+                }
+            }
+            List<EducationalObject> discussionTopicList = (List<EducationalObject>) em.createNativeQuery(sql, EducationalObject.class).getResultList();
+            return discussionTopicList;
         } finally {
             em.close();
         }
