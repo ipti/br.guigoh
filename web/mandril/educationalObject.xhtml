@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">title.publishEnvironment - </ui:define>
+    <ui:define name="title">Ambiente de publicação - nome do objeto educacional</ui:define>
     <ui:define name="content">
         <script type="text/javascript" src="../resources/js/educationalObject.js"/>
         <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
@@ -18,26 +18,27 @@
             </div>
             <div class="cnt-left">
                 <div id="wrap-left">
-                    <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">socialTech.recommend</a>
+                    <h:outputText value="#{educationalObjectBean.educationalObjectBO}"/>
+                    <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">Recomendar este Objeto Educacional</a>
                     <div id="recommend-box">
-                        <p>socialTech.emails</p>
+                        <p>Email(s) do(s) destinatário(s):</p>
                         <input type="text" class="area-text-email" id="email-recommend"/>
                         <div id="recommendMsg"></div>
                         <button class="btn-send" id="btn-recommend" onclick="sendRecommend()">Enviar</button>
                     </div>
                     <ul>
-                        <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">st.license</a></li>
+                        <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
                     </ul>
                     <h:panelGroup styleClass="educational-object-info">
-                        <p><strong>socialTech.tag </strong><span id="tagsData"></span></p>
-                        <p><strong>socialTech.theme</strong><span id="mainTheme"></span></p>
-                        <p><strong>socialTech.publishedBy</strong><span id="authorNick"></span></p>    
+                        <p><strong>Tags: </strong>#{educationalObjectBean.educationalObjectBO}</p>
+                        <p><strong>Tema: </strong>#{educationalObjectBean.educationalObjectBO}</p>
+                        <p><strong>Publicado por: </strong>#{educationalObjectBean.educationalObjectBO}</p>    
                     </h:panelGroup>
                     
                     <br/>
                     
                     <div id="download-box">
-                        <span class="title">socialTech.filesList</span>
+                        <span class="title">Lista de arquivos</span>
                         <div id="upload-container">
                             <!--
                             <label>
@@ -56,7 +57,7 @@
                     <br/>
 
                     <div id="more-info">
-                        <h5 class="title">socialTech.aboutAuthors</h5>
+                        <h5 class="title">Sobre os Autores</h5>
                         <div id="authors-list"></div>
                     </div>
                 </div>
