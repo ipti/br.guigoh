@@ -6,6 +6,7 @@ package com.guigoh.mandril.bo;
 
 import com.guigoh.mandril.dao.EducationalObjectDAO;
 import com.guigoh.mandril.entity.EducationalObject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,6 +81,14 @@ public class EducationalObjectBO {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
+        List<EducationalObject> educationalObjectList = educationalObjectDAO.getEducationalObjectsByExpression(expression, tag, id);
+        if (educationalObjectList == null) {
+            return new ArrayList<EducationalObject>();
+        }
+        return educationalObjectList;
     }
     
 }

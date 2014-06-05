@@ -6,7 +6,6 @@
     <ui:param name="themeName" value="#{themeBean.interest.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
     <ui:define name="content">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/home.css"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/theme.css"></link>
         <script type="text/javascript" src="/resources/js/theme.js"></script>
         <script type="text/javascript">
@@ -65,9 +64,28 @@
                     <h:panelGroup styleClass="publication_objects_box">
                         <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('Objetos educacionais').toUpperCase()}"></h:outputText>
                         <h:panelGroup styleClass="publication_objects">
-
+                            <ui:repeat value="#{themeBean.educationalObjectList}" var="educationalObject">
+                                <h:panelGroup styleClass="educational_object">
+                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 77px"/>
+                                    <h:outputText styleClass="clock_icon"/>
+                                    <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
+                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
+                                    <br/>
+                                    <h:panelGroup styleClass="container_description">
+                                        <h:outputText styleClass="educational_object_label" value="por"/>
+                                        <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="object_tags">
+                                        <ui:repeat value="#{educationalObject.tagsCollection}" var="tag">
+                                            ##{tag.name}
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </ui:repeat>
                         </h:panelGroup>
-                        <a class="publish_new_object_container" href="/ts/submit.do?lang=#{localeBean.acronym.substring(0, 2)}">
+                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
                             <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
                             <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                         </a>
