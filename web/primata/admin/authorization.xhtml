@@ -55,8 +55,16 @@
                     </h:panelGroup>
                     <h:panelGroup styleClass="authorization_objects_panel">
                         <h:outputText styleClass="authorization_objects" value="Objetos Educacionais pendentes"></h:outputText>
-                        <span class="authorization_objects_alert">Não existem Objetos Educacionais pendentes.</span>
                         <div class="authorization_objects_box">
+                            <ui:repeat value="#{adminBean.educationalObjectList}" var="educationalObject">
+                                <ui:param value="#{educationalObject.id}" name="id"/>
+                                <div id="submitted_object_box_#{educationalObject.id}" class="submitted_object_box">
+                                    <span class="submitted_object">#{educationalObject.name}</span>
+                                    <h:commandButton value="Aceitar">
+                                        <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
+                                    </h:commandButton>
+                                </div>
+                            </ui:repeat>
                         </div>
                     </h:panelGroup>
                     <span class="clear"></span>
