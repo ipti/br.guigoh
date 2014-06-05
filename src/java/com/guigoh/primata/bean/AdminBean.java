@@ -4,6 +4,8 @@
  */
 package com.guigoh.primata.bean;
 
+import com.guigoh.mandril.bo.EducationalObjectBO;
+import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.bo.AuthorizationBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.util.CookieService;
@@ -32,15 +34,19 @@ public class AdminBean implements Serializable {
     public static final String PENDING_ACCESS = "PC";
     public static final String ADMIN = "AD";
     public static final String REVISER = "RE";
+    public static final String ACCEPT = "AC";
+    public static final String DECLINE = "DE";
     private boolean admin;
     private boolean reviser;
     private Authorization authorization;
     private SocialProfile socialProfile;
     private List<SocialProfile> listSocialProfile;
     private List<Authorization> authorizationList;
+    private List<EducationalObject> educationalObjectList;
     private Map<Integer, Boolean> checked;
     private AuthorizationBO authorizationBO;
     private SocialProfileBO socialProfileBO;
+    private EducationalObjectBO educationalObjectBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -51,12 +57,14 @@ public class AdminBean implements Serializable {
             checked = new HashMap<Integer, Boolean>();
             socialProfileBO = new SocialProfileBO();
             authorizationBO = new AuthorizationBO();
+            educationalObjectBO = new EducationalObjectBO();
             admin = false;
             reviser = false;
             getLoggedSocialProfile();
             getUserRole();
             checkAuthorization();
             getPendingUsers();
+            getPendingEducationalObjects();
         }
     }
 
@@ -84,6 +92,17 @@ public class AdminBean implements Serializable {
         if (socialProfile.getSubnetworkId() != null) {
             authorizationList = authorizationBO.findAuthorizationByActive(socialProfile.getSubnetworkId().getId());
         }
+    }
+    
+    private void getPendingEducationalObjects(){
+        educationalObjectList = educationalObjectBO.getPendingEducationalObjects();
+    }
+    
+    public void acceptEducationalObject(Integer id){
+        EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
+        educationalObject.setStatus(ACCEPT);
+        educationalObjectBO.edit(educationalObject);
+        getPendingEducationalObjects();
     }
 
     public void submitSelections() {
@@ -135,6 +154,14 @@ public class AdminBean implements Serializable {
 
     public void setAuthorizationList(List<Authorization> authorizationList) {
         this.authorizationList = authorizationList;
+    }
+
+    public List<EducationalObject> getEducationalObjectList() {
+        return educationalObjectList;
+    }
+
+    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
+        this.educationalObjectList = educationalObjectList;
     }
 
     public Map<Integer, Boolean> getChecked() {
