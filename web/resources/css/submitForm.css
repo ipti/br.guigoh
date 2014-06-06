@@ -6,7 +6,31 @@
         Purpose of the stylesheet follows.
 */
 
-.register_box{display:block;margin:75px auto 0;border:1px solid #ababab;border-radius:10px;width:600px;height:450px}
-.ctn-form_title{background-color:white;display:block;border-radius:10px 10px 0 0;height:60px}
-.form_title{}
+.register_box{display:block;margin:75px auto 0;border-radius:10px;width:600px;height:450px}
+.ctn-form_title{background-color:white;display:block;border-radius:20px 20px 0 0;border:1px solid #ccc;height:60px}
+.form_title{display:block;margin-top: 20px;font-size:20px;text-align: center;}
+.forms{padding:20px;display:block;background-color:#E9EDE2;border-radius:0 0 20px 20px;text-align:justify}
+.form1_body{display:block;}
+.form1_body p{font-size: 13px;line-height: 18px;margin: 18px 0;}
+.form1_body a{color:blue}
+.form1_title{font-weight: bold;}
+.form1_highlight{font-size:13px;background-color:#999999;color: #FFFFFF;line-height: 16px;margin: 20px 0;display:block;padding: 10px;}
+.button_options{margin-top:12px;display:block}
+.button_cancel{text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
+#button_cancel_icon{float:left;padding:4px 2px 0}
+.button_cancel_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
+.button_back{display:none;cursor:pointer;text-decoration: none;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}
+#button_back_icon{cursor:pointer;float:left;padding:4px}
+.button_back_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
+.button_next{cursor:pointer;text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}
+#button_next_icon{float:right;padding:4px 2px 0}
+.button_next_label{color:black;font-size:13px;float:left;margin:10px 0 0 15px}
+.button_submit{display:none;text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}
+#button_submit_icon{float:left;padding:4px 2px}
+.button_submit_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
+.progress_bar{border: 1px solid #999999;color: #666666;font-size: 11px;height: 11px;margin:10px 0 0 110px;padding-bottom: 2px;float:left;width: 161px;}
+.progress{width: 14.2857%;background-color: #B9D331;height: 11px;position:relative;padding-bottom: 2px;}
+.page-number{}
+.progress-count{width:20px;position:relative;left:45%;display:block;margin:-12px 0 0 0}
+.clear{display:block;clear:both}
 
