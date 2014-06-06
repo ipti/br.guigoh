@@ -5,6 +5,7 @@
 package com.guigoh.mandril.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EducationalObjectMedia.findById", query = "SELECT e FROM EducationalObjectMedia e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObjectMedia.findByMedia", query = "SELECT e FROM EducationalObjectMedia e WHERE e.media = :media")})
 public class EducationalObjectMedia implements Serializable {
+    @Size(max = 100)
+    @Column(name = "name")
+    private String name;
+    @Size(max = 4)
+    @Column(name = "type")
+    private String type;
+    @Column(name = "size")
+    private BigInteger size;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,6 +115,30 @@ public class EducationalObjectMedia implements Serializable {
     @Override
     public String toString() {
         return "com.guigoh.primata.entity.EducationalObjectMedia[ id=" + id + " ]";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public BigInteger getSize() {
+        return size;
+    }
+
+    public void setSize(BigInteger size) {
+        this.size = size;
     }
     
 }

@@ -12,3 +12,9 @@
 #wrap-left{margin:10px 5px 10px 22px;}
 .cnt-right{width:400px;float:right;margin:0 auto 10px;}
 #wrap-right{margin:10px 5px 10px 18px;}
+
+.title{font-weight:bold}
+#more-info{margin-top:25px;}
+#more-info h5{margin:5px 0;}
+#more-info p{margin:2px 0;font-size:11px;}
+#more-info p a{color:#333;text-decoration:none;}
