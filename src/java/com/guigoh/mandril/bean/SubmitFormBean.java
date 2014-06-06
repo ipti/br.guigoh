@@ -14,7 +14,7 @@ import javax.faces.bean.SessionScoped;
  */
 @SessionScoped
 @ManagedBean(name = "submitFormBean")
-public class submitFormBean implements Serializable{
+public class SubmitFormBean implements Serializable{
     
     public void init(){
         

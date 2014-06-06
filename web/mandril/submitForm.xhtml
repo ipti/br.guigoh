@@ -6,6 +6,7 @@
     <ui:define name="title">Formulário de Registro de Objetos Educacionais</ui:define>
     <ui:define name="content">
         <link rel="stylesheet" href="../resources/css/submitForm.css" />
+        <script type="text/javascript" src="../resources/js/submitForm.js" />
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
@@ -14,52 +15,63 @@
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="Formulário de Registro de Objetos Educacionais"/>
                 </h:panelGroup>
+                <h:panelGroup styleClass="forms">
+                    <h:panelGroup styleClass="form1_body">
+                        <p class="form1_title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
+                        <p>
+                            Você está prestes a publicar seu Objeto Educacional,
+                            para que todos da Rede Arte com Ciência
+                            possam conhecê-la e/ou reaplicá-la.
+                        </p>
+                        <p>
+                            Todas os Objetos Educacionais publicados neste
+                            Espaço seguem a
+                            licença <strong>(CC) Creative Commons Atribuição-Compartilhamento
+                                pela mesma Licença 3.0 Unported</strong>
+                        </p>
+                        <p>
+                            Esta é uma forma de garantir sua autoria a respeito
+                            do que for publicado, além de permitir o compartilhamento
+                            de seu Objeto Educacional com os demais parceiros, que
+                            terão o direito de reaplicá-la.
+                        </p>
+                        <p>
+                            Para conhecer melhor os detalhes desta licença,
+                            <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt" title="">acesse a página do Creative Commons.</a>
+                        </p>
+
+                        <label class="form1_highlight">
+                            <input type="checkbox" checked="true" name="license" class="radio" />
+                            concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar a Tecnologia Social que estou prestes a publicar
+                        </label>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup styleClass="button_options">
+                    <h:link styleClass="button_cancel" outcome="/mandril/publishEnvironment.xhtml">
+                        <img id="button_cancel_icon" src="/resources/images/cross.png"/>
+                        <span class="button_cancel_label">Cancelar</span>
+                    </h:link>
+                    <h:panelGroup styleClass="progress_bar">
+                        <div class="progress"></div>
+                        <span class="progress-count">
+                            <span class="page-number">1</span>/7
+                        </span>
+                    </h:panelGroup>
+                    <span class="button_next">
+                        <img id="button_next_icon" src="/resources/images/forward.png"/>
+                        <span class="button_next_label">Avançar</span>
+                    </span>
+                    <h:commandLink styleClass="button_submit">
+                        <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
+                        <span class="button_submit_label">Submeter</span>
+                    </h:commandLink>
+                    <span class="button_back">
+                        <img id="button_back_icon" src="/resources/images/back.png"/>
+                        <span class="button_back_label">#{localeBean.getString('Voltar')}</span>
+                    </span>
+                </h:panelGroup>
             </h:panelGroup>
-            <div id="register-box" class="wizard-panel">
-                <div class="top">
-                    <div class="topleft"></div>
-                    <div class="topright"></div>
-
-                    <h1>Formulário de Registro de Objetos Educacionais</h1>
-                </div>
-                <div class="content">
-                    <div class="wrap">
-                        <div class="wizard-page">
-                            <form action="" id="form1">
-                                <p class="form-title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
-                                <p>
-                                    Você está prestes a publicar seu Objeto Educacional,
-                                    para que todos da Rede Arte com Ciência
-                                    possam conhecê-la e/ou reaplicá-la.
-                                </p>
-                                <p>
-                                    Todas os Objetos Educacionais publicados neste
-                                    Espaço seguem a
-                                    licença <strong>(CC) Creative Commons Atribuição-Compartilhamento
-                                        pela mesma Licença 3.0 Unported</strong>
-                                </p>
-                                <p>
-                                    Esta é uma forma de garantir sua autoria a respeito
-                                    do que for publicado, além de permitir o compartilhamento
-                                    de seu Objeto Educacional com os demais parceiros, que
-                                    terão o direito de reaplicá-la.
-                                </p>
-                                <p>
-                                    Para conhecer melhor os detalhes desta licença
-                                    <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt" title="">acesse a página do Creative Commons.</a>
-                                </p>
-
-                                <label class="highlight">
-                                    <input type="checkbox" name="license" class="radio" />
-                                    concordo com as regras definidas pela licença Creative Commons (CC)
-                                    Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para
-                                    disponibilizar a Tecnologia Social que estou prestes a publicar
-                                </label>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <span class="clear"></span>
         </h:form>
     </ui:define>
 </ui:composition>
