@@ -100,4 +100,12 @@ public class EducationalObjectBO {
         return educationalObjectList;
     }
     
+    public EducationalObject findEducationalObject(Integer id){
+        try{
+            return educationalObjectDAO.findEducationalObject(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
