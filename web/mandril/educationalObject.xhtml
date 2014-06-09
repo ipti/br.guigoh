@@ -17,31 +17,32 @@
         <div class="educational-object-box">
             <div class="cnt-right">
                 <div id="wrap-right">
-                    <img src="#{educationalObjectBean.educationalObject.image}"/>
+                    <!--
+                    <img src="HASHTAG{educationalObjectBean.educationalObject.image}"/>
                     <br/>Testando imagem
+                    -->
                 </div>
             </div>
             <div class="cnt-left">
                 <div id="wrap-left">
-                    <h3>#{educationalObjectBean.educationalObject.name}</h3>
-                    <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">Recomendar este Objeto Educacional</a>
-                    <div id="recommend-box">
-                        <p>Email(s) do(s) destinatário(s):</p>
-                        <input type="text" class="area-text-email" id="email-recommend"/>
-                        <div id="recommendMsg"></div>
-                        <button class="btn-send" id="btn-recommend" onclick="sendRecommend()">Enviar</button>
+                    <h3 id="educational-object-name">#{educationalObjectBean.educationalObject.name}</h3>
+                    <div id="educational-object">
+                        <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">Recomendar este Objeto Educacional</a>
+                        <div id="recommend-box">
+                            <p>Email(s) do(s) destinatário(s): <a id="recommend-close" href="javascript:void(0)" onclick="closeRecommendBox()">[X]</a></p>
+                            <input type="text" class="area-text-email" id="email-recommend"/>
+                            <div id="recommendMsg"></div>
+                            <button class="btn-send" onclick="sendRecommend()">Enviar</button>
+                        </div>
+                        <ul>
+                            <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
-                    </ul>
                     <h:panelGroup styleClass="educational-object-info">
                         <p><strong>Tags: </strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
-                        <p><strong>Tema: </strong>#{educationalObjectBean.educationalObject.themeId.name}</p>
-                        <p><strong>Publicado por: </strong>#{educationalObjectBean.educationalObject.socialProfileId.name}</p>    
+                        <p><strong>Tema: </strong><a href="http://rts.guigoh.com:8080/primata/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}">#{educationalObjectBean.educationalObject.themeId.name}</a></p>
+                        <p><strong>Publicado por: </strong><a href="http://rts.guigoh.com:8080/primata/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectBean.educationalObject.socialProfileId.name}</a></p>    
                     </h:panelGroup>
-
-                    <br/>
-
                     <div id="download-box">
                         <span class="title">Lista de arquivos</span>
                         <div id="upload-container">
@@ -58,15 +59,16 @@
                         </div>
                         <ul id="download-list"></ul>
                     </div>
-
                     <div id="more-info">
                         <h5 class="title">Sobre os Autores</h5>
                         <div id="authors-list">
                             <ui:repeat value="#{educationalObjectBean.authorList}" var="author">
-                                <p><strong>Nome: </strong><span>#{author.name}</span></p>
-                                <p><strong>Email: </strong><span>#{author.email}</span></p>
-                                <p><strong>Telefone: </strong><span>#{author.phone}</span></p>
-                                <p><strong>Site: </strong><span>#{author.site}</span></p>
+                                <div class="author-box">
+                                    <p><strong>Nome: </strong><span>#{author.name}</span></p>
+                                    <p><strong>Email: </strong><span>#{author.email}</span></p>
+                                    <p><strong>Telefone: </strong><span>#{author.phone}</span></p>
+                                    <p><strong>Site: </strong><span><a href="http://#{author.site}">#{author.site}</a></span></p>
+                                </div>
                             </ui:repeat>
                         </div>
                     </div>

@@ -204,7 +204,7 @@ public class AuthorDAO implements Serializable {
             List<Author> authorList = (List<Author>) em.createNativeQuery("select a.* from (mandril_author a"
                     + " join mandril_educational_object_author eoa on a.id = eoa.author_id)"
                     + " join mandril_educational_object eo on eo.id = eoa.educational_object_id"
-                    + " where eo.id = " + educationalObjectId, Author.class).getResultList();
+                    + " where eo.id = " + educationalObjectId + " order by a.name", Author.class).getResultList();
             return authorList;
         } catch (Exception e){
             e.printStackTrace();

@@ -1,20 +1,31 @@
 .educational-object-box{display: block; width: 900px; margin: 5px 0px 0px 24px;border:1px solid #ababab;overflow:hidden;}
 .educational-object-title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}
+.educational-object-info{padding:18px 0;font-size:11px;}
+.educational-object-info p{clear:both;}
+.educational-object-info a{color:#0000FF;}
+#educational-object{position:relative;float:left;padding:18px 0;font-size:11px;margin-bottom:-15px;}
+#educational-object ul li{margin:8px 0;}
+#educational-object-name{font-size:20px;font-weight:normal;}
 
-#recommend-box{display:none;position:inherit;height:70px;width:275px;top:14px;left:0;padding:10px;background-color:#CCDBF5;}
+#recommend-box{display:none;position:static;height:65px;margin-top:8px;padding:10px;background-color:#CCDBF5;}
 #recommend-box p{margin:0 0 5px;}
+#recommend-close{position:absolute;}
 .area-text-email{width:210px;}
 .btn-send{width:50px;height:18px;margin:5px 0 15px;padding:0 0 3px;float:right;border:none;font-size:11px;color:#fff;cursor:pointer;background:transparent url(/resources/images/btn-send.png) no-repeat top left;}
 
+#download-box{margin-top:20px;}
+
+.author-box{margin-top:10px;}
+
 .license{background:url(/resources/images/cc.png) no-repeat;height:32px;line-height:30px;padding-left:36px;}
+.license a{color:#0000FF;}
 
 .cnt-left{width:475px;margin:15px auto 10px;padding-right:10px;float:left;border-right:1px solid #ababab;}
 #wrap-left{margin:10px 5px 10px 22px;}
 .cnt-right{width:400px;float:right;margin:0 auto 10px;}
 #wrap-right{margin:10px 5px 10px 18px;}
 
-.title{font-weight:bold}
+.title{font-weight:bold;}
 #more-info{margin-top:25px;}
-#more-info h5{margin:5px 0;}
 #more-info p{margin:2px 0;font-size:11px;}
-#more-info p a{color:#333;text-decoration:none;}
+#more-info p a{color:#0000FF;text-decoration:none;}
