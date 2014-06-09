@@ -4,11 +4,11 @@
  */
 package com.guigoh.mandril.dao;
 
+import com.guigoh.mandril.dao.exceptions.NonexistentEntityException;
+import com.guigoh.mandril.dao.exceptions.RollbackFailureException;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
 import com.guigoh.primata.dao.JPAUtil;
-import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
-import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -25,7 +25,7 @@ import javax.persistence.criteria.Root;
 public class EducationalObjectMediaDAO implements Serializable {
 
     private EntityManagerFactory emf = JPAUtil.getEMF();
-
+    
     public EducationalObjectMediaDAO() {
     }
 

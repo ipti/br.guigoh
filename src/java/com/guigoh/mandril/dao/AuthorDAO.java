@@ -198,4 +198,17 @@ public class AuthorDAO implements Serializable {
         }
     }
     
+    public List<Author> getAuthorsByEducationalObject(Integer educationalObjectId){
+        EntityManager em = getEntityManager();
+        try{
+            List<Author> authorList = (List<Author>) em.createNativeQuery("select a.* from (mandril_author a"
+                    + " join mandril_educational_object_author eoa on a.id = eoa.author_id)"
+                    + " join mandril_educational_object eo on eo.id = eoa.educational_object_id"
+                    + " where eo.id = " + educationalObjectId, Author.class).getResultList();
+            return authorList;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

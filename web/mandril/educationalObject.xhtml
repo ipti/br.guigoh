@@ -35,13 +35,13 @@
                         <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
                     </ul>
                     <h:panelGroup styleClass="educational-object-info">
-                        <p><strong>Tags: </strong>#{educationalObjectBean.educationalObject.tagsCollection}</p>
+                        <p><strong>Tags: </strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
                         <p><strong>Tema: </strong>#{educationalObjectBean.educationalObject.themeId.name}</p>
                         <p><strong>Publicado por: </strong>#{educationalObjectBean.educationalObject.socialProfileId.name}</p>    
                     </h:panelGroup>
-                    
+
                     <br/>
-                    
+
                     <div id="download-box">
                         <span class="title">Lista de arquivos</span>
                         <div id="upload-container">
@@ -58,12 +58,17 @@
                         </div>
                         <ul id="download-list"></ul>
                     </div>
-                    
-                    <br/>
 
                     <div id="more-info">
                         <h5 class="title">Sobre os Autores</h5>
-                        <div id="authors-list"></div>
+                        <div id="authors-list">
+                            <ui:repeat value="#{educationalObjectBean.authorList}" var="author">
+                                <p><strong>Nome: </strong><span>#{author.name}</span></p>
+                                <p><strong>Email: </strong><span>#{author.email}</span></p>
+                                <p><strong>Telefone: </strong><span>#{author.phone}</span></p>
+                                <p><strong>Site: </strong><span>#{author.site}</span></p>
+                            </ui:repeat>
+                        </div>
                     </div>
                 </div>
             </div>
