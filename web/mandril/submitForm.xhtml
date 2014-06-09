@@ -45,6 +45,22 @@
                             concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar a Tecnologia Social que estou prestes a publicar
                         </label>
                     </h:panelGroup>
+                    <h:panelGroup styleClass="form2_body">
+                        <h:outputText styleClass="educational_object_label" value="Qual o nome do seu Objeto Educacional?"/>
+                        <h:outputText styleClass="educational_object_tip" value="Limite de 40 caracteres."/>
+                        <h:outputText styleClass="educational_object_name_warning" value="O campo 'Nome' não pode ser vazio."/>
+                        <h:inputText styleClass="educational_object_name" value="#{submitFormBean.educationalObject.name}"/>
+                        <h:outputText styleClass="educational_object_label" value="Qual é o tema principal tratado pelo Objeto Educacional?"/>
+                        <h:outputText styleClass="educational_object_tip" value="Apenas uma opção."/>
+                        <h:outputText styleClass="educational_object_theme_warning" value="Selecione ao menos uma opção."/>
+                        <h:selectOneRadio styleClass="educational_object_theme" value="#{submitFormBean.educationalObject.themeId}">
+                            <f:selectItems id="theme" value="#{submitFormBean.interestThemesList}" var="theme" itemLabel="#{theme.name}" itemValue="#{theme}"/>
+                        </h:selectOneRadio>
+                        <h:outputText styleClass="educational_object_label" value="Palavras chave"/>
+                        <h:outputText styleClass="educational_object_tip" value="Digite as palavras separadas por vírgula. Limite de 7 palavras-chave."/>
+                        <h:outputText styleClass="educational_object_tags_warning" value="Digite ao menos uma palavra chave."/>
+                        <h:inputText styleClass="educational_object_tags" value="#{submitFormBean.tags}"/>
+                    </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
                     <h:link styleClass="button_cancel" outcome="/mandril/publishEnvironment.xhtml">
@@ -54,7 +70,7 @@
                     <h:panelGroup styleClass="progress_bar">
                         <div class="progress"></div>
                         <span class="progress-count">
-                            <span class="page-number">1</span>/7
+                            <span class="page-number">1</span>/4
                         </span>
                     </h:panelGroup>
                     <span class="button_next">
