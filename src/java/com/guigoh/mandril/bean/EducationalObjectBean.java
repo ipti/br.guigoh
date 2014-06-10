@@ -6,8 +6,10 @@ package com.guigoh.mandril.bean;
 
 import com.guigoh.mandril.bo.AuthorBO;
 import com.guigoh.mandril.bo.EducationalObjectBO;
+import com.guigoh.mandril.bo.EducationalObjectMediaBO;
 import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
+import com.guigoh.mandril.entity.EducationalObjectMedia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ public class EducationalObjectBean implements Serializable {
     private EducationalObjectBO educationalObjectBO;
     private List<Author> authorList;
     private AuthorBO authorBO;
+    private EducationalObjectMediaBO educationalObjectMediaBO;
+    private List<EducationalObjectMedia> educationalObjectMediaList;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -35,8 +39,11 @@ public class EducationalObjectBean implements Serializable {
             educationalObject = new EducationalObject();
             authorBO = new AuthorBO();
             authorList = new ArrayList<Author>();
+            educationalObjectMediaBO = new EducationalObjectMediaBO();
+            educationalObjectMediaList = new ArrayList<EducationalObjectMedia>();
             findEducationalObject(educationalObjectID);
             getAuthorsByEducationalObject(educationalObjectID);
+            getMediasByEducationalObject(educationalObjectID);
         }
     }
 
@@ -44,8 +51,12 @@ public class EducationalObjectBean implements Serializable {
         educationalObject = educationalObjectBO.findEducationalObject(id);
     }
 
-    private void getAuthorsByEducationalObject(Integer educationalObjectId){
-        authorList = authorBO.getAuthorsByEducationalObject(educationalObjectId);
+    private void getAuthorsByEducationalObject(Integer educationalObjectID){
+        authorList = authorBO.getAuthorsByEducationalObject(educationalObjectID);
+    }
+    
+    private void getMediasByEducationalObject(Integer educationalObjectID){
+        educationalObjectMediaList = educationalObjectMediaBO.getMediasByEducationalObject(educationalObjectID);
     }
     
     public EducationalObject getEducationalObject() {
@@ -70,5 +81,13 @@ public class EducationalObjectBean implements Serializable {
 
     public void setAuthorList(List<Author> authorList) {
         this.authorList = authorList;
+    }
+
+    public List<EducationalObjectMedia> getEducationalObjectMediaList() {
+        return educationalObjectMediaList;
+    }
+
+    public void setEducationalObjectMediaList(List<EducationalObjectMedia> educationalObjectMediaList) {
+        this.educationalObjectMediaList = educationalObjectMediaList;
     }
 }

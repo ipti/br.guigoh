@@ -184,4 +184,15 @@ public class EducationalObjectMediaDAO implements Serializable {
             em.close();
         }
     }
+    
+    public List<EducationalObjectMedia> getMediasByEducationalObject(Integer educationalObjectID){
+        EntityManager em = getEntityManager();
+        try{
+            List<EducationalObjectMedia> educationalObjectMediaList = (List<EducationalObjectMedia>)em.createNativeQuery("select * from mandril_educational_object_media eom"
+                    + " where educational_object_id = " + educationalObjectID, EducationalObjectMedia.class).getResultList();
+            return educationalObjectMediaList;
+        } finally{
+            em.close();
+        }
+    }
 }

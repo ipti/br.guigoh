@@ -45,8 +45,10 @@
                     </h:panelGroup>
                     <div id="download-box">
                         <span class="title">Lista de arquivos</span>
-                        <ui:repeat value="" var="media">
-                            <!-- trazer mídias -->
+                        <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="media">
+                            <div class="media-box">
+                                #{media.name} #{media.type} #{media.size} Download
+                            </div>
                         </ui:repeat>
                     </div>
                     <div id="more-info">
