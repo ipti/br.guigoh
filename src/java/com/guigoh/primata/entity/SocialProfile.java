@@ -30,7 +30,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -404,7 +403,6 @@ public class SocialProfile implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<DiscussionTopicWarnings> getDiscussionTopicWarningsCollection() {
         return discussionTopicWarningsCollection;
     }
@@ -414,7 +412,6 @@ public class SocialProfile implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<DiscussionTopic> getDiscussionTopicCollection() {
         return discussionTopicCollection;
     }
@@ -424,7 +421,6 @@ public class SocialProfile implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<DiscussionTopicMsg> getDiscussionTopicMsgCollection() {
         return discussionTopicMsgCollection;
     }
@@ -442,7 +438,6 @@ public class SocialProfile implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<EducationalObject> getEducationalObjectCollection() {
         return educationalObjectCollection;
     }

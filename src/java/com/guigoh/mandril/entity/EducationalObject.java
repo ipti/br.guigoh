@@ -31,7 +31,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -114,7 +113,6 @@ public class EducationalObject implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<Tags> getTagsCollection() {
         return tagsCollection;
     }
@@ -124,7 +122,6 @@ public class EducationalObject implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<Author> getAuthorCollection() {
         return authorCollection;
     }
@@ -134,7 +131,6 @@ public class EducationalObject implements Serializable {
     }
 
     @XmlTransient
-    @JsonIgnore
     public Collection<EducationalObjectMedia> getEducationalObjectMediaCollection() {
         return educationalObjectMediaCollection;
     }
