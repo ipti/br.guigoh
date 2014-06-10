@@ -31,13 +31,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Joe
  */
-@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload"})
+@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload","/mandril/Upload"})
 public class Upload extends HttpServlet implements Serializable{
 
     Users user = new Users();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
+        System.out.println("teste");
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         List<FileItem> items = null;
@@ -56,7 +57,8 @@ public class Upload extends HttpServlet implements Serializable{
                         || (item.getContentType().equals("image/png")) ) && item.getSize() < 1000000 ) {
                     //String caminho = getServletContext().getRealPath();
                     try {
-                        loadUserCookie(request);
+                        user.setToken(CookieService.getCookie("token"));
+                        user.setUsername(CookieService.getCookie("user"));
                         SocialProfileBO socialProfileBO = new SocialProfileBO();
                         SocialProfile socialProfile = socialProfileBO.findSocialProfile(user.getToken());
 
@@ -80,20 +82,6 @@ public class Upload extends HttpServlet implements Serializable{
             }
         }
         request.getRequestDispatcher("/primata/profile/viewProfile.xhtml").forward(request, response);
-    }
-
-    private void loadUserCookie(HttpServletRequest request) {
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().trim().equalsIgnoreCase("user")) {
-                    user.setUsername(cookie.getValue());
-                } else if (cookie.getName().trim().equalsIgnoreCase("token")) {
-                    user.setToken(cookie.getValue());
-                }
-            }
-        }
     }
 
     @Override

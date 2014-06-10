@@ -58,17 +58,21 @@ $(document).ready(function() {
        
     });
     $(document).on('click', '.button_add', function(){
-        if (!String($(".educational_object_author_name").val()).match("[a-zA-Z ]{3,40}")){
-            $(".educational_object_author_warning1").text("Digite um campo 'Nome' válido");
+        var nameValue = $(".educational_object_author_name").val();
+        var emailValue = $(".educational_object_author_email").val();
+        var phoneValue = $(".educational_object_author_phone").val();
+        var siteValue = $(".educational_object_author_site").val();
+        if (!String(nameValue).match("[a-zA-Z ]{3,40}")){
+            $(".educational_object_author_warning1").text("Digite um campo 'Nome' válido. Apenas letras, mínimo de 3 caracteres.");
             $(".educational_object_author_warning1").css("display","block");
-        }else if (!String($(".educational_object_author_email").val()).match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")){
-            $(".educational_object_author_warning1").text("Digite um campo 'E-mail' válido");
+        }else if (emailValue != "" && !String(emailValue).match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")){
+            $(".educational_object_author_warning1").text("Digite um campo 'E-mail' válido. Ex: ____@____.__");
             $(".educational_object_author_warning1").css("display","block");
-        }else if (!String($(".educational_object_author_phone").val()).match("\\(\\d{2}\\) \\d{4}-\\d{4}")){
-            $(".educational_object_author_warning1").text("Digite um campo 'Phone' válido");
+        }else if (phoneValue != "" && !String(phoneValue).match("\\(\\d{2}\\) \\d{4}-\\d{4}")){
+            $(".educational_object_author_warning1").text("Digite um campo 'Telefone' válido.");
             $(".educational_object_author_warning1").css("display","block");
-        }else if (!String($(".educational_object_author_site").val()).match("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?")){
-            $(".educational_object_author_warning1").text("Digite um campo 'Site' válido");
+        }else if (siteValue != "" && !String(siteValue).match("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?")){
+            $(".educational_object_author_warning1").text("Digite um campo 'Site' válido. Ex: _____.___.__");
             $(".educational_object_author_warning1").css("display","block");
         }else{
             $(".educational_object_author_warning1").hide();
