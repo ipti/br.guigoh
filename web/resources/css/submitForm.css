@@ -17,6 +17,9 @@
 .form1_highlight{font-size:13px;background-color:#999999;color: #FFFFFF;line-height: 16px;margin: 20px 0;display:block;padding: 10px;}
 .form2_body{display:none;}
 .form3_body{display:none;}
+.form4_body{display:none;}
+.educational_object_image{display:block;margin:30px 0 0 30px}
+.educational_object_medias{display:block;margin:30px 0 0 30px}
 .educational_object_author{float:left; margin:10px 0 0 30px;}
 .educational_object_author_label{font-size: 13px;line-height: 18px;font-weight:bold;float:left}
 .educational_object_author_value{width:200px;float:left}
