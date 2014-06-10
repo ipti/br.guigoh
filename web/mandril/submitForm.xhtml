@@ -6,16 +6,18 @@
     <ui:define name="title">Formulário de Registro de Objetos Educacionais</ui:define>
     <ui:define name="content">
         <link rel="stylesheet" href="../resources/css/submitForm.css" />
+        <script src="/resources/js/jquery.mask.js"></script>
         <script type="text/javascript" src="../resources/js/submitForm.js" />
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
-        <h:form>
+        <h:form prependId="false">
             <h:panelGroup styleClass="register_box">
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="Formulário de Registro de Objetos Educacionais"/>
                 </h:panelGroup>
                 <h:panelGroup styleClass="forms">
+
                     <h:panelGroup styleClass="form1_body">
                         <p class="form1_title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
                         <p>
@@ -45,11 +47,12 @@
                             concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar a Tecnologia Social que estou prestes a publicar
                         </label>
                     </h:panelGroup>
+
                     <h:panelGroup styleClass="form2_body">
                         <h:outputText styleClass="educational_object_label" value="Qual o nome do seu Objeto Educacional?"/>
                         <h:outputText styleClass="educational_object_tip" value="Limite de 40 caracteres."/>
                         <h:outputText styleClass="educational_object_name_warning" value="O campo 'Nome' não pode ser vazio."/>
-                        <h:inputText styleClass="educational_object_name" value="#{submitFormBean.educationalObject.name}"/>
+                        <h:inputText styleClass="educational_object_name" maxlength="40" value="#{submitFormBean.educationalObject.name}"/>
                         <h:outputText styleClass="educational_object_label" value="Qual é o tema principal tratado pelo Objeto Educacional?"/>
                         <h:outputText styleClass="educational_object_tip" value="Apenas uma opção."/>
                         <h:outputText styleClass="educational_object_theme_warning" value="Selecione ao menos uma opção."/>
@@ -60,6 +63,43 @@
                         <h:outputText styleClass="educational_object_tip" value="Digite as palavras separadas por vírgula. Limite de 7 palavras-chave."/>
                         <h:outputText styleClass="educational_object_tags_warning" value="Digite ao menos uma palavra chave."/>
                         <h:inputText styleClass="educational_object_tags" value="#{submitFormBean.tags}"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="form3" styleClass="form3_body">
+                        <h:outputText styleClass="educational_object_label" value="Autores"/>
+                        <h:outputText styleClass="educational_object_tip" value="Pessoal responsável pela produção deste Objeto Educacional. Limite de 4 autores."/>
+                        <h:outputText styleClass="educational_object_author_warning1"/>
+                        <h:outputText styleClass="educational_object_author_warning2" value="Insira ao menos 1 autor."/>
+                        <h:panelGrid id="author_add" columns="2" styleClass="educational_object_author">
+                            <h:outputText styleClass="educational_object_author_label" value="Nome:"/>
+                            <h:inputText styleClass="educational_object_author_name" value="#{submitFormBean.author.name}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="E-mail:"/>
+                            <h:inputText styleClass="educational_object_author_email" value="#{submitFormBean.author.email}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="Telefone:"/>
+                            <h:inputText styleClass="educational_object_author_phone"  value="#{submitFormBean.author.phone}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="Site:"/>
+                            <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
+                        </h:panelGrid>
+                        <h:commandLink styleClass="button_add">
+                            <f:ajax render="authors_added" event="click" execute="form3" listener="#{submitFormBean.addAuthor()}"/>
+                            <img id="button_add_icon" src="/resources/images/green-plus.png"/>
+                            <span class="button_add_label">Adicionar</span>
+                        </h:commandLink>
+                        <h:panelGroup id="authors_added" styleClass="authors_added">
+                            <ui:repeat value="#{submitFormBean.authorList}" var="author">
+                                <ui:param name="author" value="#{author}"/>
+                                <h:panelGrid styleClass="author_added" columns="2">
+                                    <h:outputText styleClass="authors_added_label" value="Nome:"/><h:outputText styleClass="authors_added_value" value="#{author.name}"/>
+                                    <h:outputText styleClass="authors_added_label" value="E-mail:"/><h:outputText styleClass="authors_added_value" value="#{author.email}"/>
+                                    <h:outputText styleClass="authors_added_label" value="Telefone:"/><h:outputText styleClass="authors_added_value" value="#{author.phone}"/>
+                                    <h:outputText styleClass="authors_added_label" value="Site:"/><h:outputText styleClass="authors_added_value" value="#{author.site}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="form4" styleClass="form4_body">
+
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
