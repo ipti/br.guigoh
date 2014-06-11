@@ -45,11 +45,32 @@
                     </h:panelGroup>
                     <div id="download-box">
                         <span class="title">Lista de arquivos</span>
-                        <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="media">
+
+                        <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="media">
+                            <h:column>
+                                <f:facet name="header">Nome</f:facet>
+                                #{media.name}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Tipo</f:facet>
+                                #{media.type}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Tamanho</f:facet>
+                                #{media.size}mb
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"/>
+                                Download
+                            </h:column>
+                        </h:dataTable>
+
+                        <!--<ui:repeat value="{educationalObjectBean.educationalObjectMediaList}" var="media">
                             <div class="media-box">
-                                #{media.name} #{media.type} #{media.size} Download
+                                {media.name} {media.type} {media.size} Download
                             </div>
                         </ui:repeat>
+                        -->
                     </div>
                     <div id="more-info">
                         <h5 class="title">Sobre os Autores</h5>
