@@ -11,16 +11,16 @@ import com.guigoh.primata.entity.Interests;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author ipti004
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "submitFormBean")
 public class SubmitFormBean implements Serializable {
 
@@ -29,6 +29,7 @@ public class SubmitFormBean implements Serializable {
     private List<Author> authorList;
     private Author author;
     private String tags;
+    private Part imageFile;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -50,7 +51,7 @@ public class SubmitFormBean implements Serializable {
             }
         }
     }
-
+    
     private void loadInterestThemes() {
         InterestsBO interestsBO = new InterestsBO();
         interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");
@@ -94,5 +95,13 @@ public class SubmitFormBean implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public Part getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(Part imageFile) {
+        this.imageFile = imageFile;
     }
 }

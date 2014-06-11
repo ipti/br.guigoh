@@ -81,7 +81,7 @@
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
                         <h:commandLink styleClass="button_add">
-                            <f:ajax render="authors_added" event="click" execute="form3" listener="#{submitFormBean.addAuthor()}"/>
+                            <f:ajax render="authors_added" execute="form3" listener="#{submitFormBean.addAuthor()}" />
                             <img id="button_add_icon" src="/resources/images/green-plus.png"/>
                             <span class="button_add_label">Adicionar</span>
                         </h:commandLink>
@@ -97,21 +97,12 @@
                             </ui:repeat>
                         </h:panelGroup>
                     </h:panelGroup>
-
                     <h:panelGroup styleClass="form4_body">
                         <h:outputText styleClass="educational_object_label" value="Anexar arquivos"/>
                         <h:outputText styleClass="educational_object_tip" value="Fotos, vídeos, cartilhas, documentos explicativos etc."/>
                         <h:panelGroup styleClass="educational_object_image">
                             <h:outputText styleClass="educational_object_label" value="Imagem"/>
                             <h:outputText styleClass="educational_object_tip" value="A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif e bmp."/>
-                            <form action="Upload" method="POST" enctype="multipart/form-data">
-                                <input type="file" name="file" id="filechoose" />
-                                <input type="submit" />
-                            </form>
-                            <form action="javascript:void(0)" name="Upload" method="post"
-                                  enctype="multipart/form-data" onSubmit="return false;" class="upload-form">
-                                <input type="file" class="upload" id="upload-picture" name="file[]" />
-                            </form>
                         </h:panelGroup>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="Objeto Educacional"/>
@@ -145,6 +136,12 @@
                 </h:panelGroup>
             </h:panelGroup>
             <span class="clear"></span>
+        </h:form>
+        <h:form enctype="multipart/form-data">
+            <h:inputFile value="#{submitFormBean.imageFile}" required="true" >
+                <f:ajax execute="@this" render="image" listener="#{submitFormBean.teste()}"/>
+            </h:inputFile>
+            <h:graphicImage id="image" value="#{submitFormBean.imageFile}"/>
         </h:form>
     </ui:define>
 </ui:composition>
