@@ -37,7 +37,7 @@ $(document).ready(function() {
             }
         }
         //End
-        if (validate == true) {
+        if (validate) {
             $(".form" + page + "_body").hide();
             $(".page-number").text(++page);
             $(".form" + page + "_body").show();
@@ -55,10 +55,11 @@ $(document).ready(function() {
             $(".educational_object_author_warning1").hide();
             $(".educational_object_author_warning2").hide();
             $(".educational_object_image_warning").hide();
+            $(".educational_object_media_warning").hide();
         }
 
     });
-    $(document).on('click', '.button_add', function() {
+    $(document).on('click', '.button_author_add', function() {
         var nameValue = $(".educational_object_author_name").val();
         var emailValue = $(".educational_object_author_email").val();
         var phoneValue = $(".educational_object_author_phone").val();
@@ -80,8 +81,8 @@ $(document).ready(function() {
         }
     });
     $(document).on('change', '#imageFile', function(e) {
-        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-            var file = e.originalEvent.srcElement.files[i];
+        for (var i = 0; i < e.originalEvent.target.files.length; i++) {
+            var file = e.originalEvent.target.files[i];
             var reader = new FileReader();
             reader.onloadend = function() {
                 $("#image").attr("src", reader.result);
@@ -91,13 +92,32 @@ $(document).ready(function() {
             reader.readAsDataURL(file);
         }
     });
-    $(document).on('click', '.button_submit', function() {
+    $(document).on('change', '#mediaFile', function(e) {
+        for (var i = 0; i < e.originalEvent.target.files.length; i++) {
+            var file = e.originalEvent.target.files[i];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                $(".educational_object_media_warning").hide();
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    $(".button_submit").click(function() {
+        var validate = true;
         if ($("#image").attr("src") === undefined) {
             $(".educational_object_image_warning").css("display", "block");
-        } else {
+            validate = false;
+        }
+        if ($(".media_added").length == 0) {
+                validate = false;
+                $(".educational_object_media_warning").css("display", "block");
+            }
+        if (validate) {
             $(".submit").click();
+            $(".form4_body").hide();
+            $(".form5_body").css("display", "block");
+            $(".button_options").hide();
         }
     });
 });
-
 

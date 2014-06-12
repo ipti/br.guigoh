@@ -16,7 +16,7 @@
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="Formulário de Registro de Objetos Educacionais"/>
                 </h:panelGroup>
-                <h:panelGroup styleClass="forms">
+                <h:panelGroup id="forms" styleClass="forms">
                     <h:panelGroup styleClass="form1_body">
                         <p class="form1_title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
                         <p>
@@ -78,7 +78,7 @@
                             <h:outputText styleClass="educational_object_author_label" value="Site:"/>
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
-                        <h:commandLink styleClass="button_add" actionListener="#{submitFormBean.addAuthor()}">
+                        <h:commandLink styleClass="button_author_add" actionListener="#{submitFormBean.addAuthor()}">
                             <f:ajax render="authors_added" execute="form3"/>
                             <img id="button_add_icon" src="/resources/images/green-plus.png"/>
                             <span class="button_add_label">Adicionar</span>
@@ -95,20 +95,50 @@
                             </ui:repeat>
                         </h:panelGroup>
                     </h:panelGroup>
-                    <h:panelGroup styleClass="form4_body">
+                    <h:panelGroup id="form4" styleClass="form4_body">
                         <h:outputText styleClass="educational_object_label" value="Anexar arquivos"/>
                         <h:outputText styleClass="educational_object_tip" value="Fotos, vídeos, cartilhas, documentos explicativos etc."/>
                         <h:panelGroup styleClass="educational_object_image">
                             <h:outputText styleClass="educational_object_label" value="Imagem"/>
                             <h:outputText styleClass="educational_object_tip" value="A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif."/>
                             <h:outputText styleClass="educational_object_image_warning" value="Insira uma imagem para o Objeto Educacional."/>
-                            <h:inputFile id="imageFile" value="#{submitFormBean.imageFile}" required="true"/>
+                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}" required="true"/>
                             <img id="image" src=""/>
                         </h:panelGroup>
+                        <span class="clear"></span>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="Objeto Educacional"/>
-                            <h:outputText styleClass="educational_object_tip" value="Tipos de arquivos suportados: wav, mp3,mp4,ogg,webM, swf, jpg, png, gif, bmp, pdf, doc e txt."/>
+                            <h:outputText styleClass="educational_object_tip" value="Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3,mp4,ogg,webM, swf, jpg, png, gif, bmp, pdf, doc e txt."/>
+                            <h:outputText styleClass="educational_object_media_warning" value="Insira ao menos 1 mídia para o Objeto Educacional."/>
+                            <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}" required="true"/>
+                            <h:commandLink styleClass="button_media_add" actionListener="#{submitFormBean.addMedia()}">
+                                <f:ajax render="medias_added" execute="form4"/>
+                                <img id="button_add_icon" src="/resources/images/green-plus.png"/>
+                                <span class="button_add_label">Adicionar</span>
+                            </h:commandLink>
+                            <h:panelGroup id="medias_added" styleClass="medias_added">
+                                <ui:repeat value="#{submitFormBean.mediaList}" var="media">
+                                    <h:panelGrid styleClass="media_added" columns="6">
+                                        <h:outputText styleClass="file_attach_image"></h:outputText>
+                                        <h:panelGroup styleClass="attached_file_box">
+                                            <h:outputText styleClass="attached_file" value="#{media.submittedFileName}"></h:outputText>
+                                        </h:panelGroup>
+                                    </h:panelGrid>
+                                </ui:repeat>
+                            </h:panelGroup>
                         </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="form5" styleClass="form5_body">
+                        <h:outputText styleClass="educational_object_label" value="Seu Objeto Educacional foi enviado para a revisão."/>
+                        <h:outputText styleClass="educational_object_tip" value="Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede."/>
+                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
+                            <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
+                            <span class="publish_new_object_label">Publicar um novo Objeto Educacional</span>
+                        </a>
+                        <a class="back_to_home_container" href="/primata/home.xhtml">
+                            <img id="back_to_home" src="../resources/images/lamp.png"/>
+                            <span class="back_to_home_label">Voltar à pagina inicial</span>
+                        </a>
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
@@ -131,7 +161,7 @@
                         <span class="button_submit_label">Submeter</span>
                     </h:panelGroup>
                     <h:commandLink styleClass="submit" action="#{submitFormBean.submit()}">
-                        <f:ajax execute="@form"/>
+                        <f:ajax execute="forms" render=""/>
                     </h:commandLink>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/images/back.png"/>

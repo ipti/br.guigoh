@@ -12,13 +12,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.Part;
 
 /**
@@ -35,6 +32,8 @@ public class SubmitFormBean implements Serializable {
     private Author author;
     private String tags;
     private Part imageFile;
+    private Part mediaFile;
+    private List<Part> mediaList;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -42,6 +41,7 @@ public class SubmitFormBean implements Serializable {
             authorList = new ArrayList<Author>();
             educationalObject = new EducationalObject();
             author = new Author();
+            mediaList = new ArrayList<Part>();
             loadInterestThemes();
         }
     }
@@ -58,9 +58,19 @@ public class SubmitFormBean implements Serializable {
         }
     }
 
-    public void submit() throws IOException {
+    public void addMedia() throws IOException {
+        if (mediaList.size() < 3) {
+            if(!mediaFile.getSubmittedFileName().equals("")){
+                mediaList.add(mediaFile);
+                mediaFile.delete();
+            }
+        }
+    }
+
+    
+    public void submit() {
+        System.out.println("addSubmit");
         System.out.println(imageFile);
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/home.xhtml");
     }
 
     private void loadInterestThemes() {
@@ -115,4 +125,21 @@ public class SubmitFormBean implements Serializable {
     public void setImageFile(Part imageFile) {
         this.imageFile = imageFile;
     }
+
+    public Part getMediaFile() {
+        return mediaFile;
+    }
+
+    public void setMediaFile(Part mediaFile) {
+        this.mediaFile = mediaFile;
+    }
+
+    public List<Part> getMediaList() {
+        return mediaList;
+    }
+
+    public void setMediaList(List<Part> mediaList) {
+        this.mediaList = mediaList;
+    }
+
 }
