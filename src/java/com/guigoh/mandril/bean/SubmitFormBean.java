@@ -8,12 +8,17 @@ import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.entity.Interests;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.servlet.http.Part;
 
 /**
@@ -35,6 +40,7 @@ public class SubmitFormBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             interestThemesList = new ArrayList<Interests>();
             authorList = new ArrayList<Author>();
+            educationalObject = new EducationalObject();
             author = new Author();
             loadInterestThemes();
         }
@@ -51,7 +57,12 @@ public class SubmitFormBean implements Serializable {
             }
         }
     }
-    
+
+    public void submit() throws IOException {
+        System.out.println(imageFile);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/home.xhtml");
+    }
+
     private void loadInterestThemes() {
         InterestsBO interestsBO = new InterestsBO();
         interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");

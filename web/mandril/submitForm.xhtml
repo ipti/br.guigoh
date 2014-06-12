@@ -11,13 +11,12 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
-        <h:form prependId="false">
+        <h:form prependId="false" enctype="multipart/form-data">
             <h:panelGroup styleClass="register_box">
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="Formulário de Registro de Objetos Educacionais"/>
                 </h:panelGroup>
                 <h:panelGroup styleClass="forms">
-
                     <h:panelGroup styleClass="form1_body">
                         <p class="form1_title">LICENCIAMENTO DE SEU OBJETO EDUCACIONAL</p>
                         <p>
@@ -47,7 +46,6 @@
                             concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar a Tecnologia Social que estou prestes a publicar
                         </label>
                     </h:panelGroup>
-
                     <h:panelGroup styleClass="form2_body">
                         <h:outputText styleClass="educational_object_label" value="Qual o nome do seu Objeto Educacional?"/>
                         <h:outputText styleClass="educational_object_tip" value="Limite de 40 caracteres."/>
@@ -56,7 +54,8 @@
                         <h:outputText styleClass="educational_object_label" value="Qual é o tema principal tratado pelo Objeto Educacional?"/>
                         <h:outputText styleClass="educational_object_tip" value="Apenas uma opção."/>
                         <h:outputText styleClass="educational_object_theme_warning" value="Selecione ao menos uma opção."/>
-                        <h:selectOneRadio styleClass="educational_object_theme" value="#{submitFormBean.educationalObject.themeId}">
+                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" value="#{submitFormBean.educationalObject.themeId}">
+                            <f:converter converterId="InterestsConverter"/>
                             <f:selectItems id="theme" value="#{submitFormBean.interestThemesList}" var="theme" itemLabel="#{theme.name}" itemValue="#{theme}"/>
                         </h:selectOneRadio>
                         <h:outputText styleClass="educational_object_label" value="Palavras chave"/>
@@ -64,7 +63,6 @@
                         <h:outputText styleClass="educational_object_tags_warning" value="Digite ao menos uma palavra chave."/>
                         <h:inputText styleClass="educational_object_tags" value="#{submitFormBean.tags}"/>
                     </h:panelGroup>
-
                     <h:panelGroup id="form3" styleClass="form3_body">
                         <h:outputText styleClass="educational_object_label" value="Autores"/>
                         <h:outputText styleClass="educational_object_tip" value="Pessoal responsável pela produção deste Objeto Educacional. Limite de 4 autores."/>
@@ -80,8 +78,8 @@
                             <h:outputText styleClass="educational_object_author_label" value="Site:"/>
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
-                        <h:commandLink styleClass="button_add">
-                            <f:ajax render="authors_added" execute="form3" listener="#{submitFormBean.addAuthor()}" />
+                        <h:commandLink styleClass="button_add" actionListener="#{submitFormBean.addAuthor()}">
+                            <f:ajax render="authors_added" execute="form3"/>
                             <img id="button_add_icon" src="/resources/images/green-plus.png"/>
                             <span class="button_add_label">Adicionar</span>
                         </h:commandLink>
@@ -102,7 +100,10 @@
                         <h:outputText styleClass="educational_object_tip" value="Fotos, vídeos, cartilhas, documentos explicativos etc."/>
                         <h:panelGroup styleClass="educational_object_image">
                             <h:outputText styleClass="educational_object_label" value="Imagem"/>
-                            <h:outputText styleClass="educational_object_tip" value="A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif e bmp."/>
+                            <h:outputText styleClass="educational_object_tip" value="A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif."/>
+                            <h:outputText styleClass="educational_object_image_warning" value="Insira uma imagem para o Objeto Educacional."/>
+                            <h:inputFile id="imageFile" value="#{submitFormBean.imageFile}" required="true"/>
+                            <img id="image" src=""/>
                         </h:panelGroup>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="Objeto Educacional"/>
@@ -125,9 +126,12 @@
                         <img id="button_next_icon" src="/resources/images/forward.png"/>
                         <span class="button_next_label">Avançar</span>
                     </span>
-                    <h:commandLink styleClass="button_submit">
+                    <h:panelGroup styleClass="button_submit">
                         <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
                         <span class="button_submit_label">Submeter</span>
+                    </h:panelGroup>
+                    <h:commandLink styleClass="submit" action="#{submitFormBean.submit()}">
+                        <f:ajax execute="@form"/>
                     </h:commandLink>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/images/back.png"/>
@@ -136,12 +140,6 @@
                 </h:panelGroup>
             </h:panelGroup>
             <span class="clear"></span>
-        </h:form>
-        <h:form enctype="multipart/form-data">
-            <h:inputFile value="#{submitFormBean.imageFile}" required="true" >
-                <f:ajax execute="@this" render="image" listener="#{submitFormBean.teste()}"/>
-            </h:inputFile>
-            <h:graphicImage id="image" value="#{submitFormBean.imageFile}"/>
         </h:form>
     </ui:define>
 </ui:composition>

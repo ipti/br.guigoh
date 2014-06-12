@@ -32,6 +32,20 @@ public class CookieService {
         }
         return value;
     }
+    
+    public static String getCookieByRequest(String name, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String value = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().trim().equalsIgnoreCase(name)) {
+                    value = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        return value;
+    }
 
     public static void eraseCookie() {
         request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
