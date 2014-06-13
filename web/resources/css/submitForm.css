@@ -18,8 +18,9 @@
 .form2_body{display:none;}
 .form3_body{display:none;}
 .form4_body{display:none;}
-.form5_body{display:none;margin:90px 0 0 0}
+.form5_body{display:block;margin:90px 0 0 0}
 .form5_body span {text-align:center}
+.loading_gif{display:none;margin:100px auto;}
 .educational_object_image{display:block;margin:15px 0 0 30px}
 .educational_object_medias{display:block;margin:30px 0 0 30px}
 .educational_object_author{float:left; margin:10px 0 0 30px;}
@@ -55,7 +56,7 @@
 #button_next_icon{float:right;padding:4px 2px 0}
 .button_next_label{color:black;font-size:13px;float:left;margin:10px 0 0 15px}
 .button_author_add{text-decoration: none;margin:46px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
-.mediaFile{margin:10px 0 0 0}
+.mediaFile{display:block;margin:10px 0 0 0}
 .imageFile{float:left;margin:10px 0 0 0}
 #button_add_icon{float:left;padding:4px 2px}
 .button_add_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}

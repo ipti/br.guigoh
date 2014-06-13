@@ -108,7 +108,7 @@ $(document).ready(function() {
             reader.readAsDataURL(file);
         }
     });
-    $(".button_submit").click(function() {
+    $(document).on('click', '.button_submit' ,function() {
         var validate = true;
         if ($("#image").attr("src") === undefined) {
             $(".educational_object_image_warning").css("display", "block");
@@ -122,6 +122,7 @@ $(document).ready(function() {
             $(".submit").click();
             $(".form4_body").hide();
             $(".form5_body").css("display", "block");
+            $(".loading_gif").css("display", "block");
             $(".button_options").hide();
         }
     });

@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -34,9 +36,11 @@ public class SubmitFormBean implements Serializable {
     private Part imageFile;
     private Part mediaFile;
     private List<Part> mediaList;
+    private boolean submitted;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            submitted = false;
             interestThemesList = new ArrayList<Interests>();
             authorList = new ArrayList<Author>();
             educationalObject = new EducationalObject();
@@ -48,8 +52,13 @@ public class SubmitFormBean implements Serializable {
 
     public void addAuthor() {
         if (authorList.size() < 4) {
+            if (author.getName().matches("[a-zA-Z ]{3,40}")
+                    && (author.getEmail().matches("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b") || author.getEmail().equals(""))
+                    && (author.getPhone().matches("\\(\\d{2}\\) \\d{4}-\\d{4}") || author.getPhone().equals(""))
+                    && (author.getSite().matches("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?") || author.getSite().equals(""))) {
                 authorList.add(author);
                 author = new Author();
+            }
         }
     }
 
@@ -57,15 +66,13 @@ public class SubmitFormBean implements Serializable {
         if (mediaList.size() < 3) {
             if(!mediaFile.getSubmittedFileName().equals("")){
                 mediaList.add(mediaFile);
-                mediaFile.delete();
             }
         }
     }
 
     
-    public void submit() {
-        System.out.println("addSubmit");
-        System.out.println(imageFile);
+    public void submitForm() {
+        submitted = true;
     }
 
     private void loadInterestThemes() {
@@ -135,6 +142,14 @@ public class SubmitFormBean implements Serializable {
 
     public void setMediaList(List<Part> mediaList) {
         this.mediaList = mediaList;
+    }
+
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 
 }
