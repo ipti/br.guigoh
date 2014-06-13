@@ -55,8 +55,7 @@
 #button_next_icon{float:right;padding:4px 2px 0}
 .button_next_label{color:black;font-size:13px;float:left;margin:10px 0 0 15px}
 .button_author_add{text-decoration: none;margin:46px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
-.button_media_add{text-decoration: none;margin:5px 0 0 10px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
-.mediaFile{float:left;margin:10px 0 0 0}
+.mediaFile{margin:10px 0 0 0}
 .imageFile{float:left;margin:10px 0 0 0}
 #button_add_icon{float:left;padding:4px 2px}
 .button_add_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
@@ -76,6 +75,6 @@
 .medias_added{float:left;margin:10px 0 0 0}
 .media_added{float:left;}
 .file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;}
-.attached_file_box{float:left;font-weight:bold;margin:-23px 5px 0;font-size:13px;}
+.attached_file_box{float:left;font-weight:bold;margin:0px 5px 0;font-size:13px;}
 .clear{display:block;clear:both}
 

@@ -78,8 +78,8 @@
                             <h:outputText styleClass="educational_object_author_label" value="Site:"/>
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
-                        <h:commandLink styleClass="button_author_add" actionListener="#{submitFormBean.addAuthor()}">
-                            <f:ajax render="authors_added" execute="form3"/>
+                        <h:commandLink styleClass="button_author_add">
+                            <f:ajax render="authors_added" execute="form3" listener="#{submitFormBean.addAuthor()}"/>
                             <img id="button_add_icon" src="/resources/images/green-plus.png"/>
                             <span class="button_add_label">Adicionar</span>
                         </h:commandLink>
@@ -102,7 +102,7 @@
                             <h:outputText styleClass="educational_object_label" value="Imagem"/>
                             <h:outputText styleClass="educational_object_tip" value="A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif."/>
                             <h:outputText styleClass="educational_object_image_warning" value="Insira uma imagem para o Objeto Educacional."/>
-                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}" required="true"/>
+                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}" />
                             <img id="image" src=""/>
                         </h:panelGroup>
                         <span class="clear"></span>
@@ -110,12 +110,9 @@
                             <h:outputText styleClass="educational_object_label" value="Objeto Educacional"/>
                             <h:outputText styleClass="educational_object_tip" value="Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3,mp4,ogg,webM, swf, jpg, png, gif, bmp, pdf, doc e txt."/>
                             <h:outputText styleClass="educational_object_media_warning" value="Insira ao menos 1 mídia para o Objeto Educacional."/>
-                            <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}" required="true"/>
-                            <h:commandLink styleClass="button_media_add" actionListener="#{submitFormBean.addMedia()}">
-                                <f:ajax render="medias_added" execute="form4"/>
-                                <img id="button_add_icon" src="/resources/images/green-plus.png"/>
-                                <span class="button_add_label">Adicionar</span>
-                            </h:commandLink>
+                            <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}">
+                                <f:ajax execute="@this" listener="#{submitFormBean.addMedia()}" render="medias_added"/>
+                            </h:inputFile>
                             <h:panelGroup id="medias_added" styleClass="medias_added">
                                 <ui:repeat value="#{submitFormBean.mediaList}" var="media">
                                     <h:panelGrid styleClass="media_added" columns="6">

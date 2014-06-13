@@ -64,19 +64,25 @@ $(document).ready(function() {
         var emailValue = $(".educational_object_author_email").val();
         var phoneValue = $(".educational_object_author_phone").val();
         var siteValue = $(".educational_object_author_site").val();
+        var validate = true;
+        var text = "";
         if (!String(nameValue).match("[a-zA-Z ]{3,40}")) {
-            $(".educational_object_author_warning1").text("Digite um campo 'Nome' válido. Apenas letras, mínimo de 3 caracteres.");
-            $(".educational_object_author_warning1").css("display", "block");
+            text = "Digite um campo 'Nome' válido. Apenas letras, mínimo de 3 caracteres";
+            validate = false;
         } else if (emailValue != "" && !String(emailValue).match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")) {
-            $(".educational_object_author_warning1").text("Digite um campo 'E-mail' válido. Ex: ____@____.__");
-            $(".educational_object_author_warning1").css("display", "block");
+            text = "Digite um campo 'E-mail' válido. Ex: ____@____.__";
+            validate = false;
         } else if (phoneValue != "" && !String(phoneValue).match("\\(\\d{2}\\) \\d{4}-\\d{4}")) {
-            $(".educational_object_author_warning1").text("Digite um campo 'Telefone' válido.");
-            $(".educational_object_author_warning1").css("display", "block");
+            text = "Digite um campo 'Telefone' válido.";
+            validate = false;
         } else if (siteValue != "" && !String(siteValue).match("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?")) {
-            $(".educational_object_author_warning1").text("Digite um campo 'Site' válido. Ex: _____.___.__");
+            text = "Digite um campo 'Site' válido. Ex: _____.___.__";
+            validate = false;
+        }
+        if (!validate){
+            $(".educational_object_author_warning1").text(text);
             $(".educational_object_author_warning1").css("display", "block");
-        } else {
+        }else{
             $(".educational_object_author_warning1").hide();
         }
     });
