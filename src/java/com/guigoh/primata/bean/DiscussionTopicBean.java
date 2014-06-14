@@ -49,7 +49,6 @@ public class DiscussionTopicBean implements Serializable {
     private List<DiscussionTopicFiles> discussionTopicFilesList;
     private Integer files;
     private Tags tag;
-    private String tagInput;
     private InterestsBO interestsBO;
     private SocialProfileBO socialProfileBO;
 
@@ -57,10 +56,8 @@ public class DiscussionTopicBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             discussionTopic = new DiscussionTopic();
             discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
-            tagInput = "#";
             tags = new ArrayList<Tags>();
             tag = new Tags();
-            tag.setName(tagInput);
             user = new Users();
             getCookie();
             socialProfileBO = new SocialProfileBO();
@@ -91,24 +88,15 @@ public class DiscussionTopicBean implements Serializable {
         }
     }
 
-    public void fillTag() {
-        tag.setName(tagInput);
-    }
-
     public void addTag() {
-        if (tags.size() <= 3) {
-            if (!tag.getName().equals("#")) {
+        if (tags.size() < 3) {
+            if (!tag.getName().equals("")) {
                 tags.add(tag);
                 tag = new Tags();
-                tagInput = "#";
-                tag.setName(tagInput);
             }
         }
     }
 
-    public boolean isTagsFilled() {
-        return tags.size() == 3 ? true : false;
-    }
 
     public void createTopic() {
         try {
@@ -197,14 +185,6 @@ public class DiscussionTopicBean implements Serializable {
 
     public void setTag(Tags tag) {
         this.tag = tag;
-    }
-
-    public String getTagInput() {
-        return tagInput;
-    }
-
-    public void setTagInput(String tagInput) {
-        this.tagInput = tagInput;
     }
 
     public List<DiscussionTopicFiles> getListDiscussionTopicFiles() {
