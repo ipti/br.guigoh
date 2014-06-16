@@ -3,52 +3,7 @@
  * and open the template in the editor.
  */
 locale = $("localeAcronym").val();
-var inputLabelValue = "";
-var closeButton = "";   
 $(document).ready(function() {
-    if(locale == "ptBR"){
-        inputLabelValue = "Um título que descreva o assunto tratado no seu tópico...";
-        closeButton = "Fechar";
-    }
-    else if(locale == "enUS"){
-        inputLabelValue = "A title that describes the subject matter in your topic..."
-        closeButton = "Close";
-    }
-    else if(locale == "frFR"){
-        inputLabelValue = "Un titre qui décrit la matière dans votre sujet..."
-        closeButton = "Proche";
-    }
-    
-    $('.new_title').val(inputLabelValue);
-    $(document).on('focus', '.new_title', function(){
-        if($('.new_title').val() == inputLabelValue){
-            $('.new_title').css("color","black")
-            $('.new_title').val("");
-        }
-    });
-    $(document).on('focusout', '.new_title', function(){
-        if($('.new_title').val() == ""){
-            $('.new_title').css("color","#ccc")
-            $('.new_title').val(inputLabelValue);
-        }
-    });
-    $(document).on('focus', '.tag_input', function(){
-        if($('.tag_input').val() == "#"){
-            $('.tag_input').css("color","black")
-            $('.tag_input').val("");
-        }
-    });
-    $(document).on('focusout', '.tag_input', function(){
-        if($('.tag_input').val() == ""){
-            $('.tag_input').css("color","#ccc")
-            $('.tag_input').val("#");
-        }
-    });
-    $(document).on('click', '.tag_submit', function(){  
-        $('.tag_input').css("color","#ccc");
-        $('.tag_input').val("#");        
-    });
-    
     loadAll();
     jsf.ajax.addOnEvent(function(data){
         if (data.status === 'success') {
@@ -68,7 +23,7 @@ function loadAll(){
             backgroundColor: "#000", 
             opacity: 0.5
         },
-        buttons:[{text: closeButton,click:function() {$(this).dialog("close");}
+        buttons:[{text: "Close",click:function() {$(this).dialog("close");}
             }],
         close: function(ev, ui) {
             $(this).hide();

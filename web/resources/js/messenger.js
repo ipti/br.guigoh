@@ -109,7 +109,7 @@ function messengerFriends(){
                     cont = cont + 1;
                 }
             }
-            $('.messenger_container .messenger strong').text('('+cont+')'); 
+            $('.messenger_container .messenger span').text('('+cont+')'); 
             $('#messenger_friends p').html('');   
             $('#messenger_friends li').remove();    
             for (var i=0;i<friends.length;i++)
