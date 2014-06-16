@@ -4,10 +4,14 @@
  */
 package com.guigoh.mandril.bean;
 
+import com.guigoh.mandril.bo.EducationalObjectBO;
 import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.primata.bo.InterestsBO;
+import com.guigoh.primata.bo.SocialProfileBO;
+import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.Interests;
+import com.guigoh.primata.entity.SocialProfile;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,6 +76,14 @@ public class SubmitFormBean implements Serializable {
 
     
     public void submitForm() {
+        System.out.println(educationalObject.getName());
+        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
+        SocialProfileBO socialProfileBO = new SocialProfileBO();
+        educationalObject.setSocialProfileId(socialProfileBO.findSocialProfile(CookieService.getCookie("token")));
+        educationalObject.setStatus("PE");
+        educationalObject.setDate(educationalObjectBO.getServerTime());
+        educationalObject.setImage("/teste");
+        educationalObjectBO.create(educationalObject);
         submitted = true;
     }
 

@@ -21,10 +21,10 @@ import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
 import com.guigoh.primata.dao.JPAUtil;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -33,7 +33,7 @@ import javax.transaction.UserTransaction;
 public class EducationalObjectDAO implements Serializable {
 
     private EntityManagerFactory emf = JPAUtil.getEMF();
-    
+
     public EducationalObjectDAO() {
     }
 
@@ -359,19 +359,19 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id){
+
+    public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id) {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
-                    + "where status = 'AC' and theme_id = "+theme_id, EducationalObject.class).getResultList();
+                    + "where status = 'AC' and theme_id = " + theme_id, EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getLatestFourActiveEducationalObjects(){
+
+    public List<EducationalObject> getLatestFourActiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
@@ -381,8 +381,8 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getAllActiveEducationalObjects(){
+
+    public List<EducationalObject> getAllActiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
@@ -392,8 +392,8 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getPendingEducationalObjects(){
+
+    public List<EducationalObject> getPendingEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
@@ -403,11 +403,10 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
-    
+
     public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
         EntityManager em = getEntityManager();
         try {
-
 
             String sql = "select distinct eo.* from mandril_educational_object eo ";
             if (tag != null) {
@@ -428,5 +427,15 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
-    
+
+    public Timestamp getServerTime() {
+        EntityManager em = getEntityManager();
+        try {
+            Timestamp serverTime = (Timestamp) em.createNativeQuery("SELECT date_trunc('seconds', now()::timestamp);").getSingleResult();
+            return serverTime;
+        } finally {
+            em.close();
+        }
+    }
+
 }

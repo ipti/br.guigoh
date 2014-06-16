@@ -31,7 +31,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Joe
  */
-@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload", "/mandril/Upload"})
+@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload"})
 public class Upload extends HttpServlet implements Serializable {
 
     Users user = new Users();
