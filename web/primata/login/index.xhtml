@@ -12,11 +12,11 @@
             var url = window.location;
             var urlString = url.toString();
 
-            if (urlString == "http://plataforma.sebrae.org.br/") {
-                window.location = 'http://sebrae.guigoh.com/primata/auth/login.xhtml';
+            if (urlString == "http://plataforma.sebrae.org.br:8080/") {
+                window.location = 'http://sebrae.guigoh.com:8080/primata/auth/login.xhtml';
             } else {
-                if (urlString == "http://plataforma.rts.org.br/") {
-                    window.location = 'http://rts.guigoh.com/primata/auth/login.xhtml';
+                if (urlString == "http://plataforma.rts.org.br:8080/") {
+                    window.location = 'http://rts.guigoh.com:8080/primata/auth/login.xhtml';
                 } else {
                     window.location = '/primata/auth/login.xhtml';
                 }
