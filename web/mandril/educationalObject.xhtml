@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
         <link rel="stylesheet" href="../resources/css/jquery.wysiwyg.css" type="text/css" />
         <f:metadata>
-            <f:viewParam name="id" value="#{educationalObjectBean.educationalObjectID}" />
+            <f:viewParam id="educationalObjectID" name="id" value="#{educationalObjectBean.educationalObjectID}" />
             <f:event type="preRenderComponent" listener="#{educationalObjectBean.init()}"/>
         </f:metadata>
         <input type="hidden" id="reviewObjectId"/>
@@ -17,10 +17,13 @@
         <div class="educational-object-box">
             <div class="cnt-right">
                 <div id="wrap-right">
-                    <!--
-                    <img src="HASHTAG{educationalObjectBean.educationalObject.image}"/>
-                    <br/>Testando imagem
-                    -->
+                    <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaPreview">
+                        <h:outputText rendered="#{mediaPreview.type.equalsIgnoreCase('PDF')||mediaPreview.type.equalsIgnoreCase('DOC')}" value="#{mediaPreview.name}.#{mediaPreview.type} indisponível para visualização."/>
+                        <h:graphicImage rendered="#{mediaPreview.type.equalsIgnoreCase('JPG')||mediaPreview.type.equalsIgnoreCase('PNG')||mediaPreview.type.equalsIgnoreCase('GIF')}" url="#{mediaPreview.media}"/>
+                        <h:panelGroup rendered="#{mediaPreview.type.equalsIgnoreCase('AVI')||mediaPreview.type.equalsIgnoreCase('MP4')}">
+                            <video src="#{mediaPreview.media}" width="640" height="480" controls="preload"/>
+                        </h:panelGroup>
+                    </ui:repeat>
                 </div>
             </div>
             <div class="cnt-left">
@@ -46,31 +49,24 @@
                     <div id="download-box">
                         <span class="title">Lista de arquivos</span>
 
-                        <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="media">
+                        <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
                             <h:column>
                                 <f:facet name="header">Nome</f:facet>
-                                #{media.name}
+                                #{mediaInfo.name}.#{mediaInfo.type}
                             </h:column>
-                            <h:column>
+                            <!--<h:column>
                                 <f:facet name="header">Tipo</f:facet>
-                                #{media.type}
-                            </h:column>
+                                HASHTAG{media.type}
+                            </h:column>-->
                             <h:column>
                                 <f:facet name="header">Tamanho</f:facet>
-                                #{media.size}mb
+                                #{mediaInfo.size}mb
                             </h:column>
                             <h:column>
                                 <f:facet name="header"/>
                                 Download
                             </h:column>
                         </h:dataTable>
-
-                        <!--<ui:repeat value="{educationalObjectBean.educationalObjectMediaList}" var="media">
-                            <div class="media-box">
-                                {media.name} {media.type} {media.size} Download
-                            </div>
-                        </ui:repeat>
-                        -->
                     </div>
                     <div id="more-info">
                         <h5 class="title">Sobre os Autores</h5>
