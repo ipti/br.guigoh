@@ -98,10 +98,10 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
-        String imagePath = System.getProperty("user.home") + File.separator + "guigoh"+File.separator+"educationalobjects"+File.separator + educationalObject.getName() + File.separator + "image" + File.separator;
+        String imagePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getName() + File.separator + "image" + File.separator;
         uploadFile(imageFile, imagePath);
         //AJEITAR
-        educationalObject.setImage("http://cdn.guigoh.com/mandrildata/educationalobjects/" + socialProfile.getSocialProfileId() + "." + imageFile.getContentType().split("/")[1]);
+        educationalObject.setImage("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.create(educationalObject);
         String[] tagArray = tags.replace(" ", "").split(",");
         List<EducationalObject> educationalObjectList = new ArrayList<>();
@@ -124,7 +124,7 @@ public class SubmitFormBean implements Serializable {
             System.out.println(part.getSubmittedFileName());
             educationalObjectMedia.setName(part.getSubmittedFileName());
             educationalObjectMedia.setType(part.getContentType().split("/")[1]);
-            educationalObjectMedia.setMedia("http://cdn.guigoh.com/mandrildata/educationalobjects/" + socialProfile.getSocialProfileId() + "." + imageFile.getContentType().split("/")[1]);
+            educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
             uploadFile(part, mediaPath);
             educationalObjectMediaBO.create(educationalObjectMedia);
             
