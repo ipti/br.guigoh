@@ -6,6 +6,7 @@ package com.guigoh.mandril.bo;
 
 import com.guigoh.mandril.dao.EducationalObjectDAO;
 import com.guigoh.mandril.entity.EducationalObject;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +104,15 @@ public class EducationalObjectBO {
     public EducationalObject findEducationalObject(Integer id){
         try{
             return educationalObjectDAO.findEducationalObject(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Timestamp getServerTime(){
+        try{
+            return educationalObjectDAO.getServerTime();
         }catch (Exception e){
             e.printStackTrace();
         }

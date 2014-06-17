@@ -31,14 +31,13 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Joe
  */
-@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload","/mandril/Upload"})
-public class Upload extends HttpServlet implements Serializable{
+@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload"})
+public class Upload extends HttpServlet implements Serializable {
 
     Users user = new Users();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
-        System.out.println("teste");
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         List<FileItem> items = null;
@@ -53,16 +52,16 @@ public class Upload extends HttpServlet implements Serializable{
             if (item.isFormField()) {
             } else {
                 //byte[] arquivo = item.get();
-                if ( ( (item.getContentType().equals("image/jpeg")) || (item.getContentType().equals("image/gif"))
-                        || (item.getContentType().equals("image/png")) ) && item.getSize() < 1000000 ) {
+                if (((item.getContentType().equals("image/jpeg")) || (item.getContentType().equals("image/gif"))
+                        || (item.getContentType().equals("image/png"))) && item.getSize() < 1000000) {
                     //String caminho = getServletContext().getRealPath();
                     try {
-                        user.setToken(CookieService.getCookie("token"));
-                        user.setUsername(CookieService.getCookie("user"));
+                        user.setToken(CookieService.getCookieByRequest("token", request));
+                        user.setUsername(CookieService.getCookieByRequest("user", request));
                         SocialProfileBO socialProfileBO = new SocialProfileBO();
                         SocialProfile socialProfile = socialProfileBO.findSocialProfile(user.getToken());
 
-                        //File f = new File("C:\\Users\\Joe\\Documents\\Guigoh\\web\\resources\\images\\"+ item.getName());
+                        //File f = new File("C:\\Users\\Paulo\\Documents\\guigohdata\\socialProfile\\photo\\" + socialProfile.getSocialProfileId() + "." + item.getName());
                         String place = this.getServletContext().getRealPath("/");
                         String type = item.getContentType().split("/")[1];
                         File f = new File("/home/JBoss/arteciencia/primatadata/users/" + socialProfile.getSocialProfileId() + "." + type);
@@ -70,8 +69,6 @@ public class Upload extends HttpServlet implements Serializable{
 
                         socialProfile.setPhoto("http://cdn.guigoh.com/primatadata/users/" + socialProfile.getSocialProfileId() + "." + type);
                         socialProfileBO.edit(socialProfile);
-
-
                         //request.setAttribute("content", item.getContentType());
                         //request.setAttribute("size", item.getSize());
                         //request.getRequestDispatcher("/primata/profile/exibearquivo.jsp").forward(request, response);

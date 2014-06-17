@@ -2,7 +2,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:param name="themeName" value="#{themeBean.interest.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
     <ui:define name="content">
@@ -23,7 +24,7 @@
                 <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
                 <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
             </h:selectOneMenu>
-            <h:inputText id="search" styleClass="general_search_input" value="#{themeBean.generalSearch}" autocomplete="off">
+            <h:inputText id="search" styleClass="general_search_input" value="#{themeBean.generalSearch}" autocomplete="off" pt:placeholder="#{localeBean.getString('Pesquise tópicos ou objetos educacionais...')}">
                 <f:ajax listener="#{themeBean.generalSearchEvent()}" execute="search" render="theme_box" event="keyup"/>
             </h:inputText>
             <input type="button" value="" title="Pesquisar em contatos" class="general_search_submit" />
