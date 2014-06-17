@@ -18,10 +18,13 @@
             <div class="cnt-right">
                 <div id="wrap-right">
                     <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaPreview">
-                        <h:outputText rendered="#{mediaPreview.type.equalsIgnoreCase('PDF')||mediaPreview.type.equalsIgnoreCase('DOC')}" value="#{mediaPreview.name}.#{mediaPreview.type} indisponível para visualização."/>
+                        <h:outputText rendered="#{mediaPreview.type.equalsIgnoreCase('PDF')||mediaPreview.type.equalsIgnoreCase('DOC')||mediaPreview.type.equalsIgnoreCase('TXT')}" value="#{mediaPreview.name}.#{mediaPreview.type} indisponível para visualização."/>
                         <h:graphicImage rendered="#{mediaPreview.type.equalsIgnoreCase('JPG')||mediaPreview.type.equalsIgnoreCase('PNG')||mediaPreview.type.equalsIgnoreCase('GIF')}" url="#{mediaPreview.media}"/>
                         <h:panelGroup rendered="#{mediaPreview.type.equalsIgnoreCase('AVI')||mediaPreview.type.equalsIgnoreCase('MP4')}">
-                            <video src="#{mediaPreview.media}" width="640" height="480" controls="preload"/>
+                            <video src="#{mediaPreview.media}" width="550" height="310" controls="preload"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{mediaPreview.type.equalsIgnoreCase('WAV')||mediaPreview.type.equalsIgnoreCase('MP3')||mediaPreview.type.equalsIgnoreCase('WMA')}">
+                            <audio src="#{mediaPreview.media}" controls="preload"/>
                         </h:panelGroup>
                     </ui:repeat>
                 </div>
