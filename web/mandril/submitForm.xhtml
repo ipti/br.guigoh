@@ -120,18 +120,18 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </h:panelGroup>
-                        <h:panelGroup id="form5" styleClass="form5_body">
-                            <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
-                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
-                            <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
-                                <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
-                                <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
-                            </a>
-                            <a class="back_to_home_container" href="/primata/home.xhtml">
-                                <img id="back_to_home" src="../resources/images/lamp.png"/>
-                                <span class="back_to_home_label">#{localeBean.getString('Voltar à pagina inicial')}</span>
-                            </a>
-                        </h:panelGroup>
+                    <h:panelGroup id="form5" styleClass="form5_body">
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
+                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
+                            <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
+                            <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
+                        </a>
+                        <a class="back_to_home_container" href="/primata/home.xhtml">
+                            <img id="back_to_home" src="../resources/images/lamp.png"/>
+                            <span class="back_to_home_label">#{localeBean.getString('Voltar à pagina inicial')}</span>
+                        </a>
+                    </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
                     <h:link styleClass="button_cancel" outcome="/mandril/publishEnvironment.xhtml">
@@ -152,7 +152,8 @@
                         <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit" action="#{submitFormBean.submitForm()}"/>
+                    <h:commandLink styleClass="submit" action="#{submitFormBean.submitForm()}">
+                    </h:commandLink>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/images/back.png"/>
                         <span class="button_back_label">#{localeBean.getString('Voltar')}</span>

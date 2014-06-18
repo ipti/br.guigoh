@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * @author Joe
  */
 @WebServlet(name = "UploadFile", urlPatterns = {"/primata/discussion/UploadFile"})
-public class UploadFile extends HttpServlet implements Serializable{
+public class UploadFile extends HttpServlet {
 
     Users user = new Users();
     Boolean topic = false;

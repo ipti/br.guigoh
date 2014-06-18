@@ -48,7 +48,7 @@ public class SubmitFormBean implements Serializable {
     private Part mediaFile;
     private List<Part> mediaList;
     private boolean submitted;
-
+ 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             submitted = false;
@@ -117,8 +117,7 @@ public class SubmitFormBean implements Serializable {
             educationalObjectMedia.setType(part.getContentType().split("/")[1]);
             educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
             uploadFile(part, mediaPath);
-            educationalObjectMediaBO.create(educationalObjectMedia);
-            
+            educationalObjectMediaBO.create(educationalObjectMedia); 
         }
         submitted = true;
     }
