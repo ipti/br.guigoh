@@ -57,7 +57,7 @@ public class SubmitFormBean implements Serializable {
             educationalObject = new EducationalObject();
             author = new Author();
             mediaList = new ArrayList<Part>();
-            loadInterestThemes();
+            loadInterestThemes(); 
         }
     }
 
