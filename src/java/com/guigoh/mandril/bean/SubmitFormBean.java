@@ -100,7 +100,6 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setDate(educationalObjectBO.getServerTime());
         String imagePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getName() + File.separator + "image" + File.separator;
         uploadFile(imageFile, imagePath);
-        //AJEITAR
         educationalObject.setImage("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.create(educationalObject);
         String[] tagArray = tags.replace(" ", "").split(",");
