@@ -124,7 +124,6 @@ $(document).ready(function() {
             $(".submit").click();
             $(".form4_body").hide();
             $(".form5_body").css("display", "block");
-            $(".loading_gif").css("display", "block");
             $(".button_options").hide();
         }
     });
