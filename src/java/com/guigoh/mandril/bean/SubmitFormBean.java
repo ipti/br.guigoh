@@ -120,7 +120,6 @@ public class SubmitFormBean implements Serializable {
             EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
             educationalObjectMedia.setEducationalObjectId(educationalObject);
             educationalObjectMedia.setSize(BigInteger.valueOf(part.getSize()));
-            System.out.println(part.getSubmittedFileName());
             educationalObjectMedia.setName(part.getSubmittedFileName());
             educationalObjectMedia.setType(part.getContentType().split("/")[1]);
             educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
