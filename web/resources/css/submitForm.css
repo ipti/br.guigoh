@@ -36,8 +36,11 @@
 .educational_object_theme tr{display:block;width:550px;}
 .educational_object_theme td{display:inline-block;width:273px;margin:5px 0 0 0}
 .educational_object_theme label{font-size:13px}
-.educational_object_author_warning1{display:none;font-size:11px;color:red}
-.educational_object_author_warning2{display:none;font-size:11px;color:red}
+.educational_object_author_warning_name{display:none;font-size:11px;color:red}
+.educational_object_author_warning_email{display:none;font-size:11px;color:red}
+.educational_object_author_warning_phone{display:none;font-size:11px;color:red}
+.educational_object_author_warning_site{display:none;font-size:11px;color:red}
+.educational_object_author_warning{display:none;font-size:11px;color:red}
 .educational_object_image_warning{display:none;font-size:11px;color:red}
 .educational_object_media_warning{display:none;font-size:11px;color:red}
 .authors_added{width:550px;float:left;height:180px;text-indent:5px;border:1px solid #ccc;border-radius:10px;}
