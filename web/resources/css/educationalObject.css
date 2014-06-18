@@ -19,6 +19,7 @@
 .media-table{margin-top:10px;font-size:11px;width:270px;}
 .media-table-header{padding:3px;font-weight:bold;}
 .media-table-row{text-align:center;}
+.media-name:hover{background-color:white;}
 
 .license{background:url(/resources/images/cc.png) no-repeat;height:32px;line-height:30px;padding-left:36px;}
 .license a{color:#0000FF;}

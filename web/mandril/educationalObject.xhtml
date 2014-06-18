@@ -16,18 +16,7 @@
         <h:outputText styleClass="educational-object-title" value="#{localeBean.getString('Objeto Educacional')}"/>
         <div class="educational-object-box">
             <div class="cnt-right">
-                <div id="wrap-right">
-                    <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaPreview">
-                        <h:outputText rendered="#{mediaPreview.type.equalsIgnoreCase('PDF')||mediaPreview.type.equalsIgnoreCase('DOC')||mediaPreview.type.equalsIgnoreCase('TXT')}" value="#{mediaPreview.name}.#{mediaPreview.type} indisponível para visualização."/>
-                        <h:graphicImage rendered="#{mediaPreview.type.equalsIgnoreCase('JPG')||mediaPreview.type.equalsIgnoreCase('PNG')||mediaPreview.type.equalsIgnoreCase('GIF')}" url="#{mediaPreview.media}"/>
-                        <h:panelGroup rendered="#{mediaPreview.type.equalsIgnoreCase('AVI')||mediaPreview.type.equalsIgnoreCase('MP4')}">
-                            <video src="#{mediaPreview.media}" width="550" height="310" controls="preload"/>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{mediaPreview.type.equalsIgnoreCase('WAV')||mediaPreview.type.equalsIgnoreCase('MP3')||mediaPreview.type.equalsIgnoreCase('WMA')}">
-                            <audio src="#{mediaPreview.media}" controls="preload"/>
-                        </h:panelGroup>
-                    </ui:repeat>
-                </div>
+                <div id="wrap-right"/>
             </div>
             <div class="cnt-left">
                 <div id="wrap-left">
@@ -55,7 +44,7 @@
                         <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
                             <h:column>
                                 <f:facet name="header">Nome</f:facet>
-                                #{mediaInfo.name}.#{mediaInfo.type}
+                                <span class="media-name">#{mediaInfo.name}.#{mediaInfo.type}</span>
                             </h:column>
                             <!--<h:column>
                                 <f:facet name="header">Tipo</f:facet>
