@@ -86,6 +86,7 @@ $(document).ready(function() {
             $(".educational_object_author_warning_email").hide();
             $(".educational_object_author_warning_phone").hide();
             $(".educational_object_author_warning_site").hide();
+            $(".add").click();
         }
     });
     $(document).on('change', '#imageFile', function(e) {

@@ -7,6 +7,7 @@ package com.guigoh.primata.bo;
 import com.guigoh.primata.dao.DiscussionTopicMsgDAO;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.DiscussionTopicMsg;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author IPTI
  */
-public class DiscussionTopicMsgBO {
+public class DiscussionTopicMsgBO implements Serializable{
 
     private DiscussionTopicMsgDAO discussionTopicMsgDAO;
 

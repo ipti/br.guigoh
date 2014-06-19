@@ -7,12 +7,13 @@ package com.guigoh.primata.bo;
 import com.guigoh.primata.dao.MessengerStatusDAO;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.MessengerStatus;
+import java.io.Serializable;
 
 /**
  *
  * @author IPTI
  */
-public class MessengerStatusBO {
+public class MessengerStatusBO implements Serializable{
 
     private MessengerStatusDAO messengerStatusDAO;
 

@@ -29,6 +29,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.Part;
 
 /**
@@ -61,15 +62,10 @@ public class SubmitFormBean implements Serializable {
         }
     }
 
-    public void addAuthor() {
+    public void addAuthor() { 
         if (authorList.size() < 4) {
-            if (author.getName().matches("[a-zA-Z ]{3,40}")
-                    && (author.getEmail().matches("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b") || author.getEmail().equals(""))
-                    && (author.getPhone().matches("\\(\\d{2}\\) \\d{4}-\\d{4}") || author.getPhone().equals(""))
-                    && (author.getSite().matches("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?") || author.getSite().equals(""))) {
                 authorList.add(author);
                 author = new Author();
-            }
         }
     }
 

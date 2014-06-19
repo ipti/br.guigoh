@@ -73,10 +73,12 @@
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Site')}:"/>
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
-                        <h:commandLink styleClass="button_author_add" >
-                            <f:ajax render="authors_added" execute="form3" listener="#{submitFormBean.addAuthor()}"/>
+                        <h:panelGroup styleClass="button_author_add" >
                             <img id="button_add_icon" src="/resources/images/green-plus.png"/>
                             <span class="button_add_label">#{localeBean.getString('Adicionar')}</span>
+                        </h:panelGroup>
+                        <h:commandLink styleClass="add">
+                            <f:ajax render='authors_added' execute='form3' listener="#{submitFormBean.addAuthor()}"/>
                         </h:commandLink>
                         <h:panelGroup id="authors_added" styleClass="authors_added">
                             <ui:repeat value="#{submitFormBean.authorList}" var="author">
@@ -152,8 +154,7 @@
                         <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit" action="#{submitFormBean.submitForm()}">
-                    </h:commandLink>
+                    <h:commandLink styleClass="submit" action="#{submitFormBean.submitForm()}"/>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/images/back.png"/>
                         <span class="button_back_label">#{localeBean.getString('Voltar')}</span>

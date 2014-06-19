@@ -6,13 +6,14 @@ package com.guigoh.mandril.bo;
 
 import com.guigoh.mandril.dao.AuthorDAO;
 import com.guigoh.mandril.entity.Author;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author ipti008
  */
-public class AuthorBO {
+public class AuthorBO implements Serializable{
     
     private AuthorDAO authorDAO;
     

@@ -9,6 +9,7 @@ import com.guigoh.primata.dao.exceptions.NonexistentEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.MessengerMessages;
 import com.guigoh.primata.entity.SocialProfile;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author IPTI
  */
-public class MessengerMessagesBO {
+public class MessengerMessagesBO implements Serializable{
 
     private MessengerMessagesDAO messengerMessagesDAO;
 
