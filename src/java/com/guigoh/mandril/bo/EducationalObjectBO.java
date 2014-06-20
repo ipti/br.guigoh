@@ -6,6 +6,7 @@ package com.guigoh.mandril.bo;
 
 import com.guigoh.mandril.dao.EducationalObjectDAO;
 import com.guigoh.mandril.entity.EducationalObject;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author ipti004
  */
-public class EducationalObjectBO {
+public class EducationalObjectBO implements Serializable{
     
     private EducationalObjectDAO educationalObjectDAO;
 

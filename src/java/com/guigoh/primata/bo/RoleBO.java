@@ -6,13 +6,14 @@ package com.guigoh.primata.bo;
 
 import com.guigoh.primata.dao.RoleDAO;
 import com.guigoh.primata.entity.Role;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author ipti004
  */
-public class RoleBO {
+public class RoleBO implements Serializable{
 
     private RoleDAO roleDAO;
 

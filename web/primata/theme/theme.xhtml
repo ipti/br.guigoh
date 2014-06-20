@@ -36,7 +36,6 @@
                             <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                             <f:param name="id" value="#{themeBean.id}" />
-                            <f:param name="files" value="0" />
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
                             <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">
@@ -75,7 +74,7 @@
                                     <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
                                     <br/>
                                     <h:panelGroup styleClass="container_description">
-                                        <h:outputText styleClass="educational_object_label" value="por"/>
+                                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('por')}"/>
                                         <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="object_tags">

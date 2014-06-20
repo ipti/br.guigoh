@@ -6,6 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
+
 .theme_box {display:block;border:1px solid #B2B6B1; width:910px;margin:10px auto}
 .theme_title {color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px}
 .general_search_submit {border: 1px solid #969696; border-radius: 2px; background:url(../images/magnifer.png) no-repeat; width: 24px; height: 24px; float:right; margin: -25px 19px 0px 0px;}

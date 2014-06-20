@@ -44,10 +44,10 @@
                                 <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
                                 <br/>
                                 <h:panelGroup styleClass="container_description">
-                                    <h:outputText styleClass="educational_object_label_sended" value="Enviado por"/>
+                                    <h:outputText styleClass="educational_object_label_sended" value="#{localeBean.getString('Enviado por')}"/>
                                     <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                     <br/>
-                                    <h:outputText styleClass="educational_object_label_by" value="em"/>
+                                    <h:outputText styleClass="educational_object_label_by" value="#{localeBean.getString('em')}"/>
                                     <h:link outcome="/primata/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{educationalObject.themeId.name}"/>
                                 </h:panelGroup>
                             </h:panelGroup>

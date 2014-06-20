@@ -9,20 +9,18 @@ import com.guigoh.primata.bo.UsersBO;
 import com.guigoh.primata.bo.util.CookieService;
 import com.guigoh.primata.entity.Authorization;
 import com.guigoh.primata.entity.Users;
+import java.io.Serializable;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author IPTI
  */
-public class AuthorizeListener implements PhaseListener {
+public class AuthorizeListener implements PhaseListener{
 
     @Override
     public void afterPhase(PhaseEvent event) {

@@ -6,13 +6,14 @@ package com.guigoh.mandril.bo;
 
 import com.guigoh.mandril.dao.EducationalObjectMediaDAO;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author ipti008
  */
-public class EducationalObjectMediaBO {
+public class EducationalObjectMediaBO implements Serializable{
     private EducationalObjectMediaDAO educationalObjectMediaDAO;
 
     public EducationalObjectMediaBO() {

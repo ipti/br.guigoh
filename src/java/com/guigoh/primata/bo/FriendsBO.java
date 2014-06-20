@@ -14,6 +14,7 @@ import com.guigoh.primata.entity.Friends;
 import com.guigoh.primata.entity.FriendsPK;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
  *
  * @author IPTI
  */
-public class FriendsBO {
+public class FriendsBO implements Serializable{
 
     private FriendsDAO friendsDAO;
 
