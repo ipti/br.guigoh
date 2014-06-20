@@ -14,14 +14,12 @@ import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.TagsBO;
 import com.guigoh.primata.bo.util.CookieService;
+import com.guigoh.primata.bo.util.UploadService;
 import com.guigoh.primata.entity.Interests;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Tags;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.Part;
 
 /**
@@ -53,11 +50,11 @@ public class SubmitFormBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             submitted = false;
-            interestThemesList = new ArrayList<Interests>();
-            authorList = new ArrayList<Author>();
+            interestThemesList = new ArrayList<>();
+            authorList = new ArrayList<>();
             educationalObject = new EducationalObject();
             author = new Author();
-            mediaList = new ArrayList<Part>();
+            mediaList = new ArrayList<>();
             loadInterestThemes(); 
         }
     }
@@ -65,7 +62,6 @@ public class SubmitFormBean implements Serializable {
     public void addAuthor() { 
         if (authorList.size() < 4) {
                 authorList.add(author);
-                author = new Author();
         }
     }
 
@@ -88,7 +84,7 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
         String imagePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getName() + File.separator + "image" + File.separator;
-        uploadFile(imageFile, imagePath);
+        UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.create(educationalObject);
         String[] tagArray = tags.replace(" ", "").split(",");
@@ -111,67 +107,15 @@ public class SubmitFormBean implements Serializable {
             educationalObjectMedia.setSize(BigInteger.valueOf(part.getSize()));
             educationalObjectMedia.setName(part.getSubmittedFileName());
             educationalObjectMedia.setType(part.getContentType().split("/")[1]);
+            System.out.println("***** type:"+ part.getContentType().split("/")[1]);
             educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
-            uploadFile(part, mediaPath);
+            UploadService.uploadFile(part, mediaPath);
             educationalObjectMediaBO.create(educationalObjectMedia); 
         }
         submitted = true;
     }
 
-    private boolean uploadFile(Part part, String basePath) throws IOException {
-
-        boolean success;
-        // Extract file name from content-disposition header of file part
-        String fileName = getFileName(part);
-        System.out.println("***** fileName: " + fileName);
-        System.out.println("***** basePath: " + basePath);
-        File directory = new File(basePath);
-        if (!directory.exists()) {
-            if (directory.mkdirs()) {
-                System.out.println("Directory is created!");
-            } else {
-                System.out.println("Failed to create directory!");
-            }
-        }
-
-        File outputFilePath = new File(basePath + fileName);
-        // Copy uploaded file to destination path
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = part.getInputStream();
-            outputStream = new FileOutputStream(outputFilePath);
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
-            }
-            success = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            success = false;
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return success;
-    }
-
-    private String getFileName(Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        System.out.println("***** partHeader: " + partHeader);
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim()
-                        .replace("\"", "");
-            }
-        }
-        return null;
-    }
+    
 
     private void loadInterestThemes() {
         InterestsBO interestsBO = new InterestsBO();

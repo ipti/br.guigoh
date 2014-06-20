@@ -22,6 +22,7 @@
 .topic_creator_body{display:block;margin:22px 0 40px 120px;font-size:13px;width:650px;text-align:justify;font-weight:bold}
 .topic_creator_file_box{display:block;margin:-20px 0 20px 150px;font-weight:bold;font-size:13px;width:650px}
 .topic_creator_file_box a{color:black}
+.file{display: none}
 .topic_creator_date{font-size:12px;float:right;color:#919291;width:65px;margin:15px 20px 0 0}
 .discussion_topic_reply{border-top:1px solid #B2B6B1;width:910px;display:block}
 .member_photo{float:left;width:77px;height:77px;margin:25px 10px 10px 20px}
@@ -31,15 +32,16 @@
 .member_file_box a{color:black}
 .member_date{font-size:12px;float:right;color:#919291;width:65px;margin:15px 20px 0 0}
 .discussion_topic_clock{background:url('../images/clocks.png');width:17px;height:18px;float:right;margin:15px 2px 0 0}
-.file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;margin:-15px 0 0 120px}
+.file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;margin:-5px 0 0 120px}
 .back_link{color:black;margin:40px 0 60px 20px;float:left;font-size:14px}
 .box_spacer{border-top:1px solid #B2B6B1;display:block;margin:0 0 40px 0}
 .reply_sender_name{color:black;float:left;font-size:12px;text-decoration:underline;margin:85px 0 40px -87px;width:77px;}
 .reply_sender_photo{float:left;width:77px;height:77px;margin:0 10px 10px 20px}
 .new_reply_box{width:850px;height:170px;display:block;margin:0 0 25px 0}
+.new_reply_warning{font-size:11px;color:red;display:none;}
 .new_reply{width:700px;height:170px;display:block;resize:none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;border:0}
 .reply_message{background-color:#b9d331;border-radius:5px;float:right;background:url('../images/button_post.png') no-repeat;width:94px;height:35px;margin-right:102px}
-.reply_message_container{float:right;width:94px;height:35px;margin-right:102px;background-color:#b9d331;border-radius:5px;}
+.reply_message_container{cursor:pointer;float:right;width:94px;height:35px;margin-right:102px;background-color:#b9d331;border-radius:5px;}
 #reply_message_icon{float:left;padding:4px;margin-top:1px;}
 .reply_message_label{color:black;font-size:13px;float:left;margin:10px 0 0 3px}
 .reply_attach_button{position:relative;cursor:pointer;float:right;width:29px;height:29px;background:url('../images/ico_attach_resp.png') no-repeat;margin:0 10px 0 0}

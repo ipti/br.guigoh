@@ -42,7 +42,6 @@
                                 <h:panelGroup styleClass="discussion_topic">
                                     <h:link styleClass="discussion_topic_link" outcome="/primata/discussion/viewTopic.xhtml">
                                         <f:param name="id" value="#{discussionTopic.id}" />
-                                        <f:param name="files" value="0" />
                                         <h:outputText styleClass="discussion_topic_user_photo" style="background:url('#{discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:outputText>
                                         <h:outputText styleClass="discussion_topic_user_title" value="#{discussionTopic.title}"></h:outputText>
                                     </h:link>

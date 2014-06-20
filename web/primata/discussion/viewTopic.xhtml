@@ -14,10 +14,9 @@
     <ui:define name="content">
         <f:metadata>
             <f:viewParam name="id" value="#{viewTopicBean.discussionTopicID}" />
-            <f:viewParam name="files" value="#{viewTopicBean.files}" />
             <f:event type="preRenderComponent" listener="#{viewTopicBean.init()}"/>
         </f:metadata>
-        <h:form>
+        <h:form prependId="false" enctype="multipart/form-data">
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
             <h:panelGroup styleClass="discussion_topics_box">
                 <h:panelGroup styleClass="bread_path">
@@ -48,9 +47,7 @@
                             <h:outputText styleClass="file_attach_image"></h:outputText>
                             <h:panelGroup styleClass="topic_creator_file_box">
                                 <h:outputText value="Anexo: "></h:outputText>
-
                                 <a target="_blank" class="topic_creator_file" href="http://#{file.filepath}">#{file.fileName}</a>
-                                 
                             </h:panelGroup>
                         </ui:repeat>
                     </h:panelGroup>
@@ -69,7 +66,6 @@
                                     <h:outputText styleClass="file_attach_image"></h:outputText>
                                     <h:panelGroup styleClass="member_file_box">
                                         <h:outputText value="Anexo: "></h:outputText>
-                                        
                                         <a target="_blank" class="member_file" href="http://#{file.filepath}">#{file.fileName}</a>
                                     </h:panelGroup>
                                 </ui:repeat>
@@ -82,42 +78,34 @@
                 <h:outputText styleClass="box_spacer"></h:outputText>
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_photo" style="background:url('#{viewTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
                 <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_name" value="#{viewTopicBean.socialProfile.name}"></h:link>
-                <h:panelGroup styleClass="new_reply_box">
-                    <h:commandLink styleClass="reply_attach_button">
-                        <f:ajax event="action" execute="@form" render="@form"></f:ajax>
-                    </h:commandLink>
-                    <h:inputTextarea styleClass="new_reply" value="#{viewTopicBean.newReply}">
-                    </h:inputTextarea>
+                <h:panelGroup id="new_reply_box" styleClass="new_reply_box">
+                    <h:outputText styleClass="new_reply_warning" value="Campo obrigatório"/>
+                    <h:panelGroup styleClass="reply_attach_button"/>
+                    <h:inputFile id="file" styleClass="file" value="#{viewTopicBean.fileMedia}">
+                        <f:ajax execute="file" listener="#{viewTopicBean.addMedia()}" render="files_box"/>
+                    </h:inputFile>
+                    <h:inputTextarea styleClass="new_reply" value="#{viewTopicBean.newReply}"/>
                 </h:panelGroup>
-                <h:commandLink styleClass="reply_message_container">
-                    <f:ajax render="@form" execute="@form" event="action"  listener="#{viewTopicBean.replyTopic}"></f:ajax>
+                <h:panelGroup styleClass="reply_message_container">
                     <img id="reply_message_icon" src="/resources/images/green-plus.png"/>
                     <span class="reply_message_label">#{localeBean.getString('Postar')}</span>
+                </h:panelGroup>
+                <h:commandLink styleClass="submit" action="#{viewTopicBean.replyTopic()}">
+                    <f:ajax render="@form" execute="new_reply_box" />
                 </h:commandLink>
-                <ui:repeat value="#{viewTopicBean.newFilesList}" var="file">
-                    <h:outputText styleClass="file_attach_image"></h:outputText>
-                    <h:panelGroup styleClass="attached_file_box">
-                        <h:outputText value="Anexo: "></h:outputText>
-                        <h:outputText styleClass="reply_attached_file" value="#{file.fileName}"></h:outputText>
-                    </h:panelGroup>
-                </ui:repeat>
+                <h:messages/>
+                <h:panelGroup id="files_box">
+                    <ui:repeat value="#{viewTopicBean.fileList}" var="file">
+                        <h:outputText styleClass="file_attach_image"></h:outputText>
+                        <h:panelGroup styleClass="attached_file_box">
+                            <h:outputText value="Anexo: "></h:outputText>
+                            <h:outputText styleClass="reply_attached_file" value="#{file.submittedFileName}"></h:outputText>
+                        </h:panelGroup>
+                    </ui:repeat>
+                </h:panelGroup>
                 <h:link styleClass="back_link" outcome="/primata/theme/theme.xhtml?id=#{viewTopicBean.discussionTopic.themeId.id}" value="&lt;&lt; #{localeBean.getString('Voltar')}"></h:link>
                 <span class="clear"></span>
             </h:panelGroup>
-
-
         </h:form>
-        <div id="dialog-form" class="dialog" title="#{localeBean.getString('Adicionar arquivos')}">
-            <fieldset>
-                <form action="UploadFile" method="POST" enctype="multipart/form-data">
-                    <br/>
-                    <input type="file" name="file1" id="filechoose" />
-                    <input type="file" name="file2" id="filechoose" />
-                    <input type="file" name="file3" id="filechoose" /><br/>
-                    <input type="hidden" name="message"  value="M"/>
-                    <input type="submit" value="#{localeBean.getString('Enviar arquivos')}"/>
-                </form>
-            </fieldset>
-        </div>
     </ui:define>
 </ui:composition>

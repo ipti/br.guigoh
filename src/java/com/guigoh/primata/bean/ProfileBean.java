@@ -12,6 +12,7 @@ import com.guigoh.primata.bo.InterestsTypeBO;
 import com.guigoh.primata.bo.OccupationsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.util.CookieService;
+import com.guigoh.primata.bo.util.DownloadService;
 import com.guigoh.primata.bo.util.translator.Translator;
 import com.guigoh.primata.dao.exceptions.PreexistingEntityException;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
@@ -421,33 +422,7 @@ public class ProfileBean implements Serializable {
                 os.close();
             }
         }
-        downloadFile(file, "pdf", facesContext);
-    }
-
-    public static synchronized void downloadFile(File file, String mimeType, FacesContext facesContext) {
-
-        ExternalContext context = facesContext.getExternalContext();
-
-        HttpServletResponse response = (HttpServletResponse) context.getResponse();
-        response.setHeader("Content-Disposition", "attachment;filename=\"" + file.getName() + "\"");
-        response.setContentLength((int) file.length());
-        response.setContentType(mimeType);
-        try {
-            FileInputStream in = new FileInputStream(file);
-            OutputStream out = response.getOutputStream();
-            byte[] buf = new byte[(int) file.length()];
-            int count;
-            while ((count = in.read(buf)) >= 0) {
-                out.write(buf, 0, count);
-            }
-            in.close();
-            out.flush();
-            out.close();
-            facesContext.responseComplete();
-        } catch (IOException ex) {
-            System.out.println("Error in downloadFile: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        DownloadService.downloadFile(file, "pdf", facesContext);
     }
 
     public void execute() {

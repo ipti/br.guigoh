@@ -10,6 +10,7 @@ import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.TagsBO;
 import com.guigoh.primata.bo.util.CookieService;
+import com.guigoh.primata.bo.util.UploadService;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicFiles;
 import com.guigoh.primata.entity.Interests;
@@ -37,8 +38,8 @@ import javax.servlet.http.Part;
  * @author Joe
  */
 @ViewScoped
-@ManagedBean(name = "discussionTopicBean")
-public class DiscussionTopicBean implements Serializable {
+@ManagedBean(name = "createTopicBean")
+public class CreateTopicBean implements Serializable {
 
     public static final char ACTIVE = 'A';
     public static final char DISABLED = 'D';
@@ -116,7 +117,7 @@ public class DiscussionTopicBean implements Serializable {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
                 for (Part part : fileList) {
                     String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator;
-                    uploadFile(part, filePath);
+                    UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                     discussionTopicFiles.setFileName(part.getSubmittedFileName());
                     discussionTopicFiles.setFileType(part.getContentType().split("/")[1]);
@@ -132,61 +133,6 @@ public class DiscussionTopicBean implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean uploadFile(Part part, String basePath) throws IOException {
-
-        boolean success;
-        // Extract file name from content-disposition header of file part
-        String fileName = getFileName(part);
-        System.out.println("***** fileName: " + fileName);
-        System.out.println("***** basePath: " + basePath);
-        File directory = new File(basePath);
-        if (!directory.exists()) {
-            if (directory.mkdirs()) {
-                System.out.println("Directory is created!");
-            } else {
-                System.out.println("Failed to create directory!");
-            }
-        }
-
-        File outputFilePath = new File(basePath + fileName);
-        // Copy uploaded file to destination path
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            inputStream = part.getInputStream();
-            outputStream = new FileOutputStream(outputFilePath);
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
-            }
-            success = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            success = false;
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-        return success;
-    }
-
-    private String getFileName(Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        System.out.println("***** partHeader: " + partHeader);
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim()
-                        .replace("\"", "");
-            }
-        }
-        return null;
     }
 
     public DiscussionTopic getDiscussionTopic() {

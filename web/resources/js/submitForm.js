@@ -123,8 +123,8 @@ $(document).ready(function() {
             }
         if (validate) {
             $(".submit").click();
+            $(".loading_gif").css("display","block");
             $(".form4_body").hide();
-            $(".form5_body").css("display", "block");
             $(".button_options").hide();
         }
     });

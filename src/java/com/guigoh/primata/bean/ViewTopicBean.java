@@ -9,6 +9,7 @@ import com.guigoh.primata.bo.DiscussionTopicFilesBO;
 import com.guigoh.primata.bo.DiscussionTopicMsgBO;
 import com.guigoh.primata.bo.SocialProfileBO;
 import com.guigoh.primata.bo.util.CookieService;
+import com.guigoh.primata.bo.util.UploadService;
 import com.guigoh.primata.dao.exceptions.RollbackFailureException;
 import com.guigoh.primata.entity.DiscussionTopic;
 import com.guigoh.primata.entity.DiscussionTopicFiles;
@@ -17,7 +18,9 @@ import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -47,8 +51,8 @@ public class ViewTopicBean implements Serializable {
     private String newReply;
     private Users user;
     private SocialProfile socialProfile;
-    private List<DiscussionTopicFiles> newFilesList;
-    private int files;
+    private Part fileMedia;
+    private List<Part> fileList;
     private DiscussionTopicMsgBO dtmBO;
     private DiscussionTopicBO dtBO;
     private DiscussionTopicFilesBO dtfBO;
@@ -61,6 +65,8 @@ public class ViewTopicBean implements Serializable {
             user = new Users();
             user.setUsername(CookieService.getCookie("user"));
             user.setToken(CookieService.getCookie("token"));
+            fileList = new ArrayList<>();
+            newReply = "";
             if (discussionTopic == null) {
                 discussionTopic = dtBO.findDiscussionTopicByID(discussionTopicID);
                 discussionTopic.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
@@ -69,8 +75,6 @@ public class ViewTopicBean implements Serializable {
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
                     dtm.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                newFilesList = new ArrayList<DiscussionTopicFiles>();
-                newReply = "";
                 SocialProfileBO spBO = new SocialProfileBO();
                 socialProfile = spBO.findSocialProfile(user.getToken());
             } else if (discussionTopic.getId() != discussionTopicID) {
@@ -80,64 +84,17 @@ public class ViewTopicBean implements Serializable {
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
                     dtm.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                newFilesList = new ArrayList<DiscussionTopicFiles>();
-                newReply = "";
                 SocialProfileBO spBO = new SocialProfileBO();
                 socialProfile = spBO.findSocialProfile(user.getToken());
             }
-            loadSessionFiles();
-        }
-    }
-    
-    private HttpSession getSession(){
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        return request.getSession();
-    }
-    private void loadSessionFiles() {
-        HttpSession session = getSession();
-        if (files == 1) {
-            newFilesList = (List<DiscussionTopicFiles>) session.getAttribute("listDiscussionTopicFiles");
-        } else {
-            session.removeAttribute("listDiscussionTopicFiles");
-            newFilesList = new ArrayList<DiscussionTopicFiles>();
         }
     }
 
-    public void redirect(String filePath) {
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(filePath.trim());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void downloadFile(String filePath, String fileType) {
-        File file = new File(filePath);
-        downloadFile(file, fileType, FacesContext.getCurrentInstance());
-    }
-
-    public static synchronized void downloadFile(File file, String mimeType, FacesContext facesContext) {
-
-        ExternalContext context = facesContext.getExternalContext();
-        HttpServletResponse response = (HttpServletResponse) context.getResponse();
-        response.setHeader("Content-Disposition", "attachment;filename=\"" + file.getName() + "\"");
-        response.setContentLength((int) file.length());
-        response.setContentType(mimeType);
-        try {
-            FileInputStream in = new FileInputStream(file);
-            OutputStream out = response.getOutputStream();
-            byte[] buf = new byte[(int) file.length()];
-            int count;
-            while ((count = in.read(buf)) >= 0) {
-                out.write(buf, 0, count);
+    public void addMedia() throws IOException {
+        if (fileList.size() < 3) {
+            if (!fileMedia.getSubmittedFileName().equals("")) {
+                fileList.add(fileMedia);
             }
-            in.close();
-            out.flush();
-            out.close();
-            facesContext.responseComplete();
-        } catch (IOException ex) {
-            System.out.println("Error in downloadFile: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 
@@ -151,21 +108,26 @@ public class ViewTopicBean implements Serializable {
                 discussionTopicMsg.setSocialProfileId(socialProfile);
                 discussionTopicMsg.setData(dtmBO.getServerTime());
                 dtmBO.replyTopic(discussionTopicMsg);
-                if (newFilesList != null && !newFilesList.isEmpty()) {
-                    for (DiscussionTopicFiles dtf : newFilesList) {
-                        dtf.setFkId(discussionTopicMsg.getId());
-                        dtf.setFkType(MESSAGE);
-                        dtfBO.create(dtf);
-                        discussionTopicMsg.getDiscussionTopicFilesList().add(dtf);
+                List<DiscussionTopicFiles> dtfList = new ArrayList<>();
+                if (!fileList.isEmpty()) {
+                    for (Part part : fileList) {
+                        String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator;
+                        UploadService.uploadFile(part, filePath);
+                        DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
+                        discussionTopicFiles.setFileName(part.getSubmittedFileName());
+                        discussionTopicFiles.setFileType(part.getContentType().split("/")[1]);
+                        discussionTopicFiles.setFilepath("http://cdn.guigoh.com/discussionFiles/" + part.getSubmittedFileName());
+                        discussionTopicFiles.setFkType(MESSAGE);
+                        discussionTopicFiles.setFkId(discussionTopicMsg.getId());
+                        dtfList.add(discussionTopicFiles);
+                        dtfBO.create(discussionTopicFiles);
                     }
                 }
-                HttpSession session = getSession();
-                session.removeAttribute("listDiscussionTopicFiles");
-                newFilesList = new ArrayList<DiscussionTopicFiles>();
+                discussionTopicMsg.setDiscussionTopicFilesList(dtfList);
                 discussionTopicMsgList.add(discussionTopicMsg);
-                newReply = "";
             }
             newReply = "";
+            fileList = new ArrayList<>();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,14 +165,6 @@ public class ViewTopicBean implements Serializable {
         this.newReply = newReply;
     }
 
-    public List<DiscussionTopicFiles> getNewFilesList() {
-        return newFilesList;
-    }
-
-    public void setNewFilesList(List<DiscussionTopicFiles> newFilesList) {
-        this.newFilesList = newFilesList;
-    }
-
     public Users getUser() {
         return user;
     }
@@ -227,11 +181,20 @@ public class ViewTopicBean implements Serializable {
         this.socialProfile = socialProfile;
     }
 
-    public int getFiles() {
-        return files;
+    public Part getFileMedia() {
+        return fileMedia;
     }
 
-    public void setFiles(int files) {
-        this.files = files;
+    public void setFileMedia(Part fileMedia) {
+        this.fileMedia = fileMedia;
     }
+
+    public List<Part> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<Part> fileList) {
+        this.fileList = fileList;
+    }
+    
 }
