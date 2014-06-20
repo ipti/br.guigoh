@@ -63,7 +63,9 @@
                         <img id="post_topic_icon" src="/resources/images/green-plus.png"/>
                         <span class="post_topic_label">#{localeBean.getString('Postar')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit" action="#{discussionTopicBean.createTopic()}"/>
+                    <h:commandLink styleClass="submit" action="#{discussionTopicBean.createTopic()}">
+                        <f:ajax execute="@form" />
+                    </h:commandLink>
                     <h:link styleClass="back_button_container" outcome="/primata/theme/theme.xhtml?id=#{discussionTopicBean.theme.id}"> 
                         <img id="back_button_icon" src="/resources/images/back.png"/>
                         <span class="back_button_label">#{localeBean.getString('Voltar')}</span>
