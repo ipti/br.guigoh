@@ -16,7 +16,11 @@
         <h:outputText styleClass="educational-object-title" value="#{localeBean.getString('Objeto Educacional')}"/>
         <div class="educational-object-box">
             <div class="cnt-right">
-                <div id="wrap-right"/>
+                <div id="wrap-right">
+                    <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaPreview">
+                        <h:outputText class="media-url" value="#{mediaPreview.media}"/>
+                    </ui:repeat>
+                </div>
             </div>
             <div class="cnt-left">
                 <div id="wrap-left">
@@ -44,19 +48,15 @@
                         <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
                             <h:column>
                                 <f:facet name="header">Nome</f:facet>
-                                <span class="media-name">#{mediaInfo.name}.#{mediaInfo.type}</span>
+                                <h:outputLabel class="media-name" value="#{mediaInfo.name}.#{mediaInfo.type}"/>
                             </h:column>
-                            <!--<h:column>
-                                <f:facet name="header">Tipo</f:facet>
-                                HASHTAG{media.type}
-                            </h:column>-->
                             <h:column>
                                 <f:facet name="header">Tamanho</f:facet>
-                                #{mediaInfo.size}mb
+                                <h:outputText value="#{mediaInfo.size}mb"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header"/>
-                                Download
+                                <h:link value="Download"/>
                             </h:column>
                         </h:dataTable>
                     </div>

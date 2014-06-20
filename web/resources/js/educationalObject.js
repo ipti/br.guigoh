@@ -2,7 +2,7 @@ var commentsPag;
 $(document).ready(function() {
 
     displayPreview();
-    
+
     $("#send-comment-btn").click(function() {
         $("#send-comment").slideToggle();
     });
@@ -37,21 +37,28 @@ $(document).ready(function() {
 
 function displayPreview() {
     var mediaName = $(".media-name");
+    var mediaUrl = $(".media-url");
     var right = $("#wrap-right");
-    var count = 0;
-    $.each(mediaName, function(){
-        var type = $(this).text().split(".")[1];
-        if (type.match(/^pdf$/i)||type.match(/^doc$/i)||type.match(/^txt$/i)){
-            right.append("<h:outputText value='#{educationalObjectBean.educationalObjectMediaList["+count+"].name}.#{educationalObjectBean.educationalObjectMediaList["+count+"].type} indisponível para visualização.'/>");
-        }else if (type.match(/^jpg$/i)||type.match(/^png$/i)||type.match(/^gif$/i)){
-            right.append("<h:graphicImage url='#{educationalObjectBean.educationalObjectMediaList["+count+"].media}'/>");
-        }else if (type.match(/^mp3$/i)||type.match(/^wav$/i)||type.match(/^wma$/i)){
-            right.append("#{educationalObjectBean.educationalObjectMediaList["+count+"].name}<br/><audio src='#{educationalObjectBean.educationalObjectMediaList["+count+"].media}' controls='preload'/>");
-        }else if (type.match(/^mp4$/i)||type.match(/^avi$/i)||type.match(/^mpeg$/i)){
-            right.append("#{educationalObjectBean.educationalObjectMediaList["+count+"].name}<br/><video src='#{educationalObjectBean.educationalObjectMediaList["+count+"].media}' width='550' height='310' controls='preload'/>");
-        }
-        count++;
+
+    $.each(mediaName, function() {
+        $(mediaName).click(function() {
+            var index = $(mediaName).index(this);
+            right.empty();
+            var type = $(this).text().split(".")[1];
+            if (type.match(/^doc$/i) || type.match(/^txt$/i)) {
+                right.append($(this).text() + " indisponível para visualização.");
+            }else if (type.match(/^pdf$/i)){
+                right.append("<iframe height='433' width='553' src='" + mediaUrl.eq(index).text()  + "'/>");
+            } else if (type.match(/^jpg$/i) || type.match(/^png$/i) || type.match(/^gif$/i)) {
+                right.append("<img src='" + mediaUrl.eq(index).text() + "'/><span class='image-title'><p>" + $(this).text() + "</p></span>");
+            } else if (type.match(/^mp3$/i) || type.match(/^wav$/i) || type.match(/^wma$/i)) {
+                right.append("<span class='audio-title'><p>" + $(this).text() + "</p></span>" + "<audio src='" + mediaUrl.eq(index).text() + "' controls='preload'/>");
+            } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i)) {
+                right.append("<span class='video-title'><p>" + $(this).text() + "</p></span>" + "<video src='" + mediaUrl.eq(index).text() + "' width='550' height='310' controls='preload'/>");
+            }
+        });
     });
+    mediaName.first().click();
 }
 function showCommentLoading(parent) {
     $(parent).find(".wrap").css("display", "none");
