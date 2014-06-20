@@ -36,7 +36,6 @@
                             <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                             <f:param name="id" value="#{themeBean.id}" />
-                            <f:param name="files" value="0" />
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
                             <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">

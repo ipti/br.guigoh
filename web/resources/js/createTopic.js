@@ -2,70 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-locale = $("localeAcronym").val();
 $(document).ready(function() {
-    loadAll();
-    jsf.ajax.addOnEvent(function(data){
-        if (data.status === 'success') {
-            loadAll();
+    $(document).on('click','.attach_button',function() {
+        $(".file").click();
+    });
+
+    $(document).on('click', '.post_topic_button_container', function() {
+        var validate = true;
+        if ($('.new_title').val() === "") {
+            $('.new_title_warning').css("display", "block");
+            validate = false;
+        }else{
+            $('.new_title_warning').hide();
+        }
+        if ($('.new_body').val() === "") {
+            $('.new_body_warning').css("display", "block");
+            validate = false;
+        }else{
+            $('.new_body_warning').hide();
+        }
+        if (validate) {
+            $('.submit').click();
         }
     });
 });
-
-function loadAll(){
-   
-    $( "#dialog-form" ).dialog({
-        autoOpen: false,
-        height: 400,
-        width: 600,
-        modal: true,
-        overlay: {
-            backgroundColor: "#000", 
-            opacity: 0.5
-        },
-        buttons:[{text: "Close",click:function() {$(this).dialog("close");}
-            }],
-        close: function(ev, ui) {
-            $(this).hide();
-        }
-    });
- 
-    $('.attach_button').click(function() {
-        $("#dialog-form").dialog('open');
-        return false;
-    });
-    
-    $( ".tag_input" ).autocomplete({
-        source: function( request, response ) {
-            $.ajax({
-                url: "/webresources/primata/tags",
-                dataType: "json",
-                data: {
-                    "text": request.term,
-                    "theme_id":theme_id
-                },
-                success: function( data ) {
-                    response( $.map( data, function( item ) {
-                        return {
-                            label: item.name,
-                            value: item.name
-                        }
-                    }));
-                }
-            });
-        },
-        focus: function(event, ui) {
-            // Set the text input value to the focused item's label, instead of the value.
-            $( ".tag_input" ).val(ui.item.label);
-            return false;
-        },
-        select: function(event, ui) {
-            // Save the selection item and value in the two inputs.
-            $( ".tag_input" ).val(ui.item.label);
-            return false;
-        }
-    });
-    
-    
-}
 

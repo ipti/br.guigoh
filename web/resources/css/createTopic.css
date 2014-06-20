@@ -15,15 +15,18 @@ strong {font-weight: bold;}
 .topic_creator_name{color:black;float:left;font-size:12px;text-decoration:underline;margin:110px 0 40px -87px;width:77px;}
 .topic_title_label{font-size:13px;font-weight:bold;display:block}
 .new_title {border:0 none; border-radius:5px; width:700px; height:28px;margin:9px auto;text-indent:10px}
+.new_title_warning{font-size:11px;color:red;display:none;margin-bottom:-5px}
+.new_body_warning{font-size:11px;color:red;display:none;margin:3px 0 -5px 0}
 .msg{font-size:11px;color:red;display:block;margin:5px 0px 0px 0px}
 .new_body{width:700px;height:170px;resize:none;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;text-indent:10px;border:0;margin:10px 0 25px}
 .attach_button{position:relative;cursor:pointer;float:right;width:29px;height:29px;background:url('../images/ico_attach_resp.png') no-repeat;margin:10px 69px 0 0}
 .files_box{float:right;height:100px;width:350px;margin:0 101px 0 0}
 .file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;}
 .attached_file_box{display:block;margin:-20px 0 5px 30px;font-weight:bold;font-size:13px;width:500px}
+.file{display:none}
 .tag_box{float:left;height:100px;width:350px;margin:0 0 0 108px}
 .post_topic_button{float:right;background:url('../images/button_post.png') no-repeat;width:94px;height:35px;margin-right:101px}
-.post_topic_button_container{text-decoration: none;border-radius:5px;width:94px;height:35px;margin:0 101px 0 0;float:right;background-color:#b9d331}
+.post_topic_button_container{cursor:pointer;text-decoration: none;border-radius:5px;width:94px;height:35px;margin:0 101px 0 0;float:right;background-color:#b9d331}
 #post_topic_icon{float:left;padding:4px;margin-top:1px;}
 .post_topic_label{color:black;font-size:13px;float:left;margin:10px 0 0 3px}
 .tags_selected{display:block;height:28px;margin:0 0 5px 0}
