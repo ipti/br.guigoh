@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Ambiente de publicação - nome do objeto educacional</ui:define>
+    <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')} - #{educationalObjectBean.educationalObject.name}</ui:define>
     <ui:define name="content">
         <script type="text/javascript" src="../resources/js/educationalObject.js"/>
         <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
@@ -26,49 +26,52 @@
                 <div id="wrap-left">
                     <h3 id="educational-object-name">#{educationalObjectBean.educationalObject.name}</h3>
                     <div id="educational-object">
-                        <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">Recomendar este Objeto Educacional</a>
+                        <a id="recommend" href="javascript:void(0)" onclick="openRecommendBox()">#{localeBean.getString('Recomendar este Objeto Educacional')}</a>
                         <div id="recommend-box">
-                            <p>Email(s) do(s) destinatário(s): <a id="recommend-close" href="javascript:void(0)" onclick="closeRecommendBox()">[X]</a></p>
+                            <p>#{localeBean.getString('Email(s) do(s) destinatário(s): ')}<a id="recommend-close" href="javascript:void(0)" onclick="closeRecommendBox()">[X]</a></p>
                             <input type="text" class="area-text-email" id="email-recommend"/>
                             <div id="recommendMsg"></div>
-                            <button class="btn-send" onclick="sendRecommend()">Enviar</button>
+                            <button class="btn-send" onclick="sendRecommend()">#{localeBean.getString('Enviar')}</button>
                         </div>
                         <ul>
-                            <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">Licença</a></li>
+                            <li class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt">#{localeBean.getString('Licença')}</a></li>
                         </ul>
                     </div>
                     <h:panelGroup styleClass="educational-object-info">
-                        <p><strong>Tags: </strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
-                        <p><strong>Tema: </strong><a href="http://rts.guigoh.com:8080/primata/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}">#{educationalObjectBean.educationalObject.themeId.name}</a></p>
-                        <p><strong>Publicado por: </strong><a href="http://rts.guigoh.com:8080/primata/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectBean.educationalObject.socialProfileId.name}</a></p>    
+                        <p><strong>#{localeBean.getString('Tags: ')}</strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
+                        <ui:param name="educationalObjectTheme" value="#{educationalObjectBean.educationalObject.themeId.name}"/>
+                        <p><strong>#{localeBean.getString('Tema: ')}</strong><a href="http://rts.guigoh.com:8080/primata/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}">#{localeBean.getString(educationalObjectTheme)}</a></p>
+                        <p><strong>#{localeBean.getString('Publicado por: ')}</strong><a href="http://rts.guigoh.com:8080/primata/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectBean.educationalObject.socialProfileId.name}</a></p>    
                     </h:panelGroup>
                     <div id="download-box">
-                        <span class="title">Lista de arquivos</span>
+                        <span class="title">#{localeBean.getString('Lista de arquivos')}</span>
 
                         <h:dataTable styleClass="media-table" rowClasses="media-table-row" headerClass="media-table-header" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
                             <h:column>
-                                <f:facet name="header">Nome</f:facet>
+                                <f:facet name="header">#{localeBean.getString('NomeArquivo')}</f:facet>
                                 <h:outputLabel class="media-name" value="#{mediaInfo.name}.#{mediaInfo.type}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Tamanho</f:facet>
+                                <f:facet name="header">#{localeBean.getString('Tamanho')}</f:facet>
                                 <h:outputText value="#{mediaInfo.size}mb"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header"/>
-                                <h:link value="Download"/>
+                                <h:form>
+                                    <h:commandLink action="#{educationalObjectBean.downloadMedia(mediaInfo.media, mediaInfo.type)}" value="#{localeBean.getString('Download')}"/>
+                                </h:form>
                             </h:column>
                         </h:dataTable>
                     </div>
                     <div id="more-info">
-                        <h5 class="title">Sobre os Autores</h5>
+                        <h5 class="title">#{localeBean.getString('Sobre os Autores')}</h5>
                         <div id="authors-list">
                             <ui:repeat value="#{educationalObjectBean.authorList}" var="author">
                                 <div class="author-box">
-                                    <p><strong>Nome: </strong><span>#{author.name}</span></p>
-                                    <p><strong>Email: </strong><span>#{author.email}</span></p>
-                                    <p><strong>Telefone: </strong><span>#{author.phone}</span></p>
-                                    <p><strong>Site: </strong><span><a href="http://#{author.site}">#{author.site}</a></span></p>
+                                    <p><strong>#{localeBean.getString('Nome: ')}</strong><span>#{author.name}</span></p>
+                                    <p><strong>#{localeBean.getString('Email: ')}</strong><span>#{author.email}</span></p>
+                                    <p><strong>#{localeBean.getString('Telefone: ')}</strong><span>#{author.phone}</span></p>
+                                    <p><strong>#{localeBean.getString('Site: ')}</strong><span><a href="http://#{author.site}">#{author.site}</a></span></p>
                                 </div>
                             </ui:repeat>
                         </div>

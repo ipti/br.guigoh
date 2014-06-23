@@ -24,6 +24,7 @@
 .image-title p{margin-top:3px;}
 .audio-title p{margin-bottom:7px;}
 .video-title p{margin-bottom:7px;}
+.image-media{max-width:550px;height:auto;}
 
 .license{background:url(/resources/images/cc.png) no-repeat;height:32px;line-height:30px;padding-left:36px;}
 .license a{color:#0000FF;}
@@ -31,7 +32,7 @@
 .cnt-left{width:300px;margin:15px auto 10px;padding-right:10px;float:left;border-right:1px solid #ababab;}
 #wrap-left{margin:0px 5px 10px 20px;}
 .cnt-right{width:589px;float:right;margin:0 auto 10px;font-size:12px;}
-#wrap-right{margin:10px 5px 10px 18px;}
+#wrap-right{margin:15px 5px 10px 18px;}
 
 .title{font-weight:bold;}
 #more-info{margin-top:25px;}

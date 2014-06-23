@@ -48,9 +48,9 @@ function displayPreview() {
             if (type.match(/^doc$/i) || type.match(/^txt$/i)) {
                 right.append($(this).text() + " indisponível para visualização.");
             }else if (type.match(/^pdf$/i)){
-                right.append("<iframe height='433' width='553' src='" + mediaUrl.eq(index).text()  + "'/>");
+                right.append("<iframe height='433' width='550' src='" + mediaUrl.eq(index).text()  + "'/>");
             } else if (type.match(/^jpg$/i) || type.match(/^png$/i) || type.match(/^gif$/i)) {
-                right.append("<img src='" + mediaUrl.eq(index).text() + "'/><span class='image-title'><p>" + $(this).text() + "</p></span>");
+                right.append("<img class='image-media' src='" + mediaUrl.eq(index).text() + "'/><span class='image-title'><p>" + $(this).text() + "</p></span>");
             } else if (type.match(/^mp3$/i) || type.match(/^wav$/i) || type.match(/^wma$/i)) {
                 right.append("<span class='audio-title'><p>" + $(this).text() + "</p></span>" + "<audio src='" + mediaUrl.eq(index).text() + "' controls='preload'/>");
             } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i)) {

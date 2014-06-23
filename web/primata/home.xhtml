@@ -48,7 +48,8 @@
                                     <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                     <br/>
                                     <h:outputText styleClass="educational_object_label_by" value="#{localeBean.getString('em')}"/>
-                                    <h:link outcome="/primata/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{educationalObject.themeId.name}"/>
+                                    <ui:param name="themeName" value="#{educationalObject.themeId.name}"/>
+                                              <h:link outcome="/primata/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
                                 </h:panelGroup>
                             </h:panelGroup>
                         </ui:repeat>

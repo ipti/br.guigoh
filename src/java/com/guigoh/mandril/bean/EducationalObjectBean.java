@@ -10,6 +10,7 @@ import com.guigoh.mandril.bo.EducationalObjectMediaBO;
 import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
+import com.guigoh.primata.bo.util.DownloadService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +39,19 @@ public class EducationalObjectBean implements Serializable {
             educationalObjectBO = new EducationalObjectBO();
             educationalObject = new EducationalObject();
             authorBO = new AuthorBO();
-            authorList = new ArrayList<Author>();
+            authorList = new ArrayList<>();
             educationalObjectMediaBO = new EducationalObjectMediaBO();
-            educationalObjectMediaList = new ArrayList<EducationalObjectMedia>();
+            educationalObjectMediaList = new ArrayList<>();
             findEducationalObject(educationalObjectID);
             getAuthorsByEducationalObject(educationalObjectID);
             getMediasByEducationalObject(educationalObjectID);
         }
     }
 
+    public void downloadMedia(String path, String type){
+        DownloadService.downloadFile(path, type);
+    }
+    
     private void findEducationalObject(Integer id) {
         educationalObject = educationalObjectBO.findEducationalObject(id);
     }
