@@ -422,7 +422,7 @@ public class ProfileBean implements Serializable {
                 os.close();
             }
         }
-        DownloadService.downloadFile(file, "pdf", facesContext);
+        DownloadService.downloadFile(file, "pdf");
     }
 
     public void execute() {

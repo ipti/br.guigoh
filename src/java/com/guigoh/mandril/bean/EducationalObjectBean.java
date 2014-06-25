@@ -11,6 +11,7 @@ import com.guigoh.mandril.entity.Author;
 import com.guigoh.mandril.entity.EducationalObject;
 import com.guigoh.mandril.entity.EducationalObjectMedia;
 import com.guigoh.primata.bo.util.DownloadService;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,8 @@ public class EducationalObjectBean implements Serializable {
         }
     }
 
-    public void downloadMedia(String path, String type){
-        DownloadService.downloadFile(path, type);
+    public void downloadMedia(String path, String type) throws IOException{
+        DownloadService.downloadFileFromURL(path, type);
     }
     
     private void findEducationalObject(Integer id) {

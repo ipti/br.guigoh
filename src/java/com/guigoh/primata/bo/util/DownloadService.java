@@ -9,10 +9,15 @@ package com.guigoh.primata.bo.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FileUtils;
+import sun.swing.FilePane;
 
 /**
  *
@@ -20,13 +25,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DownloadService {
     
-    public static void downloadFile(String filePath, String fileType) {
+    public static void downloadFileFromURL(String filePath, String fileType) throws MalformedURLException, IOException {
         File file = new File(filePath);
-        downloadFile(file, fileType, FacesContext.getCurrentInstance());
+        URL url = new URL(filePath);
+        FileUtils.copyURLToFile(url, new File(filePath));
+        downloadFile(file, fileType);
     }
 
-    public static synchronized void downloadFile(File file, String mimeType, FacesContext facesContext) {
-
+    public static synchronized void downloadFile(File file, String mimeType) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext context = facesContext.getExternalContext();
         HttpServletResponse response = (HttpServletResponse) context.getResponse();
         response.setHeader("Content-Disposition", "attachment;filename=\"" + file.getName() + "\"");
