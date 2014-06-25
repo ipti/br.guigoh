@@ -6,12 +6,18 @@
 
 package com.guigoh.primata.bo.util;
 
+import com.sun.xml.rpc.processor.util.StringUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.FileNameMap;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.Part;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -24,8 +30,6 @@ public class UploadService {
         boolean success;
         // Extract file name from content-disposition header of file part
         String fileName = getFileName(part);
-        System.out.println("***** fileName: " + fileName);
-        System.out.println("***** basePath: " + basePath);
         File directory = new File(basePath);
         if (!directory.exists()) {
             if (directory.mkdirs()) {
@@ -63,8 +67,6 @@ public class UploadService {
     }
 
     private static String getFileName(Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        System.out.println("***** partHeader: " + partHeader);
         for (String content : part.getHeader("content-disposition").split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(content.indexOf('=') + 1).trim()
@@ -73,4 +75,6 @@ public class UploadService {
         }
         return null;
     }
+
 }
+
