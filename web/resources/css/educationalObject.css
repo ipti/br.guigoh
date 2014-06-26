@@ -7,6 +7,7 @@
 #educational-object ul li{margin:8px 0;}
 #educational-object-name{font-size:20px;font-weight:normal;}
 
+#recommend{display:none;}
 #recommend-box{display:none;position:static;height:65px;margin-top:8px;padding:10px;background-color:#CCDBF5;}
 #recommend-box p{margin:0 0 5px;}
 #recommend-close{position:absolute;}

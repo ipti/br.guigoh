@@ -49,6 +49,10 @@ public class EducationalObjectBean implements Serializable {
         }
     }
 
+    public String getMediaSize(Integer size){
+        return educationalObjectMediaBO.getMediaSize(size);
+    }
+    
     public void downloadMedia(String path, String type) throws IOException{
         DownloadService.downloadFileFromURL(path, type);
     }
