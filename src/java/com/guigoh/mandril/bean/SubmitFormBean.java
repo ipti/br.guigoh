@@ -72,6 +72,10 @@ public class SubmitFormBean implements Serializable {
             }
         }
     }
+    
+    public void removeMedia(Part media){
+        mediaList.remove(media);
+    }
 
     public void submitForm() throws IOException {
         EducationalObjectBO educationalObjectBO = new EducationalObjectBO();

@@ -10,7 +10,7 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
-        <h:form prependId="false" id="form" enctype="multipart/form-data">
+        <h:form id="form" prependId="false" enctype="multipart/form-data">
             <h:panelGroup styleClass="register_box">
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}"/>
@@ -113,11 +113,15 @@
                             </h:inputFile>
                             <h:panelGroup id="medias_added" styleClass="medias_added">
                                 <ui:repeat value="#{submitFormBean.mediaList}" var="media">
-                                    <h:panelGrid styleClass="media_added" columns="6">
+                                    <h:panelGrid styleClass="media_added" columns="9">
                                         <h:outputText styleClass="file_attach_image"></h:outputText>
                                         <h:panelGroup styleClass="attached_file_box">
-                                            <h:outputText styleClass="attached_file" value="#{media.submittedFileName}"></h:outputText>
+                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}" >
+                                            </h:outputText>
                                         </h:panelGroup>
+                                        <h:commandLink styleClass="remove_media">
+                                            <f:ajax execute="@this" listener="#{submitFormBean.removeMedia(media)}" render=":form:medias_added"/>
+                                        </h:commandLink>
                                     </h:panelGrid>
                                 </ui:repeat>
                             </h:panelGroup>
