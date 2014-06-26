@@ -44,4 +44,14 @@ public class EducationalObjectMediaBO implements Serializable{
         }
         return null;
     }
+    
+    public String getMediaSize(Integer size){
+        double convertedSizeMB = Math.ceil((double) size/100000)/10;
+        double convertedSizeKB = Math.ceil((double) size/100)/10;
+        if (convertedSizeMB > 1){
+            return convertedSizeMB + "mb";
+        } else {
+            return convertedSizeKB + "kb";
+        }
+    }
 }
