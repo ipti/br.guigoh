@@ -62,6 +62,7 @@ public class SubmitFormBean implements Serializable {
     public void addAuthor() { 
         if (authorList.size() < 4) {
                 authorList.add(author);
+                author = new Author();
         }
     }
 

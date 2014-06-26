@@ -68,7 +68,7 @@ $(document).ready(function() {
         var phoneValue = $(".educational_object_author_phone").val();
         var siteValue = $(".educational_object_author_site").val();
         var validate = true;
-        if (!String(nameValue).match("[a-zA-Z ]{3,40}")) {
+        if (!String(nameValue).match("[a-z\u00C0-\u00ff A-Z]{3,40}")) {
             $(".educational_object_author_warning_name").css("display", "block");
             validate = false;
         } else if (emailValue != "" && !String(emailValue).match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")) {

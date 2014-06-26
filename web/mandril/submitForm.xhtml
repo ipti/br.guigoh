@@ -109,6 +109,7 @@
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3,mp4,ogg,webM, swf, jpg, png, gif, bmp, pdf, doc e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
                             <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}">
+                                <f:view encoding="UTF-8"/>
                                 <f:ajax execute="@this" listener="#{submitFormBean.addMedia()}" render="medias_added"/>
                             </h:inputFile>
                             <h:panelGroup id="medias_added" styleClass="medias_added">
@@ -116,7 +117,7 @@
                                     <h:panelGrid styleClass="media_added" columns="9">
                                         <h:outputText styleClass="file_attach_image"></h:outputText>
                                         <h:panelGroup styleClass="attached_file_box">
-                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}" >
+                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}">
                                             </h:outputText>
                                         </h:panelGroup>
                                         <h:commandLink styleClass="remove_media">
