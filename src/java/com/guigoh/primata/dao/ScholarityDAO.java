@@ -27,7 +27,7 @@ import javax.transaction.UserTransaction;
  */
 public class ScholarityDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
 
     public ScholarityDAO() {
     }

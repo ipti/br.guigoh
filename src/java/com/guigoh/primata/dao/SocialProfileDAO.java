@@ -45,7 +45,7 @@ import javax.transaction.UserTransaction;
  */
 public class SocialProfileDAO implements Serializable {
     
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
 
     public SocialProfileDAO() {
     }

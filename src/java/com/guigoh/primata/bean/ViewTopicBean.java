@@ -51,13 +51,13 @@ public class ViewTopicBean implements Serializable {
     private String newReply;
     private Users user;
     private SocialProfile socialProfile;
-    private Part fileMedia;
-    private List<Part> fileList;
+    private transient Part fileMedia;
+    private transient List<Part> fileList;
     private DiscussionTopicMsgBO dtmBO;
     private DiscussionTopicBO dtBO;
     private DiscussionTopicFilesBO dtfBO;
 
-    public void init() {
+    public void init() { 
         if (!FacesContext.getCurrentInstance().isPostback()) {
             dtBO = new DiscussionTopicBO();
             dtmBO = new DiscussionTopicMsgBO();

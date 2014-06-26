@@ -32,7 +32,7 @@ import javax.persistence.EntityManagerFactory;
  */
 public class DiscussionTopicDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
 
     public DiscussionTopicDAO() {
     }

@@ -18,7 +18,7 @@
             <f:viewParam name="id" value="#{createTopicBean.themesID}" />
             <f:event type="preRenderComponent" listener="#{createTopicBean.init()}"/>
         </f:metadata>
-        <h:form prependId="false" enctype="multipart/form-data" >
+        <h:form prependId="false" enctype="multipart/form-data" acceptcharset="ISO-8859-1">
             <h:panelGroup>
                 <h:outputText styleClass="theme_title" value="#{localeBean.getString(theme)}"></h:outputText>
                 <h:panelGroup styleClass="create_topic_box">

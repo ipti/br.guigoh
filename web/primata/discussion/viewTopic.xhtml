@@ -84,7 +84,8 @@
                     <h:inputFile id="file" styleClass="file" value="#{viewTopicBean.fileMedia}">
                         <f:ajax execute="file" listener="#{viewTopicBean.addMedia()}" render="files_box"/>
                     </h:inputFile>
-                    <h:inputTextarea styleClass="new_reply" value="#{viewTopicBean.newReply}"/>
+                    <h:inputTextarea id="reply" styleClass="new_reply" value="#{viewTopicBean.newReply}">
+                    </h:inputTextarea>
                 </h:panelGroup>
                 <h:panelGroup styleClass="reply_message_container">
                     <img id="reply_message_icon" src="/resources/images/green-plus.png"/>

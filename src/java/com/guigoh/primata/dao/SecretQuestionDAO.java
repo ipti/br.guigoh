@@ -25,7 +25,7 @@ import javax.persistence.EntityManagerFactory;
  */
 public class SecretQuestionDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
             
     public SecretQuestionDAO() {
     }

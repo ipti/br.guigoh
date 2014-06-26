@@ -28,7 +28,7 @@ import javax.transaction.UserTransaction;
  */
 public class EducationsLocationDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
     
     public EducationsLocationDAO() {
 

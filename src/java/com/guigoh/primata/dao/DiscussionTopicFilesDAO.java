@@ -22,7 +22,7 @@ import javax.persistence.criteria.Root;
  */
 public class DiscussionTopicFilesDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
 
     public DiscussionTopicFilesDAO() {
     }

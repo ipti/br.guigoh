@@ -42,9 +42,9 @@ public class SubmitFormBean implements Serializable {
     private List<Author> authorList;
     private Author author;
     private String tags;
-    private Part imageFile;
-    private Part mediaFile;
-    private List<Part> mediaList;
+    private transient Part imageFile;
+    private transient Part mediaFile;
+    private transient List<Part> mediaList;
     private boolean submitted;
  
     public void init() {
@@ -106,10 +106,11 @@ public class SubmitFormBean implements Serializable {
             authorBO.create(authorOE);
         }
         String mediaPath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects"+ File.separator + educationalObject.getName() + File.separator +"media" + File.separator;
-        for (Part part : mediaList) {
+        for (Part part : mediaList) { 
             EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
             educationalObjectMedia.setEducationalObjectId(educationalObject);
             educationalObjectMedia.setSize(BigInteger.valueOf(part.getSize()));
+            //BUG ARQUIVO COM MAIS DE UM PONTO, AJEITAR
             educationalObjectMedia.setName(part.getSubmittedFileName().split("\\.")[0]);
             educationalObjectMedia.setType(part.getSubmittedFileName().split("\\.")[1]);
             educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
