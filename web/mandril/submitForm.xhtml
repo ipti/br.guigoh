@@ -10,7 +10,7 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
-        <h:form id="form" prependId="false" enctype="multipart/form-data">
+        <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
             <h:panelGroup styleClass="register_box">
                 <h:panelGroup styleClass="ctn-form_title">
                     <h:outputText styleClass="form_title" value="#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}"/>
@@ -47,7 +47,6 @@
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Apenas uma opção.')}"/>
                         <h:outputText styleClass="educational_object_theme_warning" value="#{localeBean.getString('Selecione ao menos uma opção.')}"/>
                         <h:selectOneRadio id="themes" styleClass="educational_object_theme" value="#{submitFormBean.educationalObject.themeId}">
-                            <f:view encoding="ISO-8859-1"/>
                             <f:converter converterId="InterestsConverter"/>
                             <f:selectItems  id="theme" value="#{submitFormBean.interestThemesList}" var="theme" itemLabel="#{localeBean.getString(theme.name)}" itemValue="#{theme}"/>
                         </h:selectOneRadio>
@@ -116,7 +115,7 @@
                                     <h:panelGrid styleClass="media_added" columns="9">
                                         <h:outputText styleClass="file_attach_image"></h:outputText>
                                         <h:panelGroup styleClass="attached_file_box">
-                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}" >
+                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}">
                                             </h:outputText>
                                         </h:panelGroup>
                                         <h:commandLink styleClass="remove_media">

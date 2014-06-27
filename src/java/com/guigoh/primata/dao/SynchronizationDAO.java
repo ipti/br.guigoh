@@ -23,7 +23,7 @@ import javax.transaction.UserTransaction;
  */
 public class SynchronizationDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
 
     public SynchronizationDAO() {
     }

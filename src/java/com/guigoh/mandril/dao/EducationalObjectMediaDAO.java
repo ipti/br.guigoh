@@ -24,7 +24,7 @@ import javax.persistence.criteria.Root;
  */
 public class EducationalObjectMediaDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
     
     public EducationalObjectMediaDAO() {
     }

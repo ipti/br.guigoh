@@ -24,7 +24,7 @@ import javax.transaction.UserTransaction;
  */
 public class NetworksDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
     
     public NetworksDAO() {
     }

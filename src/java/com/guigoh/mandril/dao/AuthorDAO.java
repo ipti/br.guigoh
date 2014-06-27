@@ -26,7 +26,7 @@ import javax.persistence.criteria.Root;
  */
 public class AuthorDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
     
     public AuthorDAO() {
     }

@@ -26,7 +26,7 @@ import javax.transaction.UserTransaction;
  */
 public class OccupationsTypeDAO implements Serializable {
 
-    private EntityManagerFactory emf = JPAUtil.getEMF();
+    private transient EntityManagerFactory emf = JPAUtil.getEMF();
     
     public OccupationsTypeDAO() {
 
