@@ -1,7 +1,13 @@
 var commentsPag;
 $(document).ready(function() {
-
+    
     displayPreview();
+    
+    var left = $(".cnt-left").height();
+    var right = $(".cnt-right").height();
+    if (left > right){
+        $(".cnt-right").css("height", left);
+    }
 
     $("#send-comment-btn").click(function() {
         $("#send-comment").slideToggle();
@@ -45,8 +51,8 @@ function displayPreview() {
             var index = $(mediaName).index(this);
             right.empty();
             var type = $(this).text().split(".")[1];
-            if (type.match(/^doc$/i) || type.match(/^txt$/i)) {
-                right.append($(this).text() + " indisponível para visualização.");
+            if (type.match(/^doc$/i) || type.match(/^docx$/i) || type.match(/^txt$/i)) {
+                right.append("Prévia não suportada.");
             }else if (type.match(/^pdf$/i)){
                 right.append("<iframe height='433' width='550' src='" + mediaUrl.eq(index).text()  + "'/>");
             } else if (type.match(/^jpg$/i) || type.match(/^png$/i) || type.match(/^gif$/i)) {
