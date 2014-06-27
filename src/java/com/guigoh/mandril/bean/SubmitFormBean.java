@@ -64,7 +64,10 @@ public class SubmitFormBean implements Serializable {
         if (authorList.size() < 4) {
             boolean exists = false;
             for (Author author : authorList) {
-                if (author.getName().equals(this.author.getName())) {
+                if (author.getName().equals(this.author.getName()) 
+                        && author.getEmail().equals(this.author.getEmail())
+                        && author.getPhone().equals(this.author.getPhone())
+                        && author.getSite().equals(this.author.getSite())) {
                     exists = true;
                 }
             }
