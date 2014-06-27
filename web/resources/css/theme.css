@@ -37,7 +37,7 @@
 .publish_new_object_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
 
 .educational_object_image{width:77px;height:77px;float:left;margin-right:5px}
-.educational_object_name{margin-left:4px;font-size:12px; text-decoration: none;color: black;font-weight: bold;}
+.educational_object_name{margin-left:4px;font-size:12px; float:left;width:100px;text-decoration: none;color: black;font-weight: bold;}
 .educational_object{float:left;clear:both;margin-bottom:20px;border-bottom:1px solid lightgray}
 .educational_object_publisher{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
 .container_description{clear:both;float:left;margin-top:7px}
