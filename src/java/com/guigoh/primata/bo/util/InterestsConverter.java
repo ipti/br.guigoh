@@ -6,6 +6,9 @@ package com.guigoh.primata.bo.util;
 
 import com.guigoh.primata.bo.InterestsBO;
 import com.guigoh.primata.entity.Interests;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,6 +23,11 @@ public class InterestsConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
+        try {
+            value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(InterestsConverter.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (value == null || value.length() == 0) {
             return null;
         }

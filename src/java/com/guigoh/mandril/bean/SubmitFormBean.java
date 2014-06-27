@@ -21,6 +21,7 @@ import com.guigoh.primata.entity.Tags;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class SubmitFormBean implements Serializable {
     private transient Part mediaFile;
     private transient List<Part> mediaList;
     private boolean submitted;
- 
+
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             submitted = false;
@@ -55,26 +56,36 @@ public class SubmitFormBean implements Serializable {
             educationalObject = new EducationalObject();
             author = new Author();
             mediaList = new ArrayList<>();
-            loadInterestThemes(); 
+            loadInterestThemes();
         }
     }
 
-    public void addAuthor() { 
+    public void addAuthor() throws UnsupportedEncodingException {
         if (authorList.size() < 4) {
+            boolean exists = false;
+            for (Author author : authorList) {
+                if (author.getName().equals(this.author.getName())) {
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                author.setName(new String(author.getName().getBytes("ISO-8859-1"), "UTF-8"));
                 authorList.add(author);
                 author = new Author();
+            }
+
         }
     }
 
     public void addMedia() throws IOException {
         if (mediaList.size() < 3) {
-            if (!mediaFile.getSubmittedFileName().equals("")) {
+            if (!mediaFile.getSubmittedFileName().equals("") && mediaFile.getSubmittedFileName().contains(".")) {
                 mediaList.add(mediaFile);
             }
         }
     }
-    
-    public void removeMedia(Part media){
+
+    public void removeMedia(Part media) {
         mediaList.remove(media);
     }
 
@@ -85,6 +96,7 @@ public class SubmitFormBean implements Serializable {
         AuthorBO authorBO = new AuthorBO();
         EducationalObjectMediaBO educationalObjectMediaBO = new EducationalObjectMediaBO();
         SocialProfile socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
@@ -92,6 +104,7 @@ public class SubmitFormBean implements Serializable {
         UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.create(educationalObject);
+        tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
         String[] tagArray = tags.replace(" ", "").split(",");
         List<EducationalObject> educationalObjectList = new ArrayList<>();
         educationalObjectList.add(educationalObject);
@@ -105,22 +118,20 @@ public class SubmitFormBean implements Serializable {
             authorOE.setEducationalObjectCollection(educationalObjectList);
             authorBO.create(authorOE);
         }
-        String mediaPath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects"+ File.separator + educationalObject.getName() + File.separator +"media" + File.separator;
-        for (Part part : mediaList) { 
+        String mediaPath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getName() + File.separator + "media" + File.separator;
+        for (Part part : mediaList) {
             EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
             educationalObjectMedia.setEducationalObjectId(educationalObject);
             educationalObjectMedia.setSize(BigInteger.valueOf(part.getSize()));
-            //BUG ARQUIVO COM MAIS DE UM PONTO, AJEITAR
-            educationalObjectMedia.setName(part.getSubmittedFileName().split("\\.")[0]);
-            educationalObjectMedia.setType(part.getSubmittedFileName().split("\\.")[1]);
+            String[] fileSplit = part.getSubmittedFileName().split("\\.");
+            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
             educationalObjectMedia.setMedia("http://cdn.guigoh.com/educationalobjects/" + educationalObject.getName() + "/media/" + part.getSubmittedFileName());
             UploadService.uploadFile(part, mediaPath);
-            educationalObjectMediaBO.create(educationalObjectMedia); 
+            educationalObjectMediaBO.create(educationalObjectMedia);
         }
         submitted = true;
     }
-
-    
 
     private void loadInterestThemes() {
         InterestsBO interestsBO = new InterestsBO();

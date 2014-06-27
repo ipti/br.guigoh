@@ -33,6 +33,8 @@
 .member_date{font-size:12px;float:right;color:#919291;width:65px;margin:15px 20px 0 0}
 .discussion_topic_clock{background:url('../images/clocks.png');width:17px;height:18px;float:right;margin:15px 2px 0 0}
 .file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;margin:-5px 0 0 120px}
+#files_box{display:block;width:500px;}
+.remove_media{float:right;width:16px;height:16px;margin:-45px 0 0 0;background:url('/resources/images/close.png') no-repeat}
 .back_link{color:black;margin:40px 0 60px 20px;float:left;font-size:14px}
 .box_spacer{border-top:1px solid #B2B6B1;display:block;margin:0 0 40px 0}
 .reply_sender_name{color:black;float:left;font-size:12px;text-decoration:underline;margin:85px 0 40px -87px;width:77px;}

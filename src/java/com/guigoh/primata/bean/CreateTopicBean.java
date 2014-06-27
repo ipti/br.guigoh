@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -80,8 +81,9 @@ public class CreateTopicBean implements Serializable {
         user.setToken(CookieService.getCookie("token"));
     }
 
-    public void addTag() {
+    public void addTag() throws UnsupportedEncodingException {
         if (tags.size() < 3) {
+            tagInput = new String(tagInput.getBytes("ISO-8859-1"), "UTF-8");
             if (!tagInput.equals("")) {
                 tag.setName(tagInput);
                 tags.add(tag);
@@ -93,16 +95,22 @@ public class CreateTopicBean implements Serializable {
 
     public void addMedia() throws IOException {
         if (fileList.size() < 3) {
-            if (!fileMedia.getSubmittedFileName().equals("")) {
+            if (!fileMedia.getSubmittedFileName().equals("") && fileMedia.getSubmittedFileName().contains(".")) {
                 fileList.add(fileMedia);
             }
         }
+    }
+    
+    public void removeMedia(Part media) {
+        fileList.remove(media);
     }
 
     public void createTopic() {
         try {
             Calendar c = Calendar.getInstance(TimeZone.getDefault());
             DiscussionTopicBO discussionTopicBO = new DiscussionTopicBO();
+            discussionTopic.setTitle(new String(discussionTopic.getTitle().getBytes("ISO-8859-1"), "UTF-8"));
+            discussionTopic.setBody(new String(discussionTopic.getBody().getBytes("ISO-8859-1"), "UTF-8"));
             discussionTopic.setData(c.getTime());
             discussionTopic.setSocialProfileId(socialProfile);
             discussionTopic.setStatus(ACTIVE);
@@ -119,8 +127,9 @@ public class CreateTopicBean implements Serializable {
                     String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator;
                     UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
-                    discussionTopicFiles.setFileName(part.getSubmittedFileName());
-                    discussionTopicFiles.setFileType(part.getContentType().split("/")[1]);
+                    String[] fileSplit = part.getSubmittedFileName().split("\\.");
+                    discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
+                    discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
                     discussionTopicFiles.setFilepath("http://cdn.guigoh.com/discussionFiles/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());

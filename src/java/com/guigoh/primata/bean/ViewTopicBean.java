@@ -57,7 +57,7 @@ public class ViewTopicBean implements Serializable {
     private DiscussionTopicBO dtBO;
     private DiscussionTopicFilesBO dtfBO;
 
-    public void init() { 
+    public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             dtBO = new DiscussionTopicBO();
             dtmBO = new DiscussionTopicMsgBO();
@@ -92,14 +92,19 @@ public class ViewTopicBean implements Serializable {
 
     public void addMedia() throws IOException {
         if (fileList.size() < 3) {
-            if (!fileMedia.getSubmittedFileName().equals("")) {
+            if (!fileMedia.getSubmittedFileName().equals("") && fileMedia.getSubmittedFileName().contains(".")) {
                 fileList.add(fileMedia);
             }
         }
     }
+    
+    public void removeMedia(Part media) {
+        fileList.remove(media);
+    }
 
     public void replyTopic() throws RollbackFailureException, Exception {
         try {
+            newReply = new String(newReply.getBytes("ISO-8859-1"), "UTF-8");
             if (!newReply.equals("")) {
                 DiscussionTopicMsg discussionTopicMsg = new DiscussionTopicMsg();
                 discussionTopicMsg.setDiscussionTopicId(discussionTopic);
@@ -114,8 +119,9 @@ public class ViewTopicBean implements Serializable {
                         String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator;
                         UploadService.uploadFile(part, filePath);
                         DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
-                        discussionTopicFiles.setFileName(part.getSubmittedFileName());
-                        discussionTopicFiles.setFileType(part.getContentType().split("/")[1]);
+                        String[] fileSplit = part.getSubmittedFileName().split("\\.");
+                        discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
+                        discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
                         discussionTopicFiles.setFilepath("http://cdn.guigoh.com/discussionFiles/" + part.getSubmittedFileName());
                         discussionTopicFiles.setFkType(MESSAGE);
                         discussionTopicFiles.setFkId(discussionTopicMsg.getId());
@@ -196,5 +202,5 @@ public class ViewTopicBean implements Serializable {
     public void setFileList(List<Part> fileList) {
         this.fileList = fileList;
     }
-    
+
 }
