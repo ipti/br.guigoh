@@ -15,7 +15,6 @@
     </ui:define>
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="id" value="#{createTopicBean.themesID}" />
             <f:event type="preRenderComponent" listener="#{createTopicBean.init()}"/>
         </f:metadata>
         <h:form prependId="false" id="form" enctype="multipart/form-data" acceptcharset="UTF-8">

@@ -9,14 +9,9 @@
     <ui:define name="content">
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/theme.css"></link>
         <script type="text/javascript" src="/resources/js/theme.js"></script>
-        <script type="text/javascript">
-            var theme_id = #{themeBean.id};
-        </script>
         <f:metadata>
-            <f:viewParam name="id" value="#{themeBean.id}" />
             <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
         </f:metadata>
-        <script type="text/javascript" src="/resources/js/home.js"></script>
         <h:form>
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(themeName)}"></h:outputText>
             <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
@@ -35,7 +30,7 @@
                         <h:link styleClass="create_topic_container" outcome="/primata/discussion/createTopic.xhtml">
                             <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
-                            <f:param name="id" value="#{themeBean.id}" />
+                            <f:param name="id" value="#{themeBean.themeID}" />
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
                             <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">

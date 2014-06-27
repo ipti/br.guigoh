@@ -129,12 +129,14 @@ public class ProfileBean implements Serializable {
 
     private void loadProfile(Integer id) {
         loadUserCookie();
-        if (id == null) {
+        String idStr = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+        if (idStr == null) {
             loadSocialProfile();
             loadInterests();
             loadEducations(socialProfile.getTokenId());
             loadExperiencies(socialProfile.getTokenId());
         } else {
+            this.id = id = Integer.valueOf(idStr);
             loadUsers(id);
             loadInterests();
             loadEducations(socialProfile.getTokenId());
@@ -246,7 +248,7 @@ public class ProfileBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             experiencesList.remove(exp);
             ExperiencesBO experiencesBO = new ExperiencesBO();
-            experiencesBO.removeExperience(exp);            
+            experiencesBO.removeExperience(exp);
             String message = trans.getWord("Experiência removida com sucesso!");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
@@ -375,7 +377,6 @@ public class ProfileBean implements Serializable {
             p7.setSpacingBefore(10);
             p7.setSpacingAfter(20);
 
-
             doc.add(p1);
             doc.add(p2);
             doc.add(p3);
@@ -495,7 +496,7 @@ public class ProfileBean implements Serializable {
         InterestsBO interestsBO = new InterestsBO();
         InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
         InterestsType interestsType = interestsTypeBO.findInterestsTypeByName(type);
-        Interests interestsTemp;        
+        Interests interestsTemp;
         for (Interests interests : interestsList) {
             if (interests != null) {
                 interestsTemp = interestsBO.findInterestsByInterestsName(interests.getName());

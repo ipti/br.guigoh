@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.guigoh.mandril.bean;
+package com.guigoh.mandril.bean; 
 
 import com.guigoh.mandril.bo.AuthorBO;
 import com.guigoh.mandril.bo.EducationalObjectBO;
