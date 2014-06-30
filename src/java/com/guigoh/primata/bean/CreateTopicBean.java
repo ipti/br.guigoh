@@ -49,19 +49,20 @@ public class CreateTopicBean implements Serializable {
     public static final char MSG = 'M';
     private DiscussionTopic discussionTopic;
     private List<Tags> tags;
-    private Integer themesID;
+    private Integer themeID;
     private Users user;
     private SocialProfile socialProfile;
     private Interests theme;
     private Tags tag;
     private String tagInput;
-    private Part fileMedia;
-    private List<Part> fileList;
+    private transient Part fileMedia;
+    private transient List<Part> fileList; 
     private InterestsBO interestsBO;
     private SocialProfileBO socialProfileBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            themeID = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             discussionTopic = new DiscussionTopic();
             tags = new ArrayList<Tags>();
             tag = new Tags();
@@ -72,7 +73,7 @@ public class CreateTopicBean implements Serializable {
             socialProfileBO = new SocialProfileBO();
             socialProfile = socialProfileBO.findSocialProfile(user.getToken());
             interestsBO = new InterestsBO();
-            theme = interestsBO.findInterestsByID(themesID);
+            theme = interestsBO.findInterestsByID(themeID);
         }
     }
 
@@ -138,7 +139,7 @@ public class CreateTopicBean implements Serializable {
             }
             discussionTopic = new DiscussionTopic();
             tags = new ArrayList<Tags>();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themesID);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themeID);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,12 +153,12 @@ public class CreateTopicBean implements Serializable {
         this.discussionTopic = discussionTopic;
     }
 
-    public Integer getThemesID() {
-        return themesID;
+    public Integer getThemeID() {
+        return themeID;
     }
 
-    public void setThemesID(Integer themesID) {
-        this.themesID = themesID;
+    public void setThemeID(Integer themeID) {
+        this.themeID = themeID;
     }
 
     public Users getUser() {

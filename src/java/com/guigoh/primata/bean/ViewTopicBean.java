@@ -17,22 +17,13 @@ import com.guigoh.primata.entity.DiscussionTopicMsg;
 import com.guigoh.primata.entity.SocialProfile;
 import com.guigoh.primata.entity.Users;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -59,6 +50,7 @@ public class ViewTopicBean implements Serializable {
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            discussionTopicID = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             dtBO = new DiscussionTopicBO();
             dtmBO = new DiscussionTopicMsgBO();
             dtfBO = new DiscussionTopicFilesBO();

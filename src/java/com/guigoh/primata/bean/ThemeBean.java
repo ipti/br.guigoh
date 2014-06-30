@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -27,7 +28,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "themeBean")
 public class ThemeBean implements Serializable{
     
-    private Integer id;
+    private Integer themeID;
     private Interests interest;
     private String generalSearch;
     private List<DiscussionTopic> discussionTopicList;
@@ -39,6 +40,7 @@ public class ThemeBean implements Serializable{
     
     public void init(){
         if(!FacesContext.getCurrentInstance().isPostback()){
+            themeID = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             generalSearch = "";
             tagSelected = "";
             dtBO = new DiscussionTopicBO();
@@ -54,7 +56,7 @@ public class ThemeBean implements Serializable{
     
     private void loadInterest(){
         InterestsBO iBO = new InterestsBO();
-        interest = iBO.findInterestsByID(id);
+        interest = iBO.findInterestsByID(themeID); 
     }
     
     private void loadTags(){
@@ -63,26 +65,26 @@ public class ThemeBean implements Serializable{
     }
     
     private void loadDiscussionTopics(){
-        discussionTopicList = dtBO.findDiscussionTopicsByTheme(id);
+        discussionTopicList = dtBO.findDiscussionTopicsByTheme(themeID);
     }
     
     private void loadEducationalObjectsByTheme(){
-        educationalObjectList = eoBO.getActiveEducationalObjectsByTheme(id);
+        educationalObjectList = eoBO.getActiveEducationalObjectsByTheme(themeID);
     }
     
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<DiscussionTopic>();
         educationalObjectList = new ArrayList<EducationalObject>();
-        discussionTopicList = dtBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, id);
-        educationalObjectList = eoBO.getEducationalObjectsByExpression(generalSearch, tagSelected, id);
+        discussionTopicList = dtBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
+        educationalObjectList = eoBO.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getThemeID() {
+        return themeID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setThemeID(Integer themeID) {
+        this.themeID = themeID;
     }
 
     public Interests getInterest() {
