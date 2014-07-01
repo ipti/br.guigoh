@@ -403,6 +403,28 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
+    
+    public List<EducationalObject> getActiveEducationalObjects(){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
+                    + "where status = 'AC' order by date desc", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> getInactiveEducationalObjects(){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from mandril_educational_object "
+                    + "where status = 'DE' order by date desc", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
 
     public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
         EntityManager em = getEntityManager();

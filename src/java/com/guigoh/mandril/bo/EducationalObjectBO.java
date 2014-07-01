@@ -85,6 +85,24 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
+    public List<EducationalObject> getActiveEducationalObjects(){
+        try {
+            return educationalObjectDAO.getActiveEducationalObjects();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<EducationalObject> getInactiveEducationalObjects(){
+        try {
+            return educationalObjectDAO.getInactiveEducationalObjects();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id) {
         try {
             return educationalObjectDAO.getActiveEducationalObjectsByTheme(theme_id);
