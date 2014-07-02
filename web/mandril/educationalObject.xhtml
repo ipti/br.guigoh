@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
         <link rel="stylesheet" href="../resources/css/jquery.wysiwyg.css" type="text/css" />
         <f:metadata>
+            <f:viewParam name="id" value="#{educationalObjectBean.educationalObjectID}"/>
             <f:event type="preRenderComponent" listener="#{educationalObjectBean.init()}"/>
         </f:metadata>
         <h:form>

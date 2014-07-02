@@ -12,13 +12,14 @@ import com.guigoh.primata.entity.SocialProfile;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author ipti004
  */
-@RequestScoped
+@ViewScoped
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {
 

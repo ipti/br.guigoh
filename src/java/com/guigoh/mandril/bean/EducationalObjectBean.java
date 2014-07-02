@@ -37,7 +37,6 @@ public class EducationalObjectBean implements Serializable {
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            educationalObjectID = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             educationalObjectBO = new EducationalObjectBO();
             educationalObject = new EducationalObject();
             authorBO = new AuthorBO();

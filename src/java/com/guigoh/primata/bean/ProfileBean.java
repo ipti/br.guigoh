@@ -129,14 +129,12 @@ public class ProfileBean implements Serializable {
 
     private void loadProfile(Integer id) {
         loadUserCookie();
-        String idStr = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
-        if (idStr == null) {
+        if (id == null) {
             loadSocialProfile();
             loadInterests();
             loadEducations(socialProfile.getTokenId());
             loadExperiencies(socialProfile.getTokenId());
         } else {
-            this.id = id = Integer.valueOf(idStr);
             loadUsers(id);
             loadInterests();
             loadEducations(socialProfile.getTokenId());

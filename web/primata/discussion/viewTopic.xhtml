@@ -13,6 +13,7 @@
     </ui:define>
     <ui:define name="content">
         <f:metadata>
+            <f:viewParam name="id" value="#{viewTopicBean.discussionTopicID}"/>
             <f:event type="preRenderComponent" listener="#{viewTopicBean.init()}"/>
         </f:metadata>
         <h:form prependId="false" id="form" enctype="multipart/form-data" acceptcharset="UTF-8">

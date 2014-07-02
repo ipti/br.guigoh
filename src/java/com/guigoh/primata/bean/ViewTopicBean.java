@@ -50,7 +50,6 @@ public class ViewTopicBean implements Serializable {
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            discussionTopicID = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             dtBO = new DiscussionTopicBO();
             dtmBO = new DiscussionTopicMsgBO();
             dtfBO = new DiscussionTopicFilesBO();
