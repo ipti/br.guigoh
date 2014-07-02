@@ -53,51 +53,51 @@
                             </div>
                         </h:panelGroup>
                     </h:panelGroup>
-                    <h:panelGroup styleClass="authorization_objects_panel">
-                        <h:outputText styleClass="authorization_objects" value="Objetos Educacionais pendentes"/>
-                        <div id="pending_objects_box">
-                            <ui:repeat value="#{adminBean.pendingEducationalObjectList}" var="pendingEducationalObject">
-                                <ui:param value="#{pendingEducationalObject.id}" name="id"/>
-                                <div id="submitted_object_box_#{pendingEducationalObject.id}" class="submitted_object_box">
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{pendingEducationalObject.id}" styleClass="submitted_object" value="#{pendingEducationalObject.name}"/>
-                                    <h:commandButton value="Aceitar">
+                        <h:panelGroup styleClass="authorization_objects_panel">
+                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais pendentes"/>
+                            <div id="pending_objects_box">
+                                <ui:repeat value="#{adminBean.pendingEducationalObjectList}" var="pendingEducationalObject">
+                                    <ui:param value="#{pendingEducationalObject.id}" name="id"/>
+                                    <div id="submitted_object_box_#{pendingEducationalObject.id}" class="submitted_object_box">
+                                        <h:link outcome="/mandril/educationalObject.xhtml?id=#{pendingEducationalObject.id}" styleClass="submitted_object" value="#{pendingEducationalObject.name}"/>
+                                        <h:commandButton value="Aceitar">
                                         <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
-                                    </h:commandButton>
-                                    <h:commandButton value="Rejeitar">
-                                        <f:ajax event="click" render="@form" listener="#{adminBean.declineEducationalObject(id)}"/>
-                                    </h:commandButton>
-                                </div>
-                            </ui:repeat>
-                        </div>
-                    </h:panelGroup>
+                                        </h:commandButton>
+                                        <h:commandButton value="Rejeitar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineEducationalObject(id)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
                     <h:panelGroup styleClass="authorization_objects_panel">
-                        <h:outputText styleClass="authorization_objects" value="Objetos Educacionais ativos"/>
+                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais ativos"/>
                         <div id="active_objects_box">
-                            <ui:repeat value="#{adminBean.activeEducationalObjectList}" var="activeEducationalObject">
-                                <ui:param value="#{activeEducationalObject.id}" name="id"/>
-                                <div id="active_object_box_#{activeEducationalObject.id}" class="active_object_box">
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{activeEducationalObject.id}" styleClass="submitted_object" value="#{activeEducationalObject.name}"/>
-                                    <h:commandButton value="Desativar">
-                                        <f:ajax event="click" render="@form" listener="#{adminBean.deactivateEducationalObject(id)}"/>
-                                    </h:commandButton>
-                                </div>
-                            </ui:repeat>
-                        </div>
-                    </h:panelGroup>
-                    <h:panelGroup styleClass="authorization_objects_panel">
-                        <h:outputText styleClass="authorization_objects" value="Objetos Educacionais inativos"/>
-                        <div id="inactive_objects_box">
-                            <ui:repeat value="#{adminBean.inactiveEducationalObjectList}" var="inactiveEducationalObject">
-                                <ui:param value="#{inactiveEducationalObject.id}" name="id"/>
-                                <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="inactive_object_box">
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{inactiveEducationalObject.id}" styleClass="submitted_object" value="#{inactiveEducationalObject.name}"/>
-                                    <h:commandButton value="Ativar">
-                                        <f:ajax event="click" render="@form" listener="#{adminBean.activateEducationalObject(id)}"/>
-                                    </h:commandButton>
-                                </div>
-                            </ui:repeat>
-                        </div>
-                    </h:panelGroup>
+                                <ui:repeat value="#{adminBean.activeEducationalObjectList}" var="activeEducationalObject">
+                                    <ui:param value="#{activeEducationalObject.id}" name="id"/>
+                                    <div id="active_object_box_#{activeEducationalObject.id}" class="active_object_box">
+                                        <h:link outcome="/mandril/educationalObject.xhtml?id=#{activeEducationalObject.id}" styleClass="submitted_object" value="#{activeEducationalObject.name}"/>
+                                        <h:commandButton value="Desativar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateEducationalObject(id)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="authorization_objects_panel">
+                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais inativos"/>
+                            <div id="inactive_objects_box">
+                                <ui:repeat value="#{adminBean.inactiveEducationalObjectList}" var="inactiveEducationalObject">
+                                    <ui:param value="#{inactiveEducationalObject.id}" name="id"/>
+                                    <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="inactive_object_box">
+                                        <h:link outcome="/mandril/educationalObject.xhtml?id=#{inactiveEducationalObject.id}" styleClass="submitted_object" value="#{inactiveEducationalObject.name}"/>
+                                        <h:commandButton value="Ativar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateEducationalObject(id)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
                     <span class="clear"></span>
                 </div>
             </div>

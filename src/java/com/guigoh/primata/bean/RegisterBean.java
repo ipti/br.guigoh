@@ -100,16 +100,6 @@ public class RegisterBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
-            socialProfile = new SocialProfile();
-            secretQuestion = new SecretQuestion();
-            questionsList = new ArrayList<SecretQuestion>();
-            questionsList = getQuestions();
-            stateList = new ArrayList<State>();
-            countryList = getCountries();
-            cityList = new ArrayList<City>();
-            roleList = new ArrayList<Role>();
-            languageList = getLanguages();
-            subnetworkList = getSubnetworks();
             countryBO = new CountryBO();
             stateBO = new StateBO();
             cityBO = new CityBO();
@@ -118,6 +108,16 @@ public class RegisterBean implements Serializable {
             authorizationBO = new AuthorizationBO();
             networksBO = new NetworksBO();
             emailActivationBO = new EmailActivationBO();
+            socialProfile = new SocialProfile();
+            secretQuestion = new SecretQuestion();
+            questionsList = new ArrayList<>();
+            questionsList = getQuestions();
+            stateList = new ArrayList<>();
+            countryList = getCountries();
+            cityList = new ArrayList<>();
+            roleList = new ArrayList<>();
+            languageList = getLanguages();
+            subnetworkList = getSubnetworks();
             usernameConfirm = "";
             passwordConfirm = "";
             countryId = 0;

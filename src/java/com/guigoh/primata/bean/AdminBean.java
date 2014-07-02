@@ -115,6 +115,7 @@ public class AdminBean implements Serializable {
         EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
         educationalObjectBO.edit(educationalObject);
+        getActiveEducationalObjects();
         getPendingEducationalObjects();
     }
     
@@ -130,12 +131,14 @@ public class AdminBean implements Serializable {
         educationalObject.setStatus(DEACTIVATED);
         educationalObjectBO.edit(educationalObject);
         getActiveEducationalObjects();
+        getInactiveEducationalObjects();
     }
     
     public void activateEducationalObject(Integer id){
         EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
         educationalObjectBO.edit(educationalObject);
+        getActiveEducationalObjects();
         getInactiveEducationalObjects();
     }
 
