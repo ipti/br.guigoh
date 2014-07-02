@@ -17,11 +17,12 @@
 .media-table{margin-top:10px;font-size:11px;width:270px;border-collapse:collapse}
 .media-table-header{font-weight:bold;}
 .media-table-row{line-height:18px;text-align:justify;}
-.media-table-row:hover{background-color:#B8B8B8 !important;}
+.media-table-row:hover{background-color:#D1D1D1 !important;}
 .media-download{color:#0000FF;}
 .media-name-header{padding-bottom:2px;font-weight:bold;text-align:left;}
 .media-size-header{padding-bottom:2px;font-weight:bold;text-align:center;}
 .media-size-column{text-align:center;}
+.media-download-column{text-align:right;}
 .media-name{cursor:pointer;}
 .media-url{display:none;}
 #preview-info{margin-top:-10px;font-size:10px;}

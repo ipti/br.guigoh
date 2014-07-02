@@ -19,7 +19,7 @@ function displayPreview() {
         $(mediaName).click(function() {
             var index = $(mediaName).index(this);
             $(mediaRow).css("background-color", "#DCDFD4");
-            $(mediaRow.eq(index)).css("background-color", "#D1D1D1");
+            $(mediaRow.eq(index)).css("background-color", "#B8B8B8");
             right.empty();
             var type = $(this).text().split(".")[1];
             if (type.match(/^doc$/i) || type.match(/^docx$/i) || type.match(/^txt$/i)) {
@@ -31,7 +31,7 @@ function displayPreview() {
             } else if (type.match(/^mp3$/i) || type.match(/^wav$/i) || type.match(/^wma$/i)) {
                 right.append("<span class='audio-title'><p>" + $(this).text() + "</p></span>" + "<audio src='" + mediaUrl.eq(index).text() + "' controls='preload'/>");
             } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i)) {
-                right.append("<iframe height='310' width='552' src='" + mediaUrl.eq(index).text() + "' frameborder='0' allowfullscreen></iframe>");
+                right.append("<iframe height='310' width='552' src='" + mediaUrl.eq(index).text() + "' frameborder='0'/>");
                 //right.append("<video src='" + mediaUrl.eq(index).text() + "' width='552' height='310' controls='preload'/>");
             }
         });

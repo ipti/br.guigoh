@@ -46,7 +46,7 @@
                             <span class="title">#{localeBean.getString('Lista de arquivos')}</span>
                             <br/><span id="preview-info">#{localeBean.getString('(Para pré-visualizar um arquivo, clique sobre seu nome.)')}</span>
                             <h:dataTable styleClass="media-table" rowClasses="media-table-row"
-                                         columnClasses=" , media-size-column" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
+                                         columnClasses=" , media-size-column, media-download-column" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
                                 <h:column headerClass="media-name-header">
                                     <f:facet name="header">#{localeBean.getString('NomeArquivo')}</f:facet>
                                     <h:outputLabel styleClass="media-name" value="#{mediaInfo.name}.#{mediaInfo.type}"/>
