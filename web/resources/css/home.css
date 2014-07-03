@@ -28,7 +28,7 @@ strong {font-weight: bold;}
 .user_news_name {color:black;text-decoration: underline; display:block;margin-bottom:5px}
 .social_news_name {display:block;margin: 2px 4px 0px 4px;}
 .theme_news_name {margin-left: 4px;}
-.user_feed { display: block; width: 240px; height: 77px; margin-bottom: 40px; }
+.user_feed { display: block; width: 240px; height: auto; margin-bottom: 40px; }
 .list_objects{clear:both;display:block}
 .educational_object_image{width:100px;height:100px;float:left;margin-right:15px}
 .educational_object_name{font-size:15px; text-decoration: none;float:left;color: black;font-weight: bold;}

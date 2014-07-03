@@ -7,7 +7,7 @@
 
     <application></application>   
     <lifecycle>
-        <phase-listener>com.guigoh.primata.bean.AuthorizeListener</phase-listener>
+        <phase-listener>com.guigoh.bean.AuthorizeListener</phase-listener>
     </lifecycle>
 
     <navigation-rule>
