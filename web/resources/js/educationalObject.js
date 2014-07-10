@@ -19,7 +19,7 @@ function displayPreview() {
         $(mediaName).click(function() {
             var index = $(mediaName).index(this);
             $(mediaRow).css("background-color", "#DCDFD4");
-            $(mediaRow.eq(index)).css("background-color", "#B8B8B8");
+            $(mediaRow.eq(index)).css("background-color", "#B1D1FF");
             right.empty();
             var type = $(this).text().split(".")[1];
             if (type.match(/^doc$/i) || type.match(/^docx$/i) || type.match(/^txt$/i)) {

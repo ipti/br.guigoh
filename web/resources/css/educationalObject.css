@@ -6,7 +6,7 @@
 #educational-object{position:relative;float:left;padding:18px 0;font-size:11px;margin-bottom:-15px;}
 #educational-object ul li{margin:8px 0;}
 #educational-object-name{font-size:20px;font-weight:normal;}
-.recommend{cursor:pointer;color:blue;text-decoration:underline;}
+.recommend{display:none;cursor:pointer;color:blue;text-decoration:underline;}
 #recommend-box{display:none;position:static;height:65px;margin-top:8px;padding:10px;background-color:#CCDBF5;}
 #recommend-box p{margin:0 0 5px;}
 #recommend-close{position:absolute;}
@@ -17,7 +17,7 @@
 .media-table{margin-top:10px;font-size:11px;width:270px;border-collapse:collapse}
 .media-table-header{font-weight:bold;}
 .media-table-row{line-height:18px;text-align:justify;}
-.media-table-row:hover{background-color:#D1D1D1 !important;}
+.media-table-row:hover{background-color:#C3E3FF !important;}
 .media-download{color:#0000FF;}
 .media-name-header{padding-bottom:2px;font-weight:bold;text-align:left;}
 .media-size-header{padding-bottom:2px;font-weight:bold;text-align:center;}
