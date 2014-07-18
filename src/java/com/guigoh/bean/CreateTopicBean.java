@@ -59,7 +59,7 @@ public class CreateTopicBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             discussionTopic = new DiscussionTopic();
-            tags = new ArrayList<Tags>();
+            tags = new ArrayList<>();
             tag = new Tags();
             tagInput = "";
             user = new Users();
@@ -120,20 +120,20 @@ public class CreateTopicBean implements Serializable {
             if (!fileList.isEmpty()) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
                 for (Part part : fileList) {
-                    String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator;
+                    String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
                     UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                     String[] fileSplit = part.getSubmittedFileName().split("\\.");
                     discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
                     discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
-                    discussionTopicFiles.setFilepath("http://cdn.guigoh.com/discussionFiles/" + part.getSubmittedFileName());
+                    discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
                     discussionTopicFilesBO.create(discussionTopicFiles);
                 }
             }
             discussionTopic = new DiscussionTopic();
-            tags = new ArrayList<Tags>();
+            tags = new ArrayList<>();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themeID);
         } catch (Exception e) {
             e.printStackTrace();
