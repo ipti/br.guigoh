@@ -67,6 +67,15 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
+    public List<EducationalObject> getLatestTenActiveEducationalObjects() {
+        try {
+            return educationalObjectDAO.getLatestTenActiveEducationalObjects();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public List<EducationalObject> getAllActiveEducationalObjects() {
         try {
             return educationalObjectDAO.getAllActiveEducationalObjects();

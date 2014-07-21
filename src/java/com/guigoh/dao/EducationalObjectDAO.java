@@ -381,6 +381,17 @@ public class EducationalObjectDAO implements Serializable {
             em.close();
         }
     }
+    
+    public List<EducationalObject> getLatestTenActiveEducationalObjects() {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
+                    + "where status = 'AC' order by date desc limit 10", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
 
     public List<EducationalObject> getAllActiveEducationalObjects() {
         EntityManager em = getEntityManager();

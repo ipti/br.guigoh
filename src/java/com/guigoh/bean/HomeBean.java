@@ -47,7 +47,7 @@ public class HomeBean implements Serializable {
     
     private void loadEducationalObjects(){
         EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
-        educationalObjectList = educationalObjectBO.getAllActiveEducationalObjects();
+        educationalObjectList = educationalObjectBO.getLatestTenActiveEducationalObjects();
         
     }
 
