@@ -107,7 +107,7 @@ public class ViewTopicBean implements Serializable {
                 List<DiscussionTopicFiles> dtfList = new ArrayList<>();
                 if (!fileList.isEmpty()) {
                     for (Part part : fileList) {
-                        String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "message" + File.separator + discussionTopicMsg.getId() + File.separator;
+                        String filePath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "message" + File.separator + discussionTopicMsg.getId() + File.separator;
                         UploadService.uploadFile(part, filePath);
                         DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                         String[] fileSplit = part.getSubmittedFileName().split("\\.");
