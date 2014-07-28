@@ -34,7 +34,7 @@
                         <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                     </a>
                     <div id="list_objects" class="list_objects">
-                        <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject">
+                        <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject" >
                             <h:panelGroup styleClass="educational_object">
                                 <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
                                 <h:outputText styleClass="clock_icon"/>

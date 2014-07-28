@@ -120,7 +120,7 @@ public class CreateTopicBean implements Serializable {
             if (!fileList.isEmpty()) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
                 for (Part part : fileList) {
-                    String filePath = System.getProperty("user.home") + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
+                    String filePath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
                     UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                     String[] fileSplit = part.getSubmittedFileName().split("\\.");
