@@ -103,9 +103,9 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
+        educationalObjectBO.create(educationalObject);
         String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()+ File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
-        educationalObjectBO.create(educationalObject);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.edit(educationalObject);
         tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
@@ -122,7 +122,7 @@ public class SubmitFormBean implements Serializable {
             authorOE.setEducationalObjectCollection(educationalObjectList);
             authorBO.create(authorOE);
         }
-        String mediaPath = System.getProperty("user.home") + File.separator + "arteciencia" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
+        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         for (Part part : mediaList) {
             EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
             educationalObjectMedia.setEducationalObjectId(educationalObject);
