@@ -6,6 +6,8 @@
 #educational-object{position:relative;float:left;padding:18px 0;font-size:11px;margin-bottom:-15px;}
 #educational-object ul li{margin:8px 0;}
 #educational-object-name{font-size:20px;font-weight:normal;}
+#educational-object-theme{color:#0000FF;}
+#educational-object-publisher{color:#0000FF;}
 .recommend{display:none;cursor:pointer;color:blue;text-decoration:underline;}
 #recommend-box{display:none;position:static;height:65px;margin-top:8px;padding:10px;background-color:#CCDBF5;}
 #recommend-box p{margin:0 0 5px;}

@@ -40,8 +40,8 @@
                         <h:panelGroup styleClass="educational-object-info">
                             <p><strong>#{localeBean.getString('Tags: ')}</strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
                             <ui:param name="educationalObjectTheme" value="#{educationalObjectBean.educationalObject.themeId.name}"/>
-                            <p><strong>#{localeBean.getString('Tema: ')}</strong><a href="http://rts.guigoh.com:8080/primata/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}">#{localeBean.getString(educationalObjectTheme)}</a></p>
-                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><a href="http://rts.guigoh.com:8080/primata/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectBean.educationalObject.socialProfileId.name}</a></p>    
+                            <p><strong>#{localeBean.getString('Tema: ')}</strong><h:link id="educational-object-theme" outcome="/primata/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}" value="#{localeBean.getString(educationalObjectTheme)}"/></p>
+                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><h:link id="educational-object-publisher" outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}" value="#{educationalObjectBean.educationalObject.socialProfileId.name}"/></p>    
                         </h:panelGroup>
                         <div id="download-box">
                             <span class="title">#{localeBean.getString('Lista de arquivos')}</span>
