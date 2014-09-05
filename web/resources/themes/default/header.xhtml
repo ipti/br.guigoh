@@ -40,14 +40,14 @@
                         <a href="/"><span class="img_logo"></span></a>
                         <ul>
                             <li class="menu home" ><a href="/primata/home.xhtml">#{localeBean.getString('Início')}</a></li>
-                            <li class="menu profile" ><a href="/primata/profile/viewProfile.xhtml">#{localeBean.getString('Perfil')}</a></li>
+                            <li class="menu profile" ><a href="/primata/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Perfil')}</a></li>
                             <li class="menu contacts" ><a href="/primata/friends/viewFriends.xhtml">#{localeBean.getString('Contatos')}</a></li>
                             <li class="menu environment" ><a href="/mandril/publishEnvironment.xhtml">#{localeBean.getString('Ambiente de Publicação')}</a></li>   
                         </ul>
                         <div class="log_menu">
                             <p class="welcome">#{localeBean.getString('Bem-vindo')},</p>
-                            <a id="user_name" href="/primata/profile/viewProfile.xhtml">#{headerBean.socialProfile.name}</a>
-                            <a href="/primata/profile/viewProfile.xhtml"><img src="#{headerBean.socialProfile.photo}" class="img_avatar"/></a>
+                            <a id="user_name" href="/primata/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a>
+                            <a href="/primata/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}"><img src="#{headerBean.socialProfile.photo}" class="img_avatar"/></a>
                         </div>
                     </div>            
                 </div>
