@@ -34,8 +34,8 @@ public class UsersBO implements Serializable {
             return user;
         } catch (Exception e) {
             e.printStackTrace();
+            return new Users();
         }
-        return new Users();
     }
 
     public Users findUsers(String username) {
@@ -47,8 +47,8 @@ public class UsersBO implements Serializable {
             return user;
         } catch (Exception e) {
             e.printStackTrace();
+            return new Users();
         }
-        return new Users();
     }
 
     public Integer getRegisteredUsersQuantity() {

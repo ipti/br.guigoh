@@ -52,7 +52,6 @@
                             <p>#{localeBean.getString('E-mail')}*</p>
                             <h:inputText id="user_email" value="#{registerBean.user.username}" >
                                 <f:validateBean disabled="true"/>
-
                             </h:inputText>
                         </span>
                         <span>
@@ -145,7 +144,7 @@
                         </span> -->
 
                         <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
-                            <f:ajax event="blur" execute="button_save" render="@form"/>
+                            <f:ajax event="action" execute="@form" render="@form"/>
                             <img id="button_save_icon" src="/resources/images/green-plus.png"/>
                             <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
                         </h:commandLink>

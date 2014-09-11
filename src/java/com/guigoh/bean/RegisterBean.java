@@ -100,11 +100,12 @@ public class RegisterBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
+            userBO = new UsersBO();
+            socialProfileBO = new SocialProfileBO();
             countryBO = new CountryBO();
             stateBO = new StateBO();
             cityBO = new CityBO();
             roleBO = new RoleBO();
-            authorizationBO = new UserAuthorizationBO();
             authorizationBO = new UserAuthorizationBO();
             networksBO = new NetworksBO();
             emailActivationBO = new EmailActivationBO();
