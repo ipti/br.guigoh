@@ -78,7 +78,8 @@
 .back_to_home_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
 .medias_added{float:left;margin:10px 0 0 0}
 .media_added{float:left;margin-right:10px}
-.file_attach_image{display:block;width:30px;height:30px;background:url('../images/ico_attach.png') no-repeat;}
+.file_loading_image{display:block;width:30px;height:30px;}
+.file_attach_image{display:none;width:30px;height:30px;}
 .attached_file_box{float:left;font-weight:bold;margin:0px 5px 0;font-size:13px;}
 .remove_media{float:left;width:16px;height:16px;margin:-30px 0 0 0;background:url('/resources/images/close.png') no-repeat}
 .clear{display:block;clear:both}

@@ -120,13 +120,13 @@ public class CreateTopicBean implements Serializable {
             if (!fileList.isEmpty()) {
                 DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
                 for (Part part : fileList) {
-                    String filePath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
+                    String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
                     UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                     String[] fileSplit = part.getSubmittedFileName().split("\\.");
                     discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
                     discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
-                    discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
+                    discussionTopicFiles.setFilepath("http://com.guigoh.cdn/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
                     discussionTopicFilesBO.create(discussionTopicFiles);

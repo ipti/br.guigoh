@@ -102,10 +102,14 @@ $(document).ready(function() {
         }
     });
     $(document).on('change', '#mediaFile', function(e) {
+        $(".file_loading_image").css("display","block");
+        $(".file_attach_image").css("display","none");
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
             var reader = new FileReader();
             reader.onloadend = function() {
+                $(".file_loading_image").css("display","none");
+                $(".file_attach_image").css("display","block");
                 $(".educational_object_media_warning").hide();
             }
             reader.readAsDataURL(file);

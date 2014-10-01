@@ -6,7 +6,7 @@
     <ui:define name="title">#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}</ui:define>
     <ui:define name="content">
         <link rel="stylesheet" href="../resources/css/submitForm.css" />
-        <script src="/resources/js/jquery.mask.js"></script>
+        <script src="/resources/js/jquery.mask.js"/>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
@@ -105,7 +105,7 @@
                         <span class="clear"></span>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
-                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3,mp4,ogg,webM, swf, jpg, png, gif, bmp, pdf, doc e txt.')}"/>
+                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3, mp4, ogg, webM, swf, jpg, png, gif, bmp, pdf, doc e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
                             <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}">
                                 <f:ajax execute="@this" listener="#{submitFormBean.addMedia()}" render="medias_added"/>
@@ -113,10 +113,10 @@
                             <h:panelGroup id="medias_added" styleClass="medias_added">
                                 <ui:repeat value="#{submitFormBean.mediaList}" var="media">
                                     <h:panelGrid styleClass="media_added" columns="9">
-                                        <h:outputText styleClass="file_attach_image"></h:outputText>
+                                        <h:graphicImage styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                        <h:graphicImage styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
                                         <h:panelGroup styleClass="attached_file_box">
-                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}">
-                                            </h:outputText>
+                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}"/>
                                         </h:panelGroup>
                                         <h:commandLink styleClass="remove_media">
                                             <f:ajax execute="@this" listener="#{submitFormBean.removeMedia(media)}" render=":form:medias_added"/>
@@ -161,7 +161,7 @@
                         <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit" >
+                    <h:commandLink styleClass="submit">
                         <f:ajax render="form5" execute="@form" listener="#{submitFormBean.submitForm()}"/>
                     </h:commandLink>
                     <span class="button_back">
@@ -172,6 +172,6 @@
             </h:panelGroup>
             <span class="clear"></span>
         </h:form>
-        <script type="text/javascript" src="../resources/js/submitForm.js" />
+        <script type="text/javascript" src="../resources/js/submitForm.js"/>
     </ui:define>
 </ui:composition>

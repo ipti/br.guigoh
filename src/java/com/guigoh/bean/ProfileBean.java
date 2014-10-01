@@ -136,6 +136,7 @@ public class ProfileBean implements Serializable {
             loadExperiencies(socialProfile.getTokenId());
         } else {
             loadUsers(id);
+            loadSocialProfile();
             loadInterests();
             loadEducations(socialProfile.getTokenId());
             loadExperiencies(socialProfile.getTokenId());
@@ -166,6 +167,11 @@ public class ProfileBean implements Serializable {
         SocialProfileBO socialProfileBO = new SocialProfileBO();
 
         socialProfile = socialProfileBO.findSocialProfile(user.getToken());
+        /*
+         *
+         *COMENTAR ABAIXO
+         *
+         */
         if (socialProfile.getOccupationsId() == null) {
             Occupations occupations = new Occupations();
             OccupationsType occupationsType = new OccupationsType();

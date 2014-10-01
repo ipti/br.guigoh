@@ -63,10 +63,10 @@ public class Upload extends HttpServlet {
 
                         //File f = new File("C:\\Users\\Paulo\\Documents\\guigohdata\\socialProfile\\photo\\" + socialProfile.getSocialProfileId() + "." + item.getName());
                         String type = item.getContentType().split("/")[1];
-                        File f = new File("/home/www/cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type);
+                        File f = new File("/home/www/com.guigoh.cdn/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type);
                         item.write(f);
 
-                        socialProfile.setPhoto("http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type);
+                        socialProfile.setPhoto("http://com.guigoh.cdn/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type);
                         socialProfileBO.edit(socialProfile);
                         //request.setAttribute("content", item.getContentType());
                         //request.setAttribute("size", item.getSize());

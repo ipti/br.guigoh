@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.guigoh.bean; 
+package com.guigoh.bean;
 
 import com.guigoh.bo.AuthorBO;
 import com.guigoh.bo.EducationalObjectBO;
@@ -64,7 +64,7 @@ public class SubmitFormBean implements Serializable {
         if (authorList.size() < 4) {
             boolean exists = false;
             for (Author author : authorList) {
-                if (author.getName().equals(this.author.getName()) 
+                if (author.getName().equals(this.author.getName())
                         && author.getEmail().equals(this.author.getEmail())
                         && author.getPhone().equals(this.author.getPhone())
                         && author.getSite().equals(this.author.getSite())) {
@@ -104,9 +104,9 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
         educationalObjectBO.create(educationalObject);
-        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()+ File.separator + "image" + File.separator;
+        String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
-        educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
+        educationalObject.setImage("http://com.guigoh.cdn/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.edit(educationalObject);
         tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
         String[] tagArray = tags.replace(" ", "").split(",");
@@ -122,7 +122,7 @@ public class SubmitFormBean implements Serializable {
             authorOE.setEducationalObjectCollection(educationalObjectList);
             authorBO.create(authorOE);
         }
-        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "cdn.guigoh.com" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
+        String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         for (Part part : mediaList) {
             EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
             educationalObjectMedia.setEducationalObjectId(educationalObject);
@@ -130,7 +130,7 @@ public class SubmitFormBean implements Serializable {
             String[] fileSplit = part.getSubmittedFileName().split("\\.");
             educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
             educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
+            educationalObjectMedia.setMedia("http://com.guigoh.cdn/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
             UploadService.uploadFile(part, mediaPath);
             educationalObjectMediaBO.create(educationalObjectMedia);
         }
