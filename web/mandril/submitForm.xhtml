@@ -107,30 +107,73 @@
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3, mp4, ogg, webM, swf, jpg, png, gif, bmp, pdf, doc e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
-                            <h:inputFile styleClass="mediaFile" id="mediaFile" value="#{submitFormBean.mediaFile}">
-                                <f:ajax execute="@this" listener="#{submitFormBean.addMedia()}" render="medias_added"/>
-                            </h:inputFile>
-                            <h:panelGroup id="medias_added" styleClass="medias_added">
-                                <ui:repeat value="#{submitFormBean.mediaList}" var="media">
-                                    <h:panelGrid styleClass="media_added" columns="9">
-                                        <h:graphicImage styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                        <h:graphicImage styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
-                                        <h:panelGroup styleClass="attached_file_box">
-                                            <h:outputText styleClass="attached_file"  value="#{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}"/>
-                                        </h:panelGroup>
-                                        <h:commandLink styleClass="remove_media">
-                                            <f:ajax execute="@this" listener="#{submitFormBean.removeMedia(media)}" render=":form:medias_added"/>
-                                        </h:commandLink>
-                                    </h:panelGrid>
-                                </ui:repeat>
-                            </h:panelGroup>
+                            <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>
+                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{submitFormBean.mediaFile2}"/>
+                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{submitFormBean.mediaFile3}"/>
+                            <!--                            <h:panelGroup id="medias_added" styleClass="medias_added">
+                                                            <ui:repeat value="HT{submitFormBean.mediaList}" var="media">
+                                                                <h:panelGrid styleClass="media_added" columns="9">
+                                                                    <h:graphicImage styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                                                    <h:graphicImage styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                                                    <h:panelGroup styleClass="attached_file_box">
+                                                                        <h:outputText styleClass="attached_file"  value="HT{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}"/>
+                                                                    </h:panelGroup>
+                                                                    <h:commandLink styleClass="remove_media">
+                                                                        <f:ajax execute="@this" listener="HT{submitFormBean.removeMedia(media)}" render=":form:medias_added"/>
+                                                                    </h:commandLink>
+                                                                </h:panelGrid>
+                                                            </ui:repeat>
+                                                        </h:panelGroup>-->
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup id="form5">
-                        <h:graphicImage styleClass="loading_gif" value="/resources/images/loading.gif" rendered="#{!submitFormBean.submitted}"/>
-                        <h:panelGroup styleClass="form5_body" rendered="#{submitFormBean.submitted}">
-                            <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
-                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
+                        <!--<h:graphicImage styleClass="loading_gif" value="/resources/images/loading.gif" rendered="HT{!submitFormBean.submitted}"/> -->
+                        <h:panelGroup styleClass="form5_body"> <!--rendered="HT{!submitFormBean.submitted}"-->
+                            <h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
+                            <div id="upload_progress_box">
+                                <h:panelGroup id="uploaded1" styleClass="uploaded">
+                                    <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                    <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                    <h:panelGroup>
+                                        <span id="uploaded_file1" class="uploaded_file"/>
+                                        <div id="upload_bar1" class="upload_progress_bar">
+                                            <div id="upload_bg1" class="upload_progress_background">
+                                                <div id="upload_percent1" class="upload_progress_percent">0%</div>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup id="uploaded2" styleClass="uploaded">
+                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                    <h:panelGroup>
+                                        <span id="uploaded_file2" class="uploaded_file"/>
+                                        <div id="upload_bar2" class="upload_progress_bar">
+                                            <div id="upload_bg2" class="upload_progress_background">
+                                                <div id="upload_percent2" class="upload_progress_percent">0%</div>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup id="uploaded3" styleClass="uploaded">
+                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                    <h:panelGroup>
+                                        <span id="uploaded_file3" class="uploaded_file"/>
+                                        <div id="upload_bar3" class="upload_progress_bar">
+                                            <div id="upload_bg3" class="upload_progress_background">
+                                                <div id="upload_percent3" class="upload_progress_percent">0%</div>
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="form6">
+                        <h:panelGroup styleClass="form6_body">
+                            <h:outputText styleClass="educational_object_review" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
+                            <h:outputText styleClass="educational_object_review_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
                             <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
                                 <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
                                 <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
@@ -147,10 +190,10 @@
                         <img id="button_cancel_icon" src="/resources/images/cross.png"/>
                         <span class="button_cancel_label">#{localeBean.getString('Cancelar')}</span>
                     </h:link>
-                    <h:panelGroup styleClass="progress_bar">
-                        <div class="progress"></div>
-                        <span class="progress-count">
-                            <span class="page-number">1</span>/4
+                    <h:panelGroup styleClass="page_progress_bar">
+                        <div class="page_progress"></div>
+                        <span class="page_progress_count">
+                            <span class="page_number">1</span>/4
                         </span>
                     </h:panelGroup>
                     <span class="button_next">
@@ -161,8 +204,8 @@
                         <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit">
-                        <f:ajax render="form5" execute="@form" listener="#{submitFormBean.submitForm()}"/>
+                    <h:commandLink id="submit" styleClass="submit">
+                        <f:ajax execute="@form" listener="#{submitFormBean.submitForm()}"/>
                     </h:commandLink>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/images/back.png"/>
@@ -170,7 +213,7 @@
                     </span>
                 </h:panelGroup>
             </h:panelGroup>
-            <span class="clear"></span>
+            <!--<span class="clear"></span>-->
         </h:form>
         <script type="text/javascript" src="../resources/js/submitForm.js"/>
     </ui:define>

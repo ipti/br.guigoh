@@ -6,7 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
-.register_box{display:block;margin:75px auto 0;border-radius:10px;width:600px;height:450px}
+.register_box{display:block;margin:75px auto 0;border-radius:10px;width:600px;height:500px;}
 .ctn-form_title{background-color:white;display:block;border-radius:20px 20px 0 0;border:1px solid #ccc;height:60px}
 .form_title{display:block;margin-top: 20px;font-size:20px;text-align: center;}
 .forms{height:350px;padding:20px;display:block;background-color:#E9EDE2;border-radius:0 0 20px 20px;text-align:justify}
@@ -18,9 +18,13 @@
 .form2_body{display:none;}
 .form3_body{display:none;}
 .form4_body{display:none;}
-.form5_body{display:block;margin:90px 0 0 0}
-.form5_body span {text-align:center}
+.form5_body{display:none;} //{display:block;margin:90px 0 0 0}
+.form6_body{display:none;}
+.form6_body span {text-align:center}
 .loading_gif{display:none;margin:130px auto}
+.educational_object_upload_tip{display:block;font-size:14px;margin:10px;text-align:center;}
+.educational_object_review{margin:100px 0 10px 0;font-size: 13px;line-height: 18px;font-weight:bold;display:block}
+.educational_object_review_tip{display:block;font-size:11px}
 .educational_object_image{display:block;margin:15px 0 0 30px}
 .educational_object_medias{display:block;margin:30px 0 0 30px}
 .educational_object_author{float:left; margin:10px 0 0 30px;}
@@ -49,7 +53,7 @@
 .authors_added_value{float:left;font-size:12px}
 #image{display:none;width:100px;height:100px;margin:0px auto}
 .button_options{margin-top:12px;display:block}
-.button_cancel{text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
+.button_cancel{text-decoration: none;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
 #button_cancel_icon{float:left;padding:4px 2px 0}
 .button_cancel_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
 .button_back{display:none;cursor:pointer;text-decoration: none;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}
@@ -66,10 +70,10 @@
 .button_submit{cursor:pointer;display:none;text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}
 #button_submit_icon{float:left;padding:4px 2px}
 .button_submit_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
-.progress_bar{border: 1px solid #999999;color: #666666;font-size: 11px;height: 11px;margin:10px 0 0 110px;padding-bottom: 2px;float:left;width: 160px;}
-.progress{width: 25%;background-color: #B9D331;height: 11px;position:relative;padding-bottom: 2px;}
-.page-number{}
-.progress-count{width:20px;position:relative;left:45%;display:block;margin:-12px 0 0 0}
+.page_progress_bar{border: 1px solid #999999;color: #666666;font-size: 11px;height: 11px;margin:10px 0 0 120px;padding-bottom: 2px;float:left;width: 160px;}
+.page_progress{width: 25%;background-color: #B9D331;height: 11px;position:relative;padding-bottom: 2px;}
+.page_number{}
+.page_progress_count{width:20px;position:relative;left:45%;display:block;margin:-12px 0 0 0}
 .publish_new_object_container{background-color:#b9d331;border-radius:5px;float:right;width:172px;height:51px;text-decoration: none;margin:30px 80px 0 0}
 #publish_new_object_lamp{float:left}
 .publish_new_object_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
@@ -78,9 +82,15 @@
 .back_to_home_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
 .medias_added{float:left;margin:10px 0 0 0}
 .media_added{float:left;margin-right:10px}
-.file_loading_image{display:block;width:30px;height:30px;}
-.file_attach_image{display:none;width:30px;height:30px;}
+.file_attach_image{float:left;display:none;width:30px;height:30px; padding:5px 5px 0 0;}
+.file_loading_image{float:left;display:block;width:30px;height:30px; padding:5px 5px 0 0;}
 .attached_file_box{float:left;font-weight:bold;margin:0px 5px 0;font-size:13px;}
 .remove_media{float:left;width:16px;height:16px;margin:-30px 0 0 0;background:url('/resources/images/close.png') no-repeat}
 .clear{display:block;clear:both}
 
+#upload_progress_box{display:block;margin:10% 25% 0;}
+.upload_progress_bar{display:block;border:1px solid #000;font-size:11px;width:200px;height:12px;margin:5px 35px 30px;}
+.upload_progress_percent{display:block;font-size:10px;}
+.upload_progress_background{display:block;background-color:#99ccff;height:12px;width:0;}
+.uploaded_file{display:block;font-size:13px;}
+.uploaded{display:none;}
