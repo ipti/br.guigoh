@@ -106,7 +106,7 @@ public class SubmitFormBean implements Serializable {
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
         educationalObjectBO.create(educationalObject);
-        String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
+        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://com.guigoh.cdn/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.edit(educationalObject);
@@ -153,7 +153,7 @@ public class SubmitFormBean implements Serializable {
 
     private void submitFile(Part part) throws IOException{
         EducationalObjectMediaBO educationalObjectMediaBO = new EducationalObjectMediaBO();
-        String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
+        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
         educationalObjectMedia.setEducationalObjectId(educationalObject);
         educationalObjectMedia.setSize(part.getSize());
