@@ -113,7 +113,7 @@ public class ViewTopicBean implements Serializable {
                         String[] fileSplit = part.getSubmittedFileName().split("\\.");
                         discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
                         discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
-                        discussionTopicFiles.setFilepath("http://com.guigoh.cdn/guigoh/discussionFiles/message/" + discussionTopicMsg.getId() + "/" + part.getSubmittedFileName());
+                        discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/message/" + discussionTopicMsg.getId() + "/" + part.getSubmittedFileName());
                         discussionTopicFiles.setFkType(MESSAGE);
                         discussionTopicFiles.setFkId(discussionTopicMsg.getId());
                         dtfList.add(discussionTopicFiles);

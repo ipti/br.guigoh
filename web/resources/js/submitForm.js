@@ -195,9 +195,11 @@ $(document).ready(function() {
                 finishUpload();
             }
         }
-        xhr1.open('post', "../mandril/submitForm.xhtml", true);
-        xhr1.send(media1);
-
+        if (typeof media1 != 'undefined'){
+            xhr1.open('post', "../mandril/submitForm.xhtml", true);
+            xhr1.send(media1);
+        }
+        
         if (xhr2.upload) {
             var progress2;
             xhr2.upload.onloadstart = function() {
@@ -217,9 +219,11 @@ $(document).ready(function() {
                 finishUpload();
             }
         }
-        xhr2.open('post', "../mandril/submitForm.xhtml", true);
-        xhr2.send(media2);
-
+        if(typeof media2 != 'undefined'){
+            xhr2.open('post', "../mandril/submitForm.xhtml", true);
+            xhr2.send(media2);
+        }
+        
         if (xhr3.upload) {
             var progress3;
             xhr3.upload.onloadstart = function() {
@@ -239,8 +243,10 @@ $(document).ready(function() {
                 finishUpload();
             }
         }
-        xhr3.open('post', "../mandril/submitForm.xhtml", true);
-        xhr3.send(media3);
+        if(typeof media3 != 'undefined'){
+            xhr3.open('post', "../mandril/submitForm.xhtml", true);
+            xhr3.send(media3);
+        } 
     });
 
 });

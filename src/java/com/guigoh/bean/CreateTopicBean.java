@@ -126,7 +126,7 @@ public class CreateTopicBean implements Serializable {
                     String[] fileSplit = part.getSubmittedFileName().split("\\.");
                     discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
                     discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
-                    discussionTopicFiles.setFilepath("http://com.guigoh.cdn/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
+                    discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
                     discussionTopicFilesBO.create(discussionTopicFiles);
