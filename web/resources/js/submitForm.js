@@ -89,11 +89,11 @@ $(document).ready(function() {
             $(".add").click();
         }
     });
-    
-    $(document).on("click", "#selectImage", function(){
+
+    $(document).on("click", "#selectImage", function() {
         $("#imageFile").click();
     });
-    
+
     $(document).on('change', '#imageFile', function(e) {
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
@@ -127,13 +127,13 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on("click", "#selectMedia1", function(){
+    $(document).on("click", "#selectMedia1", function() {
         $("#mediaFile1").click();
     });
-    $(document).on("click", "#selectMedia2", function(){
+    $(document).on("click", "#selectMedia2", function() {
         $("#mediaFile2").click();
     });
-    $(document).on("click", "#selectMedia3", function(){
+    $(document).on("click", "#selectMedia3", function() {
         $("#mediaFile3").click();
     });
 
@@ -237,12 +237,16 @@ $(document).ready(function() {
                 var progress3;
                 xhr3.upload.onloadstart = function() {
                     submitted3 = false;
+                    $("#upload_bg3").css("width", "0%");
+                    $("#upload_percent3").text("0%");
                 }
                 xhr3.upload.onprogress = function(e) {
                     if (e.lengthComputable) {
                         progress3 = Math.floor(e.loaded / e.total * 100);
-                        $("#upload_bg3").css("width", progress3 + '%');
-                        $("#upload_percent3").text(progress3 + '%');
+                        if (progress3 != 0) {
+                            $("#upload_bg3").css("width", progress3 + '%');
+                            $("#upload_percent3").text(progress3 + '%');
+                        }
                     }
                 };
                 xhr3.upload.onloadend = function() {
