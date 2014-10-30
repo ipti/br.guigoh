@@ -187,8 +187,10 @@ $(document).ready(function() {
                 xhr1.upload.onprogress = function(e) {
                     if (e.lengthComputable) {
                         progress1 = Math.floor(e.loaded / e.total * 100);
-                        $("#upload_bg1").css("width", progress1 + '%');
-                        $("#upload_percent1").text(progress1 + '%');
+                        if (progress1 != 0) {
+                            $("#upload_bg1").css("width", progress1 + '%');
+                            $("#upload_percent1").text(progress1 + '%');
+                        }
                     }
                 };
                 xhr1.upload.onloadend = function() {
@@ -214,8 +216,10 @@ $(document).ready(function() {
                 xhr2.upload.onprogress = function(e) {
                     if (e.lengthComputable) {
                         progress2 = Math.floor(e.loaded / e.total * 100);
-                        $("#upload_bg2").css("width", progress2 + '%');
-                        $("#upload_percent2").text(progress2 + '%');
+                        if (progress2 != 0) {
+                            $("#upload_bg2").css("width", progress2 + '%');
+                            $("#upload_percent2").text(progress2 + '%');
+                        }
                     }
                 };
                 xhr2.upload.onloadend = function() {
