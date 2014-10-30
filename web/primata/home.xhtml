@@ -21,7 +21,6 @@
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
                             <h:link styleClass="interest_theme" outcome="/primata/theme/theme.xhtml?id=#{theme.id}">
                                 <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.getMD5(theme.name)}.png')"></h:outputText>
-                                <!--<ui:param name="themeName" value="HASHTAG{theme.name}" />-->
                                 <h:outputText styleClass="theme_label" value="#{localeBean.getString(theme.name)}"></h:outputText>
                             </h:link>
                         </ui:repeat>
@@ -59,12 +58,12 @@
                     <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>
                     <h:panelGroup class="user_feed">
                         <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
-                            <h:link styleClass="publisher_image" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
+                            <h:link styleClass="publisher_image" outcome="/primata/profile/viewProfile.xhtml?id=#{newActivity.socialProfile.socialProfileId}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
                             <h:panelGroup styleClass="text_feed">
-                                <h:link styleClass="user_news_name" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" value="#{newActivity.socialProfile.name}"></h:link>
+                                <h:link styleClass="user_news_name" outcome="/primata/profile/viewProfile.xhtml?id=#{newActivity.socialProfile.socialProfileId}" value="#{newActivity.socialProfile.name}"></h:link>
                                 <h:outputText value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
                                 <h:outputText value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
-                                <h:outputText styleClass="social_news_name" value="&quot;#{newActivity.title}&quot;"/>
+                                <h:link styleClass="social_news_name" outcome="/primata/discussion/viewTopic.xhtml?id=#{newActivity.id}" value="&quot;#{newActivity.title}&quot;"/>
                             </h:panelGroup>
                         </ui:repeat>
                     </h:panelGroup>

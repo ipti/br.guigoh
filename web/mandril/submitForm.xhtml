@@ -99,36 +99,32 @@
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Imagem')}"/>
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif.')}"/>
                             <h:outputText styleClass="educational_object_image_warning" value="#{localeBean.getString('Insira uma imagem para o Objeto Educacional.')}"/>
+                            <h:graphicImage id="selectImage" value="/resources/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}"/>
-                            <img id="image" src=""/>
                         </h:panelGroup>
+                        <div id="noImage"/>
+                        <img id="image" src=""/>
                         <span class="clear"></span>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: wav, mp3, mp4, ogg, webM, swf, jpg, png, gif, bmp, pdf, doc e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
+                            <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>
+                            <br/>
+                            <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{submitFormBean.mediaFile2}"/>
+                            <br/>
+                            <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{submitFormBean.mediaFile3}"/>
-                            <!--                            <h:panelGroup id="medias_added" styleClass="medias_added">
-                                                            <ui:repeat value="HT{submitFormBean.mediaList}" var="media">
-                                                                <h:panelGrid styleClass="media_added" columns="9">
-                                                                    <h:graphicImage styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                                                    <h:graphicImage styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
-                                                                    <h:panelGroup styleClass="attached_file_box">
-                                                                        <h:outputText styleClass="attached_file"  value="HT{media.submittedFileName.length() > 12 ? media.submittedFileName.substring(0,10).concat('...') : media.submittedFileName}"/>
-                                                                    </h:panelGroup>
-                                                                    <h:commandLink styleClass="remove_media">
-                                                                        <f:ajax execute="@this" listener="HT{submitFormBean.removeMedia(media)}" render=":form:medias_added"/>
-                                                                    </h:commandLink>
-                                                                </h:panelGrid>
-                                                            </ui:repeat>
-                                                        </h:panelGroup>-->
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup id="form5">
-                        <!--<h:graphicImage styleClass="loading_gif" value="/resources/images/loading.gif" rendered="HT{!submitFormBean.submitted}"/> -->
-                        <h:panelGroup styleClass="form5_body"> <!--rendered="HT{!submitFormBean.submitted}"-->
+                        <h:panelGroup styleClass="form5_body">
                             <h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
                             <div id="upload_progress_box">
                                 <h:panelGroup id="uploaded1" styleClass="uploaded">
@@ -213,7 +209,6 @@
                     </span>
                 </h:panelGroup>
             </h:panelGroup>
-            <!--<span class="clear"></span>-->
         </h:form>
         <script type="text/javascript" src="../resources/js/submitForm.js"/>
     </ui:define>

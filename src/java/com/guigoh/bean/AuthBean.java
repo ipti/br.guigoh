@@ -61,9 +61,10 @@ public class AuthBean implements Serializable {
             CookieService.addCookie("user", registeredUser.getUsername());
             CookieService.addCookie("token", registeredUser.getToken());
             return "islogged";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
+            return "";
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
-        return "";
     }
 
     public String logout() {
@@ -75,7 +76,7 @@ public class AuthBean implements Serializable {
         loginStatus = status;
     }
 
-    public String sendPassToEmail() {        
+    public String sendPassToEmail() {
         try {
             userToRecover = uBO.findUsers(email);
             if (userToRecover.getUsername() != null && userToRecover.getStatus().equals("CA")) {

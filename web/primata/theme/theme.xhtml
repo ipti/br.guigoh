@@ -44,7 +44,7 @@
                                     </h:outputText>
                                     <h:outputText styleClass="discussion_topic_clock"></h:outputText>
                                     <br/>
-                                    <h:outputText value="#{localeBean.getString('por')}" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopicBean.socialProfile.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
+                                    <h:outputText value="#{localeBean.getString('por')}" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopic.socialProfileId.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
                                     <h:outputText styleClass="discussion_topic_description" value="#{discussionTopic.body}"></h:outputText>
                                     <ui:repeat value="#{discussionTopic.tagsCollection}" var="tag">
                                         <h:outputText styleClass="discussion_topic_tag" value="##{tag.name}"></h:outputText>

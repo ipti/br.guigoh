@@ -14,4 +14,8 @@ $(document).ready(function(){
             $(this).text(nameTemp.substring(0, 28)+"...");
         }
     });
+    
+    $(".interest_theme").last().css("border-bottom", "1px solid #ABABAB");
+    $(".text_feed").last().css("border-bottom", "0");
+    $(".educational_object").last().css("border-bottom", "0");
 });

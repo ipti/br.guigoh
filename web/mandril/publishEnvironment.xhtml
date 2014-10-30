@@ -5,6 +5,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')}</ui:define>
     <ui:define name="content">
+        <script type="text/javascript" src="../resources/js/publishEnvironment.js"/>
         <link rel="stylesheet" href="../resources/css/publishEnvironment.css" />
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{publishEnvironmentBean.init()}"/>

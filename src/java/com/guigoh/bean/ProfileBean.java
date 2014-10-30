@@ -136,7 +136,6 @@ public class ProfileBean implements Serializable {
             loadExperiencies(socialProfile.getTokenId());
         } else {
             loadUsers(id);
-            loadSocialProfile();
             loadInterests();
             loadEducations(socialProfile.getTokenId());
             loadExperiencies(socialProfile.getTokenId());

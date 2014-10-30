@@ -25,8 +25,8 @@
 .educational_object_upload_tip{display:block;font-size:14px;margin:10px;text-align:center;}
 .educational_object_review{margin:110px 0 10px 0;font-size: 13px;line-height: 18px;font-weight:bold;display:block}
 .educational_object_review_tip{display:block;font-size:11px}
-.educational_object_image{display:block;margin:15px 0 0 30px}
-.educational_object_medias{display:block;margin:30px 0 0 30px}
+.educational_object_image{display:block;margin:15px 0 0 30px;width:290px;}
+.educational_object_medias{display:block;margin-left:30px;position:relative;bottom:40px;}
 .educational_object_author{float:left; margin:15px 0 30px 30px;}
 .educational_object_author_label{font-size: 13px;line-height: 18px;font-weight:bold;float:left}
 .educational_object_author_value{width:200px;float:left}
@@ -52,7 +52,7 @@
 .author_added{float:left;margin:5px 0px 30px 20px;width:250px }
 .authors_added_label{float:left;font-size:12px;font-weight:bold}
 .authors_added_value{float:left;font-size:12px}
-#image{display:none;width:100px;height:100px;margin:0px auto}
+#image{float:right;display:none;width:100px;height:100px;margin-right:60px;position:relative;bottom:70px;}
 .button_options{margin-top:15px;display:block}
 .button_cancel{text-decoration: none;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
 #button_cancel_icon{float:left;padding:4px 2px 0}
@@ -64,8 +64,13 @@
 #button_next_icon{float:right;padding:4px 2px 0}
 .button_next_label{color:black;font-size:13px;float:left;margin:10px 0 0 15px}
 .button_author_add{cursor:pointer;text-decoration: none;margin:50px 0 0 40px;border-radius:5px;width:94px;height:35px;float:left;background-color:#b9d331}
-.mediaFile{display:block;margin:10px 0 0 0}
-.imageFile{float:left;margin:10px 0 0 0}
+#selectImage{cursor:pointer;margin:5px 5px 0 15px;}
+#selectedImageName{font-size:13px;position:relative;bottom:10px;}
+#noImage{float:right;height:100px;width:100px;background:lightgrey;border-radius:10px;margin-right:60px;position:relative;bottom:70px;}
+.selectMedia{cursor:pointer;margin:5px 5px 0 15px;}
+.selectedMediaName{font-size:13px;position:relative;bottom:10px;}
+.mediaFile{display:none;}
+.imageFile{display:none;}
 #button_add_icon{float:left;padding:4px 2px}
 .button_add_label{color:black;font-size:13px;float:left;margin:10px 0 0 0}
 .button_submit{cursor:pointer;display:none;text-decoration: none;margin-left:10px;border-radius:5px;width:94px;height:35px;float:right;background-color:#b9d331}

@@ -1,5 +1,7 @@
 $(document).ready(function() {
     displayPreview();
+    var mediaName = $(".media-name");
+    var mediaRow = $(".media-table-row");
     var left = $(".cnt-left").height();
     var right = $(".cnt-right").height();
     if (left > right){
@@ -7,6 +9,13 @@ $(document).ready(function() {
     }
     $(document).on("click",".recommend",function(){
         $("#recommend-box").show();
+    });
+    
+    $.each(mediaRow, function(){
+        var index = $(mediaRow).index(this);
+        if ($(mediaName.eq(index)).text() == "."){
+            $(mediaRow.eq(index)).hide();
+        }
     });
 });
 
@@ -32,7 +41,6 @@ function displayPreview() {
                 right.append("<span class='audio-title'><p>" + $(this).text() + "</p></span>" + "<audio src='" + mediaUrl.eq(index).text() + "' controls='preload'/>");
             } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i)) {
                 right.append("<iframe height='310' width='552' src='" + mediaUrl.eq(index).text() + "' frameborder='0'/>");
-                //right.append("<video src='" + mediaUrl.eq(index).text() + "' width='552' height='310' controls='preload'/>");
             }
         });
     });

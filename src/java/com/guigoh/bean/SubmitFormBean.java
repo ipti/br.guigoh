@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -47,7 +46,6 @@ public class SubmitFormBean implements Serializable {
     private transient Part mediaFile1;
     private transient Part mediaFile2;
     private transient Part mediaFile3;
-    //private transient List<Part> mediaList;
     private boolean submitted;
 
     public void init() {
@@ -57,7 +55,6 @@ public class SubmitFormBean implements Serializable {
             authorList = new ArrayList<>();
             educationalObject = new EducationalObject();
             author = new Author();
-            //mediaList = new ArrayList<>();
             loadInterestThemes();
         }
     }
@@ -82,31 +79,18 @@ public class SubmitFormBean implements Serializable {
         }
     }
 
-    public void addMedia() throws IOException {
-//        if (mediaList.size() < 3) {
-//            if (!mediaFile.getSubmittedFileName().equals("") && mediaFile.getSubmittedFileName().contains(".")) {
-//                mediaList.add(mediaFile);
-//            }
-//        }
-    }
-
-    public void removeMedia(Part media) {
-        //mediaList.remove(media);
-    }
-
     public void submitForm() throws IOException {
         EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
         SocialProfileBO socialProfileBO = new SocialProfileBO();
         TagsBO tagBO = new TagsBO();
         AuthorBO authorBO = new AuthorBO();
-//        EducationalObjectMediaBO educationalObjectMediaBO = new EducationalObjectMediaBO();
         SocialProfile socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
         educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
         educationalObject.setDate(educationalObjectBO.getServerTime());
         educationalObjectBO.create(educationalObject);
-        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
+        String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectBO.edit(educationalObject);
@@ -124,36 +108,20 @@ public class SubmitFormBean implements Serializable {
             authorOE.setEducationalObjectCollection(educationalObjectList);
             authorBO.create(authorOE);
         }
-//        String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
-//        for (Part part : mediaList) {
-//            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-//            educationalObjectMedia.setEducationalObjectId(educationalObject);
-//            educationalObjectMedia.setSize(part.getSize());
-//            String[] fileSplit = part.getSubmittedFileName().split("\\.");
-//            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-//            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-//            educationalObjectMedia.setMedia("http://com.guigoh.cdn/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-//            UploadService.uploadFile(part, mediaPath);
-//            educationalObjectMediaBO.create(educationalObjectMedia);
-//        }
-        List<Boolean> submittedFiles = new ArrayList<>();
         if (mediaFile1 != null){
             submitFile(mediaFile1);
-            submittedFiles.add(true);
         }
         if (mediaFile2 != null){
             submitFile(mediaFile2);
-            submittedFiles.add(true);
         }
         if (mediaFile3 != null){
             submitFile(mediaFile3);
-            submittedFiles.add(true);
         }
     }
 
     private void submitFile(Part part) throws IOException{
         EducationalObjectMediaBO educationalObjectMediaBO = new EducationalObjectMediaBO();
-        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
+        String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
         educationalObjectMedia.setEducationalObjectId(educationalObject);
         educationalObjectMedia.setSize(part.getSize());
@@ -242,13 +210,6 @@ public class SubmitFormBean implements Serializable {
         this.mediaFile3 = mediaFile3;
     }
 
-//    public List<Part> getMediaList() {
-//        return mediaList;
-//    }
-//
-//    public void setMediaList(List<Part> mediaList) {
-//        this.mediaList = mediaList;
-//    }
     public boolean isSubmitted() {
         return submitted;
     }

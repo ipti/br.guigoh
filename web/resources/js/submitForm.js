@@ -89,32 +89,25 @@ $(document).ready(function() {
             $(".add").click();
         }
     });
+    
+    $(document).on("click", "#selectImage", function(){
+        $("#imageFile").click();
+    });
+    
     $(document).on('change', '#imageFile', function(e) {
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
             var reader = new FileReader();
             reader.onloadend = function() {
+                $("#noImage").hide();
                 $("#image").attr("src", reader.result);
                 $("#image").css("display", "block");
                 $(".educational_object_image_warning").hide();
             }
             reader.readAsDataURL(file);
         }
+        $("#selectedImageName").text(file.name);
     });
-//    $(document).on('change', '#mediaFile', function(e) {
-//        $(".file_loading_image").css("display", "block");
-//        $(".file_attach_image").css("display", "none");
-//        for (var i = 0; i < e.originalEvent.target.files.length; i++) {
-//            var file = e.originalEvent.target.files[i];
-//            var reader = new FileReader();
-//            reader.onloadend = function() {
-//                $(".file_loading_image").css("display", "none");
-//                $(".file_attach_image").css("display", "block");
-//                $(".educational_object_media_warning").hide();
-//            }
-//            reader.readAsDataURL(file);
-//        }
-//    });
 
     $(document).on('click', '.button_submit', function() {
         var validate = true;
@@ -128,11 +121,20 @@ $(document).ready(function() {
         }
         if (validate) {
             $(".submit").click();
-            //$(".loading_gif").css("display", "block");
             $(".form4_body").hide();
             $(".button_options").hide();
             $(".form5_body").show();
         }
+    });
+
+    $(document).on("click", "#selectMedia1", function(){
+        $("#mediaFile1").click();
+    });
+    $(document).on("click", "#selectMedia2", function(){
+        $("#mediaFile2").click();
+    });
+    $(document).on("click", "#selectMedia3", function(){
+        $("#mediaFile3").click();
     });
 
     var media1;
@@ -141,6 +143,7 @@ $(document).ready(function() {
 
     $(document).on("change", "#mediaFile1", function() {
         media1 = this.files[0];
+        $("#selectedMediaName1").text(media1.name);
         $("#uploaded_file1").text(media1.name);
         $("#uploaded1").show();
         $(".educational_object_media_warning").css("display", "none");
@@ -148,6 +151,7 @@ $(document).ready(function() {
 
     $(document).on("change", "#mediaFile2", function() {
         media2 = this.files[0];
+        $("#selectedMediaName2").text(media2.name);
         $("#uploaded_file2").text(media2.name);
         $("#uploaded2").show();
         $(".educational_object_media_warning").css("display", "none");
@@ -155,6 +159,7 @@ $(document).ready(function() {
 
     $(document).on("change", "#mediaFile3", function() {
         media3 = this.files[0];
+        $("#selectedMediaName3").text(media3.name);
         $("#uploaded_file3").text(media3.name);
         $("#uploaded3").show();
         $(".educational_object_media_warning").css("display", "none");
@@ -172,81 +177,86 @@ $(document).ready(function() {
     }
 
     $(document).on("click", "#submit", function() {
-        var xhr1 = new XMLHttpRequest();
-        var xhr2 = new XMLHttpRequest();
-        var xhr3 = new XMLHttpRequest();
-
-        if (xhr1.upload) {
-            var progress1;
-            xhr1.upload.onloadstart = function() {
-                submitted1 = false;
+        if (typeof media1 != 'undefined') {
+            var xhr1 = new XMLHttpRequest();
+            if (xhr1.upload) {
+                var progress1;
+                xhr1.upload.onloadstart = function() {
+                    submitted1 = false;
+                }
+                xhr1.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        progress1 = Math.floor(e.loaded / e.total * 100);
+                        $("#upload_bg1").css("width", progress1 + '%');
+                        $("#upload_percent1").text(progress1 + '%');
+                    }
+                };
+                xhr1.upload.onloadend = function() {
+                    $("#upload_bg1").css("width", "100%");
+                    $("#upload_percent1").text("100%");
+                    $("#loading1").hide();
+                    $("#attached1").show();
+                    submitted1 = true;
+                    finishUpload();
+                }
             }
-            xhr1.upload.onprogress = function(e) {
-                progress1 = Math.floor(e.loaded / e.total * 100);
-                $("#upload_bg1").css("width", progress1 + '%');
-                $("#upload_percent1").text(progress1 + '%');
-            };
-            xhr1.upload.onloadend = function() {
-                $("#upload_bg1").css("width", "100%");
-                $("#upload_percent1").text("100%");
-                $("#loading1").hide();
-                $("#attached1").show();
-                submitted1 = true;
-                finishUpload();
-            }
-        }
-        if (typeof media1 != 'undefined'){
             xhr1.open('post', "../mandril/submitForm.xhtml", true);
             xhr1.send(media1);
         }
-        
-        if (xhr2.upload) {
-            var progress2;
-            xhr2.upload.onloadstart = function() {
-                submitted2 = false;
+
+        if (typeof media2 != 'undefined') {
+            var xhr2 = new XMLHttpRequest();
+            if (xhr2.upload) {
+                var progress2;
+                xhr2.upload.onloadstart = function() {
+                    submitted2 = false;
+                }
+                xhr2.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        progress2 = Math.floor(e.loaded / e.total * 100);
+                        $("#upload_bg2").css("width", progress2 + '%');
+                        $("#upload_percent2").text(progress2 + '%');
+                    }
+                };
+                xhr2.upload.onloadend = function() {
+                    $("#upload_bg2").css("width", "100%");
+                    $("#upload_percent2").text("100%");
+                    $("#loading2").hide();
+                    $("#attached2").show();
+                    submitted2 = true;
+                    finishUpload();
+                }
             }
-            xhr2.upload.onprogress = function(e) {
-                progress2 = Math.floor(e.loaded / e.total * 100);
-                $("#upload_bg2").css("width", progress2 + '%');
-                $("#upload_percent2").text(progress2 + '%');
-            };
-            xhr2.upload.onloadend = function() {
-                $("#upload_bg2").css("width", "100%");
-                $("#upload_percent2").text("100%");
-                $("#loading2").hide();
-                $("#attached2").show();
-                submitted2 = true;
-                finishUpload();
-            }
-        }
-        if(typeof media2 != 'undefined'){
             xhr2.open('post', "../mandril/submitForm.xhtml", true);
             xhr2.send(media2);
         }
-        
-        if (xhr3.upload) {
-            var progress3;
-            xhr3.upload.onloadstart = function() {
-                submitted3 = false;
+
+        if (typeof media3 != 'undefined') {
+            var xhr3 = new XMLHttpRequest();
+            if (xhr3.upload) {
+                var progress3;
+                xhr3.upload.onloadstart = function() {
+                    submitted3 = false;
+                }
+                xhr3.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        progress3 = Math.floor(e.loaded / e.total * 100);
+                        $("#upload_bg3").css("width", progress3 + '%');
+                        $("#upload_percent3").text(progress3 + '%');
+                    }
+                };
+                xhr3.upload.onloadend = function() {
+                    $("#upload_bg3").css("width", "100%");
+                    $("#upload_percent3").text("100%");
+                    $("#loading3").hide();
+                    $("#attached3").show();
+                    submitted3 = true;
+                    finishUpload();
+                }
             }
-            xhr3.upload.onprogress = function(e) {
-                progress3 = Math.floor(e.loaded / e.total * 100);
-                $("#upload_bg3").css("width", progress3 + '%');
-                $("#upload_percent3").text(progress3 + '%');
-            };
-            xhr3.upload.onloadend = function() {
-                $("#upload_bg3").css("width", "100%");
-                $("#upload_percent3").text("100%");
-                $("#loading3").hide();
-                $("#attached3").show();
-                submitted3 = true;
-                finishUpload();
-            }
-        }
-        if(typeof media3 != 'undefined'){
             xhr3.open('post', "../mandril/submitForm.xhtml", true);
             xhr3.send(media3);
-        } 
+        }
     });
 
 });
