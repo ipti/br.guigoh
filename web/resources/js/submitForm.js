@@ -218,57 +218,48 @@ $(document).ready(function() {
             var xhr1 = new XMLHttpRequest();
             if (xhr1.upload) {
                 var progress1;
-                var current1;
-                var difference1;
-                var loaded1;
+                var currentLoaded;
+                var lastLoaded;
+                var totalLoaded;
                 xhr1.upload.onloadstart = function() {
-                    current1 = 0;
-                    difference1 = 0;
-                    loaded1 = 0;
                     //submitted1 = false;
+                    progress1 = 0;
+                    currentLoaded = 0;
+                    lastLoaded = 0;
+                    totalLoaded = 0;
                     $("#upload_bg1").css("width", "0%");
                     $("#upload_percent1").text("0%");
                 }
                 xhr1.upload.onprogress = function(e) {
                     if (e.lengthComputable) {
-                        var temp1 = current1;
-                        current1 = e.loaded;
-                        difference1 = current1 - temp1;
-                        if (difference1 <= 0) {
-                            difference1 = 0;
+                        currentLoaded = e.loaded;
+                        if (currentLoaded > lastLoaded) {
+                            totalLoaded += currentLoaded - lastLoaded;
+                        } else {
+                            totalLoaded += currentLoaded;
                         }
-                        loaded1 += difference1;
-                        progress1 = Math.floor(loaded1 / e.total * 100);
+                        lastLoaded = currentLoaded;
+                        //console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
+                        progress1 = Math.round(totalLoaded / e.total * 100);
+                        //console.log("Progresso: " + progress1 + "%");
                         if (progress1 <= 100) {
                             $("#upload_bg1").css("width", progress1 + '%');
                             $("#upload_percent1").text(progress1 + '%');
-                        } else {
-                            finishUpload();
                         }
-                        //console.log("loaded: " + e.loaded + " / total: " + e.total + " / percentage: " + Math.floor(e.loaded / e.total * 100) + "%");
                     }
                 }
-                xhr1.upload.onloadend = function() {
-                    finishUpload();
-//                    $("#upload_bg1").css("width", "100%");
-//                    $("#upload_percent1").text("100%");
-//                    $("#loading1").hide();
-//                    $("#attached1").show();
-//                    submitted1 = true;
-//                    finishUpload();      --------> finishUpload antigo (p/ 3 arquivos)
-                }
+                xhr1.addEventListener("readystatechange", function(e) {
+                    if (this.readyState === 4) {
+                        //console.log("readystate = 4");
+                        $("#loading1").hide();
+                        $("#attached1").show();
+                        $(".form5_body").hide();
+                        $(".form6_body").show();
+                    }
+                });
             }
             xhr1.open('post', "../mandril/submitForm.xhtml", true);
             xhr1.send(media1);
-        }
-
-        function finishUpload() {
-            setTimeout(function() {
-                $("#loading1").hide();
-                $("#attached1").show();
-                $(".form5_body").hide();
-                $(".form6_body").show();
-            }, 2000);
         }
 
         if (typeof media2 != 'undefined') {
