@@ -67,6 +67,27 @@
                             </h:commandButton>
                         </h:panelGroup>
 
+                        <h:panelGroup id="check_email_panel" rendered="#{authBean.loginStatus.equals('check_email')}">
+                            <font class="open_name">#{localeBean.getString('Confirme seu registro através do seu e-mail.')}</font>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                <f:ajax execute="@this" render="@form" />
+                            </h:commandButton>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup id="pending_panel" rendered="#{authBean.loginStatus.equals('pending')}">
+                            <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                <f:ajax execute="@this" render="@form"/>
+                            </h:commandButton>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
+                            <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                <f:ajax execute="@this" render="@form"/>
+                            </h:commandButton>
+                        </h:panelGroup>
+                        
                         <h:panelGroup id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
                             <font class="open_name">#{localeBean.getString('Digite o e-mail de acesso ao Guigoh')}</font>
                             <h:messages styleClass="msg"/>

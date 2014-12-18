@@ -49,6 +49,24 @@ public class UserAuthorizationBO implements Serializable {
         return null;
     }
 
+    public List<UserAuthorization> findAuthorizationsByRole(String role){
+        try {
+            return authorizationDAO.findAuthorizationsByRole(role);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public UserAuthorization getUserAuthorization(String token){
+        try {
+            return authorizationDAO.findAuthorization(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public List<UserAuthorization> getAll() {
         try {
             return authorizationDAO.findAuthorizationEntities();
@@ -58,6 +76,33 @@ public class UserAuthorizationBO implements Serializable {
         return null;
     }
 
+    public List<UserAuthorization> getPendingUsers(){
+        try {
+            return authorizationDAO.getPendingUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<UserAuthorization> getActiveUsers(){
+        try {
+            return authorizationDAO.getActiveUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<UserAuthorization> getInactiveUsers(){
+        try {
+            return authorizationDAO.getInactiveUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public List<UserAuthorization> findAuthorizationByActive(Integer subnetwork) {
         try {
             List<UserAuthorization> authorizationList = authorizationDAO.findAuthorizationsBySubnetwork(subnetwork);

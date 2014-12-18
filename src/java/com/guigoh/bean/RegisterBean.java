@@ -4,7 +4,6 @@
  */
 package com.guigoh.bean;
 
-import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.CityBO;
 import com.guigoh.bo.CountryBO;
 import com.guigoh.bo.EmailActivationBO;
@@ -15,12 +14,13 @@ import com.guigoh.bo.SecretQuestionBO;
 import com.guigoh.bo.SocialProfileBO;
 import com.guigoh.bo.StateBO;
 import com.guigoh.bo.SubnetworkBO;
+import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.UsersBO;
 import com.guigoh.bo.util.CookieService;
 import com.guigoh.bo.util.MD5Generator;
+import com.guigoh.bo.util.MailService;
 import com.guigoh.bo.util.RandomGenerator;
 import com.guigoh.bo.util.translator.Translator;
-import com.guigoh.entity.UserAuthorization;
 import com.guigoh.entity.City;
 import com.guigoh.entity.Country;
 import com.guigoh.entity.EmailActivation;
@@ -31,6 +31,7 @@ import com.guigoh.entity.SecretQuestion;
 import com.guigoh.entity.SocialProfile;
 import com.guigoh.entity.State;
 import com.guigoh.entity.Subnetwork;
+import com.guigoh.entity.UserAuthorization;
 import com.guigoh.entity.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class RegisterBean implements Serializable {
     private Integer cityId;
     private Integer roleId;
     private Integer subnetworkId;
-    private Integer languageId;    
+    private Integer languageId;
     private String confirmCode;
     private String confirmEmail;
     private String lastName;
@@ -157,65 +158,66 @@ public class RegisterBean implements Serializable {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
                         && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
                         && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
-                        if (usernameConfirm.equals(user.getUsername())) {
-                            if (passwordConfirm.equals(user.getPassword())) {
-                                user.setToken(MD5Generator.generate(user.getUsername() + user.getPassword() + SALT));
-                                user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
-                                user.setSecretQuestionId(secretQuestion);
-                                Country country = new Country();
-                                State state = new State();
-                                City city = new City();
-                                Subnetwork subnetwork = new Subnetwork();
-                                Language language = new Language();
-                                Role role = new Role();
-                                EmailActivation emailactivation = new EmailActivation();
-                                emailactivation.setUsername(user.getUsername());
-                                emailactivation.setCode(MD5Generator.generate(user.getUsername() + RandomGenerator.generate(5)));
-                                country.setId(countryId);
-                                socialProfile.setCountryId(country);
-                                state.setId(stateId);
-                                socialProfile.setStateId(state);
-                                city.setId(cityId);
-                                socialProfile.setCityId(city);
-                                language.setId(languageId);
-                                socialProfile.setLanguageId(language);
-                                subnetwork.setId(subnetworkId);
-                                role.setId(roleId);
-                                if (subnetworkId != 0) {
-                                    socialProfile.setSubnetworkId(subnetwork);
-                                }
-                                if (roleId != 0) {
-                                    socialProfile.setRoleId(role);
-                                }
-                                socialProfile.setTokenId(user.getToken());
-                                socialProfile.setPhoto("/resources/images/avatar.png");
-                                socialProfile.setName(socialProfile.getName() + " " + lastName);
-                                //String accountActivation = "Ativação de Conta";
-                                //String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
-                                //mailtext = trans.getWord(mailtext);
-                                //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                                //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
-                                //accountActivation = trans.getWord(accountActivation);
-                                //MailService.sendMail(mailtext, accountActivation, user.getUsername());
-                                //EmailActivationBO emailActivationBO = new EmailActivationBO();
-                                //emailActivationBO.create(emailactivation);
-                                user.setStatus(CONFIRMATION_ACCESS);
-                                userBO.create(user);
-                                automaticConfirm(user);
-                                socialProfileBO.create(socialProfile);
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
-                                user = new Users();
-                                socialProfile = new SocialProfile();
-                                lastName = "";
-                                usernameConfirm = "";
-                                passwordConfirm = "";
-                            } else {
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
+                    if (usernameConfirm.equals(user.getUsername())) {
+                        if (passwordConfirm.equals(user.getPassword())) {
+                            user.setToken(MD5Generator.generate(user.getUsername() + user.getPassword() + SALT));
+                            user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
+                            user.setSecretQuestionId(secretQuestion);
+                            Country country = new Country();
+                            State state = new State();
+                            City city = new City();
+                            Subnetwork subnetwork = new Subnetwork();
+                            Language language = new Language();
+                            Role role = new Role();
+                            EmailActivation emailactivation = new EmailActivation();
+                            emailactivation.setUsername(user.getUsername());
+                            emailactivation.setCode(MD5Generator.generate(user.getUsername() + RandomGenerator.generate(5)));
+                            country.setId(countryId);
+                            socialProfile.setCountryId(country);
+                            state.setId(stateId);
+                            socialProfile.setStateId(state);
+                            city.setId(cityId);
+                            socialProfile.setCityId(city);
+                            language.setId(languageId);
+                            socialProfile.setLanguageId(language);
+                            subnetwork.setId(subnetworkId);
+                            role.setId(roleId);
+                            if (subnetworkId != 0) {
+                                socialProfile.setSubnetworkId(subnetwork);
                             }
+                            if (roleId != 0) {
+                                socialProfile.setRoleId(role);
+                            }
+                            socialProfile.setTokenId(user.getToken());
+                            socialProfile.setPhoto("/resources/images/avatar.png");
+                            socialProfile.setName(socialProfile.getName() + " " + lastName);
+                            String accountActivation = "Ativação de Conta";
+                            String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
+                            mailtext = trans.getWord(mailtext);
+                            mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                                //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                            //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
+                            accountActivation = trans.getWord(accountActivation);
+                            MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
+                            //EmailActivationBO emailActivationBO = new EmailActivationBO();
+                            emailActivationBO.create(emailactivation);
+                            user.setStatus(CONFIRMATION_PENDING);
+                            userBO.create(user);
+                            //automaticConfirm(user);
+                            socialProfileBO.create(socialProfile);
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
+                            user = new Users();
+                            socialProfile = new SocialProfile();
+                            lastName = "";
+                            usernameConfirm = "";
+                            passwordConfirm = "";
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
                         }
-                    
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
+                    }
+
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível realizar o cadastro. Verifique os campos abaixo."), null));
                 }
@@ -305,35 +307,45 @@ public class RegisterBean implements Serializable {
                         if (emailActivation.getCode().equals(confirmCode)) {
                             panelStatus = "new_pass";
                         }
-                    } else if (userConfirm != null) {
-                        if (emailActivation.getCode().equals(confirmCode)) {
-                            userConfirm.setStatus(CONFIRMATION_ACCESS);
-                            userBO.edit(userConfirm);
-                            emailActivationBO.destroy(emailActivation);
-                            List<Networks> networksList = networksBO.getAll();
-                            UserAuthorization authorization = new UserAuthorization();
-                            authorization.setRoles(DEFAULT);
-                            authorization.setTokenId(userConfirm.getToken());
-                            //Refazer
-                            if (networksList.size() > 2) {
-                                authorization.setNetwork("Guigoh");
-                            } else {
-                                authorization.setNetwork(networksList.get(0).getName());
-                            }
-
-                            if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
-                                authorization.setStatus(FIRST_ACCESS);
-                            } else if (networksList.get(0).getType().equals(PRIVATE)) {
-                                authorization.setStatus(PENDING_ACCESS);
-                            }
-                            authorizationBO.create(authorization);
-                            panelStatus = "confirmed_email";
+                    } else if (emailActivation.getCode().equals(confirmCode)) {
+                        userConfirm.setStatus(CONFIRMATION_ACCESS);
+                        userBO.edit(userConfirm);
+                        emailActivationBO.destroy(emailActivation);
+                        List<Networks> networksList = networksBO.getAll();
+                        UserAuthorization authorization = new UserAuthorization();
+                        authorization.setRoles(DEFAULT);
+                        authorization.setTokenId(userConfirm.getToken());
+                        //Refazer
+                        if (networksList.size() > 2) {
+                            authorization.setNetwork("Guigoh");
+                        } else {
+                            authorization.setNetwork(networksList.get(0).getName());
                         }
+
+                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
+                            authorization.setStatus(FIRST_ACCESS);
+                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
+                            String newUserAccount = "Novo cadastro de usuário";
+                            String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente:\n\n";
+                            //mailtext = trans.getWord(mailtext);
+                            //mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                                //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                            //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
+                            //newUserAccount = trans.getWord(newUserAccount);
+                            for (UserAuthorization userAuthorization : authorizationBO.findAuthorizationsByRole("AD")){
+                                MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
+                            }
+                            authorization.setStatus(PENDING_ACCESS);
+                        }
+                        authorizationBO.create(authorization);
+                        panelStatus = "confirmed_email";
                     }
+                    //caindo sempre nesse else
                 } else {
                     panelStatus = "active_email";
                 }
             } else {
+                //funciona sem o "Users"
                 Users user = userBO.findUsers(CookieService.getCookie("user"));
                 if (user.getStatus() != null) {
                     if (user.getStatus().equals("CP")) {

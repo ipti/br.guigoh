@@ -57,11 +57,27 @@ public class AuthBean implements Serializable {
     public String login() {
         Users registeredUser = uBO.findUsers(user);
         user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
-        if (user.getPassword().equals(registeredUser.getPassword())) {
-            CookieService.addCookie("user", registeredUser.getUsername());
-            CookieService.addCookie("token", registeredUser.getToken());
-            return "islogged";
-        } else {
+        if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
+            if (registeredUser.getAuthorization().getStatus().equals("AC")){
+                CookieService.addCookie("user", registeredUser.getUsername());
+                CookieService.addCookie("token", registeredUser.getToken());
+                return "islogged";
+            } else if (registeredUser.getAuthorization().getStatus().equals("PC")){
+                loginStatus = "pending";
+                return "";
+            } else if (registeredUser.getAuthorization().getStatus().equals("IC")){
+                loginStatus = "inactive";
+                return "";
+            } else {
+                CookieService.addCookie("user", registeredUser.getUsername());
+                CookieService.addCookie("token", registeredUser.getToken());
+                return "wizard";
+            }
+        } else if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")){
+            loginStatus = "check_email";
+            return "";
+        }
+        else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
             return "";
         }

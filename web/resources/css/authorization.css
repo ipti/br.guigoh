@@ -34,12 +34,16 @@ strong {font-weight: bold;}
 
 .buttons {cursor:pointer; width:120px; height:26px; border:1px #666 solid; border-radius:4px; margin:10px 5px 0px;}
 .authorization_alert {color:red;font-size:15px;font-weight:bold;width:266px;display:block;margin:0 auto}
-.authorization_title {font-size:15px;font-weight:bold;width:83px;;display:block;margin:10px auto}
-.authorization_objects{font-size:15px;font-weight:bold;width:234px;;display:block;margin:10px auto}
+.authorization_title {font-size:15px;font-weight:bold;text-align:center;;display:block;margin:10px auto}
+.authorization_users{font-size:15px;font-weight:bold;text-align:center;;display:block;margin:10px auto}
+.authorization_users_panel{display:block;width:750px;border:1px solid #ccc; padding:10px;margin:20px auto}
+.authorization_objects{font-size:15px;font-weight:bold;text-align:center;display:block;margin:10px auto}
 .authorization_objects_alert {color:red;font-size:15px;font-weight:bold;width:329px;display:block;margin:0 auto}
 .authorization_objects_panel{display:block;width:750px;border:1px solid #ccc; padding:10px;margin:20px auto}
+.expand{color:#0000FF;font-weight:normal;cursor:pointer;margin:0 5px;}
+.collapse{color:#0000FF;font-weight:normal;cursor:pointer;}
+.user{color: #0000FF;}
+.user_box{display:block;margin:0 0 10px 0}
+.object_box{display:block;margin:0 0 10px 0}
 .publish_objects{display:block;margin:20px 0}
 .submitted_object{color: #0000FF;}
-.submitted_object_box{display:block;margin:0 0 10px 0}
-.active_object_box{display:block;margin:0 0 10px 0}
-.inactive_object_box{display:block;margin:0 0 10px 0}

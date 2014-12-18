@@ -16,52 +16,80 @@
             <div id="content_box" >
                 <div id="admin_box">
                     <h:panelGroup id="permission_box" rendered="#{adminBean.admin}">
-                        <h:outputText styleClass="authorization_title" value="Permissões"></h:outputText>
-                        <h:outputText styleClass="authorization_alert" rendered="#{adminBean.authorizationList.isEmpty()}" value="Não existem autorizações pendentes." ></h:outputText>
-                        <h:panelGroup id="authorization_panel" rendered="#{!adminBean.authorizationList.isEmpty()}">
-                            <h:dataTable value="#{adminBean.authorizationList}" var="authorization"
-                                         styleClass="authorizationTable"
-                                         headerClass="authorizationTableHeader"
-                                         rowClasses="authorizationTableOddRow,authorizationTableEvenRow">
-                                <f:facet name="header">
-                                    <h:outputText value="Usuários" />
-                                </f:facet>
-                                <h:column >
-                                    <f:facet name="header">
-                                        <h:outputText value="Ativar" />
 
-                                    </f:facet>
-                                    <h:selectBooleanCheckbox class="kselItems" value="#{adminBean.checked[authorization.users.socialProfile.socialProfileId]}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Nome" />
-                                    </f:facet>
-                                    <h:outputText value="#{authorization.users.socialProfile.name}" />
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="E-mail" />
-                                    </f:facet>
-                                    <h:outputText value="#{authorization.users.username}" />
-                                </h:column>
-                            </h:dataTable>
-                            <div id="button_box">
-                                <input type="button" id="checkall" class="buttons" value="Selecionar Todos"/>
-                                <input type="button" id="uncheckall" class="buttons" value="Desmarcar Todos"/>
-                                <h:commandButton value="Confirmar" class="buttons" action="#{adminBean.submitSelections}" />
+                        <!-- CODIGO BACKUP EM AUTHXHTML-PENDINGUSERS.TXT -->
+
+                        <h:outputText styleClass="authorization_title" value="Permissões"/>
+                        <h:panelGroup styleClass="authorization_users_panel">
+                            <h:panelGroup styleClass="authorization_users">
+                                <h:outputText value="Cadastros pendentes (#{adminBean.pendingUserList.size()})"/>
+                                <span id="expand_pending_users" class="expand">[+]</span>
+                                <span id="collapse_pending_users" class="collapse">[-]</span>
+                            </h:panelGroup>
+                            <div id="pending_users_box">
+                                <ui:repeat value="#{adminBean.pendingUserList}" var="pendingUsers">
+                                    <ui:param value="#{pendingUsers.users.socialProfile.socialProfileId}" name="id"/>
+                                    <div id="user_box_#{pendingUsers.users.socialProfile.socialProfileId}" class="user_box">
+                                        <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{pendingUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{pendingUsers.users.socialProfile.name}"/>
+                                        <h:commandButton value="Aceitar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptUser(pendingUsers.users.authorization.tokenId)}"/>
+                                        </h:commandButton>
+                                        <h:commandButton value="Rejeitar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineUser(pendingUsers.users.authorization.tokenId)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
                             </div>
                         </h:panelGroup>
-                    </h:panelGroup>
+                        <h:panelGroup styleClass="authorization_users_panel">
+                            <h:panelGroup styleClass="authorization_users">
+                                <h:outputText value="Cadastros ativos (#{adminBean.activeUserList.size()})"/>
+                                <span id="expand_active_users" class="expand">[+]</span>
+                                <span id="collapse_active_users" class="collapse">[-]</span>
+                            </h:panelGroup>
+                            <div id="active_users_box">
+                                <ui:repeat value="#{adminBean.activeUserList}" var="activeUsers">
+                                    <ui:param value="#{activeUsers.users.socialProfile.socialProfileId}" name="id"/>
+                                    <div id="user_box_#{activeUsers.users.socialProfile.socialProfileId}" class="user_box">
+                                        <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{activeUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{activeUsers.users.socialProfile.name}"/>
+                                        <h:commandButton value="Desativar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateUser(activeUsers.users.authorization.tokenId)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="authorization_users_panel">
+                            <h:panelGroup styleClass="authorization_users">
+                                <h:outputText value="Cadastros inativos (#{adminBean.inactiveUserList.size()})"/>
+                                <span id="expand_inactive_users" class="expand">[+]</span>
+                                <span id="collapse_inactive_users" class="collapse">[-]</span>
+                            </h:panelGroup>
+                            <div id="inactive_users_box">
+                                <ui:repeat value="#{adminBean.inactiveUserList}" var="inactiveUsers">
+                                    <ui:param value="#{inactiveUsers.users.socialProfile.socialProfileId}" name="id"/>
+                                    <div id="submitted_user_box_#{inactiveUsers.users.socialProfile.socialProfileId}" class="user_box">
+                                        <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{inactiveUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{inactiveUsers.users.socialProfile.name}"/>
+                                        <h:commandButton value="Ativar">
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateUser(inactiveUsers.users.authorization.tokenId)}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
-                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais pendentes"/>
+                            <h:panelGroup styleClass="authorization_objects">
+                                <h:outputText value="Objetos Educacionais pendentes (#{adminBean.pendingEducationalObjectList.size()})"/>
+                                <span id="expand_pending_objects" class="expand">[+]</span>
+                                <span id="collapse_pending_objects" class="collapse">[-]</span>
+                            </h:panelGroup>
                             <div id="pending_objects_box">
                                 <ui:repeat value="#{adminBean.pendingEducationalObjectList}" var="pendingEducationalObject">
                                     <ui:param value="#{pendingEducationalObject.id}" name="id"/>
-                                    <div id="submitted_object_box_#{pendingEducationalObject.id}" class="submitted_object_box">
+                                    <div id="submitted_object_box_#{pendingEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{pendingEducationalObject.id}" styleClass="submitted_object" value="#{pendingEducationalObject.name}"/>
                                         <h:commandButton value="Aceitar">
-                                        <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
                                         </h:commandButton>
                                         <h:commandButton value="Rejeitar">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.declineEducationalObject(id)}"/>
@@ -70,12 +98,16 @@
                                 </ui:repeat>
                             </div>
                         </h:panelGroup>
-                    <h:panelGroup styleClass="authorization_objects_panel">
-                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais ativos"/>
-                        <div id="active_objects_box">
+                        <h:panelGroup styleClass="authorization_objects_panel">
+                            <h:panelGroup styleClass="authorization_objects">
+                                <h:outputText value="Objetos Educacionais ativos (#{adminBean.activeEducationalObjectList.size()})"/>
+                                <span id="expand_active_objects" class="expand">[+]</span>
+                                <span id="collapse_active_objects" class="collapse">[-]</span>
+                            </h:panelGroup>
+                            <div id="active_objects_box">
                                 <ui:repeat value="#{adminBean.activeEducationalObjectList}" var="activeEducationalObject">
                                     <ui:param value="#{activeEducationalObject.id}" name="id"/>
-                                    <div id="active_object_box_#{activeEducationalObject.id}" class="active_object_box">
+                                    <div id="active_object_box_#{activeEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{activeEducationalObject.id}" styleClass="submitted_object" value="#{activeEducationalObject.name}"/>
                                         <h:commandButton value="Desativar">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.deactivateEducationalObject(id)}"/>
@@ -85,11 +117,15 @@
                             </div>
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
-                            <h:outputText styleClass="authorization_objects" value="Objetos Educacionais inativos"/>
+                            <h:panelGroup styleClass="authorization_objects">
+                                <h:outputText value="Objetos Educacionais inativos (#{adminBean.inactiveEducationalObjectList.size()})"/>
+                                <span id="expand_inactive_objects" class="expand">[+]</span>
+                                <span id="collapse_inactive_objects" class="collapse">[-]</span>
+                            </h:panelGroup>
                             <div id="inactive_objects_box">
                                 <ui:repeat value="#{adminBean.inactiveEducationalObjectList}" var="inactiveEducationalObject">
                                     <ui:param value="#{inactiveEducationalObject.id}" name="id"/>
-                                    <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="inactive_object_box">
+                                    <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{inactiveEducationalObject.id}" styleClass="submitted_object" value="#{inactiveEducationalObject.name}"/>
                                         <h:commandButton value="Ativar">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.activateEducationalObject(id)}"/>
@@ -98,7 +134,8 @@
                                 </ui:repeat>
                             </div>
                         </h:panelGroup>
-                    <span class="clear"></span>
+                        <span class="clear"></span>
+                    </h:panelGroup>
                 </div>
             </div>
         </h:form>

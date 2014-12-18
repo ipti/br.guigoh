@@ -157,7 +157,7 @@ $(document).ready(function() {
         $("#uploaded1").show();
         $(".educational_object_media_warning").css("display", "none");
     });
-
+    
     $(document).on("change", "#mediaFile2", function() {
         media2 = this.files[0];
         if (media2.name.length <= 32) {
@@ -239,9 +239,9 @@ $(document).ready(function() {
                             totalLoaded += currentLoaded;
                         }
                         lastLoaded = currentLoaded;
-                        //console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
+                        console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
                         progress1 = Math.round(totalLoaded / e.total * 100);
-                        //console.log("Progresso: " + progress1 + "%");
+                        console.log("Progresso: " + progress1 + "%");
                         if (progress1 <= 100) {
                             $("#upload_bg1").css("width", progress1 + '%');
                             $("#upload_percent1").text(progress1 + '%');
@@ -250,7 +250,7 @@ $(document).ready(function() {
                 }
                 xhr1.addEventListener("readystatechange", function(e) {
                     if (this.readyState === 4) {
-                        //console.log("readystate = 4");
+                        console.log("readystate = 4");
                         $("#loading1").hide();
                         $("#attached1").show();
                         $(".form5_body").hide();

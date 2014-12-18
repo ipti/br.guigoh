@@ -62,14 +62,14 @@ public class AuthorizeListener implements PhaseListener{
         }
         // Verifica se o usuário não está na página de registro
         if (!isRegisterPage) {
-            if (!isEmailPage) {
-                if ((!isLoginPage && pending)
-                        || (!isLoginPage && confirmed && inactiveAccess)
-                        || !isLoginPage && confirmed && pendingAccess) {
-                    NavigationHandler nh = context.getApplication().getNavigationHandler();
-                    nh.handleNavigation(context, null, "email");
-                }
-            }
+//            if (!isEmailPage) {
+//                if ((!isLoginPage && pending)
+//                        || (!isLoginPage && confirmed && inactiveAccess)
+//                        || !isLoginPage && confirmed && pendingAccess) {
+//                    NavigationHandler nh = context.getApplication().getNavigationHandler();
+//                    nh.handleNavigation(context, null, "email");
+//                }
+//            }
             if (!isWizardPage) {
                 if (!isLoginPage && confirmed && firstAccess) {
                     NavigationHandler nh = context.getApplication().getNavigationHandler();
@@ -81,19 +81,26 @@ public class AuthorizeListener implements PhaseListener{
                 // Verifica se o usuário está logado e se não está na página de login
                 if (!isLoginPage && ((user.getUsername().equals("")) || (user.getUsername().isEmpty()))) {
                     // Redireciona o fluxo para a página de login
+                    
+                    //nao influencia
                     NavigationHandler nh = context.getApplication().getNavigationHandler();
                     nh.handleNavigation(context, null, "logout");
                 } else if (isLoginPage && !user.getUsername().equals("")) {
                     // Se o usuário logado tentar acessar a página de login ele é
                     // redirecionado para a página inicial
+                    
+                    //nao influencia
                     NavigationHandler nh = context.getApplication().getNavigationHandler();
                     nh.handleNavigation(context, null, "islogged");
                 }
-            } else {
-                if (!isLoginPage) {
-                    NavigationHandler nh = context.getApplication().getNavigationHandler();
-                    nh.handleNavigation(context, null, "logout");
-                }
+//            } else {
+//                if (!isLoginPage) {
+//                    
+//                    //influencia
+//                    NavigationHandler nh = context.getApplication().getNavigationHandler();
+//                    nh.handleNavigation(context, null, "logout");
+//                }
+//            }
             }
         }
     }

@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
     <f:view contentType="text/html"/>
     <h:head>
         <title>#{localeBean.getString('Confirmação de e-mail')}</title>
@@ -22,11 +23,27 @@
                 <font class="block_left_bot"><span class="companies_logos"></span></font>
             </div>
             <div class="block_right">
+                <div class="flags">
+                    <h:form>
+                        <ui:param name="url" value="#{request.servletPath}"/>
+                        <h:panelGrid styleClass="localeLogon" columns="3">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                <h:graphicImage  value="/resources/images/ptBR.gif" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                <h:graphicImage  value="/resources/images/enUS.png" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                <h:graphicImage  value="/resources/images/frFR.png" />
+                            </h:commandLink>
+                        </h:panelGrid>
+                    </h:form>
+                </div>
                 <span class="login_box">
                     <h:form id="login_form" styleClass="login_open">
-                        <h:panelGroup id="pass_sent_panel" rendered="#{registerBean.panelStatus.equals('confirmed_email')}">
+                        <h:panelGroup id="confirmed_email_panel" rendered="#{registerBean.panelStatus.equals('confirmed_email')}">
                             <font class="open_name">#{localeBean.getString('E-mail autorizado com sucesso!')}</font>
-                            <h:commandButton class="button_back" action="#{registerBean.backToLogin()}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                         
                         <h:panelGroup id="new_pass_panel" rendered="#{registerBean.panelStatus.equals('new_pass')}">
@@ -36,27 +53,28 @@
                             <h:inputSecret value="#{registerBean.newPassword}"/><br/>
                             <h:outputText class="new_pass" value="#{localeBean.getString('Confirmar:')}"/>
                             <h:inputSecret  value="#{registerBean.newPasswordConfirm}"/><br/>
-                            <h:commandButton action="#{registerBean.changePassword}" styleClass="button_change"/>
+                            <h:commandButton action="#{registerBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                         
                         <h:panelGroup id="inactive_panel" rendered="#{registerBean.panelStatus.equals('inactive')}">
                             <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
-                            <h:commandButton class="button_back" action="#{registerBean.backToLogin()}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                         
                         <h:panelGroup id="pending_panel" rendered="#{registerBean.panelStatus.equals('pending')}">
                             <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
-                            <h:commandButton class="button_back" action="#{registerBean.backToLogin()}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                         
                         <h:panelGroup id="check_email_panel" rendered="#{registerBean.panelStatus.equals('check_email')}">
                             <font class="open_name">#{localeBean.getString('Confirme seu registro através do seu e-mail.')}</font>
-                            <h:commandButton class="button_back" action="#{registerBean.backToLogin()}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                         
                         <h:panelGroup id="active_email_panel" rendered="#{registerBean.panelStatus.equals('active_email')}">
                             <font class="open_name">#{localeBean.getString('Seu e-mail já foi confirmado.')}</font>
-                            <h:commandButton class="button_back" action="#{registerBean.backToLogin()}"/>
+                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
                         </h:panelGroup>
                     </h:form>
                 </span>

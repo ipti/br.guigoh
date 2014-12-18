@@ -16,7 +16,7 @@ body {background-color:#84A7CA; margin:0 auto;}
 .block_left_midbot{display:block; width:435px; height:80px; background-color:#fff; margin-bottom:4px;}
 .block_left_midbot p{padding:29px 0 29px 29px; text-align:justify;float:left}
 .block_left_bot {display:block; width:435px; height:240px; background-color:#fff; margin-bottom:4px;}
-.companies_logos {display:block; width:372px; height:138px; background:url(../images/companies_logos.png) no-repeat 28px 12px;}
+.companies_logos {display:block; width:372px; height:160px; background:url(../images/companies_logos.png) no-repeat 28px 12px;} 
 .block_right {display:block; width:341px; float:left;}
 .login_box {display:block; width:410px; height:366px; margin:146px 0px 0px 146px; background-image:url(../images/login_box.png);}
 .open_name {display: block; font-weight:bold; font-size:18px; padding-top:122px; margin-bottom:30px;}
@@ -29,7 +29,7 @@ body {background-color:#84A7CA; margin:0 auto;}
 .button_back{display:block; margin:15px 0px 0px 230px; height:24px;width:65px;font-size:13px}
 .button_verify{width:73px;font-size:13px}
 .button_send{cursor:pointer;width:64px;font-size:13px}
-.button_change{width:65px;height:24px;width:35px;font-size:13px}
+.button_change{width:65px;height:24px;width:65px;font-size:13px}
 .button_ok{display:block;margin-left:270px;height:24px;width:35px;font-size:13px}
 .link_register {display:block; color:#fff; font-size:20px; width:240px; margin-left:400px; margin-top:16px;}
 #cmd_register_icon{float:right}
