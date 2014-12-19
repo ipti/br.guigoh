@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
-    <ui:define name="title">Authorization</ui:define>
+    <ui:define name="title">#{localeBean.getString("Autorização")}</ui:define>
     <ui:define name="scripts">
         <script type="text/javascript" src="/resources/js/authorization.js"></script>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/authorization.css"></link>
@@ -19,10 +19,10 @@
 
                         <!-- CODIGO BACKUP EM AUTHXHTML-PENDINGUSERS.TXT -->
 
-                        <h:outputText styleClass="authorization_title" value="Permissões"/>
+                        <h:outputText styleClass="authorization_title" value="#{localeBean.getString('Permissões')}"/>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="Cadastros pendentes (#{adminBean.pendingUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros pendentes')} (#{adminBean.pendingUserList.size()})"/>
                                 <span id="expand_pending_users" class="expand">[+]</span>
                                 <span id="collapse_pending_users" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -31,10 +31,10 @@
                                     <ui:param value="#{pendingUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="user_box_#{pendingUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{pendingUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{pendingUsers.users.socialProfile.name}"/>
-                                        <h:commandButton value="Aceitar">
+                                        <h:commandButton value="#{localeBean.getString('Aceitar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.acceptUser(pendingUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
-                                        <h:commandButton value="Rejeitar">
+                                        <h:commandButton value= "#{localeBean.getString('Rejeitar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.declineUser(pendingUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
@@ -43,7 +43,7 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="Cadastros ativos (#{adminBean.activeUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros ativos')} (#{adminBean.activeUserList.size()})"/>
                                 <span id="expand_active_users" class="expand">[+]</span>
                                 <span id="collapse_active_users" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -52,7 +52,7 @@
                                     <ui:param value="#{activeUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="user_box_#{activeUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{activeUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{activeUsers.users.socialProfile.name}"/>
-                                        <h:commandButton value="Desativar">
+                                        <h:commandButton value="#{localeBean.getString('Desativar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.deactivateUser(activeUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
@@ -61,7 +61,7 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="Cadastros inativos (#{adminBean.inactiveUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros inativos')} (#{adminBean.inactiveUserList.size()})"/>
                                 <span id="expand_inactive_users" class="expand">[+]</span>
                                 <span id="collapse_inactive_users" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -70,7 +70,7 @@
                                     <ui:param value="#{inactiveUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="submitted_user_box_#{inactiveUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{inactiveUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{inactiveUsers.users.socialProfile.name}"/>
-                                        <h:commandButton value="Ativar">
+                                        <h:commandButton value="#{localeBean.getString('Ativar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.activateUser(inactiveUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
@@ -79,7 +79,7 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="Objetos Educacionais pendentes (#{adminBean.pendingEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais pendentes')} (#{adminBean.pendingEducationalObjectList.size()})"/>
                                 <span id="expand_pending_objects" class="expand">[+]</span>
                                 <span id="collapse_pending_objects" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -88,10 +88,10 @@
                                     <ui:param value="#{pendingEducationalObject.id}" name="id"/>
                                     <div id="submitted_object_box_#{pendingEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{pendingEducationalObject.id}" styleClass="submitted_object" value="#{pendingEducationalObject.name}"/>
-                                        <h:commandButton value="Aceitar">
+                                        <h:commandButton value="#{localeBean.getString('Aceitar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
                                         </h:commandButton>
-                                        <h:commandButton value="Rejeitar">
+                                        <h:commandButton value="#{localeBean.getString('Rejeitar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.declineEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>
@@ -100,7 +100,7 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="Objetos Educacionais ativos (#{adminBean.activeEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais ativos')} (#{adminBean.activeEducationalObjectList.size()})"/>
                                 <span id="expand_active_objects" class="expand">[+]</span>
                                 <span id="collapse_active_objects" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -109,7 +109,7 @@
                                     <ui:param value="#{activeEducationalObject.id}" name="id"/>
                                     <div id="active_object_box_#{activeEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{activeEducationalObject.id}" styleClass="submitted_object" value="#{activeEducationalObject.name}"/>
-                                        <h:commandButton value="Desativar">
+                                        <h:commandButton value="#{localeBean.getString('Desativar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.deactivateEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>
@@ -118,7 +118,7 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="Objetos Educacionais inativos (#{adminBean.inactiveEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais inativos')} (#{adminBean.inactiveEducationalObjectList.size()})"/>
                                 <span id="expand_inactive_objects" class="expand">[+]</span>
                                 <span id="collapse_inactive_objects" class="collapse">[-]</span>
                             </h:panelGroup>
@@ -127,7 +127,7 @@
                                     <ui:param value="#{inactiveEducationalObject.id}" name="id"/>
                                     <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="object_box">
                                         <h:link outcome="/mandril/educationalObject.xhtml?id=#{inactiveEducationalObject.id}" styleClass="submitted_object" value="#{inactiveEducationalObject.name}"/>
-                                        <h:commandButton value="Ativar">
+                                        <h:commandButton value="#{localeBean.getString('Ativar')}">
                                             <f:ajax event="click" render="@form" listener="#{adminBean.activateEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>

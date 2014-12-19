@@ -10,6 +10,7 @@ import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.SocialProfileBO;
 import com.guigoh.bo.util.CookieService;
 import com.guigoh.bo.util.MailService;
+import com.guigoh.bo.util.translator.Translator;
 import com.guigoh.entity.UserAuthorization;
 import com.guigoh.entity.SocialProfile;
 import java.io.Serializable;
@@ -54,6 +55,7 @@ public class AdminBean implements Serializable {
     private UserAuthorizationBO authorizationBO;
     private SocialProfileBO socialProfileBO;
     private EducationalObjectBO educationalObjectBO;
+    private Translator trans;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -67,6 +69,8 @@ public class AdminBean implements Serializable {
             educationalObjectBO = new EducationalObjectBO();
             admin = false;
             reviser = false;
+            trans = new Translator();
+            trans.setLocale(CookieService.getCookie("locale"));
             getLoggedSocialProfile();
             getUserRole();
             checkAuthorization();
@@ -135,18 +139,15 @@ public class AdminBean implements Serializable {
             UserAuthorization user = authorizationBO.getUserAuthorization(token);
             user.setStatus(FIRST_ACCESS);
             authorizationBO.edit(user);
-
-            /*
-             *
-             * TRADUZIR CONTEUDOS ABAIXO
-             *
-             */
             String mailSubject = "Cadastro aceito";
             String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"
-                    + "Clique no link abaixo para começar a utilizar sua conta.\n\n"
-                    + "http://rts.guigoh.com:8080/primata/auth/login.xhtml";
-
+                            + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
+            trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
+            mailSubject = trans.getWord(mailSubject);
+            mailText = trans.getWord(mailText);
+            mailText += "http://rts.guigoh.com:8080/primata/auth/login.xhtml";
             MailService.sendMail(mailText, mailSubject, user.getUsers().getUsername());
+            trans.setLocale(CookieService.getCookie("locale"));
             getActiveUsers();
             getPendingUsers();
         } catch (Exception e) {
@@ -159,15 +160,13 @@ public class AdminBean implements Serializable {
             UserAuthorization user = authorizationBO.getUserAuthorization(token);
             user.setStatus(INACTIVE_ACCESS);
             authorizationBO.edit(user);
-
-            /*
-             *
-             * TRADUZIR CONTEUDOS ABAIXO
-             *
-             */
             String mailSubject = "Cadastro negado";
             String mailText = "Seu cadastro no Arte com Ciência foi negado por um administrador.";
+            trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
+            mailSubject = trans.getWord(mailSubject);
+            mailText = trans.getWord(mailText);
             MailService.sendMail(mailText, mailSubject, user.getUsers().getUsername());
+            trans.setLocale(CookieService.getCookie("locale"));
             getInactiveUsers();
             getPendingUsers();
         } catch (Exception e) {

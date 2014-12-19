@@ -193,12 +193,14 @@ public class RegisterBean implements Serializable {
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
                             String accountActivation = "Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
+                            trans.setLocale(language.getAcronym());
                             mailtext = trans.getWord(mailtext);
                             mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                                 //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                             //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
+                            trans.setLocale(CookieService.getCookie("locale"));
                             //EmailActivationBO emailActivationBO = new EmailActivationBO();
                             emailActivationBO.create(emailactivation);
                             user.setStatus(CONFIRMATION_PENDING);
@@ -326,15 +328,19 @@ public class RegisterBean implements Serializable {
                             authorization.setStatus(FIRST_ACCESS);
                         } else if (networksList.get(0).getType().equals(PRIVATE)) {
                             String newUserAccount = "Novo cadastro de usuário";
-                            String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente:\n\n";
+                            String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                             //mailtext = trans.getWord(mailtext);
                             //mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                                 //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                             //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                             //newUserAccount = trans.getWord(newUserAccount);
                             for (UserAuthorization userAuthorization : authorizationBO.findAuthorizationsByRole("AD")){
+                                trans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
+                                newUserAccount = trans.getWord(newUserAccount);
+                                mailtext = trans.getWord(mailtext);
                                 MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
                             }
+                            trans.setLocale(CookieService.getCookie("locale"));
                             authorization.setStatus(PENDING_ACCESS);
                         }
                         authorizationBO.create(authorization);
