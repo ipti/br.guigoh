@@ -33,6 +33,7 @@ public class AuthBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
     private Users user;
+    private String locale;
     private String loginStatus;
     private String email;
     private String secretAnswer;
@@ -45,8 +46,9 @@ public class AuthBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
+            locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
             trans = new Translator();
-            trans.setLocale(CookieService.getCookie("locale"));
+            trans.setLocale(locale);
             loginStatus = "login";
             userToRecover = new Users();
             email = "";
@@ -58,14 +60,14 @@ public class AuthBean implements Serializable {
         Users registeredUser = uBO.findUsers(user);
         user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
         if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
-            if (registeredUser.getAuthorization().getStatus().equals("AC")){
+            if (registeredUser.getAuthorization().getStatus().equals("AC")) {
                 CookieService.addCookie("user", registeredUser.getUsername());
                 CookieService.addCookie("token", registeredUser.getToken());
                 return "islogged";
-            } else if (registeredUser.getAuthorization().getStatus().equals("PC")){
+            } else if (registeredUser.getAuthorization().getStatus().equals("PC")) {
                 loginStatus = "pending";
                 return "";
-            } else if (registeredUser.getAuthorization().getStatus().equals("IC")){
+            } else if (registeredUser.getAuthorization().getStatus().equals("IC")) {
                 loginStatus = "inactive";
                 return "";
             } else {
@@ -73,11 +75,10 @@ public class AuthBean implements Serializable {
                 CookieService.addCookie("token", registeredUser.getToken());
                 return "wizard";
             }
-        } else if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")){
+        } else if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
             loginStatus = "check_email";
             return "";
-        }
-        else {
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
             return "";
         }
