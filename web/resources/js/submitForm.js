@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var width = $(".page_progress").width();
     var page = 1;
-    $(".educational_object_author_phone").mask("(99) 9999-9999");
+//    $(".educational_object_author_phone").mask("(99) 9999-9999");
     $(document).on('click', '.button_back', function() {
         $(".form" + page + "_body").hide();
         $(".page_number").text(--page);
@@ -213,142 +213,207 @@ $(document).ready(function() {
 //        }
 //    }
 
-    $(document).on("click", "#submit", function() {
-        if (typeof media1 != 'undefined') {
-            var xhr1 = new XMLHttpRequest();
-            if (xhr1.upload) {
-                var progress1;
-                var currentLoaded;
-                var lastLoaded;
-                var totalLoaded;
-                xhr1.upload.onloadstart = function() {
-                    //submitted1 = false;
-                    progress1 = 0;
-                    currentLoaded = 0;
-                    lastLoaded = 0;
-                    totalLoaded = 0;
-                    $("#upload_bg1").css("width", "0%");
-                    $("#upload_percent1").text("0%");
-                }
-                xhr1.upload.onprogress = function(e) {
-                    if (e.lengthComputable) {
-                        currentLoaded = e.loaded;
-                        if (currentLoaded > lastLoaded) {
-                            totalLoaded += currentLoaded - lastLoaded;
-                        } else {
-                            totalLoaded += currentLoaded;
-                        }
-                        lastLoaded = currentLoaded;
-                        console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
-                        progress1 = Math.round(totalLoaded / e.total * 100);
-                        console.log("Progresso: " + progress1 + "%");
-                        if (progress1 <= 100) {
-                            $("#upload_bg1").css("width", progress1 + '%');
-                            $("#upload_percent1").text(progress1 + '%');
-                        }
-                    }
-                }
-                xhr1.addEventListener("readystatechange", function(e) {
-                    if (this.readyState === 4) {
-                        console.log("readystate = 4");
-                        $("#loading1").hide();
-                        $("#attached1").show();
-                        $(".form5_body").hide();
-                        $(".form6_body").show();
-                    }
-                });
-            }
-            xhr1.open('post', "../mandril/submitForm.xhtml", true);
-            xhr1.send(media1);
-        }
+//    $(document).on("click", "#submit", function() {
+//        if (typeof media1 != 'undefined') {
+//            var xhr1 = new XMLHttpRequest();
+//            if (xhr1.upload) {
+//                var progress1;
+//                var currentLoaded;
+//                var lastLoaded;
+//                var totalLoaded;
+//                xhr1.upload.onloadstart = function() {
+//                    //submitted1 = false;
+//                    progress1 = 0;
+//                    currentLoaded = 0;
+//                    lastLoaded = 0;
+//                    totalLoaded = 0;
+//                    $("#upload_bg1").css("width", "0%");
+//                    $("#upload_percent1").text("0%");
+//                }
+//                xhr1.upload.onprogress = function(e) {
+//                    if (e.lengthComputable) {
+//                        currentLoaded = e.loaded;
+//                        if (currentLoaded > lastLoaded) {
+//                            totalLoaded += currentLoaded - lastLoaded;
+//                        } else {
+//                            totalLoaded += currentLoaded;
+//                        }
+//                        lastLoaded = currentLoaded;
+//                        console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
+//                        progress1 = Math.round(totalLoaded / e.total * 100);
+//                        console.log("Progresso: " + progress1 + "%");
+//                        if (progress1 <= 100) {
+//                            $("#upload_bg1").css("width", progress1 + '%');
+//                            $("#upload_percent1").text(progress1 + '%');
+//                        }
+//                    }
+//                }
+//                xhr1.addEventListener("readystatechange", function(e) {
+//                    if (this.readyState === 4) {
+//                        console.log("readystate = 4");
+//                        $("#loading1").hide();
+//                        $("#attached1").show();
+//                        $(".form5_body").hide();
+//                        $(".form6_body").show();
+//                    }
+//                });
+//            }
+//            xhr1.open('post', "../mandril/submitForm.xhtml", true);
+//            xhr1.send(media1);
+//        }
+//
+//        if (typeof media2 != 'undefined') {
+//            var xhr2 = new XMLHttpRequest();
+//            if (xhr2.upload) {
+//                var progress2;
+//                var current2;
+//                var difference2;
+//                var loaded2;
+//                xhr2.upload.onloadstart = function() {
+//                    current2 = 0;
+//                    difference2 = 0;
+//                    loaded2 = 0;
+//                    //submitted2 = false;
+//                    $("#upload_bg2").css("width", "0%");
+//                    $("#upload_percent2").text("0%");
+//                }
+//                xhr2.upload.onprogress = function(e) {
+//                    if (e.lengthComputable) {
+//                        var temp2 = current2;
+//                        current2 = e.loaded;
+//                        difference2 = current2 - temp2;
+//                        if (difference2 <= 0) {
+//                            difference2 = 0;
+//                        }
+//                        loaded2 += difference2;
+//                        progress2 = Math.floor(loaded2 / e.total * 100);
+//                        $("#upload_bg2").css("width", progress2 + '%');
+//                        $("#upload_percent2").text(progress2 + '%');
+//                        console.log("e2");
+//                        console.log(e);
+//                    }
+//                };
+//                xhr2.upload.onloadend = function() {
+//                    $("#upload_bg2").css("width", "100%");
+//                    $("#upload_percent2").text("100%");
+//                    $("#loading2").hide();
+//                    $("#attached2").show();
+//                    //submitted2 = true;
+//                    finishUpload();
+//                }
+//            }
+//            xhr2.open('post', "../mandril/submitForm.xhtml", true);
+//            xhr2.send(media2);
+//        }
+//
+//        if (typeof media3 != 'undefined') {
+//            var xhr3 = new XMLHttpRequest();
+//            if (xhr3.upload) {
+//                var progress3;
+//                var current3;
+//                var difference3;
+//                var loaded3;
+//                xhr3.upload.onloadstart = function() {
+//                    current3 = 0;
+//                    difference3 = 0;
+//                    loaded3 = 0;
+//                    //submitted3 = false;
+//                    $("#upload_bg3").css("width", "0%");
+//                    $("#upload_percent3").text("0%");
+//                }
+//                xhr3.upload.onprogress = function(e) {
+//                    if (e.lengthComputable) {
+//                        var temp3 = current3;
+//                        current3 = e.loaded;
+//                        difference3 = current3 - temp3;
+//                        if (difference3 <= 0) {
+//                            difference3 = 0;
+//                        }
+//                        loaded3 += difference3;
+//                        progress3 = Math.floor(loaded3 / e.total * 100);
+//                        $("#upload_bg3").css("width", progress3 + '%');
+//                        $("#upload_percent3").text(progress3 + '%');
+//                        console.log("e3");
+//                        console.log(e);
+//                    }
+//                };
+//                xhr3.upload.onloadend = function() {
+//                    $("#upload_bg3").css("width", "100%");
+//                    $("#upload_percent3").text("100%");
+//                    $("#loading3").hide();
+//                    $("#attached3").show();
+//                    //submitted3 = true;
+//                    finishUpload();
+//                }
+//            }
+//            xhr3.open('post', "../mandril/submitForm.xhtml", true);
+//            xhr3.send(media3);
+//        }
+//    });
 
-        if (typeof media2 != 'undefined') {
-            var xhr2 = new XMLHttpRequest();
-            if (xhr2.upload) {
-                var progress2;
-                var current2;
-                var difference2;
-                var loaded2;
-                xhr2.upload.onloadstart = function() {
-                    current2 = 0;
-                    difference2 = 0;
-                    loaded2 = 0;
-                    //submitted2 = false;
-                    $("#upload_bg2").css("width", "0%");
-                    $("#upload_percent2").text("0%");
-                }
-                xhr2.upload.onprogress = function(e) {
-                    if (e.lengthComputable) {
-                        var temp2 = current2;
-                        current2 = e.loaded;
-                        difference2 = current2 - temp2;
-                        if (difference2 <= 0) {
-                            difference2 = 0;
-                        }
-                        loaded2 += difference2;
-                        progress2 = Math.floor(loaded2 / e.total * 100);
-                        $("#upload_bg2").css("width", progress2 + '%');
-                        $("#upload_percent2").text(progress2 + '%');
-                        console.log("e2");
-                        console.log(e);
-                    }
-                };
-                xhr2.upload.onloadend = function() {
-                    $("#upload_bg2").css("width", "100%");
-                    $("#upload_percent2").text("100%");
-                    $("#loading2").hide();
-                    $("#attached2").show();
-                    //submitted2 = true;
-                    finishUpload();
-                }
-            }
-            xhr2.open('post', "../mandril/submitForm.xhtml", true);
-            xhr2.send(media2);
-        }
+    var progressbar = $("#progressbar");
+    var progressLabel = $(".progress-label");
 
-        if (typeof media3 != 'undefined') {
-            var xhr3 = new XMLHttpRequest();
-            if (xhr3.upload) {
-                var progress3;
-                var current3;
-                var difference3;
-                var loaded3;
-                xhr3.upload.onloadstart = function() {
-                    current3 = 0;
-                    difference3 = 0;
-                    loaded3 = 0;
-                    //submitted3 = false;
-                    $("#upload_bg3").css("width", "0%");
-                    $("#upload_percent3").text("0%");
-                }
-                xhr3.upload.onprogress = function(e) {
-                    if (e.lengthComputable) {
-                        var temp3 = current3;
-                        current3 = e.loaded;
-                        difference3 = current3 - temp3;
-                        if (difference3 <= 0) {
-                            difference3 = 0;
-                        }
-                        loaded3 += difference3;
-                        progress3 = Math.floor(loaded3 / e.total * 100);
-                        $("#upload_bg3").css("width", progress3 + '%');
-                        $("#upload_percent3").text(progress3 + '%');
-                        console.log("e3");
-                        console.log(e);
-                    }
-                };
-                xhr3.upload.onloadend = function() {
-                    $("#upload_bg3").css("width", "100%");
-                    $("#upload_percent3").text("100%");
-                    $("#loading3").hide();
-                    $("#attached3").show();
-                    //submitted3 = true;
-                    finishUpload();
-                }
-            }
-            xhr3.open('post', "../mandril/submitForm.xhtml", true);
-            xhr3.send(media3);
+    $("#progressbar").progressbar({
+        value: false,
+        change: function () {
+            progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+        },
+        complete: function () {
+            progressLabel.text("100%");
+            
         }
     });
+
+    var formData = new FormData();
+    var percent;
+
+    $(document).on("change", "input[type='file']", function () {
+        addFiles(this.files);
+    });
+    
+    $(document).on("click", "#submit", uploadFiles);
+
+    function addFiles(files) {
+        for (var i = 0, file; file = files[i]; i++) {
+            formData.append(file.name, file);
+        }
+    }
+
+    function uploadFiles() {
+
+//        for (var i = 0, file; file = files[i]; i++) {
+//            formData.append(file.name, file);
+//        }
+
+        var xhr = new XMLHttpRequest();
+
+        if (xhr.upload) {
+
+            xhr.upload.onloadstart = function () {
+                percent = 0;
+            }
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+//                    console.log("e.loaded: " + e.loaded + " / total: " + e.total);
+                    percent = Math.floor(e.loaded / e.total * 100);
+//                    console.log("Progresso: " + percent + "%");
+                    progressbar.progressbar("value", percent);
+                }
+            }
+            xhr.onreadystatechange = function (){
+                if (this.readyState === 4) {
+                    console.log(this.readyState + " / " + this.status + " / " + this.statusText);
+                    $("#loading1").hide();
+                    $("#attached1").show();
+                    $(".form5_body").hide();
+                    $(".form6_body").show();
+                }
+            }
+        }
+
+        xhr.open("post", "../mandril/submitForm.xhtml", true);
+        xhr.send(formData);
+    }
 
 });

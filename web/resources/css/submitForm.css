@@ -22,7 +22,7 @@
 .form6_body{display:none;}
 .form6_body span {text-align:center}
 .loading_gif{display:none;margin:130px auto}
-.educational_object_upload_tip{display:block;font-size:14px;margin:10px;text-align:center;}
+.educational_object_upload_tip{display:block;font-size:14px;margin-top:20%;text-align:center;}
 .educational_object_review{margin:110px 0 10px 0;font-size: 13px;line-height: 18px;font-weight:bold;display:block}
 .educational_object_review_tip{display:block;font-size:11px}
 .educational_object_image{display:block;margin:15px 0 0 30px;width:290px;}
@@ -88,15 +88,19 @@
 .back_to_home_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
 .medias_added{float:left;margin:10px 0 0 0}
 .media_added{float:left;margin-right:10px}
-.file_attach_image{float:left;display:none;width:30px;height:30px; padding:5px 5px 0 0;}
-.file_loading_image{float:left;display:block;width:30px;height:30px; padding:5px 5px 0 0;}
+.file_attach_image{float:left;display:none;width:30px;height:30px;margin: -5px 5px 0 0;} 
+.file_loading_image{float:left;display:block;width:30px;height:30px;margin: -5px 5px 0 0;}
 .attached_file_box{float:left;font-weight:bold;margin:0px 5px 0;font-size:13px;}
 .remove_media{float:left;width:16px;height:16px;margin:-30px 0 0 0;background:url('/resources/images/close.png') no-repeat}
 .clear{display:block;clear:both}
 
-#upload_progress_box{display:block;margin:10% 25% 0;}
+#upload_progress_box{display:block;margin:10% 25% 0 20%;}
 .upload_progress_bar{display:block;border:1px solid #000;font-size:11px;width:200px;height:12px;margin:5px 35px 30px;}
 .upload_progress_percent{display:block;font-size:10px;}
 .upload_progress_background{display:block;background-color:#99ccff;height:12px;width:0;}
 .uploaded_file{display:block;font-size:13px;}
 .uploaded{display:none;}
+
+#progressbar{height:20px;}
+.ui-progressbar {position: relative;}
+.progress-label {position: absolute;left: 44%;font-size:15px;}

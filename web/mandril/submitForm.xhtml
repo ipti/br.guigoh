@@ -7,6 +7,9 @@
     <ui:define name="content">
         <link rel="stylesheet" href="../resources/css/submitForm.css" />
         <script src="/resources/js/jquery.mask.js"/>
+        <link rel="stylesheet" href="../resources/css/jquery-ui-progressbar.css"/>
+        <script src="/resources/js/jquery.js"/>
+        <script src="/resources/js/jquery-ui.js"/>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
@@ -113,56 +116,61 @@
                             <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>
-<!--                            <br/>
+                            <br/>
                             <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
-                            <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="HT{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="HT{submitFormBean.mediaFile2}"/>
+                            <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{submitFormBean.mediaFile2}"/>
                             <br/>
                             <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
-                            <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="HT{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="HT{submitFormBean.mediaFile3}"/>-->
+                            <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{submitFormBean.mediaFile3}"/>
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup id="form5">
                         <h:panelGroup styleClass="form5_body">
                             <h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
                             <div id="upload_progress_box">
-                                <h:panelGroup id="uploaded1" styleClass="uploaded">
+                                <!--<h:panelGroup id="uploaded1" styleClass="uploaded">-->
                                     <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
                                     <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
-                                    <h:panelGroup>
-                                        <span id="uploaded_file1" class="uploaded_file"/>
-                                        <div id="upload_bar1" class="upload_progress_bar">
-                                            <div id="upload_bg1" class="upload_progress_background">
-                                                <div id="upload_percent1" class="upload_progress_percent">0%</div>
-                                            </div>
+                                    <!--<h:panelGroup>-->
+                                        <!--<span id="uploaded_file1" class="uploaded_file"/>-->
+                                        <div id="progressbar">
+                                            <div class="progress-label"/>
+<!--                                                0%
+                                            </div>-->
                                         </div>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-                                <h:panelGroup id="uploaded2" styleClass="uploaded">
-                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
-                                    <h:panelGroup>
-                                        <span id="uploaded_file2" class="uploaded_file"/>
-                                        <div id="upload_bar2" class="upload_progress_bar">
-                                            <div id="upload_bg2" class="upload_progress_background">
-                                                <div id="upload_percent2" class="upload_progress_percent">0%</div>
-                                            </div>
-                                        </div>
-                                    </h:panelGroup>
-                                </h:panelGroup>
-                                <h:panelGroup id="uploaded3" styleClass="uploaded">
-                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
-                                    <h:panelGroup>
-                                        <span id="uploaded_file3" class="uploaded_file"/>
-                                        <div id="upload_bar3" class="upload_progress_bar">
-                                            <div id="upload_bg3" class="upload_progress_background">
-                                                <div id="upload_percent3" class="upload_progress_percent">0%</div>
-                                            </div>
-                                        </div>
-                                    </h:panelGroup>
-                                </h:panelGroup>
+                                        <!--                                        <div id="upload_bar1" class="upload_progress_bar">
+                                                                                    <div id="upload_bg1" class="upload_progress_background">
+                                                                                        <div id="upload_percent1" class="upload_progress_percent">0%</div>
+                                                                                    </div>
+                                                                                </div>-->
+                                    <!--</h:panelGroup>-->
+                                <!--</h:panelGroup>-->
+                                <!--                                <h:panelGroup id="uploaded2" styleClass="uploaded">
+                                                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                                                    <h:panelGroup>
+                                                                        <span id="uploaded_file2" class="uploaded_file"/>
+                                                                        <div id="upload_bar2" class="upload_progress_bar">
+                                                                            <div id="upload_bg2" class="upload_progress_background">
+                                                                                <div id="upload_percent2" class="upload_progress_percent">0%</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </h:panelGroup>
+                                                                </h:panelGroup>
+                                                                <h:panelGroup id="uploaded3" styleClass="uploaded">
+                                                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                                                    <h:panelGroup>
+                                                                        <span id="uploaded_file3" class="uploaded_file"/>
+                                                                        <div id="upload_bar3" class="upload_progress_bar">
+                                                                            <div id="upload_bg3" class="upload_progress_background">
+                                                                                <div id="upload_percent3" class="upload_progress_percent">0%</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </h:panelGroup>
+                                                                </h:panelGroup>-->
                             </div>
                         </h:panelGroup>
                     </h:panelGroup>
