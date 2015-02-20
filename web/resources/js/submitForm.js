@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var width = $(".page_progress").width();
     var page = 1;
-//    $(".educational_object_author_phone").mask("(99) 9999-9999");
+    $(".educational_object_author_phone").mask("(99) 9999-9999");
     $(document).on('click', '.button_back', function() {
         $(".form" + page + "_body").hide();
         $(".page_number").text(--page);

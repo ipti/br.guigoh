@@ -12,11 +12,11 @@ import com.guigoh.bo.util.MD5Generator;
 import com.guigoh.entity.Interests;
 import com.guigoh.entity.NewActivity;
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -26,17 +26,19 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(name = "homeBean")
 public class HomeBean implements Serializable {
 
-    List<Interests> interestThemesList = new ArrayList<Interests>();
-    List<EducationalObject> educationalObjectList = new ArrayList<EducationalObject>();
+    List<Interests> interestThemesList = new ArrayList<>();
+    List<EducationalObject> educationalObjectList = new ArrayList<>();
     List<NewActivity> newActivityList = new ArrayList();
 
     public void init() {
-        try {
-            loadInterestThemes();
-            loadEducationalObjects();
-            loadLastTopicActivities();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            try {
+                loadInterestThemes();
+                loadEducationalObjects();
+                loadLastTopicActivities();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -44,11 +46,20 @@ public class HomeBean implements Serializable {
         InterestsBO interestsBO = new InterestsBO();
         interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");
     }
-    
-    private void loadEducationalObjects(){
+
+    private void loadEducationalObjects() {
         EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
-        educationalObjectList = educationalObjectBO.getLatestTenActiveEducationalObjects();
-        
+        educationalObjectList = educationalObjectBO.getLatestFiveActiveEducationalObjects();
+    }
+
+    public void loadMoreEducationalObjects() {
+        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
+        List<EducationalObject> outList = educationalObjectList;
+        List<EducationalObject> moreObjects = educationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
+        for (EducationalObject temp : moreObjects){
+            outList.add(temp);
+        }
+        setEducationalObjectList(outList);
     }
 
     private void loadLastTopicActivities() {
@@ -83,5 +94,5 @@ public class HomeBean implements Serializable {
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
     }
-    
+
 }

@@ -40,3 +40,4 @@ strong {font-weight: bold;}
 .educational_object_label_by{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
 .educational_object_date{display:block;font-size:11px;color:#939598;margin:2px 0 20px}
 .clock_icon {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
+#show_more{color:blue;font-size:11px;}

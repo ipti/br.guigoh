@@ -22,6 +22,7 @@ import com.guigoh.entity.EducationalObject;
 import com.guigoh.entity.EducationalObjectMedia;
 import com.guigoh.dao.JPAUtil;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -382,17 +383,28 @@ public class EducationalObjectDAO implements Serializable {
         }
     }
     
-    public List<EducationalObject> getLatestTenActiveEducationalObjects() {
+    public List<EducationalObject> getLatestFiveActiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' order by date desc limit 10", EducationalObject.class).getResultList();
+                    + "where status = 'AC' order by date desc limit 5", EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
         }
     }
 
+    public List<EducationalObject> loadMoreEducationalObjects(Date date) {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
+                    + "where status = 'AC' and date < '" + date + "' order by date desc limit 5", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
     public List<EducationalObject> getAllActiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {

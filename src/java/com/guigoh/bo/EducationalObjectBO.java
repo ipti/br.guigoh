@@ -9,6 +9,7 @@ import com.guigoh.entity.EducationalObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,9 +68,18 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getLatestTenActiveEducationalObjects() {
+    public List<EducationalObject> getLatestFiveActiveEducationalObjects() {
         try {
-            return educationalObjectDAO.getLatestTenActiveEducationalObjects();
+            return educationalObjectDAO.getLatestFiveActiveEducationalObjects();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<EducationalObject> loadMoreEducationalObjects(Date date) {
+        try {
+            return educationalObjectDAO.loadMoreEducationalObjects(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
