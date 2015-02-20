@@ -8,14 +8,19 @@ $(document).ready(function(){
     }else if (left > middle){
         $(".middle_column").css("height", left);
     }
-    $.each(educationalObjectName, function(){
-        var nameTemp = $(this).text();
-        if (nameTemp.length > 28){
-            $(this).text(nameTemp.substring(0, 28)+"...");
-        }
-    });
+    
+    shortenName();
     
     $(".interest_theme").last().css("border-bottom", "1px solid #ABABAB");
     $(".text_feed").last().css("border-bottom", "0");
     $(".educational_object").last().css("border-bottom", "0");
+
+    function shortenName(){
+        $.each(educationalObjectName, function(){
+            var nameTemp = $(this).text();
+            if (nameTemp.length > 28){
+                $(this).text(nameTemp.substring(0, 28)+"...");
+            }
+        });
+    }
 });

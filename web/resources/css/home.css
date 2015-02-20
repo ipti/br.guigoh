@@ -31,7 +31,7 @@ strong {font-weight: bold;}
 .user_feed { display: block; width: 240px; height: auto; margin-bottom: 40px; }
 .list_objects{clear:both;display:block;margin-bottom:-30px;}
 .educational_object_image{width:100px;height:100px;float:left;margin-right:15px}
-.educational_object_name{font-size:15px; text-decoration: none;float:left;color: black;font-weight: bold;}
+.educational_object_name{font-size:15px; text-decoration: none;color: black;font-weight: bold;}
 .educational_object{display:block;height:120px;margin-bottom:20px;padding:5px 0 5px 5px;border-bottom:1px solid lightgray}
 .educational_object_publisher{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
 .container_description{float:left;margin-top:7px}
@@ -41,3 +41,6 @@ strong {font-weight: bold;}
 .educational_object_date{display:block;font-size:11px;color:#939598;margin:2px 0 20px}
 .clock_icon {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
 #show_more{color:blue;font-size:11px;}
+
+
+//retirado float:left do .educational_object_name. Repor quando consertar o home.js pra encurtar os nomes
