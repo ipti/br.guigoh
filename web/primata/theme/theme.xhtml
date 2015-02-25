@@ -9,6 +9,7 @@
     <ui:define name="content">
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/theme.css"></link>
         <script type="text/javascript" src="/resources/js/theme.js"></script>
+        <script type="text/javascript" src="/resources/js/jquery.twbsPagination.js"></script>
         <f:metadata>
             <f:viewParam name="id" value="#{themeBean.themeID}"/>
             <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
@@ -56,6 +57,10 @@
                     </h:panelGroup>
                     <h:panelGroup styleClass="publication_objects_box">
                         <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('Objetos educacionais').toUpperCase()}"></h:outputText>
+                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
+                            <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
+                            <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
+                        </a>
                         <h:panelGroup styleClass="publication_objects">
                             <ui:repeat value="#{themeBean.educationalObjectList}" var="educationalObject">
                                 <h:panelGroup styleClass="educational_object">
@@ -78,10 +83,6 @@
                                 </h:panelGroup>
                             </ui:repeat>
                         </h:panelGroup>
-                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
-                            <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
-                            <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
-                        </a>
                     </h:panelGroup> 
                 </h:form>
                 <span class="clear"></span>

@@ -26,7 +26,7 @@
                         </ui:repeat>
                     </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup styleClass="middle_column">
+                <h:panelGroup id="middle_column" styleClass="middle_column">
                     <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('Últimos objetos educacionais publicados').toUpperCase()}"/>
                     <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
                         <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
@@ -55,9 +55,10 @@
                             </ui:repeat>
                         </h:panelGroup>
                     </div>
-                    <h:commandLink id="show_more" value="Mostrar mais" action="#{homeBean.loadMoreEducationalObjects()}">
-                        <f:ajax execute="show_more" render="display_objects"/>
+                    <h:commandLink id="show_more" value="Mostrar mais" action="#{homeBean.loadMoreEducationalObjects()}" rendered="#{homeBean.existsMoreObjects}">
+                        <f:ajax execute="show_more" render="middle_column"/>
                     </h:commandLink>
+                    <h:outputText id="no_more" value="Não há mais Objetos Educacionais" rendered="#{!homeBean.existsMoreObjects}"/>
                 </h:panelGroup>
                 <h:panelGroup styleClass="right_column">
                     <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>

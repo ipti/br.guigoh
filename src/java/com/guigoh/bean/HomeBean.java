@@ -29,6 +29,7 @@ public class HomeBean implements Serializable {
     List<Interests> interestThemesList = new ArrayList<>();
     List<EducationalObject> educationalObjectList = new ArrayList<>();
     List<NewActivity> newActivityList = new ArrayList();
+    Boolean existsMoreObjects;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -36,6 +37,7 @@ public class HomeBean implements Serializable {
                 loadInterestThemes();
                 loadEducationalObjects();
                 loadLastTopicActivities();
+                existsMore();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,6 +62,16 @@ public class HomeBean implements Serializable {
             outList.add(temp);
         }
         setEducationalObjectList(outList);
+        existsMore();
+    }
+    
+    public void existsMore(){
+        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
+        if (educationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
+            setExistsMoreObjects(false);
+        } else {
+            setExistsMoreObjects(true);
+        }
     }
 
     private void loadLastTopicActivities() {
@@ -93,6 +105,14 @@ public class HomeBean implements Serializable {
 
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
+    }
+
+    public Boolean getExistsMoreObjects() {
+        return existsMoreObjects;
+    }
+
+    public void setExistsMoreObjects(Boolean existsMoreObjects) {
+        this.existsMoreObjects = existsMoreObjects;
     }
 
 }

@@ -403,7 +403,7 @@ $(document).ready(function() {
             }
             xhr.onreadystatechange = function (){
                 if (this.readyState === 4) {
-                    console.log(this.readyState + " / " + this.status + " / " + this.statusText);
+//                    console.log(this.readyState + " / " + this.status + " / " + this.statusText);
                     $("#loading1").hide();
                     $("#attached1").show();
                     $(".form5_body").hide();

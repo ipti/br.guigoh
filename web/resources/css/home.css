@@ -21,7 +21,7 @@ strong {font-weight: bold;}
 #publish_new_object_lamp{float:left}
 .publish_new_object_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
 .network_news{font-size:14px;font-weight:bold;margin:0 0 32px;display:block}
-.publisher_image{float:left; margin-right: 6px;height:77px;width:77px;background:url(../images/avatar.png) no-repeat;background-size:77px}
+.publisher_image{float:left; margin-right:9px;height:77px;width:77px;background:url(../images/avatar.png) no-repeat;background-size:77px}
 .text_feed {font-size:11px;display:block;height:77px;margin:0 0 15px;border-bottom:1px solid lightgray;padding-bottom:15px;}   
 .more_objects{float:right;cursor:pointer;margin:10px 0 20px 0;width:80px;display:none}
 #more_objects_icon{margin:6px 0 0 10px;float:right;width:17px;height:9px;background:url(../images/plus.png) no-repeat;}
@@ -40,7 +40,8 @@ strong {font-weight: bold;}
 .educational_object_label_by{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
 .educational_object_date{display:block;font-size:11px;color:#939598;margin:2px 0 20px}
 .clock_icon {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
-#show_more{color:blue;font-size:11px;}
+#show_more{color:blue;font-size:11px;display:block;text-align:center;margin:40px 0 10px 0;}
+#no_more{color:#989898;font-size:11px;display:block;text-align:center;margin:40px 0 10px 0;font-style:italic;}
 
 
 //retirado float:left do .educational_object_name. Repor quando consertar o home.js pra encurtar os nomes
