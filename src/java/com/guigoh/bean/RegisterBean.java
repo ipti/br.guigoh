@@ -196,17 +196,17 @@ public class RegisterBean implements Serializable {
                             LanguageBO languageBO = new LanguageBO();
                             trans.setLocale(languageBO.findById(languageId).getAcronym());
                             mailtext = trans.getWord(mailtext);
-                            mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                            //mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                            //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                            mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
-                            //EmailActivationBO emailActivationBO = new EmailActivationBO();
-                            emailActivationBO.create(emailactivation);
                             user.setStatus(CONFIRMATION_PENDING);
-                            userBO.create(user);
-                            //automaticConfirm(user);
-                            socialProfileBO.create(socialProfile);
+                            System.out.println("User:" + user.getUsername() + '/' + user.getStatus());
+                            userBO.create(user);                            
+                            emailActivationBO.create(emailactivation);
+                            socialProfileBO.create(socialProfile);     
+                            automaticConfirm(user);
                             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
                             user = new Users();
                             socialProfile = new SocialProfile();
@@ -244,17 +244,21 @@ public class RegisterBean implements Serializable {
         UserAuthorization authorization = new UserAuthorization();
         authorization.setRoles(DEFAULT);
         authorization.setTokenId(user.getToken());
-        if (networksList.size() > 2) {
-            authorization.setNetwork("Guigoh");
-        } else {
-            authorization.setNetwork(networksList.get(0).getName());
-        }
+//        if (networksList.size() > 2) {
+//            authorization.setNetwork("Guigoh");
+//        } else {
+        
+        authorization.setNetwork(networksList.get(0).getName());
+            
+//        }
 
-        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
-            authorization.setStatus(FIRST_ACCESS);
-        } else if (networksList.get(0).getType().equals(PRIVATE)) {
-            authorization.setStatus(PENDING_ACCESS);
-        }
+//        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
+//            authorization.setStatus(FIRST_ACCESS);
+//        } else if (networksList.get(0).getType().equals(PRIVATE)) {
+        
+        authorization.setStatus(PENDING_ACCESS);
+        
+//        }
         authorizationBO.create(authorization);
     }
 
@@ -324,9 +328,9 @@ public class RegisterBean implements Serializable {
                             authorization.setNetwork(networksList.get(0).getName());
                         }
 
-                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
-                            authorization.setStatus(FIRST_ACCESS);
-                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
+//                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
+//                            authorization.setStatus(FIRST_ACCESS);
+//                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
                             String newUserAccount = "Novo cadastro de usuário";
                             String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                             //mailtext = trans.getWord(mailtext);
@@ -342,7 +346,7 @@ public class RegisterBean implements Serializable {
                             }
                             trans.setLocale(CookieService.getCookie("locale"));
                             authorization.setStatus(PENDING_ACCESS);
-                        }
+//                        }
                         authorizationBO.create(authorization);
                         panelStatus = "confirmed_email";
                     }

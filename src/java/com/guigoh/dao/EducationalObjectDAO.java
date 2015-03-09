@@ -365,7 +365,7 @@ public class EducationalObjectDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' and theme_id = " + theme_id, EducationalObject.class).getResultList();
+                    + "where status = 'AC' and theme_id = " + theme_id + " order by date desc", EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();

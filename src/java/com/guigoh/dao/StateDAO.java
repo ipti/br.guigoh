@@ -303,7 +303,7 @@ public class StateDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<State> stateList = (List<State>) em.createNativeQuery("select * from state "
-                    + "where country_id = " + id, State.class).getResultList();
+                    + "where country_id = " + id + " order by name", State.class).getResultList();
             return stateList;
         } finally {
             em.close();

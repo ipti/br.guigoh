@@ -179,8 +179,8 @@ public class UserAuthorizationDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<UserAuthorization> pendingUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token from users where token in "
-                    + "(select token_id from user_authorization where status = 'PC')) order by social_profile_id desc", 
+                    + "(select token_id from user_authorization where status = 'PC') "
+                    + "order by social_profile_id desc", 
                     UserAuthorization.class).getResultList();
             return pendingUserList;
         } finally {
@@ -192,8 +192,8 @@ public class UserAuthorizationDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<UserAuthorization> activeUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token from users where token in "
-                    + "(select token_id from user_authorization where status = 'AC')) order by social_profile_id desc", 
+                    + "(select token_id from user_authorization where status = 'AC') "
+                    + "order by social_profile_id desc", 
                     UserAuthorization.class).getResultList();
             return activeUserList;
         } finally {
@@ -205,8 +205,8 @@ public class UserAuthorizationDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<UserAuthorization> inactiveUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token from users where token in "
-                    + "(select token_id from user_authorization where status = 'IC')) order by social_profile_id desc", 
+                    + "(select token_id from user_authorization where status = 'IC') "
+                    + "order by social_profile_id desc", 
                     UserAuthorization.class).getResultList();
             return inactiveUserList;
         } finally {

@@ -243,7 +243,7 @@ public class CityDAO implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<City> cityList = (List<City>) em.createNativeQuery("select * from city "
-                    + "where state_id = " + id, City.class).getResultList();
+                    + "where state_id = " + id + " order by name", City.class).getResultList();
             return cityList;
         } finally {
             em.close();
