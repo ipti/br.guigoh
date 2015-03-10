@@ -3,93 +3,93 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-    <f:view contentType="text/html"/>
+      xmlns:ui="http://java.sun.com/jsf/facelets">    
     <h:head>
         <title>#{localeBean.getString('Confirmação de e-mail')}</title>
         <link rel="shortcut icon" href="/resources/images/guigoh.png"></link>
         <link type="text/css" rel="stylesheet" media="all" href="/resources/css/login.css"></link>
     </h:head>
     <h:body>
-        <f:metadata>
-            <f:viewParam name="code" value="#{registerBean.confirmCode}" />
-            <f:viewParam name="user" value="#{registerBean.confirmEmail}" />
-            <f:event type="preRenderComponent" listener="#{registerBean.authenticateUser()}"/>
-        </f:metadata>
-        <div class="central">
-            <div class="block_left">
-                <font class="block_left_top"></font>
-                <font class="block_left_midtop"><p>#{localeBean.getString('Arte com Ciência é um projeto desenvolvido numa parceria entre o Instituto de Pesquisas em Tecnologia e Inovação (IPTI), a Universidade Federal de Sergipe (UFS) e a Secretaria de Estado da Educação de Sergipe (SEED-SE), com financiamento da Financiadora de Estudos e Projetos (FINEP).')}</p></font>
-                <font class="block_left_bot"><span class="companies_logos"></span></font>
-            </div>
-            <div class="block_right">
-                <div class="flags">
-                    <h:form>
-                        <ui:param name="url" value="#{request.servletPath}"/>
-                        <h:panelGrid styleClass="localeLogon" columns="3">
-                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
-                                <h:graphicImage  value="/resources/images/ptBR.gif" />
-                            </h:commandLink>
-                            <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
-                                <h:graphicImage  value="/resources/images/enUS.png" />
-                            </h:commandLink>
-                            <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
-                                <h:graphicImage  value="/resources/images/frFR.png" />
-                            </h:commandLink>
-                        </h:panelGrid>
-                    </h:form>
+        <f:view>
+            <f:metadata>
+                <f:viewParam name="code" value="#{registerBean.confirmCode}" />
+                <f:viewParam name="user" value="#{registerBean.confirmEmail}" />
+                <f:event type="preRenderComponent" listener="#{registerBean.authenticateUser()}"/>
+            </f:metadata>
+            <div class="central">
+                <div class="block_left">
+                    <font class="block_left_top"></font>
+                    <font class="block_left_midtop"><p>#{localeBean.getString('Arte com Ciência é um projeto desenvolvido numa parceria entre o Instituto de Pesquisas em Tecnologia e Inovação (IPTI), a Universidade Federal de Sergipe (UFS) e a Secretaria de Estado da Educação de Sergipe (SEED-SE), com financiamento da Financiadora de Estudos e Projetos (FINEP).')}</p></font>
+                    <font class="block_left_bot"><span class="companies_logos"></span></font>
                 </div>
-                <span class="login_box">
-                    <h:form id="login_form" styleClass="login_open">
-                        <h:panelGroup id="confirmed_email_panel" rendered="#{registerBean.panelStatus.equals('confirmed_email')}">
-                            <font class="open_name">#{localeBean.getString('E-mail autorizado com sucesso!')}</font>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                        
-                        <h:panelGroup id="new_pass_panel" rendered="#{registerBean.panelStatus.equals('new_pass')}">
-                            <font class="open_name">#{localeBean.getString('Digite sua nova senha')}</font>
-                            <h:messages styleClass="msg"/>
-                            <h:outputText class="new_pass" value="#{localeBean.getString('Nova senha:')}"/>
-                            <h:inputSecret value="#{registerBean.newPassword}"/><br/>
-                            <h:outputText class="new_pass" value="#{localeBean.getString('Confirmar:')}"/>
-                            <h:inputSecret  value="#{registerBean.newPasswordConfirm}"/><br/>
-                            <h:commandButton action="#{registerBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                        
-                        <h:panelGroup id="inactive_panel" rendered="#{registerBean.panelStatus.equals('inactive')}">
-                            <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                        
-                        <h:panelGroup id="pending_panel" rendered="#{registerBean.panelStatus.equals('pending')}">
-                            <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                        
-                        <h:panelGroup id="check_email_panel" rendered="#{registerBean.panelStatus.equals('check_email')}">
-                            <font class="open_name">#{localeBean.getString('Confirme seu registro através do seu e-mail.')}</font>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                        
-                        <h:panelGroup id="active_email_panel" rendered="#{registerBean.panelStatus.equals('active_email')}">
-                            <font class="open_name">#{localeBean.getString('Seu e-mail já foi confirmado.')}</font>
-                            <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
-                        </h:panelGroup>
-                    </h:form>
-                </span>
-            </div>
-            <span class="clear"></span> 
-        </div>
-        <div class="bottom">
-            <ul class="bottom_menu">
-                <!--<li ><a href="/">Contato</a></li>
-                <li ><span></span><a href="/">Termos de Uso</a></li>
-                <li ><span></span><a href="/">Alguns direitos reservados</a></li>-->
-                <span class="powered_guigoh">Powered by</span>
-            </ul>
-            <span class="clear"></span> 
-        </div>
+                <div class="block_right">
+                    <div class="flags">
+                        <h:form>
+                            <ui:param name="url" value="#{request.servletPath}"/>
+                            <h:panelGrid styleClass="localeLogon" columns="3">
+                                <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                    <h:graphicImage  value="/resources/images/ptBR.gif" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                    <h:graphicImage  value="/resources/images/enUS.png" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                    <h:graphicImage  value="/resources/images/frFR.png" />
+                                </h:commandLink>
+                            </h:panelGrid>
+                        </h:form>
+                    </div>
+                    <span class="login_box">
+                        <h:form id="login_form" styleClass="login_open">
+                            <h:panelGroup id="confirmed_email_panel" rendered="#{registerBean.panelStatus.equals('confirmed_email')}">
+                                <font class="open_name">#{localeBean.getString('E-mail autorizado com sucesso!')}</font>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
 
+                            <h:panelGroup id="new_pass_panel" rendered="#{registerBean.panelStatus.equals('new_pass')}">
+                                <font class="open_name">#{localeBean.getString('Digite sua nova senha')}</font>
+                                <h:messages styleClass="msg"/>
+                                <h:outputText class="new_pass" value="#{localeBean.getString('Nova senha:')}"/>
+                                <h:inputSecret value="#{registerBean.newPassword}"/><br/>
+                                <h:outputText class="new_pass" value="#{localeBean.getString('Confirmar:')}"/>
+                                <h:inputSecret  value="#{registerBean.newPasswordConfirm}"/><br/>
+                                <h:commandButton action="#{registerBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="inactive_panel" rendered="#{registerBean.panelStatus.equals('inactive')}">
+                                <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="pending_panel" rendered="#{registerBean.panelStatus.equals('pending')}">
+                                <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="check_email_panel" rendered="#{registerBean.panelStatus.equals('check_email')}">
+                                <font class="open_name">#{localeBean.getString('Confirme seu registro através do seu e-mail.')}</font>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup id="active_email_panel" rendered="#{registerBean.panelStatus.equals('active_email')}">
+                                <font class="open_name">#{localeBean.getString('Seu e-mail já foi confirmado.')}</font>
+                                <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{registerBean.backToLogin()}"/>
+                            </h:panelGroup>
+                        </h:form>
+                    </span>
+                </div>
+                <span class="clear"></span> 
+            </div>
+            <div class="bottom">
+                <ul class="bottom_menu">
+                    <!--<li ><a href="/">Contato</a></li>
+                    <li ><span></span><a href="/">Termos de Uso</a></li>
+                    <li ><span></span><a href="/">Alguns direitos reservados</a></li>-->
+                    <span class="powered_guigoh">Powered by</span>
+                </ul>
+                <span class="clear"></span> 
+            </div>
+        </f:view>
     </h:body>
 </html>

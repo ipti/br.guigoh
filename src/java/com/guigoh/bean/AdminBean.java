@@ -144,8 +144,8 @@ public class AdminBean implements Serializable {
             trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
             mailSubject = trans.getWord(mailSubject);
             mailText = trans.getWord(mailText);
-            //mailText += "http://artecomciencia.guigoh.com/primata/auth/login.xhtml";
-            mailText += "http://rts.guigoh.com:8080/primata/auth/login.xhtml";
+            mailText += "http://artecomciencia.guigoh.com/primata/auth/login.xhtml";
+//            mailText += "http://rts.guigoh.com:8080/primata/auth/login.xhtml";
             MailService.sendMail(mailText, mailSubject, user.getUsers().getUsername());
             trans.setLocale(CookieService.getCookie("locale"));
             getActiveUsers();

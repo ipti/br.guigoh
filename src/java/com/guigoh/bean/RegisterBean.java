@@ -196,8 +196,8 @@ public class RegisterBean implements Serializable {
                             LanguageBO languageBO = new LanguageBO();
                             trans.setLocale(languageBO.findById(languageId).getAcronym());
                             mailtext = trans.getWord(mailtext);
-                            //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                            mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                            mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+//                            mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
