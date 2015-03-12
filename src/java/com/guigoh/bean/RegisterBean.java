@@ -202,7 +202,6 @@ public class RegisterBean implements Serializable {
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
                             user.setStatus(CONFIRMATION_PENDING);
-                            System.out.println("User:" + user.getUsername() + '/' + user.getStatus());
                             userBO.create(user);                            
                             emailActivationBO.create(emailactivation);
                             socialProfileBO.create(socialProfile);     
@@ -303,11 +302,18 @@ public class RegisterBean implements Serializable {
         cityList = cityBO.findCitiesByStateId(stateId);
     }
 
-    public void authenticateUser() {
+    public void authenticateUser() {               
+        UsersBO tempUserBO = new UsersBO();
+        EmailActivationBO tempEmailActivationBO = new EmailActivationBO();
+        NetworksBO tempNetworksBO = new NetworksBO();
+        UserAuthorizationBO tempAuthorizationBO = new UserAuthorizationBO();
+        Translator tempTrans = new Translator();
+        tempTrans.setLocale(CookieService.getCookie("locale"));
+        
         try {
             if (confirmEmail != null && confirmCode != null) {
-                Users userConfirm = userBO.findUsers(confirmEmail);
-                EmailActivation emailActivation = emailActivationBO.findEmailActivationByUsername(userConfirm.getUsername());
+                Users userConfirm = tempUserBO.findUsers(confirmEmail);
+                EmailActivation emailActivation = tempEmailActivationBO.findEmailActivationByUsername(userConfirm.getUsername());
                 if (emailActivation.getUsername() != null) {
                     if (userConfirm.getStatus().equals("CA")) {
                         if (emailActivation.getCode().equals(confirmCode)) {
@@ -315,9 +321,9 @@ public class RegisterBean implements Serializable {
                         }
                     } else if (emailActivation.getCode().equals(confirmCode)) {
                         userConfirm.setStatus(CONFIRMATION_ACCESS);
-                        userBO.edit(userConfirm);
-                        emailActivationBO.destroy(emailActivation);
-                        List<Networks> networksList = networksBO.getAll();
+                        tempUserBO.edit(userConfirm);
+                        tempEmailActivationBO.destroy(emailActivation);
+                        List<Networks> networksList = tempNetworksBO.getAll();
                         UserAuthorization authorization = new UserAuthorization();
                         authorization.setRoles(DEFAULT);
                         authorization.setTokenId(userConfirm.getToken());
@@ -338,16 +344,16 @@ public class RegisterBean implements Serializable {
                                 //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                             //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                             //newUserAccount = trans.getWord(newUserAccount);
-                            for (UserAuthorization userAuthorization : authorizationBO.findAuthorizationsByRole("AD")){
-                                trans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
-                                newUserAccount = trans.getWord(newUserAccount);
-                                mailtext = trans.getWord(mailtext);
+                            for (UserAuthorization userAuthorization : tempAuthorizationBO.findAuthorizationsByRole("AD")){
+                                //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
+                                //newUserAccount = tempTrans.getWord(newUserAccount);
+                                //mailtext = tempTrans.getWord(mailtext);
                                 MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
                             }
-                            trans.setLocale(CookieService.getCookie("locale"));
+                            //tempTrans.setLocale(CookieService.getCookie("locale"));
                             authorization.setStatus(PENDING_ACCESS);
 //                        }
-                        authorizationBO.create(authorization);
+                        tempAuthorizationBO.create(authorization);
                         panelStatus = "confirmed_email";
                     }
                     //caindo sempre nesse else
@@ -356,12 +362,12 @@ public class RegisterBean implements Serializable {
                 }
             } else {
                 //funciona sem o "Users"
-                Users user = userBO.findUsers(CookieService.getCookie("user"));
+                Users user = tempUserBO.findUsers(CookieService.getCookie("user"));
                 if (user.getStatus() != null) {
                     if (user.getStatus().equals("CP")) {
                         panelStatus = "check_email";
                     } else {
-                        UserAuthorization authorization = authorizationBO.findAuthorizationByTokenId(user.getToken());
+                        UserAuthorization authorization = tempAuthorizationBO.findAuthorizationByTokenId(user.getToken());
                         if (authorization.getStatus().equals("IC")) {
                             panelStatus = "inactive";
                         } else if (authorization.getStatus().equals("PC")) {
