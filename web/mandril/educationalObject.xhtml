@@ -52,13 +52,13 @@
                                     <f:facet name="header">#{localeBean.getString('NomeArquivo')}</f:facet>
                                     <h:outputLabel styleClass="media-name" value="#{mediaInfo.name}.#{mediaInfo.type}"/>
                                 </h:column>
-                                <h:column headerClass="media-size-header">
-                                    <f:facet name="header">#{localeBean.getString('Tamanho')}</f:facet>
-                                    <h:outputText value="#{educationalObjectBean.getMediaSize(mediaInfo.size)}"/>
-                                </h:column>
+<!--                                <h:column headerClass="media-size-header">
+                                    <f:facet name="header">HT{localeBean.getString('Tamanho')}</f:facet>
+                                    <h:outputText value="HT{educationalObjectBean.getMediaSize(mediaInfo.size)}"/>
+                                </h:column>-->
 <!--                                <h:column>
                                     <f:facet name="header"/>
-                                    <h:commandLink styleClass="media-download" action="#{educationalObjectBean.downloadMedia(mediaInfo.media, mediaInfo.type)}" value="#{localeBean.getString('Download')}"/>
+                                    <h:commandLink styleClass="media-download" action="HT{educationalObjectBean.downloadMedia(mediaInfo.media, mediaInfo.type)}" value="HT{localeBean.getString('Download')}"/>
                                 </h:column>-->
                             </h:dataTable>
                         </div>
