@@ -38,9 +38,9 @@ function displayPreview() {
                 right.append("<img class='image-media' src='" + mediaUrl.eq(index).text() + "'/>");
             } else if (type.match(/^mp3$/i) || type.match(/^wav$/i) || type.match(/^wma$/i)) {
                 right.append("<span class='audio-title'><p>" + $(this).text() + "</p></span>" + "<audio src='" + mediaUrl.eq(index).text() + "' controls='preload'/>");
-            } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i)) {
+            } else if (type.match(/^mp4$/i) || type.match(/^avi$/i) || type.match(/^mpeg$/i) || type.match(/^wmv$/i)) {
                 right.append("<iframe height='310' width='552' src='" + mediaUrl.eq(index).text() + "' frameborder='0'/>");
-            } else if (type.match(/^ogg$/i) || type.match(/^webM$/i) || type.match(/^swf$/i) || type.match(/^doc$/i) || type.match(/^txt$/i) || type.match(/^wmv$/i)) {
+            } else if (type.match(/^ogg$/i) || type.match(/^webM$/i) || type.match(/^swf$/i) || type.match(/^doc$/i) || type.match(/^txt$/i)) {
                 if (locale == 'ptBR') {
                     var htmlOutput = "A prévia deste arquivo não é suportada. Clique ";
                     htmlOutput += "<a href='" + mediaUrl.eq(index).text() + "' style='color:#0000FF' download>aqui</a>";
