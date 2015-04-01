@@ -100,8 +100,9 @@
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Fotos, vídeos, cartilhas, documentos explicativos etc.')}"/>
                         <h:panelGroup styleClass="educational_object_image">
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Imagem')}"/>
-                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, png, gif.')}"/>
+                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, jpeg, png e gif.')}"/>
                             <h:outputText styleClass="educational_object_image_warning" value="#{localeBean.getString('Insira uma imagem para o Objeto Educacional.')}"/>
+                            <h:outputText styleClass="educational_object_image_type_warning" value="A imagem deve ser do tipo bmp, jpg, jpeg, png ou gif."/>
                             <h:graphicImage id="selectImage" value="/resources/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}"/>
@@ -111,8 +112,9 @@
                         <span class="clear"></span>
                         <h:panelGroup styleClass="educational_object_medias">
                             <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
-                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: jpg, png, gif, bmp, mp3, wav, wma, mp4, avi, mpeg, wmv, ogg, webM, swf, doc e txt.')}"/>
+                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: jpg, jpeg, png, gif, bmp, mp3, wav, wma, mp4, avi, mpeg, wmv, ogg, webM, swf, pdf, doc, docx e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
+                            <h:outputText styleClass="educational_object_media_type_warning" value="As mídias devem ser dos tipos especificados acima."/>
                             <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>

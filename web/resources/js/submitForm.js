@@ -90,6 +90,27 @@ $(document).ready(function() {
         }
     });
 
+    function validateImage(image){
+        var type = image.text().split(".").pop();
+        if ((!type.match(/^png$/i)) && (!type.match(/^jpg$/i)) && (!type.match(/^jpeg$/i)) && (!type.match(/^gif$/i)) && (!type.match(/^bmp$/i))){
+            return false;
+        }
+        return true;
+    }
+    
+    function validateMedia(media){
+        var type = media.text().split(".").pop();
+        if ((!type.match(/^jpg$/i))  && (!type.match(/^jpeg$/i)) && (!type.match(/^png$/i))  && (!type.match(/^gif$/i)) &&
+            (!type.match(/^bmp$/i))  && (!type.match(/^mp3$/i))  && (!type.match(/^wav$/i))  && (!type.match(/^wma$/i)) &&
+            (!type.match(/^mp4$/i))  && (!type.match(/^avi$/i))  && (!type.match(/^mpeg$/i)) && (!type.match(/^wmv$/i)) &&
+            (!type.match(/^ogg$/i))  && (!type.match(/^webM$/i)) && (!type.match(/^swf$/i))  && (!type.match(/^doc$/i)) &&
+            (!type.match(/^docx$/i)) && (!type.match(/^txt$/i))  && (!type.match(/^pdf$/i))) {
+        
+            return false;
+        }
+        return true;
+    }
+
     $(document).on("click", "#selectImage", function() {
         $("#imageFile").click();
     });
@@ -103,6 +124,8 @@ $(document).ready(function() {
                 $("#image").attr("src", reader.result);
                 $("#image").css("display", "block");
                 $(".educational_object_image_warning").hide();
+                $(".educational_object_image_type_warning").hide();
+                $("#selectedImageName").css("color", "black");
             }
             reader.readAsDataURL(file);
             if (file.name.length <= 32) {
@@ -115,16 +138,36 @@ $(document).ready(function() {
 
     $(document).on('click', '.button_submit', function() {
         var validate = true;
-        if ($("#image").attr("src") === undefined) {
-            $(".educational_object_image_warning").css("display", "block");
+        if ($("#image").attr("src") == "") {
             validate = false;
+            $(".educational_object_image_warning").css("display", "block");
+        } else if (!validateImage($("#selectedImageName"))){
+            validate = false;
+            $("#selectedImageName").css("color", "red");
+            $(".educational_object_image_type_warning").css("display", "block");
         }
         if ((($("#mediaFile1").val() == '') && ($("#mediaFile2").val() == '') && ($("#mediaFile3").val() == '')) == true) {
             validate = false;
             $(".educational_object_media_warning").css("display", "block");
+        } 
+        if (!validateMedia($("#selectedMediaName1")) && $("#mediaFile1").val() != ""){
+            validate = false;
+            $("#selectedMediaName1").css("color", "red");
+            $(".educational_object_media_type_warning").css("display", "block");
         }
+        if (!validateMedia($("#selectedMediaName2")) && $("#mediaFile2").val() != ""){
+            validate = false;
+            $("#selectedMediaName2").css("color", "red");
+            $(".educational_object_media_type_warning").css("display", "block");
+        }
+        if (!validateMedia($("#selectedMediaName3")) && $("#mediaFile3").val() != ""){
+            validate = false;
+            $("#selectedMediaName3").css("color", "red");
+            $(".educational_object_media_type_warning").css("display", "block");
+        }
+        
         if (validate) {
-            $(".submit").click();
+            $("#submit").click();
             $(".form4_body").hide();
             $(".button_options").hide();
             $(".form5_body").show();
@@ -156,6 +199,8 @@ $(document).ready(function() {
         }
         $("#uploaded1").show();
         $(".educational_object_media_warning").css("display", "none");
+        $(".educational_object_media_type_warning").css("display", "none");
+        $("#selectedMediaName1").css("color", "black");
     });
     
     $(document).on("change", "#mediaFile2", function() {
@@ -169,6 +214,8 @@ $(document).ready(function() {
         }
         $("#uploaded2").show();
         $(".educational_object_media_warning").css("display", "none");
+        $(".educational_object_media_type_warning").css("display", "none");
+        $("#selectedMediaName2").css("color", "black");
     });
 
     $(document).on("change", "#mediaFile3", function() {
@@ -182,174 +229,9 @@ $(document).ready(function() {
         }
         $("#uploaded3").show();
         $(".educational_object_media_warning").css("display", "none");
+        $(".educational_object_media_type_warning").css("display", "none");
+        $("#selectedMediaName3").css("color", "black");
     });
-
-//    função genérica pra seleção de arquivos
-//
-//    selectFile(this.file[0], 1);
-//    selectFile(this.file[1], 2);
-//    selectFile(this.file[2], 3);
-//    
-//    function selectFile(input, num){
-//        
-//        media = input;
-//        $("#selectedMediaName"+num).text(media.name);
-//        $("#uploaded_file"+num).text(media.name);
-//        $("#uploaded"+num).show();
-//        $(".educational_object_media_warning").css("display", "none");
-//    }
-
-
-//    método antigo (p/ 3 arquivos)
-//
-//    var submitted1 = true;
-//    var submitted2 = true;
-//    var submitted3 = true;
-//    
-//    function finishUpload() {
-//        if ((submitted1 == true) & (submitted2 == true) & (submitted3 == true)) {
-//            $(".form5_body").hide();
-//            $(".form6_body").show();
-//        }
-//    }
-
-//    $(document).on("click", "#submit", function() {
-//        if (typeof media1 != 'undefined') {
-//            var xhr1 = new XMLHttpRequest();
-//            if (xhr1.upload) {
-//                var progress1;
-//                var currentLoaded;
-//                var lastLoaded;
-//                var totalLoaded;
-//                xhr1.upload.onloadstart = function() {
-//                    //submitted1 = false;
-//                    progress1 = 0;
-//                    currentLoaded = 0;
-//                    lastLoaded = 0;
-//                    totalLoaded = 0;
-//                    $("#upload_bg1").css("width", "0%");
-//                    $("#upload_percent1").text("0%");
-//                }
-//                xhr1.upload.onprogress = function(e) {
-//                    if (e.lengthComputable) {
-//                        currentLoaded = e.loaded;
-//                        if (currentLoaded > lastLoaded) {
-//                            totalLoaded += currentLoaded - lastLoaded;
-//                        } else {
-//                            totalLoaded += currentLoaded;
-//                        }
-//                        lastLoaded = currentLoaded;
-//                        console.log("lastLoaded: " + lastLoaded + " / e.loaded: " + e.loaded + " / totalLoaded: " + totalLoaded + " / total: " + e.total);
-//                        progress1 = Math.round(totalLoaded / e.total * 100);
-//                        console.log("Progresso: " + progress1 + "%");
-//                        if (progress1 <= 100) {
-//                            $("#upload_bg1").css("width", progress1 + '%');
-//                            $("#upload_percent1").text(progress1 + '%');
-//                        }
-//                    }
-//                }
-//                xhr1.addEventListener("readystatechange", function(e) {
-//                    if (this.readyState === 4) {
-//                        console.log("readystate = 4");
-//                        $("#loading1").hide();
-//                        $("#attached1").show();
-//                        $(".form5_body").hide();
-//                        $(".form6_body").show();
-//                    }
-//                });
-//            }
-//            xhr1.open('post', "../mandril/submitForm.xhtml", true);
-//            xhr1.send(media1);
-//        }
-//
-//        if (typeof media2 != 'undefined') {
-//            var xhr2 = new XMLHttpRequest();
-//            if (xhr2.upload) {
-//                var progress2;
-//                var current2;
-//                var difference2;
-//                var loaded2;
-//                xhr2.upload.onloadstart = function() {
-//                    current2 = 0;
-//                    difference2 = 0;
-//                    loaded2 = 0;
-//                    //submitted2 = false;
-//                    $("#upload_bg2").css("width", "0%");
-//                    $("#upload_percent2").text("0%");
-//                }
-//                xhr2.upload.onprogress = function(e) {
-//                    if (e.lengthComputable) {
-//                        var temp2 = current2;
-//                        current2 = e.loaded;
-//                        difference2 = current2 - temp2;
-//                        if (difference2 <= 0) {
-//                            difference2 = 0;
-//                        }
-//                        loaded2 += difference2;
-//                        progress2 = Math.floor(loaded2 / e.total * 100);
-//                        $("#upload_bg2").css("width", progress2 + '%');
-//                        $("#upload_percent2").text(progress2 + '%');
-//                        console.log("e2");
-//                        console.log(e);
-//                    }
-//                };
-//                xhr2.upload.onloadend = function() {
-//                    $("#upload_bg2").css("width", "100%");
-//                    $("#upload_percent2").text("100%");
-//                    $("#loading2").hide();
-//                    $("#attached2").show();
-//                    //submitted2 = true;
-//                    finishUpload();
-//                }
-//            }
-//            xhr2.open('post', "../mandril/submitForm.xhtml", true);
-//            xhr2.send(media2);
-//        }
-//
-//        if (typeof media3 != 'undefined') {
-//            var xhr3 = new XMLHttpRequest();
-//            if (xhr3.upload) {
-//                var progress3;
-//                var current3;
-//                var difference3;
-//                var loaded3;
-//                xhr3.upload.onloadstart = function() {
-//                    current3 = 0;
-//                    difference3 = 0;
-//                    loaded3 = 0;
-//                    //submitted3 = false;
-//                    $("#upload_bg3").css("width", "0%");
-//                    $("#upload_percent3").text("0%");
-//                }
-//                xhr3.upload.onprogress = function(e) {
-//                    if (e.lengthComputable) {
-//                        var temp3 = current3;
-//                        current3 = e.loaded;
-//                        difference3 = current3 - temp3;
-//                        if (difference3 <= 0) {
-//                            difference3 = 0;
-//                        }
-//                        loaded3 += difference3;
-//                        progress3 = Math.floor(loaded3 / e.total * 100);
-//                        $("#upload_bg3").css("width", progress3 + '%');
-//                        $("#upload_percent3").text(progress3 + '%');
-//                        console.log("e3");
-//                        console.log(e);
-//                    }
-//                };
-//                xhr3.upload.onloadend = function() {
-//                    $("#upload_bg3").css("width", "100%");
-//                    $("#upload_percent3").text("100%");
-//                    $("#loading3").hide();
-//                    $("#attached3").show();
-//                    //submitted3 = true;
-//                    finishUpload();
-//                }
-//            }
-//            xhr3.open('post', "../mandril/submitForm.xhtml", true);
-//            xhr3.send(media3);
-//        }
-//    });
 
     var progressbar = $("#progressbar");
     var progressLabel = $(".progress-label");

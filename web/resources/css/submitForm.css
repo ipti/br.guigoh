@@ -47,7 +47,9 @@
 .educational_object_author_warning_site{display:none;font-size:11px;color:red}
 .educational_object_author_warning{display:none;font-size:11px;color:red}
 .educational_object_image_warning{display:none;font-size:11px;color:red}
+.educational_object_image_type_warning{display:none;font-size:11px;color:red}
 .educational_object_media_warning{display:none;font-size:11px;color:red}
+.educational_object_media_type_warning{display:none;font-size:11px;color:red}
 .authors_added{width:550px;float:left;height:180px;text-indent:5px;border:1px solid #ccc;border-radius:10px;}
 .author_added{float:left;margin:5px 0px 30px 20px;width:250px }
 .authors_added_label{float:left;font-size:12px;font-weight:bold}
