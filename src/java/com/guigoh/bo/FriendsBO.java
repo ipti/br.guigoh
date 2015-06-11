@@ -23,14 +23,9 @@ import java.util.List;
  * @author IPTI
  */
 public class FriendsBO implements Serializable{
-
-    private FriendsDAO friendsDAO;
-
-    public FriendsBO() {
-        friendsDAO = new FriendsDAO();
-    }
-
-    public List<Friends> findFriendsByToken(String id) {
+    
+    public static List<Friends> findFriendsByToken(String id) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<Friends> friendList = friendsDAO.findFriendsByToken(id);
         if (friendList == null) {
             return new ArrayList<Friends>();
@@ -38,7 +33,8 @@ public class FriendsBO implements Serializable{
         return friendList;
     }
 
-    public List<Friends> findPendingFriendsByToken(String id) {
+    public static List<Friends> findPendingFriendsByToken(String id) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<Friends> pendingFriendList = friendsDAO.findPendingFriendsByToken(id);
         if (pendingFriendList == null) {
             return new ArrayList<Friends>();
@@ -46,7 +42,8 @@ public class FriendsBO implements Serializable{
         return pendingFriendList;
     }
 
-    public List<Friends> loadFriendSearchList(String token, String str) {
+    public static List<Friends> loadFriendSearchList(String token, String str) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<Friends> friendsList = friendsDAO.loadFriendSearchList(token, str);
         if (friendsList == null) {
             return new ArrayList<Friends>();
@@ -54,7 +51,8 @@ public class FriendsBO implements Serializable{
         return friendsList;
     }
 
-    public List<SocialProfile> loadUserSearchList(String str) {
+    public static List<SocialProfile> loadUserSearchList(String str) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<SocialProfile> usersList = friendsDAO.loadUserSearchList(str);
         if (usersList == null) {
             return new ArrayList<SocialProfile>();
@@ -62,8 +60,9 @@ public class FriendsBO implements Serializable{
         return usersList;
     }
 
-    public void addFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public static void addFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
+            FriendsDAO friendsDAO = new FriendsDAO();
             SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
             SocialProfile socialProfile = socialProfileDAO.findSocialProfile(socialProfileId);
             Friends friend = new Friends();
@@ -77,8 +76,9 @@ public class FriendsBO implements Serializable{
         }
     }
 
-    public void removeFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public static void removeFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
+            FriendsDAO friendsDAO = new FriendsDAO();
             Friends friend = findFriends(user, socialProfileId);
             friendsDAO.destroy(friend.getFriendsPK());
         } catch (Exception e) {
@@ -86,8 +86,9 @@ public class FriendsBO implements Serializable{
         }
     }
 
-    public void acceptFriend(Users user, Integer socialProfileId) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public static void acceptFriend(Users user, Integer socialProfileId) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
+            FriendsDAO friendsDAO = new FriendsDAO();
             Friends friend = findFriends(user, socialProfileId);
             friend.setStatus("AC");
             friendsDAO.edit(friend);
@@ -96,8 +97,9 @@ public class FriendsBO implements Serializable{
         }
     }
 
-    public void recommendFriend(Users user, Integer socialProfileId, String receiverUserName, String message) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public static void recommendFriend(Users user, Integer socialProfileId, String receiverUserName, String message) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
+            FriendsDAO friendsDAO = new FriendsDAO();
             UsersDAO usersDAO = new UsersDAO();
             Users receiver = usersDAO.findUsers(receiverUserName);
             SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
@@ -124,7 +126,8 @@ public class FriendsBO implements Serializable{
         }
     }
 
-    public Friends findFriends(Users user, Integer socialProfileId) {
+    public static Friends findFriends(Users user, Integer socialProfileId) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         FriendsPK friendPK = new FriendsPK();
         SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
         SocialProfile contactAdded = socialProfileDAO.findSocialProfile(socialProfileId);
@@ -150,7 +153,8 @@ public class FriendsBO implements Serializable{
         }
     }
 
-    public List<SocialProfile> findFriendsOnlineByToken(String id) {
+    public static List<SocialProfile> findFriendsOnlineByToken(String id) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<SocialProfile> socialProfile = friendsDAO.findFriendsOnlineByToken(id);
         if (socialProfile == null) {
             return new ArrayList<SocialProfile>();
@@ -158,7 +162,8 @@ public class FriendsBO implements Serializable{
         return socialProfile;
     }
 
-    public List<SocialProfile> findFriendsOfflineByToken(String id) {
+    public static List<SocialProfile> findFriendsOfflineByToken(String id) {
+        FriendsDAO friendsDAO = new FriendsDAO();
         List<SocialProfile> socialProfile = friendsDAO.findFriendsOfflineByToken(id);
         if (socialProfile == null) {
             return new ArrayList<SocialProfile>();

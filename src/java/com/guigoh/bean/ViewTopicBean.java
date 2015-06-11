@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
@@ -30,7 +30,7 @@ import javax.servlet.http.Part;
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "viewTopicBean")
 public class ViewTopicBean implements Serializable {
 
@@ -44,39 +44,31 @@ public class ViewTopicBean implements Serializable {
     private SocialProfile socialProfile;
     private transient Part fileMedia;
     private transient List<Part> fileList;
-    private DiscussionTopicMsgBO dtmBO;
-    private DiscussionTopicBO dtBO;
-    private DiscussionTopicFilesBO dtfBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            dtBO = new DiscussionTopicBO();
-            dtmBO = new DiscussionTopicMsgBO();
-            dtfBO = new DiscussionTopicFilesBO();
             user = new Users();
             user.setUsername(CookieService.getCookie("user"));
             user.setToken(CookieService.getCookie("token"));
             fileList = new ArrayList<>();
             newReply = "";
             if (discussionTopic == null) {
-                discussionTopic = dtBO.findDiscussionTopicByID(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+                discussionTopic = DiscussionTopicBO.findDiscussionTopicByID(discussionTopicID);
+                discussionTopic.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
 
-                discussionTopicMsgList = dtmBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+                discussionTopicMsgList = DiscussionTopicMsgBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+                    dtm.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                SocialProfileBO spBO = new SocialProfileBO();
-                socialProfile = spBO.findSocialProfile(user.getToken());
+                socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
             } else if (discussionTopic.getId() != discussionTopicID) {
-                discussionTopic = dtBO.findDiscussionTopicByID(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
-                discussionTopicMsgList = dtmBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+                discussionTopic = DiscussionTopicBO.findDiscussionTopicByID(discussionTopicID);
+                discussionTopic.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+                discussionTopicMsgList = DiscussionTopicMsgBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(dtfBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+                    dtm.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                SocialProfileBO spBO = new SocialProfileBO();
-                socialProfile = spBO.findSocialProfile(user.getToken());
+                socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
             }
         }
     }
@@ -102,8 +94,8 @@ public class ViewTopicBean implements Serializable {
                 discussionTopicMsg.setReply(newReply);
                 discussionTopicMsg.setStatus('A');
                 discussionTopicMsg.setSocialProfileId(socialProfile);
-                discussionTopicMsg.setData(dtmBO.getServerTime());
-                dtmBO.replyTopic(discussionTopicMsg);
+                discussionTopicMsg.setData(DiscussionTopicMsgBO.getServerTime());
+                DiscussionTopicMsgBO.replyTopic(discussionTopicMsg);
                 List<DiscussionTopicFiles> dtfList = new ArrayList<>();
                 if (!fileList.isEmpty()) {
                     for (Part part : fileList) {
@@ -117,7 +109,7 @@ public class ViewTopicBean implements Serializable {
                         discussionTopicFiles.setFkType(MESSAGE);
                         discussionTopicFiles.setFkId(discussionTopicMsg.getId());
                         dtfList.add(discussionTopicFiles);
-                        dtfBO.create(discussionTopicFiles);
+                        DiscussionTopicFilesBO.create(discussionTopicFiles);
                     }
                 }
                 discussionTopicMsg.setDiscussionTopicFilesList(dtfList);
@@ -125,8 +117,7 @@ public class ViewTopicBean implements Serializable {
             }
             newReply = "";
             fileList = new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 

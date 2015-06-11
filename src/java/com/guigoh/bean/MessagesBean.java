@@ -14,16 +14,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "messagesBean")
 public class MessagesBean implements Serializable{
 
@@ -33,25 +31,21 @@ public class MessagesBean implements Serializable{
     private SocialProfile contactSocialProfile;
     private SocialProfile socialProfile;
     private Boolean isCurriculum;
-    private SocialProfileBO spBO;
-    private MessengerMessagesBO mmBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
-            spBO = new SocialProfileBO();
-            mmBO = new MessengerMessagesBO();
             contactSocialProfile = new SocialProfile();
-            messagesList = new ArrayList<MessengerMessages>();
+            messagesList = new ArrayList<>();
             getCookie();
-            socialProfile = spBO.findSocialProfile(user.getToken());
+            socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
             loadContacts();
         }
     }
 
     private void loadContacts() {
-        contactsList = new ArrayList<SocialProfile>();
-        contactsList = mmBO.getAllContacts(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
+        contactsList = new ArrayList<>();
+        contactsList = MessengerMessagesBO.getAllContacts(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId());
     }
 
     private void getCookie() {
@@ -61,7 +55,7 @@ public class MessagesBean implements Serializable{
     
     public void getCurriculumMessages(){
         isCurriculum = true;
-        messagesList = mmBO.getAllCurriculumMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId());
+        messagesList = MessengerMessagesBO.getAllCurriculumMessages(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId());
     }
     
     public String goToProfile(Integer id) {
@@ -70,8 +64,8 @@ public class MessagesBean implements Serializable{
 
     public void getMessages(Integer socialProfileId) {
         isCurriculum = false;
-        messagesList = mmBO.getAllMessages(spBO.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
-        contactSocialProfile = spBO.findSocialProfileBySocialProfileId(socialProfileId);
+        messagesList = MessengerMessagesBO.getAllMessages(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
+        contactSocialProfile = SocialProfileBO.findSocialProfileBySocialProfileId(socialProfileId);
     }
 
     public Users getUser() {

@@ -53,8 +53,6 @@ public class CreateTopicBean implements Serializable {
     private String tagInput;
     private transient Part fileMedia;
     private transient List<Part> fileList; 
-    private InterestsBO interestsBO;
-    private SocialProfileBO socialProfileBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -65,10 +63,8 @@ public class CreateTopicBean implements Serializable {
             user = new Users();
             fileList = new ArrayList<>();
             getCookie();
-            socialProfileBO = new SocialProfileBO();
-            socialProfile = socialProfileBO.findSocialProfile(user.getToken());
-            interestsBO = new InterestsBO();
-            theme = interestsBO.findInterestsByID(themeID);
+            socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+            theme = InterestsBO.findInterestsByID(themeID);
         }
     }
 
@@ -104,21 +100,18 @@ public class CreateTopicBean implements Serializable {
     public void createTopic() {
         try {
             Calendar c = Calendar.getInstance(TimeZone.getDefault());
-            DiscussionTopicBO discussionTopicBO = new DiscussionTopicBO();
             discussionTopic.setTitle(new String(discussionTopic.getTitle().getBytes("ISO-8859-1"), "UTF-8"));
             discussionTopic.setBody(new String(discussionTopic.getBody().getBytes("ISO-8859-1"), "UTF-8"));
             discussionTopic.setData(c.getTime());
             discussionTopic.setSocialProfileId(socialProfile);
             discussionTopic.setStatus(ACTIVE);
             discussionTopic.setThemeId(theme);
-            TagsBO tagsBO = new TagsBO();
-            discussionTopicBO.create(discussionTopic);
+            DiscussionTopicBO.create(discussionTopic);
             for (Tags t : tags) {
-                tagsBO.create(t);
-                tagsBO.createTagsDiscussionTopic(t, discussionTopic);
+                TagsBO.create(t);
+                TagsBO.createTagsDiscussionTopic(t, discussionTopic);
             }
             if (!fileList.isEmpty()) {
-                DiscussionTopicFilesBO discussionTopicFilesBO = new DiscussionTopicFilesBO();
                 for (Part part : fileList) {
                     String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
                     UploadService.uploadFile(part, filePath);
@@ -129,14 +122,13 @@ public class CreateTopicBean implements Serializable {
                     discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
-                    discussionTopicFilesBO.create(discussionTopicFiles);
+                    DiscussionTopicFilesBO.create(discussionTopicFiles);
                 }
             }
             discussionTopic = new DiscussionTopic();
             tags = new ArrayList<>();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themeID);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 

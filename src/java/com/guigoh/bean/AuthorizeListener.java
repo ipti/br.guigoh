@@ -9,7 +9,6 @@ import com.guigoh.bo.UsersBO;
 import com.guigoh.bo.util.CookieService;
 import com.guigoh.entity.UserAuthorization;
 import com.guigoh.entity.Users;
-import java.io.Serializable;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -28,10 +27,10 @@ public class AuthorizeListener implements PhaseListener{
         FacesContext context = event.getFacesContext();
         // Obtém a página que atualmente está interagindo com o ciclo
         // Se for a página 'login.jsp' seta a variável como true
-        boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("login") > -1 ? true : false;
-        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("register") > -1 ? true : false;
-        boolean isWizardPage = context.getViewRoot().getViewId().lastIndexOf("wizardProfile") > -1 ? true : false;
-        boolean isEmailPage = context.getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1 ? true : false;
+        boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("login") > -1;
+        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("register") > -1;
+        boolean isWizardPage = context.getViewRoot().getViewId().lastIndexOf("wizardProfile") > -1;
+        boolean isEmailPage = context.getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1;
         // Obtém a sessão atual
         // Resgata o nome do usuário logado
         Users user = new Users();
@@ -44,15 +43,13 @@ public class AuthorizeListener implements PhaseListener{
         Boolean confirmed = false;
         Boolean pending = false;
         if (user.getUsername() != null) {
-            UsersBO userBO = new UsersBO();
-            Users usertemp = userBO.findUsers(user);
+            Users usertemp = UsersBO.findUsers(user);
 
             confirmed = (usertemp.getStatus().equals("CA"));
             pending = (usertemp.getStatus().equals("CP"));
 
 
-            UserAuthorizationBO authorizationBO = new UserAuthorizationBO();
-            UserAuthorization authorization = authorizationBO.findAuthorizationByTokenId(usertemp.getToken());
+            UserAuthorization authorization = UserAuthorizationBO.findAuthorizationByTokenId(usertemp.getToken());
             if (authorization != null) {
                 firstAccess = (authorization.getStatus().equals("FC"));
                 activeAccess = (authorization.getStatus().equals("AC"));

@@ -16,14 +16,9 @@ import java.util.List;
  */
 public class OccupationsBO implements Serializable {
 
-    private OccupationsDAO occupationsDAO;
-
-    public OccupationsBO() {
-        occupationsDAO = new OccupationsDAO();
-    }
-
-    public Occupations findSocialProfile(Integer id) {
+    public static Occupations findSocialProfile(Integer id) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             return occupationsDAO.findOccupations(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,8 +26,9 @@ public class OccupationsBO implements Serializable {
         return null;
     }
 
-    public List<Occupations> findOccupationsByType(Integer id) {
+    public static List<Occupations> findOccupationsByType(Integer id) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             List<Occupations> occupationsList = occupationsDAO.findOccupationsByType(id);
             if (occupationsList == null) {
                 return new ArrayList<Occupations>();
@@ -44,8 +40,9 @@ public class OccupationsBO implements Serializable {
         return null;
     }
 
-    public List<Occupations> getAll() {
+    public static List<Occupations> getAll() {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             List<Occupations> occupationsList = occupationsDAO.findOccupationsEntities();
             if (occupationsList == null) {
                 return new ArrayList<Occupations>();
@@ -57,8 +54,9 @@ public class OccupationsBO implements Serializable {
         return null;
     }
 
-    public Occupations findOccupationsByName(Occupations occupations) {
+    public static Occupations findOccupationsByName(Occupations occupations) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             return occupationsDAO.findOccupationsByName(occupations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +64,9 @@ public class OccupationsBO implements Serializable {
         return new Occupations();
     }
 
-    public Occupations findOccupationsByNameByType(Occupations occupations) {
+    public static Occupations findOccupationsByNameByType(Occupations occupations) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             return occupationsDAO.findOccupationsByNameByType(occupations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,16 +74,18 @@ public class OccupationsBO implements Serializable {
         return new Occupations();
     }
 
-    public void create(Occupations occupations) {
+    public static void create(Occupations occupations) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             occupationsDAO.create(occupations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void createInsert(Occupations occupations) {
+    public static void createInsert(Occupations occupations) {
         try {
+            OccupationsDAO occupationsDAO = new OccupationsDAO();
             occupationsDAO.createInsert(occupations);
         } catch (Exception e) {
             e.printStackTrace();

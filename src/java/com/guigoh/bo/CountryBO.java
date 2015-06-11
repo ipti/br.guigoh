@@ -15,15 +15,10 @@ import java.util.List;
  * @author Joe
  */
 public class CountryBO implements Serializable {
-
-    private CountryDAO countryDAO;
     
-    public CountryBO(){
-        countryDAO = new CountryDAO();
-    }
-    
-    public List<Country> getAll() {
+    public static List<Country> getAll() {
         try {
+            CountryDAO countryDAO = new CountryDAO();
             return countryDAO.findCountryEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,8 +26,9 @@ public class CountryBO implements Serializable {
         }
     }
 
-    public Country getCountryByName(String countryName) {
+    public static Country getCountryByName(String countryName) {
         try {
+            CountryDAO countryDAO = new CountryDAO();
             return countryDAO.findCountryByName(countryName);
         } catch (Exception e) {
             e.printStackTrace();

@@ -19,14 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.apache.commons.mail.EmailException;
 
 /**
  *
  * @author Joe
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "adminBean")
 public class AdminBean implements Serializable {
 
@@ -52,9 +53,6 @@ public class AdminBean implements Serializable {
     private List<EducationalObject> activeEducationalObjectList;
     private List<EducationalObject> inactiveEducationalObjectList;
     private Map<Integer, Boolean> checked;
-    private UserAuthorizationBO authorizationBO;
-    private SocialProfileBO socialProfileBO;
-    private EducationalObjectBO educationalObjectBO;
     private Translator trans;
 
     public void init() {
@@ -64,9 +62,6 @@ public class AdminBean implements Serializable {
             listSocialProfile = new ArrayList<>();
             //authorizationList = new ArrayList<>();
             checked = new HashMap<>();
-            socialProfileBO = new SocialProfileBO();
-            authorizationBO = new UserAuthorizationBO();
-            educationalObjectBO = new EducationalObjectBO();
             admin = false;
             reviser = false;
             trans = new Translator();
@@ -84,11 +79,11 @@ public class AdminBean implements Serializable {
     }
 
     private void getLoggedSocialProfile() {
-        socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
     }
 
     private void getUserRole() {
-        authorization = authorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
+        authorization = UserAuthorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
         if (authorization.getRoles().equals(ADMIN)) {
             admin = true;
         }
@@ -110,34 +105,34 @@ public class AdminBean implements Serializable {
 //        }
 //    }
     private void getPendingUsers() {
-        pendingUserList = authorizationBO.getPendingUsers();
+        pendingUserList = UserAuthorizationBO.getPendingUsers();
     }
 
     private void getActiveUsers() {
-        activeUserList = authorizationBO.getActiveUsers();
+        activeUserList = UserAuthorizationBO.getActiveUsers();
     }
 
     private void getInactiveUsers() {
-        inactiveUserList = authorizationBO.getInactiveUsers();
+        inactiveUserList = UserAuthorizationBO.getInactiveUsers();
     }
 
     private void getPendingEducationalObjects() {
-        pendingEducationalObjectList = educationalObjectBO.getPendingEducationalObjects();
+        pendingEducationalObjectList = EducationalObjectBO.getPendingEducationalObjects();
     }
 
     private void getActiveEducationalObjects() {
-        activeEducationalObjectList = educationalObjectBO.getActiveEducationalObjects();
+        activeEducationalObjectList = EducationalObjectBO.getActiveEducationalObjects();
     }
 
     private void getInactiveEducationalObjects() {
-        inactiveEducationalObjectList = educationalObjectBO.getInactiveEducationalObjects();
+        inactiveEducationalObjectList = EducationalObjectBO.getInactiveEducationalObjects();
     }
 
     public void acceptUser(String token) {
         try {
-            UserAuthorization user = authorizationBO.getUserAuthorization(token);
+            UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
             user.setStatus(FIRST_ACCESS);
-            authorizationBO.edit(user);
+            UserAuthorizationBO.edit(user);
             String mailSubject = "Cadastro aceito";
             String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"
                             + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
@@ -150,16 +145,15 @@ public class AdminBean implements Serializable {
             trans.setLocale(CookieService.getCookie("locale"));
             getActiveUsers();
             getPendingUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (EmailException e) {
         }
     }
 
     public void declineUser(String token) {
         try {
-            UserAuthorization user = authorizationBO.getUserAuthorization(token);
+            UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
             user.setStatus(INACTIVE_ACCESS);
-            authorizationBO.edit(user);
+            UserAuthorizationBO.edit(user);
             String mailSubject = "Cadastro negado";
             String mailText = "Seu cadastro no Arte com Ciência foi negado por um administrador.";
             trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
@@ -169,54 +163,53 @@ public class AdminBean implements Serializable {
             trans.setLocale(CookieService.getCookie("locale"));
             getInactiveUsers();
             getPendingUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (EmailException e) {
         }
     }
 
     public void deactivateUser(String token) {
-        UserAuthorization user = authorizationBO.getUserAuthorization(token);
+        UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
         user.setStatus(INACTIVE_ACCESS);
-        authorizationBO.edit(user);
+        UserAuthorizationBO.edit(user);
         getActiveUsers();
         getInactiveUsers();
     }
 
     public void activateUser(String token) {
-        UserAuthorization user = authorizationBO.getUserAuthorization(token);
+        UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
         user.setStatus(ACTIVE_ACCESS);
-        authorizationBO.edit(user);
+        UserAuthorizationBO.edit(user);
         getActiveUsers();
         getInactiveUsers();
     }
 
     public void acceptEducationalObject(Integer id) {
-        EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
+        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
-        educationalObjectBO.edit(educationalObject);
+        EducationalObjectBO.edit(educationalObject);
         getActiveEducationalObjects();
         getPendingEducationalObjects();
     }
 
     public void declineEducationalObject(Integer id) {
-        EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
+        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(REJECTED);
-        educationalObjectBO.edit(educationalObject);
+        EducationalObjectBO.edit(educationalObject);
         getPendingEducationalObjects();
     }
 
     public void deactivateEducationalObject(Integer id) {
-        EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
+        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(DEACTIVATED);
-        educationalObjectBO.edit(educationalObject);
+        EducationalObjectBO.edit(educationalObject);
         getActiveEducationalObjects();
         getInactiveEducationalObjects();
     }
 
     public void activateEducationalObject(Integer id) {
-        EducationalObject educationalObject = educationalObjectBO.getEducationalObject(id);
+        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
-        educationalObjectBO.edit(educationalObject);
+        EducationalObjectBO.edit(educationalObject);
         getActiveEducationalObjects();
         getInactiveEducationalObjects();
     }

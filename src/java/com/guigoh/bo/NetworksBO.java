@@ -15,14 +15,9 @@ import java.util.List;
  */
 public class NetworksBO implements Serializable {
 
-    private NetworksDAO networksDAO;
-
-    public NetworksBO() {
-        networksDAO = new NetworksDAO();
-    }
-
-    public List<Networks> getAll() {
+    public static List<Networks> getAll() {
         try {
+            NetworksDAO networksDAO = new NetworksDAO();
             return networksDAO.findNetworksEntities();
         } catch (Exception e) {
             e.printStackTrace();

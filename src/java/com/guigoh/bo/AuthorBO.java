@@ -15,30 +15,27 @@ import java.util.List;
  */
 public class AuthorBO implements Serializable{
     
-    private AuthorDAO authorDAO;
-    
-    public AuthorBO(){
-        authorDAO = new AuthorDAO();
-    }
-    
-    public void create(Author author){
+    public static void create(Author author){
         try{
+            AuthorDAO authorDAO = new AuthorDAO();
             authorDAO.create(author);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
     
-    public void edit(Author author){
+    public static void edit(Author author){
         try{
+            AuthorDAO authorDAO = new AuthorDAO();
             authorDAO.edit(author);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
     
-    public List<Author> getAuthorsByEducationalObject(Integer educationalObjectId){
+    public static List<Author> getAuthorsByEducationalObject(Integer educationalObjectId){
         try{
+            AuthorDAO authorDAO = new AuthorDAO();
             return authorDAO.getAuthorsByEducationalObject(educationalObjectId);
         } catch (Exception e){
             e.printStackTrace();

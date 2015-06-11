@@ -20,13 +20,8 @@ import java.util.List;
  */
 public class MessengerMessagesBO implements Serializable{
 
-    private MessengerMessagesDAO messengerMessagesDAO;
-
-    public MessengerMessagesBO() {
-        messengerMessagesDAO = new MessengerMessagesDAO();
-    }
-
-    public List<MessengerMessages> getNonReadMessages(Integer socialProfileId) {
+    public static List<MessengerMessages> getNonReadMessages(Integer socialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<MessengerMessages> messagesList = messengerMessagesDAO.getNonReadMessages(socialProfileId);
         if (messagesList == null) {
             return new ArrayList<MessengerMessages>();
@@ -34,7 +29,8 @@ public class MessengerMessagesBO implements Serializable{
         return messagesList;
     }
 
-    public List<MessengerMessages> getCurriculumMessages(Integer socialProfileId) {
+    public static List<MessengerMessages> getCurriculumMessages(Integer socialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<MessengerMessages> messagesList = messengerMessagesDAO.getCurriculumMessages(socialProfileId);
         if (messagesList == null) {
             return new ArrayList<MessengerMessages>();
@@ -42,7 +38,8 @@ public class MessengerMessagesBO implements Serializable{
         return messagesList;
     }
 
-    public List<MessengerMessages> getAllCurriculumMessages(Integer socialProfileId) {
+    public static List<MessengerMessages> getAllCurriculumMessages(Integer socialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<MessengerMessages> messagesList = messengerMessagesDAO.getAllCurriculumMessages(socialProfileId);
         if (messagesList == null) {
             return new ArrayList<MessengerMessages>();
@@ -50,7 +47,8 @@ public class MessengerMessagesBO implements Serializable{
         return messagesList;
     }
 
-    public List<MessengerMessages> getLastTenMessages(Integer loggedSocialProfileId, Integer socialProfileId) {
+    public static List<MessengerMessages> getLastTenMessages(Integer loggedSocialProfileId, Integer socialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<MessengerMessages> messagesList = messengerMessagesDAO.getLastTenMessages(loggedSocialProfileId, socialProfileId);
         if (messagesList == null) {
             return new ArrayList<MessengerMessages>();
@@ -58,7 +56,8 @@ public class MessengerMessagesBO implements Serializable{
         return messagesList;
     }
 
-    public List<MessengerMessages> getAllMessages(Integer loggedSocialProfileId, Integer socialProfileId) {
+    public static List<MessengerMessages> getAllMessages(Integer loggedSocialProfileId, Integer socialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<MessengerMessages> messagesList = messengerMessagesDAO.getAllMessages(loggedSocialProfileId, socialProfileId);
         if (messagesList == null) {
             return new ArrayList<MessengerMessages>();
@@ -66,7 +65,8 @@ public class MessengerMessagesBO implements Serializable{
         return messagesList;
     }
 
-    public List<SocialProfile> getAllContacts(Integer loggedSocialProfileId) {
+    public static List<SocialProfile> getAllContacts(Integer loggedSocialProfileId) {
+        MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
         List<SocialProfile> contactsList = messengerMessagesDAO.getAllContacts(loggedSocialProfileId);
         if (contactsList == null) {
             return new ArrayList<SocialProfile>();
@@ -74,24 +74,27 @@ public class MessengerMessagesBO implements Serializable{
         return contactsList;
     }
 
-    public void editMessage(MessengerMessages mm) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public static void editMessage(MessengerMessages mm) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
+            MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
             messengerMessagesDAO.edit(mm);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void createMessage(MessengerMessages mm) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public static void createMessage(MessengerMessages mm) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
+            MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
             messengerMessagesDAO.create(mm);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Timestamp getServerTime() {
+    public static Timestamp getServerTime() {
         try {
+            MessengerMessagesDAO messengerMessagesDAO = new MessengerMessagesDAO();
             return messengerMessagesDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();

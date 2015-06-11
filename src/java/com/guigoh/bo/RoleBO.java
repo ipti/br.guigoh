@@ -14,15 +14,10 @@ import java.util.List;
  * @author ipti004
  */
 public class RoleBO implements Serializable{
-
-    private RoleDAO roleDAO;
-
-    public RoleBO() {
-        roleDAO = new RoleDAO();
-    }
-
-    public List<Role> getAll() {
+    
+    public static List<Role> getAll() {
         try {
+            RoleDAO roleDAO = new RoleDAO();
             return roleDAO.findRoleEntities();
         }catch (Exception e){
             e.printStackTrace();

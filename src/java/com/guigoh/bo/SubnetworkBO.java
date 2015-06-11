@@ -15,14 +15,9 @@ import java.util.List;
  */
 public class SubnetworkBO implements Serializable {
 
-    private SubnetworkDAO subnetworkDAO;
-
-    public SubnetworkBO() {
-        subnetworkDAO = new SubnetworkDAO();
-    }
-
-    public List<Subnetwork> getAll() {
+    public static List<Subnetwork> getAll() {
         try {
+            SubnetworkDAO subnetworkDAO = new SubnetworkDAO();
             return subnetworkDAO.findSubnetworkEntities();
         } catch (Exception e){
             e.printStackTrace();

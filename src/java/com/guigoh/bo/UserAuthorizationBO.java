@@ -16,96 +16,100 @@ import java.util.List;
  */
 public class UserAuthorizationBO implements Serializable {
 
-    private UserAuthorizationDAO authorizationDAO;
-
-    public UserAuthorizationBO() {
-        authorizationDAO = new UserAuthorizationDAO();
-    }
-
-    public void create(UserAuthorization authorization) {
+    public static void create(UserAuthorization authorization) {
         try {
-            authorizationDAO.create(authorization);
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            userAuthorizationDAO.create(authorization);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void edit(UserAuthorization authorization) {
+    public static void edit(UserAuthorization authorization) {
         try {
-            authorizationDAO.edit(authorization);
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            userAuthorizationDAO.edit(authorization);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public UserAuthorization findAuthorizationByTokenId(String token_id) {
+    public static UserAuthorization findAuthorizationByTokenId(String token_id) {
         try {
-            return authorizationDAO.findAuthorization(token_id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<UserAuthorization> findAuthorizationsByRole(String role){
-        try {
-            return authorizationDAO.findAuthorizationsByRole(role);
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.findAuthorization(token_id);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
-    public UserAuthorization getUserAuthorization(String token){
+
+    public static List<UserAuthorization> findAuthorizationsByRole(String role){
         try {
-            return authorizationDAO.findAuthorization(token);
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.findAuthorizationsByRole(role);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
     
-    public List<UserAuthorization> getAll() {
+    public static UserAuthorization getUserAuthorization(String token){
         try {
-            return authorizationDAO.findAuthorizationEntities();
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.findAuthorization(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static List<UserAuthorization> getAll() {
+        try {
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.findAuthorizationEntities();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public List<UserAuthorization> getPendingUsers(){
+    public static List<UserAuthorization> getPendingUsers(){
         try {
-            return authorizationDAO.getPendingUsers();
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.getPendingUsers();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
     
-    public List<UserAuthorization> getActiveUsers(){
+    public static List<UserAuthorization> getActiveUsers(){
         try {
-            return authorizationDAO.getActiveUsers();
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.getActiveUsers();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
     
-    public List<UserAuthorization> getInactiveUsers(){
+    public static List<UserAuthorization> getInactiveUsers(){
         try {
-            return authorizationDAO.getInactiveUsers();
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            return userAuthorizationDAO.getInactiveUsers();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
     
-    public List<UserAuthorization> findAuthorizationByActive(Integer subnetwork) {
+    public static List<UserAuthorization> findAuthorizationByActive(Integer subnetwork) {
         try {
-            List<UserAuthorization> authorizationList = authorizationDAO.findAuthorizationsBySubnetwork(subnetwork);
+            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            List<UserAuthorization> authorizationList = userAuthorizationDAO.findAuthorizationsBySubnetwork(subnetwork);
             if (authorizationList == null) {
                 return new ArrayList<UserAuthorization>();
             }

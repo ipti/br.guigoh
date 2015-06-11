@@ -18,13 +18,8 @@ import java.util.List;
  */
 public class DiscussionTopicMsgBO implements Serializable{
 
-    private DiscussionTopicMsgDAO discussionTopicMsgDAO;
-
-    public DiscussionTopicMsgBO() {
-        discussionTopicMsgDAO = new DiscussionTopicMsgDAO();
-    }
-
-    public List<DiscussionTopicMsg> findDiscussionTopicMsgsByTopic(Integer id) {
+    public static List<DiscussionTopicMsg> findDiscussionTopicMsgsByTopic(Integer id) {
+        DiscussionTopicMsgDAO discussionTopicMsgDAO = new DiscussionTopicMsgDAO();
         List<DiscussionTopicMsg> discussionTopicMsgList = discussionTopicMsgDAO.findDiscussionTopicMsgsByTopic(id);
         if (discussionTopicMsgList == null) {
             return new ArrayList<DiscussionTopicMsg>();
@@ -32,12 +27,14 @@ public class DiscussionTopicMsgBO implements Serializable{
         return discussionTopicMsgList;
     }
 
-    public void replyTopic(DiscussionTopicMsg discussionTopicMsg) throws RollbackFailureException, Exception {
+    public static void replyTopic(DiscussionTopicMsg discussionTopicMsg) throws RollbackFailureException, Exception {
+        DiscussionTopicMsgDAO discussionTopicMsgDAO = new DiscussionTopicMsgDAO();
         discussionTopicMsgDAO.create(discussionTopicMsg);
     }
 
-    public Timestamp getServerTime() {
+    public static Timestamp getServerTime() {
         try {
+            DiscussionTopicMsgDAO discussionTopicMsgDAO = new DiscussionTopicMsgDAO();
             return discussionTopicMsgDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();

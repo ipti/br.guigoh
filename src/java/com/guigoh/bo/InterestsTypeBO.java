@@ -14,23 +14,19 @@ import java.util.List;
  * @author Joe
  */
 public class InterestsTypeBO implements Serializable {
-
-    private InterestsTypeDAO interestsTypeDAO;
     
-    public InterestsTypeBO(){
-        interestsTypeDAO = new InterestsTypeDAO();
-    }
-    
-    public List<InterestsType> findInterestsType() {
+    public static List<InterestsType> findInterestsType() {
         try {
+            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
             return interestsTypeDAO.findInterestsTypeEntities();
         } catch (Exception e) {
         }
         return null;
     }
 
-    public InterestsType findInterestsTypeByName(String typeName) {
+    public static InterestsType findInterestsTypeByName(String typeName) {
         try {
+            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
             return interestsTypeDAO.findInterestsTypeByName(typeName);
         } catch (Exception e) {
         }

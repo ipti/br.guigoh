@@ -17,15 +17,10 @@ import java.util.List;
  * @author ipti004
  */
 public class EducationalObjectBO implements Serializable{
-    
-    private EducationalObjectDAO educationalObjectDAO;
 
-    public EducationalObjectBO() {
-        educationalObjectDAO = new EducationalObjectDAO();
-    }
-
-    public void create(EducationalObject educationalObject) {
+    public static void create(EducationalObject educationalObject) {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             educationalObjectDAO.create(educationalObject);
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,16 +28,18 @@ public class EducationalObjectBO implements Serializable{
 
     }
 
-    public void edit(EducationalObject educationalObject) {
+    public static void edit(EducationalObject educationalObject) {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             educationalObjectDAO.edit(educationalObject);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public List<EducationalObject> getAll() {
+    public static List<EducationalObject> getAll() {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.findEducationalObjectEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,8 +47,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public EducationalObject getEducationalObject(Integer id){
+    public static EducationalObject getEducationalObject(Integer id){
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.findEducationalObject(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,8 +57,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getLatestFourActiveEducationalObjects() {
+    public static List<EducationalObject> getLatestFourActiveEducationalObjects() {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getLatestFourActiveEducationalObjects();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,8 +67,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getLatestFiveActiveEducationalObjects() {
+    public static List<EducationalObject> getLatestFiveActiveEducationalObjects() {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getLatestFiveActiveEducationalObjects();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,8 +77,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> loadMoreEducationalObjects(Date date) {
+    public static List<EducationalObject> loadMoreEducationalObjects(Date date) {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.loadMoreEducationalObjects(date);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,8 +87,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getAllActiveEducationalObjects() {
+    public static List<EducationalObject> getAllActiveEducationalObjects() {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getAllActiveEducationalObjects();
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,8 +97,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getPendingEducationalObjects() {
+    public static List<EducationalObject> getPendingEducationalObjects() {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getPendingEducationalObjects();
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,8 +107,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getActiveEducationalObjects(){
+    public static List<EducationalObject> getActiveEducationalObjects(){
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getActiveEducationalObjects();
         } catch (Exception e){
             e.printStackTrace();
@@ -113,8 +117,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getInactiveEducationalObjects(){
+    public static List<EducationalObject> getInactiveEducationalObjects(){
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getInactiveEducationalObjects();
         } catch (Exception e){
             e.printStackTrace();
@@ -122,8 +127,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id) {
+    public static List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id) {
         try {
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getActiveEducationalObjectsByTheme(theme_id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,7 +137,8 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
+    public static List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
+        EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
         List<EducationalObject> educationalObjectList = educationalObjectDAO.getEducationalObjectsByExpression(expression, tag, id);
         if (educationalObjectList == null) {
             return new ArrayList<EducationalObject>();
@@ -139,8 +146,9 @@ public class EducationalObjectBO implements Serializable{
         return educationalObjectList;
     }
     
-    public EducationalObject findEducationalObject(Integer id){
+    public static EducationalObject findEducationalObject(Integer id){
         try{
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.findEducationalObject(id);
         }catch (Exception e){
             e.printStackTrace();
@@ -148,8 +156,9 @@ public class EducationalObjectBO implements Serializable{
         return null;
     }
     
-    public Timestamp getServerTime(){
+    public static Timestamp getServerTime(){
         try{
+            EducationalObjectDAO educationalObjectDAO = new EducationalObjectDAO();
             return educationalObjectDAO.getServerTime();
         }catch (Exception e){
             e.printStackTrace();

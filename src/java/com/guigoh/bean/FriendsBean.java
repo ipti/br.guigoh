@@ -16,17 +16,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "friendsBean")
 public class FriendsBean implements Serializable {
 
@@ -37,16 +34,12 @@ public class FriendsBean implements Serializable {
     private List<SocialProfile> socialProfileList;
     private String friendInputSearch = "";
     private String userInputSearch = "";
-    private SocialProfileBO spBO = new SocialProfileBO();
-    private FriendsBO friendsBO = new FriendsBO();
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();        
             getCookie();
-            spBO = new SocialProfileBO();
-            friendsBO = new FriendsBO();
-            userSocialProfile = spBO.findSocialProfile(user.getToken());
+            userSocialProfile = SocialProfileBO.findSocialProfile(user.getToken());
             loadFriends();
         }
     }
@@ -57,10 +50,10 @@ public class FriendsBean implements Serializable {
     }
 
     public void loadFriends() {
-        acceptedList = new ArrayList<Friends>();
-        pendingList = new ArrayList<Friends>();
-        acceptedList = friendsBO.findFriendsByToken(user.getToken());
-        pendingList = friendsBO.findPendingFriendsByToken(user.getToken());
+        acceptedList = new ArrayList<>();
+        pendingList = new ArrayList<>();
+        acceptedList = FriendsBO.findFriendsByToken(user.getToken());
+        pendingList = FriendsBO.findPendingFriendsByToken(user.getToken());
         organizeFriendList(acceptedList);
         organizeFriendList(pendingList);
     }
@@ -80,26 +73,26 @@ public class FriendsBean implements Serializable {
     }
             
     public void searchFriendEvent() {
-        acceptedList = new ArrayList<Friends>();
-        acceptedList = friendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
+        acceptedList = new ArrayList<>();
+        acceptedList = FriendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
         organizeFriendList(acceptedList);
     }
 
     public void searchUsersEvent() {
-        socialProfileList = new ArrayList<SocialProfile>();
+        socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = friendsBO.loadUserSearchList(userInputSearch);
+            socialProfileList = FriendsBO.loadUserSearchList(userInputSearch);
             
         }
     }
 
     public void removeFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        friendsBO.removeFriend(user, id);
+        FriendsBO.removeFriend(user, id);
         loadFriends();
     }
 
     public void acceptFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        friendsBO.acceptFriend(user, id);
+        FriendsBO.acceptFriend(user, id);
         loadFriends();
     }
 

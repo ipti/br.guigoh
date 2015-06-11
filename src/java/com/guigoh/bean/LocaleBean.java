@@ -11,9 +11,7 @@ import com.guigoh.bo.util.translator.Translator;
 import com.guigoh.entity.SocialProfile;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -23,22 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {
 
-    private Translator trans;
+    private final Translator trans;
     private String locale;
-    private String token;
+    private final String token;
     private SocialProfile socialProfile;
-    private LanguageBO languageBO;
-    private SocialProfileBO socialProfileBO;
 
     public LocaleBean() {
         trans = new Translator();
-        languageBO = new LanguageBO();
-        socialProfileBO = new SocialProfileBO();
         token = CookieService.getCookie("token");
         locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
         if (token != null) {
-            socialProfile = socialProfileBO.findSocialProfile(token);
-            locale = languageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
+            socialProfile = SocialProfileBO.findSocialProfile(token);
+            locale = LanguageBO.findById(socialProfile.getLanguageId().getId()).getAcronym();
         }
         changeLocale("", locale);
     }
@@ -51,8 +45,8 @@ public class LocaleBean implements Serializable {
     public final String changeLocale(String url, String locale) {
         CookieService.addCookie("locale", locale);
         if (token != null) {
-            socialProfile.setLanguageId(languageBO.findByAcronym(locale));
-            socialProfileBO.edit(socialProfile);
+            socialProfile.setLanguageId(LanguageBO.findByAcronym(locale));
+            SocialProfileBO.edit(socialProfile);
         }
         this.locale = locale;
         return url + "?faces-redirect=true&includeViewParams=true";

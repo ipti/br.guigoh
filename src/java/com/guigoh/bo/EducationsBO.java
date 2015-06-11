@@ -17,14 +17,9 @@ import java.util.List;
  */
 public class EducationsBO implements Serializable {
 
-    private EducationsDAO educationsDAO;
-
-    public EducationsBO() {
-        educationsDAO = new EducationsDAO();
-    }
-
-    public List<Educations> findEducationsByTokenId(String token_id) {
+    public static List<Educations> findEducationsByTokenId(String token_id) {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             return educationsDAO.findEducationsByTokenId(token_id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,8 +27,9 @@ public class EducationsBO implements Serializable {
         return null;
     }
 
-    public List<Educations> getAll() {
+    public static List<Educations> getAll() {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             return educationsDAO.findEducationsEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,24 +37,27 @@ public class EducationsBO implements Serializable {
         return null;
     }
 
-    public void create(Educations educations) {
+    public static void create(Educations educations) {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             educationsDAO.create(educations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void createInsert(Educations educations) {
+    public static void createInsert(Educations educations) {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             educationsDAO.createInsert(educations);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Educations findEducationsByName(Educations educations) {
+    public static Educations findEducationsByName(Educations educations) {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             return educationsDAO.findEducationsByName(educations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +65,9 @@ public class EducationsBO implements Serializable {
         return null;
     }
 
-    public void removeEducation(Educations edu) {
+    public static void removeEducation(Educations edu) {
         try {
+            EducationsDAO educationsDAO = new EducationsDAO();
             educationsDAO.destroy(edu.getEducationsPK());
         } catch (Exception e) {
             e.printStackTrace();

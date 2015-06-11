@@ -15,15 +15,10 @@ import java.util.List;
  * @author Joe
  */
 public class DiscussionTopicFilesBO implements Serializable {
-
-    private DiscussionTopicFilesDAO discussionTopicFilesDAO;
     
-    public DiscussionTopicFilesBO(){
-        discussionTopicFilesDAO = new DiscussionTopicFilesDAO();
-    }
-    
-    public void create(DiscussionTopicFiles discussionTopicFiles) {
+    public static void create(DiscussionTopicFiles discussionTopicFiles) {
         try {
+            DiscussionTopicFilesDAO discussionTopicFilesDAO = new DiscussionTopicFilesDAO();
             discussionTopicFilesDAO.create(discussionTopicFiles);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,9 +26,10 @@ public class DiscussionTopicFilesBO implements Serializable {
 
     }
 
-    public List<DiscussionTopicFiles> getDiscussionTopicFilesByFK(Integer id, char type) {
+    public static List<DiscussionTopicFiles> getDiscussionTopicFilesByFK(Integer id, char type) {
         List<DiscussionTopicFiles> discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
         try {
+            DiscussionTopicFilesDAO discussionTopicFilesDAO = new DiscussionTopicFilesDAO();
             discussionTopicFilesList = discussionTopicFilesDAO.getDiscussionTopicFilesByFK(id, type);
             if (discussionTopicFilesList == null) {
                 return new ArrayList<DiscussionTopicFiles>();

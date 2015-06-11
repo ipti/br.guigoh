@@ -80,21 +80,17 @@ public class SubmitFormBean implements Serializable {
     }
 
     public void submitForm() throws IOException {
-        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-        TagsBO tagBO = new TagsBO();
-        AuthorBO authorBO = new AuthorBO();
-        SocialProfile socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        SocialProfile socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
         educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
-        educationalObject.setDate(educationalObjectBO.getServerTime());
-        educationalObjectBO.create(educationalObject);
+        educationalObject.setDate(EducationalObjectBO.getServerTime());
+        EducationalObjectBO.create(educationalObject);
 //        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
-        educationalObjectBO.edit(educationalObject);
+        EducationalObjectBO.edit(educationalObject);
         tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
         String[] tagArray = tags.replace(" ", "").split(",");
         List<EducationalObject> educationalObjectList = new ArrayList<>();
@@ -103,11 +99,11 @@ public class SubmitFormBean implements Serializable {
             Tags tag = new Tags();
             tag.setEducationalObjectCollection(educationalObjectList);
             tag.setName(tagValue);
-            tagBO.create(tag);
+            TagsBO.create(tag);
         }
         for (Author authorOE : authorList) {
             authorOE.setEducationalObjectCollection(educationalObjectList);
-            authorBO.create(authorOE);
+            AuthorBO.create(authorOE);
         }
         if (mediaFile1 != null){
             submitFile(mediaFile1);
@@ -121,7 +117,6 @@ public class SubmitFormBean implements Serializable {
     }
 
     private void submitFile(Part part) throws IOException{
-        EducationalObjectMediaBO educationalObjectMediaBO = new EducationalObjectMediaBO();
 //        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
@@ -132,12 +127,11 @@ public class SubmitFormBean implements Serializable {
         educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
         educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
         UploadService.uploadFile(part, mediaPath);
-        educationalObjectMediaBO.create(educationalObjectMedia);
+        EducationalObjectMediaBO.create(educationalObjectMedia);
     }
 
     private void loadInterestThemes() {
-        InterestsBO interestsBO = new InterestsBO();
-        interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");
+        interestThemesList = InterestsBO.findInterestsByInterestsTypeName("Themes");
     }
 
     public EducationalObject getEducationalObject() {

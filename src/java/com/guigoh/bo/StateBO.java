@@ -15,14 +15,9 @@ import java.util.List;
  */
 public class StateBO implements Serializable {
 
-    private StateDAO stateDAO;
-
-    public StateBO() {
-        stateDAO = new StateDAO();
-    }
-
-    public List<State> getAll() {
+    public static List<State> getAll() {
         try {
+            StateDAO stateDAO = new StateDAO();
             return stateDAO.findStateEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +25,9 @@ public class StateBO implements Serializable {
         return null;
     }
 
-    public List<State> findStatesByCountryId(Integer id) {
+    public static List<State> findStatesByCountryId(Integer id) {
         try {
+            StateDAO stateDAO = new StateDAO();
             return stateDAO.findStatesByCountryId(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +35,9 @@ public class StateBO implements Serializable {
         return null;
     }
 
-    public State getStateByName(String stateName) {
+    public static State getStateByName(String stateName) {
         try {
+            StateDAO stateDAO = new StateDAO();
             return stateDAO.findStateByName(stateName);
         } catch (Exception e) {
             e.printStackTrace();

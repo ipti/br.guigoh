@@ -31,14 +31,14 @@ import com.guigoh.entity.State;
 import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "curriculumFinderBean")
 public class CurriculumFinderBean implements Serializable{
 
@@ -75,15 +75,15 @@ public class CurriculumFinderBean implements Serializable{
             education = new Educations();
             experience = new Experiences();
             interest = new Interests();
-            socialProfileList = new ArrayList<SocialProfile>();
-            stateList = new ArrayList<State>();
+            socialProfileList = new ArrayList<>();
+            stateList = new ArrayList<>();
             countryList = getCountries();
             occupationTypeList = getOccupationTypes();
-            occupationList = new ArrayList<Occupations>();
+            occupationList = new ArrayList<>();
             interestTypeList = getInterestTypes();
-            interestList = new ArrayList<Interests>();
+            interestList = new ArrayList<>();
             scholarityList = getScholarities();
-            cityList = new ArrayList<City>();
+            cityList = new ArrayList<>();
             educationNameList = getEducationNames();
             educationLocationList = getEducationLocations();
             countryId = 0;
@@ -101,7 +101,6 @@ public class CurriculumFinderBean implements Serializable{
     }
 
     public void searchUsersEvent() {
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
         Country country = new Country();
         country.setId(countryId);
         socialProfile.setCountryId(country);
@@ -130,13 +129,13 @@ public class CurriculumFinderBean implements Serializable{
         educationsLocation.setId(educationLocationId);
         education.setNameId(educationsName);
         education.setLocationId(educationsLocation);
-        socialProfileList = new ArrayList<SocialProfile>();
-        socialProfileList = socialProfileBO.loadUserSearchList(socialProfile, education, experienceTime, interest);
+        socialProfileList = new ArrayList<>();
+        socialProfileList = SocialProfileBO.loadUserSearchList(socialProfile, education, experienceTime, interest);
         socialProfileList = removeDuplicates(socialProfileList);
     }
     
     private List<SocialProfile> removeDuplicates(List<SocialProfile> socialProfileList){
-        List<SocialProfile> socialProfileListAux = new ArrayList<SocialProfile>();
+        List<SocialProfile> socialProfileListAux = new ArrayList<>();
         for (SocialProfile sp : socialProfileList){
             if(!socialProfileListAux.contains(sp)){
                 socialProfileListAux.add(sp);
@@ -151,53 +150,43 @@ public class CurriculumFinderBean implements Serializable{
     }
 
     private List<Country> getCountries() {
-        CountryBO countryBO = new CountryBO();
-        return countryBO.getAll();
+        return CountryBO.getAll();
     }
     
     private List<OccupationsType> getOccupationTypes(){
-        OccupationsTypeBO occupationsBO = new OccupationsTypeBO();
-        return occupationsBO.getAll();
+        return OccupationsTypeBO.getAll();
     }
     
     private List<InterestsType> getInterestTypes(){
-        InterestsTypeBO  interestsTypeBO = new InterestsTypeBO();
-        return interestsTypeBO.findInterestsType();
+        return InterestsTypeBO.findInterestsType();
     }
     
     private List<Scholarity> getScholarities(){
-        ScholarityBO scholarityBO = new ScholarityBO();
-        return scholarityBO.getAll();
+        return ScholarityBO.getAll();
     }
     
     private List<EducationsName> getEducationNames(){
-        EducationsNameBO educationsNameBO = new EducationsNameBO();
-        return educationsNameBO.getAll();
+        return EducationsNameBO.getAll();
     }
     
     private List<EducationsLocation> getEducationLocations(){
-        EducationsLocationBO educationsLocationBO = new EducationsLocationBO();
-        return educationsLocationBO.getAll();
+        return EducationsLocationBO.getAll();
     }
     
     public void loadInterests(){
-        InterestsBO interestsBO = new InterestsBO();
-        interestList = interestsBO.findInterestsByInterestsTypeId(interestTypeId);
+        interestList = InterestsBO.findInterestsByInterestsTypeId(interestTypeId);
     }
     
     public void loadOccupations(){
-        OccupationsBO occupationsBO = new OccupationsBO();
-        occupationList = occupationsBO.findOccupationsByType(occupationTypeId);
+        occupationList = OccupationsBO.findOccupationsByType(occupationTypeId);
     }
 
     public void loadStates() {
-        StateBO stateBO = new StateBO();
-        stateList = stateBO.findStatesByCountryId(countryId);
+        stateList = StateBO.findStatesByCountryId(countryId);
     }
 
     public void loadCities() {
-        CityBO cityBO = new CityBO();
-        cityList = cityBO.findCitiesByStateId(stateId);
+        cityList = CityBO.findCitiesByStateId(stateId);
     }
 
     public SocialProfile getSocialProfile() {

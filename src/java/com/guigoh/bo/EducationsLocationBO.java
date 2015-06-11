@@ -18,14 +18,9 @@ import java.util.List;
  */
 public class EducationsLocationBO implements Serializable {
 
-    EducationsLocationDAO educationsLocationDAO;
-
-    public EducationsLocationBO() {
-        educationsLocationDAO = new EducationsLocationDAO();
-    }
-
-    public List<EducationsLocation> getAll() {
+    public static List<EducationsLocation> getAll() {
         try {
+            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
             return educationsLocationDAO.findEducationsLocationEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,16 +28,18 @@ public class EducationsLocationBO implements Serializable {
         return null;
     }
 
-    public void create(EducationsLocation educationsLocation) {
+    public static void create(EducationsLocation educationsLocation) {
         try {
+            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
             educationsLocationDAO.create(educationsLocation);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public EducationsLocation findEducationsLocationByName(EducationsLocation locationId) {
+    public static EducationsLocation findEducationsLocationByName(EducationsLocation locationId) {
         try {
+            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
             return educationsLocationDAO.findEducationsByName(locationId);
         } catch (Exception e) {
             e.printStackTrace();

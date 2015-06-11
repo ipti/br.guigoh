@@ -13,13 +13,13 @@ import com.guigoh.entity.UserAuthorization;
 import com.guigoh.entity.SocialProfile;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author Joe
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "headerBean")
 public class HeaderBean implements Serializable {
     
@@ -42,14 +42,12 @@ public class HeaderBean implements Serializable {
     }
     
     private void loadSocialProfile() {
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-        socialProfile = socialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
         socialProfile.setName(socialProfile.getName().split(" ")[0]);
     }
     
     private void loadAuthorization() {
-        UserAuthorizationBO authorizationBO = new UserAuthorizationBO();
-        authorization = authorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
+        authorization = UserAuthorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
         if (authorization != null) {
             if (authorization.getRoles().equals(ADMIN)) {
                 admin = true;
@@ -61,10 +59,8 @@ public class HeaderBean implements Serializable {
     }
     
     private void getRegisteredUsersQuantity() {
-        UsersBO uBO = new UsersBO();
-        MessengerStatusBO msBO = new MessengerStatusBO();
-        registeredUsersCount = uBO.getRegisteredUsersQuantity();
-        registeredUsersOnline = msBO.getUsersOnline();
+        registeredUsersCount = UsersBO.getRegisteredUsersQuantity();
+        registeredUsersOnline = MessengerStatusBO.getUsersOnline();
         if (registeredUsersOnline == 0) {
             registeredUsersOnline++;
         }

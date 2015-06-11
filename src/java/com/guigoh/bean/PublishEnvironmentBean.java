@@ -10,30 +10,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author ipti004
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "publishEnvironmentBean")
 public class PublishEnvironmentBean implements Serializable{
     
     private List<EducationalObject> educationalObjectList;
-    private EducationalObjectBO educationalObjectBO; 
     
     public void init(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            educationalObjectBO = new EducationalObjectBO();
-            educationalObjectList = new ArrayList<EducationalObject>();
+            educationalObjectList = new ArrayList<>();
             loadEducationalObjectList();
         }
     }
     
     private void loadEducationalObjectList(){
-        educationalObjectList = educationalObjectBO.getLatestFourActiveEducationalObjects();
+        educationalObjectList = EducationalObjectBO.getLatestFourActiveEducationalObjects();
     }
 
     public List<EducationalObject> getEducationalObjectList() {

@@ -40,13 +40,15 @@ import com.guigoh.entity.SocialProfile;
 import com.guigoh.entity.State;
 import com.guigoh.entity.Users;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +57,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Joe
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "wizardProfileBean")
 public class WizardProfileBean implements Serializable {
 
@@ -131,45 +133,45 @@ public class WizardProfileBean implements Serializable {
     public void init() {
         if (socialProfile == null) {
             showpanel = 1;
-            interestsList = new ArrayList<Interests>();
-            interestsTypeList = new ArrayList<InterestsType>();
-            themesList = new ArrayList<Interests>();
-            booksList = new ArrayList<Interests>();
-            musicsList = new ArrayList<Interests>();
-            moviesList = new ArrayList<Interests>();
-            hobbiesList = new ArrayList<Interests>();
-            sportsList = new ArrayList<Interests>();
+            interestsList = new ArrayList<>();
+            interestsTypeList = new ArrayList<>();
+            themesList = new ArrayList<>();
+            booksList = new ArrayList<>();
+            musicsList = new ArrayList<>();
+            moviesList = new ArrayList<>();
+            hobbiesList = new ArrayList<>();
+            sportsList = new ArrayList<>();
             socialProfile = new SocialProfile();
-            stateList = new ArrayList<State>();
-            countryList = new ArrayList<Country>();
-            cityList = new ArrayList<City>();
+            stateList = new ArrayList<>();
+            countryList = new ArrayList<>();
+            cityList = new ArrayList<>();
             user = new Users();
-            experiencesList = new ArrayList<Experiences>();
-            educationsList = new ArrayList<Educations>();
-            interestsListAll = new ArrayList<Interests>();
-            themesListAll = new ArrayList<Interests>();
-            themesListFixo = new ArrayList<Interests>();
+            experiencesList = new ArrayList<>();
+            educationsList = new ArrayList<>();
+            interestsListAll = new ArrayList<>();
+            themesListAll = new ArrayList<>();
+            themesListFixo = new ArrayList<>();
             education = new Educations();
             experience = new Experiences();
-            booksAddList = new ArrayList<Integer>();
-            musicsAddList = new ArrayList<Integer>();
-            moviesAddList = new ArrayList<Integer>();
-            booksListAll = new ArrayList<Interests>();
-            musicsListAll = new ArrayList<Interests>();
-            moviesListAll = new ArrayList<Interests>();
-            sportsListAll = new ArrayList<Interests>();
-            hobbiesListAll = new ArrayList<Interests>();
-            occupationsListAll = new ArrayList<Occupations>();
-            occupationsTypeList = new ArrayList<OccupationsType>();
-            countryEducationList = new ArrayList<Country>();
-            countryExperienceList = new ArrayList<Country>();
-            stateEducationList = new ArrayList<State>();
-            stateExperienceList = new ArrayList<State>();
-            educationsNameListAll = new ArrayList<EducationsName>();
-            educationsLocationListAll = new ArrayList<EducationsLocation>();
-            experiencesLocationListAll = new ArrayList<ExperiencesLocation>();
+            booksAddList = new ArrayList<>();
+            musicsAddList = new ArrayList<>();
+            moviesAddList = new ArrayList<>();
+            booksListAll = new ArrayList<>();
+            musicsListAll = new ArrayList<>();
+            moviesListAll = new ArrayList<>();
+            sportsListAll = new ArrayList<>();
+            hobbiesListAll = new ArrayList<>();
+            occupationsListAll = new ArrayList<>();
+            occupationsTypeList = new ArrayList<>();
+            countryEducationList = new ArrayList<>();
+            countryExperienceList = new ArrayList<>();
+            stateEducationList = new ArrayList<>();
+            stateExperienceList = new ArrayList<>();
+            educationsNameListAll = new ArrayList<>();
+            educationsLocationListAll = new ArrayList<>();
+            experiencesLocationListAll = new ArrayList<>();
             multiThemeList = new Integer[6];
-            scholarityList = new ArrayList<Scholarity>();
+            scholarityList = new ArrayList<>();
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
             loadWizard();
@@ -216,14 +218,12 @@ public class WizardProfileBean implements Serializable {
         occupationss.setOccupationsTypeId(occupationsType);
         experience.setNameId(occupationss);
         experience.setLocationId(new ExperiencesLocation());
-        CountryBO countryBO = new CountryBO();
-        countryExperienceId = countryBO.getCountryByName(BRAZIL).getId();
-        countryEducationId = countryBO.getCountryByName(BRAZIL).getId();
+        countryExperienceId = CountryBO.getCountryByName(BRAZIL).getId();
+        countryEducationId = CountryBO.getCountryByName(BRAZIL).getId();
         loadStateExperiences();
         loadStateEducations();
-        StateBO stateBO = new StateBO();
-        stateExperienceId = stateBO.getStateByName(SERGIPE).getId();
-        stateEducationId = stateBO.getStateByName(SERGIPE).getId();
+        stateExperienceId = StateBO.getStateByName(SERGIPE).getId();
+        stateEducationId = StateBO.getStateByName(SERGIPE).getId();
         education.setNameId(new EducationsName());
         education.setLocationId(new EducationsLocation());
     }
@@ -244,8 +244,7 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void loadSocialProfile() {
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-        socialProfile = socialProfileBO.findSocialProfile(user.getToken());
+        socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
         if (socialProfile.getOccupationsId() == null) {
             Occupations occupations_s = new Occupations();
             OccupationsType occupationsType = new OccupationsType();
@@ -266,28 +265,23 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void loadExperiencies() {
-        ExperiencesBO experiencesBO = new ExperiencesBO();
-        experiencesList = experiencesBO.findExperiencesByTokenId(user.getToken());
+        experiencesList = ExperiencesBO.findExperiencesByTokenId(user.getToken());
     }
 
     private void loadEducations() {
-        EducationsBO educationsBO = new EducationsBO();
-        educationsList = educationsBO.findEducationsByTokenId(user.getToken());
+        educationsList = EducationsBO.findEducationsByTokenId(user.getToken());
     }
 
     private void getAllEducationsName() {
-        EducationsNameBO educationsNameBO = new EducationsNameBO();
-        educationsNameListAll = educationsNameBO.getAll();
+        educationsNameListAll = EducationsNameBO.getAll();
     }
 
     private void getAllEducationsLocationList() {
-        EducationsLocationBO educationsLocationBO = new EducationsLocationBO();
-        educationsLocationListAll = educationsLocationBO.getAll();
+        educationsLocationListAll = EducationsLocationBO.getAll();
     }
 
     private void getAllExperiencesLocationList() {
-        ExperiencesLocationBO experiencesLocationBO = new ExperiencesLocationBO();
-        experiencesLocationListAll = experiencesLocationBO.getAll();
+        experiencesLocationListAll = ExperiencesLocationBO.getAll();
     }
 
     public void addEducations() {
@@ -307,22 +301,20 @@ public class WizardProfileBean implements Serializable {
                 EducationsBO educationsBO = new EducationsBO();
                 Country country = new Country();
 
-                EducationsLocationBO educationsLocationBO = new EducationsLocationBO();
-                EducationsLocation educationsLocationt = educationsLocationBO.findEducationsLocationByName(education.getLocationId());
+                EducationsLocation educationsLocationt = EducationsLocationBO.findEducationsLocationByName(education.getLocationId());
 
                 if (educationsLocationt == null) {
                     education.getLocationId().setId(0);
-                    educationsLocationBO.create(education.getLocationId());
-                    educationsLocationt = educationsLocationBO.findEducationsLocationByName(education.getLocationId());
+                    EducationsLocationBO.create(education.getLocationId());
+                    educationsLocationt = EducationsLocationBO.findEducationsLocationByName(education.getLocationId());
                 }
 
-                EducationsNameBO educationsNameBO = new EducationsNameBO();
-                EducationsName educationsNamet = educationsNameBO.findEducationsNameByName(education.getNameId());
+                EducationsName educationsNamet = EducationsNameBO.findEducationsNameByName(education.getNameId());
 
                 if (educationsNamet == null) {
                     education.getNameId().setId(0);
-                    educationsNameBO.create(education.getNameId());
-                    educationsNamet = educationsNameBO.findEducationsNameByName(education.getNameId());
+                    EducationsNameBO.create(education.getNameId());
+                    educationsNamet = EducationsNameBO.findEducationsNameByName(education.getNameId());
                 }
 
 
@@ -348,7 +340,7 @@ public class WizardProfileBean implements Serializable {
                     cont = false;
                 }
                 if (cont == true) {
-                    educationsBO.createInsert(education);
+                    EducationsBO.createInsert(education);
                     education = new Educations();
                     education.setNameId(new EducationsName());
                     education.setLocationId(new EducationsLocation());
@@ -358,8 +350,7 @@ public class WizardProfileBean implements Serializable {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Educação adicionada com sucesso!"), null));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParseException e) {
         }
     }
 
@@ -369,27 +360,24 @@ public class WizardProfileBean implements Serializable {
             Boolean cont = true;
             if ((experience.getNameId().getName() != null && experience.getNameId().getName().length() != 0
                     && experience.getLocationId().getName() != null && experience.getLocationId().getName().length() != 0)) {
-                ExperiencesBO experiencesBO = new ExperiencesBO();
 
-                ExperiencesLocationBO experiencesLocationBO = new ExperiencesLocationBO();
-                ExperiencesLocation experiencesLocationt = experiencesLocationBO.findExperiencesLocationByName(experience.getLocationId());
+                ExperiencesLocation experiencesLocationt = ExperiencesLocationBO.findExperiencesLocationByName(experience.getLocationId());
 
                 if (experiencesLocationt == null) {
                     experience.getLocationId().setId(0);
-                    experiencesLocationBO.create(experience.getLocationId());
-                    experiencesLocationt = experiencesLocationBO.findExperiencesLocationByName(experience.getLocationId());
+                    ExperiencesLocationBO.create(experience.getLocationId());
+                    experiencesLocationt = ExperiencesLocationBO.findExperiencesLocationByName(experience.getLocationId());
                 }
 
                 if (experience.getNameId().getOccupationsTypeId().getId() == 0) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("O campo ÁREA DE ATIVIDADE é obrigatório"), null));
                     cont = false;
                 }
-                OccupationsBO occupationsBO = new OccupationsBO();
-                Occupations occupationst = occupationsBO.findOccupationsByNameByType(experience.getNameId());
+                Occupations occupationst = OccupationsBO.findOccupationsByNameByType(experience.getNameId());
                 if (occupationst.getId() == null && cont) {
                     //experience.getNameId().setId(0);
-                    occupationsBO.createInsert(experience.getNameId());
-                    occupationst = occupationsBO.findOccupationsByNameByType(experience.getNameId());
+                    OccupationsBO.createInsert(experience.getNameId());
+                    occupationst = OccupationsBO.findOccupationsByNameByType(experience.getNameId());
                 }
 
                 experience.setNameId(occupationst);
@@ -421,7 +409,7 @@ public class WizardProfileBean implements Serializable {
                     experience.setDataEnd(new Date(experience.getDataEnd().getTime() + 600 * 60 * 1000));
                 }
                 if (cont == true) {
-                    experiencesBO.createInsert(experience);
+                    ExperiencesBO.createInsert(experience);
                     experience = new Experiences();
                     OccupationsType occupationsType = new OccupationsType();
                     Occupations occupationsT = new Occupations();
@@ -434,29 +422,25 @@ public class WizardProfileBean implements Serializable {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Experiência adicionada com sucesso!"), null));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParseException e) {
         }
     }
 
     private void loadAvailability() {
-        AvailabilityBO availabilityBO = new AvailabilityBO();
-        availabitityListAll = availabilityBO.getAll();
+        availabitityListAll = AvailabilityBO.getAll();
     }
 
     private void checkInterestsList(List<Interests> interestsList, String type) {
-        InterestsBO interestsBO = new InterestsBO();
-        InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
-        InterestsType interestsType = interestsTypeBO.findInterestsTypeByName(type);
+        InterestsType interestsType = InterestsTypeBO.findInterestsTypeByName(type);
         Interests interestsTemp = new Interests();
         for (Interests interests : interestsList) {
             if (interests != null) {
-                interestsTemp = interestsBO.findInterestsByInterestsName(interests.getName());
+                interestsTemp = InterestsBO.findInterestsByInterestsName(interests.getName());
                 if (interestsTemp.getId() == null) {
 
                     interests.setId(0);
                     interests.setTypeId(interestsType);
-                    interestsBO.create(interests);
+                    InterestsBO.create(interests);
 
                 }
             }
@@ -478,12 +462,11 @@ public class WizardProfileBean implements Serializable {
                     }
                 }
                 if (!socialProfile.getOccupationsId().getName().equals("")) {
-                    OccupationsBO occupationsBO = new OccupationsBO();
-                    occupationst = occupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+                    occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
                     if (occupationst.getId() == null) {
                         socialProfile.getOccupationsId().setId(0);
-                        occupationsBO.create(socialProfile.getOccupationsId());
-                        occupationst = occupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+                        OccupationsBO.create(socialProfile.getOccupationsId());
+                        occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
                     }
 
                 }
@@ -494,20 +477,19 @@ public class WizardProfileBean implements Serializable {
                 socialProfile.getCityId().setId(cityId);
             }
             if (panel == 2) {
-                InterestsBO interestsBO = new InterestsBO();
-                interestsBO.destroyInterestsBySocialProfile(socialProfile);
-                interestsBO.createInterestsBySocialProfileByIds(multiThemeList, socialProfile);
+                InterestsBO.destroyInterestsBySocialProfile(socialProfile);
+                InterestsBO.createInterestsBySocialProfileByIds(multiThemeList, socialProfile);
                 checkInterestsList(booksList, "Books");
                 checkInterestsList(musicsList, "Musics");
                 checkInterestsList(moviesList, "Movies");
                 checkInterestsList(sportsList, "Sports");
                 checkInterestsList(hobbiesList, "Hobbies");
 
-                interestsBO.createInterestsBySocialProfileByInterest(booksList, socialProfile);
-                interestsBO.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
-                interestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
-                interestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
-                interestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
+                InterestsBO.createInterestsBySocialProfileByInterest(booksList, socialProfile);
+                InterestsBO.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
+                InterestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
+                InterestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
+                InterestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
             } else {
                 SocialProfileBO socialProfileBO = new SocialProfileBO();
 
@@ -518,7 +500,7 @@ public class WizardProfileBean implements Serializable {
                     socialProfile.setScholarityId(null);
                 }
 
-                socialProfileBO.edit(socialProfile);
+                SocialProfileBO.edit(socialProfile);
 
                 if (socialProfile.getAvailabilityId() == null) {
                     Availability availability = new Availability();
@@ -539,7 +521,7 @@ public class WizardProfileBean implements Serializable {
 
     private String findInterestTypeById(Integer id) {
         for (InterestsType interestsType : interestsTypeList) {
-            if (interestsType.getId() == id) {
+            if (Objects.equals(interestsType.getId(), id)) {
                 return interestsType.getType();
             }
         }
@@ -548,10 +530,8 @@ public class WizardProfileBean implements Serializable {
 
     private void loadInterestsUser() {
         if (socialProfile != null) {
-            InterestsBO interestsBO = new InterestsBO();
-            interestsList = interestsBO.findInterests(socialProfile.getSocialProfileId());
-            InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
-            interestsTypeList = interestsTypeBO.findInterestsType();
+            interestsList = InterestsBO.findInterests(socialProfile.getSocialProfileId());
+            interestsTypeList = InterestsTypeBO.findInterestsType();
 
             for (Interests interests : interestsList) {
                 if (findInterestTypeById(interests.getTypeId().getId()).equals("CI")) {
@@ -600,7 +580,6 @@ public class WizardProfileBean implements Serializable {
             }
             return it;
         } catch (Exception e) {
-            e.printStackTrace();
             return it;
         }
     }
@@ -608,10 +587,9 @@ public class WizardProfileBean implements Serializable {
     public String skip(int panel) {
         try {
             editWizard(panel);
-            UserAuthorizationBO authorizationBO = new UserAuthorizationBO();
-            UserAuthorization authorization = authorizationBO.findAuthorizationByTokenId(user.getToken());
+            UserAuthorization authorization = UserAuthorizationBO.findAuthorizationByTokenId(user.getToken());
             authorization.setStatus("AC");
-            authorizationBO.edit(authorization);
+            UserAuthorizationBO.edit(authorization);
             return "profile";
         } catch (Exception e) {
             return "";
@@ -619,87 +597,73 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void loadInterests() {
-        InterestsBO interestsBO = new InterestsBO();
-        interestsListAll = interestsBO.getAll();
+        interestsListAll = InterestsBO.getAll();
     }
 
     private void loadThemes() {
-        InterestsBO interestsBO = new InterestsBO();
-        themesListAll = interestsBO.findInterestsByInterestsTypeName("Themes");
+        themesListAll = InterestsBO.findInterestsByInterestsTypeName("Themes");
     }
 
     public List<String> loadAutocompleteInterests() {
         try {
 
-            List<String> label = new ArrayList<String>();
+            List<String> label = new ArrayList<>();
             for (Interests interests : interestsListAll) {
                 label.add(interests.getName());
             }
             return label;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<String>();
+            return new ArrayList<>();
 
         }
     }
 
     private void getCountrys() {
-        CountryBO countryBO = new CountryBO();
-        countryList = countryBO.getAll();
+        countryList = CountryBO.getAll();
         countryEducationList = countryList;
         countryExperienceList = countryList;
     }
 
     private void getStates() {
-        StateBO stateBO = new StateBO();
-        stateList = stateBO.findStatesByCountryId(countryId);
+        stateList = StateBO.findStatesByCountryId(countryId);
     }
 
     private void getCitys() {
-        CityBO cityBO = new CityBO();
-        cityList = cityBO.findCitiesByStateId(stateId);
+        cityList = CityBO.findCitiesByStateId(stateId);
     }
 
     public void loadState() {
         try {
-            StateBO stateBO = new StateBO();
-            stateList = stateBO.findStatesByCountryId(countryId);
+            stateList = StateBO.findStatesByCountryId(countryId);
             cityId = 0;
             stateId = 0;
-            cityList = new ArrayList<City>();
+            cityList = new ArrayList<>();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void loadStateEducations() {
         try {
-            StateBO stateBO = new StateBO();
-            stateEducationList = stateBO.findStatesByCountryId(countryEducationId);
+            stateEducationList = StateBO.findStatesByCountryId(countryEducationId);
             stateEducationId = 0;
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void loadStateExperiences() {
         try {
-            StateBO stateBO = new StateBO();
-            stateExperienceList = stateBO.findStatesByCountryId(countryExperienceId);
+            stateExperienceList = StateBO.findStatesByCountryId(countryExperienceId);
             stateExperienceId = 0;
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void loadCity() {
         try {
-            CityBO cityBO = new CityBO();
-            cityList = cityBO.findCitiesByStateId(stateId);
+            cityList = CityBO.findCitiesByStateId(stateId);
             cityId = 0;
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -711,48 +675,39 @@ public class WizardProfileBean implements Serializable {
                 }
             }
 
-            OccupationsBO occupationsBO = new OccupationsBO();
             //occupations = convertAutoCompleteOccupations(occupationsBO.findOccupationsByType(socialProfile.getOccupationsId().getOccupationsTypeId().getId()));
-            occupations = convertAutoCompleteOccupations(occupationsBO.getAll());
+            occupations = convertAutoCompleteOccupations(OccupationsBO.getAll());
             //socialProfile.getOccupationsId().setName("");
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     private void getAllOccupationsType() {
-        OccupationsTypeBO occupationsTypeBO = new OccupationsTypeBO();
-        occupationsTypeList = occupationsTypeBO.getAll();
+        occupationsTypeList = OccupationsTypeBO.getAll();
     }
 
     private void getAllBooks() {
-        InterestsBO interestsBO = new InterestsBO();
-        booksListAll = interestsBO.findInterestsByInterestsTypeName("Books");
+        booksListAll = InterestsBO.findInterestsByInterestsTypeName("Books");
     }
 
     private void getAllMusics() {
-        InterestsBO interestsBO = new InterestsBO();
-        musicsListAll = interestsBO.findInterestsByInterestsTypeName("Musics");
+        musicsListAll = InterestsBO.findInterestsByInterestsTypeName("Musics");
     }
 
     private void getAllMovies() {
-        InterestsBO interestsBO = new InterestsBO();
-        moviesListAll = interestsBO.findInterestsByInterestsTypeName("Movies");
+        moviesListAll = InterestsBO.findInterestsByInterestsTypeName("Movies");
     }
 
     private void getAllSports() {
-        InterestsBO interestsBO = new InterestsBO();
-        sportsListAll = interestsBO.findInterestsByInterestsTypeName("Sports");
+        sportsListAll = InterestsBO.findInterestsByInterestsTypeName("Sports");
     }
 
     private void getAllHobbies() {
-        InterestsBO interestsBO = new InterestsBO();
-        hobbiesListAll = interestsBO.findInterestsByInterestsTypeName("Hobbies");
+        hobbiesListAll = InterestsBO.findInterestsByInterestsTypeName("Hobbies");
     }
 
     private void getAllScholarity() {
-        ScholarityBO scholarityBO = new ScholarityBO();
-        scholarityList = scholarityBO.getAll();
+        scholarityList = ScholarityBO.getAll();
     }
 
     public void autocompleteLabelAndValue() {
@@ -766,7 +721,6 @@ public class WizardProfileBean implements Serializable {
             educationName = convertAutoCompleteEducations(educationsNameListAll);
             educationLocation = convertAutoCompleteEducationsLocation(educationsLocationListAll);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -774,11 +728,9 @@ public class WizardProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             experiencesList.remove(exp);
-            ExperiencesBO experiencesBO = new ExperiencesBO();
-            experiencesBO.removeExperience(exp);
+            ExperiencesBO.removeExperience(exp);
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Experiência removida com sucesso!"), null));
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -786,11 +738,9 @@ public class WizardProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             educationsList.remove(edu);
-            EducationsBO educationsBO = new EducationsBO();
-            educationsBO.removeEducation(edu);
+            EducationsBO.removeEducation(edu);
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Educação removida com sucesso!"), null));
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

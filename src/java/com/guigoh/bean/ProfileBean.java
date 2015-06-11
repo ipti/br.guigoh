@@ -39,20 +39,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "profileBean")
 public class ProfileBean implements Serializable {
 
@@ -95,19 +94,19 @@ public class ProfileBean implements Serializable {
             socialProfile = new SocialProfile();
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
-            interestsList = new ArrayList<Interests>();
-            interestsTypeList = new ArrayList<InterestsType>();
-            themesList = new ArrayList<Interests>();
-            booksList = new ArrayList<Interests>();
-            musicsList = new ArrayList<Interests>();
-            moviesList = new ArrayList<Interests>();
-            hobbiesList = new ArrayList<Interests>();
-            sportsList = new ArrayList<Interests>();
-            experiencesList = new ArrayList<Experiences>();
-            educationsList = new ArrayList<Educations>();
+            interestsList = new ArrayList<>();
+            interestsTypeList = new ArrayList<>();
+            themesList = new ArrayList<>();
+            booksList = new ArrayList<>();
+            musicsList = new ArrayList<>();
+            moviesList = new ArrayList<>();
+            hobbiesList = new ArrayList<>();
+            sportsList = new ArrayList<>();
+            experiencesList = new ArrayList<>();
+            educationsList = new ArrayList<>();
             recommendPanel = false;
             recommenderMessage = "";
-            friendList = new ArrayList<Friends>();
+            friendList = new ArrayList<>();
             friendInputSearch = "";
             receiver = "";
             profileEdit1 = false;
@@ -143,8 +142,7 @@ public class ProfileBean implements Serializable {
     }
 
     private void loadUsers(Integer id) {
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-        socialProfile = socialProfileBO.findSocialProfileBySocialProfileId(id);
+        socialProfile = SocialProfileBO.findSocialProfileBySocialProfileId(id);
     }
 
     private void loadUserCookie() {
@@ -163,9 +161,7 @@ public class ProfileBean implements Serializable {
     }
 
     private void loadSocialProfile() {
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-
-        socialProfile = socialProfileBO.findSocialProfile(user.getToken());
+        socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
         /*
          *
          *COMENTAR ABAIXO
@@ -193,10 +189,8 @@ public class ProfileBean implements Serializable {
 
     private void loadInterests() {
         if (socialProfile != null) {
-            InterestsBO interestsBO = new InterestsBO();
-            interestsList = interestsBO.findInterests(socialProfile.getSocialProfileId());
-            InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
-            interestsTypeList = interestsTypeBO.findInterestsType();
+            interestsList = InterestsBO.findInterests(socialProfile.getSocialProfileId());
+            interestsTypeList = InterestsTypeBO.findInterestsType();
 
             musicsList.clear();
             moviesList.clear();
@@ -239,7 +233,7 @@ public class ProfileBean implements Serializable {
 
     private String findInterestTypeById(Integer id) {
         for (InterestsType interestsType : interestsTypeList) {
-            if (interestsType.getId() == id) {
+            if (Objects.equals(interestsType.getId(), id)) {
                 return interestsType.getType();
             }
         }
@@ -250,12 +244,10 @@ public class ProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             experiencesList.remove(exp);
-            ExperiencesBO experiencesBO = new ExperiencesBO();
-            experiencesBO.removeExperience(exp);
+            ExperiencesBO.removeExperience(exp);
             String message = trans.getWord("Experiência removida com sucesso!");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -263,39 +255,32 @@ public class ProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             educationsList.remove(edu);
-            EducationsBO educationsBO = new EducationsBO();
-            educationsBO.removeEducation(edu);
+            EducationsBO.removeEducation(edu);
             String message = trans.getWord("Educação removida com sucesso!");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     private void loadExperiencies(String token_id) {
-        ExperiencesBO experiencesBO = new ExperiencesBO();
-        experiencesList = experiencesBO.findExperiencesByTokenId(token_id);
+        experiencesList = ExperiencesBO.findExperiencesByTokenId(token_id);
     }
 
     private void loadEducations(String token_id) {
-        EducationsBO educationsBO = new EducationsBO();
-        educationsList = educationsBO.findEducationsByTokenId(token_id);
+        educationsList = EducationsBO.findEducationsByTokenId(token_id);
     }
 
     public void addFriend() throws PreexistingEntityException, RollbackFailureException, Exception {
-        FriendsBO friendsBO = new FriendsBO();
         friendStatus = "Invited";
-        friendsBO.addFriend(user, id);
+        FriendsBO.addFriend(user, id);
     }
 
     public void searchFriendEvent() {
         try {
-            FriendsBO friendBO = new FriendsBO();
-            friendList = new ArrayList<Friends>();
-            friendList = friendBO.loadFriendSearchList(user.getToken(), friendInputSearch);
+            friendList = new ArrayList<>();
+            friendList = FriendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
             organizeFriendList(friendList);
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
     }
@@ -303,24 +288,19 @@ public class ProfileBean implements Serializable {
     private void organizeFriendList(List<Friends> list) {
         for (Friends friend : list) {
             if (user.getToken().equals(friend.getTokenFriend2().getToken())) {
-                /*
-                 * renomear user
-                 */
-                Users user = friend.getTokenFriend1();
+                Users friend2 = friend.getTokenFriend1();
                 friend.setTokenFriend1(friend.getTokenFriend2());
-                friend.setTokenFriend2(user);
+                friend.setTokenFriend2(friend2);
             }
         }
     }
 
     public void recommendFriend() throws Exception {
-        FriendsBO friendsBO = new FriendsBO();
-        friendsBO.recommendFriend(user, id, receiver, recommenderMessage);
+        FriendsBO.recommendFriend(user, id, receiver, recommenderMessage);
     }
 
     private void checkFriendStatus() {
-        FriendsBO friendsBO = new FriendsBO();
-        Friends friend = friendsBO.findFriends(user, id);
+        Friends friend = FriendsBO.findFriends(user, id);
         if (friend == null) {
             friendStatus = "Uninvited";
         } else if (friend.getTokenFriend1().equals(friend.getTokenFriend2())) {
@@ -434,11 +414,10 @@ public class ProfileBean implements Serializable {
 
     public void saveSocialProfile() {
         try {
-            OccupationsBO occupationsBO = new OccupationsBO();
-            Occupations occupationst = occupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+            Occupations occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
             if (occupationst.getId() == null) {
-                occupationsBO.createInsert(socialProfile.getOccupationsId());
-                occupationst = occupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+                OccupationsBO.createInsert(socialProfile.getOccupationsId());
+                occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
             }
             if (occupationst.getName() == null) {
                 socialProfile.setOccupationsId(null);
@@ -448,8 +427,7 @@ public class ProfileBean implements Serializable {
             if (socialProfile.getAvailabilityId().getId() == 0) {
                 socialProfile.setAvailabilityId(null);
             }
-            SocialProfileBO socialProfileBO = new SocialProfileBO();
-            socialProfileBO.edit(socialProfile);
+            SocialProfileBO.edit(socialProfile);
 
             if (socialProfile.getAvailabilityId() == null) {
                 Availability availability = new Availability();
@@ -462,52 +440,45 @@ public class ProfileBean implements Serializable {
                 socialProfile.setScholarityId(scholarity);
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void saveThemes() {
         try {
-            InterestsBO interestsBO = new InterestsBO();
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Themes");
-            interestsBO.createInterestsBySocialProfileByIds(wizardProfileBean.getMultiThemeList(), socialProfile);
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Themes");
+            InterestsBO.createInterestsBySocialProfileByIds(wizardProfileBean.getMultiThemeList(), socialProfile);
             loadInterests();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void saveCulture() {
         try {
-            InterestsBO interestsBO = new InterestsBO();
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Books");
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Musics");
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Movies");
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Books");
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Musics");
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Movies");
             checkInterestsList(booksList, "Books");
             checkInterestsList(musicsList, "Musics");
             checkInterestsList(moviesList, "Movies");
-            interestsBO.createInterestsBySocialProfileByInterest(booksList, socialProfile);
-            interestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
-            interestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
+            InterestsBO.createInterestsBySocialProfileByInterest(booksList, socialProfile);
+            InterestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
+            InterestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
             loadInterests();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     private void checkInterestsList(List<Interests> interestsList, String type) {
-        InterestsBO interestsBO = new InterestsBO();
-        InterestsTypeBO interestsTypeBO = new InterestsTypeBO();
-        InterestsType interestsType = interestsTypeBO.findInterestsTypeByName(type);
+        InterestsType interestsType = InterestsTypeBO.findInterestsTypeByName(type);
         Interests interestsTemp;
         for (Interests interests : interestsList) {
             if (interests != null) {
-                interestsTemp = interestsBO.findInterestsByInterestsName(interests.getName());
+                interestsTemp = InterestsBO.findInterestsByInterestsName(interests.getName());
                 if (interestsTemp.getId() == null) {
 
                     interests.setId(0);
                     interests.setTypeId(interestsType);
-                    interestsBO.create(interests);
+                    InterestsBO.create(interests);
 
                 }
             }
@@ -516,16 +487,14 @@ public class ProfileBean implements Serializable {
 
     public void saveSportsHobbies() {
         try {
-            InterestsBO interestsBO = new InterestsBO();
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Sports");
-            interestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Hobbies");
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Sports");
+            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Hobbies");
             checkInterestsList(sportsList, "Sports");
             checkInterestsList(hobbiesList, "Hobbies");
-            interestsBO.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
-            interestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
+            InterestsBO.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
+            InterestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
             loadInterests();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -536,7 +505,6 @@ public class ProfileBean implements Serializable {
             socialProfile.getCityId().setId(wizardProfileBean.getCityId());
             saveSocialProfile();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -545,7 +513,6 @@ public class ProfileBean implements Serializable {
             wizardProfileBean.addEducations();
             loadEducations(socialProfile.getTokenId());
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -554,7 +521,6 @@ public class ProfileBean implements Serializable {
             wizardProfileBean.addExperiences();
             loadExperiencies(socialProfile.getTokenId());
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

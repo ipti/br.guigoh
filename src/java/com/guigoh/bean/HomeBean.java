@@ -15,21 +15,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
  *
  * @author IPTI
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "homeBean")
 public class HomeBean implements Serializable {
 
-    List<Interests> interestThemesList = new ArrayList<>();
-    List<EducationalObject> educationalObjectList = new ArrayList<>();
-    List<NewActivity> newActivityList = new ArrayList();
-    Boolean existsMoreObjects;
+    private List<Interests> interestThemesList = new ArrayList<>();
+    private List<EducationalObject> educationalObjectList = new ArrayList<>();
+    private List<NewActivity> newActivityList = new ArrayList();
+    private Boolean existsMoreObjects;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -39,25 +39,21 @@ public class HomeBean implements Serializable {
                 loadLastTopicActivities();
                 existsMore();
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
 
     private void loadInterestThemes() {
-        InterestsBO interestsBO = new InterestsBO();
-        interestThemesList = interestsBO.findInterestsByInterestsTypeName("Themes");
+        interestThemesList = InterestsBO.findInterestsByInterestsTypeName("Themes");
     }
 
     private void loadEducationalObjects() {
-        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
-        educationalObjectList = educationalObjectBO.getLatestFiveActiveEducationalObjects();
+        educationalObjectList = EducationalObjectBO.getLatestFiveActiveEducationalObjects();
     }
 
     public void loadMoreEducationalObjects() {
-        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
         List<EducationalObject> outList = educationalObjectList;
-        List<EducationalObject> moreObjects = educationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
+        List<EducationalObject> moreObjects = EducationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
         for (EducationalObject temp : moreObjects){
             outList.add(temp);
         }
@@ -66,8 +62,7 @@ public class HomeBean implements Serializable {
     }
     
     public void existsMore(){
-        EducationalObjectBO educationalObjectBO = new EducationalObjectBO();
-        if (educationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
+        if (EducationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
             setExistsMoreObjects(false);
         } else {
             setExistsMoreObjects(true);
@@ -75,8 +70,7 @@ public class HomeBean implements Serializable {
     }
 
     private void loadLastTopicActivities() {
-        DiscussionTopicBO dtBO = new DiscussionTopicBO();
-        newActivityList = dtBO.getLastActivities();
+        newActivityList = DiscussionTopicBO.getLastActivities();
     }
 
     public String getMD5(String value) {

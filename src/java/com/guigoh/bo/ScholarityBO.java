@@ -16,14 +16,9 @@ import java.util.List;
  */
 public class ScholarityBO implements Serializable {
 
-    private ScholarityDAO scholarityDAO;
-
-    public ScholarityBO() {
-        scholarityDAO = new ScholarityDAO();
-    }
-
-    public List<Scholarity> getAll() {
+    public static List<Scholarity> getAll() {
         try {
+            ScholarityDAO scholarityDAO = new ScholarityDAO();
             List<Scholarity> scholarityList = scholarityDAO.findScholarityEntities();
             if (scholarityList == null) {
                 return new ArrayList<Scholarity>();

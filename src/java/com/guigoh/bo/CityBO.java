@@ -14,15 +14,10 @@ import java.util.List;
  * @author Joe
  */
 public class CityBO implements Serializable {
-
-    private CityDAO cityDAO;
-
-    public CityBO() {
-        cityDAO = new CityDAO();
-    }
-
-    public List<City> getAll() {
+    
+    public static List<City> getAll() {
         try {
+            CityDAO cityDAO = new CityDAO();
             return cityDAO.findCityEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +25,9 @@ public class CityBO implements Serializable {
         return null;
     }
 
-    public List<City> findCitiesByStateId(Integer id) {
+    public static List<City> findCitiesByStateId(Integer id) {
         try {
+            CityDAO cityDAO = new CityDAO();
             return cityDAO.findCitysByCountryId(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +35,9 @@ public class CityBO implements Serializable {
         return null;
     }
 
-    public City getCityByName(String cityName) {
+    public static City getCityByName(String cityName) {
         try {
+            CityDAO cityDAO = new CityDAO();
             return cityDAO.findCityByName(cityName);
         } catch (Exception e) {
             e.printStackTrace();

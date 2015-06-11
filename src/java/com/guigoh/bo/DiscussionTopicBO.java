@@ -18,14 +18,9 @@ import java.util.List;
  */
 public class DiscussionTopicBO implements Serializable {
 
-    private DiscussionTopicDAO discussionTopicDAO;
-
-    public DiscussionTopicBO() {
-        discussionTopicDAO = new DiscussionTopicDAO();
-    }
-
-    public void create(DiscussionTopic discussionTopic) {
+    public static void create(DiscussionTopic discussionTopic) {
         try {
+            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
             discussionTopicDAO.create(discussionTopic);
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,7 +28,8 @@ public class DiscussionTopicBO implements Serializable {
 
     }
 
-    public List<NewActivity> getLastActivities() {
+    public static List<NewActivity> getLastActivities() {
+        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
         List<NewActivity> newActivityList = discussionTopicDAO.getLastActivities();
         if (newActivityList == null) {
             return new ArrayList<NewActivity>();
@@ -41,7 +37,8 @@ public class DiscussionTopicBO implements Serializable {
         return newActivityList;
     }
 
-    public List<DiscussionTopic> findDiscussionTopicsByTheme(Integer id) {
+    public static List<DiscussionTopic> findDiscussionTopicsByTheme(Integer id) {
+        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
         List<DiscussionTopic> discussionTopicList = discussionTopicDAO.findDiscussionTopicsByTheme(id);
         if (discussionTopicList == null) {
             return new ArrayList<DiscussionTopic>();
@@ -49,7 +46,8 @@ public class DiscussionTopicBO implements Serializable {
         return discussionTopicList;
     }
 
-    public List<DiscussionTopic> loadDiscussionTopicsByExpression(String expression, String tag, Integer id) {
+    public static List<DiscussionTopic> loadDiscussionTopicsByExpression(String expression, String tag, Integer id) {
+        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
         List<DiscussionTopic> discussionTopicList = discussionTopicDAO.loadDiscussionTopicsByExpression(expression, tag, id);
         if (discussionTopicList == null) {
             return new ArrayList<DiscussionTopic>();
@@ -57,8 +55,9 @@ public class DiscussionTopicBO implements Serializable {
         return discussionTopicList;
     }
 
-    public DiscussionTopic findDiscussionTopicByID(int discussionTopicID) {
+    public static DiscussionTopic findDiscussionTopicByID(int discussionTopicID) {
         try {
+            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
             return discussionTopicDAO.findDiscussionTopic(discussionTopicID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +65,9 @@ public class DiscussionTopicBO implements Serializable {
         return null;
     }
 
-    public Timestamp getServerTime() {
+    public static Timestamp getServerTime() {
         try {
+            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
             return discussionTopicDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();

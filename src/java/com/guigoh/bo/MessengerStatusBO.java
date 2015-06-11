@@ -14,15 +14,10 @@ import java.io.Serializable;
  * @author IPTI
  */
 public class MessengerStatusBO implements Serializable{
-
-    private MessengerStatusDAO messengerStatusDAO;
-
-    public MessengerStatusBO() {
-        messengerStatusDAO = new MessengerStatusDAO();
-    }
-
-    public Double getServerTime() {
+    
+    public static Double getServerTime() {
         try {
+            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
             return messengerStatusDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +25,9 @@ public class MessengerStatusBO implements Serializable{
         return null;
     }
 
-    public Long getUsersOnline() {
+    public static Long getUsersOnline() {
         try {
+            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
             return messengerStatusDAO.getUsersOnline();
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +35,9 @@ public class MessengerStatusBO implements Serializable{
         return null;
     }
 
-    public void pingUser(MessengerStatus ms) throws RollbackFailureException, Exception {
+    public static void pingUser(MessengerStatus ms) throws RollbackFailureException, Exception {
         try {
+            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
             if (messengerStatusDAO.findMessengerStatus(ms.getSocialProfileId()) == null) {
                 messengerStatusDAO.create(ms);
             } else {

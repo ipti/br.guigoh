@@ -5,7 +5,6 @@
 package com.guigoh.bean;
 
 import com.guigoh.bo.EmailActivationBO;
-import com.guigoh.bo.LanguageBO;
 import com.guigoh.bo.SocialProfileBO;
 import com.guigoh.bo.UsersBO;
 import com.guigoh.bo.util.CookieService;
@@ -19,7 +18,7 @@ import com.guigoh.entity.Users;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
@@ -27,7 +26,7 @@ import org.apache.commons.mail.EmailException;
  *
  * @author Joerlan Lima
  */
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "authBean")
 public class AuthBean implements Serializable {
 
@@ -41,7 +40,6 @@ public class AuthBean implements Serializable {
     private String password;
     private String passwordConfirm;
     private Translator trans;
-    private UsersBO uBO;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -52,28 +50,28 @@ public class AuthBean implements Serializable {
             loginStatus = "login";
             userToRecover = new Users();
             email = "";
-            uBO = new UsersBO();
         }
     }
 
     public String login() {
-        Users registeredUser = uBO.findUsers(user);
+        Users registeredUser = UsersBO.findUsers(user);
         user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
         if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
-            if (registeredUser.getAuthorization().getStatus().equals("AC")) {
-                CookieService.addCookie("user", registeredUser.getUsername());
-                CookieService.addCookie("token", registeredUser.getToken());
-                return "islogged";
-            } else if (registeredUser.getAuthorization().getStatus().equals("PC")) {
-                loginStatus = "pending";
-                return "";
-            } else if (registeredUser.getAuthorization().getStatus().equals("IC")) {
-                loginStatus = "inactive";
-                return "";
-            } else {
-                CookieService.addCookie("user", registeredUser.getUsername());
-                CookieService.addCookie("token", registeredUser.getToken());
-                return "wizard";
+            switch (registeredUser.getAuthorization().getStatus()) {
+                case "AC":
+                    CookieService.addCookie("user", registeredUser.getUsername());
+                    CookieService.addCookie("token", registeredUser.getToken());
+                    return "islogged";
+                case "PC":
+                    loginStatus = "pending";
+                    return "";
+                case "IC":
+                    loginStatus = "inactive";
+                    return "";
+                default:
+                    CookieService.addCookie("user", registeredUser.getUsername());
+                    CookieService.addCookie("token", registeredUser.getToken());
+                    return "wizard";
             }
         } else if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
             loginStatus = "check_email";
@@ -95,17 +93,15 @@ public class AuthBean implements Serializable {
 
     public String sendPassToEmail() {
         try {
-            userToRecover = uBO.findUsers(email);
+            userToRecover = UsersBO.findUsers(email);
             if (userToRecover.getUsername() != null && userToRecover.getStatus().equals("CA")) {
                 EmailActivation emailactivation = new EmailActivation();
                 emailactivation.setUsername(userToRecover.getUsername());
                 emailactivation.setCode(MD5Generator.generate(userToRecover.getUsername() + RandomGenerator.generate(5)));
-                EmailActivationBO emailActivationBO = new EmailActivationBO();
-                SocialProfileBO spBO = new SocialProfileBO();
-                SocialProfile socialProfile = spBO.findSocialProfile(userToRecover.getToken());
+                SocialProfile socialProfile = SocialProfileBO.findSocialProfile(userToRecover.getToken());
                 String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
-                emailActivationBO.create(emailactivation);
+                EmailActivationBO.create(emailactivation);
                 loginStatus = "pass_sent";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
@@ -117,7 +113,7 @@ public class AuthBean implements Serializable {
     }
 
     public String loadQuestion() {
-        userToRecover = uBO.findUsers(email);
+        userToRecover = UsersBO.findUsers(email);
         if (userToRecover.getUsername() != null) {
             loginStatus = "question";
         } else {
@@ -138,7 +134,7 @@ public class AuthBean implements Serializable {
     public String changePassword() throws Exception {
         if (password.equals(passwordConfirm)) {
             userToRecover.setPassword(MD5Generator.generate(password + SALT));
-            uBO.edit(userToRecover);
+            UsersBO.edit(userToRecover);
             return "logout";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));

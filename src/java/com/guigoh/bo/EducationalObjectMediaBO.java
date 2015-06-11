@@ -14,30 +14,28 @@ import java.util.List;
  * @author ipti008
  */
 public class EducationalObjectMediaBO implements Serializable{
-    private EducationalObjectMediaDAO educationalObjectMediaDAO;
-
-    public EducationalObjectMediaBO() {
-        educationalObjectMediaDAO = new EducationalObjectMediaDAO();
-    }
     
-    public void create(EducationalObjectMedia educationalObjectMedia){
+    public static void create(EducationalObjectMedia educationalObjectMedia){
         try{
+            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
             educationalObjectMediaDAO.create(educationalObjectMedia);
         } catch(Exception e){
             e.printStackTrace();
         }
     }
     
-    public void edit(EducationalObjectMedia educationalObjectMedia){
+    public static void edit(EducationalObjectMedia educationalObjectMedia){
         try{
+            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
             educationalObjectMediaDAO.edit(educationalObjectMedia);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
     
-    public List<EducationalObjectMedia> getMediasByEducationalObject(Integer educationalObjectID){
+    public static List<EducationalObjectMedia> getMediasByEducationalObject(Integer educationalObjectID){
         try{
+            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
             return educationalObjectMediaDAO.getMediasByEducationalObject(educationalObjectID);
         } catch (Exception e){
             e.printStackTrace();
@@ -45,7 +43,7 @@ public class EducationalObjectMediaBO implements Serializable{
         return null;
     }
     
-    public String getMediaSize(Integer size){
+    public static String getMediaSize(Integer size){
         double convertedSizeMB = Math.ceil((double) size/Math.pow(1024, 2)*10)/10;
         double convertedSizeKB = Math.ceil(((double) size/1024)*10)/10;
         if (convertedSizeMB > 1){
