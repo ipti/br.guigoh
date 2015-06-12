@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.RoleDAO;
-import com.guigoh.entity.Role;
+import com.ipti.guigoh.model.jpa.controller.RoleJpaController;
+import com.ipti.guigoh.model.entity.Role;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class RoleBO implements Serializable{
     
     public static List<Role> getAll() {
         try {
-            RoleDAO roleDAO = new RoleDAO();
+            RoleJpaController roleDAO = new RoleJpaController();
             return roleDAO.findRoleEntities();
         }catch (Exception e){
             e.printStackTrace();

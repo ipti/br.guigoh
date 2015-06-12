@@ -4,9 +4,9 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.DiscussionTopicDAO;
-import com.guigoh.entity.DiscussionTopic;
-import com.guigoh.entity.NewActivity;
+import com.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import com.ipti.guigoh.model.entity.DiscussionTopic;
+import com.ipti.guigoh.model.entity.NewActivity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class DiscussionTopicBO implements Serializable {
 
     public static void create(DiscussionTopic discussionTopic) {
         try {
-            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+            DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
             discussionTopicDAO.create(discussionTopic);
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,7 +29,7 @@ public class DiscussionTopicBO implements Serializable {
     }
 
     public static List<NewActivity> getLastActivities() {
-        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+        DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
         List<NewActivity> newActivityList = discussionTopicDAO.getLastActivities();
         if (newActivityList == null) {
             return new ArrayList<NewActivity>();
@@ -38,7 +38,7 @@ public class DiscussionTopicBO implements Serializable {
     }
 
     public static List<DiscussionTopic> findDiscussionTopicsByTheme(Integer id) {
-        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+        DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
         List<DiscussionTopic> discussionTopicList = discussionTopicDAO.findDiscussionTopicsByTheme(id);
         if (discussionTopicList == null) {
             return new ArrayList<DiscussionTopic>();
@@ -47,7 +47,7 @@ public class DiscussionTopicBO implements Serializable {
     }
 
     public static List<DiscussionTopic> loadDiscussionTopicsByExpression(String expression, String tag, Integer id) {
-        DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+        DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
         List<DiscussionTopic> discussionTopicList = discussionTopicDAO.loadDiscussionTopicsByExpression(expression, tag, id);
         if (discussionTopicList == null) {
             return new ArrayList<DiscussionTopic>();
@@ -57,7 +57,7 @@ public class DiscussionTopicBO implements Serializable {
 
     public static DiscussionTopic findDiscussionTopicByID(int discussionTopicID) {
         try {
-            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+            DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
             return discussionTopicDAO.findDiscussionTopic(discussionTopicID);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class DiscussionTopicBO implements Serializable {
 
     public static Timestamp getServerTime() {
         try {
-            DiscussionTopicDAO discussionTopicDAO = new DiscussionTopicDAO();
+            DiscussionTopicJpaController discussionTopicDAO = new DiscussionTopicJpaController();
             return discussionTopicDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();

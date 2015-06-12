@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.SecretQuestionDAO;
-import com.guigoh.entity.SecretQuestion;
+import com.ipti.guigoh.model.jpa.controller.SecretQuestionJpaController;
+import com.ipti.guigoh.model.entity.SecretQuestion;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SecretQuestionBO implements Serializable {
 
     public static List<SecretQuestion> getAll() {
         try {
-            SecretQuestionDAO secretQuestionDAO = new SecretQuestionDAO();
+            SecretQuestionJpaController secretQuestionDAO = new SecretQuestionJpaController();
             return secretQuestionDAO.findSecretQuestionEntities();
         } catch (Exception e) {
             e.printStackTrace();

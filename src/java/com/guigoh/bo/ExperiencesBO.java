@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.ExperiencesDAO;
-import com.guigoh.entity.Experiences;
+import com.ipti.guigoh.model.jpa.controller.ExperiencesJpaController;
+import com.ipti.guigoh.model.entity.Experiences;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class ExperiencesBO implements Serializable {
 
     public static List<Experiences> findExperiencesByTokenId(String token_id) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+            ExperiencesJpaController experiencesDAO = new ExperiencesJpaController();
             return experiencesDAO.findExperiencesByTokenId(token_id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class ExperiencesBO implements Serializable {
 
     public static List<Experiences> getAll() {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+            ExperiencesJpaController experiencesDAO = new ExperiencesJpaController();
             return experiencesDAO.findExperiencesEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class ExperiencesBO implements Serializable {
 
     public static void create(Experiences experiences) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+            ExperiencesJpaController experiencesDAO = new ExperiencesJpaController();
             experiencesDAO.create(experiences);
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class ExperiencesBO implements Serializable {
 
     public static void createInsert(Experiences experiences) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+            ExperiencesJpaController experiencesDAO = new ExperiencesJpaController();
             experiencesDAO.createInsert(experiences);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class ExperiencesBO implements Serializable {
 
     public static void removeExperience(Experiences exp) {
         try {
-            ExperiencesDAO experiencesDAO = new ExperiencesDAO();
+            ExperiencesJpaController experiencesDAO = new ExperiencesJpaController();
             experiencesDAO.destroy(exp.getExperiencesPK());
         } catch (Exception e) {
             e.printStackTrace();

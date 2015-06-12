@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.CityDAO;
-import com.guigoh.entity.City;
+import com.ipti.guigoh.model.jpa.controller.CityJpaController;
+import com.ipti.guigoh.model.entity.City;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class CityBO implements Serializable {
     
     public static List<City> getAll() {
         try {
-            CityDAO cityDAO = new CityDAO();
+            CityJpaController cityDAO = new CityJpaController();
             return cityDAO.findCityEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class CityBO implements Serializable {
 
     public static List<City> findCitiesByStateId(Integer id) {
         try {
-            CityDAO cityDAO = new CityDAO();
+            CityJpaController cityDAO = new CityJpaController();
             return cityDAO.findCitysByCountryId(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class CityBO implements Serializable {
 
     public static City getCityByName(String cityName) {
         try {
-            CityDAO cityDAO = new CityDAO();
+            CityJpaController cityDAO = new CityJpaController();
             return cityDAO.findCityByName(cityName);
         } catch (Exception e) {
             e.printStackTrace();

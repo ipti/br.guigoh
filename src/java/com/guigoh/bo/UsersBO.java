@@ -1,7 +1,7 @@
 package com.guigoh.bo;
 
-import com.guigoh.dao.UsersDAO;
-import com.guigoh.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import com.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class UsersBO implements Serializable {
 
     public static void create(Users users) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             usersDAO.create(users);
         } catch (Exception e) {
             e.printStackTrace();
@@ -22,7 +22,7 @@ public class UsersBO implements Serializable {
 
     public static Users findUsers(Users users) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             Users user = usersDAO.findUsers(users.getUsername());
             if (user == null) {
                 return new Users();
@@ -36,7 +36,7 @@ public class UsersBO implements Serializable {
 
     public static Users findUsers(String username) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             Users user = usersDAO.findUsers(username);
             if (user == null) {
                 return new Users();
@@ -50,7 +50,7 @@ public class UsersBO implements Serializable {
 
     public static Integer getRegisteredUsersQuantity() {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             return usersDAO.getUsersCount();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class UsersBO implements Serializable {
 
     public static void edit(Users user) {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             usersDAO.edit(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class UsersBO implements Serializable {
 
     public static List<Users> getAll() {
         try {
-            UsersDAO usersDAO = new UsersDAO();
+            UsersJpaController usersDAO = new UsersJpaController();
             return usersDAO.findUsersEntities();
         } catch (Exception e) {
             e.printStackTrace();

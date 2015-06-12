@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.ScholarityDAO;
-import com.guigoh.entity.Scholarity;
+import com.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
+import com.ipti.guigoh.model.entity.Scholarity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class ScholarityBO implements Serializable {
 
     public static List<Scholarity> getAll() {
         try {
-            ScholarityDAO scholarityDAO = new ScholarityDAO();
+            ScholarityJpaController scholarityDAO = new ScholarityJpaController();
             List<Scholarity> scholarityList = scholarityDAO.findScholarityEntities();
             if (scholarityList == null) {
                 return new ArrayList<Scholarity>();

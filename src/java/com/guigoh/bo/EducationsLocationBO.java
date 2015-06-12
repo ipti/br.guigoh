@@ -4,11 +4,11 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.EducationsLocationDAO;
-import com.guigoh.dao.EducationsNameDAO;
-import com.guigoh.entity.Educations;
-import com.guigoh.entity.EducationsLocation;
-import com.guigoh.entity.EducationsName;
+import com.ipti.guigoh.model.jpa.controller.EducationsLocationJpaController;
+import com.ipti.guigoh.model.jpa.controller.EducationsNameJpaController;
+import com.ipti.guigoh.model.entity.Educations;
+import com.ipti.guigoh.model.entity.EducationsLocation;
+import com.ipti.guigoh.model.entity.EducationsName;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class EducationsLocationBO implements Serializable {
 
     public static List<EducationsLocation> getAll() {
         try {
-            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
+            EducationsLocationJpaController educationsLocationDAO = new EducationsLocationJpaController();
             return educationsLocationDAO.findEducationsLocationEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class EducationsLocationBO implements Serializable {
 
     public static void create(EducationsLocation educationsLocation) {
         try {
-            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
+            EducationsLocationJpaController educationsLocationDAO = new EducationsLocationJpaController();
             educationsLocationDAO.create(educationsLocation);
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class EducationsLocationBO implements Serializable {
 
     public static EducationsLocation findEducationsLocationByName(EducationsLocation locationId) {
         try {
-            EducationsLocationDAO educationsLocationDAO = new EducationsLocationDAO();
+            EducationsLocationJpaController educationsLocationDAO = new EducationsLocationJpaController();
             return educationsLocationDAO.findEducationsByName(locationId);
         } catch (Exception e) {
             e.printStackTrace();

@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.CountryDAO;
-import com.guigoh.entity.Country;
+import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.entity.Country;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class CountryBO implements Serializable {
     
     public static List<Country> getAll() {
         try {
-            CountryDAO countryDAO = new CountryDAO();
+            CountryJpaController countryDAO = new CountryJpaController();
             return countryDAO.findCountryEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,7 +28,7 @@ public class CountryBO implements Serializable {
 
     public static Country getCountryByName(String countryName) {
         try {
-            CountryDAO countryDAO = new CountryDAO();
+            CountryJpaController countryDAO = new CountryJpaController();
             return countryDAO.findCountryByName(countryName);
         } catch (Exception e) {
             e.printStackTrace();

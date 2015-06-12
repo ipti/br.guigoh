@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.SubnetworkDAO;
-import com.guigoh.entity.Subnetwork;
+import com.ipti.guigoh.model.jpa.controller.SubnetworkJpaController;
+import com.ipti.guigoh.model.entity.Subnetwork;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SubnetworkBO implements Serializable {
 
     public static List<Subnetwork> getAll() {
         try {
-            SubnetworkDAO subnetworkDAO = new SubnetworkDAO();
+            SubnetworkJpaController subnetworkDAO = new SubnetworkJpaController();
             return subnetworkDAO.findSubnetworkEntities();
         } catch (Exception e){
             e.printStackTrace();

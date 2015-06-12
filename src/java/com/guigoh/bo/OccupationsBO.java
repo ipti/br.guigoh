@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.OccupationsDAO;
-import com.guigoh.entity.Occupations;
+import com.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
+import com.ipti.guigoh.model.entity.Occupations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class OccupationsBO implements Serializable {
 
     public static Occupations findSocialProfile(Integer id) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             return occupationsDAO.findOccupations(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,7 +28,7 @@ public class OccupationsBO implements Serializable {
 
     public static List<Occupations> findOccupationsByType(Integer id) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             List<Occupations> occupationsList = occupationsDAO.findOccupationsByType(id);
             if (occupationsList == null) {
                 return new ArrayList<Occupations>();
@@ -42,7 +42,7 @@ public class OccupationsBO implements Serializable {
 
     public static List<Occupations> getAll() {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             List<Occupations> occupationsList = occupationsDAO.findOccupationsEntities();
             if (occupationsList == null) {
                 return new ArrayList<Occupations>();
@@ -56,7 +56,7 @@ public class OccupationsBO implements Serializable {
 
     public static Occupations findOccupationsByName(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             return occupationsDAO.findOccupationsByName(occupations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public class OccupationsBO implements Serializable {
 
     public static Occupations findOccupationsByNameByType(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             return occupationsDAO.findOccupationsByNameByType(occupations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class OccupationsBO implements Serializable {
 
     public static void create(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             occupationsDAO.create(occupations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +85,7 @@ public class OccupationsBO implements Serializable {
 
     public static void createInsert(Occupations occupations) {
         try {
-            OccupationsDAO occupationsDAO = new OccupationsDAO();
+            OccupationsJpaController occupationsDAO = new OccupationsJpaController();
             occupationsDAO.createInsert(occupations);
         } catch (Exception e) {
             e.printStackTrace();

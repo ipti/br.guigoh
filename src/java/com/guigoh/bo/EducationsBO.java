@@ -4,10 +4,10 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.EducationsDAO;
-import com.guigoh.entity.Educations;
-import com.guigoh.entity.EducationsName;
-import com.guigoh.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.EducationsJpaController;
+import com.ipti.guigoh.model.entity.Educations;
+import com.ipti.guigoh.model.entity.EducationsName;
+import com.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class EducationsBO implements Serializable {
 
     public static List<Educations> findEducationsByTokenId(String token_id) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             return educationsDAO.findEducationsByTokenId(token_id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,7 +29,7 @@ public class EducationsBO implements Serializable {
 
     public static List<Educations> getAll() {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             return educationsDAO.findEducationsEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class EducationsBO implements Serializable {
 
     public static void create(Educations educations) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             educationsDAO.create(educations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class EducationsBO implements Serializable {
 
     public static void createInsert(Educations educations) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             educationsDAO.createInsert(educations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class EducationsBO implements Serializable {
 
     public static Educations findEducationsByName(Educations educations) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             return educationsDAO.findEducationsByName(educations);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class EducationsBO implements Serializable {
 
     public static void removeEducation(Educations edu) {
         try {
-            EducationsDAO educationsDAO = new EducationsDAO();
+            EducationsJpaController educationsDAO = new EducationsJpaController();
             educationsDAO.destroy(edu.getEducationsPK());
         } catch (Exception e) {
             e.printStackTrace();

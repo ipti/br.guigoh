@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.InterestsTypeDAO;
-import com.guigoh.entity.InterestsType;
+import com.ipti.guigoh.model.jpa.controller.InterestsTypeJpaController;
+import com.ipti.guigoh.model.entity.InterestsType;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class InterestsTypeBO implements Serializable {
     
     public static List<InterestsType> findInterestsType() {
         try {
-            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
+            InterestsTypeJpaController interestsTypeDAO = new InterestsTypeJpaController();
             return interestsTypeDAO.findInterestsTypeEntities();
         } catch (Exception e) {
         }
@@ -26,7 +26,7 @@ public class InterestsTypeBO implements Serializable {
 
     public static InterestsType findInterestsTypeByName(String typeName) {
         try {
-            InterestsTypeDAO interestsTypeDAO = new InterestsTypeDAO();
+            InterestsTypeJpaController interestsTypeDAO = new InterestsTypeJpaController();
             return interestsTypeDAO.findInterestsTypeByName(typeName);
         } catch (Exception e) {
         }

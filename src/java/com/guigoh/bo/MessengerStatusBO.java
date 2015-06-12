@@ -4,9 +4,9 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.MessengerStatusDAO;
-import com.guigoh.dao.exceptions.RollbackFailureException;
-import com.guigoh.entity.MessengerStatus;
+import com.ipti.guigoh.model.jpa.controller.MessengerStatusJpaController;
+import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import com.ipti.guigoh.model.entity.MessengerStatus;
 import java.io.Serializable;
 
 /**
@@ -17,7 +17,7 @@ public class MessengerStatusBO implements Serializable{
     
     public static Double getServerTime() {
         try {
-            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
+            MessengerStatusJpaController messengerStatusDAO = new MessengerStatusJpaController();
             return messengerStatusDAO.getServerTime();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class MessengerStatusBO implements Serializable{
 
     public static Long getUsersOnline() {
         try {
-            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
+            MessengerStatusJpaController messengerStatusDAO = new MessengerStatusJpaController();
             return messengerStatusDAO.getUsersOnline();
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class MessengerStatusBO implements Serializable{
 
     public static void pingUser(MessengerStatus ms) throws RollbackFailureException, Exception {
         try {
-            MessengerStatusDAO messengerStatusDAO = new MessengerStatusDAO();
+            MessengerStatusJpaController messengerStatusDAO = new MessengerStatusJpaController();
             if (messengerStatusDAO.findMessengerStatus(ms.getSocialProfileId()) == null) {
                 messengerStatusDAO.create(ms);
             } else {

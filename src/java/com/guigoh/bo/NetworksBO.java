@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.NetworksDAO;
-import com.guigoh.entity.Networks;
+import com.ipti.guigoh.model.jpa.controller.NetworksJpaController;
+import com.ipti.guigoh.model.entity.Networks;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class NetworksBO implements Serializable {
 
     public static List<Networks> getAll() {
         try {
-            NetworksDAO networksDAO = new NetworksDAO();
+            NetworksJpaController networksDAO = new NetworksJpaController();
             return networksDAO.findNetworksEntities();
         } catch (Exception e) {
             e.printStackTrace();

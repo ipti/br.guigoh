@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.StateDAO;
-import com.guigoh.entity.State;
+import com.ipti.guigoh.model.jpa.controller.StateJpaController;
+import com.ipti.guigoh.model.entity.State;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class StateBO implements Serializable {
 
     public static List<State> getAll() {
         try {
-            StateDAO stateDAO = new StateDAO();
+            StateJpaController stateDAO = new StateJpaController();
             return stateDAO.findStateEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class StateBO implements Serializable {
 
     public static List<State> findStatesByCountryId(Integer id) {
         try {
-            StateDAO stateDAO = new StateDAO();
+            StateJpaController stateDAO = new StateJpaController();
             return stateDAO.findStatesByCountryId(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class StateBO implements Serializable {
 
     public static State getStateByName(String stateName) {
         try {
-            StateDAO stateDAO = new StateDAO();
+            StateJpaController stateDAO = new StateJpaController();
             return stateDAO.findStateByName(stateName);
         } catch (Exception e) {
             e.printStackTrace();

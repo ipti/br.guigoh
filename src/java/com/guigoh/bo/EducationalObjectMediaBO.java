@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.EducationalObjectMediaDAO;
-import com.guigoh.entity.EducationalObjectMedia;
+import com.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
+import com.ipti.guigoh.model.entity.EducationalObjectMedia;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class EducationalObjectMediaBO implements Serializable{
     
     public static void create(EducationalObjectMedia educationalObjectMedia){
         try{
-            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
+            EducationalObjectMediaJpaController educationalObjectMediaDAO = new EducationalObjectMediaJpaController();
             educationalObjectMediaDAO.create(educationalObjectMedia);
         } catch(Exception e){
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class EducationalObjectMediaBO implements Serializable{
     
     public static void edit(EducationalObjectMedia educationalObjectMedia){
         try{
-            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
+            EducationalObjectMediaJpaController educationalObjectMediaDAO = new EducationalObjectMediaJpaController();
             educationalObjectMediaDAO.edit(educationalObjectMedia);
         } catch (Exception e){
             e.printStackTrace();
@@ -35,7 +35,7 @@ public class EducationalObjectMediaBO implements Serializable{
     
     public static List<EducationalObjectMedia> getMediasByEducationalObject(Integer educationalObjectID){
         try{
-            EducationalObjectMediaDAO educationalObjectMediaDAO = new EducationalObjectMediaDAO();
+            EducationalObjectMediaJpaController educationalObjectMediaDAO = new EducationalObjectMediaJpaController();
             return educationalObjectMediaDAO.getMediasByEducationalObject(educationalObjectID);
         } catch (Exception e){
             e.printStackTrace();

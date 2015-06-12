@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.EducationsNameDAO;
-import com.guigoh.entity.EducationsName;
+import com.ipti.guigoh.model.jpa.controller.EducationsNameJpaController;
+import com.ipti.guigoh.model.entity.EducationsName;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class EducationsNameBO implements Serializable {
 
     public static void create(EducationsName educationsName) {
         try {
-            EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
+            EducationsNameJpaController educationsNameDAO = new EducationsNameJpaController();
             educationsNameDAO.create(educationsName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class EducationsNameBO implements Serializable {
 
     public static EducationsName findEducationsNameByName(EducationsName nameId) {
         try {
-            EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
+            EducationsNameJpaController educationsNameDAO = new EducationsNameJpaController();
             return educationsNameDAO.findEducationsByName(nameId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class EducationsNameBO implements Serializable {
 
     public static List<EducationsName> getAll() {
         try {
-            EducationsNameDAO educationsNameDAO = new EducationsNameDAO();
+            EducationsNameJpaController educationsNameDAO = new EducationsNameJpaController();
             return educationsNameDAO.findEducationsNameEntities();
         } catch (Exception e) {
             e.printStackTrace();

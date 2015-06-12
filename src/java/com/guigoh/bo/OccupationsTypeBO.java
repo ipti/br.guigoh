@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.OccupationsTypeDAO;
-import com.guigoh.entity.OccupationsType;
+import com.ipti.guigoh.model.jpa.controller.OccupationsTypeJpaController;
+import com.ipti.guigoh.model.entity.OccupationsType;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class OccupationsTypeBO implements Serializable {
 
     public static List<OccupationsType> getAll() {
         try {
-            OccupationsTypeDAO occupationsTypeDAO = new OccupationsTypeDAO();
+            OccupationsTypeJpaController occupationsTypeDAO = new OccupationsTypeJpaController();
             return occupationsTypeDAO.findOccupationsTypeEntities();
         } catch (Exception e) {
             e.printStackTrace();

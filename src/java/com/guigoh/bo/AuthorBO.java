@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.AuthorDAO;
-import com.guigoh.entity.Author;
+import com.ipti.guigoh.model.jpa.controller.AuthorJpaController;
+import com.ipti.guigoh.model.entity.Author;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class AuthorBO implements Serializable{
     
     public static void create(Author author){
         try{
-            AuthorDAO authorDAO = new AuthorDAO();
+            AuthorJpaController authorDAO = new AuthorJpaController();
             authorDAO.create(author);
         } catch (Exception e){
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class AuthorBO implements Serializable{
     
     public static void edit(Author author){
         try{
-            AuthorDAO authorDAO = new AuthorDAO();
+            AuthorJpaController authorDAO = new AuthorJpaController();
             authorDAO.edit(author);
         } catch (Exception e){
             e.printStackTrace();
@@ -35,7 +35,7 @@ public class AuthorBO implements Serializable{
     
     public static List<Author> getAuthorsByEducationalObject(Integer educationalObjectId){
         try{
-            AuthorDAO authorDAO = new AuthorDAO();
+            AuthorJpaController authorDAO = new AuthorJpaController();
             return authorDAO.getAuthorsByEducationalObject(educationalObjectId);
         } catch (Exception e){
             e.printStackTrace();

@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.UserAuthorizationDAO;
-import com.guigoh.entity.UserAuthorization;
+import com.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import com.ipti.guigoh.model.entity.UserAuthorization;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class UserAuthorizationBO implements Serializable {
 
     public static void create(UserAuthorization authorization) {
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             userAuthorizationDAO.create(authorization);
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,7 +28,7 @@ public class UserAuthorizationBO implements Serializable {
 
     public static void edit(UserAuthorization authorization) {
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             userAuthorizationDAO.edit(authorization);
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class UserAuthorizationBO implements Serializable {
 
     public static UserAuthorization findAuthorizationByTokenId(String token_id) {
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.findAuthorization(token_id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class UserAuthorizationBO implements Serializable {
 
     public static List<UserAuthorization> findAuthorizationsByRole(String role){
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.findAuthorizationsByRole(role);
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class UserAuthorizationBO implements Serializable {
     
     public static UserAuthorization getUserAuthorization(String token){
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.findAuthorization(token);
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class UserAuthorizationBO implements Serializable {
     
     public static List<UserAuthorization> getAll() {
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.findAuthorizationEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +78,7 @@ public class UserAuthorizationBO implements Serializable {
 
     public static List<UserAuthorization> getPendingUsers(){
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.getPendingUsers();
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class UserAuthorizationBO implements Serializable {
     
     public static List<UserAuthorization> getActiveUsers(){
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.getActiveUsers();
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,7 +98,7 @@ public class UserAuthorizationBO implements Serializable {
     
     public static List<UserAuthorization> getInactiveUsers(){
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             return userAuthorizationDAO.getInactiveUsers();
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class UserAuthorizationBO implements Serializable {
     
     public static List<UserAuthorization> findAuthorizationByActive(Integer subnetwork) {
         try {
-            UserAuthorizationDAO userAuthorizationDAO = new UserAuthorizationDAO();
+            UserAuthorizationJpaController userAuthorizationDAO = new UserAuthorizationJpaController();
             List<UserAuthorization> authorizationList = userAuthorizationDAO.findAuthorizationsBySubnetwork(subnetwork);
             if (authorizationList == null) {
                 return new ArrayList<UserAuthorization>();

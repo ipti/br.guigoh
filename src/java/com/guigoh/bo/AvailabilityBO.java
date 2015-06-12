@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.AvailabilityDAO;
-import com.guigoh.entity.Availability;
+import com.ipti.guigoh.model.jpa.controller.AvailabilityJpaController;
+import com.ipti.guigoh.model.entity.Availability;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class AvailabilityBO implements Serializable {
 
     public static List<Availability> getAll() {
         try {
-            AvailabilityDAO availabilityDAO = new AvailabilityDAO();
+            AvailabilityJpaController availabilityDAO = new AvailabilityJpaController();
             return availabilityDAO.findAvailabilityEntities();
         } catch (Exception e) {
             e.printStackTrace();

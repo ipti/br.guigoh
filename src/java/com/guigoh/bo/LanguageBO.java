@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.LanguageDAO;
-import com.guigoh.entity.Language;
+import com.ipti.guigoh.model.jpa.controller.LanguageJpaController;
+import com.ipti.guigoh.model.entity.Language;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class LanguageBO implements Serializable {
 
     public static List<Language> getAll() {
         try {
-            LanguageDAO languageDAO = new LanguageDAO();
+            LanguageJpaController languageDAO = new LanguageJpaController();
             return languageDAO.findLanguageEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class LanguageBO implements Serializable {
 
     public static Language findById(Integer id) {
         try {
-            LanguageDAO languageDAO = new LanguageDAO();
+            LanguageJpaController languageDAO = new LanguageJpaController();
             return languageDAO.findLanguage(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class LanguageBO implements Serializable {
 
     public static Language findByAcronym(String acronym) {
         try {
-            LanguageDAO languageDAO = new LanguageDAO();
+            LanguageJpaController languageDAO = new LanguageJpaController();
             return languageDAO.findLanguageByAcronym(acronym);
         } catch (Exception e) {
             e.printStackTrace();

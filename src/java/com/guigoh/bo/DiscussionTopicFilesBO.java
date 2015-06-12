@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.DiscussionTopicFilesDAO;
-import com.guigoh.entity.DiscussionTopicFiles;
+import com.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
+import com.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class DiscussionTopicFilesBO implements Serializable {
     
     public static void create(DiscussionTopicFiles discussionTopicFiles) {
         try {
-            DiscussionTopicFilesDAO discussionTopicFilesDAO = new DiscussionTopicFilesDAO();
+            DiscussionTopicFilesJpaController discussionTopicFilesDAO = new DiscussionTopicFilesJpaController();
             discussionTopicFilesDAO.create(discussionTopicFiles);
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,7 +29,7 @@ public class DiscussionTopicFilesBO implements Serializable {
     public static List<DiscussionTopicFiles> getDiscussionTopicFilesByFK(Integer id, char type) {
         List<DiscussionTopicFiles> discussionTopicFilesList = new ArrayList<DiscussionTopicFiles>();
         try {
-            DiscussionTopicFilesDAO discussionTopicFilesDAO = new DiscussionTopicFilesDAO();
+            DiscussionTopicFilesJpaController discussionTopicFilesDAO = new DiscussionTopicFilesJpaController();
             discussionTopicFilesList = discussionTopicFilesDAO.getDiscussionTopicFilesByFK(id, type);
             if (discussionTopicFilesList == null) {
                 return new ArrayList<DiscussionTopicFiles>();

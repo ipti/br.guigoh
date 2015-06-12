@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.ExperiencesLocationDAO;
-import com.guigoh.entity.ExperiencesLocation;
+import com.ipti.guigoh.model.jpa.controller.ExperiencesLocationJpaController;
+import com.ipti.guigoh.model.entity.ExperiencesLocation;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class ExperiencesLocationBO implements Serializable {
 
     public static List<ExperiencesLocation> getAll() {
         try {
-            ExperiencesLocationDAO experiencesLocationDAO = new ExperiencesLocationDAO();
+            ExperiencesLocationJpaController experiencesLocationDAO = new ExperiencesLocationJpaController();
             return experiencesLocationDAO.findExperiencesLocationEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +27,7 @@ public class ExperiencesLocationBO implements Serializable {
 
     public static void create(ExperiencesLocation experiencesLocationt) {
         try {
-            ExperiencesLocationDAO experiencesLocationDAO = new ExperiencesLocationDAO();
+            ExperiencesLocationJpaController experiencesLocationDAO = new ExperiencesLocationJpaController();
             experiencesLocationDAO.create(experiencesLocationt);
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class ExperiencesLocationBO implements Serializable {
 
     public static ExperiencesLocation findExperiencesLocationByName(ExperiencesLocation locationId) {
         try {
-            ExperiencesLocationDAO experiencesLocationDAO = new ExperiencesLocationDAO();
+            ExperiencesLocationJpaController experiencesLocationDAO = new ExperiencesLocationJpaController();
             return experiencesLocationDAO.findExperiencesLocationByName(locationId);
         } catch (Exception e) {
             e.printStackTrace();

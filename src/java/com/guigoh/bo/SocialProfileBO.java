@@ -4,12 +4,12 @@
  */
 package com.guigoh.bo;
 
-import com.guigoh.dao.SocialProfileDAO;
-import com.guigoh.dao.exceptions.PreexistingEntityException;
-import com.guigoh.dao.exceptions.RollbackFailureException;
-import com.guigoh.entity.Educations;
-import com.guigoh.entity.Interests;
-import com.guigoh.entity.SocialProfile;
+import com.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import com.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
+import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import com.ipti.guigoh.model.entity.Educations;
+import com.ipti.guigoh.model.entity.Interests;
+import com.ipti.guigoh.model.entity.SocialProfile;
 import java.io.Serializable;
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class SocialProfileBO implements Serializable {
 
     public static void create(SocialProfile socialProfile) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             socialProfileDAO.create(socialProfile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class SocialProfileBO implements Serializable {
 
     public static void edit(SocialProfile socialProfile) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             socialProfileDAO.edit(socialProfile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class SocialProfileBO implements Serializable {
 
     public static SocialProfile findSocialProfile(String id) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             SocialProfile socialProfile = socialProfileDAO.findSocialProfile(id);
             if (socialProfile == null) {
                 return new SocialProfile();
@@ -54,7 +54,7 @@ public class SocialProfileBO implements Serializable {
 
     public static SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             SocialProfile socialProfile = socialProfileDAO.findSocialProfile(id);
             if (socialProfile == null) {
                 return new SocialProfile();
@@ -70,7 +70,7 @@ public class SocialProfileBO implements Serializable {
 
     public static List<SocialProfile> loadUserSearchList(SocialProfile socialProfile, Educations education, Integer experienceTime, Interests interest) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             List<SocialProfile> usersList = socialProfileDAO.loadUserSearchList(socialProfile, education, experienceTime, interest);
             if (usersList == null) {
                 return new ArrayList<SocialProfile>();
@@ -85,7 +85,7 @@ public class SocialProfileBO implements Serializable {
 
     public static List<SocialProfile> getAll() {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             return socialProfileDAO.findSocialProfileEntities();
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +95,7 @@ public class SocialProfileBO implements Serializable {
 
     public static List getSocialProfileAuthorization(Integer subnetworkId) {
         try {
-            SocialProfileDAO socialProfileDAO = new SocialProfileDAO();
+            SocialProfileJpaController socialProfileDAO = new SocialProfileJpaController();
             return socialProfileDAO.loadAllSocialProfileAuthorization(subnetworkId);
         } catch (Exception e) {
             e.printStackTrace();
