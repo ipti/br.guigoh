@@ -96,6 +96,9 @@ public class RegisterBean implements Serializable {
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            cityJpaController = new CityJpaController();
+            stateJpaController = new StateJpaController();
+            countryJpaController = new CountryJpaController();
             user = new Users();
             socialProfile = new SocialProfile();
             secretQuestion = new SecretQuestion();
@@ -121,9 +124,6 @@ public class RegisterBean implements Serializable {
             visitor = true;
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
-            cityJpaController = new CityJpaController();
-            stateJpaController = new StateJpaController();
-            countryJpaController = new CountryJpaController();
             loadDefault();
 
         }
