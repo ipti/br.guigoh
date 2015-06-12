@@ -4,8 +4,6 @@
  */
 package com.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.CityBO;
-import com.guigoh.bo.CountryBO;
 import com.guigoh.bo.EducationsLocationBO;
 import com.guigoh.bo.EducationsNameBO;
 import com.guigoh.bo.InterestsBO;
@@ -14,7 +12,6 @@ import com.guigoh.bo.OccupationsBO;
 import com.guigoh.bo.OccupationsTypeBO;
 import com.guigoh.bo.ScholarityBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.StateBO;
 import com.ipti.guigoh.model.entity.City;
 import com.ipti.guigoh.model.entity.Country;
 import com.ipti.guigoh.model.entity.Educations;
@@ -28,6 +25,9 @@ import com.ipti.guigoh.model.entity.OccupationsType;
 import com.ipti.guigoh.model.entity.Scholarity;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.State;
+import com.ipti.guigoh.model.jpa.controller.CityJpaController;
+import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.StateJpaController;
 import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
@@ -150,7 +150,8 @@ public class CurriculumFinderBean implements Serializable{
     }
 
     private List<Country> getCountries() {
-        return CountryBO.getAll();
+        CountryJpaController countryJpaController = new CountryJpaController();
+        return countryJpaController.findCountryEntities();
     }
     
     private List<OccupationsType> getOccupationTypes(){
@@ -182,11 +183,13 @@ public class CurriculumFinderBean implements Serializable{
     }
 
     public void loadStates() {
-        stateList = StateBO.findStatesByCountryId(countryId);
+        StateJpaController stateJpaController = new StateJpaController();
+        stateList = stateJpaController.findStatesByCountryId(countryId);
     }
 
     public void loadCities() {
-        cityList = CityBO.findCitiesByStateId(stateId);
+        CityJpaController cityJpaController = new CityJpaController();
+        cityList = cityJpaController.findCitiesByStateId(stateId);
     }
 
     public SocialProfile getSocialProfile() {

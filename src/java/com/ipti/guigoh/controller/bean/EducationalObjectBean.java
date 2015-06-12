@@ -4,12 +4,12 @@
  */
 package com.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.AuthorBO;
 import com.guigoh.bo.EducationalObjectBO;
 import com.guigoh.bo.EducationalObjectMediaBO;
 import com.ipti.guigoh.model.entity.Author;
 import com.ipti.guigoh.model.entity.EducationalObject;
 import com.ipti.guigoh.model.entity.EducationalObjectMedia;
+import com.ipti.guigoh.model.jpa.controller.AuthorJpaController;
 import com.ipti.guigoh.util.DownloadService;
 import java.io.IOException;
 import java.io.Serializable;
@@ -56,7 +56,8 @@ public class EducationalObjectBean implements Serializable {
     }
 
     private void getAuthorsByEducationalObject(Integer educationalObjectID){
-        authorList = AuthorBO.getAuthorsByEducationalObject(educationalObjectID);
+        AuthorJpaController authorJpaController = new AuthorJpaController();
+        authorList = authorJpaController.getAuthorsByEducationalObject(educationalObjectID);
     }
     
     private void getMediasByEducationalObject(Integer educationalObjectID){

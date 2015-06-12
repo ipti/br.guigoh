@@ -4,7 +4,6 @@
  */
 package com.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.AuthorBO;
 import com.guigoh.bo.EducationalObjectBO;
 import com.guigoh.bo.EducationalObjectMediaBO;
 import com.ipti.guigoh.model.entity.Author;
@@ -18,6 +17,7 @@ import com.ipti.guigoh.util.UploadService;
 import com.ipti.guigoh.model.entity.Interests;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.Tags;
+import com.ipti.guigoh.model.jpa.controller.AuthorJpaController;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -79,7 +79,7 @@ public class SubmitFormBean implements Serializable {
         }
     }
 
-    public void submitForm() throws IOException {
+    public void submitForm() throws IOException, Exception {
         SocialProfile socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
         educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
         educationalObject.setSocialProfileId(socialProfile);
@@ -101,9 +101,10 @@ public class SubmitFormBean implements Serializable {
             tag.setName(tagValue);
             TagsBO.create(tag);
         }
+        AuthorJpaController authorJpaController = new AuthorJpaController();
         for (Author authorOE : authorList) {
             authorOE.setEducationalObjectCollection(educationalObjectList);
-            AuthorBO.create(authorOE);
+            authorJpaController.create(authorOE);
         }
         if (mediaFile1 != null){
             submitFile(mediaFile1);

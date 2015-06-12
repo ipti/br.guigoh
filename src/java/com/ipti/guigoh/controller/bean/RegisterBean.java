@@ -4,15 +4,12 @@
  */
 package com.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.CityBO;
-import com.guigoh.bo.CountryBO;
 import com.guigoh.bo.EmailActivationBO;
 import com.guigoh.bo.LanguageBO;
 import com.guigoh.bo.NetworksBO;
 import com.guigoh.bo.RoleBO;
 import com.guigoh.bo.SecretQuestionBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.StateBO;
 import com.guigoh.bo.SubnetworkBO;
 import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.UsersBO;
@@ -33,6 +30,9 @@ import com.ipti.guigoh.model.entity.State;
 import com.ipti.guigoh.model.entity.Subnetwork;
 import com.ipti.guigoh.model.entity.UserAuthorization;
 import com.ipti.guigoh.model.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.CityJpaController;
+import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.StateJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +90,10 @@ public class RegisterBean implements Serializable {
     private Boolean visitor;
     private Translator trans;
 
+    private CityJpaController cityJpaController;
+    private StateJpaController stateJpaController;
+    private CountryJpaController countryJpaController;
+
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             user = new Users();
@@ -107,7 +111,6 @@ public class RegisterBean implements Serializable {
             passwordConfirm = "";
             countryId = 0;
             stateId = 0;
-            cityId = 0;
             roleId = 0;
             subnetworkId = 0;
             languageId = 0;
@@ -118,16 +121,20 @@ public class RegisterBean implements Serializable {
             visitor = true;
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
+            cityJpaController = new CityJpaController();
+            stateJpaController = new StateJpaController();
+            countryJpaController = new CountryJpaController();
             loadDefault();
+
         }
     }
 
     private void loadDefault() {
-        countryId = CountryBO.getCountryByName(BRAZIL).getId();
-        stateList = StateBO.findStatesByCountryId(countryId);
-        stateId = StateBO.getStateByName(SERGIPE).getId();
-        cityList = CityBO.findCitiesByStateId(stateId);
-        cityId = CityBO.getCityByName(ARACAJU).getId();
+        countryId = countryJpaController.findCountryByName(BRAZIL).getId();
+        stateList = stateJpaController.findStatesByCountryId(countryId);
+        stateId = stateJpaController.findStateByName(SERGIPE).getId();
+        cityList = cityJpaController.findCitiesByStateId(stateId);
+        cityId = cityJpaController.findCityByName(ARACAJU).getId();
         roleList = RoleBO.getAll();
 
     }
@@ -184,9 +191,9 @@ public class RegisterBean implements Serializable {
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
                             user.setStatus(CONFIRMATION_PENDING);
-                            UsersBO.create(user);                            
+                            UsersBO.create(user);
                             EmailActivationBO.create(emailactivation);
-                            SocialProfileBO.create(socialProfile);     
+                            SocialProfileBO.create(socialProfile);
                             automaticConfirm(user);
                             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
                             user = new Users();
@@ -227,17 +234,15 @@ public class RegisterBean implements Serializable {
 //        if (networksList.size() > 2) {
 //            authorization.setNetwork("Guigoh");
 //        } else {
-        
-        authorization.setNetwork(networksList.get(0).getName());
-            
-//        }
 
+        authorization.setNetwork(networksList.get(0).getName());
+
+//        }
 //        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
 //            authorization.setStatus(FIRST_ACCESS);
 //        } else if (networksList.get(0).getType().equals(PRIVATE)) {
-        
         authorization.setStatus(PENDING_ACCESS);
-        
+
 //        }
         UserAuthorizationBO.create(authorization);
     }
@@ -261,7 +266,11 @@ public class RegisterBean implements Serializable {
     }
 
     private List<Country> getCountries() {
-        return CountryBO.getAll();
+        try {
+            return countryJpaController.findCountryEntities();
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
+        }
     }
 
     private List<Language> getLanguages() {
@@ -273,17 +282,17 @@ public class RegisterBean implements Serializable {
     }
 
     public void loadState() {
-        stateList = StateBO.findStatesByCountryId(countryId);
+        stateList = stateJpaController.findStatesByCountryId(countryId);
     }
 
     public void loadCity() {
-        cityList = CityBO.findCitiesByStateId(stateId);
+        cityList = cityJpaController.findCitiesByStateId(stateId);
     }
 
-    public void authenticateUser() {               
+    public void authenticateUser() {
         Translator tempTrans = new Translator();
         tempTrans.setLocale(CookieService.getCookie("locale"));
-        
+
         try {
             if (confirmEmail != null && confirmCode != null) {
                 Users userConfirm = UsersBO.findUsers(confirmEmail);
@@ -311,21 +320,21 @@ public class RegisterBean implements Serializable {
 //                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
 //                            authorization.setStatus(FIRST_ACCESS);
 //                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
-                            String newUserAccount = "Novo cadastro de usuário";
-                            String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
+                        String newUserAccount = "Novo cadastro de usuário";
+                        String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                             //mailtext = trans.getWord(mailtext);
-                            //mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                                //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                            //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
-                            //newUserAccount = trans.getWord(newUserAccount);
-                            for (UserAuthorization userAuthorization : UserAuthorizationBO.findAuthorizationsByRole("AD")){
+                        //mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                        //mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                        //Modificar http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=codigo&user=usuario                                
+                        //newUserAccount = trans.getWord(newUserAccount);
+                        for (UserAuthorization userAuthorization : UserAuthorizationBO.findAuthorizationsByRole("AD")) {
                                 //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
-                                //newUserAccount = tempTrans.getWord(newUserAccount);
-                                //mailtext = tempTrans.getWord(mailtext);
-                                MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
-                            }
-                            //tempTrans.setLocale(CookieService.getCookie("locale"));
-                            authorization.setStatus(PENDING_ACCESS);
+                            //newUserAccount = tempTrans.getWord(newUserAccount);
+                            //mailtext = tempTrans.getWord(mailtext);
+                            MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
+                        }
+                        //tempTrans.setLocale(CookieService.getCookie("locale"));
+                        authorization.setStatus(PENDING_ACCESS);
 //                        }
                         UserAuthorizationBO.create(authorization);
                         panelStatus = "confirmed_email";

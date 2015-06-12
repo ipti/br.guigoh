@@ -5,9 +5,6 @@
 package com.ipti.guigoh.controller.bean;
 
 import com.guigoh.bo.UserAuthorizationBO;
-import com.guigoh.bo.AvailabilityBO;
-import com.guigoh.bo.CityBO;
-import com.guigoh.bo.CountryBO;
 import com.guigoh.bo.EducationsBO;
 import com.guigoh.bo.EducationsLocationBO;
 import com.guigoh.bo.EducationsNameBO;
@@ -19,7 +16,6 @@ import com.guigoh.bo.OccupationsBO;
 import com.guigoh.bo.OccupationsTypeBO;
 import com.guigoh.bo.ScholarityBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.StateBO;
 import com.ipti.guigoh.util.CookieService;
 import com.ipti.guigoh.util.translator.Translator;
 import com.ipti.guigoh.model.entity.UserAuthorization;
@@ -39,6 +35,10 @@ import com.ipti.guigoh.model.entity.Scholarity;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.State;
 import com.ipti.guigoh.model.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.AvailabilityJpaController;
+import com.ipti.guigoh.model.jpa.controller.CityJpaController;
+import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.StateJpaController;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -218,12 +218,14 @@ public class WizardProfileBean implements Serializable {
         occupationss.setOccupationsTypeId(occupationsType);
         experience.setNameId(occupationss);
         experience.setLocationId(new ExperiencesLocation());
-        countryExperienceId = CountryBO.getCountryByName(BRAZIL).getId();
-        countryEducationId = CountryBO.getCountryByName(BRAZIL).getId();
+        CountryJpaController countryJpaController = new CountryJpaController();
+        countryExperienceId = countryJpaController.findCountryByName(BRAZIL).getId();
+        countryEducationId = countryJpaController.findCountryByName(BRAZIL).getId();
         loadStateExperiences();
         loadStateEducations();
-        stateExperienceId = StateBO.getStateByName(SERGIPE).getId();
-        stateEducationId = StateBO.getStateByName(SERGIPE).getId();
+        StateJpaController stateJpaController = new StateJpaController();
+        stateExperienceId = stateJpaController.findStateByName(SERGIPE).getId();
+        stateEducationId = stateJpaController.findStateByName(SERGIPE).getId();
         education.setNameId(new EducationsName());
         education.setLocationId(new EducationsLocation());
     }
@@ -427,7 +429,8 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void loadAvailability() {
-        availabitityListAll = AvailabilityBO.getAll();
+        AvailabilityJpaController availabilityJpaController = new AvailabilityJpaController();
+        availabitityListAll = availabilityJpaController.findAvailabilityEntities();
     }
 
     private void checkInterestsList(List<Interests> interestsList, String type) {
@@ -620,22 +623,26 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void getCountrys() {
-        countryList = CountryBO.getAll();
+        CountryJpaController countryJpaController = new CountryJpaController();
+        countryList = countryJpaController.findCountryEntities();
         countryEducationList = countryList;
         countryExperienceList = countryList;
     }
 
     private void getStates() {
-        stateList = StateBO.findStatesByCountryId(countryId);
+        StateJpaController stateJpaController = new StateJpaController();
+        stateList = stateJpaController.findStatesByCountryId(countryId);
     }
 
     private void getCitys() {
-        cityList = CityBO.findCitiesByStateId(stateId);
+        CityJpaController cityJpaController = new CityJpaController();
+        cityList = cityJpaController.findCitiesByStateId(stateId);
     }
 
     public void loadState() {
         try {
-            stateList = StateBO.findStatesByCountryId(countryId);
+            StateJpaController stateJpaController = new StateJpaController();
+            stateList = stateJpaController.findStatesByCountryId(countryId);
             cityId = 0;
             stateId = 0;
             cityList = new ArrayList<>();
@@ -645,7 +652,8 @@ public class WizardProfileBean implements Serializable {
 
     public void loadStateEducations() {
         try {
-            stateEducationList = StateBO.findStatesByCountryId(countryEducationId);
+            StateJpaController stateJpaController = new StateJpaController();
+            stateEducationList = stateJpaController.findStatesByCountryId(countryEducationId);
             stateEducationId = 0;
         } catch (Exception e) {
         }
@@ -653,7 +661,8 @@ public class WizardProfileBean implements Serializable {
 
     public void loadStateExperiences() {
         try {
-            stateExperienceList = StateBO.findStatesByCountryId(countryExperienceId);
+            StateJpaController stateJpaController = new StateJpaController();
+            stateExperienceList = stateJpaController.findStatesByCountryId(countryExperienceId);
             stateExperienceId = 0;
         } catch (Exception e) {
         }
@@ -661,7 +670,8 @@ public class WizardProfileBean implements Serializable {
 
     public void loadCity() {
         try {
-            cityList = CityBO.findCitiesByStateId(stateId);
+            CityJpaController cityJpaController = new CityJpaController();
+            cityList = cityJpaController.findCitiesByStateId(stateId);
             cityId = 0;
         } catch (Exception e) {
         }

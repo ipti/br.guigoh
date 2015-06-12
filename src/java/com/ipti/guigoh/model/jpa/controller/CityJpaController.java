@@ -240,7 +240,7 @@ public class CityJpaController implements Serializable {
         }
     }
     
-    public List<City> findCitysByCountryId(Integer id) {
+    public List<City> findCitiesByStateId(Integer id) {
         EntityManager em = getEntityManager();
         try {
             List<City> cityList = (List<City>) em.createNativeQuery("select * from city "
