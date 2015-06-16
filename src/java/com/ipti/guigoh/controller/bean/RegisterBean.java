@@ -5,12 +5,9 @@
 package com.ipti.guigoh.controller.bean;
 
 import com.guigoh.bo.EmailActivationBO;
-import com.guigoh.bo.LanguageBO;
-import com.guigoh.bo.NetworksBO;
 import com.guigoh.bo.RoleBO;
 import com.guigoh.bo.SecretQuestionBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.SubnetworkBO;
 import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.UsersBO;
 import com.ipti.guigoh.util.CookieService;
@@ -32,7 +29,10 @@ import com.ipti.guigoh.model.entity.UserAuthorization;
 import com.ipti.guigoh.model.entity.Users;
 import com.ipti.guigoh.model.jpa.controller.CityJpaController;
 import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.LanguageJpaController;
+import com.ipti.guigoh.model.jpa.controller.NetworksJpaController;
 import com.ipti.guigoh.model.jpa.controller.StateJpaController;
+import com.ipti.guigoh.model.jpa.controller.SubnetworkJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,12 +93,16 @@ public class RegisterBean implements Serializable {
     private CityJpaController cityJpaController;
     private StateJpaController stateJpaController;
     private CountryJpaController countryJpaController;
+    private LanguageJpaController languageJpaController;
+    private NetworksJpaController networksJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             cityJpaController = new CityJpaController();
             stateJpaController = new StateJpaController();
             countryJpaController = new CountryJpaController();
+            languageJpaController = new LanguageJpaController();
+            networksJpaController = new NetworksJpaController();
             user = new Users();
             socialProfile = new SocialProfile();
             secretQuestion = new SecretQuestion();
@@ -183,7 +187,7 @@ public class RegisterBean implements Serializable {
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
                             String accountActivation = "Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
-                            trans.setLocale(LanguageBO.findById(languageId).getAcronym());
+                            trans.setLocale(languageJpaController.findLanguage(languageId).getAcronym());
                             mailtext = trans.getWord(mailtext);
                             mailtext += "http://artecomciencia.guigoh.com/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
 //                            mailtext += "http://rts.guigoh.com:8080/primata/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
@@ -227,7 +231,7 @@ public class RegisterBean implements Serializable {
     }
 
     private void automaticConfirm(Users user) {
-        List<Networks> networksList = NetworksBO.getAll();
+        List<Networks> networksList = networksJpaController.findNetworksEntities();
         UserAuthorization authorization = new UserAuthorization();
         authorization.setRoles(DEFAULT);
         authorization.setTokenId(user.getToken());
@@ -274,11 +278,12 @@ public class RegisterBean implements Serializable {
     }
 
     private List<Language> getLanguages() {
-        return LanguageBO.getAll();
+        return languageJpaController.findLanguageEntities();
     }
 
     private List<Subnetwork> getSubnetworks() {
-        return SubnetworkBO.getAll();
+        SubnetworkJpaController subnetworkJpaController = new SubnetworkJpaController();
+        return subnetworkJpaController.findSubnetworkEntities();
     }
 
     public void loadState() {
@@ -306,7 +311,7 @@ public class RegisterBean implements Serializable {
                         userConfirm.setStatus(CONFIRMATION_ACCESS);
                         UsersBO.edit(userConfirm);
                         EmailActivationBO.destroy(emailActivation);
-                        List<Networks> networksList = NetworksBO.getAll();
+                        List<Networks> networksList = networksJpaController.findNetworksEntities();
                         UserAuthorization authorization = new UserAuthorization();
                         authorization.setRoles(DEFAULT);
                         authorization.setTokenId(userConfirm.getToken());

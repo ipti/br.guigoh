@@ -9,8 +9,6 @@ import com.guigoh.bo.EducationsNameBO;
 import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.InterestsTypeBO;
 import com.guigoh.bo.OccupationsBO;
-import com.guigoh.bo.OccupationsTypeBO;
-import com.guigoh.bo.ScholarityBO;
 import com.guigoh.bo.SocialProfileBO;
 import com.ipti.guigoh.model.entity.City;
 import com.ipti.guigoh.model.entity.Country;
@@ -27,6 +25,8 @@ import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.State;
 import com.ipti.guigoh.model.jpa.controller.CityJpaController;
 import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.OccupationsTypeJpaController;
+import com.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
 import com.ipti.guigoh.model.jpa.controller.StateJpaController;
 import java.io.Serializable;
 import java.util.*;
@@ -155,7 +155,8 @@ public class CurriculumFinderBean implements Serializable{
     }
     
     private List<OccupationsType> getOccupationTypes(){
-        return OccupationsTypeBO.getAll();
+        OccupationsTypeJpaController occupationsTypeJpaController = new OccupationsTypeJpaController();
+        return occupationsTypeJpaController.findOccupationsTypeEntities();
     }
     
     private List<InterestsType> getInterestTypes(){
@@ -163,7 +164,8 @@ public class CurriculumFinderBean implements Serializable{
     }
     
     private List<Scholarity> getScholarities(){
-        return ScholarityBO.getAll();
+        ScholarityJpaController scholarityJpaController = new ScholarityJpaController();
+        return scholarityJpaController.findScholarityEntities();
     }
     
     private List<EducationsName> getEducationNames(){

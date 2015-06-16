@@ -4,7 +4,6 @@
  */
 package com.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.EducationsBO;
 import com.guigoh.bo.EducationsLocationBO;
 import com.guigoh.bo.EducationsNameBO;
@@ -13,12 +12,8 @@ import com.guigoh.bo.ExperiencesLocationBO;
 import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.InterestsTypeBO;
 import com.guigoh.bo.OccupationsBO;
-import com.guigoh.bo.OccupationsTypeBO;
-import com.guigoh.bo.ScholarityBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.ipti.guigoh.util.CookieService;
-import com.ipti.guigoh.util.translator.Translator;
-import com.ipti.guigoh.model.entity.UserAuthorization;
+import com.guigoh.bo.UserAuthorizationBO;
 import com.ipti.guigoh.model.entity.Availability;
 import com.ipti.guigoh.model.entity.City;
 import com.ipti.guigoh.model.entity.Country;
@@ -34,11 +29,16 @@ import com.ipti.guigoh.model.entity.OccupationsType;
 import com.ipti.guigoh.model.entity.Scholarity;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.State;
+import com.ipti.guigoh.model.entity.UserAuthorization;
 import com.ipti.guigoh.model.entity.Users;
 import com.ipti.guigoh.model.jpa.controller.AvailabilityJpaController;
 import com.ipti.guigoh.model.jpa.controller.CityJpaController;
 import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import com.ipti.guigoh.model.jpa.controller.OccupationsTypeJpaController;
+import com.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
 import com.ipti.guigoh.model.jpa.controller.StateJpaController;
+import com.ipti.guigoh.util.CookieService;
+import com.ipti.guigoh.util.translator.Translator;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -57,7 +58,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Joe
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "wizardProfileBean")
 public class WizardProfileBean implements Serializable {
 
@@ -131,51 +132,51 @@ public class WizardProfileBean implements Serializable {
     private Translator trans;
 
     public void init() {
-        if (socialProfile == null) {
-            showpanel = 1;
-            interestsList = new ArrayList<>();
-            interestsTypeList = new ArrayList<>();
-            themesList = new ArrayList<>();
-            booksList = new ArrayList<>();
-            musicsList = new ArrayList<>();
-            moviesList = new ArrayList<>();
-            hobbiesList = new ArrayList<>();
-            sportsList = new ArrayList<>();
-            socialProfile = new SocialProfile();
-            stateList = new ArrayList<>();
-            countryList = new ArrayList<>();
-            cityList = new ArrayList<>();
-            user = new Users();
-            experiencesList = new ArrayList<>();
-            educationsList = new ArrayList<>();
-            interestsListAll = new ArrayList<>();
-            themesListAll = new ArrayList<>();
-            themesListFixo = new ArrayList<>();
-            education = new Educations();
-            experience = new Experiences();
-            booksAddList = new ArrayList<>();
-            musicsAddList = new ArrayList<>();
-            moviesAddList = new ArrayList<>();
-            booksListAll = new ArrayList<>();
-            musicsListAll = new ArrayList<>();
-            moviesListAll = new ArrayList<>();
-            sportsListAll = new ArrayList<>();
-            hobbiesListAll = new ArrayList<>();
-            occupationsListAll = new ArrayList<>();
-            occupationsTypeList = new ArrayList<>();
-            countryEducationList = new ArrayList<>();
-            countryExperienceList = new ArrayList<>();
-            stateEducationList = new ArrayList<>();
-            stateExperienceList = new ArrayList<>();
-            educationsNameListAll = new ArrayList<>();
-            educationsLocationListAll = new ArrayList<>();
-            experiencesLocationListAll = new ArrayList<>();
-            multiThemeList = new Integer[6];
-            scholarityList = new ArrayList<>();
-            trans = new Translator();
-            trans.setLocale(CookieService.getCookie("locale"));
-            loadWizard();
-        }
+            if (socialProfile == null) {
+                showpanel = 1;
+                interestsList = new ArrayList<>();
+                interestsTypeList = new ArrayList<>();
+                themesList = new ArrayList<>();
+                booksList = new ArrayList<>();
+                musicsList = new ArrayList<>();
+                moviesList = new ArrayList<>();
+                hobbiesList = new ArrayList<>();
+                sportsList = new ArrayList<>();
+                socialProfile = new SocialProfile();
+                stateList = new ArrayList<>();
+                countryList = new ArrayList<>();
+                cityList = new ArrayList<>();
+                user = new Users();
+                experiencesList = new ArrayList<>();
+                educationsList = new ArrayList<>();
+                interestsListAll = new ArrayList<>();
+                themesListAll = new ArrayList<>();
+                themesListFixo = new ArrayList<>();
+                education = new Educations();
+                experience = new Experiences();
+                booksAddList = new ArrayList<>();
+                musicsAddList = new ArrayList<>();
+                moviesAddList = new ArrayList<>();
+                booksListAll = new ArrayList<>();
+                musicsListAll = new ArrayList<>();
+                moviesListAll = new ArrayList<>();
+                sportsListAll = new ArrayList<>();
+                hobbiesListAll = new ArrayList<>();
+                occupationsListAll = new ArrayList<>();
+                occupationsTypeList = new ArrayList<>();
+                countryEducationList = new ArrayList<>();
+                countryExperienceList = new ArrayList<>();
+                stateEducationList = new ArrayList<>();
+                stateExperienceList = new ArrayList<>();
+                educationsNameListAll = new ArrayList<>();
+                educationsLocationListAll = new ArrayList<>();
+                experiencesLocationListAll = new ArrayList<>();
+                multiThemeList = new Integer[6];
+                scholarityList = new ArrayList<>();
+                trans = new Translator();
+                trans.setLocale(CookieService.getCookie("locale"));
+                loadWizard();
+            }
     }
 
     private void loadWizard() {
@@ -318,7 +319,6 @@ public class WizardProfileBean implements Serializable {
                     EducationsNameBO.create(education.getNameId());
                     educationsNamet = EducationsNameBO.findEducationsNameByName(education.getNameId());
                 }
-
 
                 education.setNameId(educationsNamet);
                 education.setLocationId(educationsLocationt);
@@ -693,7 +693,8 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void getAllOccupationsType() {
-        occupationsTypeList = OccupationsTypeBO.getAll();
+        OccupationsTypeJpaController occupationsTypeJpaController = new OccupationsTypeJpaController();
+        occupationsTypeList = occupationsTypeJpaController.findOccupationsTypeEntities();
     }
 
     private void getAllBooks() {
@@ -717,7 +718,8 @@ public class WizardProfileBean implements Serializable {
     }
 
     private void getAllScholarity() {
-        scholarityList = ScholarityBO.getAll();
+        ScholarityJpaController scholarityJpaController = new ScholarityJpaController();
+        scholarityList = scholarityJpaController.findScholarityEntities();
     }
 
     public void autocompleteLabelAndValue() {
