@@ -8,7 +8,6 @@ import com.guigoh.bo.DiscussionTopicBO;
 import com.guigoh.bo.DiscussionTopicFilesBO;
 import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.TagsBO;
 import com.ipti.guigoh.util.CookieService;
 import com.ipti.guigoh.util.UploadService;
 import com.ipti.guigoh.model.entity.DiscussionTopic;
@@ -17,6 +16,7 @@ import com.ipti.guigoh.model.entity.Interests;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.Tags;
 import com.ipti.guigoh.model.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -97,7 +97,7 @@ public class CreateTopicBean implements Serializable {
         fileList.remove(media);
     }
 
-    public void createTopic() {
+    public void createTopic() throws Exception {
         try {
             Calendar c = Calendar.getInstance(TimeZone.getDefault());
             discussionTopic.setTitle(new String(discussionTopic.getTitle().getBytes("ISO-8859-1"), "UTF-8"));
@@ -107,9 +107,10 @@ public class CreateTopicBean implements Serializable {
             discussionTopic.setStatus(ACTIVE);
             discussionTopic.setThemeId(theme);
             DiscussionTopicBO.create(discussionTopic);
+            TagsJpaController tagsJpaController = new TagsJpaController();
             for (Tags t : tags) {
-                TagsBO.create(t);
-                TagsBO.createTagsDiscussionTopic(t, discussionTopic);
+                tagsJpaController.create(t);
+                tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
             }
             if (!fileList.isEmpty()) {
                 for (Part part : fileList) {

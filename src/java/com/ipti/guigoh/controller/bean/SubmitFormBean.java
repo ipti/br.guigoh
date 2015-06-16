@@ -11,13 +11,13 @@ import com.ipti.guigoh.model.entity.EducationalObject;
 import com.ipti.guigoh.model.entity.EducationalObjectMedia;
 import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.TagsBO;
 import com.ipti.guigoh.util.CookieService;
 import com.ipti.guigoh.util.UploadService;
 import com.ipti.guigoh.model.entity.Interests;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.Tags;
 import com.ipti.guigoh.model.jpa.controller.AuthorJpaController;
+import com.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -95,11 +95,12 @@ public class SubmitFormBean implements Serializable {
         String[] tagArray = tags.replace(" ", "").split(",");
         List<EducationalObject> educationalObjectList = new ArrayList<>();
         educationalObjectList.add(educationalObject);
+        TagsJpaController tagsJpaController = new TagsJpaController();
         for (String tagValue : tagArray) {
             Tags tag = new Tags();
             tag.setEducationalObjectCollection(educationalObjectList);
             tag.setName(tagValue);
-            TagsBO.create(tag);
+            tagsJpaController.create(tag);
         }
         AuthorJpaController authorJpaController = new AuthorJpaController();
         for (Author authorOE : authorList) {

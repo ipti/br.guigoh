@@ -6,7 +6,6 @@ package com.ipti.guigoh.controller.bean;
 
 import com.guigoh.bo.EmailActivationBO;
 import com.guigoh.bo.RoleBO;
-import com.guigoh.bo.SecretQuestionBO;
 import com.guigoh.bo.SocialProfileBO;
 import com.guigoh.bo.UserAuthorizationBO;
 import com.guigoh.bo.UsersBO;
@@ -31,6 +30,7 @@ import com.ipti.guigoh.model.jpa.controller.CityJpaController;
 import com.ipti.guigoh.model.jpa.controller.CountryJpaController;
 import com.ipti.guigoh.model.jpa.controller.LanguageJpaController;
 import com.ipti.guigoh.model.jpa.controller.NetworksJpaController;
+import com.ipti.guigoh.model.jpa.controller.SecretQuestionJpaController;
 import com.ipti.guigoh.model.jpa.controller.StateJpaController;
 import com.ipti.guigoh.model.jpa.controller.SubnetworkJpaController;
 import java.io.Serializable;
@@ -266,7 +266,8 @@ public class RegisterBean implements Serializable {
     }
 
     public List<SecretQuestion> getQuestions() {
-        return SecretQuestionBO.getAll();
+        SecretQuestionJpaController secretQuestionJpaController = new SecretQuestionJpaController();
+        return secretQuestionJpaController.findSecretQuestionEntities();
     }
 
     private List<Country> getCountries() {

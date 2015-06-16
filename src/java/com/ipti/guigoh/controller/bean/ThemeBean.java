@@ -8,10 +8,10 @@ import com.guigoh.bo.EducationalObjectBO;
 import com.ipti.guigoh.model.entity.EducationalObject;
 import com.guigoh.bo.DiscussionTopicBO;
 import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.TagsBO;
 import com.ipti.guigoh.model.entity.DiscussionTopic;
 import com.ipti.guigoh.model.entity.Interests;
 import com.ipti.guigoh.model.entity.Tags;
+import com.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,8 @@ public class ThemeBean implements Serializable{
     }
     
     private void loadTags(){
-        tagList = TagsBO.getAllTags();
+        TagsJpaController tagsJpaController = new TagsJpaController();
+        tagList = tagsJpaController.findTagsEntities();
     }
     
     private void loadDiscussionTopics(){

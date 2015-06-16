@@ -9,8 +9,6 @@ import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.MessengerMessagesBO;
 import com.guigoh.bo.MessengerStatusBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.TagsBO;
-import com.ipti.guigoh.util.JsonConverter;
 import com.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import com.ipti.guigoh.model.entity.Friends;
@@ -20,6 +18,7 @@ import com.ipti.guigoh.model.entity.MessengerStatus;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.Tags;
 import com.ipti.guigoh.model.entity.Users;
+import com.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -241,8 +240,8 @@ public class PrimataResource extends Thread {
     @Path("/tags")
     @Produces("application/json")
     public String getTagss(@QueryParam("text") String text, @QueryParam("theme_id") Integer theme_id) throws JSONException, Exception, RollbackFailureException {
-        TagsBO tagsBO = new TagsBO();
-        List<Tags> tagslist = tagsBO.findTagsByText(text);
+        TagsJpaController tagsJpaController = new TagsJpaController();
+        List<Tags> tagslist = tagsJpaController.findTagsByText(text);
         JSONArray tagsArray = new JSONArray();
         for (int i = 0; i < tagslist.size(); i++) {
             JSONObject tag = new JSONObject();
