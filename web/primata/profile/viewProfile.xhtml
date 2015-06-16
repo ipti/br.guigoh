@@ -234,18 +234,15 @@
                                         <font>#{localeBean.getString('Livros')}</font>
                                         <li class="cultural_item">
                                             <h:panelGroup>
-                                                <h:inputText id="books1" value="#{profileBean.booksList[0]}" class="request_form_books books1">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="books1" value="#{profileBean.booksList[0]}" converter="InterestsConverter" class="request_form_books books1">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="books2" value="#{profileBean.booksList[1]}" class="request_form_books books2">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="books2" value="#{profileBean.booksList[1]}" converter="InterestsConverter" class="request_form_books books2">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="books3" value="#{profileBean.booksList[2]}" class="request_form_books books3">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="books3" value="#{profileBean.booksList[2]}" converter="InterestsConverter" class="request_form_books books3">
                                                 </h:inputText>
                                             </h:panelGroup>
                                         </li>
@@ -254,18 +251,15 @@
                                         <font>#{localeBean.getString('Músicas')}</font>
                                         <li class="cultural_item">
                                             <h:panelGroup>
-                                                <h:inputText id="musics1" value="#{profileBean.musicsList[0]}" class="request_form_music musics1">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="musics1" value="#{profileBean.musicsList[0]}" converter="InterestsConverter" class="request_form_music musics1">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="musics2" value="#{profileBean.musicsList[1]}" class="request_form_music musics2">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="musics2" value="#{profileBean.musicsList[1]}" converter="InterestsConverter" class="request_form_music musics2">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="musics3" value="#{profileBean.musicsList[2]}" class="request_form_music musics3">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="musics3" value="#{profileBean.musicsList[2]}" converter="InterestsConverter" class="request_form_music musics3">
                                                 </h:inputText>
                                             </h:panelGroup>
                                         </li>
@@ -274,18 +268,15 @@
                                         <font>#{localeBean.getString('Filmes')}</font>
                                         <li class="cultural_item">
                                             <h:panelGroup>
-                                                <h:inputText id="movies1" value="#{profileBean.moviesList[0]}" class="request_form_cine movies1">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="movies1" value="#{profileBean.moviesList[0]}" converter="InterestsConverter" class="request_form_cine movies1">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="movies2" value="#{profileBean.moviesList[1]}" class="request_form_cine movies2">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="movies2" value="#{profileBean.moviesList[1]}" converter="InterestsConverter" class="request_form_cine movies2">
                                                 </h:inputText>
                                             </h:panelGroup>  
                                             <h:panelGroup>
-                                                <h:inputText id="movies3" value="#{profileBean.moviesList[2]}" class="request_form_cine movies3">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="movies3" value="#{profileBean.moviesList[2]}" converter="InterestsConverter" class="request_form_cine movies3">
                                                 </h:inputText>
                                             </h:panelGroup>   
                                         </li>
@@ -338,18 +329,15 @@
                                         <font>#{localeBean.getString('Esportes')}</font>
                                         <li class="cultural_item">
                                             <h:panelGroup>
-                                                <h:inputText id="sports1" value="#{profileBean.sportsList[0]}" class="request_form_sports sports1">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="sports1" value="#{profileBean.sportsList[0]}" converter="InterestsConverter" class="request_form_sports sports1">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="sports2" value="#{profileBean.sportsList[1]}" class="request_form_sports sports2">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="sports2" value="#{profileBean.sportsList[1]}" converter="InterestsConverter" class="request_form_sports sports2">
                                                 </h:inputText>
                                             </h:panelGroup>  
                                             <h:panelGroup>
-                                                <h:inputText id="sports3" value="#{profileBean.sportsList[2]}" class="request_form_sports sports3">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="sports3" value="#{profileBean.sportsList[2]}" converter="InterestsConverter" class="request_form_sports sports3">
                                                 </h:inputText>
                                             </h:panelGroup>  
                                         </li>
@@ -358,18 +346,15 @@
                                         <font>#{localeBean.getString('Hobbies')}</font>
                                         <li class="cultural_item">
                                             <h:panelGroup>
-                                                <h:inputText id="hobbies1" value="#{profileBean.hobbiesList[0]}" class="request_form_hobbies hobbies1">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="hobbies1" value="#{profileBean.hobbiesList[0]}" converter="InterestsConverter" class="request_form_hobbies hobbies1">
                                                 </h:inputText>
                                             </h:panelGroup>
                                             <h:panelGroup>
-                                                <h:inputText id="hobbies2" value="#{profileBean.hobbiesList[1]}" class="request_form_hobbies hobbies2">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="hobbies2" value="#{profileBean.hobbiesList[1]}" converter="InterestsConverter" class="request_form_hobbies hobbies2">
                                                 </h:inputText>
                                             </h:panelGroup>  
                                             <h:panelGroup>
-                                                <h:inputText id="hobbies3" value="#{profileBean.hobbiesList[2]}" class="request_form_hobbies hobbies3">
-                                                    <f:converter converterId="entityConverter"/>
+                                                <h:inputText id="hobbies3" value="#{profileBean.hobbiesList[2]}" converter="InterestsConverter" class="request_form_hobbies hobbies3">
                                                 </h:inputText>
                                             </h:panelGroup>   
                                         </li>

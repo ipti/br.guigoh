@@ -49,8 +49,7 @@
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Qual é o tema principal tratado pelo Objeto Educacional?')}"/>
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Apenas uma opção.')}"/>
                         <h:outputText styleClass="educational_object_theme_warning" value="#{localeBean.getString('Selecione ao menos uma opção.')}"/>
-                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" value="#{submitFormBean.educationalObject.themeId}">
-                            <f:converter converterId="entityConverter"/>
+                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" converter="entityConverter" value="#{submitFormBean.educationalObject.themeId}">
                             <f:selectItems  id="theme" value="#{submitFormBean.interestThemesList}" var="theme" itemLabel="#{localeBean.getString(theme.name)}" itemValue="#{theme}"/>
                         </h:selectOneRadio>
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Palavras chave')}"/>

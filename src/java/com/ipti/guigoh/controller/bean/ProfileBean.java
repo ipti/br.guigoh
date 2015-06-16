@@ -11,11 +11,6 @@ import com.guigoh.bo.InterestsBO;
 import com.guigoh.bo.InterestsTypeBO;
 import com.guigoh.bo.OccupationsBO;
 import com.guigoh.bo.SocialProfileBO;
-import com.ipti.guigoh.util.CookieService;
-import com.ipti.guigoh.util.DownloadService;
-import com.ipti.guigoh.util.translator.Translator;
-import com.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import com.ipti.guigoh.model.entity.Availability;
 import com.ipti.guigoh.model.entity.Educations;
 import com.ipti.guigoh.model.entity.Experiences;
@@ -27,6 +22,11 @@ import com.ipti.guigoh.model.entity.OccupationsType;
 import com.ipti.guigoh.model.entity.Scholarity;
 import com.ipti.guigoh.model.entity.SocialProfile;
 import com.ipti.guigoh.model.entity.Users;
+import com.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
+import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import com.ipti.guigoh.util.CookieService;
+import com.ipti.guigoh.util.DownloadService;
+import com.ipti.guigoh.util.translator.Translator;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -51,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author IPTI
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "profileBean")
 public class ProfileBean implements Serializable {
 

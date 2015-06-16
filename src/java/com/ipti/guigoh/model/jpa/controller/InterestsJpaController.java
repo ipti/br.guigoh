@@ -428,7 +428,7 @@ public class InterestsJpaController implements Serializable {
 
             Query query = em.createNativeQuery(sql);
             Boolean ok;
-            List<Interests> InterestsListT = new ArrayList<Interests>();
+            List<Interests> InterestsListT = new ArrayList<>();
             for (Interests interests : interestsList) {
                 ok = true;
                 if (interests != null) {
