@@ -59,7 +59,7 @@ public class FriendsBean implements Serializable {
     }
 
     public String goToProfile(Integer id) {
-        return "/primata/profile/viewProfile.xhtml?id=" + id;
+        return "/profile/viewProfile.xhtml?id=" + id;
     }
 
     private void organizeFriendList(List<Friends> list){

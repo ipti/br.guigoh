@@ -146,7 +146,7 @@ public class CurriculumFinderBean implements Serializable{
     }
     
     public String goToProfile(Integer id) {
-        return "/primata/profile/viewProfile.xhtml?id=" + id;
+        return "/profile/viewProfile.xhtml?id=" + id;
     }
 
     private List<Country> getCountries() {

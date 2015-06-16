@@ -6,8 +6,8 @@
 .passo2 .img-passo{background-position:0 -26px;}
 .passo3 .img-passo{background-position:0 -52px;}
 .passo1 .figuras,.passo2 .figuras,.passo3 .figuras{clear:both;margin:15px 25px;}
-.about-mandril{clear:both;margin:50px auto 20px;padding:20px;background-color:#82CFD7;}
-.about-mandril p{line-height:18px;font-size:14px;text-align:justify}
+.about-educational-object{clear:both;margin:50px auto 20px;padding:20px;background-color:#82CFD7;}
+.about-educational-object p{line-height:18px;font-size:14px;text-align:justify}
 .about-eo{margin:20px auto;padding:20px;background-color:#FFE9A4;}
 .about-eo p{line-height:18px;font-size:14px;text-align:justify}
 #register_educational_object{color:blue}

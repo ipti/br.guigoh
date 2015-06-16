@@ -57,7 +57,6 @@ public class CookieService {
                     cookies[i].setValue("");
                     cookies[i].setPath("/");
                     cookies[i].setMaxAge(0);
-                    cookies[i].setDomain(".guigoh.com");
                     response.addCookie(cookies[i]);
                 }
             }
@@ -67,7 +66,6 @@ public class CookieService {
     public static void addCookie(String key, String value) {
         response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         Cookie cookie = new Cookie(key, value);
-        cookie.setDomain(".guigoh.com");
         cookie.setPath("/");
         cookie.setMaxAge(86400);
         response.addCookie(cookie);

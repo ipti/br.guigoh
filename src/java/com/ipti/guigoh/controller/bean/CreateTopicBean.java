@@ -128,7 +128,7 @@ public class CreateTopicBean implements Serializable {
             }
             discussionTopic = new DiscussionTopic();
             tags = new ArrayList<>();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/primata/theme/theme.xhtml?id=" + themeID);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/theme/theme.xhtml?id=" + themeID);
         } catch (IOException e) {
         }
     }

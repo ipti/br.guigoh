@@ -20,15 +20,15 @@
                         <div id="latest-published">
                             <ui:repeat value="#{publishEnvironmentBean.educationalObjectList}" var="educationalObject" >
                                 <h:panelGroup styleClass="educational_object">
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
+                                    <h:link outcome="/educational-object/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
+                                    <h:link outcome="/educational-object/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
                                     <br/>
                                     <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Publicado por')}:"/>
-                                    <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
+                                    <h:link outcome="/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                     <br/>
                                     <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Tema')}:"/>
                                     <ui:param value="#{educationalObject.themeId.name}" name="themeName"/>
-                                    <h:link outcome="/primata/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
+                                    <h:link outcome="/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
                                     <br/>
                                     <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Data')}:"/>
                                     <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <h2><a id="register_educational_object" href="submitForm.xhtml">#{localeBean.getString('Publicar')}</a> #{localeBean.getString('um Objeto Educacional.')}</h2>
-                        <div class="about-mandril">
+                        <div class="about-educational-object">
                             <p><strong>#{localeBean.getString('Esse ambiente')}</strong> #{localeBean.getString('é uma maneira de compartilhar conhecimento on-line. Você pode submeter um objeto educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros. Então, compartilhe já o seu conhecimento!')}</p>
                         </div>
                         <div class="about-eo">

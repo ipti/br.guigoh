@@ -33,7 +33,7 @@ function sendMessage(){
             var message = $('#message').val();
             $.ajax({
                 type:"GET",
-                url:"/webresources/primata/sendMessageCurriculum",
+                url:"/webresources/sendMessageCurriculum",
                 data: {
                     "socialProfileId":socialProfileId,
                     "businessName":businessName,

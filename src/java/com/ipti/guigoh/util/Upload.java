@@ -31,7 +31,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  *
  * @author Joe
  */
-@WebServlet(name = "Upload", urlPatterns = {"/primata/profile/Upload"})
+@WebServlet(name = "Upload", urlPatterns = {"/profile/Upload"})
 public class Upload extends HttpServlet {
 
     Users user = new Users();
@@ -70,14 +70,14 @@ public class Upload extends HttpServlet {
                         socialProfileBO.edit(socialProfile);
                         //request.setAttribute("content", item.getContentType());
                         //request.setAttribute("size", item.getSize());
-                        //request.getRequestDispatcher("/primata/profile/exibearquivo.jsp").forward(request, response);
+                        //request.getRequestDispatcher("/profile/exibearquivo.jsp").forward(request, response);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
-        request.getRequestDispatcher("/primata/profile/viewProfile.xhtml").forward(request, response);
+        request.getRequestDispatcher("/profile/viewProfile.xhtml").forward(request, response);
     }
 
     @Override

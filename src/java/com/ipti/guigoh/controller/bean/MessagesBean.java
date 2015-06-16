@@ -59,7 +59,7 @@ public class MessagesBean implements Serializable{
     }
     
     public String goToProfile(Integer id) {
-        return "/primata/profile/viewProfile.xhtml?id=" + id;
+        return "/profile/viewProfile.xhtml?id=" + id;
     }
 
     public void getMessages(Integer socialProfileId) {

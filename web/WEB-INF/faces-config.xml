@@ -14,7 +14,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>islogged</from-outcome>
-            <to-view-id>/primata/home.xhtml</to-view-id>
+            <to-view-id>/home.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -22,7 +22,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>logout</from-outcome>
-            <to-view-id>/primata/auth/login.xhtml</to-view-id>
+            <to-view-id>/auth/login.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -30,7 +30,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>profile</from-outcome>
-            <to-view-id>/primata/profile/viewProfile.xhtml</to-view-id>
+            <to-view-id>/profile/viewProfile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -38,7 +38,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>email</from-outcome>
-            <to-view-id>/primata/users/confirmEmail.xhtml</to-view-id>
+            <to-view-id>/users/confirmEmail.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule> 
@@ -46,7 +46,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>wizard</from-outcome>
-            <to-view-id>/primata/profile/wizardProfile.xhtml</to-view-id>
+            <to-view-id>/profile/wizardProfile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>   

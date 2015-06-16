@@ -36,7 +36,7 @@ $(document).ready(function(){
 function getMessages(){
     var friend;
     $.ajax({ 
-        url: "/webresources/primata/deliverMessages",
+        url: "/webresources/deliverMessages",
         dataType: "json", 
         data: {
             "socialProfileId":logged_social_profile_id
@@ -47,7 +47,7 @@ function getMessages(){
                 if($('#msg_'+friends[i].id).length==0){
                     if($('#msg_'+friends[i].id+' .flaghistory').length==0){
                         $.ajax({ 
-                            url: "/webresources/primata/messagesHistory", 
+                            url: "/webresources/messagesHistory", 
                             dataType: "json", 
                             data: {
                                 "loggedSocialProfileId":logged_social_profile_id,
@@ -77,7 +77,7 @@ function getMessages(){
 
 function getCurriculumMessages(){
     $.ajax({ 
-        url: "/webresources/primata/getCurriculumMessages",
+        url: "/webresources/getCurriculumMessages",
         dataType: "json", 
         data: {
             "socialProfileId":logged_social_profile_id
@@ -97,7 +97,7 @@ function getCurriculumMessages(){
 function messengerFriends(){
     $.ajax({
         type:"GET",
-        url:"/webresources/primata/messengerFriends",
+        url:"/webresources/messengerFriends",
         data: {
             "socialProfileId":logged_social_profile_id
         },
@@ -153,7 +153,7 @@ function openMessengerBox(){
         if(messenger_boxes_count == 0 || body_size * 1/2 > messenger_boxes_width * (messenger_boxes_count + 1)){
                 
             $.ajax({ 
-                url: "/webresources/primata/messagesHistory", 
+                url: "/webresources/messagesHistory", 
                 dataType: "json", 
                 data: {
                     "loggedSocialProfileId":logged_social_profile_id,
@@ -185,7 +185,7 @@ function openAllHistory(event){
     var socialProfileId = $(this).attr('socialprofileid');
     $('#msg_'+socialProfileId+' #messages p').remove();
     $.ajax({ 
-        url: "/webresources/primata/allMessagesHistory", 
+        url: "/webresources/allMessagesHistory", 
         dataType: "json", 
         data: {
             "loggedSocialProfileId":logged_social_profile_id,
@@ -209,7 +209,7 @@ function sendMessage(event){
     if(message != ""){
         $.ajax({
             type:"GET",
-            url:"/webresources/primata/sendMessage",
+            url:"/webresources/sendMessage",
             data: {
                 "socialProfileIdSender":logged_social_profile_id,
                 "socialProfileIdReceiver":id,

@@ -179,11 +179,11 @@
                         <h:panelGroup styleClass="form6_body">
                             <h:outputText styleClass="educational_object_review" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
                             <h:outputText styleClass="educational_object_review_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
-                            <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
+                            <a class="publish_new_object_container" href="/educational-object/submitForm.xhtml">
                                 <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
                                 <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
                             </a>
-                            <a class="back_to_home_container" href="/primata/home.xhtml">
+                            <a class="back_to_home_container" href="/home.xhtml">
                                 <img id="back_to_home" src="../resources/images/lamp.png"/>
                                 <span class="back_to_home_label">#{localeBean.getString('Voltar à pagina inicial')}</span>
                             </a>
@@ -191,7 +191,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
-                    <h:link styleClass="button_cancel" outcome="/mandril/publishEnvironment.xhtml">
+                    <h:link styleClass="button_cancel" outcome="/educational-object/publishEnvironment.xhtml">
                         <img id="button_cancel_icon" src="/resources/images/cross.png"/>
                         <span class="button_cancel_label">#{localeBean.getString('Cancelar')}</span>
                     </h:link>

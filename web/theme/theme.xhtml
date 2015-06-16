@@ -29,14 +29,14 @@
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
                         <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
-                        <h:link styleClass="create_topic_container" outcome="/primata/discussion/createTopic.xhtml?id=#{themeBean.themeID}">
+                        <h:link styleClass="create_topic_container" outcome="/discussion/createTopic.xhtml?id=#{themeBean.themeID}">
                             <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
                             <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">
                                 <h:panelGroup styleClass="discussion_topic">
-                                    <h:link styleClass="discussion_topic_link" outcome="/primata/discussion/viewTopic.xhtml?id=#{discussionTopic.id}">
+                                    <h:link styleClass="discussion_topic_link" outcome="/discussion/viewTopic.xhtml?id=#{discussionTopic.id}">
                                         <h:outputText styleClass="discussion_topic_user_photo" style="background:url('#{discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:outputText>
                                         <h:outputText styleClass="discussion_topic_user_title" value="#{discussionTopic.title}"></h:outputText>
                                     </h:link>
@@ -45,7 +45,7 @@
                                     </h:outputText>
                                     <h:outputText styleClass="discussion_topic_clock"></h:outputText>
                                     <br/>
-                                    <h:outputText value="#{localeBean.getString('por')}" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/primata/profile/viewProfile.xhtml?id=#{discussionTopic.socialProfileId.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
+                                    <h:outputText value="#{localeBean.getString('por')}" style="font-size:12px;margin-right:5px"></h:outputText><h:link outcome="/profile/viewProfile.xhtml?id=#{discussionTopic.socialProfileId.socialProfileId}" styleClass="discussion_topic_sender" value="#{discussionTopic.socialProfileId.name}"></h:link>
                                     <h:outputText styleClass="discussion_topic_description" value="#{discussionTopic.body}"></h:outputText>
                                     <ui:repeat value="#{discussionTopic.tagsCollection}" var="tag">
                                         <h:outputText styleClass="discussion_topic_tag" value="##{tag.name}"></h:outputText>
@@ -60,23 +60,23 @@
                     </h:panelGroup>
                     <h:panelGroup styleClass="publication_objects_box">
                         <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('Objetos educacionais').toUpperCase()}"></h:outputText>
-                        <a class="publish_new_object_container" href="/mandril/submitForm.xhtml">
+                        <a class="publish_new_object_container" href="/educational-object/submitForm.xhtml">
                             <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
                             <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                         </a>
                         <h:panelGroup styleClass="publication_objects">
                             <ui:repeat value="#{themeBean.educationalObjectList}" var="educationalObject">
                                 <h:panelGroup styleClass="educational_object">
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 77px"/>
+                                    <h:link outcome="/educational-object/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 77px"/>
                                     <h:outputText styleClass="clock_icon"/>
                                     <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
                                         <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                                     </h:outputText>
-                                    <h:link outcome="/mandril/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
+                                    <h:link outcome="/educational-object/educationalObject.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
                                     <br/>
                                     <h:panelGroup styleClass="container_description">
                                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('por')}"/>
-                                        <h:link outcome="/primata/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
+                                        <h:link outcome="/profile/viewProfile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="object_tags">
                                         <ui:repeat value="#{educationalObject.tagsCollection}" var="tag">

@@ -26,7 +26,7 @@ $(document).ready(function () {
     
 //    $(document).on("click", "#show_more", function () {
 //        $.ajax({
-//            url: "../primata/home.xhtml",            
+//            url: "../home.xhtml",            
 //            success: function () {
 //                if ($("#show_more").length == 0){
 //                    $(".educational_object").last().css("border-bottom", "0");

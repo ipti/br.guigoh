@@ -33,6 +33,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>primata/login/index.xhtml</welcome-file>
+        <welcome-file>auth/login.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

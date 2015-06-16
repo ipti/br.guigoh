@@ -45,21 +45,21 @@ import org.json.*;
  *
  * @author IPTI
  */
-@Path("primata")
-public class PrimataResource extends Thread {
+@Path("guigoh")
+public class GuigohResource extends Thread {
 
     @Context
     private UriInfo context;
 
     /**
-     * Creates a new instance of PrimataResource
+     * Creates a new instance of GuigohResource
      */
-    public PrimataResource() {
+    public GuigohResource() {
     }
 
     /**
      * Retrieves representation of an instance of
-     * com.guigoh.primata.service.PrimataResource
+ com.ipti.guigoh.controller.service.GuigohResource
      *
      * @return an instance of java.lang.String
      */
@@ -253,7 +253,7 @@ public class PrimataResource extends Thread {
     }
 
     /**
-     * PUT method for updating or creating an instance of PrimataResource
+     * PUT method for updating or creating an instance of GuigohResource
      *
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
