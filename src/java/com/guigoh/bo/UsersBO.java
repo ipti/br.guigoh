@@ -1,7 +1,7 @@
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.UsersJpaController;
-import com.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 

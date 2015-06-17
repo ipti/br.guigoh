@@ -4,16 +4,16 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.FriendsJpaController;
-import com.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import com.ipti.guigoh.model.jpa.controller.UsersJpaController;
-import com.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import com.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import com.ipti.guigoh.model.entity.Friends;
-import com.ipti.guigoh.model.entity.FriendsPK;
-import com.ipti.guigoh.model.entity.SocialProfile;
-import com.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.entity.Friends;
+import br.org.ipti.guigoh.model.entity.FriendsPK;
+import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

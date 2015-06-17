@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
-import com.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.entity.EducationalObject;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;

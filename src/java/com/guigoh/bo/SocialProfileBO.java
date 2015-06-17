@@ -4,12 +4,12 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import com.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import com.ipti.guigoh.model.entity.Educations;
-import com.ipti.guigoh.model.entity.Interests;
-import com.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.entity.Educations;
+import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.entity.SocialProfile;
 import java.io.Serializable;
 import java.util.*;
 

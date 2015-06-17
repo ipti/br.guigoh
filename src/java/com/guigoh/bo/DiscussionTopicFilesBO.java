@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
-import com.ipti.guigoh.model.entity.DiscussionTopicFiles;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
+import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

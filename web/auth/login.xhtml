@@ -7,8 +7,8 @@
     <f:view contentType="text/html"/>
     <h:head>
         <title>Login</title>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/css/login.css"></link>
-        <link rel="shortcut icon" href="/resources/images/guigoh.png"></link>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/login.css"></link>
+        <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
         <script type="text/javascript">  
             if(navigator.appName=='Microsoft Internet Explorer')
             {
@@ -34,13 +34,13 @@
                         <ui:param name="url" value="#{request.servletPath}"/>
                         <h:panelGrid styleClass="localeLogon" columns="3">
                             <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
-                                <h:graphicImage  value="/resources/images/ptBR.gif" />
+                                <h:graphicImage  value="/resources/common/images/ptBR.gif" />
                             </h:commandLink>
                             <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
-                                <h:graphicImage  value="/resources/images/enUS.png" />
+                                <h:graphicImage  value="/resources/common/images/enUS.png" />
                             </h:commandLink>
                             <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
-                                <h:graphicImage  value="/resources/images/frFR.png" />
+                                <h:graphicImage  value="/resources/common/images/frFR.png" />
                             </h:commandLink>
                         </h:panelGrid>
                     </h:form>

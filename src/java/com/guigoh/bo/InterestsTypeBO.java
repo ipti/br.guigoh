@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.InterestsTypeJpaController;
-import com.ipti.guigoh.model.entity.InterestsType;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsTypeJpaController;
+import br.org.ipti.guigoh.model.entity.InterestsType;
 import java.io.Serializable;
 import java.util.List;
 

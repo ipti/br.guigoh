@@ -1,4 +1,4 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -7,11 +7,11 @@
     <ui:param name="theme" value="#{createTopicBean.theme.name}"/>
     <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
     <ui:define name="scripts">
-        <script src="/resources/js/jquery-1.9.1.js"></script>
-        <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
-        <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/css/createTopic.css"></link>
-        <script type="text/javascript" src="/resources/js/createTopic.js"></script>
+        <script src="/resources/lib/js/jquery-1.9.1.js"></script>
+        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"></script>
+        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/createTopic.css"></link>
+        <script type="text/javascript" src="/resources/common/js/createTopic.js"></script>
     </ui:define>
     <ui:define name="content">
         <f:metadata>
@@ -63,14 +63,14 @@
                         </ui:repeat>
                     </h:panelGroup>
                     <h:panelGroup styleClass="post_topic_button_container">
-                        <img id="post_topic_icon" src="/resources/images/green-plus.png"/>
+                        <img id="post_topic_icon" src="/resources/common/images/green-plus.png"/>
                         <span class="post_topic_label">#{localeBean.getString('Postar')}</span>
                     </h:panelGroup>
                     <h:commandLink styleClass="submit" action="#{createTopicBean.createTopic()}">
                         <f:ajax execute="@form" />
                     </h:commandLink>
                     <h:link styleClass="back_button_container" outcome="/theme/theme.xhtml?id=#{createTopicBean.theme.id}"> 
-                        <img id="back_button_icon" src="/resources/images/back.png"/>
+                        <img id="back_button_icon" src="/resources/common/images/back.png"/>
                         <span class="back_button_label">#{localeBean.getString('Voltar')}</span>
                     </h:link>
                     <span class="clear"/>

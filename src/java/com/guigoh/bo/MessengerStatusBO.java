@@ -4,9 +4,9 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.MessengerStatusJpaController;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import com.ipti.guigoh.model.entity.MessengerStatus;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerStatusJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.entity.MessengerStatus;
 import java.io.Serializable;
 
 /**

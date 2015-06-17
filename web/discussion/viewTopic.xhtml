@@ -1,4 +1,4 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -6,10 +6,10 @@
     <ui:param name="theme" value="#{viewTopicBean.discussionTopic.themeId.name}"/>
     <ui:define name="title">#{localeBean.getString(theme)} - #{viewTopicBean.discussionTopic.title}</ui:define>
     <ui:define name="scripts">
-        <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
-        <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/css/viewTopic.css"></link>
-        <script type="text/javascript" src="/resources/js/viewTopic.js"></script>
+        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
+        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"></script>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/viewTopic.css"></link>
+        <script type="text/javascript" src="/resources/common/js/viewTopic.js"></script>
     </ui:define>
     <ui:define name="content">
         <f:metadata>
@@ -88,7 +88,7 @@
                     </h:inputTextarea>
                 </h:panelGroup>
                 <h:panelGroup styleClass="reply_message_container">
-                    <img id="reply_message_icon" src="/resources/images/green-plus.png"/>
+                    <img id="reply_message_icon" src="/resources/common/images/green-plus.png"/>
                     <span class="reply_message_label">#{localeBean.getString('Postar')}</span>
                 </h:panelGroup>
                 <h:commandLink styleClass="submit" action="#{viewTopicBean.replyTopic()}">

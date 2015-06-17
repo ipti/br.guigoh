@@ -1,4 +1,4 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -6,15 +6,15 @@
     <ui:define name="title">#{localeBean.getString("Complete seu cadastro")}</ui:define>
     <ui:define name="scripts">
         <link rel="shortcut icon" href="img/favicon.ico"></link>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/wizard.css"></link>
-        <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
-        <link rel="stylesheet" href="/resources/css/jquery-multiselect-2.0.css" />
-        <script src="/resources/js/jquery-1.9.1.js"></script>
-        <script src="/resources/js/jquery-ui-1.10.1.custom.js"></script>
-        <script src="/resources/js/jquery.mask.js"></script>
-        <script src="/resources/js/jquery-multiselect-2.0.js"></script>
-        <script src="/resources/js/jquery-multiselect-2_pt.js"></script>
-        <script src="/resources/js/jquery-multiselect-2_fr.js"></script>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/wizard.css"></link>
+        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
+        <link rel="stylesheet" href="/resources/lib/css/jquery-multiselect-2.0.css" />
+        <script src="/resources/lib/js/jquery-1.9.1.js"></script>
+        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"></script>
+        <script src="/resources/lib/js/jquery.mask.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2.0.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2_pt.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2_fr.js"></script>
         <script type="text/javascript">
             var books = #{wizardProfileBean.books};
             var musics = #{wizardProfileBean.musics};
@@ -50,7 +50,7 @@
         </style>
     </ui:define>
     <ui:define name="content">
-        <script type="text/javascript" src="/resources/js/wizard.js"></script>
+        <script type="text/javascript" src="/resources/common/js/wizard.js"></script>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{wizardProfileBean.init()}"/>
         </f:metadata>

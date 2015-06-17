@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.ExperiencesLocationJpaController;
-import com.ipti.guigoh.model.entity.ExperiencesLocation;
+import br.org.ipti.guigoh.model.jpa.controller.ExperiencesLocationJpaController;
+import br.org.ipti.guigoh.model.entity.ExperiencesLocation;
 import java.io.Serializable;
 import java.util.List;
 

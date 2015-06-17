@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.RoleJpaController;
-import com.ipti.guigoh.model.entity.Role;
+import br.org.ipti.guigoh.model.jpa.controller.RoleJpaController;
+import br.org.ipti.guigoh.model.entity.Role;
 import java.io.Serializable;
 import java.util.List;
 

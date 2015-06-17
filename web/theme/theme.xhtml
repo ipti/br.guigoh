@@ -1,4 +1,4 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -7,9 +7,9 @@
     <ui:param name="themeName" value="#{themeBean.interest.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
     <ui:define name="content">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/theme.css"></link>
-        <script type="text/javascript" src="/resources/js/theme.js"></script>
-        <script type="text/javascript" src="/resources/js/jquery.twbsPagination.js"></script>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/theme.css"></link>
+        <script type="text/javascript" src="/resources/common/js/theme.js"></script>
+        <script type="text/javascript" src="/resources/lib/js/jquery.twbsPagination.js"></script>
         <f:metadata>
             <f:viewParam name="id" value="#{themeBean.themeID}"/>
             <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
@@ -30,7 +30,7 @@
                     <h:panelGroup styleClass="discussion_topics_box">
                         <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
                         <h:link styleClass="create_topic_container" outcome="/discussion/createTopic.xhtml?id=#{themeBean.themeID}">
-                            <img id="create_topic_plus" src="/resources/images/green-plus.png"/>
+                            <img id="create_topic_plus" src="/resources/common/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
@@ -61,7 +61,7 @@
                     <h:panelGroup styleClass="publication_objects_box">
                         <h:outputText styleClass="publication_objects_title" value="#{localeBean.getString('Objetos educacionais').toUpperCase()}"></h:outputText>
                         <a class="publish_new_object_container" href="/educational-object/submitForm.xhtml">
-                            <img id="publish_new_object_lamp" src="/resources/images/lamp.png"/>
+                            <img id="publish_new_object_lamp" src="/resources/common/images/lamp.png"/>
                             <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                         </a>
                         <h:panelGroup styleClass="publication_objects">

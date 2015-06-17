@@ -1,15 +1,15 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}</ui:define>
     <ui:define name="content">
-        <link rel="stylesheet" href="../resources/css/submitForm.css" />
-        <script src="/resources/js/jquery.mask.js"/>
-        <script src="/resources/js/submitForm.js"/>
-        <link rel="stylesheet" href="../resources/css/jquery-ui-progressbar.css"/>
-        <script src="/resources/js/jquery-ui.js"/>
+        <link rel="stylesheet" href="../resources/common/css/submitForm.css" />
+        <script src="/resources/lib/js/jquery.mask.js"/>
+        <script src="/resources/common/js/submitForm.js"/>
+        <link rel="stylesheet" href="../resources/lib/css/jquery-ui-progressbar.css"/>
+        <script src="/resources/lib/js/jquery-ui.js"/>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
@@ -76,7 +76,7 @@
                             <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
                         </h:panelGrid>
                         <h:panelGroup styleClass="button_author_add" >
-                            <img id="button_add_icon" src="/resources/images/green-plus.png"/>
+                            <img id="button_add_icon" src="/resources/common/images/green-plus.png"/>
                             <span class="button_add_label">#{localeBean.getString('Adicionar')}</span>
                         </h:panelGroup>
                         <h:commandLink styleClass="add">
@@ -102,7 +102,7 @@
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, jpeg, png e gif.')}"/>
                             <h:outputText styleClass="educational_object_image_warning" value="#{localeBean.getString('Insira uma imagem para o Objeto Educacional.')}"/>
                             <h:outputText styleClass="educational_object_image_type_warning" value="#{localeBean.getString('A imagem deve ser do tipo bmp, jpg, jpeg, png ou gif.')}"/>
-                            <h:graphicImage id="selectImage" value="/resources/images/ico_attach_resp.png"/>
+                            <h:graphicImage id="selectImage" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}"/>
                         </h:panelGroup>
@@ -114,15 +114,15 @@
                             <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: jpg, jpeg, png, gif, bmp, mp3, wav, wma, mp4, avi, mpeg, wmv, ogg, webM, swf, pdf, doc, docx e txt.')}"/>
                             <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
                             <h:outputText styleClass="educational_object_media_type_warning" value="#{localeBean.getString('As mídias devem ser dos tipos especificados acima.')}"/>
-                            <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>
                             <br/>
-                            <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{submitFormBean.mediaFile2}"/>
                             <br/>
-                            <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/images/ico_attach_resp.png"/>
+                            <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
                             <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{submitFormBean.mediaFile3}"/>
                         </h:panelGroup>
@@ -132,8 +132,8 @@
                             <h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
                             <div id="upload_progress_box">
                                 <!--<h:panelGroup id="uploaded1" styleClass="uploaded">-->
-                                    <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                    <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                    <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                    <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
                                     <!--<h:panelGroup>-->
                                         <!--<span id="uploaded_file1" class="uploaded_file"/>-->
                                         <div id="progressbar">
@@ -149,8 +149,8 @@
                                     <!--</h:panelGroup>-->
                                 <!--</h:panelGroup>-->
                                 <!--                                <h:panelGroup id="uploaded2" styleClass="uploaded">
-                                                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
                                                                     <h:panelGroup>
                                                                         <span id="uploaded_file2" class="uploaded_file"/>
                                                                         <div id="upload_bar2" class="upload_progress_bar">
@@ -161,8 +161,8 @@
                                                                     </h:panelGroup>
                                                                 </h:panelGroup>
                                                                 <h:panelGroup id="uploaded3" styleClass="uploaded">
-                                                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/images/loading.gif"/>
-                                                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/images/ico_attach.png"/>
+                                                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
                                                                     <h:panelGroup>
                                                                         <span id="uploaded_file3" class="uploaded_file"/>
                                                                         <div id="upload_bar3" class="upload_progress_bar">
@@ -180,11 +180,11 @@
                             <h:outputText styleClass="educational_object_review" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
                             <h:outputText styleClass="educational_object_review_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
                             <a class="publish_new_object_container" href="/educational-object/submitForm.xhtml">
-                                <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
+                                <img id="publish_new_object_lamp" src="../resources/common/images/lamp.png"/>
                                 <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
                             </a>
                             <a class="back_to_home_container" href="/home.xhtml">
-                                <img id="back_to_home" src="../resources/images/lamp.png"/>
+                                <img id="back_to_home" src="../resources/common/images/lamp.png"/>
                                 <span class="back_to_home_label">#{localeBean.getString('Voltar à pagina inicial')}</span>
                             </a>
                         </h:panelGroup>
@@ -192,7 +192,7 @@
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
                     <h:link styleClass="button_cancel" outcome="/educational-object/publishEnvironment.xhtml">
-                        <img id="button_cancel_icon" src="/resources/images/cross.png"/>
+                        <img id="button_cancel_icon" src="/resources/common/images/cross.png"/>
                         <span class="button_cancel_label">#{localeBean.getString('Cancelar')}</span>
                     </h:link>
                     <h:panelGroup styleClass="page_progress_bar">
@@ -202,23 +202,23 @@
                         </span>
                     </h:panelGroup>
                     <span class="button_next">
-                        <img id="button_next_icon" src="/resources/images/forward.png"/>
+                        <img id="button_next_icon" src="/resources/common/images/forward.png"/>
                         <span class="button_next_label">#{localeBean.getString('Avançar')}</span>
                     </span>
                     <h:panelGroup styleClass="button_submit">
-                        <img id="button_submit_icon" src="/resources/images/green-plus.png"/>
+                        <img id="button_submit_icon" src="/resources/common/images/green-plus.png"/>
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
                     <h:commandLink id="submit" styleClass="submit">
                         <f:ajax execute="@form" listener="#{submitFormBean.submitForm()}"/>
                     </h:commandLink>
                     <span class="button_back">
-                        <img id="button_back_icon" src="/resources/images/back.png"/>
+                        <img id="button_back_icon" src="/resources/common/images/back.png"/>
                         <span class="button_back_label">#{localeBean.getString('Voltar')}</span>
                     </span>
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        <!--<script type="text/javascript" src="../resources/js/submitForm.js"/>-->
+        <!--<script type="text/javascript" src="../resources/common/js/submitForm.js"/>-->
     </ui:define>
 </ui:composition>

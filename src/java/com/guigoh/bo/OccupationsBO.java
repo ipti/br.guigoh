@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
-import com.ipti.guigoh.model.entity.Occupations;
+import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
+import br.org.ipti.guigoh.model.entity.Occupations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

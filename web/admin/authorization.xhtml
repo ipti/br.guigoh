@@ -1,12 +1,12 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString("Autorização")}</ui:define>
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/js/authorization.js"></script>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/authorization.css"></link>
+        <script type="text/javascript" src="/resources/common/js/authorization.js"></script>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/authorization.css"></link>
     </ui:define>
     <ui:define name="content">
         <f:metadata>

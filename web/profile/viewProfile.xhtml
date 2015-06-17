@@ -1,4 +1,4 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -6,17 +6,17 @@
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
     <ui:define name="content">
         <link rel="shortcut icon" href="img/favicon.ico"/>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/wizard.css"/>
-        <link rel="stylesheet" href="/resources/css/jquery-ui.css" />
-        <link rel="stylesheet" href="/resources/css/jquery-multiselect-2.0.css" />
-        <script src="/resources/js/jquery-ui-1.10.1.custom.js"/>
-        <script src="/resources/js/jquery.mask.js"/>
-        <script src="/resources/js/jquery-multiselect-2.0.js"/>
-        <script src="/resources/js/jquery-multiselect-2_pt.js"/>
-        <script src="/resources/js/jquery-multiselect-2_fr.js"/>
-        <script type="text/javascript" src="/resources/js/profile.js"/>
-        <script type="text/javascript" src="/resources/js/wizard.js"/>
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/css/profile.css"/>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/wizard.css"/>
+        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
+        <link rel="stylesheet" href="/resources/lib/css/jquery-multiselect-2.0.css" />
+        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"/>
+        <script src="/resources/lib/js/jquery.mask.js"/>
+        <script src="/resources/lib/js/jquery-multiselect-2.0.js"/>
+        <script src="/resources/lib/js/jquery-multiselect-2_pt.js"/>
+        <script src="/resources/lib/js/jquery-multiselect-2_fr.js"/>
+        <script type="text/javascript" src="/resources/common/js/profile.js"/>
+        <script type="text/javascript" src="/resources/common/js/wizard.js"/>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/profile.css"/>
         <script type="text/javascript">
             var books = #{profileBean.wizardProfileBean.books};
             var musics = #{profileBean.wizardProfileBean.musics};

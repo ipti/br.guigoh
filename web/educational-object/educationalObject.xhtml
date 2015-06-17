@@ -1,13 +1,13 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')} - #{educationalObjectBean.educationalObject.name}</ui:define>
     <ui:define name="content">
-        <script type="text/javascript" src="../resources/js/educationalObject.js"/>
-        <link rel="stylesheet" href="../resources/css/educationalObject.css"/>
-        <link rel="stylesheet" href="../resources/css/jquery.wysiwyg.css" type="text/css" />
+        <script type="text/javascript" src="../resources/common/js/educationalObject.js"/>
+        <link rel="stylesheet" href="../resources/common/css/educationalObject.css"/>
+        <link rel="stylesheet" href="../resources/lib/css/jquery.wysiwyg.css" type="text/css" />
         <f:metadata>
             <f:viewParam name="id" value="#{educationalObjectBean.educationalObjectID}"/>
             <f:event type="preRenderComponent" listener="#{educationalObjectBean.init()}"/>

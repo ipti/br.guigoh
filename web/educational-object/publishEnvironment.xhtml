@@ -1,12 +1,12 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')}</ui:define>
     <ui:define name="content">
-        <script type="text/javascript" src="../resources/js/publishEnvironment.js"/>
-        <link rel="stylesheet" href="../resources/css/publishEnvironment.css" />
+        <script type="text/javascript" src="../resources/common/js/publishEnvironment.js"/>
+        <link rel="stylesheet" href="../resources/common/css/publishEnvironment.css" />
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{publishEnvironmentBean.init()}"/>
         </f:metadata>
@@ -44,19 +44,19 @@
                     <div id="wrap-left">
                         <div id="passoapasso">
                             <div class="passo1">
-                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
                                 <span class="txt-pp">#{localeBean.getString('Preencher o formulário de registro de Objetos Educacionais')}</span>
-                                <img src="../resources/images/seta_pp.png" class="figuras" alt="seta" />
+                                <img src="../resources/common/images/seta_pp.png" class="figuras" alt="seta" />
                             </div>
                             <div class="passo2">
-                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
                                 <span class="txt-pp">#{localeBean.getString('Aguardar a leitura das informações pela equipe de revisores')}</span>
-                                <img src="../resources/images/oculos_pp1.png" class="figuras" alt="oculos" />
+                                <img src="../resources/common/images/oculos_pp1.png" class="figuras" alt="oculos" />
                             </div>
                             <div class="passo3">
-                                <img src="../resources/images/pixel.png" class="img-passo" alt="pixel" />
+                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
                                 <span class="txt-pp">#{localeBean.getString('Sua experiência será publicada pelo administrador do Espaço')}</span>
-                                <img src="../resources/images/ts_pp.png" class="figuras" alt="imagem ts" />
+                                <img src="../resources/common/images/ts_pp.png" class="figuras" alt="imagem ts" />
                             </div>
                         </div>
                         <h2><a id="register_educational_object" href="submitForm.xhtml">#{localeBean.getString('Publicar')}</a> #{localeBean.getString('um Objeto Educacional.')}</h2>

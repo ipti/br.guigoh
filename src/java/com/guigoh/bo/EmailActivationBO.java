@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.EmailActivationJpaController;
-import com.ipti.guigoh.model.entity.EmailActivation;
+import br.org.ipti.guigoh.model.jpa.controller.EmailActivationJpaController;
+import br.org.ipti.guigoh.model.entity.EmailActivation;
 import java.io.Serializable;
 
 /**

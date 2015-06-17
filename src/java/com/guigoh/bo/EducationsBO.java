@@ -4,10 +4,10 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.EducationsJpaController;
-import com.ipti.guigoh.model.entity.Educations;
-import com.ipti.guigoh.model.entity.EducationsName;
-import com.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsJpaController;
+import br.org.ipti.guigoh.model.entity.Educations;
+import br.org.ipti.guigoh.model.entity.EducationsName;
+import br.org.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 

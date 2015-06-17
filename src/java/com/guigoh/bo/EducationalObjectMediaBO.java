@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
-import com.ipti.guigoh.model.entity.EducationalObjectMedia;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
+import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import java.io.Serializable;
 import java.util.List;
 

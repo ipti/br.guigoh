@@ -8,8 +8,8 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>#{localeBean.getString('Cadastro de usuário')}</title>
-        <link rel="shortcut icon" href="/resources/images/guigoh.png"></link>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/register.css"></link>
+        <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/register.css"></link>
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
@@ -23,13 +23,13 @@
                             <ui:param name="url" value="#{request.servletPath}"/>
                             <h:panelGrid styleClass="localeLogon" columns="3">
                                 <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
-                                    <h:graphicImage  value="/resources/images/ptBR.gif" />
+                                    <h:graphicImage  value="/resources/common/images/ptBR.gif" />
                                 </h:commandLink>
                                 <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
-                                    <h:graphicImage  value="/resources/images/enUS.png" />
+                                    <h:graphicImage  value="/resources/common/images/enUS.png" />
                                 </h:commandLink>
                                 <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
-                                    <h:graphicImage  value="/resources/images/frFR.png" />
+                                    <h:graphicImage  value="/resources/common/images/frFR.png" />
                                 </h:commandLink>
                             </h:panelGrid>
                         </h:form>
@@ -145,11 +145,11 @@
 
                         <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
                             <f:ajax event="action" execute="@form" render="@form"/>
-                            <img id="button_save_icon" src="/resources/images/green-plus.png"/>
+                            <img id="button_save_icon" src="/resources/common/images/green-plus.png"/>
                             <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
                         </h:commandLink>
                         <h:link outcome="/auth/login.xhtml" styleClass="button_back" id="button_back">
-                            <img id="back_button_icon" src="/resources/images/back.png"/>
+                            <img id="back_button_icon" src="/resources/common/images/back.png"/>
                             <font class="back_button_label">#{localeBean.getString('Retornar')}</font>
                         </h:link>
                     </h:form>

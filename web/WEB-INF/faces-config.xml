@@ -7,7 +7,7 @@
 
     <application></application>   
     <lifecycle>
-        <phase-listener>com.ipti.guigoh.controller.listener.AuthorizeListener</phase-listener>
+        <phase-listener>br.org.ipti.guigoh.controller.listener.AuthorizeListener</phase-listener>
     </lifecycle>
 
     <navigation-rule>

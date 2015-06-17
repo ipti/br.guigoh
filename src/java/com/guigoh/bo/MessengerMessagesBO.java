@@ -4,11 +4,11 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
-import com.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import com.ipti.guigoh.model.entity.MessengerMessages;
-import com.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.entity.MessengerMessages;
+import br.org.ipti.guigoh.model.entity.SocialProfile;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;

@@ -4,8 +4,8 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
-import com.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

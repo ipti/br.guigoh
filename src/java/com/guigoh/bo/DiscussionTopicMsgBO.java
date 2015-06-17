@@ -4,9 +4,9 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.DiscussionTopicMsgJpaController;
-import com.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import com.ipti.guigoh.model.entity.DiscussionTopicMsg;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicMsgJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;

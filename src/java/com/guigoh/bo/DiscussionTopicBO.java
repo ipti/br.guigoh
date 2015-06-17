@@ -4,9 +4,9 @@
  */
 package com.guigoh.bo;
 
-import com.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
-import com.ipti.guigoh.model.entity.DiscussionTopic;
-import com.ipti.guigoh.model.entity.NewActivity;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import br.org.ipti.guigoh.model.entity.DiscussionTopic;
+import br.org.ipti.guigoh.model.entity.NewActivity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;

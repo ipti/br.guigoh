@@ -15,7 +15,7 @@
         <init-param>
             <description>Multiple packages, separated by semicolon(;), can be specified in param-value</description>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>com.ipti.guigoh.controller.service</param-value>
+            <param-value>br.org.ipti.guigoh.controller.service</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

@@ -1,15 +1,15 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Início')}</ui:define>
     <ui:define name="content">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/home.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/home.css"></link>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
         </f:metadata>
-        <script type="text/javascript" src="/resources/js/home.js"></script>
+        <script type="text/javascript" src="/resources/common/js/home.js"></script>
         <h:form prependId="false">
             <h:outputText styleClass="home_title" value="#{localeBean.getString('Início')}"></h:outputText>
             <div class="home_box">
@@ -20,7 +20,7 @@
                     <h:panelGroup styleClass="interest_themes">
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
                             <h:link styleClass="interest_theme" outcome="/theme/theme.xhtml?id=#{theme.id}">
-                                <h:outputText styleClass="theme_icon" style="background:url('../resources/images/themes/#{homeBean.getMD5(theme.name)}.png')"></h:outputText>
+                                <h:outputText styleClass="theme_icon" style="background:url('../resources/common/images/themes/#{homeBean.getMD5(theme.name)}.png')"></h:outputText>
                                 <h:outputText styleClass="theme_label" value="#{localeBean.getString(theme.name)}"></h:outputText>
                             </h:link>
                         </ui:repeat>
@@ -29,7 +29,7 @@
                 <h:panelGroup id="middle_column" styleClass="middle_column">
                     <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('Últimos objetos educacionais publicados').toUpperCase()}"/>
                     <a class="publish_new_object_container" href="/educational-object/submitForm.xhtml">
-                        <img id="publish_new_object_lamp" src="../resources/images/lamp.png"/>
+                        <img id="publish_new_object_lamp" src="../resources/common/images/lamp.png"/>
                         <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                     </a>
                     <div id="list_objects" class="list_objects">

@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+    </h:head>
+    <f:metadata>
+        <f:event type="preRenderComponent" listener="#{headerBean.init()}"/>
+    </f:metadata>
+    <h:form>
+        <body>
+            <div id="general">
+                <div id="menu">
+                    <ul class="top_menu">
+                        <h:panelGroup styleClass="logoutContainer">
+                            <h:outputText styleClass="registered_users_quantity" rendered="#{headerBean.admin}" value="#{headerBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')} | #{headerBean.registeredUsersOnline} #{localeBean.getString('online')} |"></h:outputText>
+                            <!--<li class="first"><a href="/">Administrador</a></li>
+                            <li ><span></span><a href="/">Idioma</a></li>
+                            <li ><span></span><a href="/">Reportar Erros</a></li>
+                            <li ><span></span><a href="/">Sobre</a></li>
+                            <li ><span></span><a href="/">Ajuda</a></li>-->
+                            <li class="first"><h:commandLink action="/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></li>
+                            <li class="first"><h:commandLink action="#{authBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
+                        </h:panelGroup>
+                        <ui:param name="url" value="#{request.servletPath}"/>
+                        <h:panelGrid styleClass="localeLogon" columns="3">
+                            <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
+                                <h:graphicImage  value="/resources/common/images/ptBR.gif" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
+                                <h:graphicImage  value="/resources/common/images/enUS.png" />
+                            </h:commandLink>
+                            <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
+                                <h:graphicImage  value="/resources/common/images/frFR.png" />
+                            </h:commandLink>
+                        </h:panelGrid>
+
+                    </ul>
+                    <div class="mid_menu">
+                        <a href="/"><span class="img_logo"></span></a>
+                        <ul>
+                            <li class="menu home" ><a href="/home.xhtml">#{localeBean.getString('Início')}</a></li>
+                            <li class="menu profile" ><a href="/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Perfil')}</a></li>
+                            <li class="menu contacts" ><a href="/friends/viewFriends.xhtml">#{localeBean.getString('Contatos')}</a></li>
+                            <li class="menu environment" ><a href="/educational-object/publishEnvironment.xhtml">#{localeBean.getString('Ambiente de Publicação')}</a></li>   
+                        </ul>
+                        <div class="log_menu">
+                            <p class="welcome">#{localeBean.getString('Bem-vindo')},</p>
+                            <a id="user_name" href="/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a>
+                            <a href="/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}"><img src="#{headerBean.socialProfile.photo}" class="img_avatar"/></a>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </body>
+    </h:form>
+</html>

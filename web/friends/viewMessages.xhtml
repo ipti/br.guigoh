@@ -1,11 +1,11 @@
-<ui:composition template="/resources/themes/default/template.xhtml" 
+<ui:composition template="/template/default/template.xhtml" 
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">Friends</ui:define>
     <ui:define name="content">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/css/messages.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/messages.css"></link>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{messagesBean.init()}"/>
         </f:metadata>
@@ -20,7 +20,7 @@
                         <div class="contacts_box_blocks">
                             <div class="contacts_box_block">
                                 <div class="contacts_block_align">
-                                    <h:commandLink class="profile_avatar" style="background:url('/resources/images/curriculum.png') no-repeat center center;background-size:77px;">
+                                    <h:commandLink class="profile_avatar" style="background:url('/resources/common/images/curriculum.png') no-repeat center center;background-size:77px;">
                                         <f:ajax event="click" execute="@this" listener="#{messagesBean.getCurriculumMessages()}" render=":form:contacts_messages"></f:ajax>
                                         <p class="name" >Solicitações de currículo</p>
                                     </h:commandLink>
