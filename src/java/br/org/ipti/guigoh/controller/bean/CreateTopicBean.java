@@ -44,7 +44,7 @@ public class CreateTopicBean implements Serializable {
     public static final char TOPIC = 'T';
     public static final char MSG = 'M';
     private DiscussionTopic discussionTopic;
-    private List<Tags> tags;
+    private List<Tags> tagList;
     private Integer themeID;
     private Users user;
     private SocialProfile socialProfile;
@@ -52,12 +52,12 @@ public class CreateTopicBean implements Serializable {
     private Tags tag;
     private String tagInput;
     private transient Part fileMedia;
-    private transient List<Part> fileList; 
+    private transient List<Part> fileList;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             discussionTopic = new DiscussionTopic();
-            tags = new ArrayList<>();
+            tagList = new ArrayList<>();
             tag = new Tags();
             tagInput = "";
             user = new Users();
@@ -74,13 +74,21 @@ public class CreateTopicBean implements Serializable {
     }
 
     public void addTag() throws UnsupportedEncodingException {
-        if (tags.size() < 3) {
+        if (tagList.size() < 3) {
             tagInput = new String(tagInput.getBytes("ISO-8859-1"), "UTF-8");
             if (!tagInput.equals("")) {
-                tag.setName(tagInput);
-                tags.add(tag);
-                tag = new Tags();
-                tagInput = "";
+                boolean exists = false;
+                for (Tags t : tagList) {
+                    if (t.getName().equals(tagInput)) {
+                        exists = true;
+                    }
+                }
+                if (!exists) {
+                    tag.setName(tagInput);
+                    tagList.add(tag);
+                    tag = new Tags();
+                    tagInput = "";
+                }
             }
         }
     }
@@ -92,7 +100,7 @@ public class CreateTopicBean implements Serializable {
             }
         }
     }
-    
+
     public void removeMedia(Part media) {
         fileList.remove(media);
     }
@@ -108,9 +116,14 @@ public class CreateTopicBean implements Serializable {
             discussionTopic.setThemeId(theme);
             DiscussionTopicBO.create(discussionTopic);
             TagsJpaController tagsJpaController = new TagsJpaController();
-            for (Tags t : tags) {
-                tagsJpaController.create(t);
-                tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
+            for (Tags t : tagList) {
+                Tags tag = tagsJpaController.findTagByName(t.getName());
+                if (tag == null) {
+                    tagsJpaController.create(t);
+                    tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
+                } else {
+                    tagsJpaController.createTagsDiscussionTopic(tag, discussionTopic);
+                }
             }
             if (!fileList.isEmpty()) {
                 for (Part part : fileList) {
@@ -118,7 +131,7 @@ public class CreateTopicBean implements Serializable {
                     UploadService.uploadFile(part, filePath);
                     DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                     String[] fileSplit = part.getSubmittedFileName().split("\\.");
-                    discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
+                    discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
                     discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
                     discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
@@ -127,7 +140,7 @@ public class CreateTopicBean implements Serializable {
                 }
             }
             discussionTopic = new DiscussionTopic();
-            tags = new ArrayList<>();
+            tagList = new ArrayList<>();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/theme/theme.xhtml?id=" + themeID);
         } catch (IOException e) {
         }
@@ -174,11 +187,11 @@ public class CreateTopicBean implements Serializable {
     }
 
     public List<Tags> getTags() {
-        return tags;
+        return tagList;
     }
 
-    public void setTags(List<Tags> tags) {
-        this.tags = tags;
+    public void setTags(List<Tags> tagList) {
+        this.tagList = tagList;
     }
 
     public Tags getTag() {
@@ -213,5 +226,4 @@ public class CreateTopicBean implements Serializable {
         this.tagInput = tagInput;
     }
 
-    
 }

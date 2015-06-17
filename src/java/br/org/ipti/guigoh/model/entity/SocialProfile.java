@@ -91,7 +91,7 @@ public class SocialProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "social_profile_id")
     private int socialProfileId;
-    @Size(max = 500)
+    @Size(max = 100)
     @Column(name = "photo")
     private String photo;
     @Size(max = 20)

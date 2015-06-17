@@ -240,19 +240,13 @@ public class TagsJpaController implements Serializable {
         }
     }
     
-    public Tags findTagsByName(String tags) {
+    public Tags findTagByName(String tags) {
         EntityManager em = getEntityManager();
         try {
-            if (tags.equals("") || tags == null) {
-                return new Tags();
-            }
             String ttemp = tags.toUpperCase().replaceAll(" ", "");
-            List<Tags> tagstemp = (List<Tags>) em.createNativeQuery("select * from tags "
-                    + "where UPPER(regexp_replace(name,'\\s*', '', 'g')) like '" + ttemp + "' ", Tags.class).getResultList();
-            if (tagstemp.isEmpty()) {
-                return new Tags();
-            }
-            return tagstemp.get(0);
+            Tags tag = (Tags) em.createNativeQuery("select * from tags "
+                    + "where UPPER(regexp_replace(name,'\\s*', '', 'g')) like '" + ttemp + "' ", Tags.class).getSingleResult();
+            return tag;
         } catch (NoResultException e) {
             return null;
         } finally {
