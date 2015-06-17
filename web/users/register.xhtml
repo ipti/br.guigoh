@@ -8,8 +8,10 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>#{localeBean.getString('Cadastro de usuário')}</title>
-        <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
+        <!-- BEGIN PAGE STYLES -->
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/register.css"></link>
+        <!-- END PAGE STYLES -->
+        <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
@@ -163,5 +165,9 @@
                 <span class="powered_guigoh">Powered by</span>
             </ul>
         </div>
+        
+        <!-- BEGIN PAGE SCRIPTS -->
+        
+        <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>

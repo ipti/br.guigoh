@@ -7,14 +7,10 @@
     <f:view contentType="text/html"/>
     <h:head>
         <title>Login</title>
+        <!-- BEGIN PAGE STYLES -->
         <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/login.css"></link>
+        <!-- END PAGE STYLES -->
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
-        <script type="text/javascript">  
-            if(navigator.appName=='Microsoft Internet Explorer')
-            {
-                window.location = '/resources/notsupported.htm';
-            }
-        </script> 
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{authBean.init()}"/>
@@ -73,21 +69,21 @@
                                 <f:ajax execute="@this" render="@form" />
                             </h:commandButton>
                         </h:panelGroup>
-                        
+
                         <h:panelGroup id="pending_panel" rendered="#{authBean.loginStatus.equals('pending')}">
                             <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
                             <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandButton>
                         </h:panelGroup>
-                        
+
                         <h:panelGroup id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
                             <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
                             <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
                                 <f:ajax execute="@this" render="@form"/>
                             </h:commandButton>
                         </h:panelGroup>
-                        
+
                         <h:panelGroup id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
                             <font class="open_name">#{localeBean.getString('Digite o e-mail de acesso ao Guigoh')}</font>
                             <h:messages styleClass="msg"/>
@@ -177,6 +173,14 @@
             </ul>
             <span class="clear"></span> 
         </div>
-
+        
+        <!-- BEGIN PAGE SCRIPTS -->
+        <script type="text/javascript">
+            if (navigator.appName == 'Microsoft Internet Explorer')
+            {
+                window.location = '/resources/notsupported.htm';
+            }
+        </script> 
+        <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>

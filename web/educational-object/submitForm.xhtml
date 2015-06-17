@@ -4,12 +4,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}</ui:define>
-    <ui:define name="content">
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link rel="stylesheet" href="../resources/common/css/submitForm.css" />
-        <script src="/resources/lib/js/jquery.mask.js"/>
-        <script src="/resources/common/js/submitForm.js"/>
         <link rel="stylesheet" href="../resources/lib/css/jquery-ui-progressbar.css"/>
-        <script src="/resources/lib/js/jquery-ui.js"/>
+    </ui:define>
+    <!-- END PAGE STYLES -->
+    <ui:define name="content">
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
         </f:metadata>
@@ -219,6 +220,12 @@
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        <!--<script type="text/javascript" src="../resources/common/js/submitForm.js"/>-->
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script src="/resources/lib/js/jquery.mask.js"/>
+        <script src="/resources/lib/js/jquery-ui.js"/>
+        <script src="/resources/common/js/submitForm.js"/>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

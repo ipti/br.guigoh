@@ -6,13 +6,11 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:param name="theme" value="#{createTopicBean.theme.name}"/>
     <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
-    <ui:define name="scripts">
-        <script src="/resources/lib/js/jquery-1.9.1.js"></script>
-        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"></script>
-        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/createTopic.css"></link>
-        <script type="text/javascript" src="/resources/common/js/createTopic.js"></script>
     </ui:define>
+    <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
             <f:viewParam name="id" value="#{createTopicBean.themeID}"/>
@@ -78,4 +76,9 @@
             </h:panelGroup>
         </h:form>
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/common/js/createTopic.js"></script>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

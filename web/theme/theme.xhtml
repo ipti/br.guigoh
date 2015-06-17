@@ -6,10 +6,12 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:param name="themeName" value="#{themeBean.interest.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
-    <ui:define name="content">
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/theme.css"></link>
-        <script type="text/javascript" src="/resources/common/js/theme.js"></script>
-        <script type="text/javascript" src="/resources/lib/js/jquery.twbsPagination.js"></script>
+    </ui:define>
+    <!-- END PAGE STYLES -->
+    <ui:define name="content">
         <f:metadata>
             <f:viewParam name="id" value="#{themeBean.themeID}"/>
             <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
@@ -92,4 +94,10 @@
             </h:panelGroup>
         </h:form>
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/common/js/theme.js"></script>
+        <script type="text/javascript" src="/resources/lib/js/jquery.twbsPagination.js"></script>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -4,9 +4,12 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')}</ui:define>
-    <ui:define name="content">
-        <script type="text/javascript" src="../resources/common/js/publishEnvironment.js"/>
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link rel="stylesheet" href="../resources/common/css/publishEnvironment.css" />
+    </ui:define>
+    <!-- END PAGE STYLES -->
+    <ui:define name="content">
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{publishEnvironmentBean.init()}"/>
         </f:metadata>
@@ -75,4 +78,9 @@
             </div>
         </h:form>
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="../resources/common/js/publishEnvironment.js"/>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

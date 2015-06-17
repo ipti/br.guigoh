@@ -5,12 +5,11 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:param name="theme" value="#{viewTopicBean.discussionTopic.themeId.name}"/>
     <ui:define name="title">#{localeBean.getString(theme)} - #{viewTopicBean.discussionTopic.title}</ui:define>
-    <ui:define name="scripts">
-        <link rel="stylesheet" href="/resources/lib/css/jquery-ui.css" />
-        <script src="/resources/lib/js/jquery-ui-1.10.1.custom.js"></script>
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/viewTopic.css"></link>
-        <script type="text/javascript" src="/resources/common/js/viewTopic.js"></script>
     </ui:define>
+    <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
             <f:viewParam name="id" value="#{viewTopicBean.discussionTopicID}"/>
@@ -112,4 +111,9 @@
             </h:panelGroup>
         </h:form>
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/common/js/viewTopic.js"></script>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

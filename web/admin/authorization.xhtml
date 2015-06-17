@@ -4,10 +4,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString("Autorização")}</ui:define>
-    <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/authorization.js"></script>
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/authorization.css"></link>
     </ui:define>
+    <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{adminBean.init()}"/>
@@ -139,6 +140,10 @@
                 </div>
             </div>
         </h:form>
-
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/common/js/authorization.js"></script>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>

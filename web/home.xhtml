@@ -4,12 +4,15 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="title">#{localeBean.getString('Início')}</ui:define>
-    <ui:define name="content">
+    <!-- BEGIN PAGE STYLES -->
+    <ui:define name="styles">
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/home.css"></link>
+    </ui:define>
+    <!-- END PAGE STYLES -->
+    <ui:define name="content">
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
         </f:metadata>
-        <script type="text/javascript" src="/resources/common/js/home.js"></script>
         <h:form prependId="false">
             <h:outputText styleClass="home_title" value="#{localeBean.getString('Início')}"></h:outputText>
             <div class="home_box">
@@ -78,4 +81,9 @@
             </div>
         </h:form>
     </ui:define>
+    <!-- BEGIN PAGE SCRIPTS -->
+    <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/common/js/home.js"></script>
+    </ui:define>
+    <!-- END PAGE SCRIPTS -->
 </ui:composition>
