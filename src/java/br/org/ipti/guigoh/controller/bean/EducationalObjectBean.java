@@ -4,12 +4,12 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
-import com.guigoh.bo.EducationalObjectMediaBO;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
 import br.org.ipti.guigoh.util.DownloadService;
 import java.io.IOException;
 import java.io.Serializable;
@@ -44,7 +44,13 @@ public class EducationalObjectBean implements Serializable {
     }
 
     public String getMediaSize(Integer size){
-        return EducationalObjectMediaBO.getMediaSize(size);
+        double convertedSizeMB = Math.ceil((double) size/Math.pow(1024, 2)*10)/10;
+        double convertedSizeKB = Math.ceil(((double) size/1024)*10)/10;
+        if (convertedSizeMB > 1){
+            return convertedSizeMB + "MB";
+        } else {
+            return convertedSizeKB + "KB";
+        }
     }
     
     public void downloadMedia(String path, String type) throws IOException{
@@ -52,7 +58,8 @@ public class EducationalObjectBean implements Serializable {
     }
     
     private void findEducationalObject(Integer id) {
-        educationalObject = EducationalObjectBO.findEducationalObject(id);
+        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+        educationalObject = educationalObjectJpaController.findEducationalObject(id);
     }
 
     private void getAuthorsByEducationalObject(Integer educationalObjectID){
@@ -61,7 +68,8 @@ public class EducationalObjectBean implements Serializable {
     }
     
     private void getMediasByEducationalObject(Integer educationalObjectID){
-        educationalObjectMediaList = EducationalObjectMediaBO.getMediasByEducationalObject(educationalObjectID);
+        EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+        educationalObjectMediaList = educationalObjectMediaJpaController.getMediasByEducationalObject(educationalObjectID);
     }
     
     public EducationalObject getEducationalObject() {

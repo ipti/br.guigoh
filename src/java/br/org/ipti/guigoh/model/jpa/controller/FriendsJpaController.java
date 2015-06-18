@@ -17,6 +17,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import br.org.ipti.guigoh.model.entity.Users;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -247,6 +248,9 @@ public class FriendsJpaController implements Serializable {
         try {
             List<Friends> friendList = (List<Friends>) em.createNativeQuery("select * from friends "
                     + "where status = 'AC' and (token_friend_1 = '" + id + "' or token_friend_2 = '" + id + "')", Friends.class).getResultList();
+            if (friendList == null) {
+                return new ArrayList<>();
+            }
             return friendList;
         } finally {
             em.close();
@@ -259,26 +263,32 @@ public class FriendsJpaController implements Serializable {
             List<SocialProfile> onlineList = (List<SocialProfile>) em.createNativeQuery("select sp.* from messenger_status ms "
                     + "join social_profile sp on ms.social_profile_id = sp.social_profile_id "
                     + "join friends f on (sp.token_id = f.token_friend_2 or sp.token_id = f.token_friend_1) "
-                    + "where (f.token_friend_1 = '"+id+"' or f.token_friend_2 = '"+id+"') "
-                    + "and sp.token_id <> '"+id+"' "
+                    + "where (f.token_friend_1 = '" + id + "' or f.token_friend_2 = '" + id + "') "
+                    + "and sp.token_id <> '" + id + "' "
                     + "and f.status = 'AC' "
                     + "and (select round( date_part( 'epoch', now() ) )) - ms.last_ping < 90", SocialProfile.class).getResultList();
+            if (onlineList == null) {
+                return new ArrayList<>();
+            }
             return onlineList;
         } finally {
             em.close();
         }
     }
-    
+
     public List<SocialProfile> findFriendsOfflineByToken(String id) {
         EntityManager em = getEntityManager();
         try {
             List<SocialProfile> offlineList = (List<SocialProfile>) em.createNativeQuery("select sp.* from messenger_status ms "
                     + "join social_profile sp on ms.social_profile_id = sp.social_profile_id "
                     + "join friends f on (sp.token_id = f.token_friend_2 or sp.token_id = f.token_friend_1) "
-                    + "where (f.token_friend_1 = '"+id+"' or f.token_friend_2 = '"+id+"') "
-                    + "and sp.token_id <> '"+id+"' "
+                    + "where (f.token_friend_1 = '" + id + "' or f.token_friend_2 = '" + id + "') "
+                    + "and sp.token_id <> '" + id + "' "
                     + "and f.status = 'AC' "
                     + "and (select round( date_part( 'epoch', now() ) )) - ms.last_ping > 90", SocialProfile.class).getResultList();
+            if (offlineList == null) {
+                return new ArrayList<>();
+            }
             return offlineList;
         } finally {
             em.close();
@@ -288,9 +298,12 @@ public class FriendsJpaController implements Serializable {
     public List<Friends> findPendingFriendsByToken(String id) {
         EntityManager em = getEntityManager();
         try {
-            List<Friends> friendList = (List<Friends>) em.createNativeQuery("select * from friends "
+            List<Friends> pendingFriendList = (List<Friends>) em.createNativeQuery("select * from friends "
                     + "where status = 'PE' and token_friend_2 = '" + id + "'", Friends.class).getResultList();
-            return friendList;
+            if (pendingFriendList == null) {
+                return new ArrayList<>();
+            }
+            return pendingFriendList;
         } finally {
             em.close();
         }
@@ -304,6 +317,9 @@ public class FriendsJpaController implements Serializable {
                     + "where (UPPER(sp.name) like '" + str.toUpperCase() + "%') "
                     + "and f.status = 'AC' "
                     + "and (f.token_friend_1 = '" + token + "' or f.token_friend_2 = '" + token + "')", Friends.class).getResultList();
+            if (friendsList == null) {
+                return new ArrayList<>();
+            }
             return friendsList;
         } finally {
             em.close();
@@ -316,6 +332,9 @@ public class FriendsJpaController implements Serializable {
             List<SocialProfile> usersList = (List<SocialProfile>) em.createNativeQuery("select * from social_profile "
                     + "where (UPPER(name) like '" + str.toUpperCase() + "%') "
                     + "", SocialProfile.class).getResultList();
+            if (usersList == null) {
+                return new ArrayList<>();
+            }
             return usersList;
         } finally {
             em.close();
@@ -332,6 +351,90 @@ public class FriendsJpaController implements Serializable {
             query.executeUpdate();
         } finally {
             em.close();
+        }
+    }
+    
+    public void addFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
+        try {
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
+            Friends friend = new Friends();
+            friend.setStatus("PE");
+            friend.setTokenFriend1(user);
+            friend.setTokenFriend2(socialProfile.getUsers());
+            friend.setRecommenders(0);
+            create(friend);
+        } catch (Exception e) {
+        }
+    }
+
+    public void removeFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
+        try {
+            Friends friend = findFriends(user, socialProfileId);
+            destroy(friend.getFriendsPK());
+        } catch (Exception e) {
+        }
+    }
+
+    public void acceptFriend(Users user, Integer socialProfileId) throws NonexistentEntityException, RollbackFailureException, Exception {
+        try {
+            Friends friend = findFriends(user, socialProfileId);
+            friend.setStatus("AC");
+            edit(friend);
+        } catch (Exception e) {
+        }
+    }
+
+    public void recommendFriend(Users user, Integer socialProfileId, String receiverUserName, String message) throws PreexistingEntityException, RollbackFailureException, Exception {
+        try {
+            UsersJpaController usersJpaController = new UsersJpaController();
+            Users receiver = usersJpaController.findUsers(receiverUserName);
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
+            FriendsPK friendsPK = new FriendsPK();
+            friendsPK.setTokenFriend1(socialProfile.getTokenId());
+            friendsPK.setTokenFriend2(receiver.getToken());
+            Friends friend = findFriends(friendsPK);
+            if (friend == null) {
+                friend = new Friends();
+                friend.setStatus("PE");
+                friend.setTokenFriend1(socialProfile.getUsers());
+                friend.setTokenFriend2(receiver);
+                friend.setTokenRecommender(user);
+                friend.setMessage(message);
+                friend.setRecommenders(1);
+                create(friend);
+            } else {
+                friend.setRecommenders(friend.getRecommenders() + 1);
+                edit(friend);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public Friends findFriends(Users user, Integer socialProfileId) {
+        FriendsPK friendPK = new FriendsPK();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        SocialProfile contactAdded = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
+
+        friendPK.setTokenFriend1(user.getToken());
+        friendPK.setTokenFriend2(contactAdded.getTokenId());
+
+        if (user.getToken().equals(contactAdded.getTokenId())) {
+            Friends friend = new Friends();
+            friend.setTokenFriend1(user);
+            friend.setTokenFriend2(contactAdded.getUsers());
+            return friend;
+        } else if (findFriends(friendPK) == null) {
+            friendPK.setTokenFriend1(contactAdded.getTokenId());
+            friendPK.setTokenFriend2(user.getToken());
+            if (findFriends(friendPK) == null) {
+                return null;
+            } else {
+                return findFriends(friendPK);
+            }
+        } else {
+            return findFriends(friendPK);
         }
     }
 

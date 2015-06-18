@@ -4,10 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.DiscussionTopicBO;
-import com.guigoh.bo.DiscussionTopicFilesBO;
-import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
@@ -16,6 +12,10 @@ import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.io.File;
 import java.io.IOException;
@@ -53,9 +53,12 @@ public class CreateTopicBean implements Serializable {
     private String tagInput;
     private transient Part fileMedia;
     private transient List<Part> fileList;
+    private InterestsJpaController interestsJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            interestsJpaController = new InterestsJpaController();
             discussionTopic = new DiscussionTopic();
             tagList = new ArrayList<>();
             tag = new Tags();
@@ -63,8 +66,9 @@ public class CreateTopicBean implements Serializable {
             user = new Users();
             fileList = new ArrayList<>();
             getCookie();
-            socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
-            theme = InterestsBO.findInterestsByID(themeID);
+            socialProfileJpaController = new SocialProfileJpaController();
+            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+            theme = interestsJpaController.findInterestsByID(themeID);
         }
     }
 
@@ -114,7 +118,8 @@ public class CreateTopicBean implements Serializable {
             discussionTopic.setSocialProfileId(socialProfile);
             discussionTopic.setStatus(ACTIVE);
             discussionTopic.setThemeId(theme);
-            DiscussionTopicBO.create(discussionTopic);
+            DiscussionTopicJpaController discussionTopicJpaController = new DiscussionTopicJpaController();
+            discussionTopicJpaController.create(discussionTopic);
             TagsJpaController tagsJpaController = new TagsJpaController();
             for (Tags t : tagList) {
                 Tags tag = tagsJpaController.findTagByName(t.getName());
@@ -126,6 +131,7 @@ public class CreateTopicBean implements Serializable {
                 }
             }
             if (!fileList.isEmpty()) {
+                DiscussionTopicFilesJpaController discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
                 for (Part part : fileList) {
                     String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
                     UploadService.uploadFile(part, filePath);
@@ -136,7 +142,7 @@ public class CreateTopicBean implements Serializable {
                     discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
                     discussionTopicFiles.setFkType(TOPIC);
                     discussionTopicFiles.setFkId(discussionTopic.getId());
-                    DiscussionTopicFilesBO.create(discussionTopicFiles);
+                    discussionTopicFilesJpaController.create(discussionTopicFiles);
                 }
             }
             discussionTopic = new DiscussionTopic();

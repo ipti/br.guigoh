@@ -4,11 +4,11 @@
  */
 package br.org.ipti.guigoh.controller.listener;
 
-import com.guigoh.bo.UserAuthorizationBO;
-import com.guigoh.bo.UsersBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -43,13 +43,14 @@ public class AuthorizeListener implements PhaseListener{
         Boolean confirmed = false;
         Boolean pending = false;
         if (user.getUsername() != null) {
-            Users usertemp = UsersBO.findUsers(user);
-
+            UsersJpaController usersJpaController = new UsersJpaController();
+            Users usertemp = usersJpaController.findUsers(user.getUsername());
+            
             confirmed = (usertemp.getStatus().equals("CA"));
             pending = (usertemp.getStatus().equals("CP"));
 
-
-            UserAuthorization authorization = UserAuthorizationBO.findAuthorizationByTokenId(usertemp.getToken());
+            UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
+            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(usertemp.getToken());
             if (authorization != null) {
                 firstAccess = (authorization.getStatus().equals("FC"));
                 activeAccess = (authorization.getStatus().equals("AC"));

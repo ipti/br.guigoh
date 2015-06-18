@@ -4,11 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EmailActivationBO;
-import com.guigoh.bo.RoleBO;
-import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.UserAuthorizationBO;
-import com.guigoh.bo.UsersBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.util.MailService;
@@ -28,11 +23,18 @@ import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.CityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EmailActivationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.LanguageJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.NetworksJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.RoleJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SecretQuestionJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.StateJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SubnetworkJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,10 @@ public class RegisterBean implements Serializable {
     private CountryJpaController countryJpaController;
     private LanguageJpaController languageJpaController;
     private NetworksJpaController networksJpaController;
+    private RoleJpaController roleJpaController;
+    private EmailActivationJpaController emailActivationJpaController;
+    private UserAuthorizationJpaController userAuthorizationJpaController;
+    private UsersJpaController usersJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -103,6 +109,10 @@ public class RegisterBean implements Serializable {
             countryJpaController = new CountryJpaController();
             languageJpaController = new LanguageJpaController();
             networksJpaController = new NetworksJpaController();
+            roleJpaController = new RoleJpaController();
+            emailActivationJpaController = new EmailActivationJpaController();
+            userAuthorizationJpaController = new UserAuthorizationJpaController();
+            usersJpaController = new UsersJpaController();
             user = new Users();
             socialProfile = new SocialProfile();
             secretQuestion = new SecretQuestion();
@@ -139,14 +149,14 @@ public class RegisterBean implements Serializable {
         stateId = stateJpaController.findStateByName(SERGIPE).getId();
         cityList = cityJpaController.findCitiesByStateId(stateId);
         cityId = cityJpaController.findCityByName(ARACAJU).getId();
-        roleList = RoleBO.getAll();
+        roleList = roleJpaController.findRoleEntities();
 
     }
 
     public void register() throws Exception {
         try {
-            Users userTest = UsersBO.findUsers(user);
-            if (userTest.getToken() != null) {
+            Users userTest = usersJpaController.findUsers(user.getUsername());
+            if (userTest != null) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
@@ -183,7 +193,7 @@ public class RegisterBean implements Serializable {
                                 socialProfile.setRoleId(role);
                             }
                             socialProfile.setTokenId(user.getToken());
-                            socialProfile.setPhoto("/resources/images/avatar.png");
+                            socialProfile.setPhoto("/resources/common/images/avatar.png");
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
                             String accountActivation = "Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
@@ -195,9 +205,10 @@ public class RegisterBean implements Serializable {
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
                             user.setStatus(CONFIRMATION_PENDING);
-                            UsersBO.create(user);
-                            EmailActivationBO.create(emailactivation);
-                            SocialProfileBO.create(socialProfile);
+                            usersJpaController.create(user);
+                            emailActivationJpaController.create(emailactivation);
+                            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+                            socialProfileJpaController.create(socialProfile);
                             automaticConfirm(user);
                             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
                             user = new Users();
@@ -230,7 +241,7 @@ public class RegisterBean implements Serializable {
         return "logout";
     }
 
-    private void automaticConfirm(Users user) {
+    private void automaticConfirm(Users user) throws PreexistingEntityException, RollbackFailureException, Exception {
         List<Networks> networksList = networksJpaController.findNetworksEntities();
         UserAuthorization authorization = new UserAuthorization();
         authorization.setRoles(DEFAULT);
@@ -248,16 +259,16 @@ public class RegisterBean implements Serializable {
         authorization.setStatus(PENDING_ACCESS);
 
 //        }
-        UserAuthorizationBO.create(authorization);
+        userAuthorizationJpaController.create(authorization);
     }
 
     public String changePassword() throws Exception {
-        EmailActivation emailActivation = EmailActivationBO.findEmailActivationByUsername(confirmEmail);
-        Users userToRecover = UsersBO.findUsers(confirmEmail);
+        EmailActivation emailActivation = emailActivationJpaController.findEmailActivationByUsername(confirmEmail);
+        Users userToRecover = usersJpaController.findUsers(confirmEmail);
         if (newPassword.equals(newPasswordConfirm)) {
             userToRecover.setPassword(MD5Generator.generate(newPassword + SALT));
-            UsersBO.edit(userToRecover);
-            EmailActivationBO.destroy(emailActivation);
+            usersJpaController.edit(userToRecover);
+            emailActivationJpaController.destroy(emailActivation.getUsername());
             return "logout";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os campos devem ser iguais."), null));
@@ -295,14 +306,14 @@ public class RegisterBean implements Serializable {
         cityList = cityJpaController.findCitiesByStateId(stateId);
     }
 
-    public void authenticateUser() {
+    public void authenticateUser() throws RollbackFailureException, Exception {
         Translator tempTrans = new Translator();
         tempTrans.setLocale(CookieService.getCookie("locale"));
 
         try {
             if (confirmEmail != null && confirmCode != null) {
-                Users userConfirm = UsersBO.findUsers(confirmEmail);
-                EmailActivation emailActivation = EmailActivationBO.findEmailActivationByUsername(userConfirm.getUsername());
+                Users userConfirm = usersJpaController.findUsers(confirmEmail);
+                EmailActivation emailActivation = emailActivationJpaController.findEmailActivationByUsername(userConfirm.getUsername());
                 if (emailActivation.getUsername() != null) {
                     if (userConfirm.getStatus().equals("CA")) {
                         if (emailActivation.getCode().equals(confirmCode)) {
@@ -310,8 +321,8 @@ public class RegisterBean implements Serializable {
                         }
                     } else if (emailActivation.getCode().equals(confirmCode)) {
                         userConfirm.setStatus(CONFIRMATION_ACCESS);
-                        UsersBO.edit(userConfirm);
-                        EmailActivationBO.destroy(emailActivation);
+                        usersJpaController.edit(userConfirm);
+                        emailActivationJpaController.destroy(emailActivation.getUsername());
                         List<Networks> networksList = networksJpaController.findNetworksEntities();
                         UserAuthorization authorization = new UserAuthorization();
                         authorization.setRoles(DEFAULT);
@@ -333,7 +344,7 @@ public class RegisterBean implements Serializable {
                         //mailtext += "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                         //Modificar http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                         //newUserAccount = trans.getWord(newUserAccount);
-                        for (UserAuthorization userAuthorization : UserAuthorizationBO.findAuthorizationsByRole("AD")) {
+                        for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
                                 //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
                             //newUserAccount = tempTrans.getWord(newUserAccount);
                             //mailtext = tempTrans.getWord(mailtext);
@@ -342,7 +353,7 @@ public class RegisterBean implements Serializable {
                         //tempTrans.setLocale(CookieService.getCookie("locale"));
                         authorization.setStatus(PENDING_ACCESS);
 //                        }
-                        UserAuthorizationBO.create(authorization);
+                        userAuthorizationJpaController.create(authorization);
                         panelStatus = "confirmed_email";
                     }
                     //caindo sempre nesse else
@@ -351,12 +362,12 @@ public class RegisterBean implements Serializable {
                 }
             } else {
                 //funciona sem o "Users"
-                Users user = UsersBO.findUsers(CookieService.getCookie("user"));
-                if (user.getStatus() != null) {
+                Users user = usersJpaController.findUsers(CookieService.getCookie("user"));
+                if (user != null) {
                     if (user.getStatus().equals("CP")) {
                         panelStatus = "check_email";
                     } else {
-                        UserAuthorization authorization = UserAuthorizationBO.findAuthorizationByTokenId(user.getToken());
+                        UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(user.getToken());
                         switch (authorization.getStatus()) {
                             case "IC":
                                 panelStatus = "inactive";

@@ -345,13 +345,16 @@ public class InterestsJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<Interests> findInterestsBySocialProfileId(Integer socialprofile_id) {
         EntityManager em = getEntityManager();
         try {
             List<Interests> interestsList = (List<Interests>) em.createNativeQuery("select id, name, type_id from interests it "
                     + "join social_profile_interests si on it.id = si.interests_id "
                     + "where si.social_profile_id = " + socialprofile_id, Interests.class).getResultList();
+            if (interestsList == null) {
+                return new ArrayList<>();
+            }
             return interestsList;
         } finally {
             em.close();
@@ -364,6 +367,9 @@ public class InterestsJpaController implements Serializable {
             List<Interests> interestsList = (List<Interests>) em.createNativeQuery("select it.id, it.name, it.type_id from interests it "
                     + "join interests_type ty on it.type_id = ty.id "
                     + "where ty.name = '" + interestsType + "'", Interests.class).getResultList();
+            if (interestsList == null) {
+                return new ArrayList<>();
+            }
             return interestsList;
         } finally {
             em.close();
@@ -376,6 +382,9 @@ public class InterestsJpaController implements Serializable {
             List<Interests> interestsList = (List<Interests>) em.createNativeQuery("select it.id, it.name, it.type_id from interests it "
                     + "join interests_type ty on it.type_id = ty.id "
                     + "where ty.id = '" + interestsTypeId + "'", Interests.class).getResultList();
+            if (interestsList == null) {
+                return new ArrayList<Interests>();
+            }
             return interestsList;
         } finally {
             em.close();
@@ -501,13 +510,18 @@ public class InterestsJpaController implements Serializable {
 
     }
 
-    public void destroyInterestsBySocialProfileInterestsType(SocialProfile socialprofile, Interests interests) throws RollbackFailureException, Exception {
+    public void destroyInterestsBySocialProfileInterestsType(SocialProfile socialprofile, String interestType) throws RollbackFailureException, Exception {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
-            em.createNativeQuery("DELETE from social_profile_interests where social_profile_id = "
-                    + socialprofile.getSocialProfileId() + " and interests_id = " + interests.getId()).executeUpdate();
-            em.getTransaction().commit();
+            List<Interests> interestsList = findInterestsBySocialProfileId(socialprofile.getSocialProfileId());
+            for (Interests interest : interestsList) {
+                if (interest.getTypeId().getName().equalsIgnoreCase(interestType)) {
+                    em.createNativeQuery("DELETE from social_profile_interests where social_profile_id = "
+                            + socialprofile.getSocialProfileId() + " and interests_id = " + interest.getId()).executeUpdate();
+                    em.getTransaction().commit();
+                }
+            }
         } catch (Exception ex) {
             try {
                 em.getTransaction().rollback();
@@ -521,7 +535,7 @@ public class InterestsJpaController implements Serializable {
             }
         }
     }
-    
+
     public Interests findInterestsByID(Integer interestsID) {
         EntityManager em = getEntityManager();
         try {
@@ -537,5 +551,5 @@ public class InterestsJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

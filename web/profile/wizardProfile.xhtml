@@ -34,7 +34,6 @@
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
-        <script type="text/javascript" src="/resources/common/js/wizard.js"></script>
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{wizardProfileBean.init()}"/>
         </f:metadata>
@@ -470,9 +469,6 @@
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
         <script src="/resources/lib/js/jquery.mask.min.js"></script>
-        <script src="/resources/lib/js/jquery-multiselect-2.0.min.js"></script>
-        <script src="/resources/lib/js/jquery-multiselect-2_pt.min.js"></script>
-        <script src="/resources/lib/js/jquery-multiselect-2_fr.min.js"></script>
         <script type="text/javascript">
             var books = #{wizardProfileBean.books};
             var musics = #{wizardProfileBean.musics};
@@ -484,6 +480,11 @@
             var educationName = #{wizardProfileBean.educationName};
             var educationLocation = #{wizardProfileBean.educationLocation};
         </script>
+        <script src="/resources/lib/js/jquery-ui.min.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2.0.min.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2_pt.min.js"></script>
+        <script src="/resources/lib/js/jquery-multiselect-2_fr.min.js"></script>
+        <script type="text/javascript" src="/resources/common/js/wizard.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

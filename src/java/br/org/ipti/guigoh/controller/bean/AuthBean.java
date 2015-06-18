@@ -4,9 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EmailActivationBO;
-import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.UsersBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.util.MailService;
@@ -15,6 +12,10 @@ import br.org.ipti.guigoh.util.translator.Translator;
 import br.org.ipti.guigoh.model.entity.EmailActivation;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.EmailActivationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -40,9 +41,11 @@ public class AuthBean implements Serializable {
     private String password;
     private String passwordConfirm;
     private Translator trans;
+    private UsersJpaController usersJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            usersJpaController = new UsersJpaController();
             user = new Users();
             locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
             trans = new Translator();
@@ -54,32 +57,32 @@ public class AuthBean implements Serializable {
     }
 
     public String login() {
-        Users registeredUser = UsersBO.findUsers(user);
-        user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
-        if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
-            switch (registeredUser.getAuthorization().getStatus()) {
-                case "AC":
-                    CookieService.addCookie("user", registeredUser.getUsername());
-                    CookieService.addCookie("token", registeredUser.getToken());
-                    return "islogged";
-                case "PC":
-                    loginStatus = "pending";
-                    return "";
-                case "IC":
-                    loginStatus = "inactive";
-                    return "";
-                default:
-                    CookieService.addCookie("user", registeredUser.getUsername());
-                    CookieService.addCookie("token", registeredUser.getToken());
-                    return "wizard";
+        Users registeredUser = usersJpaController.findUsers(user.getUsername());
+            user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
+            if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
+                switch (registeredUser.getAuthorization().getStatus()) {
+                    case "AC":
+                        CookieService.addCookie("user", registeredUser.getUsername());
+                        CookieService.addCookie("token", registeredUser.getToken());
+                        return "islogged";
+                    case "PC":
+                        loginStatus = "pending";
+                        return "";
+                    case "IC":
+                        loginStatus = "inactive";
+                        return "";
+                    default:
+                        CookieService.addCookie("user", registeredUser.getUsername());
+                        CookieService.addCookie("token", registeredUser.getToken());
+                        return "wizard";
+                }
+            } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
+                loginStatus = "check_email";
+                return "";
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
+                return "";
             }
-        } else if (user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
-            loginStatus = "check_email";
-            return "";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
-            return "";
-        }
     }
 
     public String logout() {
@@ -91,17 +94,19 @@ public class AuthBean implements Serializable {
         loginStatus = status;
     }
 
-    public String sendPassToEmail() {
+    public String sendPassToEmail() throws RollbackFailureException, Exception {
         try {
-            userToRecover = UsersBO.findUsers(email);
+            userToRecover = usersJpaController.findUsers(email);
             if (userToRecover.getUsername() != null && userToRecover.getStatus().equals("CA")) {
+                EmailActivationJpaController emailActivationJpaController = new EmailActivationJpaController();
                 EmailActivation emailactivation = new EmailActivation();
                 emailactivation.setUsername(userToRecover.getUsername());
                 emailactivation.setCode(MD5Generator.generate(userToRecover.getUsername() + RandomGenerator.generate(5)));
-                SocialProfile socialProfile = SocialProfileBO.findSocialProfile(userToRecover.getToken());
+                SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+                SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(userToRecover.getToken());
                 String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
-                EmailActivationBO.create(emailactivation);
+                emailActivationJpaController.create(emailactivation);
                 loginStatus = "pass_sent";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
@@ -113,7 +118,7 @@ public class AuthBean implements Serializable {
     }
 
     public String loadQuestion() {
-        userToRecover = UsersBO.findUsers(email);
+        userToRecover = usersJpaController.findUsers(email);
         if (userToRecover.getUsername() != null) {
             loginStatus = "question";
         } else {
@@ -134,7 +139,7 @@ public class AuthBean implements Serializable {
     public String changePassword() throws Exception {
         if (password.equals(passwordConfirm)) {
             userToRecover.setPassword(MD5Generator.generate(password + SALT));
-            UsersBO.edit(userToRecover);
+            usersJpaController.edit(userToRecover);
             return "logout";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));

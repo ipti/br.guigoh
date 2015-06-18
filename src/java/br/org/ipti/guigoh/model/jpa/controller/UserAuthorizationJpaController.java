@@ -278,6 +278,9 @@ public class UserAuthorizationJpaController implements Serializable {
             List<UserAuthorization> authorizationList = (List<UserAuthorization>) em.createNativeQuery("select a.* from user_authorization a "
                     + "join social_profile s on a.token_id = s.token_id "
                     + "where a.status = 'PC' and s.subnetwork_id = '" + subnetwork + "'", UserAuthorization.class).getResultList();
+            if (authorizationList == null) {
+                return new ArrayList<>();
+            }
             return authorizationList;
         } finally {
             em.close();

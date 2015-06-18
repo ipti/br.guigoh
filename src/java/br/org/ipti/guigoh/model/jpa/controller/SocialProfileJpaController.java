@@ -892,7 +892,7 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
     
-    public SocialProfile findSocialProfile(Integer id) {
+    public SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         EntityManager em = getEntityManager();
         try {
             SocialProfile socialProfile = (SocialProfile) em.createNativeQuery("select * from social_profile "
@@ -993,6 +993,9 @@ public class SocialProfileJpaController implements Serializable {
                 sql += "and p.scholarity_id = '" + socialProfile.getScholarityId().getId() + "' ";
             }
             List<SocialProfile> usersList = (List<SocialProfile>) em.createNativeQuery(sql, SocialProfile.class).getResultList();
+            if (usersList == null) {
+                return new ArrayList<>();
+            }
             return usersList;
         } finally {
             em.close();

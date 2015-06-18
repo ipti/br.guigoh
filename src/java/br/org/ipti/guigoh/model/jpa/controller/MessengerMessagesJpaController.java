@@ -4,18 +4,19 @@
  */
 package br.org.ipti.guigoh.model.jpa.controller;
 
-import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.MessengerMessages;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
@@ -163,6 +164,9 @@ public class MessengerMessagesJpaController implements Serializable {
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
                     + "where message_delivered = 'N' and social_profile_id_receiver = '" + socialProfileId + "'", MessengerMessages.class).getResultList();
+            if (messengerMessagesList == null){
+                messengerMessagesList = new ArrayList<>();
+            }
             return messengerMessagesList;
         } finally {
             em.close();
@@ -174,6 +178,9 @@ public class MessengerMessagesJpaController implements Serializable {
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
                     + "where message_delivered = 'U' and social_profile_id_receiver = '" + socialProfileId + "'", MessengerMessages.class).getResultList();
+            if (messengerMessagesList == null){
+                messengerMessagesList = new ArrayList<>();
+            }
             return messengerMessagesList;
         } finally {
             em.close();
@@ -185,6 +192,9 @@ public class MessengerMessagesJpaController implements Serializable {
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
                     + "where (message_delivered = 'U' or message_delivered = 'S') and social_profile_id_receiver = '" + socialProfileId + "' order by message_date desc", MessengerMessages.class).getResultList();
+            if (messengerMessagesList == null){
+                messengerMessagesList = new ArrayList<>();
+            }
             return messengerMessagesList;
         } finally {
             em.close();
@@ -196,6 +206,9 @@ public class MessengerMessagesJpaController implements Serializable {
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
                     + "where message_delivered = 'Y' and ((social_profile_id_receiver = '"+loggedSocialProfileId+"' and social_profile_id_sender = '"+socialProfileId+"') or (social_profile_id_receiver = '"+socialProfileId+"' and social_profile_id_sender = '"+loggedSocialProfileId+"')) order by message_date desc limit 10", MessengerMessages.class).getResultList();
+            if (messengerMessagesList == null){
+                messengerMessagesList = new ArrayList<>();
+            }
             return messengerMessagesList;
         } finally {
             em.close();
@@ -207,6 +220,9 @@ public class MessengerMessagesJpaController implements Serializable {
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
                     + "where ((social_profile_id_receiver = '"+loggedSocialProfileId+"' and social_profile_id_sender = '"+socialProfileId+"') or (social_profile_id_receiver = '"+socialProfileId+"' and social_profile_id_sender = '"+loggedSocialProfileId+"')) order by message_date", MessengerMessages.class).getResultList();
+            if (messengerMessagesList == null){
+                messengerMessagesList = new ArrayList<>();
+            }
             return messengerMessagesList;
         } finally {
             em.close();
@@ -222,17 +238,10 @@ public class MessengerMessagesJpaController implements Serializable {
                     + "UNION "
                     + "select social_profile_id_sender as spr from messenger_messages "
                     + "where social_profile_id_receiver = '"+loggedSocialProfileId+"' and (message_delivered = 'Y' or message_delivered = 'N')) ", SocialProfile.class).getResultList();
+            if (contactsList == null){
+                contactsList = new ArrayList<>();
+            }
             return contactsList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public Timestamp getServerTime(){
-        EntityManager em = getEntityManager();
-        try {
-            Timestamp serverTime = (Timestamp) em.createNativeQuery("SELECT date_trunc('seconds', now()::timestamp);").getSingleResult();
-            return serverTime;
         } finally {
             em.close();
         }

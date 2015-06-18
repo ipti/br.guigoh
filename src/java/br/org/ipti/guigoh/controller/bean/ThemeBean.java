@@ -4,13 +4,13 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
-import com.guigoh.bo.DiscussionTopicBO;
-import com.guigoh.bo.InterestsBO;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Tags;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,9 +34,13 @@ public class ThemeBean implements Serializable{
     private List<EducationalObject> educationalObjectList;
     private List<Tags> tagList;
     private String tagSelected;
+    private DiscussionTopicJpaController discussionTopicJpaController;
+    private EducationalObjectJpaController educationalObjectJpaController;
     
     public void init(){ 
         if(!FacesContext.getCurrentInstance().isPostback()){
+            discussionTopicJpaController = new DiscussionTopicJpaController();
+            educationalObjectJpaController = new EducationalObjectJpaController();
             generalSearch = ""; 
             tagSelected = "";
             loadInterest();
@@ -49,7 +53,8 @@ public class ThemeBean implements Serializable{
     }
     
     private void loadInterest(){
-        interest = InterestsBO.findInterestsByID(themeID); 
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
+        interest = interestsJpaController.findInterestsByID(themeID); 
     }
     
     private void loadTags(){
@@ -58,18 +63,18 @@ public class ThemeBean implements Serializable{
     }
     
     private void loadDiscussionTopics(){
-        discussionTopicList = DiscussionTopicBO.findDiscussionTopicsByTheme(themeID);
+        discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByTheme(themeID);
     }
     
     private void loadEducationalObjectsByTheme(){
-        educationalObjectList = EducationalObjectBO.getActiveEducationalObjectsByTheme(themeID);
+        educationalObjectList = educationalObjectJpaController.getActiveEducationalObjectsByTheme(themeID);
     }
     
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
-        discussionTopicList = DiscussionTopicBO.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
-        educationalObjectList = EducationalObjectBO.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
+        discussionTopicList = discussionTopicJpaController.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
+        educationalObjectList = educationalObjectJpaController.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
     }
 
     public Integer getThemeID() {

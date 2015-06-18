@@ -4,18 +4,19 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.DiscussionTopicBO;
-import com.guigoh.bo.DiscussionTopicFilesBO;
-import com.guigoh.bo.DiscussionTopicMsgBO;
-import com.guigoh.bo.SocialProfileBO;
-import br.org.ipti.guigoh.util.CookieService;
-import br.org.ipti.guigoh.util.UploadService;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicMsgJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.UploadService;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -44,6 +45,9 @@ public class ViewTopicBean implements Serializable {
     private SocialProfile socialProfile;
     private transient Part fileMedia;
     private transient List<Part> fileList;
+    private DiscussionTopicJpaController discussionTopicJpaController;
+    private DiscussionTopicFilesJpaController discussionTopicFilesJpaController;
+    private DiscussionTopicMsgJpaController discussionTopicMsgJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -51,24 +55,28 @@ public class ViewTopicBean implements Serializable {
             user.setUsername(CookieService.getCookie("user"));
             user.setToken(CookieService.getCookie("token"));
             fileList = new ArrayList<>();
+            discussionTopicJpaController = new DiscussionTopicJpaController();
+            discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
+            discussionTopicMsgJpaController = new DiscussionTopicMsgJpaController();
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
             newReply = "";
             if (discussionTopic == null) {
-                discussionTopic = DiscussionTopicBO.findDiscussionTopicByID(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+                discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
+                discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
 
-                discussionTopicMsgList = DiscussionTopicMsgBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+                discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+                    dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+                socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
             } else if (discussionTopic.getId() != discussionTopicID) {
-                discussionTopic = DiscussionTopicBO.findDiscussionTopicByID(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
-                discussionTopicMsgList = DiscussionTopicMsgBO.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+                discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
+                discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+                discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
                 for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(DiscussionTopicFilesBO.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+                    dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
                 }
-                socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+                socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
             }
         }
     }
@@ -87,6 +95,7 @@ public class ViewTopicBean implements Serializable {
 
     public void replyTopic() throws RollbackFailureException, Exception {
         try {
+            UtilJpaController utilJpaController = new UtilJpaController();
             newReply = new String(newReply.getBytes("ISO-8859-1"), "UTF-8");
             if (!newReply.equals("")) {
                 DiscussionTopicMsg discussionTopicMsg = new DiscussionTopicMsg();
@@ -94,8 +103,8 @@ public class ViewTopicBean implements Serializable {
                 discussionTopicMsg.setReply(newReply);
                 discussionTopicMsg.setStatus('A');
                 discussionTopicMsg.setSocialProfileId(socialProfile);
-                discussionTopicMsg.setData(DiscussionTopicMsgBO.getServerTime());
-                DiscussionTopicMsgBO.replyTopic(discussionTopicMsg);
+                discussionTopicMsg.setData(utilJpaController.getTimestampServerTime());
+                discussionTopicMsgJpaController.create(discussionTopicMsg);
                 List<DiscussionTopicFiles> dtfList = new ArrayList<>();
                 if (!fileList.isEmpty()) {
                     for (Part part : fileList) {
@@ -109,7 +118,7 @@ public class ViewTopicBean implements Serializable {
                         discussionTopicFiles.setFkType(MESSAGE);
                         discussionTopicFiles.setFkId(discussionTopicMsg.getId());
                         dtfList.add(discussionTopicFiles);
-                        DiscussionTopicFilesBO.create(discussionTopicFiles);
+                        discussionTopicFilesJpaController.create(discussionTopicFiles);
                     }
                 }
                 discussionTopicMsg.setDiscussionTopicFilesList(dtfList);

@@ -4,14 +4,14 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.FriendsBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +34,16 @@ public class FriendsBean implements Serializable {
     private List<SocialProfile> socialProfileList;
     private String friendInputSearch = "";
     private String userInputSearch = "";
+    private FriendsJpaController friendsJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            friendsJpaController = new FriendsJpaController();
+            socialProfileJpaController = new SocialProfileJpaController();
             user = new Users();        
             getCookie();
-            userSocialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+            userSocialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
             loadFriends();
         }
     }
@@ -52,8 +56,8 @@ public class FriendsBean implements Serializable {
     public void loadFriends() {
         acceptedList = new ArrayList<>();
         pendingList = new ArrayList<>();
-        acceptedList = FriendsBO.findFriendsByToken(user.getToken());
-        pendingList = FriendsBO.findPendingFriendsByToken(user.getToken());
+        acceptedList = friendsJpaController.findFriendsByToken(user.getToken());
+        pendingList = friendsJpaController.findPendingFriendsByToken(user.getToken());
         organizeFriendList(acceptedList);
         organizeFriendList(pendingList);
     }
@@ -74,28 +78,28 @@ public class FriendsBean implements Serializable {
             
     public void searchFriendEvent() {
         acceptedList = new ArrayList<>();
-        acceptedList = FriendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
+        acceptedList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
         organizeFriendList(acceptedList);
     }
 
     public void searchUsersEvent() {
         socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = FriendsBO.loadUserSearchList(userInputSearch);
+            socialProfileList = friendsJpaController.loadUserSearchList(userInputSearch);
             
         }
     }
 
     public void removeFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        FriendsBO.removeFriend(user, id);
+        friendsJpaController.removeFriend(user, id);
         loadFriends();
     }
 
     public void acceptFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
-        FriendsBO.acceptFriend(user, id);
+        friendsJpaController.acceptFriend(user, id);
         loadFriends();
     }
-
+    
     public List getPendingList() {
         return pendingList;
     }

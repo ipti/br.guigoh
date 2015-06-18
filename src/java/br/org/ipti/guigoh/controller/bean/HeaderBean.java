@@ -4,17 +4,16 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.MessengerStatusBO;
-import com.guigoh.bo.SocialProfileBO;
-import com.guigoh.bo.UserAuthorizationBO;
-import com.guigoh.bo.UsersBO;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerStatusJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -43,12 +42,14 @@ public class HeaderBean implements Serializable {
     }
     
     private void loadSocialProfile() {
-        socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         socialProfile.setName(socialProfile.getName().split(" ")[0]);
     }
     
     private void loadAuthorization() {
-        authorization = UserAuthorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
+        UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
+        authorization = userAuthorizationJpaController.findAuthorization(socialProfile.getTokenId());
         if (authorization != null) {
             if (authorization.getRoles().equals(ADMIN)) {
                 admin = true;
@@ -60,8 +61,10 @@ public class HeaderBean implements Serializable {
     }
     
     private void getRegisteredUsersQuantity() {
-        registeredUsersCount = UsersBO.getRegisteredUsersQuantity();
-        registeredUsersOnline = MessengerStatusBO.getUsersOnline();
+        UsersJpaController usersJpaController = new UsersJpaController();
+        registeredUsersCount = usersJpaController.getUsersCount();
+        MessengerStatusJpaController messengerStatusJpaController = new MessengerStatusJpaController();
+        registeredUsersOnline = messengerStatusJpaController.getUsersOnline();
         if (registeredUsersOnline == 0) {
             registeredUsersOnline++;
         }

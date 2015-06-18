@@ -4,13 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationsBO;
-import com.guigoh.bo.ExperiencesBO;
-import com.guigoh.bo.FriendsBO;
-import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.InterestsTypeBO;
-import com.guigoh.bo.OccupationsBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.model.entity.Availability;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.Experiences;
@@ -22,6 +15,13 @@ import br.org.ipti.guigoh.model.entity.OccupationsType;
 import br.org.ipti.guigoh.model.entity.Scholarity;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.ExperiencesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsTypeJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
@@ -43,7 +43,6 @@ import java.util.Objects;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -86,9 +85,21 @@ public class ProfileBean implements Serializable {
     private Boolean edit;
     private WizardProfileBean wizardProfileBean;
     private Translator trans;
+    private EducationsJpaController educationsJpaController;
+    private ExperiencesJpaController experiencesJpaController;
+    private FriendsJpaController friendsJpaController;
+    private InterestsJpaController interestsJpaController;
+    private InterestsTypeJpaController interestsTypeJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            educationsJpaController = new EducationsJpaController();
+            experiencesJpaController = new ExperiencesJpaController();
+            friendsJpaController = new FriendsJpaController();
+            interestsJpaController = new InterestsJpaController();
+            interestsTypeJpaController = new InterestsTypeJpaController();
+            socialProfileJpaController = new SocialProfileJpaController();
             user = new Users();
             wizardProfileBean = new WizardProfileBean();
             wizardProfileBean.init();
@@ -143,7 +154,7 @@ public class ProfileBean implements Serializable {
     }
 
     private void loadUsers(Integer id) {
-        socialProfile = SocialProfileBO.findSocialProfileBySocialProfileId(id);
+        socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(id);
     }
 
     private void loadUserCookie() {
@@ -162,7 +173,7 @@ public class ProfileBean implements Serializable {
     }
 
     private void loadSocialProfile() {
-        socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+        socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
         /*
          *
          *COMENTAR ABAIXO
@@ -190,8 +201,8 @@ public class ProfileBean implements Serializable {
 
     private void loadInterests() {
         if (socialProfile != null) {
-            interestsList = InterestsBO.findInterests(socialProfile.getSocialProfileId());
-            interestsTypeList = InterestsTypeBO.findInterestsType();
+            interestsList = interestsJpaController.findInterestsBySocialProfileId(socialProfile.getSocialProfileId());
+            interestsTypeList = interestsTypeJpaController.findInterestsTypeEntities();
 
             musicsList.clear();
             moviesList.clear();
@@ -245,7 +256,7 @@ public class ProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             experiencesList.remove(exp);
-            ExperiencesBO.removeExperience(exp);
+            experiencesJpaController.destroy(exp.getExperiencesPK());
             String message = trans.getWord("Experiência removida com sucesso!");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
@@ -256,7 +267,7 @@ public class ProfileBean implements Serializable {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             educationsList.remove(edu);
-            EducationsBO.removeEducation(edu);
+            educationsJpaController.destroy(edu.getEducationsPK());
             String message = trans.getWord("Educação removida com sucesso!");
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
         } catch (Exception e) {
@@ -264,22 +275,22 @@ public class ProfileBean implements Serializable {
     }
 
     private void loadExperiencies(String token_id) {
-        experiencesList = ExperiencesBO.findExperiencesByTokenId(token_id);
+        experiencesList = experiencesJpaController.findExperiencesByTokenId(token_id);
     }
 
     private void loadEducations(String token_id) {
-        educationsList = EducationsBO.findEducationsByTokenId(token_id);
+        educationsList = educationsJpaController.findEducationsByTokenId(token_id);
     }
 
     public void addFriend() throws PreexistingEntityException, RollbackFailureException, Exception {
         friendStatus = "Invited";
-        FriendsBO.addFriend(user, id);
+        friendsJpaController.addFriend(user, id);
     }
 
     public void searchFriendEvent() {
         try {
             friendList = new ArrayList<>();
-            friendList = FriendsBO.loadFriendSearchList(user.getToken(), friendInputSearch);
+            friendList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
             organizeFriendList(friendList);
         } catch (Exception e) {
         }
@@ -297,11 +308,11 @@ public class ProfileBean implements Serializable {
     }
 
     public void recommendFriend() throws Exception {
-        FriendsBO.recommendFriend(user, id, receiver, recommenderMessage);
+        friendsJpaController.recommendFriend(user, id, receiver, recommenderMessage);
     }
 
     private void checkFriendStatus() {
-        Friends friend = FriendsBO.findFriends(user, id);
+        Friends friend = friendsJpaController.findFriends(user, id);
         if (friend == null) {
             friendStatus = "Uninvited";
         } else if (friend.getTokenFriend1().equals(friend.getTokenFriend2())) {
@@ -415,10 +426,11 @@ public class ProfileBean implements Serializable {
 
     public void saveSocialProfile() {
         try {
-            Occupations occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+            OccupationsJpaController occupationsJpaController = new OccupationsJpaController();
+            Occupations occupationst = occupationsJpaController.findOccupationsByNameByType(socialProfile.getOccupationsId());
             if (occupationst.getId() == null) {
-                OccupationsBO.createInsert(socialProfile.getOccupationsId());
-                occupationst = OccupationsBO.findOccupationsByNameByType(socialProfile.getOccupationsId());
+                occupationsJpaController.createInsert(socialProfile.getOccupationsId());
+                occupationst = occupationsJpaController.findOccupationsByNameByType(socialProfile.getOccupationsId());
             }
             if (occupationst.getName() == null) {
                 socialProfile.setOccupationsId(null);
@@ -428,7 +440,7 @@ public class ProfileBean implements Serializable {
             if (socialProfile.getAvailabilityId().getId() == 0) {
                 socialProfile.setAvailabilityId(null);
             }
-            SocialProfileBO.edit(socialProfile);
+            socialProfileJpaController.edit(socialProfile);
 
             if (socialProfile.getAvailabilityId() == null) {
                 Availability availability = new Availability();
@@ -446,8 +458,8 @@ public class ProfileBean implements Serializable {
 
     public void saveThemes() {
         try {
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Themes");
-            InterestsBO.createInterestsBySocialProfileByIds(wizardProfileBean.getMultiThemeList(), socialProfile);
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Themes");
+            interestsJpaController.createInterestsBySocialProfileByIds(wizardProfileBean.getMultiThemeList(), socialProfile);
             loadInterests();
         } catch (Exception e) {
         }
@@ -455,31 +467,31 @@ public class ProfileBean implements Serializable {
 
     public void saveCulture() {
         try {
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Books");
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Musics");
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Movies");
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Books");
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Musics");
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Movies");
             checkInterestsList(booksList, "Books");
             checkInterestsList(musicsList, "Musics");
             checkInterestsList(moviesList, "Movies");
-            InterestsBO.createInterestsBySocialProfileByInterest(booksList, socialProfile);
-            InterestsBO.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
-            InterestsBO.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
+            interestsJpaController.createInterestsBySocialProfileByInterest(booksList, socialProfile);
+            interestsJpaController.createInterestsBySocialProfileByInterest(moviesList, socialProfile);
+            interestsJpaController.createInterestsBySocialProfileByInterest(musicsList, socialProfile);
             loadInterests();
         } catch (Exception e) {
         }
     }
 
-    private void checkInterestsList(List<Interests> interestsList, String type) {
-        InterestsType interestsType = InterestsTypeBO.findInterestsTypeByName(type);
+    private void checkInterestsList(List<Interests> interestsList, String type) throws Exception {
+        InterestsType interestsType = interestsTypeJpaController.findInterestsTypeByName(type);
         Interests interestsTemp;
         for (Interests interests : interestsList) {
             if (interests != null) {
-                interestsTemp = InterestsBO.findInterestsByInterestsName(interests.getName());
+                interestsTemp = interestsJpaController.findInterestsByInterestsName(interests.getName());
                 if (interestsTemp.getId() == null) {
 
                     interests.setId(0);
                     interests.setTypeId(interestsType);
-                    InterestsBO.create(interests);
+                    interestsJpaController.create(interests);
 
                 }
             }
@@ -488,12 +500,12 @@ public class ProfileBean implements Serializable {
 
     public void saveSportsHobbies() {
         try {
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Sports");
-            InterestsBO.destroyInterestsBySocialProfileInterestsType(socialProfile, "Hobbies");
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Sports");
+            interestsJpaController.destroyInterestsBySocialProfileInterestsType(socialProfile, "Hobbies");
             checkInterestsList(sportsList, "Sports");
             checkInterestsList(hobbiesList, "Hobbies");
-            InterestsBO.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
-            InterestsBO.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
+            interestsJpaController.createInterestsBySocialProfileByInterest(sportsList, socialProfile);
+            interestsJpaController.createInterestsBySocialProfileByInterest(hobbiesList, socialProfile);
             loadInterests();
         } catch (Exception e) {
         }

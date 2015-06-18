@@ -4,13 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.service;
 
-import com.guigoh.bo.FriendsBO;
-import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.MessengerMessagesBO;
-import com.guigoh.bo.MessengerStatusBO;
-import com.guigoh.bo.SocialProfileBO;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.MessengerMessages;
@@ -18,7 +11,14 @@ import br.org.ipti.guigoh.model.entity.MessengerStatus;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerStatusJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -29,16 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import org.json.*;
 /**
  * REST Web Service
@@ -76,13 +76,13 @@ public class GuigohResource extends Thread {
     @Path("/allMessagesHistory")
     @Produces("application/json")
     public String getAllMessagesHistory(@QueryParam("loggedSocialProfileId") Integer loggedSocialProfileId, @QueryParam("friendSocialProfileId") Integer socialProfileId) throws JSONException, NonexistentEntityException, RollbackFailureException, Exception {
-        MessengerMessagesBO messengerMessagesBO = new MessengerMessagesBO();
-        List<MessengerMessages> messengerMessagesList = messengerMessagesBO.getAllMessages(loggedSocialProfileId, socialProfileId);
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getAllMessages(loggedSocialProfileId, socialProfileId);
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         JSONArray messagesList = new JSONArray();
         for (int i = 0; i < messengerMessagesList.size(); i++) {
             JSONObject message = new JSONObject();
-            SocialProfile socialProfile = socialProfileBO.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
+            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
             message.put("id", messengerMessagesList.get(i).getSocialProfileIdSender());
             message.put("name", socialProfile.getName());
             message.put("message", messengerMessagesList.get(i).getMessage());
@@ -97,17 +97,17 @@ public class GuigohResource extends Thread {
     @Path("/messagesHistory")
     @Produces("application/json")
     public String getMessagesHistory(@QueryParam("loggedSocialProfileId") Integer loggedSocialProfileId, @QueryParam("friendSocialProfileId") Integer socialProfileId) throws JSONException, NonexistentEntityException, RollbackFailureException, Exception {
-        MessengerMessagesBO messengerMessagesBO = new MessengerMessagesBO();
-        List<MessengerMessages> lastTenMessagesList = messengerMessagesBO.getLastTenMessages(loggedSocialProfileId, socialProfileId);
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(loggedSocialProfileId, socialProfileId);
         List<MessengerMessages> messengerMessagesList = new ArrayList<MessengerMessages>();
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         for (int i = lastTenMessagesList.size(); i > 0; i--) {
             messengerMessagesList.add(lastTenMessagesList.get(i - 1));
         }
         JSONArray messagesList = new JSONArray();
         for (int i = 0; i < messengerMessagesList.size(); i++) {
             JSONObject message = new JSONObject();
-            SocialProfile socialProfile = socialProfileBO.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
+            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
             message.put("id", messengerMessagesList.get(i).getSocialProfileIdSender());
             message.put("name", socialProfile.getName());
             message.put("message", messengerMessagesList.get(i).getMessage());
@@ -122,16 +122,16 @@ public class GuigohResource extends Thread {
     @Path("/deliverMessages")
     @Produces("application/json")
     public String getMessagesDelivered(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, NonexistentEntityException, RollbackFailureException, Exception {
-        MessengerMessagesBO messengerMessagesBO = new MessengerMessagesBO();
-        List<MessengerMessages> nonReadMessagesList = messengerMessagesBO.getNonReadMessages(socialProfileId);
-        List<MessengerMessages> messengerMessagesList = new ArrayList<MessengerMessages>();
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        List<MessengerMessages> nonReadMessagesList = messengerMessagesJpaController.getNonReadMessages(socialProfileId);
+        List<MessengerMessages> messengerMessagesList = new ArrayList<>();
         for (MessengerMessages mm : nonReadMessagesList) {
             messengerMessagesList.add(mm);
         }
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         JSONArray messagesList = new JSONArray();
         for (int i = 0; i < messengerMessagesList.size(); i++) {
-            SocialProfile socialProfile = socialProfileBO.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
+            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
             JSONObject message = new JSONObject();
             message.put("id", messengerMessagesList.get(i).getSocialProfileIdSender());
             message.put("name", socialProfile.getName());
@@ -139,7 +139,7 @@ public class GuigohResource extends Thread {
             message.put("messageType", "N");
             messagesList.put(i, message);
             messengerMessagesList.get(i).setMessageDelivered('Y');
-            messengerMessagesBO.editMessage(messengerMessagesList.get(i));
+            messengerMessagesJpaController.edit(messengerMessagesList.get(i));
         }
 
         return messagesList.toString();
@@ -153,11 +153,12 @@ public class GuigohResource extends Thread {
         mm.setMessage(message);
         mm.setSocialProfileIdReceiver(idReceiver);
         mm.setSocialProfileIdSender(idSender);
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        Timestamp ts = mmBO.getServerTime();
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        UtilJpaController utilJpaController = new UtilJpaController();
+        Timestamp ts = utilJpaController.getTimestampServerTime();
         mm.setMessageDate(ts);
         mm.setMessageDelivered('N');
-        mmBO.createMessage(mm);
+        messengerMessagesJpaController.create(mm);
         JSONObject object = new JSONObject();
         return object.toString();
     }
@@ -166,23 +167,24 @@ public class GuigohResource extends Thread {
     @Path("/messengerFriends")
     @Produces("application/json")
     public String getMessengerFriends(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, Exception, RollbackFailureException {
-        MessengerStatusBO messengerStatusBO = new MessengerStatusBO();
-        Double serverTime = messengerStatusBO.getServerTime();
+        MessengerStatusJpaController messengerStatusJpaController = new MessengerStatusJpaController();
+        UtilJpaController utilJpaController = new UtilJpaController();
+        Double serverTime = utilJpaController.getEpochServerTime();
         MessengerStatus ms = new MessengerStatus();
         ms.setSocialProfileId(socialProfileId);
         ms.setLastPing(serverTime);
-        messengerStatusBO.pingUser(ms);
-        SocialProfileBO socialProfileBO = new SocialProfileBO();
-        SocialProfile socialProfile = socialProfileBO.findSocialProfileBySocialProfileId(socialProfileId);
-        FriendsBO friendsBO = new FriendsBO();
-        List<SocialProfile> friendsOfflineList = friendsBO.findFriendsOfflineByToken(socialProfile.getTokenId());
-        List<SocialProfile> friendsOnlineList = friendsBO.findFriendsOnlineByToken(socialProfile.getTokenId());
+        messengerStatusJpaController.pingUser(ms);
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
+        FriendsJpaController friendsJpaController = new FriendsJpaController();
+        List<SocialProfile> friendsOfflineList = friendsJpaController.findFriendsOfflineByToken(socialProfile.getTokenId());
+        List<SocialProfile> friendsOnlineList = friendsJpaController.findFriendsOnlineByToken(socialProfile.getTokenId());
         JSONArray friendList = new JSONArray();
         for (int i = 0; i < friendsOnlineList.size(); i++) {
             JSONObject friend = new JSONObject();
             friend.put("id", friendsOnlineList.get(i).getSocialProfileId());
             friend.put("name", friendsOnlineList.get(i).getName());
-            friend.put("photo", socialProfileBO.findSocialProfileBySocialProfileId(friendsOnlineList.get(i).getSocialProfileId()).getPhoto());
+            friend.put("photo", socialProfileJpaController.findSocialProfileBySocialProfileId(friendsOnlineList.get(i).getSocialProfileId()).getPhoto());
             friend.put("online", "true");
             friendList.put(i, friend);
         }
@@ -190,7 +192,7 @@ public class GuigohResource extends Thread {
             JSONObject friend = new JSONObject();
             friend.put("id", friendsOfflineList.get(i).getSocialProfileId());
             friend.put("name", friendsOfflineList.get(i).getName());
-            friend.put("photo", socialProfileBO.findSocialProfileBySocialProfileId(friendsOfflineList.get(i).getSocialProfileId()).getPhoto());
+            friend.put("photo", socialProfileJpaController.findSocialProfileBySocialProfileId(friendsOfflineList.get(i).getSocialProfileId()).getPhoto());
             friend.put("online", "false");
             friendList.put(friendsOnlineList.size() + i, friend);
         }
@@ -207,10 +209,11 @@ public class GuigohResource extends Thread {
         mm.setSocialProfileIdSender(0);
         mm.setSocialProfileIdReceiver(socialProfileId);
         mm.setMessageDelivered('U');
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        Timestamp ts = mmBO.getServerTime();
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        UtilJpaController utilJpaController = new UtilJpaController();
+        Timestamp ts = utilJpaController.getTimestampServerTime();
         mm.setMessageDate(ts);
-        mmBO.createMessage(mm);
+        messengerMessagesJpaController.create(mm);
         JSONObject jsonObject = new JSONObject();
         return jsonObject.toString();
     }
@@ -219,8 +222,8 @@ public class GuigohResource extends Thread {
     @Path("/getCurriculumMessages")
     @Produces("application/json")
     public String getCurriculumMessages(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, Exception, RollbackFailureException {
-        MessengerMessagesBO mmBO = new MessengerMessagesBO();
-        List<MessengerMessages> curriculumMessagesList = mmBO.getCurriculumMessages(socialProfileId);
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        List<MessengerMessages> curriculumMessagesList = messengerMessagesJpaController.getCurriculumMessages(socialProfileId);
         JSONArray messagesList = new JSONArray();
         for (int i = 0; i < curriculumMessagesList.size(); i++) {
             JSONObject message = new JSONObject();
@@ -231,7 +234,7 @@ public class GuigohResource extends Thread {
             message.put("date", curriculumMessagesList.get(i).getMessageDate());
             messagesList.put(i, message);
             curriculumMessagesList.get(i).setMessageDelivered('S');
-            mmBO.editMessage(curriculumMessagesList.get(i));
+            messengerMessagesJpaController.edit(curriculumMessagesList.get(i));
         }
         return messagesList.toString();
     }

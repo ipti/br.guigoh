@@ -4,20 +4,21 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
-import com.guigoh.bo.EducationalObjectMediaBO;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
-import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.SocialProfileBO;
-import br.org.ipti.guigoh.util.CookieService;
-import br.org.ipti.guigoh.util.UploadService;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.UploadService;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -80,17 +81,20 @@ public class SubmitFormBean implements Serializable {
     }
 
     public void submitForm() throws IOException, Exception {
-        SocialProfile socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+        UtilJpaController utilJpaController = new UtilJpaController();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
         educationalObject.setSocialProfileId(socialProfile);
         educationalObject.setStatus("PE");
-        educationalObject.setDate(EducationalObjectBO.getServerTime());
-        EducationalObjectBO.create(educationalObject);
+        educationalObject.setDate(utilJpaController.getTimestampServerTime());
+        educationalObjectJpaController.create(educationalObject);
 //        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
-        EducationalObjectBO.edit(educationalObject);
+        educationalObjectJpaController.edit(educationalObject);
         tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
         String[] tagArray = tags.replace(" ", "").split(",");
         List<EducationalObject> educationalObjectList = new ArrayList<>();
@@ -118,7 +122,7 @@ public class SubmitFormBean implements Serializable {
         }
     }
 
-    private void submitFile(Part part) throws IOException{
+    private void submitFile(Part part) throws IOException, Exception{
 //        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
@@ -129,11 +133,13 @@ public class SubmitFormBean implements Serializable {
         educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
         educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
         UploadService.uploadFile(part, mediaPath);
-        EducationalObjectMediaBO.create(educationalObjectMedia);
+        EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+        educationalObjectMediaJpaController.create(educationalObjectMedia);
     }
 
     private void loadInterestThemes() {
-        interestThemesList = InterestsBO.findInterestsByInterestsTypeName("Themes");
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
+        interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }
 
     public EducationalObject getEducationalObject() {

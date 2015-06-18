@@ -15,6 +15,7 @@ import javax.persistence.criteria.Root;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -191,17 +192,10 @@ public class DiscussionTopicMsgJpaController implements Serializable {
         try {
             List<DiscussionTopicMsg> discussionTopicMsgList = (List<DiscussionTopicMsg>) em.createNativeQuery("select * from discussion_topic_msg "
                     + "where discussion_topic_id = " + id + " and status = 'A'", DiscussionTopicMsg.class).getResultList();
-            return discussionTopicMsgList;
-        } finally {
-            em.close();
+            if (discussionTopicMsgList == null) {
+            return new ArrayList<>();
         }
-    }
-    
-    public Timestamp getServerTime(){
-        EntityManager em = getEntityManager();
-        try {
-            Timestamp serverTime = (Timestamp) em.createNativeQuery("SELECT date_trunc('seconds', now()::timestamp);").getSingleResult();
-            return serverTime;
+            return discussionTopicMsgList;
         } finally {
             em.close();
         }

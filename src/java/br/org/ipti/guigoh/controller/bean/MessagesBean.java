@@ -4,12 +4,12 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.MessengerMessagesBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.model.entity.MessengerMessages;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,8 @@ public class MessagesBean implements Serializable{
     private SocialProfile contactSocialProfile;
     private SocialProfile socialProfile;
     private Boolean isCurriculum;
+    private MessengerMessagesJpaController messengerMessagesJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -38,14 +40,16 @@ public class MessagesBean implements Serializable{
             contactSocialProfile = new SocialProfile();
             messagesList = new ArrayList<>();
             getCookie();
-            socialProfile = SocialProfileBO.findSocialProfile(user.getToken());
+            socialProfileJpaController = new SocialProfileJpaController();
+            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+            messengerMessagesJpaController = new MessengerMessagesJpaController();
             loadContacts();
         }
     }
 
     private void loadContacts() {
         contactsList = new ArrayList<>();
-        contactsList = MessengerMessagesBO.getAllContacts(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId());
+        contactsList = messengerMessagesJpaController.getAllContacts(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId());
     }
 
     private void getCookie() {
@@ -55,7 +59,7 @@ public class MessagesBean implements Serializable{
     
     public void getCurriculumMessages(){
         isCurriculum = true;
-        messagesList = MessengerMessagesBO.getAllCurriculumMessages(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId());
+        messagesList = messengerMessagesJpaController.getAllCurriculumMessages(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId());
     }
     
     public String goToProfile(Integer id) {
@@ -64,8 +68,8 @@ public class MessagesBean implements Serializable{
 
     public void getMessages(Integer socialProfileId) {
         isCurriculum = false;
-        messagesList = MessengerMessagesBO.getAllMessages(SocialProfileBO.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
-        contactSocialProfile = SocialProfileBO.findSocialProfileBySocialProfileId(socialProfileId);
+        messagesList = messengerMessagesJpaController.getAllMessages(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
+        contactSocialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
     }
 
     public Users getUser() {

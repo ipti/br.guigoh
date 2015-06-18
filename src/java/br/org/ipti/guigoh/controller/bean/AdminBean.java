@@ -4,15 +4,17 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
-import com.guigoh.bo.UserAuthorizationBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.MailService;
 import br.org.ipti.guigoh.util.translator.Translator;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,9 +56,13 @@ public class AdminBean implements Serializable {
     private List<EducationalObject> inactiveEducationalObjectList;
     private Map<Integer, Boolean> checked;
     private Translator trans;
+    private EducationalObjectJpaController educationalObjectJpaController;
+    private UserAuthorizationJpaController userAuthorizationJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            educationalObjectJpaController = new EducationalObjectJpaController();
+            userAuthorizationJpaController = new UserAuthorizationJpaController();
             authorization = new UserAuthorization();
             socialProfile = new SocialProfile();
             listSocialProfile = new ArrayList<>();
@@ -79,11 +85,12 @@ public class AdminBean implements Serializable {
     }
 
     private void getLoggedSocialProfile() {
-        socialProfile = SocialProfileBO.findSocialProfile(CookieService.getCookie("token"));
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
     }
 
     private void getUserRole() {
-        authorization = UserAuthorizationBO.findAuthorizationByTokenId(socialProfile.getTokenId());
+        authorization = userAuthorizationJpaController.findAuthorization(socialProfile.getTokenId());
         if (authorization.getRoles().equals(ADMIN)) {
             admin = true;
         }
@@ -105,34 +112,34 @@ public class AdminBean implements Serializable {
 //        }
 //    }
     private void getPendingUsers() {
-        pendingUserList = UserAuthorizationBO.getPendingUsers();
+        pendingUserList = userAuthorizationJpaController.getPendingUsers();
     }
 
     private void getActiveUsers() {
-        activeUserList = UserAuthorizationBO.getActiveUsers();
+        activeUserList = userAuthorizationJpaController.getActiveUsers();
     }
 
     private void getInactiveUsers() {
-        inactiveUserList = UserAuthorizationBO.getInactiveUsers();
+        inactiveUserList = userAuthorizationJpaController.getInactiveUsers();
     }
 
     private void getPendingEducationalObjects() {
-        pendingEducationalObjectList = EducationalObjectBO.getPendingEducationalObjects();
+        pendingEducationalObjectList = educationalObjectJpaController.getPendingEducationalObjects();
     }
 
     private void getActiveEducationalObjects() {
-        activeEducationalObjectList = EducationalObjectBO.getActiveEducationalObjects();
+        activeEducationalObjectList = educationalObjectJpaController.getActiveEducationalObjects();
     }
 
     private void getInactiveEducationalObjects() {
-        inactiveEducationalObjectList = EducationalObjectBO.getInactiveEducationalObjects();
+        inactiveEducationalObjectList = educationalObjectJpaController.getInactiveEducationalObjects();
     }
 
-    public void acceptUser(String token) {
+    public void acceptUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
-            UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
+            UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
             user.setStatus(FIRST_ACCESS);
-            UserAuthorizationBO.edit(user);
+            userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro aceito";
             String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"
                             + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
@@ -149,11 +156,11 @@ public class AdminBean implements Serializable {
         }
     }
 
-    public void declineUser(String token) {
+    public void declineUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
-            UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
+            UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
             user.setStatus(INACTIVE_ACCESS);
-            UserAuthorizationBO.edit(user);
+            userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro negado";
             String mailText = "Seu cadastro no Arte com Ciência foi negado por um administrador.";
             trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
@@ -167,49 +174,49 @@ public class AdminBean implements Serializable {
         }
     }
 
-    public void deactivateUser(String token) {
-        UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
+    public void deactivateUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
+        UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
         user.setStatus(INACTIVE_ACCESS);
-        UserAuthorizationBO.edit(user);
+        userAuthorizationJpaController.edit(user);
         getActiveUsers();
         getInactiveUsers();
     }
 
-    public void activateUser(String token) {
-        UserAuthorization user = UserAuthorizationBO.getUserAuthorization(token);
+    public void activateUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
+        UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
         user.setStatus(ACTIVE_ACCESS);
-        UserAuthorizationBO.edit(user);
+        userAuthorizationJpaController.edit(user);
         getActiveUsers();
         getInactiveUsers();
     }
 
-    public void acceptEducationalObject(Integer id) {
-        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
+    public void acceptEducationalObject(Integer id) throws Exception {
+        EducationalObject educationalObject = educationalObjectJpaController.findEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
-        EducationalObjectBO.edit(educationalObject);
+        educationalObjectJpaController.edit(educationalObject);
         getActiveEducationalObjects();
         getPendingEducationalObjects();
     }
 
-    public void declineEducationalObject(Integer id) {
-        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
+    public void declineEducationalObject(Integer id) throws Exception {
+        EducationalObject educationalObject = educationalObjectJpaController.findEducationalObject(id);
         educationalObject.setStatus(REJECTED);
-        EducationalObjectBO.edit(educationalObject);
+        educationalObjectJpaController.edit(educationalObject);
         getPendingEducationalObjects();
     }
 
-    public void deactivateEducationalObject(Integer id) {
-        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
+    public void deactivateEducationalObject(Integer id) throws Exception {
+        EducationalObject educationalObject = educationalObjectJpaController.findEducationalObject(id);
         educationalObject.setStatus(DEACTIVATED);
-        EducationalObjectBO.edit(educationalObject);
+        educationalObjectJpaController.edit(educationalObject);
         getActiveEducationalObjects();
         getInactiveEducationalObjects();
     }
 
-    public void activateEducationalObject(Integer id) {
-        EducationalObject educationalObject = EducationalObjectBO.getEducationalObject(id);
+    public void activateEducationalObject(Integer id) throws Exception {
+        EducationalObject educationalObject = educationalObjectJpaController.findEducationalObject(id);
         educationalObject.setStatus(ACCEPTED);
-        EducationalObjectBO.edit(educationalObject);
+        educationalObjectJpaController.edit(educationalObject);
         getActiveEducationalObjects();
         getInactiveEducationalObjects();
     }

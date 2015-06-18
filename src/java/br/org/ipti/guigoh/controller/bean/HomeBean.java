@@ -4,13 +4,13 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
-import com.guigoh.bo.DiscussionTopicBO;
-import com.guigoh.bo.InterestsBO;
 import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.NewActivity;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +30,12 @@ public class HomeBean implements Serializable {
     private List<EducationalObject> educationalObjectList = new ArrayList<>();
     private List<NewActivity> newActivityList = new ArrayList();
     private Boolean existsMoreObjects;
+    private EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             try {
+                educationalObjectJpaController = new EducationalObjectJpaController();
                 loadInterestThemes();
                 loadEducationalObjects();
                 loadLastTopicActivities();
@@ -44,16 +46,17 @@ public class HomeBean implements Serializable {
     }
 
     private void loadInterestThemes() {
-        interestThemesList = InterestsBO.findInterestsByInterestsTypeName("Themes");
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
+        interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }
 
     private void loadEducationalObjects() {
-        educationalObjectList = EducationalObjectBO.getLatestFiveActiveEducationalObjects();
+        educationalObjectList = educationalObjectJpaController.getLatestFiveActiveEducationalObjects();
     }
 
     public void loadMoreEducationalObjects() {
         List<EducationalObject> outList = educationalObjectList;
-        List<EducationalObject> moreObjects = EducationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
+        List<EducationalObject> moreObjects = educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
         for (EducationalObject temp : moreObjects){
             outList.add(temp);
         }
@@ -62,7 +65,7 @@ public class HomeBean implements Serializable {
     }
     
     public void existsMore(){
-        if (EducationalObjectBO.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
+        if (educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
             setExistsMoreObjects(false);
         } else {
             setExistsMoreObjects(true);
@@ -70,7 +73,8 @@ public class HomeBean implements Serializable {
     }
 
     private void loadLastTopicActivities() {
-        newActivityList = DiscussionTopicBO.getLastActivities();
+        DiscussionTopicJpaController discussionTopicJpaController = new DiscussionTopicJpaController();
+        newActivityList = discussionTopicJpaController.getLastActivities();
     }
 
     public String getMD5(String value) {

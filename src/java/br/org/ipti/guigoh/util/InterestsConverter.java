@@ -4,8 +4,8 @@
  */
 package br.org.ipti.guigoh.util;
 
-import com.guigoh.bo.InterestsBO;
 import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,9 +31,9 @@ public class InterestsConverter implements Converter {
         if (value == null || value.length() == 0) {
             return null;
         }
-        InterestsBO interestsBO = new InterestsBO();
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
 
-        Interests interests = interestsBO.findInterestsByInterestsName(value);
+        Interests interests = interestsJpaController.findInterestsByInterestsName(value);
         interests.setName(value);
         return interests;
     }

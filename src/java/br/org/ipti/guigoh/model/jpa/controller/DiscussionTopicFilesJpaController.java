@@ -9,6 +9,7 @@ import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -160,6 +161,9 @@ public class DiscussionTopicFilesJpaController implements Serializable {
         try {
             List<DiscussionTopicFiles> discussionTopicFilesList = (List<DiscussionTopicFiles>) em.createNativeQuery("select * from discussion_topic_files "
                     + "where fk_id = " + id + " and fk_type = '"+type+"'", DiscussionTopicFiles.class).getResultList();
+            if (discussionTopicFilesList == null) {
+                return new ArrayList<>();
+            }
             return discussionTopicFilesList;
         } finally {
             em.close();

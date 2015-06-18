@@ -466,8 +466,11 @@ public class EducationalObjectJpaController implements Serializable {
                     sql += "and eot.tag_id = (select id from tags where name = '" + tag + "') ";
                 }
             }
-            List<EducationalObject> discussionTopicList = (List<EducationalObject>) em.createNativeQuery(sql, EducationalObject.class).getResultList();
-            return discussionTopicList;
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery(sql, EducationalObject.class).getResultList();
+            if (educationalObjectList == null) {
+            return new ArrayList<EducationalObject>();
+        }
+            return educationalObjectList;
         } finally {
             em.close();
         }

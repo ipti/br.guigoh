@@ -242,7 +242,7 @@ public class EducationsNameJpaController implements Serializable {
         }
     }
 
-    public EducationsName findEducationsByName(EducationsName nameId) {
+    public EducationsName findEducationsNameByName(EducationsName nameId) {
         EntityManager em = getEntityManager();
         try {
             EducationsName educationsNametemp = (EducationsName) em.createNativeQuery("select * from educations_name "

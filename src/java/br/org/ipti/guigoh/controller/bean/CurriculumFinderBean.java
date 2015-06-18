@@ -4,12 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationsLocationBO;
-import com.guigoh.bo.EducationsNameBO;
-import com.guigoh.bo.InterestsBO;
-import com.guigoh.bo.InterestsTypeBO;
-import com.guigoh.bo.OccupationsBO;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.entity.Country;
 import br.org.ipti.guigoh.model.entity.Educations;
@@ -25,8 +19,14 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.State;
 import br.org.ipti.guigoh.model.jpa.controller.CityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsLocationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsNameJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsTypeJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.OccupationsTypeJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.StateJpaController;
 import java.io.Serializable;
 import java.util.*;
@@ -130,7 +130,8 @@ public class CurriculumFinderBean implements Serializable{
         education.setNameId(educationsName);
         education.setLocationId(educationsLocation);
         socialProfileList = new ArrayList<>();
-        socialProfileList = SocialProfileBO.loadUserSearchList(socialProfile, education, experienceTime, interest);
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        socialProfileList = socialProfileJpaController.loadUserSearchList(socialProfile, education, experienceTime, interest);
         socialProfileList = removeDuplicates(socialProfileList);
     }
     
@@ -160,7 +161,8 @@ public class CurriculumFinderBean implements Serializable{
     }
     
     private List<InterestsType> getInterestTypes(){
-        return InterestsTypeBO.findInterestsType();
+        InterestsTypeJpaController interestsTypeJpaController = new InterestsTypeJpaController();
+        return interestsTypeJpaController.findInterestsTypeEntities();
     }
     
     private List<Scholarity> getScholarities(){
@@ -169,19 +171,23 @@ public class CurriculumFinderBean implements Serializable{
     }
     
     private List<EducationsName> getEducationNames(){
-        return EducationsNameBO.getAll();
+        EducationsNameJpaController educationsNameJpaController = new EducationsNameJpaController();
+        return educationsNameJpaController.findEducationsNameEntities();
     }
     
     private List<EducationsLocation> getEducationLocations(){
-        return EducationsLocationBO.getAll();
+        EducationsLocationJpaController educationsLocationJpaController = new EducationsLocationJpaController();
+        return educationsLocationJpaController.findEducationsLocationEntities();
     }
     
     public void loadInterests(){
-        interestList = InterestsBO.findInterestsByInterestsTypeId(interestTypeId);
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
+        interestList = interestsJpaController.findInterestsByInterestsTypeId(interestTypeId);
     }
     
     public void loadOccupations(){
-        occupationList = OccupationsBO.findOccupationsByType(occupationTypeId);
+        OccupationsJpaController occupationsJpaController = new OccupationsJpaController();
+        occupationList = occupationsJpaController.findOccupationsByType(occupationTypeId);
     }
 
     public void loadStates() {

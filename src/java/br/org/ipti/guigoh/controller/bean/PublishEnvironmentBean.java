@@ -4,8 +4,8 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import com.guigoh.bo.EducationalObjectBO;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,8 @@ public class PublishEnvironmentBean implements Serializable{
     }
     
     private void loadEducationalObjectList(){
-        educationalObjectList = EducationalObjectBO.getLatestFourActiveEducationalObjects();
+        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+        educationalObjectList = educationalObjectJpaController.getLatestFourActiveEducationalObjects();
     }
 
     public List<EducationalObject> getEducationalObjectList() {

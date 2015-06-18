@@ -5,7 +5,6 @@
 package br.org.ipti.guigoh.model.jpa.controller;
 
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.model.jpa.exceptions.IllegalOrphanException;
 import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
@@ -271,6 +270,9 @@ public class DiscussionTopicJpaController implements Serializable {
         try {
             List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
                     + "where theme_id = " + id + " and status = 'A' order by data DESC", DiscussionTopic.class).getResultList();
+            if (discussionTopicList == null) {
+                return new ArrayList<>();
+            }
             return discussionTopicList;
         } finally {
             em.close();
@@ -280,7 +282,6 @@ public class DiscussionTopicJpaController implements Serializable {
     public List<DiscussionTopic> loadDiscussionTopicsByExpression(String expression, String tag, Integer id) {
         EntityManager em = getEntityManager();
         try {
-
 
             String sql = "select distinct dt.* from discussion_topic dt "
                     + "left join discussion_topic_msg dtm on dt.id = dtm.discussion_topic_id ";
@@ -299,13 +300,16 @@ public class DiscussionTopicJpaController implements Serializable {
                 }
             }
             List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery(sql, DiscussionTopic.class).getResultList();
+            if (discussionTopicList == null) {
+                return new ArrayList<>();
+            }
             return discussionTopicList;
         } finally {
             em.close();
         }
     }
-    
-    public List<NewActivity> getLastActivities(){
+
+    public List<NewActivity> getLastActivities() {
         EntityManager em = getEntityManager();
         try {
             List<Object[]> objectList = em.createNativeQuery("select * from "
@@ -316,23 +320,13 @@ public class DiscussionTopicJpaController implements Serializable {
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
                     + "where dtm.status = 'A') "
                     + "as news order by data desc limit 5").getResultList();
-            List<NewActivity> newActivityList = new ArrayList<NewActivity>();
-            SocialProfileBO spBO = new SocialProfileBO();
-            for(Object[] obj: objectList){
-                NewActivity newActivity = new NewActivity((Integer)obj[0],(SocialProfile)spBO.findSocialProfileBySocialProfileId((Integer)obj[1]),(String)obj[2],(Date)obj[3],(String)obj[4]);
+            List<NewActivity> newActivityList = new ArrayList<>();
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+            for (Object[] obj : objectList) {
+                NewActivity newActivity = new NewActivity((Integer) obj[0], (SocialProfile) socialProfileJpaController.findSocialProfileBySocialProfileId((Integer) obj[1]), (String) obj[2], (Date) obj[3], (String) obj[4]);
                 newActivityList.add(newActivity);
             }
             return newActivityList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public Timestamp getServerTime() {
-        EntityManager em = getEntityManager();
-        try {
-            Timestamp serverTime = (Timestamp) em.createNativeQuery("SELECT date_trunc('seconds', now()::timestamp);").getSingleResult();
-            return serverTime;
         } finally {
             em.close();
         }

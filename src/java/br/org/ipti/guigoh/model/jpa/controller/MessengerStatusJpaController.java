@@ -157,16 +157,6 @@ public class MessengerStatusJpaController implements Serializable {
         }
     }
     
-    public Double getServerTime() {
-        EntityManager em = getEntityManager();
-        try {
-            Double serverTime = (Double) em.createNativeQuery("select round( date_part( 'epoch', now() ) )").getSingleResult();
-            return serverTime;
-        } finally {
-            em.close();
-        }
-    }
-    
     public Long getUsersOnline(){
         EntityManager em = getEntityManager();
         try {
@@ -177,4 +167,15 @@ public class MessengerStatusJpaController implements Serializable {
         }
     }
     
+    public void pingUser(MessengerStatus ms) throws RollbackFailureException, Exception {
+        try {
+            if (findMessengerStatus(ms.getSocialProfileId()) == null) {
+                create(ms);
+            } else {
+                edit(ms);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

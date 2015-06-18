@@ -4,9 +4,9 @@
  */
 package br.org.ipti.guigoh.util;
 
-import com.guigoh.bo.SocialProfileBO;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -58,8 +58,8 @@ public class Upload extends HttpServlet {
                     try {
                         user.setToken(CookieService.getCookieByRequest("token", request));
                         user.setUsername(CookieService.getCookieByRequest("user", request));
-                        SocialProfileBO socialProfileBO = new SocialProfileBO();
-                        SocialProfile socialProfile = socialProfileBO.findSocialProfile(user.getToken());
+                        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+                        SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
 
                         //File f = new File("C:\\Users\\Paulo\\Documents\\guigohdata\\socialProfile\\photo\\" + socialProfile.getSocialProfileId() + "." + item.getName());
                         String type = item.getContentType().split("/")[1];
@@ -67,12 +67,11 @@ public class Upload extends HttpServlet {
                         item.write(f);
 
                         socialProfile.setPhoto("http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type);
-                        socialProfileBO.edit(socialProfile);
+                        socialProfileJpaController.edit(socialProfile);
                         //request.setAttribute("content", item.getContentType());
                         //request.setAttribute("size", item.getSize());
                         //request.getRequestDispatcher("/profile/exibearquivo.jsp").forward(request, response);
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             }
