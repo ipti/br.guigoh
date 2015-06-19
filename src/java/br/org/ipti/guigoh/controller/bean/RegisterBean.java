@@ -102,7 +102,7 @@ public class RegisterBean implements Serializable {
     private UserAuthorizationJpaController userAuthorizationJpaController;
     private UsersJpaController usersJpaController;
 
-    public void init() {
+    public void init() throws Exception {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             cityJpaController = new CityJpaController();
             stateJpaController = new StateJpaController();
@@ -131,15 +131,18 @@ public class RegisterBean implements Serializable {
             roleId = 0;
             subnetworkId = 0;
             languageId = 0;
-            confirmCode = "";
-            confirmEmail = "";
             lastName = "";
             panelStatus = "";
             visitor = true;
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
             loadDefault();
-
+            if (FacesContext.getCurrentInstance().getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1) {
+                authenticateUser();
+            } else {
+                confirmCode = "";
+                confirmEmail = "";
+            }
         }
     }
 
@@ -339,13 +342,13 @@ public class RegisterBean implements Serializable {
 //                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
                         String newUserAccount = "Novo cadastro de usuário";
                         String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
-                            //mailtext = trans.getWord(mailtext);
+                        //mailtext = trans.getWord(mailtext);
                         //mailtext += "http://rts.guigoh.com:8080/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                         //mailtext += "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                         //Modificar http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=codigo&user=usuario                                
                         //newUserAccount = trans.getWord(newUserAccount);
                         for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
-                                //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
+                            //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
                             //newUserAccount = tempTrans.getWord(newUserAccount);
                             //mailtext = tempTrans.getWord(mailtext);
                             MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
@@ -353,7 +356,7 @@ public class RegisterBean implements Serializable {
                         //tempTrans.setLocale(CookieService.getCookie("locale"));
                         authorization.setStatus(PENDING_ACCESS);
 //                        }
-                        userAuthorizationJpaController.create(authorization);
+                        userAuthorizationJpaController.edit(authorization);
                         panelStatus = "confirmed_email";
                     }
                     //caindo sempre nesse else

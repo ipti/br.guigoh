@@ -16,7 +16,7 @@
             <f:metadata>
                 <f:viewParam name="code" value="#{registerBean.confirmCode}" />
                 <f:viewParam name="user" value="#{registerBean.confirmEmail}" />
-                <f:event type="preRenderComponent" listener="#{registerBean.authenticateUser()}"/>
+                <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
             </f:metadata>
             <div class="central">
                 <div class="block_left">
