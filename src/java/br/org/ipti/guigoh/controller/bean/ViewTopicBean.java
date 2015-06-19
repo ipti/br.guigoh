@@ -35,49 +35,27 @@ import javax.servlet.http.Part;
 @ManagedBean(name = "viewTopicBean")
 public class ViewTopicBean implements Serializable {
 
-    private static final char TOPIC = 'T';
-    private static final char MESSAGE = 'M';
+    private static final char TOPIC = 'T', MESSAGE = 'M';
+
     private int discussionTopicID;
-    private DiscussionTopic discussionTopic;
-    private List<DiscussionTopicMsg> discussionTopicMsgList;
     private String newReply;
+
+    private DiscussionTopic discussionTopic;
     private Users user;
     private SocialProfile socialProfile;
+
+    private List<DiscussionTopicMsg> discussionTopicMsgList;
+
     private transient Part fileMedia;
     private transient List<Part> fileList;
+
     private DiscussionTopicJpaController discussionTopicJpaController;
     private DiscussionTopicFilesJpaController discussionTopicFilesJpaController;
     private DiscussionTopicMsgJpaController discussionTopicMsgJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            user = new Users();
-            user.setUsername(CookieService.getCookie("user"));
-            user.setToken(CookieService.getCookie("token"));
-            fileList = new ArrayList<>();
-            discussionTopicJpaController = new DiscussionTopicJpaController();
-            discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
-            discussionTopicMsgJpaController = new DiscussionTopicMsgJpaController();
-            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
-            newReply = "";
-            if (discussionTopic == null) {
-                discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
-
-                discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
-                for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
-                }
-                socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-            } else if (discussionTopic.getId() != discussionTopicID) {
-                discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
-                discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
-                discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
-                for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
-                    dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
-                }
-                socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-            }
+            initGlobalVariables();
         }
     }
 
@@ -88,7 +66,7 @@ public class ViewTopicBean implements Serializable {
             }
         }
     }
-    
+
     public void removeMedia(Part media) {
         fileList.remove(media);
     }
@@ -112,7 +90,7 @@ public class ViewTopicBean implements Serializable {
                         UploadService.uploadFile(part, filePath);
                         DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
                         String[] fileSplit = part.getSubmittedFileName().split("\\.");
-                        discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("."+fileSplit[fileSplit.length - 1], ""));
+                        discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
                         discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
                         discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/message/" + discussionTopicMsg.getId() + "/" + part.getSubmittedFileName());
                         discussionTopicFiles.setFkType(MESSAGE);
@@ -127,6 +105,41 @@ public class ViewTopicBean implements Serializable {
             newReply = "";
             fileList = new ArrayList<>();
         } catch (IOException e) {
+        }
+    }
+    
+    private void initGlobalVariables() {
+        user = new Users();
+        
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+        
+        fileList = new ArrayList<>();
+        
+        discussionTopicJpaController = new DiscussionTopicJpaController();
+        discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
+        discussionTopicMsgJpaController = new DiscussionTopicMsgJpaController();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        
+        newReply = "";
+        
+        if (discussionTopic == null) {
+            discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
+            discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+
+            discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+            for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
+                dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+            }
+            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+        } else if (discussionTopic.getId() != discussionTopicID) {
+            discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
+            discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
+            discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
+            for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
+                dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
+            }
+            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
         }
     }
 
@@ -193,5 +206,4 @@ public class ViewTopicBean implements Serializable {
     public void setFileList(List<Part> fileList) {
         this.fileList = fileList;
     }
-
 }

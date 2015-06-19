@@ -39,23 +39,20 @@ import javax.servlet.http.Part;
 public class SubmitFormBean implements Serializable {
 
     private EducationalObject educationalObject;
+
     private List<Interests> interestThemesList;
     private List<Author> authorList;
+
     private Author author;
+
     private String tags;
-    private transient Part imageFile;
-    private transient Part mediaFile1;
-    private transient Part mediaFile2;
-    private transient Part mediaFile3;
     private boolean submitted;
+
+    private transient Part imageFile, mediaFile1, mediaFile2, mediaFile3;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            submitted = false;
-            interestThemesList = new ArrayList<>();
-            authorList = new ArrayList<>();
-            educationalObject = new EducationalObject();
-            author = new Author();
+            initGlobalVariables();
             loadInterestThemes();
         }
     }
@@ -111,18 +108,18 @@ public class SubmitFormBean implements Serializable {
             authorOE.setEducationalObjectCollection(educationalObjectList);
             authorJpaController.create(authorOE);
         }
-        if (mediaFile1 != null){
+        if (mediaFile1 != null) {
             submitFile(mediaFile1);
         }
-        if (mediaFile2 != null){
+        if (mediaFile2 != null) {
             submitFile(mediaFile2);
         }
-        if (mediaFile3 != null){
+        if (mediaFile3 != null) {
             submitFile(mediaFile3);
         }
     }
 
-    private void submitFile(Part part) throws IOException, Exception{
+    private void submitFile(Part part) throws IOException, Exception {
 //        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
@@ -140,6 +137,16 @@ public class SubmitFormBean implements Serializable {
     private void loadInterestThemes() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
+    }
+    
+    private void initGlobalVariables() {
+        submitted = false;
+        
+        interestThemesList = new ArrayList<>();
+        authorList = new ArrayList<>();
+        
+        educationalObject = new EducationalObject();
+        author = new Author();
     }
 
     public EducationalObject getEducationalObject() {
@@ -221,5 +228,4 @@ public class SubmitFormBean implements Serializable {
     public void setSubmitted(boolean submitted) {
         this.submitted = submitted;
     }
-
 }

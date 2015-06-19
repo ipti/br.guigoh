@@ -33,45 +33,30 @@ import org.apache.commons.mail.EmailException;
 @ManagedBean(name = "adminBean")
 public class AdminBean implements Serializable {
 
-    public static final String ACTIVE_ACCESS = "AC";
-    public static final String INACTIVE_ACCESS = "IC";
-    public static final String FIRST_ACCESS = "FC";
-    public static final String PENDING_ACCESS = "PC";
-    public static final String ADMIN = "AD";
-    public static final String REVISER = "RE";
-    public static final String ACCEPTED = "AC";
-    public static final String REJECTED = "RE";
-    public static final String DEACTIVATED = "DE";
-    private boolean admin;
-    private boolean reviser;
+    public static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
+    FIRST_ACCESS = "FC", PENDING_ACCESS = "PC", ADMIN = "AD", REVISER = "RE",
+    ACCEPTED = "AC", REJECTED = "RE", DEACTIVATED = "DE";
+
+    private boolean admin, reviser;
+
     private UserAuthorization authorization;
     private SocialProfile socialProfile;
-    private List<SocialProfile> listSocialProfile;
-    private List<UserAuthorization> pendingUserList;
-    private List<UserAuthorization> activeUserList;
-    private List<UserAuthorization> inactiveUserList;
-    //private List<UserAuthorization> authorizationList;
-    private List<EducationalObject> pendingEducationalObjectList;
-    private List<EducationalObject> activeEducationalObjectList;
-    private List<EducationalObject> inactiveEducationalObjectList;
-    private Map<Integer, Boolean> checked;
     private Translator trans;
+
+    private List<SocialProfile> socialProfileList;
+    private List<UserAuthorization> pendingUserList, activeUserList, inactiveUserList;
+    //private List<UserAuthorization> authorizationList;
+    private List<EducationalObject> pendingEducationalObjectList, activeEducationalObjectList, inactiveEducationalObjectList;
+
+    private Map<Integer, Boolean> checked;
+
     private EducationalObjectJpaController educationalObjectJpaController;
     private UserAuthorizationJpaController userAuthorizationJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            educationalObjectJpaController = new EducationalObjectJpaController();
-            userAuthorizationJpaController = new UserAuthorizationJpaController();
-            authorization = new UserAuthorization();
-            socialProfile = new SocialProfile();
-            listSocialProfile = new ArrayList<>();
-            //authorizationList = new ArrayList<>();
-            checked = new HashMap<>();
-            admin = false;
-            reviser = false;
-            trans = new Translator();
-            trans.setLocale(CookieService.getCookie("locale"));
+            initGlobalVariables();
+            
             getLoggedSocialProfile();
             getUserRole();
             checkAuthorization();
@@ -142,7 +127,7 @@ public class AdminBean implements Serializable {
             userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro aceito";
             String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"
-                            + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
+                    + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
             trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
             mailSubject = trans.getWord(mailSubject);
             mailText = trans.getWord(mailText);
@@ -239,6 +224,23 @@ public class AdminBean implements Serializable {
 //        }
 //        getPendingUsers();
 //    }
+    private void initGlobalVariables() {
+        educationalObjectJpaController = new EducationalObjectJpaController();
+        userAuthorizationJpaController = new UserAuthorizationJpaController();
+        
+        authorization = new UserAuthorization();
+        socialProfile = new SocialProfile();
+        socialProfileList = new ArrayList<>();
+        //authorizationList = new ArrayList<>();
+        
+        checked = new HashMap<>();
+        
+        admin = reviser = false;
+        
+        trans = new Translator();
+        trans.setLocale(CookieService.getCookie("locale"));
+    }
+
     public UserAuthorization getAuthorization() {
         return authorization;
     }
@@ -255,12 +257,12 @@ public class AdminBean implements Serializable {
         this.socialProfile = socialProfile;
     }
 
-    public List<SocialProfile> getListSocialProfile() {
-        return listSocialProfile;
+    public List<SocialProfile> getSocialProfileList() {
+        return socialProfileList;
     }
 
-    public void setListSocialProfile(List<SocialProfile> listSocialProfile) {
-        this.listSocialProfile = listSocialProfile;
+    public void setSocialProfileList(List<SocialProfile> socialProfileList) {
+        this.socialProfileList = socialProfileList;
     }
 
 //    public List<UserAuthorization> getAuthorizationList() {

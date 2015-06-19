@@ -23,26 +23,22 @@ import javax.faces.context.FacesContext;
  */
 @ViewScoped
 @ManagedBean(name = "messagesBean")
-public class MessagesBean implements Serializable{
+public class MessagesBean implements Serializable {
 
     private Users user;
+    private SocialProfile contactSocialProfile, socialProfile;
+
     private List<SocialProfile> contactsList;
     private List<MessengerMessages> messagesList;
-    private SocialProfile contactSocialProfile;
-    private SocialProfile socialProfile;
+
     private Boolean isCurriculum;
+
     private MessengerMessagesJpaController messengerMessagesJpaController;
     private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            user = new Users();
-            contactSocialProfile = new SocialProfile();
-            messagesList = new ArrayList<>();
-            getCookie();
-            socialProfileJpaController = new SocialProfileJpaController();
-            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-            messengerMessagesJpaController = new MessengerMessagesJpaController();
+            initGlobalVariables();
             loadContacts();
         }
     }
@@ -52,16 +48,11 @@ public class MessagesBean implements Serializable{
         contactsList = messengerMessagesJpaController.getAllContacts(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId());
     }
 
-    private void getCookie() {
-        user.setUsername(CookieService.getCookie("user"));
-        user.setToken(CookieService.getCookie("token"));
-    }
-    
-    public void getCurriculumMessages(){
+    public void getCurriculumMessages() {
         isCurriculum = true;
         messagesList = messengerMessagesJpaController.getAllCurriculumMessages(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId());
     }
-    
+
     public String goToProfile(Integer id) {
         return "/profile/viewProfile.xhtml?id=" + id;
     }
@@ -70,6 +61,21 @@ public class MessagesBean implements Serializable{
         isCurriculum = false;
         messagesList = messengerMessagesJpaController.getAllMessages(socialProfileJpaController.findSocialProfile(user.getToken()).getSocialProfileId(), socialProfileId);
         contactSocialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
+    }
+
+    private void initGlobalVariables() {
+        user = new Users();
+        contactSocialProfile = new SocialProfile();
+        
+        messagesList = new ArrayList<>();
+        
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+        
+        socialProfileJpaController = new SocialProfileJpaController();
+        messengerMessagesJpaController = new MessengerMessagesJpaController();
+        
+        socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
     }
 
     public Users getUser() {
@@ -119,5 +125,5 @@ public class MessagesBean implements Serializable{
     public void setIsCurriculum(Boolean isCurriculum) {
         this.isCurriculum = isCurriculum;
     }
-    
+
 }

@@ -29,19 +29,18 @@ public class HomeBean implements Serializable {
     private List<Interests> interestThemesList = new ArrayList<>();
     private List<EducationalObject> educationalObjectList = new ArrayList<>();
     private List<NewActivity> newActivityList = new ArrayList();
+
     private Boolean existsMoreObjects;
+
     private EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            try {
-                educationalObjectJpaController = new EducationalObjectJpaController();
-                loadInterestThemes();
-                loadEducationalObjects();
-                loadLastTopicActivities();
-                existsMore();
-            } catch (Exception e) {
-            }
+            initGlobalVariables();
+            loadInterestThemes();
+            loadEducationalObjects();
+            loadLastTopicActivities();
+            existsMore();
         }
     }
 
@@ -57,15 +56,15 @@ public class HomeBean implements Serializable {
     public void loadMoreEducationalObjects() {
         List<EducationalObject> outList = educationalObjectList;
         List<EducationalObject> moreObjects = educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
-        for (EducationalObject temp : moreObjects){
+        for (EducationalObject temp : moreObjects) {
             outList.add(temp);
         }
         setEducationalObjectList(outList);
         existsMore();
     }
-    
-    public void existsMore(){
-        if (educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()){
+
+    public void existsMore() {
+        if (educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()) {
             setExistsMoreObjects(false);
         } else {
             setExistsMoreObjects(true);
@@ -111,6 +110,10 @@ public class HomeBean implements Serializable {
 
     public void setExistsMoreObjects(Boolean existsMoreObjects) {
         this.existsMoreObjects = existsMoreObjects;
+    }
+
+    private void initGlobalVariables() {
+        educationalObjectJpaController = new EducationalObjectJpaController();
     }
 
 }

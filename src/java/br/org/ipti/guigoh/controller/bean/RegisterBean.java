@@ -53,21 +53,16 @@ import org.apache.commons.mail.EmailException;
 public class RegisterBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
-    public static final String CONFIRMATION_PENDING = "CP";
-    public static final String CONFIRMATION_ACCESS = "CA";
-    public static final String DEFAULT = "DE";
-    public static final String ACTIVE_ACCESS = "AC";
-    public static final String INACTIVE_ACCESS = "IC";
-    public static final String FIRST_ACCESS = "FC";
-    public static final String PENDING_ACCESS = "PC";
-    public static final String PUBLIC = "PU";
-    public static final String PRIVATE = "PR";
-    public static final String BRAZIL = "Brasil";
-    public static final String SERGIPE = "Sergipe";
-    public static final String ARACAJU = "Aracaju";
+    public static final String CONFIRMATION_PENDING = "CP", CONFIRMATION_ACCESS = "CA", DEFAULT = "DE",
+            ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC", FIRST_ACCESS = "FC", PENDING_ACCESS = "PC",
+            PUBLIC = "PU", PRIVATE = "PR";
+    public static final String BRAZIL = "Brasil", SERGIPE = "Sergipe", ARACAJU = "Aracaju";
+
     private Users user;
     private SocialProfile socialProfile;
     private SecretQuestion secretQuestion;
+    private Translator trans;
+
     private List<SecretQuestion> questionsList;
     private List<State> stateList;
     private List<Country> countryList;
@@ -75,22 +70,11 @@ public class RegisterBean implements Serializable {
     private List<Language> languageList;
     private List<Role> roleList;
     private List<Subnetwork> subnetworkList;
-    private String usernameConfirm;
-    private String passwordConfirm;
-    private Integer countryId;
-    private Integer stateId;
-    private Integer cityId;
-    private Integer roleId;
-    private Integer subnetworkId;
-    private Integer languageId;
-    private String confirmCode;
-    private String confirmEmail;
-    private String lastName;
-    private String panelStatus;
-    private String newPassword;
-    private String newPasswordConfirm;
+
+    private String usernameConfirm, passwordConfirm, confirmCode, confirmEmail,
+            lastName, panelStatus, newPassword, newPasswordConfirm;
+    private Integer countryId, stateId, cityId, roleId, subnetworkId, languageId;
     private Boolean visitor;
-    private Translator trans;
 
     private CityJpaController cityJpaController;
     private StateJpaController stateJpaController;
@@ -104,38 +88,7 @@ public class RegisterBean implements Serializable {
 
     public void init() throws Exception {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            cityJpaController = new CityJpaController();
-            stateJpaController = new StateJpaController();
-            countryJpaController = new CountryJpaController();
-            languageJpaController = new LanguageJpaController();
-            networksJpaController = new NetworksJpaController();
-            roleJpaController = new RoleJpaController();
-            emailActivationJpaController = new EmailActivationJpaController();
-            userAuthorizationJpaController = new UserAuthorizationJpaController();
-            usersJpaController = new UsersJpaController();
-            user = new Users();
-            socialProfile = new SocialProfile();
-            secretQuestion = new SecretQuestion();
-            questionsList = new ArrayList<>();
-            questionsList = getQuestions();
-            stateList = new ArrayList<>();
-            countryList = getCountries();
-            cityList = new ArrayList<>();
-            roleList = new ArrayList<>();
-            languageList = getLanguages();
-            subnetworkList = getSubnetworks();
-            usernameConfirm = "";
-            passwordConfirm = "";
-            countryId = 0;
-            stateId = 0;
-            roleId = 0;
-            subnetworkId = 0;
-            languageId = 0;
-            lastName = "";
-            panelStatus = "";
-            visitor = true;
-            trans = new Translator();
-            trans.setLocale(CookieService.getCookie("locale"));
+            initGlobalVariables();
             loadDefault();
             if (FacesContext.getCurrentInstance().getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1) {
                 authenticateUser();
@@ -385,6 +338,38 @@ public class RegisterBean implements Serializable {
             }
         } catch (EmailException e) {
         }
+    }
+
+    private void initGlobalVariables() {
+        cityJpaController = new CityJpaController();
+        stateJpaController = new StateJpaController();
+        countryJpaController = new CountryJpaController();
+        languageJpaController = new LanguageJpaController();
+        networksJpaController = new NetworksJpaController();
+        roleJpaController = new RoleJpaController();
+        emailActivationJpaController = new EmailActivationJpaController();
+        userAuthorizationJpaController = new UserAuthorizationJpaController();
+        usersJpaController = new UsersJpaController();
+        
+        user = new Users();
+        socialProfile = new SocialProfile();
+        secretQuestion = new SecretQuestion();
+        trans = new Translator();
+        
+        questionsList = getQuestions();
+        countryList = getCountries();
+        languageList = getLanguages();
+        subnetworkList = getSubnetworks();
+        
+        stateList = new ArrayList<>();
+        cityList = new ArrayList<>();
+        roleList = new ArrayList<>();
+        
+        usernameConfirm = passwordConfirm = lastName = panelStatus = "";
+        countryId = stateId = roleId = subnetworkId = languageId = 0;
+        visitor = true;
+        
+        trans.setLocale(CookieService.getCookie("locale"));
     }
 
     public Users getUser() {

@@ -28,50 +28,57 @@ import javax.faces.context.FacesContext;
 public class EducationalObjectBean implements Serializable {
 
     private int educationalObjectID;
+
     private EducationalObject educationalObject;
+
     private List<Author> authorList;
     private List<EducationalObjectMedia> educationalObjectMediaList;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            educationalObject = new EducationalObject();
-            authorList = new ArrayList<>();
-            educationalObjectMediaList = new ArrayList<>();
+            initGlobalVariables();
             findEducationalObject(educationalObjectID);
             getAuthorsByEducationalObject(educationalObjectID);
             getMediasByEducationalObject(educationalObjectID);
         }
     }
 
-    public String getMediaSize(Integer size){
-        double convertedSizeMB = Math.ceil((double) size/Math.pow(1024, 2)*10)/10;
-        double convertedSizeKB = Math.ceil(((double) size/1024)*10)/10;
-        if (convertedSizeMB > 1){
+    public String getMediaSize(Integer size) {
+        double convertedSizeMB = Math.ceil((double) size / Math.pow(1024, 2) * 10) / 10;
+        double convertedSizeKB = Math.ceil(((double) size / 1024) * 10) / 10;
+        if (convertedSizeMB > 1) {
             return convertedSizeMB + "MB";
         } else {
             return convertedSizeKB + "KB";
         }
     }
-    
-    public void downloadMedia(String path, String type) throws IOException{
+
+    public void downloadMedia(String path, String type) throws IOException {
         DownloadService.downloadFileFromURL(path, type);
     }
-    
+
     private void findEducationalObject(Integer id) {
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         educationalObject = educationalObjectJpaController.findEducationalObject(id);
     }
 
-    private void getAuthorsByEducationalObject(Integer educationalObjectID){
+    private void getAuthorsByEducationalObject(Integer educationalObjectID) {
         AuthorJpaController authorJpaController = new AuthorJpaController();
         authorList = authorJpaController.getAuthorsByEducationalObject(educationalObjectID);
     }
-    
-    private void getMediasByEducationalObject(Integer educationalObjectID){
+
+    private void getMediasByEducationalObject(Integer educationalObjectID) {
         EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
         educationalObjectMediaList = educationalObjectMediaJpaController.getMediasByEducationalObject(educationalObjectID);
     }
     
+    private void initGlobalVariables() {
+        educationalObject = new EducationalObject();
+        
+        authorList = new ArrayList<>();
+        educationalObjectMediaList = new ArrayList<>();
+    }
+
     public EducationalObject getEducationalObject() {
         return educationalObject;
     }

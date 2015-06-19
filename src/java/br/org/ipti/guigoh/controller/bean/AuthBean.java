@@ -32,57 +32,47 @@ import org.apache.commons.mail.EmailException;
 public class AuthBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
-    private Users user;
-    private String locale;
-    private String loginStatus;
-    private String email;
-    private String secretAnswer;
-    private Users userToRecover;
-    private String password;
-    private String passwordConfirm;
+    
+    private Users user, userToRecover;
     private Translator trans;
+    
+    private String locale, loginStatus, email, secretAnswer, password, passwordConfirm;
+    
     private UsersJpaController usersJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            usersJpaController = new UsersJpaController();
-            user = new Users();
-            locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
-            trans = new Translator();
-            trans.setLocale(locale);
-            loginStatus = "login";
-            userToRecover = new Users();
-            email = "";
+            initGlobalVariables();
         }
     }
 
     public String login() {
         Users registeredUser = usersJpaController.findUsers(user.getUsername());
-            user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
-            if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
-                switch (registeredUser.getAuthorization().getStatus()) {
-                    case "AC":
-                        CookieService.addCookie("user", registeredUser.getUsername());
-                        CookieService.addCookie("token", registeredUser.getToken());
-                        return "islogged";
-                    case "PC":
-                        loginStatus = "pending";
-                        return "";
-                    case "IC":
-                        loginStatus = "inactive";
-                        return "";
-                    default:
-                        CookieService.addCookie("user", registeredUser.getUsername());
-                        CookieService.addCookie("token", registeredUser.getToken());
-                        return "wizard";
-                }
-            } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
-                loginStatus = "check_email";
-                return "";
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
-                return "";
+        user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
+        if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
+            switch (registeredUser.getAuthorization().getStatus()) {
+                case "AC":
+                    CookieService.addCookie("user", registeredUser.getUsername());
+                    CookieService.addCookie("token", registeredUser.getToken());
+                    return "islogged";
+                case "PC":
+                    loginStatus = "pending";
+                    return "";
+                case "IC":
+                    loginStatus = "inactive";
+                    return "";
+                default:
+                    CookieService.addCookie("user", registeredUser.getUsername());
+                    CookieService.addCookie("token", registeredUser.getToken());
+                    return "wizard";
             }
+        } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
+            loginStatus = "check_email";
+            return "";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
+            return "";
+        }
     }
 
     public String logout() {
@@ -146,6 +136,19 @@ public class AuthBean implements Serializable {
             return "";
         }
 
+    }
+    
+    private void initGlobalVariables() {
+        usersJpaController = new UsersJpaController();
+        
+        locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
+        
+        user = userToRecover = new Users();
+        trans = new Translator();
+        trans.setLocale(locale);
+        
+        loginStatus = "login";
+        email = "";
     }
 
     public Users getUser() {

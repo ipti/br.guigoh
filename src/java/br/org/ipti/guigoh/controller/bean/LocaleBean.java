@@ -23,23 +23,17 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {
 
-    private final Translator trans;
-    private String locale;
-    private final String token;
+    private Translator trans;
     private SocialProfile socialProfile;
-    private final LanguageJpaController languageJpaController;
-    private final SocialProfileJpaController socialProfileJpaController;
+    
+    private String locale;
+    private String token;
+    
+    private LanguageJpaController languageJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
 
     public LocaleBean() throws RollbackFailureException, Exception {
-        trans = new Translator();
-        token = CookieService.getCookie("token");
-        languageJpaController = new LanguageJpaController();
-        socialProfileJpaController = new SocialProfileJpaController();
-        locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
-        if (token != null) {
-            socialProfile = socialProfileJpaController.findSocialProfile(token);
-            locale = languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym();
-        }
+        initGlobalVariables();
         changeLocale("", locale);
     }
 
@@ -64,5 +58,20 @@ public class LocaleBean implements Serializable {
 
     public String getAcronym() {
         return locale;
+    }
+
+    private void initGlobalVariables() {
+        languageJpaController = new LanguageJpaController();
+        socialProfileJpaController = new SocialProfileJpaController();
+        
+        trans = new Translator();
+        
+        token = CookieService.getCookie("token");
+        locale = CookieService.getCookie("locale") != null ? CookieService.getCookie("locale") : "ptBR";
+        
+        if (token != null) {
+            socialProfile = socialProfileJpaController.findSocialProfile(token);
+            locale = languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym();
+        }
     }
 }

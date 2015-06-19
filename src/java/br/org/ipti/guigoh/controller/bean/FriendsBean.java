@@ -29,33 +29,24 @@ public class FriendsBean implements Serializable {
 
     private Users user;
     private SocialProfile userSocialProfile;
-    private List<Friends> acceptedList;
-    private List<Friends> pendingList;
+
+    private List<Friends> acceptedList, pendingList;
     private List<SocialProfile> socialProfileList;
-    private String friendInputSearch = "";
-    private String userInputSearch = "";
+
+    private String friendInputSearch, userInputSearch;
+
     private FriendsJpaController friendsJpaController;
     private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            friendsJpaController = new FriendsJpaController();
-            socialProfileJpaController = new SocialProfileJpaController();
-            user = new Users();        
-            getCookie();
-            userSocialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+            initGlobalVariables();
             loadFriends();
         }
     }
-    
-    private void getCookie(){
-        user.setUsername(CookieService.getCookie("user"));
-        user.setToken(CookieService.getCookie("token"));
-    }
 
     public void loadFriends() {
-        acceptedList = new ArrayList<>();
-        pendingList = new ArrayList<>();
+        acceptedList = pendingList = new ArrayList<>();
         acceptedList = friendsJpaController.findFriendsByToken(user.getToken());
         pendingList = friendsJpaController.findPendingFriendsByToken(user.getToken());
         organizeFriendList(acceptedList);
@@ -66,16 +57,16 @@ public class FriendsBean implements Serializable {
         return "/profile/viewProfile.xhtml?id=" + id;
     }
 
-    private void organizeFriendList(List<Friends> list){
-        for(Friends friend : list){
-            if (user.getToken().equals(friend.getTokenFriend2().getToken())){
+    private void organizeFriendList(List<Friends> list) {
+        for (Friends friend : list) {
+            if (user.getToken().equals(friend.getTokenFriend2().getToken())) {
                 Users userFriend = friend.getTokenFriend1();
                 friend.setTokenFriend1(friend.getTokenFriend2());
                 friend.setTokenFriend2(userFriend);
             }
         }
     }
-            
+
     public void searchFriendEvent() {
         acceptedList = new ArrayList<>();
         acceptedList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
@@ -86,7 +77,7 @@ public class FriendsBean implements Serializable {
         socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
             socialProfileList = friendsJpaController.loadUserSearchList(userInputSearch);
-            
+
         }
     }
 
@@ -99,7 +90,21 @@ public class FriendsBean implements Serializable {
         friendsJpaController.acceptFriend(user, id);
         loadFriends();
     }
-    
+
+    private void initGlobalVariables() {
+        friendsJpaController = new FriendsJpaController();
+        socialProfileJpaController = new SocialProfileJpaController();
+        
+        friendInputSearch = userInputSearch = "";
+        
+        user = new Users();
+        
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+        
+        userSocialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+    }
+
     public List getPendingList() {
         return pendingList;
     }
@@ -156,4 +161,3 @@ public class FriendsBean implements Serializable {
         this.userSocialProfile = userSocialProfile;
     }
 }
-    

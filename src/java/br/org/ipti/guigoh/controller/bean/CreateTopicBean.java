@@ -38,43 +38,29 @@ import javax.servlet.http.Part;
 @ManagedBean(name = "createTopicBean")
 public class CreateTopicBean implements Serializable {
 
-    public static final char ACTIVE = 'A';
-    public static final char DISABLED = 'D';
-    public static final char WARNING = 'W';
-    public static final char TOPIC = 'T';
-    public static final char MSG = 'M';
+    public static final char ACTIVE = 'A', DISABLED = 'D', WARNING = 'W', TOPIC = 'T', MSG = 'M';
+
     private DiscussionTopic discussionTopic;
-    private List<Tags> tagList;
-    private Integer themeID;
     private Users user;
     private SocialProfile socialProfile;
     private Interests theme;
     private Tags tag;
+
     private String tagInput;
+    private Integer themeID;
+
     private transient Part fileMedia;
     private transient List<Part> fileList;
+
+    private List<Tags> tagList;
+
     private InterestsJpaController interestsJpaController;
     private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            interestsJpaController = new InterestsJpaController();
-            discussionTopic = new DiscussionTopic();
-            tagList = new ArrayList<>();
-            tag = new Tags();
-            tagInput = "";
-            user = new Users();
-            fileList = new ArrayList<>();
-            getCookie();
-            socialProfileJpaController = new SocialProfileJpaController();
-            socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-            theme = interestsJpaController.findInterestsByID(themeID);
+            initGlobalVariables();
         }
-    }
-
-    private void getCookie() {
-        user.setUsername(CookieService.getCookie("user"));
-        user.setToken(CookieService.getCookie("token"));
     }
 
     public void addTag() throws UnsupportedEncodingException {
@@ -150,6 +136,26 @@ public class CreateTopicBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/theme/theme.xhtml?id=" + themeID);
         } catch (IOException e) {
         }
+    }
+
+    private void initGlobalVariables() {
+        interestsJpaController = new InterestsJpaController();
+        socialProfileJpaController = new SocialProfileJpaController();
+        
+        tagInput = "";
+        
+        discussionTopic = new DiscussionTopic();
+        tag = new Tags();
+        user = new Users();
+        
+        tagList = new ArrayList<>();
+        fileList = new ArrayList<>();
+        
+        user.setUsername(CookieService.getCookie("user"));
+        user.setToken(CookieService.getCookie("token"));
+        
+        socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+        theme = interestsJpaController.findInterestsByID(themeID);
     }
 
     public DiscussionTopic getDiscussionTopic() {
@@ -231,5 +237,4 @@ public class CreateTopicBean implements Serializable {
     public void setTagInput(String tagInput) {
         this.tagInput = tagInput;
     }
-
 }

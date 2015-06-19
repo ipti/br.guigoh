@@ -25,7 +25,7 @@ public class PublishEnvironmentBean implements Serializable{
     
     public void init(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            educationalObjectList = new ArrayList<>();
+            initGlobalVariables();
             loadEducationalObjectList();
         }
     }
@@ -33,6 +33,10 @@ public class PublishEnvironmentBean implements Serializable{
     private void loadEducationalObjectList(){
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         educationalObjectList = educationalObjectJpaController.getLatestFourActiveEducationalObjects();
+    }
+    
+    private void initGlobalVariables() {
+        educationalObjectList = new ArrayList<>();
     }
 
     public List<EducationalObject> getEducationalObjectList() {
@@ -42,6 +46,4 @@ public class PublishEnvironmentBean implements Serializable{
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
     }
-    
-    
 }

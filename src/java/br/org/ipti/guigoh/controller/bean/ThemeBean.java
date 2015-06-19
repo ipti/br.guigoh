@@ -25,56 +25,63 @@ import javax.faces.context.FacesContext;
  */
 @ViewScoped
 @ManagedBean(name = "themeBean")
-public class ThemeBean implements Serializable{
-    
+public class ThemeBean implements Serializable {
+
     private Integer themeID;
+    private String generalSearch, tagSelected;
+
     private Interests interest;
-    private String generalSearch;
+
     private List<DiscussionTopic> discussionTopicList;
     private List<EducationalObject> educationalObjectList;
     private List<Tags> tagList;
-    private String tagSelected;
+
     private DiscussionTopicJpaController discussionTopicJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
-    
-    public void init(){ 
-        if(!FacesContext.getCurrentInstance().isPostback()){
-            discussionTopicJpaController = new DiscussionTopicJpaController();
-            educationalObjectJpaController = new EducationalObjectJpaController();
-            generalSearch = ""; 
-            tagSelected = "";
+
+    public void init() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            initGlobalVariables();
             loadInterest();
-            discussionTopicList = new ArrayList<>();
-            tagList = new ArrayList<>();
             loadTags();
             loadDiscussionTopics();
             loadEducationalObjectsByTheme();
         }
     }
-    
-    private void loadInterest(){
+
+    private void loadInterest() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interest = interestsJpaController.findInterestsByID(themeID); 
+        interest = interestsJpaController.findInterestsByID(themeID);
     }
-    
-    private void loadTags(){
+
+    private void loadTags() {
         TagsJpaController tagsJpaController = new TagsJpaController();
         tagList = tagsJpaController.findTagsEntities();
     }
-    
-    private void loadDiscussionTopics(){
+
+    private void loadDiscussionTopics() {
         discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByTheme(themeID);
     }
-    
-    private void loadEducationalObjectsByTheme(){
+
+    private void loadEducationalObjectsByTheme() {
         educationalObjectList = educationalObjectJpaController.getActiveEducationalObjectsByTheme(themeID);
     }
-    
+
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
         discussionTopicList = discussionTopicJpaController.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
         educationalObjectList = educationalObjectJpaController.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
+    }
+
+    private void initGlobalVariables() {
+        discussionTopicJpaController = new DiscussionTopicJpaController();
+        educationalObjectJpaController = new EducationalObjectJpaController();
+        
+        generalSearch = tagSelected = "";
+        
+        discussionTopicList = new ArrayList<>();
+        tagList = new ArrayList<>();
     }
 
     public Integer getThemeID() {
@@ -132,5 +139,4 @@ public class ThemeBean implements Serializable{
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
     }
-    
 }

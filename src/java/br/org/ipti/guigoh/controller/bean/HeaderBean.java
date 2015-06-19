@@ -23,19 +23,17 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(name = "headerBean")
 public class HeaderBean implements Serializable {
     
-    public static final String ADMIN = "AD";
-    public static final String REVISER = "RE";
+    public static final String ADMIN = "AD", REVISER = "RE";
+    
     private SocialProfile socialProfile;
     private UserAuthorization authorization;
-    private Boolean admin;
-    private Boolean reviser;
+    
+    private Boolean admin, reviser;
     private Integer registeredUsersCount;
     private Long registeredUsersOnline;
     
     public void init() {
-        socialProfile = new SocialProfile();
-        admin = false;
-        reviser = false;
+        initGlobalVariables();
         loadSocialProfile();
         loadAuthorization();
         getRegisteredUsersQuantity();
@@ -68,6 +66,12 @@ public class HeaderBean implements Serializable {
         if (registeredUsersOnline == 0) {
             registeredUsersOnline++;
         }
+    }
+    
+    private void initGlobalVariables() {
+        socialProfile = new SocialProfile();
+        
+        admin = reviser = false;
     }
     
     public SocialProfile getSocialProfile() {
