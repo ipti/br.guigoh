@@ -52,12 +52,12 @@ public class CookieService {
         response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (!cookies[i].getName().equals("locale")) {
-                    cookies[i].setValue("");
-                    cookies[i].setPath("/");
-                    cookies[i].setMaxAge(0);
-                    response.addCookie(cookies[i]);
+            for (Cookie cookie : cookies) {
+                if (!cookie.getName().equals("locale")) {
+                    cookie.setValue("");
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
                 }
             }
         }

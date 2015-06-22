@@ -318,12 +318,12 @@ public class RegisterBean implements Serializable {
                 }
             } else {
                 //funciona sem o "Users"
-                Users user = usersJpaController.findUsers(CookieService.getCookie("user"));
-                if (user != null) {
-                    if (user.getStatus().equals("CP")) {
+                Users userDB = usersJpaController.findUsers(CookieService.getCookie("user"));
+                if (userDB != null) {
+                    if (userDB.getStatus().equals("CP")) {
                         panelStatus = "check_email";
                     } else {
-                        UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(user.getToken());
+                        UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(userDB.getToken());
                         switch (authorization.getStatus()) {
                             case "IC":
                                 panelStatus = "inactive";

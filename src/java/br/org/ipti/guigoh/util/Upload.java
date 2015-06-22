@@ -9,15 +9,12 @@ import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,9 +43,8 @@ public class Upload extends HttpServlet {
         } catch (FileUploadException ex) {
             Logger.getLogger(Upload.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Iterator iter = items.iterator();
-        while (iter.hasNext()) {
-            FileItem item = (FileItem) iter.next();
+        for (Iterator<FileItem> it = items.iterator(); it.hasNext();) {
+            FileItem item = it.next();
             if (item.isFormField()) {
             } else {
                 //byte[] arquivo = item.get();

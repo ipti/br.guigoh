@@ -27,8 +27,6 @@ public class MD5Generator {
             //Converts message digest value in base 16 (hex) 
             md5 = new BigInteger(1, digest.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-
-            e.printStackTrace();
         }
         return md5;
     }

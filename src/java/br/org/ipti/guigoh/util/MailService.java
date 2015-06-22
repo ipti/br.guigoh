@@ -34,6 +34,5 @@ public class MailService {
         email.setSubject(subject);
         email.setMsg(message);
         email.send();
-        email = null;
     }
 }

@@ -6,18 +6,12 @@
 
 package br.org.ipti.guigoh.util;
 
-import com.sun.xml.rpc.processor.util.StringUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.FileNameMap;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.http.Part;
-import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -53,7 +47,6 @@ public class UploadService {
             }
             success = true;
         } catch (IOException e) {
-            e.printStackTrace();
             success = false;
         } finally {
             if (outputStream != null) {

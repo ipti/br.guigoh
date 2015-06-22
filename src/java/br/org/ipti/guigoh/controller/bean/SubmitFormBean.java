@@ -60,11 +60,11 @@ public class SubmitFormBean implements Serializable {
     public void addAuthor() throws UnsupportedEncodingException {
         if (authorList.size() < 4) {
             boolean exists = false;
-            for (Author author : authorList) {
-                if (author.getName().equals(this.author.getName())
-                        && author.getEmail().equals(this.author.getEmail())
-                        && author.getPhone().equals(this.author.getPhone())
-                        && author.getSite().equals(this.author.getSite())) {
+            for (Author a : authorList) {
+                if (a.getName().equals(this.author.getName())
+                        && a.getEmail().equals(this.author.getEmail())
+                        && a.getPhone().equals(this.author.getPhone())
+                        && a.getSite().equals(this.author.getSite())) {
                     exists = true;
                 }
             }

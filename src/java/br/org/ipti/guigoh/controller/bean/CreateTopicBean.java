@@ -108,12 +108,12 @@ public class CreateTopicBean implements Serializable {
             discussionTopicJpaController.create(discussionTopic);
             TagsJpaController tagsJpaController = new TagsJpaController();
             for (Tags t : tagList) {
-                Tags tag = tagsJpaController.findTagByName(t.getName());
-                if (tag == null) {
+                Tags tagDB = tagsJpaController.findTagByName(t.getName());
+                if (tagDB == null) {
                     tagsJpaController.create(t);
                     tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
                 } else {
-                    tagsJpaController.createTagsDiscussionTopic(tag, discussionTopic);
+                    tagsJpaController.createTagsDiscussionTopic(tagDB, discussionTopic);
                 }
             }
             if (!fileList.isEmpty()) {

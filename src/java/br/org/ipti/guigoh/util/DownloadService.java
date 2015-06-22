@@ -9,7 +9,6 @@ package br.org.ipti.guigoh.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,20 +38,20 @@ public class DownloadService {
         response.setContentLength((int) file.length());
         response.setContentType(mimeType);
         try {
-            FileInputStream in = new FileInputStream(file);
-            OutputStream out = response.getOutputStream();
-            byte[] buf = new byte[(int) file.length()];
-            int count;
-            while ((count = in.read(buf)) >= 0) {
-                out.write(buf, 0, count);
+            OutputStream out;
+            try (FileInputStream in = new FileInputStream(file)) {
+                out = response.getOutputStream();
+                byte[] buf = new byte[(int) file.length()];
+                int count;
+                while ((count = in.read(buf)) >= 0) {
+                    out.write(buf, 0, count);
+                }
             }
-            in.close();
             out.flush();
             out.close();
             facesContext.responseComplete();
         } catch (IOException ex) {
             System.out.println("Error in downloadFile: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 }
