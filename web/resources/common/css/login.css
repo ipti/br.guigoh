@@ -1,3 +1,26 @@
+.logo-guigoh {
+    position: absolute;
+    bottom: 25px;
+    left: 35px;
+}
+
+.logo-ipti {
+    position: absolute;
+    bottom: 6px;
+    right: 35px;
+}
+
+.header-logo {
+    background: #E3E6DD;
+    height: 100px;
+    padding: 0 35px;
+    position: relative;
+}
+
+.header-picture {
+    height: 315px;
+}
+
 .msg{
     font-size:13px;
     color:red;
@@ -27,14 +50,15 @@ transform: scaleX(-1);
     margin-bottom: 62px;
 }
 
-.pass_sent {
+.pass-sent {
     margin-bottom: 119px !important;
 }
 
-.secret_answer_animal {
-    margin-bottom: 30px;
+.secret-question{
+    font-size:14px;
+    display:block;
 }
 
-.secret_answer_city {
-    margin-bottom: 46px;
+.secret-answer{
+    margin-bottom:33px
 }

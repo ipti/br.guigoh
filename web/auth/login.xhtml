@@ -48,7 +48,7 @@
                                     <h:messages styleClass="msg"/>
                                     <h:inputText styleClass="block" autocomplete="on" pt:placeholder="E-mail" value="#{authBean.user.username}"/>
                                     <h:inputSecret styleClass="block" autocomplete="off" pt:placeholder="Senha" value="#{authBean.user.password}"/>
-                                    <h:commandLink action="#{authBean.login()}">
+                                    <h:commandLink styleClass="forward" action="#{authBean.login()}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
                                     </h:commandLink>
                                     <h:commandLink action="#{authBean.recoverAccount('recover_pass')}" class="forgot black" value="Esqueceu sua senha?">
@@ -92,7 +92,7 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('inactive')}">
                                     <h3>Sua conta está desativada. Contate o administrador.</h3>
                                     <h:commandLink action="#{authBean.logout()}">
                                         <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
@@ -100,16 +100,14 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('secret_question')}">
                                     <h3>Digite o e-mail de acesso ao Guigoh.</h3>
                                     <h:messages styleClass="msg"/>
-                                    <h:inputText id="question_recovery" pt:placeholder="E-mail" class="email-recovery" value="#{authBean.email}">
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:inputText>
+                                    <h:inputText id="question-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{authBean.email}"></h:inputText>
                                     <br/>
-                                    <h:commandLink action="#{authBean.loadQuestion()}">
+                                    <h:commandLink styleClass="forward" action="#{authBean.loadQuestion()}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="question_recovery" render="@form"/>
+                                        <f:ajax execute="question-recovery" render="@form"/>
                                     </h:commandLink>
                                     <h:commandLink action="#{authBean.recoverAccount('recover_pass')}">
                                         <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
@@ -117,21 +115,15 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="secret_question_panel" rendered="#{authBean.loginStatus.equals('question')}">
-                                    <h3>Responda sua pergunta secreta</h3>
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('question')}">
+                                    <h3>Responda sua pergunta secreta.</h3>
                                     <h:messages styleClass="msg"/>
-                                    <ui:param value="#{authBean.userToRecover.secretQuestionId.name}" name="secretQuestionIdName"/>
-                                    <h:outputText styleClass="secret_question" value="#{localeBean.getString(secretQuestionIdName)}"/><br/>
-                                    <h:inputText id="secret_answer_animal" class="secret_answer_animal" rendered="#{authBean.userToRecover.secretQuestionId.id == 1}" value="#{authBean.secretAnswer}"/>
-                                    <h:inputText id="secret_answer_city" class="secret_answer_city" rendered="#{authBean.userToRecover.secretQuestionId.id == 2}" value="#{authBean.secretAnswer}"/>
+                                    <h:outputText styleClass="secret-question" value="#{authBean.userToRecover.secretQuestionId.name}"/><br/>
+                                    <h:inputText id="secret-answer" class="secret-answer" pt:placeholder="Resposta" value="#{authBean.secretAnswer}"/>
                                     <br/>
-                                    <h:commandLink rendered="#{authBean.userToRecover.secretQuestionId.id == 1}" action="#{authBean.checkAnswer}">
+                                    <h:commandLink styleClass="forward" action="#{authBean.checkAnswer}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="secret_answer_animal" render="@form"/>
-                                    </h:commandLink>
-                                    <h:commandLink rendered="#{authBean.userToRecover.secretQuestionId.id == 2}" action="#{authBean.checkAnswer}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="secret_answer_city" render="@form"/>
+                                        <f:ajax execute="secret-answer" render="@form"/>
                                     </h:commandLink>
                                     <h:commandLink action="#{authBean.recoverAccount('secret_question')}">
                                         <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
@@ -139,12 +131,12 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="new_pass_email_panel" rendered="#{authBean.loginStatus.equals('new_pass_email')}"> 
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('new_pass_email')}"> 
                                     <h3>Digite o e-mail que você deseja recuperar.</h3>
                                     <h:messages styleClass="msg"/>
                                     <h:inputText id="email-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{authBean.email}"/>
                                     <br/>
-                                    <h:commandLink action="#{authBean.sendPassToEmail}">
+                                    <h:commandLink styleClass="forward" action="#{authBean.sendPassToEmail}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
                                         <f:ajax execute="email-recovery" render="@form"/>
                                     </h:commandLink>
@@ -154,20 +146,20 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="pass_sent_panel" rendered="#{authBean.loginStatus.equals('pass_sent')}">
-                                    <h3 class="pass_sent">Verifique seu e-mail</h3>
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('pass_sent')}">
+                                    <h3 class="pass-sent">Verifique o seu e-mail.</h3>
                                     <h:commandLink action="#{authBean.recoverAccount('login')}">
                                         <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment id="success_panel" rendered="#{authBean.loginStatus.equals('success')}">
+                                <ui:fragment rendered="#{authBean.loginStatus.equals('success')}">
                                     <h3>Digite sua nova senha</h3>
                                     <h:messages styleClass="msg"/>                                    
                                     <h:inputSecret pt:placeholder="Nova senha" value="#{authBean.password}"/><br/>                                    
                                     <h:inputSecret pt:placeholder="Confirme a senha" value="#{authBean.passwordConfirm}"/><br/>
-                                    <h:commandLink action="#{authBean.changePassword}">
+                                    <h:commandLink styleClass="forward" action="#{authBean.changePassword}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
                                     </h:commandLink>
                                     <h:commandLink action="#{authBean.recoverAccount('login')}">
@@ -190,119 +182,6 @@
                 </div>
             </div>
         </section>
-        <!--  <div class="central">
-              <div class="block_right">
-                  <span class="login_box">
-                      <h:form id="login_form" styleClass="login_open">
-                          <h:panelGroup id="recover_pass_panel"  rendered="#{authBean.loginStatus.equals('recover_pass')}">
-                              <font class="open_name">#{localeBean.getString('O que deseja fazer?')}</font>
-                              <h:commandLink class="new_password_link" action="#{authBean.recoverAccount('new_pass_email')}" value="#{localeBean.getString('Recuperar minha conta através do e-mail.')}"></h:commandLink>
-                              <h:commandLink class="secret_question_link" action="#{authBean.recoverAccount('secret_question')}" value="#{localeBean.getString('Responder minha pergunta secreta.')}"></h:commandLink>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="check_email_panel" rendered="#{authBean.loginStatus.equals('check_email')}">
-                              <font class="open_name">#{localeBean.getString('Confirme seu registro através do seu e-mail.')}</font>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="pending_panel" rendered="#{authBean.loginStatus.equals('pending')}">
-                              <font class="open_name">#{localeBean.getString('Sua conta já foi solicitada. Aguarde a confirmação do administrador.')}</font>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
-                              <font class="open_name">#{localeBean.getString('Sua conta está desativada. Contate o administrador.')}</font>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
-                              <font class="open_name">#{localeBean.getString('Digite o e-mail de acesso ao Guigoh')}</font>
-                              <h:messages styleClass="msg"/>
-                              <h:inputText  value="#{authBean.email}">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:inputText>
-                              <br/>
-                              <h:commandButton styleClass="button_verify" value="#{localeBean.getString('Verificar')}" action="#{authBean.loadQuestion()}">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:commandButton>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="secret_question_panel" rendered="#{authBean.loginStatus.equals('question')}">
-                              <font class="open_name">#{localeBean.getString('Responda sua pergunta secreta')}</font>
-                              <h:messages styleClass="msg"/>
-                              <ui:param value="#{authBean.userToRecover.secretQuestionId.name}" name="secretQuestionIdName"/>
-                              <h:outputText styleClass="secret_question" value="#{localeBean.getString(secretQuestionIdName)}"/><br/>
-                              <h:inputText value="#{authBean.secretAnswer}">
-                                  <f:ajax execute="@this" event="keyup"/>
-                              </h:inputText>
-                              <br/>
-                              <h:commandButton action="#{authBean.checkAnswer}" styleClass="button_change" value="OK">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:commandButton>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('secret_question')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="new_pass_email_panel" rendered="#{authBean.loginStatus.equals('new_pass_email')}"> 
-                              <font class="open_name">#{localeBean.getString('Digite o e-mail que você deseja recuperar')}</font>
-                              <h:messages styleClass="msg"/>
-                              <h:inputText  value="#{authBean.email}">
-                                  <f:ajax execute="@this" event="keyup"/>
-                              </h:inputText>
-                              <br/>
-                              <h:commandButton action="#{authBean.sendPassToEmail}" styleClass="button_send" value="#{localeBean.getString('Enviar')}">
-                                  <f:ajax execute="@this" render="@form"/>
-                              </h:commandButton>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="pass_sent_panel" rendered="#{authBean.loginStatus.equals('pass_sent')}">
-                              <font class="open_name">#{localeBean.getString('Verifique seu e-mail')}</font>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-  
-                          <h:panelGroup id="success_panel" rendered="#{authBean.loginStatus.equals('success')}">
-                              <font class="open_name">#{localeBean.getString('Digite sua nova senha')}</font>
-                              <h:messages styleClass="msg"/>
-                              <h:outputText class="new_pass" value="#{localeBean.getString('nova senha :')}"/>
-                              <h:inputSecret value="#{authBean.password}"/><br/>
-                              <h:outputText class="new_pass" value="#{localeBean.getString('confirmar :')}"/>
-                              <h:inputSecret value="#{authBean.passwordConfirm}"/><br/>
-                              <h:commandButton action="#{authBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
-                              <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
-                                  <f:ajax execute="@this" render="@form" />
-                              </h:commandButton>
-                          </h:panelGroup>
-                      </h:form>
-                  </span>
-                <h:form>
-  
-                    <font class="link_register">#{localeBean.getString('Ainda não é membro?')}
-                        <h:commandLink id="cmd_register" action="/users/register.xhtml?faces-redirect=true">
-                            <span class="cmd_register_label">#{localeBean.getString('Cadastre-se')}</span>
-                        </h:commandLink>
-                    </font>
-                </h:form>
-
-              </div>
-          </div> -->
         <footer>
             <div class="container">
                 <img src="../resources/common/images/footer.png"></img>
@@ -310,7 +189,39 @@
         </footer>
 
         <!-- BEGIN PAGE SCRIPTS -->
+        <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
         <script type="text/javascript">
+
+            $(document).on("keypress", "input", function(event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                    $(".forward").click();
+                }
+            });
+
+            function setCursors(ajax) {
+                if (ajax === "begin") {
+                    $('body').css('cursor', 'wait');
+                    $('.row-details').css('cursor', 'wait');
+                    $('a').css('cursor', 'wait');
+                } else {
+                    $('body').css('cursor', 'auto');
+                    $('.row-details').css('cursor', 'pointer');
+                    $('a').css('cursor', 'pointer');
+                }
+            }
+
+            jsf.ajax.addOnEvent(function(data) {
+                switch (data.status) {
+                    case "begin":
+                        setCursors(data.status);
+                        break;
+                    case "success":
+                        setCursors(data.status);
+                        break;
+                }
+            });
+
             if (navigator.appName == 'Microsoft Internet Explorer')
             {
                 window.location = '/resources/notsupported.htm';

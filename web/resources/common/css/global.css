@@ -11,35 +11,10 @@ body {
     margin: 0 auto;
 }
 
-/** Login **/
-.logo-guigoh {
-    position: absolute;
-    bottom: 40px;
-    left: 35px;
-}
-
-.logo-ipti {
-    position: absolute;
-    bottom: 25px;
-    right: 35px;
-}
-
-/** Header **/
-.header-logo {
-    background: #E3E6DD;
-    height: 150px;
-    padding: 0 35px;
-    position: relative;
-}
-
-.header-picture {
-    height: 315px;
-}
-
 /** Conteudo **/
 .content {
     background: #E3E6DD;
-    padding: 50px 35px;
+    padding: 20px 35px;
 }
 
 .main {
@@ -86,13 +61,6 @@ aside .panel:last-child {
     padding: 6px 6px 5px 7px;
 }
 
-.panel .button-back{
-    float: left;
-    width:30px;
-    height:31px;
-    padding: 6px 6px 5px 7px;
-}
-
 .panel .forgot {
     display: block;
     margin-top: 35px;
@@ -108,7 +76,7 @@ footer {
 } 
 
 footer img {
-    margin: 25px 35px
+    margin: 5px 35px 15px;
 }
 
 /** Buttons **/

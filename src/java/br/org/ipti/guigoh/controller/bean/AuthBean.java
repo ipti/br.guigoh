@@ -87,7 +87,7 @@ public class AuthBean implements Serializable {
     public String sendPassToEmail() throws RollbackFailureException, Exception {
         try {
             userToRecover = usersJpaController.findUsers(email);
-            if (userToRecover.getUsername() != null && userToRecover.getStatus().equals("CA")) {
+            if (userToRecover != null && userToRecover.getStatus().equals("CA")) {
                 EmailActivationJpaController emailActivationJpaController = new EmailActivationJpaController();
                 EmailActivation emailactivation = new EmailActivation();
                 emailactivation.setUsername(userToRecover.getUsername());
@@ -114,7 +114,7 @@ public class AuthBean implements Serializable {
 
     public String loadQuestion() {
         userToRecover = usersJpaController.findUsers(email);
-        if (userToRecover.getUsername() != null) {
+        if (userToRecover != null) {
             loginStatus = "question";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail incorreto!"), null));
@@ -123,7 +123,7 @@ public class AuthBean implements Serializable {
     }
 
     public String checkAnswer() {
-        if (secretAnswer.equals(userToRecover.getSecretAnswer())) {
+        if (secretAnswer.toUpperCase().equals(userToRecover.getSecretAnswer().toUpperCase())) {
             loginStatus = "success";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Resposta incorreta!"), null));
@@ -132,7 +132,10 @@ public class AuthBean implements Serializable {
     }
 
     public String changePassword() throws Exception {
-        if (password.equals(passwordConfirm)) {
+        if (password.equals("")){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos abaixo não podem estar vazios."), null));
+            return "";
+        } else if (password.equals(passwordConfirm)) {
             userToRecover.setPassword(MD5Generator.generate(password + SALT));
             usersJpaController.edit(userToRecover);
             return "logout";
@@ -140,7 +143,6 @@ public class AuthBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));
             return "";
         }
-
     }
     
     private void initGlobalVariables() {
