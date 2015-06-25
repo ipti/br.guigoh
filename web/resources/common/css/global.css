@@ -1,0 +1,144 @@
+body {
+    background: #5D5D5D;
+}
+
+.clear {
+    clear: both;
+}
+
+.container {
+    width: 960px;
+    margin: 0 auto;
+}
+
+/** Login **/
+.logo-guigoh {
+    position: absolute;
+    bottom: 40px;
+    left: 35px;
+}
+
+.logo-ipti {
+    position: absolute;
+    bottom: 25px;
+    right: 35px;
+}
+
+/** Header **/
+.header-logo {
+    background: #E3E6DD;
+    height: 150px;
+    padding: 0 35px;
+    position: relative;
+}
+
+.header-picture {
+    height: 315px;
+}
+
+/** Conteudo **/
+.content {
+    background: #E3E6DD;
+    padding: 50px 35px;
+}
+
+.main {
+    width: 565;
+    float: left;
+}
+
+/** Sidebar **/
+aside {
+    width: 325px;
+    float: right;
+}
+
+.panel {
+    background: white;
+    padding: 25px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.panel-login{
+    height:186px;
+}
+
+aside .panel:last-child {
+    margin: 0;
+}
+
+.background {
+    background-image: url(../images/bg-sidebar.png);
+    background-repeat: no-repeat;
+}
+
+.panel h3 {
+    margin-bottom: 25px;
+}
+
+.panel input {
+    width: calc(100% - 20px);
+}
+
+.panel button[type=submit] {
+    float: right;
+    padding: 6px 6px 5px 7px;
+}
+
+.panel .button-back{
+    float: left;
+    width:30px;
+    height:31px;
+    padding: 6px 6px 5px 7px;
+}
+
+.panel .forgot {
+    display: block;
+    margin-top: 35px;
+}
+
+.panel .black {
+    color:#323232
+}
+
+/** Footer **/
+footer {
+    background: #9D9D9D;
+} 
+
+footer img {
+    margin: 25px 35px
+}
+
+/** Buttons **/
+button {
+    background: #323232;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    padding: 11px;
+}
+.block {
+    width: calc(100%);
+}
+
+.circle {
+    border-radius: 50%;
+}
+
+/** Forms **/
+input {
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #CACACA;
+    height: 30px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    padding: 0 10px;
+    font-style: italic;
+}
+
+.pointer{
+    cursor:pointer;
+}
