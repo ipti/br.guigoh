@@ -96,7 +96,12 @@ public class AuthBean implements Serializable {
                 SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(userToRecover.getToken());
                 String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
-                emailActivationJpaController.create(emailactivation);
+                if (emailActivationJpaController.findEmailActivationByUsername(userToRecover.getUsername()).getUsername() != null){
+                    emailActivationJpaController.edit(emailactivation);
+                } else {
+                    emailActivationJpaController.create(emailactivation);
+                }
+                
                 loginStatus = "pass_sent";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));

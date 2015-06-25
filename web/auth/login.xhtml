@@ -42,12 +42,12 @@
                     </div>
                     <aside>
                         <div class="panel panel-login background">
-                            <h:form>
+                            <h:form prependId="false">
                                 <ui:fragment rendered="#{authBean.loginStatus.equals('login')}">
                                     <h3>Login</h3>
                                     <h:messages styleClass="msg"/>
-                                    <h:inputText styleClass="block" pt:type="email" pt:placeholder="E-mail" value="#{authBean.user.username}"/>
-                                    <h:inputSecret styleClass="block" pt:placeholder="Senha" value="#{authBean.user.password}"/>
+                                    <h:inputText styleClass="block" autocomplete="on" pt:placeholder="E-mail" value="#{authBean.user.username}"/>
+                                    <h:inputSecret styleClass="block" autocomplete="off" pt:placeholder="Senha" value="#{authBean.user.password}"/>
                                     <h:commandLink action="#{authBean.login()}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
                                     </h:commandLink>
@@ -78,91 +78,103 @@
 
                                 <ui:fragment rendered="#{authBean.loginStatus.equals('check_email')}">
                                     <h3>Confirme seu registro através do seu e-mail.</h3>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                    <h:commandLink action="#{authBean.logout()}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
+                                    </h:commandLink>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{authBean.loginStatus.equals('pending')}">
                                     <h3>Sua conta já foi solicitada. Aguarde a confirmação do administrador.</h3>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                    <h:commandLink action="#{authBean.logout()}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form"/>
-                                    </h:commandButton>
+                                    </h:commandLink>
                                 </ui:fragment>
 
-                                <h:panelGroup id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
+                                <ui:fragment id="inactive_panel" rendered="#{authBean.loginStatus.equals('inactive')}">
                                     <h3>Sua conta está desativada. Contate o administrador.</h3>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.logout()}">
+                                    <h:commandLink action="#{authBean.logout()}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form"/>
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
 
-                                <h:panelGroup id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
+                                <ui:fragment id="email_secret_question_panel"  rendered="#{authBean.loginStatus.equals('secret_question')}">
                                     <h3>Digite o e-mail de acesso ao Guigoh.</h3>
                                     <h:messages styleClass="msg"/>
-                                    <h:inputText  value="#{authBean.email}">
+                                    <h:inputText id="question_recovery" pt:placeholder="E-mail" class="email-recovery" value="#{authBean.email}">
                                         <f:ajax execute="@this" render="@form"/>
                                     </h:inputText>
                                     <br/>
-                                    <h:commandButton styleClass="button_verify" value="#{localeBean.getString('Verificar')}" action="#{authBean.loadQuestion()}">
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandButton>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
+                                    <h:commandLink action="#{authBean.loadQuestion()}">
+                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        <f:ajax execute="question_recovery" render="@form"/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{authBean.recoverAccount('recover_pass')}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
 
-                                <h:panelGroup id="secret_question_panel" rendered="#{authBean.loginStatus.equals('question')}">
+                                <ui:fragment id="secret_question_panel" rendered="#{authBean.loginStatus.equals('question')}">
                                     <h3>Responda sua pergunta secreta</h3>
                                     <h:messages styleClass="msg"/>
                                     <ui:param value="#{authBean.userToRecover.secretQuestionId.name}" name="secretQuestionIdName"/>
                                     <h:outputText styleClass="secret_question" value="#{localeBean.getString(secretQuestionIdName)}"/><br/>
-                                    <h:inputText value="#{authBean.secretAnswer}">
-                                        <f:ajax execute="@this" event="keyup"/>
-                                    </h:inputText>
+                                    <h:inputText id="secret_answer_animal" class="secret_answer_animal" rendered="#{authBean.userToRecover.secretQuestionId.id == 1}" value="#{authBean.secretAnswer}"/>
+                                    <h:inputText id="secret_answer_city" class="secret_answer_city" rendered="#{authBean.userToRecover.secretQuestionId.id == 2}" value="#{authBean.secretAnswer}"/>
                                     <br/>
-                                    <h:commandButton action="#{authBean.checkAnswer}" styleClass="button_change" value="OK">
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandButton>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('secret_question')}">
+                                    <h:commandLink rendered="#{authBean.userToRecover.secretQuestionId.id == 1}" action="#{authBean.checkAnswer}">
+                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        <f:ajax execute="secret_answer_animal" render="@form"/>
+                                    </h:commandLink>
+                                    <h:commandLink rendered="#{authBean.userToRecover.secretQuestionId.id == 2}" action="#{authBean.checkAnswer}">
+                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        <f:ajax execute="secret_answer_city" render="@form"/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{authBean.recoverAccount('secret_question')}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
 
-                                <h:panelGroup id="new_pass_email_panel" rendered="#{authBean.loginStatus.equals('new_pass_email')}"> 
+                                <ui:fragment id="new_pass_email_panel" rendered="#{authBean.loginStatus.equals('new_pass_email')}"> 
                                     <h3>Digite o e-mail que você deseja recuperar.</h3>
                                     <h:messages styleClass="msg"/>
-                                    <h:inputText  value="#{authBean.email}">
-                                        <f:ajax execute="@this" event="keyup"/>
-                                    </h:inputText>
+                                    <h:inputText id="email-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{authBean.email}"/>
                                     <br/>
-                                    <h:commandButton action="#{authBean.sendPassToEmail}" styleClass="button_send" value="#{localeBean.getString('Enviar')}">
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandButton>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('recover_pass')}">
+                                    <h:commandLink action="#{authBean.sendPassToEmail}">
+                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        <f:ajax execute="email-recovery" render="@form"/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{authBean.recoverAccount('recover_pass')}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
 
-                                <h:panelGroup id="pass_sent_panel" rendered="#{authBean.loginStatus.equals('pass_sent')}">
-                                    <h3>Verifique seu e-mail</h3>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
+                                <ui:fragment id="pass_sent_panel" rendered="#{authBean.loginStatus.equals('pass_sent')}">
+                                    <h3 class="pass_sent">Verifique seu e-mail</h3>
+                                    <h:commandLink action="#{authBean.recoverAccount('login')}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
 
-                                <h:panelGroup id="success_panel" rendered="#{authBean.loginStatus.equals('success')}">
-                                    <h3>'Digite sua nova senha</h3>
-                                    <h:messages styleClass="msg"/>
-                                    <h:outputText class="new_pass" value="#{localeBean.getString('nova senha :')}"/>
-                                    <h:inputSecret value="#{authBean.password}"/><br/>
-                                    <h:outputText class="new_pass" value="#{localeBean.getString('confirmar :')}"/>
-                                    <h:inputSecret value="#{authBean.passwordConfirm}"/><br/>
-                                    <h:commandButton action="#{authBean.changePassword}" styleClass="button_change" value="#{localeBean.getString('Alterar')}"/>
-                                    <h:commandButton class="button_back" value="#{localeBean.getString('Voltar')}" action="#{authBean.recoverAccount('login')}">
+                                <ui:fragment id="success_panel" rendered="#{authBean.loginStatus.equals('success')}">
+                                    <h3>Digite sua nova senha</h3>
+                                    <h:messages styleClass="msg"/>                                    
+                                    <h:inputSecret pt:placeholder="Nova senha" value="#{authBean.password}"/><br/>                                    
+                                    <h:inputSecret pt:placeholder="Confirme a senha" value="#{authBean.passwordConfirm}"/><br/>
+                                    <h:commandLink action="#{authBean.changePassword}">
+                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{authBean.recoverAccount('login')}">
+                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
-                                    </h:commandButton>
-                                </h:panelGroup>
+                                    </h:commandLink>
+                                </ui:fragment>
                             </h:form>
                         </div>
                         <div class="panel">

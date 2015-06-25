@@ -22,3 +22,19 @@ transform: scaleX(-1);
     margin-top:10px;
     line-height:32px;
 }
+
+.email-recovery {
+    margin-bottom: 62px;
+}
+
+.pass_sent {
+    margin-bottom: 119px !important;
+}
+
+.secret_answer_animal {
+    margin-bottom: 30px;
+}
+
+.secret_answer_city {
+    margin-bottom: 46px;
+}
