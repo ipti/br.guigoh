@@ -4,11 +4,6 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import br.org.ipti.guigoh.util.CookieService;
-import br.org.ipti.guigoh.util.MD5Generator;
-import br.org.ipti.guigoh.util.MailService;
-import br.org.ipti.guigoh.util.RandomGenerator;
-import br.org.ipti.guigoh.util.translator.Translator;
 import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.entity.Country;
 import br.org.ipti.guigoh.model.entity.EmailActivation;
@@ -35,12 +30,17 @@ import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.MD5Generator;
+import br.org.ipti.guigoh.util.MailService;
+import br.org.ipti.guigoh.util.RandomGenerator;
+import br.org.ipti.guigoh.util.translator.Translator;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
@@ -48,7 +48,7 @@ import org.apache.commons.mail.EmailException;
  *
  * @author Joerlan Lima
  */
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "registerBean")
 public class RegisterBean implements Serializable {
 
@@ -166,7 +166,7 @@ public class RegisterBean implements Serializable {
                             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                             socialProfileJpaController.create(socialProfile);
                             automaticConfirm(user);
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Clique em retornar para ir à tela de login."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso!"), null));
                             user = new Users();
                             socialProfile = new SocialProfile();
                             lastName = "";
