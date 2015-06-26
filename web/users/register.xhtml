@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <f:view contentType="text/html"/>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -36,22 +37,28 @@
                 <div class="container">
                     <div class="content">
                         <div class="main-register">
+                            <h:messages styleClass="msg"/>
                             <div class="profile">
                                 <p style="font-size: 22px">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
                                 <form>
                                     <div class="col-2">
-                                        <input type="text" placeholder="nome"></input>
-                                        <input type="text" placeholder="e-mail"></input>
-                                        <input type="text" placeholder="senha"></input>
-                                        <input type="text" placeholder="pergunta secreta"></input>
+                                        <h:inputText pt:placeholder="Nome" value="#{registerBean.socialProfile.name}"></h:inputText>
+                                        <h:inputText pt:placeholder="E-mail" value="#{registerBean.user.username}"></h:inputText>
+                                        <h:inputSecret pt:placeholder="Senha" value="#{registerBean.user.password}"></h:inputSecret>
+                                        <div class="select">
+                                            <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
+                                                <f:selectItem itemLabel="Pergunta secreta" itemValue="0"/>
+                                                <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions.id}" itemLabel="#{questions.name}" />
+                                            </h:selectOneMenu>
+                                        </div>
                                         <hr></hr>
                                     </div>
                                     <div class="col-2">
-                                        <input type="text" placeholder="sobrenome"></input>
-                                        <input type="text" placeholder="confirmação de e-mail"></input>
-                                        <input type="text" placeholder="confirmação de senha"></input>
-                                        <input type="text" placeholder="resposta da pergunta secreta"></input>
+                                        <h:inputText pt:placeholder="sobrenome" value="#{registerBean.lastName}"></h:inputText>
+                                        <h:inputText pt:placeholder="confirmação de e-mail" value="#{registerBean.usernameConfirm}"></h:inputText>
+                                        <h:inputSecret pt:placeholder="confirmação de senha" value="#{registerBean.passwordConfirm}"></h:inputSecret>
+                                        <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{registerBean.user.secretAnswer}"></h:inputText>
                                     </div>
                                     <div class="clear"></div>
                                 </form>
@@ -60,29 +67,49 @@
                                 <p>Alguns dados sobre sua instituição de ensino.</p>
                                 <div class="col-2">
                                     <div class="select">
-                                        <select> <option>selecione sua instituição de ensino</option></select>
+                                        <h:selectOneMenu value="#{registerBean.subnetworkId}">
+                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue="0"/>
+                                            <f:selectItems value="#{registerBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork.id}" itemLabel="#{subnetwork.description}" />
+                                        </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <select><option>selecione o idioma</option></select>
+                                        <h:selectOneMenu value="#{registerBean.languageId}">
+                                            <f:selectItem itemLabel="Selecione o idioma" itemValue="0"/>
+                                            <f:selectItems value="#{registerBean.languageList}" var="language" itemValue="#{language.id}" itemLabel="#{language.description}" />
+                                        </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <select><option>selecione selecione o estado</option></select>
+                                        <h:selectOneMenu id="state" value="#{registerBean.stateId}">
+                                            <f:selectItem itemLabel="Selecione o estado" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.stateList}" var="state" itemValue="#{state.id}" itemLabel="#{state.name}" />
+                                            <f:ajax event="change" render="city" listener="#{registerBean.loadCity()}"/>
+                                        </h:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="select">
-                                        <select><option>selecione o seu cargo</option></select>
+                                        <h:selectOneMenu value="#{registerBean.roleId}">
+                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue="0"/>
+                                            <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
+                                        </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <select><option>selecione o estado</option></select>
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.countryId}">
+                                            <f:selectItem itemLabel="Selecione o país" itemValue="0"/>
+                                            <f:selectItems value="#{registerBean.countryList}" var="country" itemValue="#{country.id}" itemLabel="#{country.name}" />
+                                            <f:ajax event="change" execute="@this" render="state" listener="#{registerBean.loadState}"/>
+                                        </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <select><option>selecione a cidade</option></select>
+                                        <h:selectOneMenu id="city" value="#{registerBean.socialProfile.cityId}">
+                                            <f:selectItem itemLabel="Selecione a cidade" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.cityList}" var="city" itemValue="#{city.id}" itemLabel="#{city.name}" />
+                                        </h:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="buttons col-1">
                                     <a class="back pull-left" href="../auth/login.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
-                                    <button class="submit">Cadastre-se</button>
+                                    <button class="submit pointer">Cadastre-se</button>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -97,158 +124,59 @@
                 <img src="../resources/common/images/footer.png"></img>
             </div>
         </footer>
-        <!--<div class="central">
-            <div class="block_central">
-                <font class="block_top_l"></font> 
-                <font class="block_top_r">
-                    <h1>#{localeBean.getString('Criar conta de usuário')}</h1>
-                    <div class="flags">
-                        <h:form>
-                            <ui:param name="url" value="#{request.servletPath}"/>
-                            <h:panelGrid styleClass="localeLogon" columns="3">
-                                <h:commandLink styleClass="ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}">
-                                    <h:graphicImage  value="/resources/common/images/ptBR.gif" />
-                                </h:commandLink>
-                                <h:commandLink styleClass="enUS" action="#{localeBean.changeLocale(url, 'enUS')}">
-                                    <h:graphicImage  value="/resources/common/images/enUS.png" />
-                                </h:commandLink>
-                                <h:commandLink styleClass="frFR" action="#{localeBean.changeLocale(url, 'frFR')}">
-                                    <h:graphicImage  value="/resources/common/images/frFR.png" />
-                                </h:commandLink>
-                            </h:panelGrid>
-                        </h:form>
-                    </div>
-                    <h:form class="register_user">
-                        <h:messages id="msg" errorClass="error" infoClass="info"/><br/>
-                        <span>
-                            <p>#{localeBean.getString('Nome')}*</p>
-                            <h:inputText id="user_name" value="#{registerBean.socialProfile.name}">
-                                <f:validateBean disabled="true"/>
-                            </h:inputText>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Sobrenome')}*</p>
-                            <h:inputText id="user_lastname" value="#{registerBean.lastName}" >
-                                <f:validateBean disabled="true"/>
-                            </h:inputText>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('E-mail')}*</p>
-                            <h:inputText id="user_email" value="#{registerBean.user.username}" >
-                                <f:validateBean disabled="true"/>
-                            </h:inputText>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Confirme seu e-mail')}*</p>
-                            <h:inputText id="user_confirm" value="#{registerBean.usernameConfirm}" >
-                                <f:validateBean disabled="true"/>
-                            </h:inputText>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Senha')}*</p>
-                            <h:inputSecret id="pass" value="#{registerBean.user.password}">
-                                <f:validateBean disabled="true"/>
-                            </h:inputSecret>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Confirme sua senha')}*</p>
-                            <h:inputSecret id="pass_confirm" value="#{registerBean.passwordConfirm}" >
-                                <f:validateBean disabled="true"/>
-                            </h:inputSecret>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Pergunta secreta')}*</p>
-                            <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />  
-                                <ui:param value="#{questions.name}" name="questionsName" />
-                                <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions.id}" itemLabel="#{localeBean.getString(questionsName)}" />
-                            </h:selectOneMenu>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Resposta')}*</p>
-                            <h:inputText id="senha_answer" value="#{registerBean.user.secretAnswer}"  >
-                                <f:validateBean disabled="true"/>
-                            </h:inputText>
-                        </span>
-                        <span class="form_institutions">
-                            <p>#{localeBean.getString('Você pertence a algumas dessas instituições?')}</p>
-                            <h:selectOneMenu value="#{registerBean.subnetworkId}">
-                                <f:ajax event="change" listener="#{registerBean.updateRole}" render="role"/>
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <f:selectItems value="#{registerBean.subnetworkList}" var="subnetworks" itemValue="#{subnetworks.id}" itemLabel="#{subnetworks.description}" />
-                            </h:selectOneMenu>
-                        </span> 
-                        <span class="form_institutions">
-                            <p>#{localeBean.getString('Qual função você exerce na instituição?')}</p>
-                            <h:selectOneMenu value="#{registerBean.roleId}" disabled="#{registerBean.visitor}" id="role">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <ui:param value="#{role.name}" name="roleName"/>
-                                <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{localeBean.getString(roleName)}" />
-                            </h:selectOneMenu>
-                        </span>
-                        <span class="form_idioms">
-                            <p>#{localeBean.getString('Idioma')}*</p>
-                            <h:selectOneMenu value="#{registerBean.languageId}">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <ui:param value="#{languages.description}" name="languagesDescription"/>
-                                <f:selectItems value="#{registerBean.languageList}" var="languages" itemValue="#{languages.id}" itemLabel="#{localeBean.getString(languagesDescription)}" />
-                            </h:selectOneMenu>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('País')}*</p>
-                            <h:selectOneMenu value="#{registerBean.countryId}">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <ui:param value="#{countries.name}" name="countriesName"/>
-                                <f:selectItems value="#{registerBean.countryList}" var="countries" itemValue="#{countries.id}" itemLabel="#{localeBean.getString(countriesName)}" />
-                                <f:ajax event="valueChange" render="state" listener="#{registerBean.loadState}"/>
-                            </h:selectOneMenu>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Estado')}*</p>
-                            <h:selectOneMenu id="state" value="#{registerBean.stateId}">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <f:selectItems value="#{registerBean.stateList}" var="states" itemValue="#{states.id}" itemLabel="#{states.name}" />
-                                <f:ajax event="valueChange" render="city" listener="#{registerBean.loadCity()}"/>
-                            </h:selectOneMenu>
-                        </span>
-                        <span>
-                            <p>#{localeBean.getString('Cidade')}*</p>
-                            <h:selectOneMenu id="city" value="#{registerBean.cityId}">
-                                <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="0" />
-                                <f:selectItems value="#{registerBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
-                            </h:selectOneMenu>
-                        </span>
-        <span class="check_box">
-            <input type="checkbox" checked="true" class="term_box"></input>
-            <p>Li e aceito o 
-                <a href="/">Termo de adesão</a>
-            </p>
-        </span>
-
-        <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
-            <f:ajax event="action" execute="@form" render="@form"/>
-            <img id="button_save_icon" src="/resources/common/images/green-plus.png"/>
-            <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
-        </h:commandLink>
-        <h:link outcome="/auth/login.xhtml" styleClass="button_back" id="button_back">
-            <img id="back_button_icon" src="/resources/common/images/back.png"/>
-            <font class="back_button_label">#{localeBean.getString('Retornar')}</font>
-        </h:link>
-    </h:form>
-</font>
-</div>
-<span class="clear"></span>
-</div>    
-<span class="clear"></span>
-<div class="bottom">
-<ul class="bottom_menu">
-<span class="powered_guigoh">Powered by</span>
-</ul>
-</div>
-        -->
 
         <!-- BEGIN PAGE SCRIPTS -->
+        <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
+        <script>
+            $('select').on("change", changeSelectColors).change();
+            $('select').on("change", checkLength).change();
+            function changeSelectColors() {
+                if ($(this).children('option:first-child').is(':selected')) {
+                    $(this).css("color", "rgba(0, 0, 0, 0.4)");
+                } else {
+                    $(this).css("color", "initial");
+                }
+                $(this).children("option").not(":eq(0)").css("color", "initial");
+                $(this).children("option:first-child").css("color", "rgba(0, 0, 0, 0.4)");
+            }
+            function checkLength() {
+                if ($(this).children("option:selected").text().trim().length > 45) {
+                    var string = $(this).children("option:selected").text();
+                    $(this).children("option:selected").text(string.substring(0, 45) + "...");
+                }
+            }
+            
+            $(document).on("keypress", "input", function(event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                    $(".forward").click();
+                }
+            });
 
+            function setCursors(ajax) {
+                if (ajax === "begin") {
+                    $('body').css('cursor', 'wait');
+                    $('.row-details').css('cursor', 'wait');
+                    $('a').css('cursor', 'wait');
+                } else {
+                    $('body').css('cursor', 'auto');
+                    $('.row-details').css('cursor', 'pointer');
+                    $('a').css('cursor', 'pointer');
+                }
+            }
+
+            jsf.ajax.addOnEvent(function(data) {
+                switch (data.status) {
+                    case "begin":
+                        setCursors(data.status);
+                        break;
+                    case "success":
+                        setCursors(data.status);
+                        break;
+                }
+            });
+            
+        </script>
         <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>
