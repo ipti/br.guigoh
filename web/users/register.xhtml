@@ -7,15 +7,97 @@
     <f:view contentType="text/html"/>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>#{localeBean.getString('Cadastro de usuário')}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <title>Cadastro</title>
         <!-- BEGIN PAGE STYLES -->
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/register.css"></link>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/reset.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/global.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/login.css"></link>
         <!-- END PAGE STYLES -->
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
     <h:body>
         <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
-        <div class="central">
+        <header>
+            <div class="container">
+                <div class="header-logo">
+                    <img class="logo-guigoh" src="../resources/common/images/logo-guigoh.png"></img>
+                    <img class="logo-ipti" src="../resources/common/images/logo-ipti.png"></img>
+                </div>
+                <div class="title">
+                    <h1>Cadastro</h1>
+                </div>
+            </div>
+        </header>
+        <section>
+            <h:form prependId="false">
+                <div class="container">
+                    <div class="content">
+                        <div class="main-register">
+                            <div class="profile">
+                                <p style="font-size: 22px">Olá calouro!</p>
+                                <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
+                                <form>
+                                    <div class="col-2">
+                                        <input type="text" placeholder="nome"></input>
+                                        <input type="text" placeholder="e-mail"></input>
+                                        <input type="text" placeholder="senha"></input>
+                                        <input type="text" placeholder="pergunta secreta"></input>
+                                        <hr></hr>
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="text" placeholder="sobrenome"></input>
+                                        <input type="text" placeholder="confirmação de e-mail"></input>
+                                        <input type="text" placeholder="confirmação de senha"></input>
+                                        <input type="text" placeholder="resposta da pergunta secreta"></input>
+                                    </div>
+                                    <div class="clear"></div>
+                                </form>
+                            </div>
+                            <div class="school">
+                                <p>Alguns dados sobre sua instituição de ensino.</p>
+                                <div class="col-2">
+                                    <div class="select">
+                                        <select> <option>selecione sua instituição de ensino</option></select>
+                                    </div>
+                                    <div class="select">
+                                        <select><option>selecione o idioma</option></select>
+                                    </div>
+                                    <div class="select">
+                                        <select><option>selecione selecione o estado</option></select>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="select">
+                                        <select><option>selecione o seu cargo</option></select>
+                                    </div>
+                                    <div class="select">
+                                        <select><option>selecione o estado</option></select>
+                                    </div>
+                                    <div class="select">
+                                        <select><option>selecione a cidade</option></select>
+                                    </div>
+                                </div>
+                                <div class="buttons col-1">
+                                    <a class="back pull-left" href="../auth/login.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
+                                    <button class="submit">Cadastre-se</button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </h:form>
+        </section>
+        <footer>
+            <div class="container">
+                <img src="../resources/common/images/footer.png"></img>
+            </div>
+        </footer>
+        <!--<div class="central">
             <div class="block_central">
                 <font class="block_top_l"></font> 
                 <font class="block_top_r">
@@ -58,7 +140,6 @@
                         </span>
                         <span>
                             <p>#{localeBean.getString('Confirme seu e-mail')}*</p>
-                            <!-- Não precisa de required nem requiredMessage. A verificação é feita no bean -->
                             <h:inputText id="user_confirm" value="#{registerBean.usernameConfirm}" >
                                 <f:validateBean disabled="true"/>
                             </h:inputText>
@@ -71,7 +152,6 @@
                         </span>
                         <span>
                             <p>#{localeBean.getString('Confirme sua senha')}*</p>
-                            <!-- Não precisa de required nem requiredMessage. A verificação é feita no bean -->
                             <h:inputSecret id="pass_confirm" value="#{registerBean.passwordConfirm}" >
                                 <f:validateBean disabled="true"/>
                             </h:inputSecret>
@@ -138,36 +218,37 @@
                                 <f:selectItems value="#{registerBean.cityList}" var="citys" itemValue="#{citys.id}" itemLabel="#{citys.name}" />
                             </h:selectOneMenu>
                         </span>
-                        <!--<span class="check_box">
-                            <input type="checkbox" checked="true" class="term_box"></input>
-                            <p>Li e aceito o 
-                                <a href="/">Termo de adesão</a>
-                            </p>
-                        </span> -->
+        <span class="check_box">
+            <input type="checkbox" checked="true" class="term_box"></input>
+            <p>Li e aceito o 
+                <a href="/">Termo de adesão</a>
+            </p>
+        </span>
 
-                        <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
-                            <f:ajax event="action" execute="@form" render="@form"/>
-                            <img id="button_save_icon" src="/resources/common/images/green-plus.png"/>
-                            <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
-                        </h:commandLink>
-                        <h:link outcome="/auth/login.xhtml" styleClass="button_back" id="button_back">
-                            <img id="back_button_icon" src="/resources/common/images/back.png"/>
-                            <font class="back_button_label">#{localeBean.getString('Retornar')}</font>
-                        </h:link>
-                    </h:form>
-                </font>
-            </div>
-            <span class="clear"></span>
-        </div>    
-        <span class="clear"></span>
-        <div class="bottom">
-            <ul class="bottom_menu">
-                <span class="powered_guigoh">Powered by</span>
-            </ul>
-        </div>
-        
+        <h:commandLink styleClass="button_save" id="button_save" action="#{registerBean.register()}">
+            <f:ajax event="action" execute="@form" render="@form"/>
+            <img id="button_save_icon" src="/resources/common/images/green-plus.png"/>
+            <font class="button_save_label">#{localeBean.getString('Salvar')}</font>
+        </h:commandLink>
+        <h:link outcome="/auth/login.xhtml" styleClass="button_back" id="button_back">
+            <img id="back_button_icon" src="/resources/common/images/back.png"/>
+            <font class="back_button_label">#{localeBean.getString('Retornar')}</font>
+        </h:link>
+    </h:form>
+</font>
+</div>
+<span class="clear"></span>
+</div>    
+<span class="clear"></span>
+<div class="bottom">
+<ul class="bottom_menu">
+<span class="powered_guigoh">Powered by</span>
+</ul>
+</div>
+        -->
+
         <!-- BEGIN PAGE SCRIPTS -->
-        
+
         <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>

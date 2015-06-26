@@ -62,3 +62,11 @@ transform: scaleX(-1);
 .secret-answer{
     margin-bottom:33px
 }
+
+.buttons{
+    display:block;
+}
+
+.back{
+    margin-top:37px;
+}
