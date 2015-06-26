@@ -55,7 +55,7 @@ p {
     float: left;
 }
 
-.main-register input[type=text], input[type=password] {
+.main-register input[type=text], .main-register input[type=password] {
     width: 285px !important;
 }
 

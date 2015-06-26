@@ -37,7 +37,7 @@
                 <div class="container">
                     <div class="content">
                         <div class="main-register">
-                            <h:messages styleClass="msg"/>
+                            <h:messages styleClass="msg" errorClass="error" infoClass="info"/>
                             <div class="profile">
                                 <p style="font-size: 22px">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
@@ -94,14 +94,14 @@
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.countryId}">
+                                        <h:selectOneMenu value="#{registerBean.countryId}">
                                             <f:selectItem itemLabel="Selecione o país" itemValue="0"/>
                                             <f:selectItems value="#{registerBean.countryList}" var="country" itemValue="#{country.id}" itemLabel="#{country.name}" />
                                             <f:ajax event="change" execute="@this" render="state" listener="#{registerBean.loadState}"/>
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu id="city" value="#{registerBean.socialProfile.cityId}">
+                                        <h:selectOneMenu id="city" value="#{registerBean.cityId}">
                                             <f:selectItem itemLabel="Selecione a cidade" itemValue=""/>
                                             <f:selectItems value="#{registerBean.cityList}" var="city" itemValue="#{city.id}" itemLabel="#{city.name}" />
                                         </h:selectOneMenu>
@@ -109,7 +109,9 @@
                                 </div>
                                 <div class="buttons col-1">
                                     <a class="back pull-left" href="../auth/login.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
-                                    <button class="submit pointer">Cadastre-se</button>
+                                    <h:commandLink action="#{registerBean.register()}">
+                                        <button class="submit pointer">Cadastre-se</button>
+                                    </h:commandLink>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -145,7 +147,7 @@
                     $(this).children("option:selected").text(string.substring(0, 45) + "...");
                 }
             }
-            
+
             $(document).on("keypress", "input", function(event) {
                 if (event.which == 13) {
                     event.preventDefault();
@@ -175,7 +177,7 @@
                         break;
                 }
             });
-            
+
         </script>
         <!-- END PAGE SCRIPTS -->
     </h:body>

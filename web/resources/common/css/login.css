@@ -23,9 +23,17 @@
 
 .msg{
     font-size:13px;
-    color:red;
     display:block;
     margin:-19px 0px 8px 0px
+}
+
+.error{
+    color:red;
+}
+
+.info{
+    color:green;
+    font-weight:bold;
 }
 
 .mirror{

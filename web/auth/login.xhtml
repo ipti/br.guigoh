@@ -45,7 +45,7 @@
                             <h:form prependId="false">
                                 <ui:fragment rendered="#{authBean.loginStatus.equals('login')}">
                                     <h3>Login</h3>
-                                    <h:messages styleClass="msg"/>
+                                    <h:messages styleClass="msg" errorClass="error" infoClass="info"/>
                                     <h:inputText styleClass="block" autocomplete="on" pt:placeholder="E-mail" value="#{authBean.user.username}"/>
                                     <h:inputSecret styleClass="block" autocomplete="off" pt:placeholder="Senha" value="#{authBean.user.password}"/>
                                     <h:commandLink styleClass="forward" action="#{authBean.login()}">
