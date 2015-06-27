@@ -5,7 +5,6 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <f:view contentType="text/html"/>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
@@ -33,23 +32,22 @@
             </div>
         </header>
         <section>
-            <h:form prependId="false">
-                <div class="container">
+            <h:form prependId="false" id="form-panel">
+                <h:panelGroup layout="block" class="container">
                     <div class="content">
                         <div class="main-register">
                             <h:messages styleClass="msg" errorClass="error" infoClass="info"/>
                             <div class="profile">
                                 <p style="font-size: 22px">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
-                                <form>
                                     <div class="col-2">
                                         <h:inputText pt:placeholder="Nome" value="#{registerBean.socialProfile.name}"></h:inputText>
                                         <h:inputText pt:placeholder="E-mail" value="#{registerBean.user.username}"></h:inputText>
                                         <h:inputSecret pt:placeholder="Senha" value="#{registerBean.user.password}"></h:inputSecret>
                                         <div class="select">
-                                            <h:selectOneMenu value="#{registerBean.secretQuestion.id}">
-                                                <f:selectItem itemLabel="Pergunta secreta" itemValue="0"/>
-                                                <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions.id}" itemLabel="#{questions.name}" />
+                                            <h:selectOneMenu value="#{registerBean.user.secretQuestionId}" converter="entityConverter">
+                                                <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
+                                                <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
                                             </h:selectOneMenu>
                                         </div>
                                         <hr></hr>
@@ -61,51 +59,50 @@
                                         <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{registerBean.user.secretAnswer}"></h:inputText>
                                     </div>
                                     <div class="clear"></div>
-                                </form>
                             </div>
                             <div class="school">
                                 <p>Alguns dados sobre sua instituição de ensino.</p>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.subnetworkId}">
-                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue="0"/>
-                                            <f:selectItems value="#{registerBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork.id}" itemLabel="#{subnetwork.description}" />
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.subnetworkId}" converter="entityConverter">
+                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork}" itemLabel="#{subnetwork.description}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.languageId}">
-                                            <f:selectItem itemLabel="Selecione o idioma" itemValue="0"/>
-                                            <f:selectItems value="#{registerBean.languageList}" var="language" itemValue="#{language.id}" itemLabel="#{language.description}" />
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.languageId}" converter="entityConverter">
+                                            <f:selectItem itemLabel="Selecione o idioma" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.languageList}" var="language" itemValue="#{language}" itemLabel="#{language.description}" />
                                         </h:selectOneMenu>
                                     </div>
-                                    <div class="select">
-                                        <h:selectOneMenu id="state" value="#{registerBean.stateId}">
+                                    <h:panelGroup layout="block" class="select" id="state">
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.stateId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o estado" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.stateList}" var="state" itemValue="#{state.id}" itemLabel="#{state.name}" />
-                                            <f:ajax event="change" render="city" listener="#{registerBean.loadCity()}"/>
+                                            <f:selectItems value="#{registerBean.stateList}" var="state" itemValue="#{state}" itemLabel="#{state.name}" />
+                                            <f:ajax render="city" listener="#{registerBean.loadCity()}"/>
                                         </h:selectOneMenu>
-                                    </div>
+                                    </h:panelGroup>
                                 </div>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.roleId}">
-                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue="0"/>
-                                            <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role.id}" itemLabel="#{role.name}" />
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.roleId}" converter="entityConverter">
+                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role}" itemLabel="#{role.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.countryId}">
-                                            <f:selectItem itemLabel="Selecione o país" itemValue="0"/>
-                                            <f:selectItems value="#{registerBean.countryList}" var="country" itemValue="#{country.id}" itemLabel="#{country.name}" />
-                                            <f:ajax event="change" execute="@this" render="state" listener="#{registerBean.loadState}"/>
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.countryId}" converter="entityConverter" >
+                                            <f:ajax event="valueChange" execute="@this" render="state city" listener="#{registerBean.loadState}"/>
+                                            <f:selectItem itemLabel="Selecione o país" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.countryList}" var="country" itemValue="#{country}" itemLabel="#{country.name}" />
                                         </h:selectOneMenu>
                                     </div>
-                                    <div class="select">
-                                        <h:selectOneMenu id="city" value="#{registerBean.cityId}">
+                                    <h:panelGroup layout="block" class="select" id="city">
+                                        <h:selectOneMenu value="#{registerBean.socialProfile.cityId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione a cidade" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.cityList}" var="city" itemValue="#{city.id}" itemLabel="#{city.name}" />
+                                            <f:selectItems value="#{registerBean.cityList}" var="city" itemValue="#{city}" itemLabel="#{city.name}" />
                                         </h:selectOneMenu>
-                                    </div>
+                                    </h:panelGroup>
                                 </div>
                                 <div class="buttons col-1">
                                     <a class="back pull-left" href="../auth/login.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
@@ -118,7 +115,7 @@
                         </div>
                         <div class="clear"></div>
                     </div>
-                </div>
+                </h:panelGroup>
             </h:form>
         </section>
         <footer>
@@ -130,15 +127,16 @@
         <!-- BEGIN PAGE SCRIPTS -->
         <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
         <script>
-            $('select').on("change", changeSelectColors).change();
-            $('select').on("change", checkLength).change();
+            $('select').each(changeSelectColors);
+            $('select').on("change", changeSelectColors);
+            $('select').on("change", checkLength);
             function changeSelectColors() {
                 if ($(this).children('option:first-child').is(':selected')) {
                     $(this).css("color", "rgba(0, 0, 0, 0.4)");
                 } else {
-                    $(this).css("color", "initial");
+                    $(this).css("color", "black");
                 }
-                $(this).children("option").not(":eq(0)").css("color", "initial");
+                $(this).children("option").not(":eq(0)").css("color", "black");
                 $(this).children("option:first-child").css("color", "rgba(0, 0, 0, 0.4)");
             }
             function checkLength() {
@@ -174,6 +172,8 @@
                         break;
                     case "success":
                         setCursors(data.status);
+                        $('select').each(changeSelectColors);
+                        $('select').on("change", changeSelectColors);
                         break;
                 }
             });

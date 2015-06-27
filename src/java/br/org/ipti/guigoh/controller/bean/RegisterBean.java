@@ -44,10 +44,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
-/**
- *
- * @author Joerlan Lima
- */
 @SessionScoped
 @ManagedBean(name = "registerBean")
 public class RegisterBean implements Serializable {
@@ -56,11 +52,9 @@ public class RegisterBean implements Serializable {
     public static final String CONFIRMATION_PENDING = "CP", CONFIRMATION_ACCESS = "CA", DEFAULT = "DE",
             ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC", FIRST_ACCESS = "FC", PENDING_ACCESS = "PC",
             PUBLIC = "PU", PRIVATE = "PR";
-    public static final String BRAZIL = "Brasil", SERGIPE = "Sergipe", ARACAJU = "Aracaju";
 
     private Users user;
     private SocialProfile socialProfile;
-    private SecretQuestion secretQuestion;
     private Translator trans;
 
     private List<SecretQuestion> questionsList;
@@ -73,8 +67,6 @@ public class RegisterBean implements Serializable {
 
     private String usernameConfirm, passwordConfirm, confirmCode, confirmEmail,
             lastName, panelStatus, newPassword, newPasswordConfirm;
-    private Integer countryId, stateId, cityId, roleId, subnetworkId, languageId;
-    private Boolean visitor;
 
     private CityJpaController cityJpaController;
     private StateJpaController stateJpaController;
@@ -100,11 +92,6 @@ public class RegisterBean implements Serializable {
     }
 
     private void loadDefault() {
-        countryId = countryJpaController.findCountryByName(BRAZIL).getId();
-        stateList = stateJpaController.findStatesByCountryId(countryId);
-        stateId = stateJpaController.findStateByName(SERGIPE).getId();
-        cityList = cityJpaController.findCitiesByStateId(stateId);
-        cityId = cityJpaController.findCityByName(ARACAJU).getId();
         roleList = roleJpaController.findRoleEntities();
 
     }
@@ -116,44 +103,21 @@ public class RegisterBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
-                        && !lastName.equals("") && languageId != 0 && secretQuestion.getId() != 0
-                        && !(user.getSecretAnswer().equals("")) && countryId != 0 && stateId != 0 && cityId != 0) {
+                        && !lastName.equals("") && socialProfile.getLanguageId() != null && user.getSecretQuestionId() != null
+                        && !(user.getSecretAnswer().equals("")) && socialProfile.getCountryId() != null && socialProfile.getStateId() != null && socialProfile.getCityId() != null) {
                     if (usernameConfirm.equals(user.getUsername())) {
                         if (passwordConfirm.equals(user.getPassword())) {
                             user.setToken(MD5Generator.generate(user.getUsername() + user.getPassword() + SALT));
                             user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
-                            user.setSecretQuestionId(secretQuestion);
-                            Country country = new Country();
-                            State state = new State();
-                            City city = new City();
-                            Subnetwork subnetwork = new Subnetwork();
-                            Language language = new Language();
-                            Role role = new Role();
                             EmailActivation emailactivation = new EmailActivation();
                             emailactivation.setUsername(user.getUsername());
                             emailactivation.setCode(MD5Generator.generate(user.getUsername() + RandomGenerator.generate(5)));
-                            country.setId(countryId);
-                            socialProfile.setCountryId(country);
-                            state.setId(stateId);
-                            socialProfile.setStateId(state);
-                            city.setId(cityId);
-                            socialProfile.setCityId(city);
-                            language.setId(languageId);
-                            socialProfile.setLanguageId(language);
-                            subnetwork.setId(subnetworkId);
-                            role.setId(roleId);
-                            if (subnetworkId != 0) {
-                                socialProfile.setSubnetworkId(subnetwork);
-                            }
-                            if (roleId != 0) {
-                                socialProfile.setRoleId(role);
-                            }
                             socialProfile.setTokenId(user.getToken());
                             socialProfile.setPhoto("/resources/common/images/avatar.png");
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
                             String accountActivation = "Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
-                            trans.setLocale(languageJpaController.findLanguage(languageId).getAcronym());
+                            trans.setLocale(languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym());
                             mailtext = trans.getWord(mailtext);
                             mailtext += "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
 //                            mailtext += "http://rts.guigoh.com:8080/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
@@ -187,10 +151,6 @@ public class RegisterBean implements Serializable {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
         }
-    }
-
-    public void updateRole() {
-        visitor = subnetworkId == 0;
     }
 
     public String backToLogin() {
@@ -256,11 +216,14 @@ public class RegisterBean implements Serializable {
     }
 
     public void loadState() {
-        stateList = stateJpaController.findStatesByCountryId(countryId);
+        socialProfile.setStateId(null);
+        stateList = socialProfile.getCountryId() != null ? stateJpaController.findStatesByCountryId(socialProfile.getCountryId().getId()): new ArrayList<>();
+        cityList = new ArrayList<>();
     }
 
     public void loadCity() {
-        cityList = cityJpaController.findCitiesByStateId(stateId);
+        socialProfile.setCityId(null);
+        cityList = socialProfile.getStateId() != null ? cityJpaController.findCitiesByStateId(socialProfile.getStateId().getId()) : new ArrayList<>();
     }
 
     public void authenticateUser() throws RollbackFailureException, Exception {
@@ -354,7 +317,6 @@ public class RegisterBean implements Serializable {
         
         user = new Users();
         socialProfile = new SocialProfile();
-        secretQuestion = new SecretQuestion();
         trans = new Translator();
         
         questionsList = getQuestions();
@@ -367,8 +329,6 @@ public class RegisterBean implements Serializable {
         roleList = new ArrayList<>();
         
         usernameConfirm = passwordConfirm = lastName = panelStatus = "";
-        countryId = stateId = roleId = subnetworkId = languageId = 0;
-        visitor = true;
         
         trans.setLocale(CookieService.getCookie("locale"));
     }
@@ -387,14 +347,6 @@ public class RegisterBean implements Serializable {
 
     public void setQuestionsList(List<SecretQuestion> questions) {
         this.questionsList = questions;
-    }
-
-    public SecretQuestion getSecretQuestion() {
-        return secretQuestion;
-    }
-
-    public void setSecretQuestion(SecretQuestion secretQuestion) {
-        this.secretQuestion = secretQuestion;
     }
 
     public List<State> getStateList() {
@@ -461,46 +413,6 @@ public class RegisterBean implements Serializable {
         this.subnetworkList = subnetworkList;
     }
 
-    public Integer getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Integer countryId) {
-        this.countryId = countryId;
-    }
-
-    public Integer getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(Integer stateId) {
-        this.stateId = stateId;
-    }
-
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
-    }
-
-    public Integer getSubnetworkId() {
-        return subnetworkId;
-    }
-
-    public void setSubnetworkId(Integer subnetworkId) {
-        this.subnetworkId = subnetworkId;
-    }
-
-    public Integer getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
-    }
-
     public String getConfirmCode() {
         return confirmCode;
     }
@@ -555,21 +467,5 @@ public class RegisterBean implements Serializable {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
-    }
-
-    public Boolean getVisitor() {
-        return visitor;
-    }
-
-    public void setVisitor(Boolean visitor) {
-        this.visitor = visitor;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 }

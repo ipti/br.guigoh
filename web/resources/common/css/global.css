@@ -117,7 +117,7 @@ aside .panel:last-child {
 }
 
 .panel .forgot {
-    display: block;
+    float: left;
     margin-top: 35px;
 }
 
