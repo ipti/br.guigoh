@@ -24,8 +24,8 @@ import javax.faces.context.FacesContext;
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "friendsBean")
-public class FriendsBean implements Serializable {
+@ManagedBean(name = "friendBean")
+public class FriendBean implements Serializable {
 
     private Users user;
     private SocialProfile userSocialProfile;
@@ -54,7 +54,7 @@ public class FriendsBean implements Serializable {
     }
 
     public String goToProfile(Integer id) {
-        return "/profile/viewProfile.xhtml?id=" + id;
+        return "/profile/view-profile.xhtml?id=" + id;
     }
 
     private void organizeFriendList(List<Friends> list) {

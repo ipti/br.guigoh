@@ -8,7 +8,7 @@
     <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/createTopic.css"></link>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/create-topic.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
@@ -25,8 +25,8 @@
                         <h:link outcome="/theme/theme.xhtml?id=#{createTopicBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
                         <h:outputText value="#{localeBean.getString('Novo tópico')}"></h:outputText>
                     </h:panelGroup>
-                    <h:link outcome="/profile/viewProfile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{createTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
-                    <h:link outcome="/profile/viewProfile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{createTopicBean.socialProfile.name}"></h:link>
+                    <h:link outcome="/profile/view-profile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{createTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
+                    <h:link outcome="/profile/view-profile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{createTopicBean.socialProfile.name}"></h:link>
                     <h:outputText styleClass="topic_title_label" value="#{localeBean.getString('Assunto')}:"></h:outputText>
                     <h:outputText styleClass="new_title_warning" value="Campo obrigatório"/>
                     <h:inputText styleClass="new_title" value="#{createTopicBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Um título que descreva o assunto tratado no seu tópico...')}"></h:inputText>
@@ -78,7 +78,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/createTopic.js"></script>
+        <script type="text/javascript" src="/resources/common/js/create-topic.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

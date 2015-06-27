@@ -6,7 +6,7 @@
     <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')} - #{educationalObjectBean.educationalObject.name}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link rel="stylesheet" href="../resources/common/css/educationalObject.css"/>
+        <link rel="stylesheet" href="../resources/common/css/educational-object.css"/>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
@@ -43,7 +43,7 @@
                             <p><strong>#{localeBean.getString('Tags: ')}</strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
                             <ui:param name="educationalObjectTheme" value="#{educationalObjectBean.educationalObject.themeId.name}"/>
                             <p><strong>#{localeBean.getString('Tema: ')}</strong><h:link id="educational-object-theme" outcome="/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}" value="#{localeBean.getString(educationalObjectTheme)}"/></p>
-                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><h:link id="educational-object-publisher" outcome="/profile/viewProfile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}" value="#{educationalObjectBean.educationalObject.socialProfileId.name}"/></p>    
+                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><h:link id="educational-object-publisher" outcome="/profile/view-profile.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}" value="#{educationalObjectBean.educationalObject.socialProfileId.name}"/></p>    
                         </h:panelGroup>
                         <div id="download-box">
                             <span class="title">#{localeBean.getString('Lista de arquivos')}</span>
@@ -84,7 +84,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="../resources/common/js/educationalObject.js"/>
+        <script type="text/javascript" src="../resources/common/js/educational-object.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -82,7 +82,7 @@ public class RegisterBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             loadDefault();
-            if (FacesContext.getCurrentInstance().getViewRoot().getViewId().lastIndexOf("confirmEmail") > -1) {
+            if (FacesContext.getCurrentInstance().getViewRoot().getViewId().lastIndexOf("confirm-email") > -1) {
                 authenticateUser();
             } else {
                 confirmCode = "";
@@ -119,8 +119,8 @@ public class RegisterBean implements Serializable {
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Arte com Ciência.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
                             trans.setLocale(languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym());
                             mailtext = trans.getWord(mailtext);
-                            mailtext += "http://artecomciencia.guigoh.com/auth/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-//                            mailtext += "http://rts.guigoh.com:8080/auth/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                            mailtext += "http://artecomciencia.guigoh.com/auth/confirm-email.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+//                            mailtext += "http://rts.guigoh.com:8080/auth/confirm-email.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
@@ -259,9 +259,9 @@ public class RegisterBean implements Serializable {
                         String newUserAccount = "Novo cadastro de usuário";
                         String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                         //mailtext = trans.getWord(mailtext);
-                        //mailtext += "http://rts.guigoh.com:8080/auth/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                        //mailtext += "http://artecomciencia.guigoh.com/auth/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                        //Modificar http://artecomciencia.guigoh.com/auth/confirmEmail.xhtml?code=codigo&user=usuario                                
+                        //mailtext += "http://rts.guigoh.com:8080/auth/confirm-email.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                        //mailtext += "http://artecomciencia.guigoh.com/auth/confirm-email.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                        //Modificar http://artecomciencia.guigoh.com/auth/confirm-email.xhtml?code=codigo&user=usuario                                
                         //newUserAccount = trans.getWord(newUserAccount);
                         for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
                             //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());

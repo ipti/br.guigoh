@@ -7,7 +7,7 @@
     <ui:define name="title">#{localeBean.getString(theme)} - #{viewTopicBean.discussionTopic.title}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/viewTopic.css"></link>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/view-topic.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
@@ -39,8 +39,8 @@
                             <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
                         </h:outputText>
                         <h:outputText styleClass="discussion_topic_clock"></h:outputText>
-                        <h:link outcome="/profile/viewProfile.xhtml?id=#{viewTopicBean.discussionTopic.socialProfileId.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{viewTopicBean.discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:link>
-                        <h:link outcome="/profile/viewProfile.xhtml?id=#{viewTopicBean.discussionTopic.socialProfileId.socialProfileId}" styleClass="topic_creator_name" value="#{viewTopicBean.discussionTopic.socialProfileId.name}"></h:link>
+                        <h:link outcome="/profile/view-profile.xhtml?id=#{viewTopicBean.discussionTopic.socialProfileId.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{viewTopicBean.discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:link>
+                        <h:link outcome="/profile/view-profile.xhtml?id=#{viewTopicBean.discussionTopic.socialProfileId.socialProfileId}" styleClass="topic_creator_name" value="#{viewTopicBean.discussionTopic.socialProfileId.name}"></h:link>
                         <h:outputText styleClass="topic_creator_body" value="#{viewTopicBean.discussionTopic.body}"></h:outputText>
                         <ui:repeat value="#{viewTopicBean.discussionTopic.discussionTopicFilesList}" var="file">
                             <h:outputText styleClass="file_attach_image"></h:outputText>
@@ -58,8 +58,8 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
                                 </h:outputText>
                                 <h:outputText styleClass="discussion_topic_clock"></h:outputText>
-                                <h:link outcome="/profile/viewProfile.xhtml?id=#{discussionTopicMsg.socialProfileId.socialProfileId}" styleClass="member_photo" style="background:url('#{discussionTopicMsg.socialProfileId.photo}') no-repeat;background-size:77px"></h:link>
-                                <h:link outcome="/profile/viewProfile.xhtml?id=#{discussionTopicMsg.socialProfileId.socialProfileId}" styleClass="member_name" value="#{discussionTopicMsg.socialProfileId.name}"></h:link>
+                                <h:link outcome="/profile/view-profile.xhtml?id=#{discussionTopicMsg.socialProfileId.socialProfileId}" styleClass="member_photo" style="background:url('#{discussionTopicMsg.socialProfileId.photo}') no-repeat;background-size:77px"></h:link>
+                                <h:link outcome="/profile/view-profile.xhtml?id=#{discussionTopicMsg.socialProfileId.socialProfileId}" styleClass="member_name" value="#{discussionTopicMsg.socialProfileId.name}"></h:link>
                                 <h:outputText styleClass="member_reply" value="#{discussionTopicMsg.reply}"></h:outputText>
                                 <ui:repeat value="#{discussionTopicMsg.discussionTopicFilesList}" var="file">
                                     <h:outputText styleClass="file_attach_image"></h:outputText>
@@ -75,8 +75,8 @@
                 </h:panelGroup>
                 <span class="clear"></span>
                 <h:outputText styleClass="box_spacer"></h:outputText>
-                <h:link outcome="/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_photo" style="background:url('#{viewTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
-                <h:link outcome="/profile/viewProfile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_name" value="#{viewTopicBean.socialProfile.name}"></h:link>
+                <h:link outcome="/profile/view-profile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_photo" style="background:url('#{viewTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
+                <h:link outcome="/profile/view-profile.xhtml?id=#{viewTopicBean.socialProfile.socialProfileId}" styleClass="reply_sender_name" value="#{viewTopicBean.socialProfile.name}"></h:link>
                 <h:panelGroup id="new_reply_box" styleClass="new_reply_box">
                     <h:outputText styleClass="new_reply_warning" value="Campo obrigatório"/>
                     <h:panelGroup styleClass="reply_attach_button"/>
@@ -113,7 +113,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/viewTopic.js"></script>
+        <script type="text/javascript" src="/resources/common/js/view-topic.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

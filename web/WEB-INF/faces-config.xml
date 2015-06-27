@@ -30,7 +30,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>profile</from-outcome>
-            <to-view-id>/profile/viewProfile.xhtml</to-view-id>
+            <to-view-id>/profile/view-profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -38,7 +38,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>email</from-outcome>
-            <to-view-id>/auth/confirmEmail.xhtml</to-view-id>
+            <to-view-id>/auth/confirm-email.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule> 
@@ -46,7 +46,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>wizard</from-outcome>
-            <to-view-id>/profile/wizardProfile.xhtml</to-view-id>
+            <to-view-id>/profile/wizard-profile.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>   

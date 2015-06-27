@@ -6,16 +6,16 @@
     <ui:define name="title">#{localeBean.getString('Contatos')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/friends.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/friend.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:event type="preRenderComponent" listener="#{friendsBean.init()}"/>
+            <f:event type="preRenderComponent" listener="#{friendBean.init()}"/>
         </f:metadata>
         <h:form prependId="false">
             <div id="content_box" >	
-                <h:panelGroup rendered="#{!friendsBean.pendingList.isEmpty()}">
+                <h:panelGroup rendered="#{!friendBean.pendingList.isEmpty()}">
                     <div class="pending_box">
                         <font class="pending_box_title">
                             <p>#{localeBean.getString('Contatos Pendentes')}</p>    
@@ -23,14 +23,14 @@
                         <hr class="line" />              
                         <h1>#{localeBean.getString('Aceite ou rejeite contatos que lhe adicionaram na rede, logo abaixo:')}</h1>
                         <div class="pending_box_block">
-                            <ui:repeat value="#{friendsBean.pendingList}" var="pending">
-                                <h:link outcome="#{friendsBean.goToProfile(pending.tokenFriend2.socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{pending.tokenFriend2.socialProfile.photo}') no-repeat center center;background-size:77px;">
+                            <ui:repeat value="#{friendBean.pendingList}" var="pending">
+                                <h:link outcome="#{friendBean.goToProfile(pending.tokenFriend2.socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{pending.tokenFriend2.socialProfile.photo}') no-repeat center center;background-size:77px;">
                                     <p class="name">#{pending.tokenFriend2.socialProfile.name}</p>
                                     <p class="occupation">#{pending.tokenFriend2.socialProfile.occupationsId.name}</p>
-                                    <h:commandButton id ="add_pending_friend" styleClass="button_accept" value="#{localeBean.getString('Aceitar')}" action="#{friendsBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
+                                    <h:commandButton id ="add_pending_friend" styleClass="button_accept" value="#{localeBean.getString('Aceitar')}" action="#{friendBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
                                         <f:ajax execute="add_pending_friend" render="@form"/>
                                     </h:commandButton>
-                                    <h:commandButton id ="remove_pending_friend" styleClass="button_reject" value="#{localeBean.getString('Rejeitar')}" action="#{friendsBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
+                                    <h:commandButton id ="remove_pending_friend" styleClass="button_reject" value="#{localeBean.getString('Rejeitar')}" action="#{friendBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
                                         <f:ajax execute="remove_pending_friend" render="@form"/>
                                     </h:commandButton>
                                 </h:link>
@@ -40,28 +40,28 @@
                     </div>	
                 </h:panelGroup>
                 <span class="clear"></span>
-                <h:panelGroup rendered="#{!friendsBean.acceptedList.isEmpty()}">
+                <h:panelGroup rendered="#{!friendBean.acceptedList.isEmpty()}">
                     <div class="contacts_box">
                         <font class="contacts_box_title">
                             <p>#{localeBean.getString('Contatos')}</p>    
                         </font>
                         <hr class="contacts_line" />
                         <h:form class="contacts_search">
-                            <h:inputText id="searchFriends" styleClass="contacts_search_friends_box" value="#{friendsBean.friendInputSearch}" autocomplete="off">
-                                <f:ajax listener="#{friendsBean.searchFriendEvent()}" execute="searchFriends" render="friends" event="keyup"/>
+                            <h:inputText id="searchFriends" styleClass="contacts_search_friends_box" value="#{friendBean.friendInputSearch}" autocomplete="off">
+                                <f:ajax listener="#{friendBean.searchFriendEvent()}" execute="searchFriends" render="friends" event="keyup"/>
                             </h:inputText>
                             <input type="button" value="" title="Pesquisar em contatos" class="contacts_button_friends_submit" />
                             <span class="clear"></span>
                             <h1>#{localeBean.getString('Para acessar o perfil, basta clicar na foto, nome ou ocupação do contato. Para procurar um amigo, digite no campo acima.')}</h1>
                             <h:panelGroup id="friends">
                                 <div class="contacts_box_blocks">
-                                    <ui:repeat value="#{friendsBean.acceptedList}" var="friend" >
+                                    <ui:repeat value="#{friendBean.acceptedList}" var="friend" >
                                         <div class="contacts_box_block">
-                                            <h:commandButton id ="remove_friend" styleClass="button_reject_close" value="x" action="#{friendsBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}">
+                                            <h:commandButton id ="remove_friend" styleClass="button_reject_close" value="x" action="#{friendBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}">
                                                 <f:ajax execute="remove_friend" render="@form"/>
                                             </h:commandButton>
                                             <div class="contacts_block_align">
-                                                <h:link outcome="#{friendsBean.goToProfile(friend.tokenFriend2.socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{friend.tokenFriend2.socialProfile.photo}') no-repeat center center;background-size:77px;">
+                                                <h:link outcome="#{friendBean.goToProfile(friend.tokenFriend2.socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{friend.tokenFriend2.socialProfile.photo}') no-repeat center center;background-size:77px;">
                                                     <p class="name" >#{friend.tokenFriend2.socialProfile.name}</p>
                                                     <p class="occupation">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
                                                 </h:link>
@@ -82,20 +82,20 @@
                     <hr class="line" />
                     <h1>#{localeBean.getString('Digite no campo ao lado o contato que você deseja procurar:')}</h1>
                     <h:form class="contacts_search">
-                        <h:inputText id="searchUsers" value="#{friendsBean.userInputSearch}" styleClass="contacts_search_users_box" autocomplete="off">
-                            <f:ajax listener="#{friendsBean.searchUsersEvent()}" execute="searchUsers" render="users" event="keyup"/>
+                        <h:inputText id="searchUsers" value="#{friendBean.userInputSearch}" styleClass="contacts_search_users_box" autocomplete="off">
+                            <f:ajax listener="#{friendBean.searchUsersEvent()}" execute="searchUsers" render="users" event="keyup"/>
                         </h:inputText>
                         <input type="button" value="" title="Pesquisar em contatos" class="contacts_button_users_submit" />
                         <h:panelGroup id="users">
                             <div class="contacts_box_blocks">
-                                <ui:repeat value="#{friendsBean.socialProfileList}" var="socialProfile">
+                                <ui:repeat value="#{friendBean.socialProfileList}" var="socialProfile">
                                     <div class="contacts_box_block">
                                         <div class="contacts_block_align">
-                                            <h:link outcome="#{friendsBean.goToProfile(socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{socialProfile.photo}') no-repeat center center;background-size:77px;">
+                                            <h:link outcome="#{friendBean.goToProfile(socialProfile.socialProfileId)}" class="profile_avatar" style="background:url('#{socialProfile.photo}') no-repeat center center;background-size:77px;">
                                                 <p class="name">#{socialProfile.name}</p>
                                                 <p class="occupation">#{socialProfile.occupationsId.name}</p>
                                             </h:link>
-                                            <h:panelGroup rendered="#{socialProfile.socialProfileId != friendsBean.userSocialProfile.socialProfileId}">
+                                            <h:panelGroup rendered="#{socialProfile.socialProfileId != friendBean.userSocialProfile.socialProfileId}">
                                                 <p class="messageButton" name="#{socialProfile.name}" socialprofileid="#{socialProfile.socialProfileId}">+ Mensagem</p>
                                             </h:panelGroup>
                                         </div>   
