@@ -39,6 +39,11 @@ public class HeaderBean implements Serializable {
         getRegisteredUsersQuantity();
     }
     
+    public String logout() {
+        CookieService.eraseCookie();
+        return "logout";
+    }
+    
     private void loadSocialProfile() {
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));

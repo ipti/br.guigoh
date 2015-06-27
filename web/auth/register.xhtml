@@ -132,12 +132,12 @@
             $('select').on("change", checkLength);
             function changeSelectColors() {
                 if ($(this).children('option:first-child').is(':selected')) {
-                    $(this).css("color", "rgba(0, 0, 0, 0.4)");
+                    $(this).css("color", "rgba(0, 0, 0, 0.5)");
                 } else {
                     $(this).css("color", "black");
                 }
                 $(this).children("option").not(":eq(0)").css("color", "black");
-                $(this).children("option:first-child").css("color", "rgba(0, 0, 0, 0.4)");
+                $(this).children("option:first-child").css("color", "rgba(0, 0, 0, 0.5)");
             }
             function checkLength() {
                 if ($(this).children("option:selected").text().trim().length > 45) {

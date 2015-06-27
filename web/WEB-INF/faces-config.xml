@@ -38,7 +38,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>email</from-outcome>
-            <to-view-id>/users/confirmEmail.xhtml</to-view-id>
+            <to-view-id>/auth/confirmEmail.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule> 

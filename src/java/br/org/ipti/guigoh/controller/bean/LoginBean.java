@@ -28,8 +28,8 @@ import org.apache.commons.mail.EmailException;
  * @author Joerlan Lima
  */
 @ViewScoped
-@ManagedBean(name = "authBean")
-public class AuthBean implements Serializable {
+@ManagedBean(name = "loginBean")
+public class LoginBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
     
@@ -70,14 +70,9 @@ public class AuthBean implements Serializable {
             loginStatus = "check_email";
             return "";
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Login incorreto!"), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Login incorreto!"), null));
             return "";
         }
-    }
-
-    public String logout() {
-        CookieService.eraseCookie();
-        return "logout";
     }
 
     public void recoverAccount(String status) {
@@ -94,7 +89,7 @@ public class AuthBean implements Serializable {
                 emailactivation.setCode(MD5Generator.generate(userToRecover.getUsername() + RandomGenerator.generate(5)));
                 SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                 SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(userToRecover.getToken());
-                String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/users/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
+                String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/auth/confirmEmail.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
                 if (emailActivationJpaController.findEmailActivationByUsername(userToRecover.getUsername()).getUsername() != null){
                     emailActivationJpaController.edit(emailactivation);

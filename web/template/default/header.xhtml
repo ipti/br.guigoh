@@ -20,7 +20,7 @@
                             <li ><span></span><a href="/">Sobre</a></li>
                             <li ><span></span><a href="/">Ajuda</a></li>-->
                             <li class="first"><h:commandLink action="/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></li>
-                            <li class="first"><h:commandLink action="#{authBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
+                            <li class="first"><h:commandLink action="#{headerBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
                         </h:panelGroup>
                         <ui:param name="url" value="#{request.servletPath}"/>
                         <h:panelGrid styleClass="localeLogon" columns="3">
@@ -41,7 +41,7 @@
                         <ul>
                             <li class="menu home" ><a href="/home.xhtml">#{localeBean.getString('Início')}</a></li>
                             <li class="menu profile" ><a href="/profile/viewProfile.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Perfil')}</a></li>
-                            <li class="menu contacts" ><a href="/friends/viewFriends.xhtml">#{localeBean.getString('Contatos')}</a></li>
+                            <li class="menu contacts" ><a href="/friend/viewFriends.xhtml">#{localeBean.getString('Contatos')}</a></li>
                             <li class="menu environment" ><a href="/educational-object/publishEnvironment.xhtml">#{localeBean.getString('Ambiente de Publicação')}</a></li>   
                         </ul>
                         <div class="log_menu">

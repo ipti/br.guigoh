@@ -22,17 +22,18 @@
 }
 
 .msg{
+    color: red;
     font-size:13px;
     display:block;
     margin:-19px 0px 8px 0px
 }
 
 .error{
-    color:red;
+    color:red !important;
 }
 
 .info{
-    color:green;
+    color:green !important;
     font-weight:bold;
 }
 
@@ -55,11 +56,11 @@ transform: scaleX(-1);
 }
 
 .email-recovery {
-    margin-bottom: 62px;
+    margin-bottom: 39px;
 }
 
 .pass-sent {
-    margin-bottom: 119px !important;
+    margin-bottom: 109px !important;
 }
 
 .secret-question{
@@ -68,7 +69,7 @@ transform: scaleX(-1);
 }
 
 .secret-answer{
-    margin-bottom:33px
+    margin-bottom:15px
 }
 
 .buttons{
