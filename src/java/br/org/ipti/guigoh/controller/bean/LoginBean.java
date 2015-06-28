@@ -67,10 +67,10 @@ public class LoginBean implements Serializable {
                     CookieService.addCookie("token", registeredUser.getToken());
                     return "islogged";
                 case "PC":
-                    loginStatus = "pending";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta já foi solicitada. Aguarde a confirmação do administrador."), null));
                     return "";
                 case "IC":
-                    loginStatus = "inactive";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta está desativada. Contate o administrador."), null));
                     return "";
                 default:
                     CookieService.addCookie("user", registeredUser.getUsername());
@@ -78,7 +78,7 @@ public class LoginBean implements Serializable {
                     return "wizard";
             }
         } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
-            loginStatus = "check_email";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Confirme seu registro através do seu e-mail."), null));
             return "";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Login incorreto!"), null));
@@ -106,8 +106,7 @@ public class LoginBean implements Serializable {
                 } else {
                     emailActivationJpaController.create(emailactivation);
                 }
-
-                loginStatus = "pass_sent";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique o seu e-mail."), null));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
             }

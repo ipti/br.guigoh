@@ -78,30 +78,6 @@
                                     </h:commandLink>
                                 </ui:fragment>
 
-                                <ui:fragment rendered="#{loginBean.loginStatus.equals('check_email')}">
-                                    <h3>Confirme seu registro através do seu e-mail.</h3>
-                                    <h:commandLink action="#{loginBean.logout()}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
-                                </ui:fragment>
-
-                                <ui:fragment rendered="#{loginBean.loginStatus.equals('pending')}">
-                                    <h3>Sua conta já foi solicitada. Aguarde a confirmação do administrador.</h3>
-                                    <h:commandLink action="#{loginBean.logout()}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandLink>
-                                </ui:fragment>
-
-                                <ui:fragment rendered="#{loginBean.loginStatus.equals('inactive')}">
-                                    <h3>Sua conta está desativada. Contate o administrador.</h3>
-                                    <h:commandLink action="#{loginBean.logout()}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandLink>
-                                </ui:fragment>
-
                                 <ui:fragment rendered="#{loginBean.loginStatus.equals('secret_question')}">
                                     <h3>Digite o e-mail de acesso ao Guigoh.</h3>
                                     <h:messages styleClass="msg"/>
@@ -143,14 +119,6 @@
                                         <f:ajax execute="email-recovery" render="@form"/>
                                     </h:commandLink>
                                     <h:commandLink action="#{loginBean.recoverAccount('recover_pass')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
-                                </ui:fragment>
-
-                                <ui:fragment rendered="#{loginBean.loginStatus.equals('pass_sent')}">
-                                    <h3 class="pass-sent">Verifique o seu e-mail.</h3>
-                                    <h:commandLink action="#{loginBean.recoverAccount('login')}">
                                         <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
                                         <f:ajax execute="@this" render="@form" />
                                     </h:commandLink>
