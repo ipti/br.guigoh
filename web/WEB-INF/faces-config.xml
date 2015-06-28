@@ -37,14 +37,6 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-outcome>email</from-outcome>
-            <to-view-id>/auth/confirm-email.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule> 
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
             <from-outcome>wizard</from-outcome>
             <to-view-id>/profile/wizard-profile.xhtml</to-view-id>
             <redirect/>
