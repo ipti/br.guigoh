@@ -17,9 +17,11 @@
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
     <h:body>
-        <f:viewParam name="code" value="#{loginBean.confirmCode}" />
-        <f:viewParam name="user" value="#{loginBean.confirmEmail}" />
-        <f:event type="preRenderComponent" listener="#{loginBean.init()}"/>
+        <f:metadata>
+            <f:viewParam name="code" value="#{loginBean.confirmCode}" />
+            <f:viewParam name="user" value="#{loginBean.confirmEmail}" />
+            <f:event type="preRenderComponent" listener="#{loginBean.init()}"/>
+        </f:metadata>
         <header>
             <div class="container">
                 <div class="header-logo">
