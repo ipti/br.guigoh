@@ -106,7 +106,7 @@ public class LoginBean implements Serializable {
                 } else {
                     emailActivationJpaController.create(emailactivation);
                 }
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Verifique o seu e-mail."), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Verifique o seu e-mail."), null));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
             }
@@ -146,6 +146,7 @@ public class LoginBean implements Serializable {
             }
             userToRecover.setPassword(MD5Generator.generate(password + SALT));
             usersJpaController.edit(userToRecover);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Senha alterada com sucesso!"), null));
             return "logout";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));
