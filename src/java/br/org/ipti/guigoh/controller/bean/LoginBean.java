@@ -28,10 +28,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
-/**
- *
- * @author Joerlan Lima
- */
 @ViewScoped
 @ManagedBean(name = "loginBean")
 public class LoginBean implements Serializable {
@@ -90,7 +86,7 @@ public class LoginBean implements Serializable {
         loginStatus = status;
     }
 
-    public String sendPassToEmail() throws RollbackFailureException, Exception {
+    public void sendPassToEmail() throws RollbackFailureException, Exception {
         try {
             userToRecover = usersJpaController.findUsers(email);
             if (userToRecover != null && userToRecover.getStatus().equals("CA")) {
@@ -107,38 +103,35 @@ public class LoginBean implements Serializable {
                     emailActivationJpaController.create(emailactivation);
                 }
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Verifique o seu e-mail."), null));
+                loginStatus = "login";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail não cadastrado/autorizado no Guigoh."), null));
             }
         } catch (EmailException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível enviar este e-mail. Verifique sua conexão."), null));
         }
-        return "";
     }
 
-    public String loadQuestion() {
+    public void loadQuestion() {
         userToRecover = usersJpaController.findUsers(email);
         if (userToRecover != null) {
             loginStatus = "question";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("E-mail incorreto!"), null));
         }
-        return "";
     }
 
-    public String checkAnswer() {
+    public void checkAnswer() {
         if (secretAnswer.toUpperCase().equals(userToRecover.getSecretAnswer().toUpperCase())) {
             loginStatus = "change_password";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Resposta incorreta!"), null));
         }
-        return "";
     }
 
-    public String changePassword() throws Exception {
+    public void changePassword() throws Exception {
         if (password.equals("")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos abaixo não podem estar vazios."), null));
-            return "";
         } else if (password.equals(passwordConfirm)) {
             if (confirmEmail != null && confirmCode != null) {
                 userToRecover = usersJpaController.findUsers(confirmEmail);
@@ -146,66 +139,64 @@ public class LoginBean implements Serializable {
             }
             userToRecover.setPassword(MD5Generator.generate(password + SALT));
             usersJpaController.edit(userToRecover);
+            confirmCode = "";
+            confirmEmail = "";
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Senha alterada com sucesso!"), null));
-            return "logout";
+            loginStatus = "login";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível alterar a senha. Os dois campos devem ser iguais."), null));
-            return "";
         }
     }
 
-    public void authenticateUser() throws RollbackFailureException, Exception {
+    public void authenticateUser() throws RollbackFailureException, Exception, EmailException {
         Translator tempTrans = new Translator();
         tempTrans.setLocale(CookieService.getCookie("locale"));
         NetworksJpaController networksJpaController = new NetworksJpaController();
         UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
-        try {
-                Users userConfirm = usersJpaController.findUsers(confirmEmail);
-                EmailActivation emailActivation = emailActivationJpaController.findEmailActivationByUsername(userConfirm.getUsername());
-                if (emailActivation.getUsername() != null) {
-                    if (userConfirm.getStatus().equals("CA")) {
-                        if (emailActivation.getCode().equals(confirmCode)) {
-                            loginStatus = "change_password";
-                        }
-                    } else if (emailActivation.getCode().equals(confirmCode)) {
-                        userConfirm.setStatus(CONFIRMATION_ACCESS);
-                        usersJpaController.edit(userConfirm);
-                        emailActivationJpaController.destroy(emailActivation.getUsername());
-                        List<Networks> networksList = networksJpaController.findNetworksEntities();
-                        UserAuthorization authorization = new UserAuthorization();
-                        authorization.setRoles(DEFAULT);
-                        authorization.setTokenId(userConfirm.getToken());
-                        //Refazer
-                        if (networksList.size() > 2) {
-                            authorization.setNetwork("Guigoh");
-                        } else {
-                            authorization.setNetwork(networksList.get(0).getName());
-                        }
+        Users userConfirm = usersJpaController.findUsers(confirmEmail);
+        EmailActivation emailActivation = emailActivationJpaController.findEmailActivationByUsername(userConfirm.getUsername());
+        if (emailActivation.getUsername() != null) {
+            if (userConfirm.getStatus().equals("CA")) {
+                if (emailActivation.getCode().equals(confirmCode)) {
+                    loginStatus = "change_password";
+                }
+            } else if (emailActivation.getCode().equals(confirmCode)) {
+                userConfirm.setStatus(CONFIRMATION_ACCESS);
+                usersJpaController.edit(userConfirm);
+                emailActivationJpaController.destroy(emailActivation.getUsername());
+                List<Networks> networksList = networksJpaController.findNetworksEntities();
+                UserAuthorization authorization = new UserAuthorization();
+                authorization.setRoles(DEFAULT);
+                authorization.setTokenId(userConfirm.getToken());
+                //Refazer
+                if (networksList.size() > 2) {
+                    authorization.setNetwork("Guigoh");
+                } else {
+                    authorization.setNetwork(networksList.get(0).getName());
+                }
 
 //                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
 //                            authorization.setStatus(FIRST_ACCESS);
 //                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
-                        String newUserAccount = "Novo cadastro de usuário";
-                        String mailtext = "Um novo usuário se cadastrou no Arte com Ciência e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
+                String newUserAccount = "Novo cadastro de usuário";
+                String mailtext = "Um novo usuário se cadastrou no Guigoh e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                         //mailtext = trans.getWord(mailtext);
-                        //mailtext += "http://rts.guigoh.com:8080/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                        //mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                        //Modificar http://artecomciencia.guigoh.com/auth/login.xhtml?code=codigo&user=usuario                                
-                        //newUserAccount = trans.getWord(newUserAccount);
-                        for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
+                //mailtext += "http://rts.guigoh.com:8080/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                //mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                //Modificar http://artecomciencia.guigoh.com/auth/login.xhtml?code=codigo&user=usuario                                
+                //newUserAccount = trans.getWord(newUserAccount);
+                for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
                             //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
-                            //newUserAccount = tempTrans.getWord(newUserAccount);
-                            //mailtext = tempTrans.getWord(mailtext);
-                            MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
-                        }
-                        //tempTrans.setLocale(CookieService.getCookie("locale"));
-                        authorization.setStatus(PENDING_ACCESS);
+                    //newUserAccount = tempTrans.getWord(newUserAccount);
+                    //mailtext = tempTrans.getWord(mailtext);
+                    MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());
+                }
+                //tempTrans.setLocale(CookieService.getCookie("locale"));
+                authorization.setStatus(PENDING_ACCESS);
 //                        }
-                        userAuthorizationJpaController.edit(authorization);
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("E-mail autorizado com sucesso!"), null));
-                    }
-                } 
-        } catch (EmailException e) {
+                userAuthorizationJpaController.edit(authorization);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("E-mail autorizado com sucesso!"), null));
+            }
         }
     }
 

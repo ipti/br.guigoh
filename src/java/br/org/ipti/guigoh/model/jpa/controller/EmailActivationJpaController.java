@@ -9,6 +9,7 @@ import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.EmailActivation;
+import br.org.ipti.guigoh.model.entity.Users;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -98,6 +99,11 @@ public class EmailActivationJpaController implements Serializable {
                 emailActivation.getUsername();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The emailActivation with id " + id + " no longer exists.", enfe);
+            }
+            Users users = emailActivation.getUsers();
+            if (users != null) {
+                users.setEmailActivation(null);
+                users = em.merge(users);
             }
             em.remove(emailActivation);
             em.getTransaction().commit();
