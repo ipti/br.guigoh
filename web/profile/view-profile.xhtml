@@ -1,9 +1,10 @@
 <ui:composition template="/template/default/template.xhtml" 
-                
+
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
@@ -422,7 +423,7 @@
                                     <f:ajax event="action" render="panel_curriculum2"/>
                                 </h:commandLink >
                                 <ul class="text_curriculum">
-<!--limpar h:outputtext-->          <li class="text_left"><p>#{profileBean.socialProfile.address}, #{profileBean.socialProfile.complement}</p><p><h:outputText value="Nº" rendered="#{!(profileBean.socialProfile.number.length() == 0)}"></h:outputText> #{profileBean.socialProfile.number} - #{profileBean.socialProfile.neighborhood}</p></li>
+                                    <!--limpar h:outputtext-->          <li class="text_left"><p>#{profileBean.socialProfile.address}, #{profileBean.socialProfile.complement}</p><p><h:outputText value="Nº" rendered="#{!(profileBean.socialProfile.number.length() == 0)}"></h:outputText> #{profileBean.socialProfile.number} - #{profileBean.socialProfile.neighborhood}</p></li>
                                     <li class="text_right"><p>#{profileBean.socialProfile.cityId.name}, #{profileBean.socialProfile.stateId.name}, #{profileBean.socialProfile.countryId.name}</p><p>CEP: #{profileBean.socialProfile.zipcode}</p></li>
                                 </ul>
                             </h:panelGroup>
@@ -435,8 +436,8 @@
                                     <h:panelGrid class="curriculum2_edit_box_grid" columns="6">
                                         <span class="edit_label">#{localeBean.getString('Endereço')}: </span><h:inputText id="address" value="#{profileBean.socialProfile.address}" class="request_form_street"/>
                                         <span class="edit_label">#{localeBean.getString('Complemento')}: </span><h:inputText id="complement" value="#{profileBean.socialProfile.complement}" class="request_form_complement"/>
-<!--??-->                                        <h:outputText></h:outputText>
-<!--??-->                                        <h:outputText></h:outputText>
+                                        <!--??-->                                        <h:outputText></h:outputText>
+                                        <!--??-->                                        <h:outputText></h:outputText>
                                         <span class="edit_label">#{localeBean.getString('Número')}: </span><h:inputText id="number" value="#{profileBean.socialProfile.number}" class="request_form_number"/>
                                         <span class="edit_label">#{localeBean.getString('Bairro')}: </span><h:inputText id="neighborhood" value="#{profileBean.socialProfile.neighborhood}" class="request_form_district"/>
                                         <span class="edit_label">#{localeBean.getString('CEP')}: </span><h:inputText id="zipcode" value="#{profileBean.socialProfile.zipcode}" class="request_form_cep zipcode"/>
@@ -536,7 +537,7 @@
                                 <h:panelGroup id="listEducations">
                                     <ul class="text_curriculum">
                                         <li><h:messages errorClass="error" infoClass="info"/></li>
-<!--???-->                                        <li></li>
+                                        <!--???-->                                        <li></li>
                                         <br/>
                                         <ui:repeat value="#{profileBean.educationsList}" var="education" rendered="#{profileBean.educationsList.size() > 0}">
                                             <li class="text_left"><p></p><p>#{education.locationId.name}</p><p>#{education.nameId.name}</p></li>
@@ -589,10 +590,10 @@
                                             <f:selectItem itemLabel = "#{localeBean.getString('Selecione...')}" itemValue="" />  
                                             <f:selectItems value="#{profileBean.wizardProfileBean.occupationsTypeList}" var="occupationType" itemValue="#{occupationType.id}" itemLabel="#{occupationType.name}" />
                                         </h:selectOneMenu>
-<!--???-->                                        <h:outputText></h:outputText>
-<!--???-->                                        <h:outputText></h:outputText>
-<!--???-->                                        <h:outputText></h:outputText>
-<!--???-->                                        <h:outputText></h:outputText>
+                                        <!--???-->                                        <h:outputText></h:outputText>
+                                        <!--???-->                                        <h:outputText></h:outputText>
+                                        <!--???-->                                        <h:outputText></h:outputText>
+                                        <!--???-->                                        <h:outputText></h:outputText>
                                         <span class="edit_label">#{localeBean.getString('Nome da Atividade')}: </span>
                                         <h:inputText id="activity" value="#{profileBean.wizardProfileBean.experience.nameId.name}" class="request_form_activity activity"
                                                      required="true" requiredMessage="* #{localeBean.getString('O campo NOME DA ATIVIDADE é obrigatório')}">

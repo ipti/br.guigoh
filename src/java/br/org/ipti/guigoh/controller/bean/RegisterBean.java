@@ -135,6 +135,7 @@ public class RegisterBean implements Serializable {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
         }
     }
@@ -196,7 +197,6 @@ public class RegisterBean implements Serializable {
         
         stateList = new ArrayList<>();
         cityList = new ArrayList<>();
-        roleList = new ArrayList<>();
         
         usernameConfirm = passwordConfirm = lastName = "";
         

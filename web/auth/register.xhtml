@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,6 +12,7 @@
         <title>Cadastro</title>
         <!-- BEGIN PAGE STYLES -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
+        <link href="../resources/lib/css/slick.min.css" rel="stylesheet"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/reset.css"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/global.css"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/login.css"></link>
@@ -40,25 +41,25 @@
                             <div class="profile">
                                 <p style="font-size: 22px">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
-                                    <div class="col-2">
-                                        <h:inputText pt:placeholder="Nome" value="#{registerBean.socialProfile.name}"></h:inputText>
-                                        <h:inputText pt:placeholder="E-mail" value="#{registerBean.user.username}"></h:inputText>
-                                        <h:inputSecret pt:placeholder="Senha" value="#{registerBean.user.password}"></h:inputSecret>
-                                        <div class="select">
-                                            <h:selectOneMenu value="#{registerBean.user.secretQuestionId}" converter="entityConverter">
-                                                <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
-                                                <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
-                                            </h:selectOneMenu>
-                                        </div>
-                                        <hr></hr>
+                                <div class="col-2">
+                                    <h:inputText pt:placeholder="Nome" value="#{registerBean.socialProfile.name}"></h:inputText>
+                                    <h:inputText pt:placeholder="E-mail" value="#{registerBean.user.username}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="Senha" value="#{registerBean.user.password}"></h:inputSecret>
+                                    <div class="select">
+                                        <h:selectOneMenu value="#{registerBean.user.secretQuestionId}" converter="entityConverter">
+                                            <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
+                                            <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
+                                        </h:selectOneMenu>
                                     </div>
-                                    <div class="col-2">
-                                        <h:inputText pt:placeholder="sobrenome" value="#{registerBean.lastName}"></h:inputText>
-                                        <h:inputText pt:placeholder="confirmação de e-mail" value="#{registerBean.usernameConfirm}"></h:inputText>
-                                        <h:inputSecret pt:placeholder="confirmação de senha" value="#{registerBean.passwordConfirm}"></h:inputSecret>
-                                        <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{registerBean.user.secretAnswer}"></h:inputText>
-                                    </div>
-                                    <div class="clear"></div>
+                                    <hr></hr>
+                                </div>
+                                <div class="col-2">
+                                    <h:inputText pt:placeholder="sobrenome" value="#{registerBean.lastName}"></h:inputText>
+                                    <h:inputText pt:placeholder="confirmação de e-mail" value="#{registerBean.usernameConfirm}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="confirmação de senha" value="#{registerBean.passwordConfirm}"></h:inputSecret>
+                                    <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{registerBean.user.secretAnswer}"></h:inputText>
+                                </div>
+                                <div class="clear"></div>
                             </div>
                             <div class="school">
                                 <p>Alguns dados sobre sua instituição de ensino.</p>
@@ -86,7 +87,7 @@
                                 <div class="col-2">
                                     <div class="select">
                                         <h:selectOneMenu value="#{registerBean.socialProfile.roleId}" converter="entityConverter">
-                                            <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue=""/>
+                                            <f:selectItem itemLabel="Selecione o seu cargo" itemValue=""/>
                                             <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role}" itemLabel="#{role.name}" />
                                         </h:selectOneMenu>
                                     </div>
@@ -120,13 +121,33 @@
         </section>
         <footer>
             <div class="container">
-                <img src="../resources/common/images/footer.png"></img>
+                <h3>apoio</h3>
+                <div class="carousel">
+                    <div><img src="../resources/common/images/logos/1.png"/></div>
+                    <div><img src="../resources/common/images/logos/2.png"/></div>
+                    <div><img src="../resources/common/images/logos/3.png"/></div>
+                    <div><img src="../resources/common/images/logos/4.png"/></div>
+                    <div><img src="../resources/common/images/logos/5.png"/></div>
+                    <div><img src="../resources/common/images/logos/6.png"/></div>
+                    <div><img src="../resources/common/images/logos/7.png"/></div>
+                    <div><img src="../resources/common/images/logos/8.png"/></div>
+                    <div><img src="../resources/common/images/logos/9.png"/></div>
+                </div>
             </div>
         </footer>
 
         <!-- BEGIN PAGE SCRIPTS -->
         <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
+        <script type="text/javascript" src="../resources/lib/js/slick.min.js"/>
         <script>
+            $('.carousel').slick({
+                slidesToShow: 5,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: false,
+            });
+
             $('select').each(changeSelectColors);
             $('select').on("change", changeSelectColors);
             $('select').on("change", checkLength);

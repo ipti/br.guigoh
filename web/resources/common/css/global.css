@@ -118,7 +118,8 @@ aside .panel:last-child {
 
 .panel .forgot {
     float: left;
-    margin-top: 35px;
+    font-size:14px;
+    margin-top: 20px;
 }
 
 .black {
@@ -131,7 +132,13 @@ footer {
 } 
 
 footer img {
-    margin: 5px 35px 15px;
+    margin: 5px 25px 15px;
+}
+
+footer h3 {
+    color: white;
+    font-size:13px;
+    padding: 2px 0 0 35px;
 }
 
 /** Buttons **/

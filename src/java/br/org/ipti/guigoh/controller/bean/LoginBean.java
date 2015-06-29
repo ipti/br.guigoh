@@ -20,6 +20,7 @@ import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.util.MailService;
 import br.org.ipti.guigoh.util.RandomGenerator;
 import br.org.ipti.guigoh.util.translator.Translator;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -53,7 +54,7 @@ public class LoginBean implements Serializable {
         }
     }
 
-    public String login() {
+    public void login() throws IOException {
         Users registeredUser = usersJpaController.findUsers(user.getUsername());
         user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
         if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
@@ -61,24 +62,24 @@ public class LoginBean implements Serializable {
                 case "AC":
                     CookieService.addCookie("user", registeredUser.getUsername());
                     CookieService.addCookie("token", registeredUser.getToken());
-                    return "islogged";
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+                    break;
                 case "PC":
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta já foi solicitada. Aguarde a confirmação do administrador."), null));
-                    return "";
+                    break;
                 case "IC":
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta está desativada. Contate o administrador."), null));
-                    return "";
-                default:
+                    break;
+                case "FC":
                     CookieService.addCookie("user", registeredUser.getUsername());
                     CookieService.addCookie("token", registeredUser.getToken());
-                    return "wizard";
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/profile/wizard-profile.xhtml");
+                    break;
             }
         } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Confirme seu registro através do seu e-mail."), null));
-            return "";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Login incorreto!"), null));
-            return "";
         }
     }
 
@@ -180,13 +181,13 @@ public class LoginBean implements Serializable {
 //                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
                 String newUserAccount = "Novo cadastro de usuário";
                 String mailtext = "Um novo usuário se cadastrou no Guigoh e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
-                        //mailtext = trans.getWord(mailtext);
+                //mailtext = trans.getWord(mailtext);
                 //mailtext += "http://rts.guigoh.com:8080/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                 //mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                 //Modificar http://artecomciencia.guigoh.com/auth/login.xhtml?code=codigo&user=usuario                                
                 //newUserAccount = trans.getWord(newUserAccount);
                 for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
-                            //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
+                    //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
                     //newUserAccount = tempTrans.getWord(newUserAccount);
                     //mailtext = tempTrans.getWord(mailtext);
                     MailService.sendMail(mailtext, newUserAccount, userAuthorization.getUsers().getUsername());

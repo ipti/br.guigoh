@@ -1,15 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <f:view contentType="text/html"/>
     <h:head>
         <title>Login</title>
         <!-- BEGIN PAGE STYLES -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
+        <link href="../resources/lib/css/slick.min.css" rel="stylesheet"></link>
         <link href="../resources/common/css/reset.css" rel="stylesheet"></link>
         <link href="../resources/common/css/global.css" rel="stylesheet"></link>
         <link href="../resources/common/css/login.css" rel="stylesheet"></link>
@@ -17,10 +18,10 @@
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
     <h:body>
-        <f:metadata>
+        <f:event type="preRenderComponent" listener="#{loginBean.init()}"/>
+        <f:metadata>  
             <f:viewParam name="code" value="#{loginBean.confirmCode}" />
             <f:viewParam name="user" value="#{loginBean.confirmEmail}" />
-            <f:event type="preRenderComponent" listener="#{loginBean.init()}"/>
         </f:metadata>
         <header>
             <div class="container">
@@ -29,7 +30,7 @@
                     <img class="logo-ipti" src="../resources/common/images/logo-ipti.png"></img>
                 </div>
                 <div class="header-picture">
-                    <img src="../resources/common/images/poster.png"></img>
+                    <img src=""></img>
                     <p></p>
                 </div>
             </div>
@@ -156,13 +157,38 @@
         </section>
         <footer>
             <div class="container">
-                <img src="../resources/common/images/footer.png"></img>
+                <h3>apoio</h3>
+                <div class="carousel">
+                    <div><img src="../resources/common/images/logos/1.png"/></div>
+                    <div><img src="../resources/common/images/logos/2.png"/></div>
+                    <div><img src="../resources/common/images/logos/3.png"/></div>
+                    <div><img src="../resources/common/images/logos/4.png"/></div>
+                    <div><img src="../resources/common/images/logos/5.png"/></div>
+                    <div><img src="../resources/common/images/logos/6.png"/></div>
+                    <div><img src="../resources/common/images/logos/7.png"/></div>
+                    <div><img src="../resources/common/images/logos/8.png"/></div>
+                    <div><img src="../resources/common/images/logos/9.png"/></div>
+                </div>
             </div>
         </footer>
 
         <!-- BEGIN PAGE SCRIPTS -->
         <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
+        <script type="text/javascript" src="../resources/lib/js/slick.min.js"/>
         <script type="text/javascript">
+
+            var poster = ["1", "2", "3", "4"];
+            var rand = poster[Math.floor(Math.random() * poster.length)];
+            var url = "../resources/common/images/objeto-" + rand + ".jpg";
+            $(".header-picture img").attr("src", url);
+
+            $('.carousel').slick({
+                slidesToShow: 5,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                arrows: false,
+            });
 
             $(document).on("keypress", "input", function(event) {
                 if (event.which == 13) {
@@ -170,7 +196,6 @@
                     $(".forward").click();
                 }
             });
-
             function setCursors(ajax) {
                 if (ajax === "begin") {
                     $('body').css('cursor', 'wait');
@@ -193,7 +218,6 @@
                         break;
                 }
             });
-
             if (navigator.appName == 'Microsoft Internet Explorer')
             {
                 window.location = '/resources/notsupported.htm';
