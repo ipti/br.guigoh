@@ -245,7 +245,7 @@ public class TagsJpaController implements Serializable {
         try {
             String ttemp = tags.toUpperCase().replaceAll(" ", "");
             Tags tag = (Tags) em.createNativeQuery("select * from tags "
-                    + "where UPPER(regexp_replace(name,'\\s*', '', 'g')) like '" + ttemp + "' ", Tags.class).getSingleResult();
+                    + "where UPPER(regexp_replace(name,'\\s*', '', 'g')) like '" + ttemp + "' limit 1", Tags.class).getSingleResult();
             return tag;
         } catch (NoResultException e) {
             return null;
@@ -285,6 +285,36 @@ public class TagsJpaController implements Serializable {
 
             query.setParameter(1, tags.getId().longValue());
             query.setParameter(2, discussionTopic.getId().longValue());
+
+            query.executeUpdate();
+
+
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            try {
+                em.getTransaction().rollback();
+            } catch (Exception re) {
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public void createTagsEducationalObject(Tags tag, EducationalObject educationalObject) throws RollbackFailureException, Exception {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        try {
+            String sql = "INSERT INTO educational_object_tag (tag_id, educational_object_id) "
+                    + "VALUES(?1,?2)";
+
+            Query query = em.createNativeQuery(sql);
+
+            query.setParameter(1, tag.getId().longValue());
+            query.setParameter(2, educationalObject.getId().longValue());
 
             query.executeUpdate();
 

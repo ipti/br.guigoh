@@ -98,10 +98,15 @@ public class SubmitFormBean implements Serializable {
         educationalObjectList.add(educationalObject);
         TagsJpaController tagsJpaController = new TagsJpaController();
         for (String tagValue : tagArray) {
-            Tags tag = new Tags();
-            tag.setEducationalObjectCollection(educationalObjectList);
-            tag.setName(tagValue);
-            tagsJpaController.create(tag);
+            Tags tagDB = tagsJpaController.findTagByName(tagValue);
+            if (tagDB == null) {
+                Tags tag = new Tags();
+                tag.setEducationalObjectCollection(educationalObjectList);
+                tag.setName(tagValue);
+                tagsJpaController.create(tag);
+            } else { 
+                tagsJpaController.createTagsEducationalObject(tagDB, educationalObject);
+            }
         }
         AuthorJpaController authorJpaController = new AuthorJpaController();
         for (Author authorOE : authorList) {
@@ -138,13 +143,13 @@ public class SubmitFormBean implements Serializable {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }
-    
+
     private void initGlobalVariables() {
         submitted = false;
-        
+
         interestThemesList = new ArrayList<>();
         authorList = new ArrayList<>();
-        
+
         educationalObject = new EducationalObject();
         author = new Author();
     }
