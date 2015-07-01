@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "City.findAll", query = "SELECT c FROM City c"),
     @NamedQuery(name = "City.findById", query = "SELECT c FROM City c WHERE c.id = :id"),
-    @NamedQuery(name = "City.findByName", query = "SELECT c FROM City c WHERE c.name = :name"),
-    @NamedQuery(name = "City.findByAcronyms", query = "SELECT c FROM City c WHERE c.acronyms = :acronyms")})
+    @NamedQuery(name = "City.findByName", query = "SELECT c FROM City c WHERE c.name = :name")})
 public class City implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,11 +46,6 @@ public class City implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "acronyms")
-    private String acronyms;
     @JoinColumn(name = "state_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private State stateId;
@@ -69,10 +63,9 @@ public class City implements Serializable {
         this.id = id;
     }
 
-    public City(Integer id, String name, String acronyms) {
+    public City(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.acronyms = acronyms;
     }
 
     public Integer getId() {
@@ -89,14 +82,6 @@ public class City implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAcronyms() {
-        return acronyms;
-    }
-
-    public void setAcronyms(String acronyms) {
-        this.acronyms = acronyms;
     }
 
     public State getStateId() {
