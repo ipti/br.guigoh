@@ -178,20 +178,20 @@
         <script type="text/javascript">
 
             var poster = ["1", "2", "3", "4"];
-            var rand = poster[Math.floor(Math.random() * poster.length)];
-            var url = "../resources/common/images/banners/objeto-" + rand + ".jpg";
-            $(".header-picture img").attr("src", url);
+                var rand = poster[Math.floor(Math.random() * poster.length)];
+                        var url = "../resources/common/images/banners/objeto-" + rand + ".jpg";
+                        $(".header-picture img").attr("src", url);
 
-            $('.carousel').slick({
-                slidesToShow: 5,
-                slidesToScroll: 1,
+                    $('.carousel').slick({
+                        slidesToShow: 5,
+                        slidesToScroll: 1,
                 autoplay: true,
-                autoplaySpeed: 2000,
+            autoplaySpeed: 2000,
                 arrows: false,
                 pauseOnHover: false
             });
 
-            $(document).on("keypress", "input", function(event) {
+            $(document).on("keypress", ".panel input", function(event) {
                 if (event.which == 13) {
                     event.preventDefault();
                     $(".forward").click();
