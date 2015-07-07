@@ -70,10 +70,10 @@
                                         <h:commandButton id="contact_friend" styleClass="button_friend" rendered="#{profileBean.friendStatus.equals('Accepted')}" value="#{localeBean.getString('Amigo')}"/>
                                         <p class="messageButton" name="#{profileBean.socialProfile.name}" socialprofileid="#{profileBean.socialProfile.socialProfileId}">#{localeBean.getString('+ Mensagem')}</p>
                                     </h:panelGroup>
-                                    <h:commandLink styleClass="button_profile1" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}">
-                                        <f:setPropertyActionListener target="#{profileBean.profileEdit1}" value="true"/>
+<!--                                    <h:commandLink styleClass="button_profile1" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}">
+                                        <f:setPropertyActionListener target="HT{profileBean.profileEdit1}" value="true"/>
                                         <f:ajax event="action" render="panel1"/>
-                                    </h:commandLink>
+                                    </h:commandLink>-->
                                 </div>
                                 <h:panelGroup id="recommend_panel" rendered="#{profileBean.recommendPanel}">
                                     <h:inputText id="searchFriends" value="#{profileBean.friendInputSearch}" autocomplete="off">
@@ -139,10 +139,10 @@
                         <h:form>
                             <h:panelGroup id="panel2">
                                 <h:panelGroup id="profile2" rendered="#{profileBean.profileEdit2 == false}">
-                                    <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                        <f:setPropertyActionListener target="#{profileBean.profileEdit2}" value="true"/>
+<!--                                    <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="HT{profileBean.profileEdit2}" value="true"/>
                                         <f:ajax event="action" render="panel2"/>
-                                    </h:commandLink>
+                                    </h:commandLink>-->
                                     <ul class="theme_buttons">
                                         <ui:repeat value="#{profileBean.themesList}" var="themes">
                                             <ui:param name="themeName" value="#{themes.name}"/>
@@ -172,10 +172,10 @@
                         <h:form>
                             <h:panelGroup id="panel3">
                                 <h:panelGroup id="profile3" rendered="#{profileBean.profileEdit3 == false}">
-                                    <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                        <f:setPropertyActionListener target="#{profileBean.profileEdit3}" value="true"/>
+<!--                                    <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="HT{profileBean.profileEdit3}" value="true"/>
                                         <f:ajax event="action" render="panel3"/>
-                                    </h:commandLink >
+                                    </h:commandLink >-->
                                     <ul class="int_cultural">
                                         <span class="icon_book"></span>
                                         <font>#{localeBean.getString('Livros')}</font>
@@ -278,10 +278,10 @@
                         <h:form>
                             <h:panelGroup id="panel4">
                                 <h:panelGroup id="profile4" rendered="#{profileBean.profileEdit4 == false}">
-                                    <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                        <f:setPropertyActionListener target="#{profileBean.profileEdit4}" value="true"/>
+<!--                                    <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                        <f:setPropertyActionListener target="HT{profileBean.profileEdit4}" value="true"/>
                                         <f:ajax event="action" render="panel4"/>
-                                    </h:commandLink >
+                                    </h:commandLink >-->
                                     <ul class="int_cultural">
                                         <span class="icon_sports"/>
                                         <font>#{localeBean.getString('Esportes')}</font>
@@ -364,10 +364,10 @@
                     <h:form>
                         <h:panelGroup id="panel_curriculum1">
                             <h:panelGroup id="curriculum1" rendered="#{profileBean.curriculumEdit1 == false}">
-                                <h:commandLink styleClass="button_curriculum1" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                    <f:setPropertyActionListener target="#{profileBean.curriculumEdit1}" value="true"/>
+<!--                                <h:commandLink styleClass="button_curriculum1" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                    <f:setPropertyActionListener target="HT{profileBean.curriculumEdit1}" value="true"/>
                                     <f:ajax event="action" render="panel_curriculum1"/>
-                                </h:commandLink >
+                                </h:commandLink >-->
                                 <h:commandLink id="button_pdf" class="button_download" action="#{profileBean.downloadPDF()}" value="#{localeBean.getString('Baixar PDF')}"/>
                                 <ui:param name="scholarityDescription" value="#{profileBean.socialProfile.scholarityId.description}"/>
                                 <font class="scholarity">#{localeBean.getString('Escolaridade')}: <span>#{localeBean.getString(scholarityDescription)}</span></font>
@@ -418,10 +418,10 @@
                     <h:form>
                         <h:panelGroup id="panel_curriculum2">
                             <h:panelGroup id="curriculum2" rendered="#{profileBean.curriculumEdit2 == false}">
-                                <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                    <f:setPropertyActionListener target="#{profileBean.curriculumEdit2}" value="true"/>
+<!--                                <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                    <f:setPropertyActionListener target="HT{profileBean.curriculumEdit2}" value="true"/>
                                     <f:ajax event="action" render="panel_curriculum2"/>
-                                </h:commandLink >
+                                </h:commandLink >-->
                                 <ul class="text_curriculum">
                                     <!--limpar h:outputtext-->          <li class="text_left"><p>#{profileBean.socialProfile.address}, #{profileBean.socialProfile.complement}</p><p><h:outputText value="Nº" rendered="#{!(profileBean.socialProfile.number.length() == 0)}"></h:outputText> #{profileBean.socialProfile.number} - #{profileBean.socialProfile.neighborhood}</p></li>
                                     <li class="text_right"><p>#{profileBean.socialProfile.cityId.name}, #{profileBean.socialProfile.stateId.name}, #{profileBean.socialProfile.countryId.name}</p><p>CEP: #{profileBean.socialProfile.zipcode}</p></li>
@@ -473,10 +473,10 @@
                     <h:form>
                         <h:panelGroup id="panel_curriculum3">
                             <h:panelGroup id="curriculum3" rendered="#{profileBean.curriculumEdit3 == false}">
-                                <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                    <f:setPropertyActionListener target="#{profileBean.curriculumEdit3}" value="true"/>
+<!--                                <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                    <f:setPropertyActionListener target="HT{profileBean.curriculumEdit3}" value="true"/>
                                     <f:ajax event="action" render="panel_curriculum3"/>
-                                </h:commandLink>
+                                </h:commandLink>-->
                                 <ul class="text_curriculum">
                                     <ui:repeat value="#{profileBean.educationsList}" var="education">
                                         <li class="text_left"><p></p><p>#{education.locationId.name}</p><p>#{education.nameId.name}</p></li>
@@ -564,10 +564,10 @@
                     <h:form>
                         <h:panelGroup id="panel_curriculum4">
                             <h:panelGroup id="curriculum4" rendered="#{profileBean.curriculumEdit4 == false}">
-                                <h:commandLink styleClass="button" value="#{localeBean.getString('editar')}" action="#{profileBean.execute()}" rendered="#{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
-                                    <f:setPropertyActionListener target="#{profileBean.curriculumEdit4}" value="true"/>
+<!--                                <h:commandLink styleClass="button" value="HT{localeBean.getString('editar')}" action="HT{profileBean.execute()}" rendered="HT{((profileBean.id == null) or (profileBean.friendStatus.equals('Myself')))}">
+                                    <f:setPropertyActionListener target="HT{profileBean.curriculumEdit4}" value="true"/>
                                     <f:ajax event="action" render="panel_curriculum4"/>
-                                </h:commandLink >
+                                </h:commandLink >-->
                                 <ul class="text_curriculum">
                                     <ui:repeat value="#{profileBean.experiencesList}" var="experience">
                                         <li class="text_left"><p></p><p>#{experience.locationId.name}</p><p>#{experience.nameId.name}</p></li>
