@@ -173,34 +173,6 @@ public class MessengerMessagesJpaController implements Serializable {
         }
     }
     
-    public List<MessengerMessages> getCurriculumMessages(Integer socialProfileId){
-        EntityManager em = getEntityManager();
-        try {
-            List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
-                    + "where message_delivered = 'U' and social_profile_id_receiver = '" + socialProfileId + "'", MessengerMessages.class).getResultList();
-            if (messengerMessagesList == null){
-                messengerMessagesList = new ArrayList<>();
-            }
-            return messengerMessagesList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<MessengerMessages> getAllCurriculumMessages(Integer socialProfileId){
-        EntityManager em = getEntityManager();
-        try {
-            List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
-                    + "where (message_delivered = 'U' or message_delivered = 'S') and social_profile_id_receiver = '" + socialProfileId + "' order by message_date desc", MessengerMessages.class).getResultList();
-            if (messengerMessagesList == null){
-                messengerMessagesList = new ArrayList<>();
-            }
-            return messengerMessagesList;
-        } finally {
-            em.close();
-        }
-    }
-    
     public List<MessengerMessages> getLastTenMessages(Integer loggedSocialProfileId, Integer socialProfileId){
         EntityManager em = getEntityManager();
         try {

@@ -5,13 +5,12 @@ locale == "enUS" ? sendMessageButton = "send" : locale == "frFR" ? sendMessageBu
 $(document).ready(function(){
     "use strict";
     
-    getCurriculumMessages();
     messengerFriends();
     setInterval(function() {
-        messengerFriends()
+        messengerFriends();
     }, 60000);
     setInterval(function() {
-        getMessages()
+        getMessages();
     }, 3000);
     $('#messenger_friends').on('click','li',openMessengerBox);
     $(document).on('click','.messageButton',openMessengerBox);
@@ -32,12 +31,10 @@ $(document).ready(function(){
         }
     });
     
-    var header = $('#atm-header');
     var content = $('#atm-content');
     var input = $('#atm-input');
-    var status = $('#atm-status');
     var myName = false;
-    var author = null;
+    var id = null;
     var logged = false;
     var socket = atmosphere;
     var subSocket;
@@ -52,18 +49,18 @@ $(document).ready(function(){
 
 
     request.onOpen = function(response) {
-        content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
         input.removeAttr('disabled').focus();
-        status.text('Choose name:');
         transport = response.transport;
-
+        
         // Carry the UUID. This is required if you want to call subscribe(request) again.
         request.uuid = response.request.uuid;
+        
+        subSocket.push(atmosphere.util.stringifyJSON({ id: logged_social_profile_id}));
     };
 
     request.onClientTimeout = function(r) {
         content.html($('<p>', { text: 'Client closed the connection after a timeout. Reconnecting in ' + request.reconnectInterval }));
-        subSocket.push(atmosphere.util.stringifyJSON({ author: author, message: 'is inactive and closed the connection. Will reconnect in ' + request.reconnectInterval }));
+        subSocket.push(atmosphere.util.stringifyJSON({ id: logged_social_profile_id, message: 'is inactive and closed the connection. Will reconnect in ' + request.reconnectInterval }));
         input.attr('disabled', 'disabled');
         setTimeout(function (){
             subSocket = socket.subscribe(request);
@@ -79,7 +76,6 @@ $(document).ready(function(){
     request.onTransportFailure = function(errorMsg, request) {
         atmosphere.util.info(errorMsg);
         request.fallbackTransport = "long-polling";
-        header.html($('<h3>', { text: 'Atmosphere Chat. Default transport is WebSocket, fallback is ' + request.fallbackTransport }));
     };
 
     request.onMessage = function (response) {
@@ -95,18 +91,17 @@ $(document).ready(function(){
         input.removeAttr('disabled').focus();
         if (!logged && myName) {
             logged = true;
-            status.text(myName + ': ').css('color', 'blue');
         } else {
-            var me = json.author == author;
+            var me = json.id == id;
             var date = typeof(json.time) == 'string' ? parseInt(json.time) : json.time;
-            addMessage(json.author, json.message, me ? 'blue' : 'black', new Date(date));
+            addMessage(json.id, json.message, me ? 'blue' : 'black', new Date(date));
         }
     };
 
     request.onClose = function(response) {
         content.html($('<p>', { text: 'Server closed the connection after a timeout' }));
         if (subSocket) {
-            subSocket.push(atmosphere.util.stringifyJSON({ author: author, message: 'disconnecting' }));
+            subSocket.push(atmosphere.util.stringifyJSON({ id: logged_social_profile_id, message: 'disconnecting' }));
         }
         input.attr('disabled', 'disabled');
     };
@@ -128,12 +123,12 @@ $(document).ready(function(){
         if (e.keyCode === 13) {
             var msg = $(this).val();
 
-            // First message is always the author's name
-            if (author == null) {
-                author = msg;
+            // First message is always the id's name
+            if (id == null) {
+                id = msg;
             }
 
-            subSocket.push(atmosphere.util.stringifyJSON({ author: author, message: msg }));
+            subSocket.push(atmosphere.util.stringifyJSON({ id: logged_social_profile_id, message: msg }));
             $(this).val('');
 
             input.attr('disabled', 'disabled');
@@ -142,15 +137,14 @@ $(document).ready(function(){
             }
         }
     });
-
-    function addMessage(author, message, color, datetime) {
-        content.append('<p><span style="color:' + color + '">' + author + '</span> @ ' +
+    
+    function addMessage(id, message, color, datetime) {
+        content.append('<p><span style="color:' + color + '">' + id + '</span> @ ' +
             + (datetime.getHours() < 10 ? '0' + datetime.getHours() : datetime.getHours()) + ':'
             + (datetime.getMinutes() < 10 ? '0' + datetime.getMinutes() : datetime.getMinutes())
             + ': ' + message + '</p>');
     }
 });
-
 
 function getMessages(){
     var friend;
@@ -189,25 +183,6 @@ function getMessages(){
                 $('#msg_'+friends[i].id).show();
                 $('#msg_'+friends[i].id+' #messages').append(message);
                 $('#msg_'+friends[i].id+' #messages').scrollTop($('#msg_'+friends[i].id+' #messages').prop("scrollHeight"));
-            }
-        }
-    });
-}
-
-function getCurriculumMessages(){
-    $.ajax({ 
-        url: "/webresources/getCurriculumMessages",
-        dataType: "json", 
-        data: {
-            "socialProfileId":logged_social_profile_id
-        },
-        success: function(messages){
-            for(var i=0;i<messages.length;i++){
-                $('.curriculum_pop_ups').append("<li class='curriculum_pop_up'><p>"+messages[i].businessName+" está interessado no seu currículo!</p>"
-                    + "<p>E-mail: "+messages[i].email+"</p><p>Telefone: "+messages[i].phone+"</p><p>"+messages[i].message+"</p>"
-                    + "</li>")
-                
-                
             }
         }
     });

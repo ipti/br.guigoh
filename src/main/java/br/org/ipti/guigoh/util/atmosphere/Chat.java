@@ -88,7 +88,7 @@ public class Chat {
      */
     @org.atmosphere.config.service.Message(encoders = {JacksonEncoder.class}, decoders = {JacksonDecoder.class})
     public Message onMessage(Message message) throws IOException {
-        logger.info("{} just send {}", message.getAuthor(), message.getMessage());
+        logger.info("{} just send {}", message.getId(), message.getMessage());
         return message;
     }
 

@@ -188,46 +188,6 @@ public class GuigohResource extends Thread {
     }
 
     @GET
-    @Path("/sendMessageCurriculum")
-    @Produces("application/json")
-    public String sendMessageCurriculum(@QueryParam("socialProfileId") Integer socialProfileId, @QueryParam("businessName") String businessName, @QueryParam("email") String email, @QueryParam("phone") String phone, @QueryParam("message") String message) throws JSONException, Exception, RollbackFailureException {
-        MessengerMessages mm = new MessengerMessages();
-        String messageConcatenated = businessName + ";" + email + ";" + phone + ";" + message;
-        mm.setMessage(messageConcatenated);
-        mm.setSocialProfileIdSender(0);
-        mm.setSocialProfileIdReceiver(socialProfileId);
-        mm.setMessageDelivered('U');
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        UtilJpaController utilJpaController = new UtilJpaController();
-        Timestamp ts = utilJpaController.getTimestampServerTime();
-        mm.setMessageDate(ts);
-        messengerMessagesJpaController.create(mm);
-        JSONObject jsonObject = new JSONObject();
-        return jsonObject.toString();
-    }
-
-    @GET
-    @Path("/getCurriculumMessages")
-    @Produces("application/json")
-    public String getCurriculumMessages(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, Exception, RollbackFailureException {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        List<MessengerMessages> curriculumMessagesList = messengerMessagesJpaController.getCurriculumMessages(socialProfileId);
-        JSONArray messagesList = new JSONArray();
-        for (int i = 0; i < curriculumMessagesList.size(); i++) {
-            JSONObject message = new JSONObject();
-            message.put("businessName", curriculumMessagesList.get(i).getMessage().split(";")[0]);
-            message.put("email", curriculumMessagesList.get(i).getMessage().split(";")[1]);
-            message.put("phone", curriculumMessagesList.get(i).getMessage().split(";")[2]);
-            message.put("message", curriculumMessagesList.get(i).getMessage().split(";")[3]);
-            message.put("date", curriculumMessagesList.get(i).getMessageDate());
-            messagesList.put(i, message);
-            curriculumMessagesList.get(i).setMessageDelivered('S');
-            messengerMessagesJpaController.edit(curriculumMessagesList.get(i));
-        }
-        return messagesList.toString();
-    }
-
-    @GET
     @Path("/tags")
     @Produces("application/json")
     public String getTagss(@QueryParam("text") String text, @QueryParam("theme_id") Integer theme_id) throws JSONException, Exception, RollbackFailureException {

@@ -20,7 +20,7 @@ import java.util.Date;
 public class Message {
 
     private String message;
-    private String author;
+    private String id;
     private long time;
 
     public Message() {
@@ -28,7 +28,7 @@ public class Message {
     }
 
     public Message(String author, String message) {
-        this.author = author;
+        this.id = author;
         this.message = message;
         this.time = new Date().getTime();
     }
@@ -37,12 +37,12 @@ public class Message {
         return message;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setId(String author) {
+        this.id = author;
     }
 
     public void setMessage(String message) {

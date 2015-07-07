@@ -49,8 +49,5 @@ body {height:100%; background-color: #84A7CA; margin: 0 auto;}
 #history{background:url(../images/magnifer.png) no-repeat;float:right;width:20px;height:20px;cursor:pointer}
 #close{background:url(../images/close.png) no-repeat;float:right;width:20px;height:20px;cursor:pointer}
 .textmessage{width:145px}
-.curriculum_container{z-index: 20;width:320px;position:fixed;top:150px}
-.curriculum_pop_up{background-color:#DDDDDD;;margin-bottom: 10px}
-.curriculum_pop_up p{font-size:11px}
 .localeLogon{float:right;margin-right:10px}
 .logoutContainer{float:right;}
