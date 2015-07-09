@@ -34,31 +34,6 @@
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     
-    <!-- Atmosphere Servlet -->
-    <description>Atmosphere Chat</description>
-    <display-name>Atmosphere Chat</display-name>
-    <servlet>
-        <description>AtmosphereServlet</description>
-        <servlet-name>AtmosphereServlet</servlet-name>
-        <servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
-        <!-- limit classpath scanning to speed up starting, not mandatory -->
-        <init-param>
-            <param-name>org.atmosphere.cpr.packages</param-name>
-            <param-value>br.org.ipti.guigoh.util.atmosphere</param-value>
-        </init-param>
-        <init-param>
-            <param-name>org.atmosphere.interceptor.HeartbeatInterceptor.clientHeartbeatFrequencyInSeconds</param-name>
-            <param-value>10</param-value>
-        </init-param>
-        <load-on-startup>0</load-on-startup> 
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AtmosphereServlet</servlet-name>
-	<url-pattern>/chat/*</url-pattern>
-    </servlet-mapping>
-    
-    
     <session-config>
         <session-timeout>
             30
