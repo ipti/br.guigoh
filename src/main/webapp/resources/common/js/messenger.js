@@ -2,14 +2,12 @@ locale = $("#localeAcronym").val();
 var sendMessageButton = "";
 locale == "enUS" ? sendMessageButton = "send" : locale == "frFR" ? sendMessageButton = "envoyer" : sendMessageButton = "enviar";
 
+var wsocket = '';
+var friends = [];
+
 $(document).ready(function () {
+
     messengerFriends();
-    setInterval(function () {
-        messengerFriends();
-    }, 60000);
-    setInterval(function () {
-        getMessages();
-    }, 3000);
     $('#messenger_friends').on('click', 'li', openMessengerBox);
     $(document).on('click', '.messageButton', openMessengerBox);
     $(document).on('click', '#messageInputs #sendMessage', sendMessage);
@@ -29,7 +27,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 
 function getMessages() {
@@ -83,28 +80,42 @@ function messengerFriends() {
         },
         dataType: 'json',
         success: function (friends) {
-            var cont = 0;
-            for (var i = 0; i < friends.length; i++) {
-                if (friends[i].online == "true") {
-                    cont = cont + 1;
-                }
-            }
-            $('.messenger_container .messenger span').text('(' + cont + ')');
             $('#messenger_friends p').html('');
             $('#messenger_friends li').remove();
+            var friends_ids = "";
             for (var i = 0; i < friends.length; i++)
             {
+                friends_ids += friends[i].id + ",";
                 $('#messenger_friends').append("<li id='friend_" + friends[i].id + "' name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'><span id='friend_photo'/>" + friends[i].name + "</li>");
                 $("#friend_" + friends[i].id + " #friend_photo").css("background", "url('" + friends[i].photo + "') no-repeat center center");
                 $("#friend_" + friends[i].id + " #friend_photo").css("background-size", "25px");
-                if (friends[i].online == "true") {
-                    $('#friend_' + friends[i].id).css("color", "green");
-                } else {
-                    $('#friend_' + friends[i].id).css("color", "red");
-                }
+                $("#messenger_friends li").css("color","red");
             }
+            wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friends_ids));
+            wsocket.onmessage = onMessageReceived;
         }
     });
+}
+
+function onMessageReceived(evt) {
+    var msg = JSON.parse(evt.data); // native API
+    if (typeof msg.status !== 'undefined') {
+        if (msg.status === "online" && friends.indexOf(msg.id) === -1) {
+            friends.push(msg.id);
+        } else if (msg.status === "offline" && friends.indexOf(msg.id) !== -1) {
+            friends.pop(msg.id);
+        }
+        $('#messenger-menu strong').text('(' + friends.length + ')');
+        $.each($("#messenger_friends li"), function(){
+            $(this).css("color", "red");
+            if (friends.indexOf($(this).attr("socialprofileid")) !== -1){
+                $(this).css("color", "green");
+                var friend = $(this);
+                $(this).remove();
+                $("#messenger_friends").prepend(friend);
+            } 
+        });
+    }
 }
 
 function closeMessengerBox() {
@@ -187,20 +198,21 @@ function sendMessage(event) {
     var id = $(this).attr('socialprofileid');
     var message = $('#textmessage_' + id).val();
     if (message != "") {
-        $.ajax({
-            type: "GET",
-            url: "/webresources/sendMessage",
-            data: {
-                "socialProfileIdSender": logged_social_profile_id,
-                "socialProfileIdReceiver": id,
-                "message": message
-            },
-            dataType: 'json',
-            success: function (success) {
-                $('#msg_' + id + ' #messages').append("<p> Você: " + message + "</p>");
-                $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
-                $('#msg_' + id + ' #textmessage_' + id).val("");
-            }
-        });
+//        wsocket.send(message);
+//        $.ajax({
+//            type: "GET",
+//            url: "/webresources/sendMessage",
+//            data: {
+//                "socialProfileIdSender": logged_social_profile_id,
+//                "socialProfileIdReceiver": id,
+//                "message": message
+//            },
+//            dataType: 'json',
+//            success: function (success) {
+//                $('#msg_' + id + ' #messages').append("<p> Você: " + message + "</p>");
+//                $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
+//                $('#msg_' + id + ' #textmessage_' + id).val("");
+//            }
+//        });
     }
 }
