@@ -1,13 +1,13 @@
 package br.org.ipti.guigoh.util.websocket;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Message {
 
     private String message;
     private String sender;
     private String receiver;
-    private Date received;
+    private Timestamp received;
 
     public final String getMessage() {
         return message;
@@ -25,11 +25,11 @@ public class Message {
         this.sender = sender;
     }
 
-    public final Date getReceived() {
+    public final Timestamp getReceived() {
         return received;
     }
 
-    public final void setReceived(final Date received) {
+    public final void setReceived(final Timestamp received) {
         this.received = received;
     }
 
@@ -44,6 +44,6 @@ public class Message {
     @Override
     public String toString() {
         return "Message [message=" + message + ", sender=" + sender
-                + ", received=" + received + "]";
+                + ", receiver=" + receiver + ", received=" + received + "]";
     }
 }

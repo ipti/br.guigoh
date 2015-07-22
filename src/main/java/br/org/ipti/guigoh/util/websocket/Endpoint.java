@@ -1,11 +1,11 @@
 package br.org.ipti.guigoh.util.websocket;
 
+import br.org.ipti.guigoh.model.entity.MessengerMessages;
+import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.json.Json;
 
 import javax.websocket.EncodeException;
@@ -16,6 +16,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import org.json.JSONObject;
 
 @ServerEndpoint(value = "/socket/{user}/{friends}", encoders = MessageEncoder.class, decoders = MessageDecoder.class)
 public class Endpoint {
@@ -53,12 +54,21 @@ public class Endpoint {
     }
 
     @OnMessage
-    public void onMessage(final Session session, final Message message) {
-        String user = (String) session.getUserProperties().get("user");
+    public void onMessage(final Session session, final Message message) throws Exception {
+        MessengerMessages messengerMessages = new MessengerMessages();
+        messengerMessages.setMessage(message.getMessage());
+        messengerMessages.setSocialProfileIdReceiver(Integer.parseInt(message.getReceiver()));
+        messengerMessages.setSocialProfileIdSender(Integer.parseInt(message.getSender()));
+        messengerMessages.setMessageDate(message.getReceived());
+        messengerMessages.setMessageDelivered('N');
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        messengerMessagesJpaController.create(messengerMessages);
         try {
             for (Session s : session.getOpenSessions()) {
                 if (s.isOpen()
-                        && user.equals(s.getUserProperties().get("user"))) {
+                        && message.getReceiver().equals(s.getUserProperties().get("user"))) {
+                    messengerMessages.setMessageDelivered('Y');
+                    messengerMessagesJpaController.edit(messengerMessages);
                     s.getBasicRemote().sendObject(message);
                 }
             }
