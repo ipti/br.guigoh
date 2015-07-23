@@ -8,7 +8,6 @@ var friends = [];
 $(document).ready(function () {
 
     messengerFriends();
-    getMessages();
     $('#messenger_friends').on('click', 'li', openMessengerBox);
     $(document).on('click', '.messageButton', openMessengerBox);
     $(document).on('click', '#messageInputs #sendMessage', sendMessage);
@@ -29,23 +28,6 @@ $(document).ready(function () {
         }
     });
 });
-
-function getMessages() {
-    var friend;
-    $.ajax({
-        url: "/webresources/deliverMessages",
-        dataType: "json",
-        data: {
-            "socialProfileId": logged_social_profile_id
-        },
-        success: function (friends) {
-            for (var i = 0; i < friends.length; i++) {
-                friend = friends[i];
-                showBox(friend.id, friend.name, friend.message);
-            }
-        }
-    });
-}
 
 function messengerFriends() {
     $.ajax({
@@ -92,28 +74,31 @@ function onMessageReceived(evt) {
             }
         });
     } else if (typeof msg.message !== 'undefined') {
-        var name = $("#friend_" + msg.sender).attr("name");
-        showBox(msg.sender, name, msg.message);
+        showBox(msg.senderId, msg.senderName, msg.message);
+    } else if (typeof msg.offlineMessages !== 'undefined') {
+        var offlineMessages = JSON.parse(msg.offlineMessages);
+        $.each(offlineMessages, function () {
+            showBox(this.senderId, this.senderName, this.message);
+        });
     }
 }
 
 function showBox(id, name, message) {
+    var json;
     if ($('#msg_' + id).length === 0) {
         $('.messenger_boxes').append(createBox(id, name));
-    }
-    if ($('#msg_' + id + ' .old').length === 0) {
         getMessagesHistory(id);
     }
-    //tratar mensagens duplicadas
-    if (name === undefined) {
-        name = $('#msg_' + id + ' .old').attr("name");
-        $('#msg_' + id + ' .messenger_title').html(name);
+    if (message !== null) {
+        $('#msg_' + id + ' #messages').append($("<p class='new'>" + name + ": " + message + "</p>"));
     }
-    $('#msg_' + id + ' #messages').append($("<p>" + name + ": " + message + "</p>"));
     $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
     $('#msg_' + id).show();
+    json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
+    wsocket.send(json);
 }
 
+//passar via websocket
 function getMessagesHistory(id) {
     $.ajax({
         url: "/webresources/messagesHistory",
@@ -125,7 +110,8 @@ function getMessagesHistory(id) {
         },
         success: function (history) {
             for (var i = 0; i < history.length; i++) {
-                $('#msg_' + id + ' #messages').append("<p class='old' name='" + history[i].name + "'>" + history[i].name + ": " + history[i].message + "</p>");
+                //appendar de uma vez só
+                $('#msg_' + id + ' #messages').append("<p class='old'>" + history[i].name + ": " + history[i].message + "</p>");
                 $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
             }
         }
@@ -146,51 +132,25 @@ function createBox(id, name) {
     return box;
 }
 
-//refatorar esse lixo
 function openMessengerBox() {
     var name = $(this).attr('name');
-    var socialProfileId = $(this).attr('socialprofileid');
-    var createbox = "<li id='msg_" + socialProfileId + "'><span class='messenger_photo'></span><span class='messenger_title'>" + name + "</span><span id='close' socialprofileid='" + socialProfileId + "'></span><div id='messages'></div><div id='messageInputs'><input id='textmessage_" + socialProfileId + "' class='textmessage' type='text' value=''></input><input socialprofileid=" + socialProfileId + " id='sendMessage' type='button' value='" + sendMessageButton + "'></input></div></li>";
-    if ($('#msg_' + socialProfileId).length > 0) {
-        if ($('#msg_' + socialProfileId).css('visibility') == "hidden") {
-            $('#msg_' + socialProfileId).css('visibility', 'visible');
-            $('#textmessage_' + socialProfileId).focus().select();
-        }
-        else {
-            $('#msg_' + socialProfileId).remove();
+    var id = $(this).attr('socialprofileid');
+    if ($('#msg_' + id).length > 0) {
+        if ($('#msg_' + id).css('visibility') === "hidden") {
+            $('#msg_' + id).show();
+            $('#textmessage_' + id).focus().select();
+        } else {
+            $('#msg_' + id).remove();
         }
     } else {
         var messenger_boxes_count = $('.messenger_boxes li').size();
-        if (messenger_boxes_count != 0) {
+        if (messenger_boxes_count !== 0) {
             var messenger_boxes_width = $('.messenger_boxes li').css('width').replace('px', '');
             var body_size = $('body').css('width').replace('px', '');
         }
-        if (messenger_boxes_count == 0 || body_size * 1 / 2 > messenger_boxes_width * (messenger_boxes_count + 1)) {
-
-            $.ajax({
-                url: "/webresources/messagesHistory",
-                dataType: "json",
-                data: {
-                    "loggedSocialProfileId": logged_social_profile_id,
-                    "friendSocialProfileId": socialProfileId
-                },
-                error: function (history) {
-                    if ($('#msg_' + socialProfileId).length == 0) {
-                        $('.messenger_boxes').append(createbox);
-                    }
-                },
-                success: function (history) {
-                    if ($('#msg_' + socialProfileId).length == 0) {
-                        $('.messenger_boxes').append(createbox);
-                    }
-
-                    for (var i = 0; i < history.length; i++) {
-                        $('#msg_' + socialProfileId + ' #messages').append("<p>" + history[i].name + ": " + history[i].message + "</p>");
-                        $('#msg_' + socialProfileId + ' #messages').scrollTop($('#msg_' + socialProfileId + ' #messages').prop("scrollHeight"));
-                        $('#textmessage_' + socialProfileId).focus().select();
-                    }
-                }
-            });
+        if (messenger_boxes_count === 0 || body_size * 1 / 2 > messenger_boxes_width * (messenger_boxes_count + 1)) {
+            showBox(id, name, null);
+            $('#textmessage_' + id).focus().select();
         }
     }
 }
@@ -200,9 +160,8 @@ function sendMessage(event) {
     var id = $(this).attr('socialprofileid');
     var message = $('#textmessage_' + id).val();
     if (message !== "") {
-        var json = '{"message":"' + message + '",'
-                + '"sender":"' + logged_social_profile_id + '",'
-                + '"receiver":"' + id + '", "received":""}';
+        var json = '{"message":"' + message + '", "senderId":"' + logged_social_profile_id + '",'
+                + '"receiverId":"' + id + '", "type":"NEW_MSG"}';
         wsocket.send(json);
         $('#msg_' + id + ' #messages').append("<p> Você: " + message + "</p>");
         $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));

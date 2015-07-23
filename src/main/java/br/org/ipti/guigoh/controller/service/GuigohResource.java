@@ -34,25 +34,12 @@ import org.json.*;
 @Path("/")
 public class GuigohResource extends Thread {
 
-    @Context
-    private UriInfo context;
-
-    /**
-     * Creates a new instance of GuigohResource
-     */
     public GuigohResource() {
     }
 
-    /**
-     * Retrieves representation of an instance of
- br.org.ipti.guigoh.controller.service.GuigohResource
-     *
-     * @return an instance of java.lang.String
-     */
     @GET
     @Produces("application/json")
     public String getJson() {
-        //TODO return proper representation object
         throw new UnsupportedOperationException();
     }
 
@@ -76,33 +63,6 @@ public class GuigohResource extends Thread {
             message.put("message", messengerMessagesList.get(i).getMessage());
             messagesList.put(i, message);
         }
-
-        return messagesList.toString();
-    }
-
-    @GET
-    @Path("/deliverMessages")
-    @Produces("application/json")
-    public String getMessagesDelivered(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, NonexistentEntityException, RollbackFailureException, Exception {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        List<MessengerMessages> nonReadMessagesList = messengerMessagesJpaController.getNonReadMessages(socialProfileId);
-        List<MessengerMessages> messengerMessagesList = new ArrayList<>();
-        for (MessengerMessages mm : nonReadMessagesList) {
-            messengerMessagesList.add(mm);
-        }
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
-        JSONArray messagesList = new JSONArray();
-        for (int i = 0; i < messengerMessagesList.size(); i++) {
-            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
-            JSONObject message = new JSONObject();
-            message.put("id", messengerMessagesList.get(i).getSocialProfileIdSender());
-            message.put("name", socialProfile.getName());
-            message.put("message", messengerMessagesList.get(i).getMessage());
-            messagesList.put(i, message);
-            messengerMessagesList.get(i).setMessageDelivered('Y');
-            messengerMessagesJpaController.edit(messengerMessagesList.get(i));
-        }
-
         return messagesList.toString();
     }
 
@@ -142,12 +102,6 @@ public class GuigohResource extends Thread {
         return tagsArray.toString();
     }
 
-    /**
-     * PUT method for updating or creating an instance of GuigohResource
-     *
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
     @PUT
     @Consumes("application/json")
     public void putJson(String content) {
