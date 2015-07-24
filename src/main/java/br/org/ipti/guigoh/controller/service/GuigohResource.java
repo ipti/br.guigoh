@@ -66,7 +66,7 @@ public class GuigohResource extends Thread {
     @GET
     @Path("/tags")
     @Produces("application/json")
-    public String getTagss(@QueryParam("text") String text, @QueryParam("theme_id") Integer theme_id) throws JSONException, Exception, RollbackFailureException {
+    public String getTags(@QueryParam("text") String text, @QueryParam("theme_id") Integer theme_id) throws JSONException, Exception, RollbackFailureException {
         TagsJpaController tagsJpaController = new TagsJpaController();
         List<Tags> tagslist = tagsJpaController.findTagsByText(text);
         JSONArray tagsArray = new JSONArray();
