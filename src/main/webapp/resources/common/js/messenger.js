@@ -80,6 +80,16 @@ function onMessageReceived(evt) {
         $.each(offlineMessages, function () {
             showBox(this.senderId, this.senderName, this.message);
         });
+    } else if (typeof msg.historyMessages !== 'undefined') {
+        var historyMessages = JSON.parse(msg.historyMessages);
+        var messages = '';
+        var id;
+        $.each(historyMessages, function () {
+            messages += "<p class='old'>" + this.senderName + ": " + this.message + "</p>";
+            id = (logged_social_profile_id === this.senderId) ? this.receiverId : this.senderId;
+        });
+        $('#msg_' + id + ' #messages').prepend(messages);
+        $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
     }
 }
 
@@ -87,7 +97,8 @@ function showBox(id, name, message) {
     var json;
     if ($('#msg_' + id).length === 0) {
         $('.messenger_boxes').append(createBox(id, name));
-        getMessagesHistory(id);
+        json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_HISTORY"}';
+        wsocket.send(json);
     }
     if (message !== null) {
         $('#msg_' + id + ' #messages').append($("<p class='new'>" + name + ": " + message + "</p>"));
@@ -96,27 +107,6 @@ function showBox(id, name, message) {
     $('#msg_' + id).show();
     json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
     wsocket.send(json);
-}
-
-//passar via websocket
-function getMessagesHistory(id) {
-    $.ajax({
-        url: "/webresources/messagesHistory",
-        dataType: "json",
-        async: false,
-        data: {
-            "loggedSocialProfileId": logged_social_profile_id,
-            "friendSocialProfileId": id
-        },
-        success: function (history) {
-            for (var i = 0; i < history.length; i++) {
-                //appendar de uma vez só
-                $('#msg_' + id + ' #messages').append("<p class='old'>" + history[i].name + ": " + history[i].message + "</p>");
-                $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
-            }
-        }
-
-    });
 }
 
 function createBox(id, name) {

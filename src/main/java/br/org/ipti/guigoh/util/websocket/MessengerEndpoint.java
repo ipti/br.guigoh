@@ -80,8 +80,7 @@ public class MessengerEndpoint {
             messengerMessages.setMessageDelivered('N');
             messengerMessagesJpaController.create(messengerMessages);
             for (Session s : session.getOpenSessions()) {
-                if (s.isOpen()
-                        && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
                     s.getBasicRemote().sendObject(Json.createObjectBuilder()
                             .add("message", obj.getString("message"))
                             .add("senderId", obj.getString("senderId"))
@@ -98,6 +97,13 @@ public class MessengerEndpoint {
             for (MessengerMessages messengerMessages : messengerMessagesList) {
                 messengerMessages.setMessageDelivered('Y');
                 messengerMessagesJpaController.edit(messengerMessages);
+            }
+        } else if (obj.getString("type").equals("MSG_HISTORY")) {
+            String json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
+            for (Session s : session.getOpenSessions()) {
+                if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                    s.getBasicRemote().sendObject(json);
+                }
             }
         }
     }
@@ -131,6 +137,29 @@ public class MessengerEndpoint {
         MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(id));
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        for (MessengerMessages messengerMessages : messengerMessagesList) {
+            jsonArrayBuilder.add(Json.createObjectBuilder()
+                    .add("message", messengerMessages.getMessage())
+                    .add("senderId", messengerMessages.getSocialProfileIdSender())
+                    .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdSender()).getName())
+                    .add("receiverId", messengerMessages.getSocialProfileIdReceiver())
+                    .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
+                    .add("received", messengerMessages.getMessageDate().toString())
+                    .add("type", "NEW_MSG"));
+        }
+        JsonArray jsonArray = jsonArrayBuilder.build();
+        return jsonArray.toString();
+    }
+
+    private String loadHistoryMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {
+        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(Integer.parseInt(receiverId), Integer.parseInt(senderId));
+        List<MessengerMessages> messengerMessagesList = new ArrayList<>();
+        for (int i = lastTenMessagesList.size(); i > 0; i--) {
+            messengerMessagesList.add(lastTenMessagesList.get(i - 1));
+        }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         for (MessengerMessages messengerMessages : messengerMessagesList) {
             jsonArrayBuilder.add(Json.createObjectBuilder()

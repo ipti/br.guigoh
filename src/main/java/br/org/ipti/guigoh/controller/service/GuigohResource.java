@@ -44,29 +44,6 @@ public class GuigohResource extends Thread {
     }
 
     @GET
-    @Path("/messagesHistory")
-    @Produces("application/json")
-    public String getMessagesHistory(@QueryParam("loggedSocialProfileId") Integer loggedSocialProfileId, @QueryParam("friendSocialProfileId") Integer socialProfileId) throws JSONException, NonexistentEntityException, RollbackFailureException, Exception {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(loggedSocialProfileId, socialProfileId);
-        List<MessengerMessages> messengerMessagesList = new ArrayList<>();
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
-        for (int i = lastTenMessagesList.size(); i > 0; i--) {
-            messengerMessagesList.add(lastTenMessagesList.get(i - 1));
-        }
-        JSONArray messagesList = new JSONArray();
-        for (int i = 0; i < messengerMessagesList.size(); i++) {
-            JSONObject message = new JSONObject();
-            SocialProfile socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessagesList.get(i).getSocialProfileIdSender());
-            message.put("id", messengerMessagesList.get(i).getSocialProfileIdSender());
-            message.put("name", socialProfile.getName());
-            message.put("message", messengerMessagesList.get(i).getMessage());
-            messagesList.put(i, message);
-        }
-        return messagesList.toString();
-    }
-
-    @GET
     @Path("/messengerFriends")
     @Produces("application/json")
     public String getMessengerFriends(@QueryParam("socialProfileId") Integer socialProfileId) throws JSONException, Exception, RollbackFailureException {
