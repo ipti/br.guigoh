@@ -58,13 +58,13 @@ public class FriendBean implements Serializable {
     }
 
     private void organizeFriendList(List<Friends> list) {
-        for (Friends friend : list) {
-            if (user.getToken().equals(friend.getTokenFriend2().getToken())) {
-                Users userFriend = friend.getTokenFriend1();
-                friend.setTokenFriend1(friend.getTokenFriend2());
-                friend.setTokenFriend2(userFriend);
-            }
-        }
+        list.stream()
+                .filter((friend) -> (user.getToken().equals(friend.getTokenFriend2().getToken())))
+                .forEach((friend) -> {
+            Users userFriend = friend.getTokenFriend1();
+            friend.setTokenFriend1(friend.getTokenFriend2());
+            friend.setTokenFriend2(userFriend);
+        });
     }
 
     public void searchFriendEvent() {

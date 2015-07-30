@@ -30,12 +30,14 @@ import javax.websocket.server.ServerEndpoint;
 public class MessengerEndpoint {
 
     private static final String ADMIN = "AD";
-    private UserAuthorizationJpaController userAuthorizationJpaController;
-    private SocialProfileJpaController socialProfileJpaController;
+    private final UserAuthorizationJpaController userAuthorizationJpaController;
+    private final SocialProfileJpaController socialProfileJpaController;
+    private final MessengerMessagesJpaController messengerMessagesJpaController;
 
     public MessengerEndpoint() {
         userAuthorizationJpaController = new UserAuthorizationJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
+        messengerMessagesJpaController = new MessengerMessagesJpaController();
     }
 
     @OnOpen
@@ -83,46 +85,48 @@ public class MessengerEndpoint {
 
     @OnMessage
     public void onMessage(final Session session, final String textMessage) throws Exception {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         UtilJpaController utilJpaController = new UtilJpaController();
         JsonObject obj = Json.createReader(new StringReader(textMessage))
                 .readObject();
-        if (obj.getString("type").equals("NEW_MSG")) {
-            MessengerMessages messengerMessages = new MessengerMessages();
-            messengerMessages.setMessage(obj.getString("message"));
-            messengerMessages.setSocialProfileIdReceiver(Integer.parseInt(obj.getString("receiverId")));
-            messengerMessages.setSocialProfileIdSender(Integer.parseInt(obj.getString("senderId")));
-            Timestamp ts = utilJpaController.getTimestampServerTime();
-            messengerMessages.setMessageDate(ts);
-            messengerMessages.setMessageDelivered('N');
-            messengerMessagesJpaController.create(messengerMessages);
-            for (Session s : session.getOpenSessions()) {
-                if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                    s.getBasicRemote().sendObject(Json.createObjectBuilder()
-                            .add("message", obj.getString("message"))
-                            .add("senderId", obj.getString("senderId"))
-                            .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
-                            .add("receiverId", obj.getString("receiverId"))
-                            .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                            .add("received", ts.toString())
-                            .add("type", obj.getString("type")).build()
-                            .toString());
+        switch (obj.getString("type")) {
+            case "NEW_MSG":
+                MessengerMessages messengerMessages = new MessengerMessages();
+                messengerMessages.setMessage(obj.getString("message"));
+                messengerMessages.setSocialProfileIdReceiver(Integer.parseInt(obj.getString("receiverId")));
+                messengerMessages.setSocialProfileIdSender(Integer.parseInt(obj.getString("senderId")));
+                Timestamp ts = utilJpaController.getTimestampServerTime();
+                messengerMessages.setMessageDate(ts);
+                messengerMessages.setMessageDelivered('N');
+                messengerMessagesJpaController.create(messengerMessages);
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                        s.getBasicRemote().sendObject(Json.createObjectBuilder()
+                                .add("message", obj.getString("message"))
+                                .add("senderId", obj.getString("senderId"))
+                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
+                                .add("receiverId", obj.getString("receiverId"))
+                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
+                                .add("received", ts.toString())
+                                .add("type", obj.getString("type")).build()
+                                .toString());
+                    }
                 }
-            }
-        } else if (obj.getString("type").equals("MSG_SENT")) {
-            List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(obj.getString("receiverId")));
-            for (MessengerMessages messengerMessages : messengerMessagesList) {
-                messengerMessages.setMessageDelivered('Y');
-                messengerMessagesJpaController.edit(messengerMessages);
-            }
-        } else if (obj.getString("type").equals("MSG_HISTORY")) {
-            String json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
-            for (Session s : session.getOpenSessions()) {
-                if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                    s.getBasicRemote().sendObject(json);
+                break;
+            case "MSG_SENT":
+                List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(obj.getString("receiverId")));
+                for (MessengerMessages mm : messengerMessagesList) {
+                    mm.setMessageDelivered('Y');
+                    messengerMessagesJpaController.edit(mm);
                 }
-            }
+                break;
+            case "MSG_HISTORY":
+                String json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                        s.getBasicRemote().sendObject(json);
+                    }
+                }
+                break;
         }
     }
 
@@ -158,11 +162,9 @@ public class MessengerEndpoint {
     }
 
     private String loadOfflineMessages(String id) throws RollbackFailureException, Exception {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(id));
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for (MessengerMessages messengerMessages : messengerMessagesList) {
+        messengerMessagesList.stream().forEach((messengerMessages) -> {
             jsonArrayBuilder.add(Json.createObjectBuilder()
                     .add("message", messengerMessages.getMessage())
                     .add("senderId", messengerMessages.getSocialProfileIdSender())
@@ -171,7 +173,7 @@ public class MessengerEndpoint {
                     .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
                     .add("received", messengerMessages.getMessageDate().toString())
                     .add("type", "NEW_MSG"));
-        }
+        });
         JsonArray jsonArray = jsonArrayBuilder.build();
         if (jsonArray.isEmpty()) {
             return null;
@@ -181,15 +183,13 @@ public class MessengerEndpoint {
     }
 
     private String loadHistoryMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {
-        MessengerMessagesJpaController messengerMessagesJpaController = new MessengerMessagesJpaController();
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(Integer.parseInt(receiverId), Integer.parseInt(senderId));
         List<MessengerMessages> messengerMessagesList = new ArrayList<>();
         for (int i = lastTenMessagesList.size(); i > 0; i--) {
             messengerMessagesList.add(lastTenMessagesList.get(i - 1));
         }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for (MessengerMessages messengerMessages : messengerMessagesList) {
+        messengerMessagesList.stream().forEach((messengerMessages) -> {
             jsonArrayBuilder.add(Json.createObjectBuilder()
                     .add("message", messengerMessages.getMessage())
                     .add("senderId", messengerMessages.getSocialProfileIdSender())
@@ -198,7 +198,7 @@ public class MessengerEndpoint {
                     .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
                     .add("received", messengerMessages.getMessageDate().toString())
                     .add("type", "NEW_MSG"));
-        }
+        });
         JsonArray jsonArray = jsonArrayBuilder.build();
         return jsonArray.toString();
     }

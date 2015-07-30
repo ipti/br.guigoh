@@ -5,17 +5,12 @@
 package br.org.ipti.guigoh.controller.service;
 
 import br.org.ipti.guigoh.model.entity.Friends;
-import br.org.ipti.guigoh.model.entity.MessengerMessages;
-import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,8 +18,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import org.json.*;
 /**
  * REST Web Service

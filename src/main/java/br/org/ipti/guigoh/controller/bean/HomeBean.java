@@ -56,9 +56,9 @@ public class HomeBean implements Serializable {
     public void loadMoreEducationalObjects() {
         List<EducationalObject> outList = educationalObjectList;
         List<EducationalObject> moreObjects = educationalObjectJpaController.loadMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
-        for (EducationalObject temp : moreObjects) {
+        moreObjects.stream().forEach((temp) -> {
             outList.add(temp);
-        }
+        });
         setEducationalObjectList(outList);
         existsMore();
     }

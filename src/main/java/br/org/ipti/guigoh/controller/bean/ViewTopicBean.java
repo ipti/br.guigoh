@@ -128,17 +128,17 @@ public class ViewTopicBean implements Serializable {
             discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
 
             discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
-            for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
+            discussionTopicMsgList.stream().forEach((dtm) -> {
                 dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
-            }
+            });
             socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
         } else if (discussionTopic.getId() != discussionTopicID) {
             discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicID);
             discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), TOPIC));
             discussionTopicMsgList = discussionTopicMsgJpaController.findDiscussionTopicMsgsByTopic(discussionTopic.getId());
-            for (DiscussionTopicMsg dtm : discussionTopicMsgList) {
+            discussionTopicMsgList.stream().forEach((dtm) -> {
                 dtm.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(dtm.getId(), MESSAGE));
-            }
+            });
             socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
         }
     }

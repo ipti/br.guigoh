@@ -449,7 +449,7 @@ public class WizardProfileBean implements Serializable {
 
     private void checkInterestsList(List<Interests> interestsList, String type) throws Exception {
         InterestsType interestsType = interestsTypeJpaController.findInterestsTypeByName(type);
-        Interests interestsTemp = new Interests();
+        Interests interestsTemp;
         for (Interests interests : interestsList) {
             if (interests != null) {
                 interestsTemp = interestsJpaController.findInterestsByInterestsName(interests.getName());
@@ -548,7 +548,7 @@ public class WizardProfileBean implements Serializable {
             interestsList = interestsJpaController.findInterestsBySocialProfileId(socialProfile.getSocialProfileId());
             interestsTypeList = interestsTypeJpaController.findInterestsTypeEntities();
 
-            for (Interests interests : interestsList) {
+            interestsList.stream().map((interests) -> {
                 if (findInterestTypeById(interests.getTypeId().getId()).equals("CI")) {
                     if (interests.getTypeId().getName().equals("Musics")) {
                         musicsList.add(interests);
@@ -560,6 +560,8 @@ public class WizardProfileBean implements Serializable {
                         booksList.add(interests);
                     }
                 }
+                return interests;
+            }).map((interests) -> {
                 if (findInterestTypeById(interests.getTypeId().getId()).equals("SH")) {
                     if (interests.getTypeId().getName().equals("Sports")) {
                         sportsList.add(interests);
@@ -568,10 +570,10 @@ public class WizardProfileBean implements Serializable {
                         hobbiesList.add(interests);
                     }
                 }
-                if (findInterestTypeById(interests.getTypeId().getId()).equals("TH")) {
-                    themesList.add(interests);
-                }
-            }
+                return interests;
+            }).filter((interests) -> (findInterestTypeById(interests.getTypeId().getId()).equals("TH"))).forEach((interests) -> {
+                themesList.add(interests);
+            });
         }
         //HashMap<String, List<Interests>> hashmap = new HashMap<String, List<Interests>>();
         //hashmap.put("Musics", musicsList);
@@ -624,9 +626,9 @@ public class WizardProfileBean implements Serializable {
         try {
 
             List<String> label = new ArrayList<>();
-            for (Interests interests : interestsListAll) {
+            interestsListAll.stream().forEach((interests) -> {
                 label.add(interests.getName());
-            }
+            });
             return label;
 
         } catch (Exception e) {
