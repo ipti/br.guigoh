@@ -1,8 +1,10 @@
 package br.org.ipti.guigoh.util.websocket;
 
 import br.org.ipti.guigoh.model.entity.MessengerMessages;
+import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.IOException;
@@ -27,6 +29,15 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/socket/{user}/{friends}")
 public class MessengerEndpoint {
 
+    private static final String ADMIN = "AD";
+    private UserAuthorizationJpaController userAuthorizationJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
+
+    public MessengerEndpoint() {
+        userAuthorizationJpaController = new UserAuthorizationJpaController();
+        socialProfileJpaController = new SocialProfileJpaController();
+    }
+
     @OnOpen
     public void onOpen(final Session session, @PathParam("user") final String user, @PathParam("friends") final String friends) throws IOException, EncodeException, Exception {
         session.getUserProperties().put("user", user);
@@ -35,12 +46,21 @@ public class MessengerEndpoint {
         List<String> onlineUsers = new ArrayList<>();
         String sessionFriends = (String) session.getUserProperties().get("friends");
         friendList.addAll(Arrays.asList(sessionFriends.split(",")));
+        String json;
         for (Session s : session.getOpenSessions()) {
+            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
+            if (authorization.getRoles().equals(ADMIN)) {
+                json = Json.createObjectBuilder()
+                        .add("onlineUsers", session.getOpenSessions().size()).build().toString();
+                s.getBasicRemote().sendObject(json);
+            }
             onlineUsers.add((String) s.getUserProperties().get("user"));
         }
-        String json;
-        json = Json.createObjectBuilder().add("offlineMessages", loadOfflineMessages(user)).build().toString();
-        session.getBasicRemote().sendObject(json);
+        String offlineMessages = loadOfflineMessages(user);
+        if (offlineMessages != null) {
+            json = Json.createObjectBuilder().add("offlineMessages", offlineMessages).build().toString();
+            session.getBasicRemote().sendObject(json);
+        }
         for (Session s : session.getOpenSessions()) {
             if (!s.getUserProperties().get("user").equals(user)) {
                 for (String friendId : friendList) {
@@ -115,6 +135,12 @@ public class MessengerEndpoint {
         String json;
         int count = 0;
         for (Session s : session.getOpenSessions()) {
+            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
+            if (authorization.getRoles().equals(ADMIN)) {
+                json = Json.createObjectBuilder()
+                        .add("onlineUsers", session.getOpenSessions().size()).build().toString();
+                s.getBasicRemote().sendObject(json);
+            }
             if (s.getUserProperties().get("user").equals(user)) {
                 count++;
             }
@@ -147,7 +173,11 @@ public class MessengerEndpoint {
                     .add("type", "NEW_MSG"));
         }
         JsonArray jsonArray = jsonArrayBuilder.build();
-        return jsonArray.toString();
+        if (jsonArray.isEmpty()) {
+            return null;
+        } else {
+            return jsonArray.toString();
+        }
     }
 
     private String loadHistoryMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {

@@ -12,6 +12,7 @@ body {height:100%; background-color: #84A7CA; margin: 0 auto;}
 .top_menu li {display: inline; padding:0 0.4em; margin:0 auto; width:auto; background:none; border-left: 1px #fff solid;}
 .first { border-left:0 !important;}
 .registered_users_quantity{color:white}
+#registered_users_online{color:white}
 .top_menu li a {color: #fff;}
 .mid_menu {display:block; height: 110px; width: 950px; background-color:#E9EDE2; margin: 20px 20px 20px 0px; position: relative; border-top-left-radius: 30px;-webkit-box-shadow: 0 8px 6px -6px gray; -moz-box-shadow: 0 8px 6px -6px gray;  box-shadow: 0 8px 6px -6px gray; border-bottom: 1px solid #919191;}
 .img_logo {background:url(../images/logo.png); position: absolute; top: 10px; left: 40px; width:198px; height:88px; cursor: pointer;}
