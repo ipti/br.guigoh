@@ -56,22 +56,6 @@ public class GuigohResource extends Thread {
         return jsonFriendList.toString();
     }
 
-    @GET
-    @Path("/tags")
-    @Produces("application/json")
-    public String getTags(@QueryParam("text") String text, @QueryParam("theme_id") Integer theme_id) throws JSONException, Exception, RollbackFailureException {
-        TagsJpaController tagsJpaController = new TagsJpaController();
-        List<Tags> tagslist = tagsJpaController.findTagsByText(text);
-        JSONArray tagsArray = new JSONArray();
-        for (int i = 0; i < tagslist.size(); i++) {
-            JSONObject tag = new JSONObject();
-            tag.put("name", tagslist.get(i).getName());
-            tag.put("id", tagslist.get(i).getId());
-            tagsArray.put(i, tag);
-        }
-        return tagsArray.toString();
-    }
-
     @PUT
     @Consumes("application/json")
     public void putJson(String content) {
