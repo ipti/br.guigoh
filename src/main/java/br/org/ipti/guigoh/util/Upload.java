@@ -72,7 +72,7 @@ public class Upload extends HttpServlet {
                 }
             }
         }
-        request.getRequestDispatcher("/profile/view-profile.xhtml").forward(request, response);
+        request.getRequestDispatcher("/profile/view.xhtml").forward(request, response);
     }
 
     @Override

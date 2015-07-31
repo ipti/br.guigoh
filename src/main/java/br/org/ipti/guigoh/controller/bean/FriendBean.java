@@ -54,7 +54,7 @@ public class FriendBean implements Serializable {
     }
 
     public String goToProfile(Integer id) {
-        return "/profile/view-profile.xhtml?id=" + id;
+        return "/profile/view.xhtml?id=" + id;
     }
 
     private void organizeFriendList(List<Friends> list) {

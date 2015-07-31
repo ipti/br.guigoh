@@ -8,10 +8,10 @@
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/wizard.css"/>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/profile-wizard.css"/>
         <link rel="stylesheet" href="/resources/lib/css/jquery-ui.min.css" />
         <link rel="stylesheet" href="/resources/lib/css/jquery-multiselect-2.0.min.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/profile.css"/>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/profile-view.css"/>
         <style type="text/css">
             .multiselect {
                 width: 600px;
@@ -672,8 +672,8 @@
         <script src="/resources/lib/js/jquery-multiselect-2.0.min.js"/>
         <script src="/resources/lib/js/jquery-multiselect-2_pt.min.js"/>
         <script src="/resources/lib/js/jquery-multiselect-2_fr.min.js"/>
-        <script type="text/javascript" src="/resources/common/js/profile.js"/>
-        <script type="text/javascript" src="/resources/common/js/wizard.js"/>
+        <script type="text/javascript" src="/resources/common/js/profile-view.js"/>
+        <script type="text/javascript" src="/resources/common/js/profile-wizard.js"/>
         <script type="text/javascript">
             var books = #{profileBean.wizardProfileBean.books};
             var musics = #{profileBean.wizardProfileBean.musics};

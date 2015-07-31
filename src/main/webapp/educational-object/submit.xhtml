@@ -7,7 +7,7 @@
     <ui:define name="title">#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link rel="stylesheet" href="../resources/common/css/submit-form.css" />
+        <link rel="stylesheet" href="../resources/common/css/educational-object-submit.css" />
         <link rel="stylesheet" href="../resources/lib/css/jquery-ui.min.css"/>
     </ui:define>
     <!-- END PAGE STYLES -->
@@ -181,7 +181,7 @@
                         <h:panelGroup styleClass="form6_body">
                             <h:outputText styleClass="educational_object_review" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
                             <h:outputText styleClass="educational_object_review_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
-                            <a class="publish_new_object_container" href="/educational-object/submit-form.xhtml">
+                            <a class="publish_new_object_container" href="/educational-object/submit.xhtml">
                                 <img id="publish_new_object_lamp" src="../resources/common/images/lamp.png"/>
                                 <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
                             </a>
@@ -193,7 +193,7 @@
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup styleClass="button_options">
-                    <h:link styleClass="button_cancel" outcome="/educational-object/publish-environment.xhtml">
+                    <h:link styleClass="button_cancel" outcome="/educational-object/publish.xhtml">
                         <img id="button_cancel_icon" src="/resources/common/images/cross.png"/>
                         <span class="button_cancel_label">#{localeBean.getString('Cancelar')}</span>
                     </h:link>
@@ -226,7 +226,7 @@
     <ui:define name="scripts">
         <script src="/resources/lib/js/jquery.mask.min.js"/>
         <script src="/resources/lib/js/jquery-ui.min.js"/>
-        <script src="/resources/common/js/submit-form.js"/>
+        <script src="/resources/common/js/educational-object-submit.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

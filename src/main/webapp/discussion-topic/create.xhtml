@@ -8,7 +8,7 @@
     <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/create-topic.css"></link>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/discussion-topic-create.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
@@ -22,11 +22,11 @@
                 <h:panelGroup styleClass="create_topic_box">
                     <h:panelGroup styleClass="bread_path">
                         <h:link outcome="/home.xhtml">Home</h:link> > 
-                        <h:link outcome="/theme/theme.xhtml?id=#{createTopicBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
+                        <h:link outcome="/theme/view.xhtml?id=#{createTopicBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
                         <h:outputText value="#{localeBean.getString('Novo tópico')}"></h:outputText>
                     </h:panelGroup>
-                    <h:link outcome="/profile/view-profile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{createTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
-                    <h:link outcome="/profile/view-profile.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{createTopicBean.socialProfile.name}"></h:link>
+                    <h:link outcome="/profile/view.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{createTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
+                    <h:link outcome="/profile/view.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{createTopicBean.socialProfile.name}"></h:link>
                     <h:outputText styleClass="topic_title_label" value="#{localeBean.getString('Assunto')}:"></h:outputText>
                     <h:outputText styleClass="new_title_warning" value="Campo obrigatório"/>
                     <h:inputText styleClass="new_title" value="#{createTopicBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Um título que descreva o assunto tratado no seu tópico...')}"></h:inputText>
@@ -67,7 +67,7 @@
                     <h:commandLink styleClass="submit" action="#{createTopicBean.createTopic()}">
                         <f:ajax execute="@form" />
                     </h:commandLink>
-                    <h:link styleClass="back_button_container" outcome="/theme/theme.xhtml?id=#{createTopicBean.theme.id}"> 
+                    <h:link styleClass="back_button_container" outcome="/theme/view.xhtml?id=#{createTopicBean.theme.id}"> 
                         <img id="back_button_icon" src="/resources/common/images/back.png"/>
                         <span class="back_button_label">#{localeBean.getString('Voltar')}</span>
                     </h:link>
@@ -78,7 +78,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/create-topic.js"></script>
+        <script type="text/javascript" src="/resources/common/js/discussion-topic-create.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

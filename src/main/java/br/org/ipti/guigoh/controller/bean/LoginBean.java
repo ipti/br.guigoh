@@ -73,7 +73,7 @@ public class LoginBean implements Serializable {
                 case "FC":
                     CookieService.addCookie("user", registeredUser.getUsername());
                     CookieService.addCookie("token", registeredUser.getToken());
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/profile/wizard-profile.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/profile/wizard.xhtml");
                     break;
             }
         } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {

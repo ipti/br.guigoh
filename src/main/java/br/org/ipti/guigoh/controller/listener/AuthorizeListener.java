@@ -29,7 +29,7 @@ public class AuthorizeListener implements PhaseListener{
         // Se for a página 'login.jsp' seta a variável como true
         boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("login") > -1;
         boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("register") > -1;
-        boolean isWizardPage = context.getViewRoot().getViewId().lastIndexOf("wizard-profile") > -1;
+        boolean isWizardPage = context.getViewRoot().getViewId().lastIndexOf("wizard") > -1;
         // Obtém a sessão atual
         // Resgata o nome do usuário logado
         Users user = new Users();

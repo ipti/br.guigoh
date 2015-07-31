@@ -23,7 +23,7 @@
                     </h:panelGroup>
                     <h:panelGroup styleClass="interest_themes">
                         <ui:repeat value="#{homeBean.interestThemesList}" var="theme" >
-                            <h:link styleClass="interest_theme" outcome="/theme/theme.xhtml?id=#{theme.id}">
+                            <h:link styleClass="interest_theme" outcome="/theme/view.xhtml?id=#{theme.id}">
                                 <h:outputText styleClass="theme_icon" style="background:url('../resources/common/images/themes/#{homeBean.getMD5(theme.name)}.png')"></h:outputText>
                                 <h:outputText styleClass="theme_label" value="#{localeBean.getString(theme.name)}"></h:outputText>
                             </h:link>
@@ -32,7 +32,7 @@
                 </h:panelGroup>
                 <h:panelGroup id="middle_column" styleClass="middle_column">
                     <h:outputText styleClass="last_objects_label" value="#{localeBean.getString('Últimos objetos educacionais publicados').toUpperCase()}"/>
-                    <a class="publish_new_object_container" href="/educational-object/submit-form.xhtml">
+                    <a class="publish_new_object_container" href="/educational-object/submit.xhtml">
                         <img id="publish_new_object_lamp" src="../resources/common/images/lamp.png"/>
                         <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                     </a>
@@ -40,20 +40,20 @@
                         <h:panelGroup id="display_objects">
                             <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject" >
                                 <h:panelGroup styleClass="educational_object">
-                                    <h:link outcome="/educational-object/educational-object.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
+                                    <h:link outcome="/educational-object/view.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
                                     <h:outputText styleClass="clock_icon"/>
                                     <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
                                         <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                                     </h:outputText>
-                                    <h:link outcome="/educational-object/educational-object.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
+                                    <h:link outcome="/educational-object/view.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
                                     <br/>
                                     <h:panelGroup styleClass="container_description">
                                         <h:outputText styleClass="educational_object_label_sended" value="#{localeBean.getString('Enviado por')}"/>
-                                        <h:link outcome="/profile/view-profile.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
+                                        <h:link outcome="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
                                         <br/>
                                         <h:outputText styleClass="educational_object_label_by" value="#{localeBean.getString('em')}"/>
                                         <ui:param name="themeName" value="#{educationalObject.themeId.name}"/>
-                                        <h:link outcome="/theme/theme.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
+                                        <h:link outcome="/theme/view.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
                                     </h:panelGroup>
                                 </h:panelGroup>
                             </ui:repeat>
@@ -68,12 +68,12 @@
                     <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>
                     <h:panelGroup class="user_feed">
                         <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
-                            <h:link styleClass="publisher_image" outcome="/profile/view-profile.xhtml?id=#{newActivity.socialProfile.socialProfileId}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
+                            <h:link styleClass="publisher_image" outcome="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
                             <h:panelGroup styleClass="text_feed">
-                                <h:link styleClass="user_news_name" outcome="/profile/view-profile.xhtml?id=#{newActivity.socialProfile.socialProfileId}" value="#{newActivity.socialProfile.name}"></h:link>
+                                <h:link styleClass="user_news_name" outcome="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}" value="#{newActivity.socialProfile.name}"></h:link>
                                 <h:outputText value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
                                 <h:outputText value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
-                                <h:link styleClass="social_news_name" outcome="/discussion/view-topic.xhtml?id=#{newActivity.id}" value="&quot;#{newActivity.title}&quot;"/>
+                                <h:link styleClass="social_news_name" outcome="/discussion-topic/view.xhtml?id=#{newActivity.id}" value="&quot;#{newActivity.title}&quot;"/>
                             </h:panelGroup>
                         </ui:repeat>
                     </h:panelGroup>

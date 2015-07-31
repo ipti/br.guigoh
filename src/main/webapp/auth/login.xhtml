@@ -13,7 +13,7 @@
         <link href="../resources/lib/css/slick.min.css" rel="stylesheet"></link>
         <link href="../resources/common/css/reset.css" rel="stylesheet"></link>
         <link href="../resources/common/css/global.css" rel="stylesheet"></link>
-        <link href="../resources/common/css/login.css" rel="stylesheet"></link>
+        <link href="../resources/common/css/auth-login.css" rel="stylesheet"></link>
         <!-- END PAGE STYLES -->
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
@@ -175,55 +175,7 @@
         <!-- BEGIN PAGE SCRIPTS -->
         <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
         <script type="text/javascript" src="../resources/lib/js/slick.min.js"/>
-        <script type="text/javascript">
-
-            var poster = ["1", "2", "3", "4"];
-                var rand = poster[Math.floor(Math.random() * poster.length)];
-                        var url = "../resources/common/images/banners/objeto-" + rand + ".jpg";
-                        $(".header-picture img").attr("src", url);
-
-                    $('.carousel').slick({
-                        slidesToShow: 5,
-                        slidesToScroll: 1,
-                autoplay: true,
-            autoplaySpeed: 2000,
-                arrows: false,
-                pauseOnHover: false
-            });
-
-            $(document).on("keypress", ".panel input", function(event) {
-                if (event.which == 13) {
-                    event.preventDefault();
-                    $(".forward").click();
-                }
-            });
-            function setCursors(ajax) {
-                if (ajax === "begin") {
-                    $('body').css('cursor', 'wait');
-                    $('.row-details').css('cursor', 'wait');
-                    $('a').css('cursor', 'wait');
-                } else {
-                    $('body').css('cursor', 'auto');
-                    $('.row-details').css('cursor', 'pointer');
-                    $('a').css('cursor', 'pointer');
-                }
-            }
-
-            jsf.ajax.addOnEvent(function(data) {
-                switch (data.status) {
-                    case "begin":
-                        setCursors(data.status);
-                        break;
-                    case "success":
-                        setCursors(data.status);
-                        break;
-                }
-            });
-            if (navigator.appName == 'Microsoft Internet Explorer')
-            {
-                window.location = '/resources/notsupported.htm';
-            }
-        </script> 
+        <script type="text/javascript" src="../resources/common/js/auth-login.js"/> 
         <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>

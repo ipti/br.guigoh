@@ -30,7 +30,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>profile</from-outcome>
-            <to-view-id>/profile/view-profile.xhtml</to-view-id>
+            <to-view-id>/profile/view.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -38,7 +38,7 @@
         <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>wizard</from-outcome>
-            <to-view-id>/profile/wizard-profile.xhtml</to-view-id>
+            <to-view-id>/profile/wizard.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>   

@@ -294,7 +294,7 @@ $(document).ready(function() {
             }
         }
 
-        xhr.open("post", "../educational-object/submit-form.xhtml", true);
+        xhr.open("post", "../educational-object/submit.xhtml", true);
         xhr.send(formData);
     }
 
