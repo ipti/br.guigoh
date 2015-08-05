@@ -906,7 +906,7 @@ public class SocialProfileJpaController implements Serializable {
      *
      * @return
      */
-    public List loadAllSocialProfileAuthorization(Integer subnetworkdId) {
+    public List findAllSocialProfileAuthorization(Integer subnetworkdId) {
         EntityManager em = getEntityManager();
         
         try {
@@ -919,87 +919,4 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-
-    public List<SocialProfile> loadUserSearchList(SocialProfile socialProfile, Educations education, Integer experienceTime, Interests interest) {
-        EntityManager em = getEntityManager();
-        try {
-            String sql = "select * from social_profile p ";
-
-            if (socialProfile.getOccupationsId().getOccupationsTypeId().getId() != 0) {
-                sql += "join occupations o on o.id = p.occupations_id ";
-            }
-
-            if (education.getNameId().getId() != 0 || education.getLocationId().getId() != 0) {
-                sql += "join educations e on e.token_id = p.token_id ";
-            }
-
-            if (interest.getTypeId().getId() != 0) {
-                sql += "join social_profile_interests pspi on pspi.social_profile_id = p.social_profile_id "
-                        + "join interests pi on pi.id = pspi.interests_id ";
-            }
-
-            if (experienceTime != 0) {
-                sql += "join experiences ex on ex.token_id = p.token_id ";
-            }
-
-            sql += "where (UPPER(p.name) like '" + socialProfile.getName().toUpperCase() + "%') ";
-
-            if (socialProfile.getOccupationsId().getOccupationsTypeId().getId() != 0) {
-                sql += "and o.occupations_type_id = '" + socialProfile.getOccupationsId().getOccupationsTypeId().getId() + "' ";
-            }
-
-            if (experienceTime != 0) {
-                Integer days;
-                if (experienceTime == 6) {
-                    days = 365 / 2;
-                } else {
-                    days = 365 * experienceTime;
-                }
-                sql += "and (select sum(exp.data_end - exp.data_begin) from experiences exp where exp.token_id = p.token_id) > '" + days + "' ";
-            }
-
-            if (education.getNameId().getId() != 0) {
-                sql += "and e.name_id = '" + education.getNameId().getId() + "' ";
-            }
-
-            if (education.getLocationId().getId() != 0) {
-                sql += "and e.location_id = '" + education.getLocationId().getId() + "' ";
-            }
-
-            if (interest.getTypeId().getId() != 0) {
-                sql += "and pi.type_id = '" + interest.getTypeId().getId() + "' ";
-            }
-
-            if (interest.getId() != 0) {
-                sql += "and pspi.interests_id = '" + interest.getId() + "' ";
-            }
-
-            if (socialProfile.getGender() != null) {
-                sql += "and p.gender = '" + socialProfile.getGender() + "' ";
-            }
-            if (socialProfile.getCountryId().getId() != 0) {
-                sql += "and p.country_id = '" + socialProfile.getCountryId().getId() + "' ";
-            }
-            if (socialProfile.getStateId().getId() != 0) {
-                sql += "and p.state_id = '" + socialProfile.getStateId().getId() + "' ";
-            }
-            if (socialProfile.getCityId().getId() != 0) {
-                sql += "and p.city_id = '" + socialProfile.getCityId().getId() + "' ";
-            }
-            if (socialProfile.getOccupationsId().getId() != 0) {
-                sql += "and p.occupations_id = '" + socialProfile.getOccupationsId().getId() + "' ";
-            }
-            if (socialProfile.getScholarityId().getId() != 0) {
-                sql += "and p.scholarity_id = '" + socialProfile.getScholarityId().getId() + "' ";
-            }
-            List<SocialProfile> usersList = (List<SocialProfile>) em.createNativeQuery(sql, SocialProfile.class).getResultList();
-            if (usersList == null) {
-                return new ArrayList<>();
-            }
-            return usersList;
-        } finally {
-            em.close();
-        }
-    }
-    
 }

@@ -49,7 +49,7 @@ public class AuthorizeListener implements PhaseListener{
             pending = (usertemp.getStatus().equals("CP"));
 
             UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
-            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(usertemp.getToken());
+            UserAuthorization authorization = userAuthorizationJpaController.findUserAuthorization(usertemp.getToken());
             if (authorization != null) {
                 firstAccess = (authorization.getStatus().equals("FC"));
                 activeAccess = (authorization.getStatus().equals("AC"));

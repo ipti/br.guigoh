@@ -47,10 +47,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- *
- * @author IPTI
- */
 @SessionScoped
 @ManagedBean(name = "profileBean")
 public class ProfileBean implements Serializable {
@@ -290,7 +286,7 @@ public class ProfileBean implements Serializable {
     public void searchFriendEvent() {
         try {
             friendList = new ArrayList<>();
-            friendList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
+            friendList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
             organizeFriendList(friendList);
         } catch (Exception e) {
         }

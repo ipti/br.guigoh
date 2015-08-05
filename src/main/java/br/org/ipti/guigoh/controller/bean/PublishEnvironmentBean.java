@@ -13,10 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author ipti004
- */
 @ViewScoped
 @ManagedBean(name = "publishEnvironmentBean")
 public class PublishEnvironmentBean implements Serializable{
@@ -26,11 +22,11 @@ public class PublishEnvironmentBean implements Serializable{
     public void init(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadEducationalObjectList();
+            getEducationalObjects();
         }
     }
     
-    private void loadEducationalObjectList(){
+    private void getEducationalObjects(){
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         educationalObjectList = educationalObjectJpaController.getLatestFourActiveEducationalObjects();
     }

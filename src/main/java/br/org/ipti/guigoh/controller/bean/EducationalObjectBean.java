@@ -19,10 +19,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author ipti008
- */
 @ViewScoped
 @ManagedBean(name = "educationalObjectBean")
 public class EducationalObjectBean implements Serializable {
@@ -62,14 +58,14 @@ public class EducationalObjectBean implements Serializable {
         educationalObject = educationalObjectJpaController.findEducationalObject(id);
     }
 
-    private void getAuthorsByEducationalObject(Integer educationalObjectID) {
+    private void getAuthorsByEducationalObject(Integer educationalObjectId) {
         AuthorJpaController authorJpaController = new AuthorJpaController();
-        authorList = authorJpaController.getAuthorsByEducationalObject(educationalObjectID);
+        authorList = authorJpaController.findAuthorsByEducationalObjectId(educationalObjectId);
     }
 
-    private void getMediasByEducationalObject(Integer educationalObjectID) {
+    private void getMediasByEducationalObject(Integer educationalObjectId) {
         EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-        educationalObjectMediaList = educationalObjectMediaJpaController.getMediasByEducationalObject(educationalObjectID);
+        educationalObjectMediaList = educationalObjectMediaJpaController.findMediasByEducationalObjectId(educationalObjectId);
     }
     
     private void initGlobalVariables() {

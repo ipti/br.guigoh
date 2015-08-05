@@ -25,10 +25,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
-/**
- *
- * @author Joe
- */
 @ViewScoped
 @ManagedBean(name = "adminBean")
 public class AdminBean implements Serializable {
@@ -39,7 +35,7 @@ public class AdminBean implements Serializable {
 
     private boolean admin, reviser;
 
-    private UserAuthorization authorization;
+    private UserAuthorization userAuthorization;
     private SocialProfile socialProfile;
     private Translator trans;
 
@@ -75,11 +71,11 @@ public class AdminBean implements Serializable {
     }
 
     private void getUserRole() {
-        authorization = userAuthorizationJpaController.findAuthorization(socialProfile.getTokenId());
-        if (authorization.getRoles().equals(ADMIN)) {
+        userAuthorization = userAuthorizationJpaController.findUserAuthorization(socialProfile.getTokenId());
+        if (userAuthorization.getRoles().equals(ADMIN)) {
             admin = true;
         }
-        if (authorization.getRoles().equals(REVISER)) {
+        if (userAuthorization.getRoles().equals(REVISER)) {
             reviser = true;
         }
     }
@@ -122,7 +118,7 @@ public class AdminBean implements Serializable {
 
     public void acceptUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
-            UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
+            UserAuthorization user = userAuthorizationJpaController.findUserAuthorization(token);
             user.setStatus(FIRST_ACCESS);
             userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro aceito";
@@ -143,7 +139,7 @@ public class AdminBean implements Serializable {
 
     public void declineUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
-            UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
+            UserAuthorization user = userAuthorizationJpaController.findUserAuthorization(token);
             user.setStatus(INACTIVE_ACCESS);
             userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro negado";
@@ -160,7 +156,7 @@ public class AdminBean implements Serializable {
     }
 
     public void deactivateUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
-        UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
+        UserAuthorization user = userAuthorizationJpaController.findUserAuthorization(token);
         user.setStatus(INACTIVE_ACCESS);
         userAuthorizationJpaController.edit(user);
         getActiveUsers();
@@ -168,7 +164,7 @@ public class AdminBean implements Serializable {
     }
 
     public void activateUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
-        UserAuthorization user = userAuthorizationJpaController.findAuthorization(token);
+        UserAuthorization user = userAuthorizationJpaController.findUserAuthorization(token);
         user.setStatus(ACTIVE_ACCESS);
         userAuthorizationJpaController.edit(user);
         getActiveUsers();
@@ -224,11 +220,12 @@ public class AdminBean implements Serializable {
 //        }
 //        getPendingUsers();
 //    }
+    
     private void initGlobalVariables() {
         educationalObjectJpaController = new EducationalObjectJpaController();
         userAuthorizationJpaController = new UserAuthorizationJpaController();
         
-        authorization = new UserAuthorization();
+        userAuthorization = new UserAuthorization();
         socialProfile = new SocialProfile();
         socialProfileList = new ArrayList<>();
         //authorizationList = new ArrayList<>();
@@ -241,12 +238,12 @@ public class AdminBean implements Serializable {
         trans.setLocale(CookieService.getCookie("locale"));
     }
 
-    public UserAuthorization getAuthorization() {
-        return authorization;
+    public UserAuthorization getUserAuthorization() {
+        return userAuthorization;
     }
 
-    public void setAuthorization(UserAuthorization authorization) {
-        this.authorization = authorization;
+    public void setUserAuthorization(UserAuthorization userAuthorization) {
+        this.userAuthorization = userAuthorization;
     }
 
     public SocialProfile getSocialProfile() {

@@ -53,10 +53,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- *
- * @author Joe
- */
 @SessionScoped
 @ManagedBean(name = "wizardProfileBean")
 public class WizardProfileBean implements Serializable {
@@ -605,7 +601,7 @@ public class WizardProfileBean implements Serializable {
         try {
             editWizard(panel);
             UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
-            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(user.getToken());
+            UserAuthorization authorization = userAuthorizationJpaController.findUserAuthorization(user.getToken());
             authorization.setStatus("AC");
             userAuthorizationJpaController.edit(authorization);
             return "profile";

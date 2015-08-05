@@ -198,7 +198,7 @@ public class AuthorJpaController implements Serializable {
         }
     }
     
-    public List<Author> getAuthorsByEducationalObject(Integer educationalObjectId){
+    public List<Author> findAuthorsByEducationalObjectId(Integer educationalObjectId){
         EntityManager em = getEntityManager();
         try{
             List<Author> authorList = (List<Author>) em.createNativeQuery("select a.* from (author a"

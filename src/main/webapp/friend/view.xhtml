@@ -84,7 +84,7 @@
                     <h1>#{localeBean.getString('Digite no campo ao lado o contato que você deseja procurar:')}</h1>
                     <h:form class="contacts_search">
                         <h:inputText id="searchUsers" value="#{friendBean.userInputSearch}" styleClass="contacts_search_users_box" autocomplete="off">
-                            <f:ajax listener="#{friendBean.searchUsersEvent()}" execute="searchUsers" render="users" event="keyup"/>
+                            <f:ajax listener="#{friendBean.searchUserEvent()}" execute="searchUsers" render="users" event="keyup"/>
                         </h:inputText>
                         <input type="button" value="" title="Pesquisar em contatos" class="contacts_button_users_submit" />
                         <h:panelGroup id="users">

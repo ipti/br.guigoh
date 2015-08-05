@@ -58,7 +58,7 @@ public class LoginBean implements Serializable {
         Users registeredUser = usersJpaController.findUsers(user.getUsername());
         user.setPassword(MD5Generator.generate(user.getPassword() + SALT));
         if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CA")) {
-            switch (registeredUser.getAuthorization().getStatus()) {
+            switch (registeredUser.getUserAuthorization().getStatus()) {
                 case "AC":
                     CookieService.addCookie("user", registeredUser.getUsername());
                     CookieService.addCookie("token", registeredUser.getToken());
@@ -113,7 +113,7 @@ public class LoginBean implements Serializable {
         }
     }
 
-    public void loadQuestion() {
+    public void getQuestion() {
         userToRecover = usersJpaController.findUsers(email);
         if (userToRecover != null) {
             loginStatus = "question";
@@ -188,7 +188,7 @@ public class LoginBean implements Serializable {
                     //mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
                     //Modificar http://artecomciencia.guigoh.com/auth/login.xhtml?code=codigo&user=usuario                                
                     //newUserAccount = trans.getWord(newUserAccount);
-                    for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
+                    for (UserAuthorization userAuthorization : userAuthorizationJpaController.findUserAuthorizationsByRole("AD")) {
                     //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
                         //newUserAccount = tempTrans.getWord(newUserAccount);
                         //mailtext = tempTrans.getWord(mailtext);

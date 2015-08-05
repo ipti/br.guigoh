@@ -30,10 +30,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
-/**
- *
- * @author Joe
- */
 @ViewScoped
 @ManagedBean(name = "createTopicBean")
 public class CreateTopicBean implements Serializable {
@@ -111,9 +107,9 @@ public class CreateTopicBean implements Serializable {
                 Tags tagDB = tagsJpaController.findTagByName(t.getName());
                 if (tagDB == null) {
                     tagsJpaController.create(t);
-                    tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
+                    tagsJpaController.createTagsXDiscussionTopic(t, discussionTopic);
                 } else {
-                    tagsJpaController.createTagsDiscussionTopic(tagDB, discussionTopic);
+                    tagsJpaController.createTagsXDiscussionTopic(tagDB, discussionTopic);
                 }
             }
             if (!fileList.isEmpty()) {
@@ -155,7 +151,7 @@ public class CreateTopicBean implements Serializable {
         user.setToken(CookieService.getCookie("token"));
         
         socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-        theme = interestsJpaController.findInterestsByID(themeID);
+        theme = interestsJpaController.findInterestsById(themeID);
     }
 
     public DiscussionTopic getDiscussionTopic() {

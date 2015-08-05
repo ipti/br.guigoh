@@ -13,7 +13,7 @@
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="id" value="#{themeBean.themeID}"/>
+            <f:viewParam name="id" value="#{themeBean.themeId}"/>
             <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
         </f:metadata>
         <h:form>
@@ -31,7 +31,7 @@
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
                         <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
-                        <h:link styleClass="create_topic_container" outcome="/discussion-topic/create.xhtml?id=#{themeBean.themeID}">
+                        <h:link styleClass="create_topic_container" outcome="/discussion-topic/create.xhtml?id=#{themeBean.themeId}">
                             <img id="create_topic_plus" src="/resources/common/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                         </h:link>

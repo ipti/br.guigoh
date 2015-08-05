@@ -86,7 +86,7 @@
                                     <h:messages styleClass="msg"/>
                                     <h:inputText id="question-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{loginBean.email}"></h:inputText>
                                     <br/>
-                                    <h:commandLink styleClass="forward" action="#{loginBean.loadQuestion()}">
+                                    <h:commandLink styleClass="forward" action="#{loginBean.getQuestion()}">
                                         <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
                                         <f:ajax execute="question-recovery" render="@form"/>
                                     </h:commandLink>

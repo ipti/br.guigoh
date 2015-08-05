@@ -34,10 +34,10 @@
                                     <div id="user_box_#{pendingUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{pendingUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{pendingUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Aceitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptUser(pendingUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptUser(pendingUsers.users.userAuthorization.tokenId)}"/>
                                         </h:commandButton>
                                         <h:commandButton value= "#{localeBean.getString('Rejeitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineUser(pendingUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineUser(pendingUsers.users.userAuthorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -55,7 +55,7 @@
                                     <div id="user_box_#{activeUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{activeUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{activeUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Desativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateUser(activeUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateUser(activeUsers.users.userAuthorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -73,7 +73,7 @@
                                     <div id="submitted_user_box_#{inactiveUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{inactiveUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{inactiveUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Ativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateUser(inactiveUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateUser(inactiveUsers.users.userAuthorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>

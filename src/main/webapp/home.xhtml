@@ -59,10 +59,10 @@
                             </ui:repeat>
                         </h:panelGroup>
                     </div>
-                    <h:commandLink id="show_more" value="#{localeBean.getString('Mostrar mais')}" action="#{homeBean.loadMoreEducationalObjects()}" rendered="#{homeBean.existsMoreObjects}">
+                    <h:commandLink id="show_more" value="#{localeBean.getString('Mostrar mais')}" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
                         <f:ajax execute="show_more" render="middle_column"/>
                     </h:commandLink>
-                    <h:outputText id="no_more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreObjects}"/>
+                    <h:outputText id="no_more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
                 </h:panelGroup>
                 <h:panelGroup styleClass="right_column">
                     <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>

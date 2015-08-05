@@ -19,15 +19,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author IPTI
- */
 @ViewScoped
 @ManagedBean(name = "themeBean")
 public class ThemeBean implements Serializable {
 
-    private Integer themeID;
+    private Integer themeId;
     private String generalSearch, tagSelected;
 
     private Interests interest;
@@ -42,36 +38,36 @@ public class ThemeBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadInterest();
-            loadTags();
-            loadDiscussionTopics();
-            loadEducationalObjectsByTheme();
+            getInterests();
+            getTags();
+            getDiscussionTopics();
+            getEducationalObjects();
         }
     }
 
-    private void loadInterest() {
+    private void getInterests() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interest = interestsJpaController.findInterestsByID(themeID);
+        interest = interestsJpaController.findInterestsById(themeId);
     }
 
-    private void loadTags() {
+    private void getTags() {
         TagsJpaController tagsJpaController = new TagsJpaController();
         tagList = tagsJpaController.findTagsEntities();
     }
 
-    private void loadDiscussionTopics() {
-        discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByTheme(themeID);
+    private void getDiscussionTopics() {
+        discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByTheme(themeId);
     }
 
-    private void loadEducationalObjectsByTheme() {
-        educationalObjectList = educationalObjectJpaController.getActiveEducationalObjectsByTheme(themeID);
+    private void getEducationalObjects() {
+        educationalObjectList = educationalObjectJpaController.getActiveEducationalObjectsByTheme(themeId);
     }
 
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
-        discussionTopicList = discussionTopicJpaController.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
-        educationalObjectList = educationalObjectJpaController.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
+        discussionTopicList = discussionTopicJpaController.getDiscussionTopicsByExpression(generalSearch, tagSelected, themeId);
+        educationalObjectList = educationalObjectJpaController.getEducationalObjectsByExpression(generalSearch, tagSelected, themeId);
     }
 
     private void initGlobalVariables() {
@@ -84,12 +80,12 @@ public class ThemeBean implements Serializable {
         tagList = new ArrayList<>();
     }
 
-    public Integer getThemeID() {
-        return themeID;
+    public Integer getThemeId() {
+        return themeId;
     }
 
-    public void setThemeID(Integer themeID) {
-        this.themeID = themeID;
+    public void setThemeId(Integer themeId) {
+        this.themeId = themeId;
     }
 
     public Interests getInterest() {

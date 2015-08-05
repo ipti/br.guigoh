@@ -30,10 +30,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
-/**
- *
- * @author ipti004
- */
 @ViewScoped
 @ManagedBean(name = "submitFormBean")
 public class SubmitFormBean implements Serializable {
@@ -53,7 +49,7 @@ public class SubmitFormBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadInterestThemes();
+            getInterestThemes();
         }
     }
 
@@ -105,7 +101,7 @@ public class SubmitFormBean implements Serializable {
                 tag.setName(tagValue);
                 tagsJpaController.create(tag);
             } else { 
-                tagsJpaController.createTagsEducationalObject(tagDB, educationalObject);
+                tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
             }
         }
         AuthorJpaController authorJpaController = new AuthorJpaController();
@@ -139,7 +135,7 @@ public class SubmitFormBean implements Serializable {
         educationalObjectMediaJpaController.create(educationalObjectMedia);
     }
 
-    private void loadInterestThemes() {
+    private void getInterestThemes() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }

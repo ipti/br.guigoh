@@ -27,10 +27,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
-/**
- *
- * @author IPTI
- */
 @ViewScoped
 @ManagedBean(name = "viewTopicBean")
 public class ViewTopicBean implements Serializable {

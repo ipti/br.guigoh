@@ -536,11 +536,11 @@ public class InterestsJpaController implements Serializable {
         }
     }
 
-    public Interests findInterestsByID(Integer interestsID) {
+    public Interests findInterestsById(Integer interestsId) {
         EntityManager em = getEntityManager();
         try {
             Interests interests = (Interests) em.createNativeQuery("select * from interests "
-                    + "where id = '" + interestsID + "'", Interests.class).getSingleResult();
+                    + "where id = '" + interestsId + "'", Interests.class).getSingleResult();
             if (interests == null) {
                 return new Interests();
             }

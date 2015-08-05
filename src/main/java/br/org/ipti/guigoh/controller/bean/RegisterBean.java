@@ -160,13 +160,13 @@ public class RegisterBean implements Serializable {
         userAuthorizationJpaController.create(authorization);
     }
 
-    public void loadState() {
+    public void getStates() {
         socialProfile.setStateId(null);
         stateList = socialProfile.getCountryId() != null ? stateJpaController.findStatesByCountryId(socialProfile.getCountryId().getId()): new ArrayList<>();
         cityList = new ArrayList<>();
     }
 
-    public void loadCity() {
+    public void getCities() {
         socialProfile.setCityId(null);
         cityList = socialProfile.getStateId() != null ? cityJpaController.findCitiesByStateId(socialProfile.getStateId().getId()) : new ArrayList<>();
     }

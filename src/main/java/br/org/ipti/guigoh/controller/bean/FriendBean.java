@@ -19,10 +19,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-/**
- *
- * @author IPTI
- */
 @ViewScoped
 @ManagedBean(name = "friendBean")
 public class FriendBean implements Serializable {
@@ -69,14 +65,14 @@ public class FriendBean implements Serializable {
 
     public void searchFriendEvent() {
         acceptedList = new ArrayList<>();
-        acceptedList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
+        acceptedList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
         organizeFriendList(acceptedList);
     }
 
-    public void searchUsersEvent() {
+    public void searchUserEvent() {
         socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = friendsJpaController.loadUserSearchList(userInputSearch);
+            socialProfileList = friendsJpaController.findUserSearchList(userInputSearch);
 
         }
     }
