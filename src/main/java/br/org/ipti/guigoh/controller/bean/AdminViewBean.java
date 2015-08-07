@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import org.apache.commons.mail.EmailException;
 
 /**
@@ -30,11 +30,11 @@ import org.apache.commons.mail.EmailException;
  * @author Joe
  */
 @ViewScoped
-@ManagedBean(name = "adminViewBean")
+@Named
 public class AdminViewBean implements Serializable {
 
-    public static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
-    FIRST_ACCESS = "FC", PENDING_ACCESS = "PC", ADMIN = "AD", REVISER = "RE",
+    private static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
+    FIRST_ACCESS = "FC", ADMIN = "AD", REVISER = "RE",
     ACCEPTED = "AC", REJECTED = "RE", DEACTIVATED = "DE";
 
     private boolean admin, reviser;

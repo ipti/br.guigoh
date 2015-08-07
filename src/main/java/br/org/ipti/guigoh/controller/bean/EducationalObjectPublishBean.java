@@ -9,16 +9,16 @@ import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author ipti004
  */
 @ViewScoped
-@ManagedBean(name = "educationalObjectPublishBean")
+@Named
 public class EducationalObjectPublishBean implements Serializable{
     
     private List<EducationalObject> educationalObjectList;

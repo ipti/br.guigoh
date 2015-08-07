@@ -40,10 +40,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author IPTI
  */
 @SessionScoped
-@ManagedBean(name = "profileViewBean")
+@Named
 public class ProfileViewBean implements Serializable {
 
     private Users user;

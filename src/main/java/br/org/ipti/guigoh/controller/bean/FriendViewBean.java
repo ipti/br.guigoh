@@ -15,16 +15,16 @@ import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "friendViewBean")
+@Named
 public class FriendViewBean implements Serializable {
 
     private Users user;

@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,11 +58,11 @@ import javax.servlet.http.HttpServletRequest;
  * @author Joe
  */
 @SessionScoped
-@ManagedBean(name = "profileWizardBean")
+@Named
 public class ProfileWizardBean implements Serializable {
 
-    public static final String BRAZIL = "Brasil";
-    public static final String SERGIPE = "Sergipe";
+    private static final String BRAZIL = "Brasil";
+    private static final String SERGIPE = "Sergipe";
     private SocialProfile socialProfile;
     private Users user;
     private List<Experiences> experiencesList;

@@ -11,14 +11,14 @@ import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
 @SessionScoped
-@ManagedBean(name = "headerBean")
+@Named
 public class HeaderBean implements Serializable {
 
-    public static final String ADMIN = "AD", REVISER = "RE";
+    private static final String ADMIN = "AD", REVISER = "RE";
 
     private SocialProfile socialProfile;
     private UserAuthorization authorization;

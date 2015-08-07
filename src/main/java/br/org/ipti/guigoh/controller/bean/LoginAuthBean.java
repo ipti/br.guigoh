@@ -24,17 +24,17 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import org.apache.commons.mail.EmailException;
 
 @ViewScoped
-@ManagedBean(name = "loginAuthBean")
+@Named
 public class LoginAuthBean implements Serializable {
 
-    public static final String SALT = "8g9erh9gejh";
-    public static final String CONFIRMATION_ACCESS = "CA", DEFAULT = "DE", PENDING_ACCESS = "PC";
+    private static final String SALT = "8g9erh9gejh";
+    private static final String CONFIRMATION_ACCESS = "CA", DEFAULT = "DE", PENDING_ACCESS = "PC";
 
     private Users user, userToRecover;
     private Translator trans;

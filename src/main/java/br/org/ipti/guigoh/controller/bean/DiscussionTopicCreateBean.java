@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.servlet.http.Part;
 
 /**
@@ -35,10 +35,10 @@ import javax.servlet.http.Part;
  * @author Joe
  */
 @ViewScoped
-@ManagedBean(name = "discussionTopicCreateBean")
+@Named
 public class DiscussionTopicCreateBean implements Serializable {
 
-    public static final char ACTIVE = 'A', DISABLED = 'D', WARNING = 'W', TOPIC = 'T', MSG = 'M';
+    private static final char ACTIVE = 'A', DISABLED = 'D', WARNING = 'W', TOPIC = 'T', MSG = 'M';
 
     private DiscussionTopic discussionTopic;
     private Users user;

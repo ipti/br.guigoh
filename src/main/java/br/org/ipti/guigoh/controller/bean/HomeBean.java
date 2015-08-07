@@ -14,12 +14,12 @@ import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 @ViewScoped
-@ManagedBean(name = "homeBean")
+@Named
 public class HomeBean implements Serializable {
 
     private List<Interests> interestThemesList = new ArrayList<>();

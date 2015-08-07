@@ -12,11 +12,11 @@ import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 @ViewScoped
-@ManagedBean(name = "localeBean")
+@Named
 public class LocaleBean implements Serializable {
 
     private Translator trans;
@@ -35,10 +35,10 @@ public class LocaleBean implements Serializable {
 
     public String getString(String string) {
         trans.setLocale(locale);
-        return trans.getWord(string);
+        return trans.getWord(string); 
     }
 
-    public final String changeLocale(String url, String locale) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public String changeLocale(String url, String locale) throws NonexistentEntityException, RollbackFailureException, Exception {
         CookieService.addCookie("locale", locale);
         if (token != null) {
             socialProfile.setLanguageId(languageJpaController.findLanguageByAcronym(locale));

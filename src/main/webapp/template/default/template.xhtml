@@ -17,9 +17,6 @@ and open the template in the editor.
         <!-- END PAGE STYLES -->
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
         <input type="hidden" id="localeAcronym" value="#{localeBean.acronym}"/>
-        <script type="text/javascript">
-            var logged_social_profile_id = #{headerBean.socialProfile.socialProfileId};
-        </script>
         <title><ui:insert name="title"></ui:insert></title>
     </h:head>
     <body>
@@ -37,6 +34,9 @@ and open the template in the editor.
         <!-- BEGIN PAGE SCRIPTS -->
         <script src="/resources/lib/js/jquery-1.11.3.min.js"></script>
         <script src="/resources/lib/js/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript">
+            var logged_social_profile_id = #{headerBean.socialProfile.socialProfileId};
+        </script>
         <script src="/resources/common/js/messenger.js"></script>
         <script src="/resources/common/js/general.js"></script>
         <ui:insert name="scripts"></ui:insert>

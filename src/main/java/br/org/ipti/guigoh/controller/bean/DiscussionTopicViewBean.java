@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.servlet.http.Part;
 
 /**
@@ -32,7 +32,7 @@ import javax.servlet.http.Part;
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "discussionTopicViewBean")
+@Named
 public class DiscussionTopicViewBean implements Serializable {
 
     private static final char TOPIC = 'T', MESSAGE = 'M';
