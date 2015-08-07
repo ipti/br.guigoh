@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:param name="themeName" value="#{themeBean.interest.name}" />
+    <ui:param name="themeName" value="#{themeViewBean.interest.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
@@ -13,30 +13,30 @@
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="id" value="#{themeBean.themeID}"/>
-            <f:event type="preRenderComponent" listener="#{themeBean.init()}"/>
+            <f:viewParam name="id" value="#{themeViewBean.themeID}"/>
+            <f:event type="preRenderComponent" listener="#{themeViewBean.init()}"/>
         </f:metadata>
         <h:form>
             <h:outputText styleClass="theme_title" value="#{localeBean.getString(themeName)}"></h:outputText>
-            <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeBean.tagSelected}">
+            <h:selectOneMenu styleClass="tags" id ="tags" value="#{themeViewBean.tagSelected}">
                 <f:selectItem itemLabel = "Tags" itemValue="" />
-                <f:selectItems value="#{themeBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
-                <f:ajax execute="@this" render="theme_box" listener="#{themeBean.generalSearchEvent()}" event="change"></f:ajax>
+                <f:selectItems value="#{themeViewBean.tagList}" var="tag" itemValue="#{tag.name}" itemLabel="#{tag.name}" />
+                <f:ajax execute="@this" render="theme_box" listener="#{themeViewBean.generalSearchEvent()}" event="change"></f:ajax>
             </h:selectOneMenu>
-            <h:inputText id="search" styleClass="general_search_input" value="#{themeBean.generalSearch}" autocomplete="off" pt:placeholder="#{localeBean.getString('Pesquise tópicos ou objetos educacionais...')}">
-                <f:ajax listener="#{themeBean.generalSearchEvent()}" execute="search" render="theme_box" event="keyup"/>
+            <h:inputText id="search" styleClass="general_search_input" value="#{themeViewBean.generalSearch}" autocomplete="off" pt:placeholder="#{localeBean.getString('Pesquise tópicos ou objetos educacionais...')}">
+                <f:ajax listener="#{themeViewBean.generalSearchEvent()}" execute="search" render="theme_box" event="keyup"/>
             </h:inputText>
             <input type="button" value="" title="Pesquisar em contatos" class="general_search_submit" />
             <h:panelGroup id="theme_box" styleClass="theme_box">	
                 <h:form>
                     <h:panelGroup styleClass="discussion_topics_box">
                         <h:outputText styleClass="discussion_topics_title" value="#{localeBean.getString('Lista de discussão').toUpperCase()}"></h:outputText>
-                        <h:link styleClass="create_topic_container" outcome="/discussion-topic/create.xhtml?id=#{themeBean.themeID}">
+                        <h:link styleClass="create_topic_container" outcome="/discussion-topic/create.xhtml?id=#{themeViewBean.themeID}">
                             <img id="create_topic_plus" src="/resources/common/images/green-plus.png"/>
                             <span class="create_topic_label">#{localeBean.getString('Novo tópico')}</span>
                         </h:link>
                         <h:panelGroup styleClass="discussion_topics">
-                            <ui:repeat value="#{themeBean.discussionTopicList}" var="discussionTopic">
+                            <ui:repeat value="#{themeViewBean.discussionTopicList}" var="discussionTopic">
                                 <h:panelGroup styleClass="discussion_topic">
                                     <h:link styleClass="discussion_topic_link" outcome="/discussion-topic/view.xhtml?id=#{discussionTopic.id}">
                                         <h:outputText styleClass="discussion_topic_user_photo" style="background:url('#{discussionTopic.socialProfileId.photo}') no-repeat;background-size:77px"></h:outputText>
@@ -67,7 +67,7 @@
                             <span class="publish_new_object_label">#{localeBean.getString('Publique o seu Objeto Educacional')}</span>
                         </a>
                         <h:panelGroup styleClass="publication_objects">
-                            <ui:repeat value="#{themeBean.educationalObjectList}" var="educationalObject">
+                            <ui:repeat value="#{themeViewBean.educationalObjectList}" var="educationalObject">
                                 <h:panelGroup styleClass="educational_object">
                                     <h:link outcome="/educational-object/view.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 77px"/>
                                     <h:outputText styleClass="clock_icon"/>

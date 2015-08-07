@@ -58,8 +58,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author Joe
  */
 @SessionScoped
-@ManagedBean(name = "wizardProfileBean")
-public class WizardProfileBean implements Serializable {
+@ManagedBean(name = "profileWizardBean")
+public class ProfileWizardBean implements Serializable {
 
     public static final String BRAZIL = "Brasil";
     public static final String SERGIPE = "Sergipe";
@@ -1103,7 +1103,7 @@ public class WizardProfileBean implements Serializable {
     }
 
     public static void setAutoCompleteThemes(String[] autoCompleteThemes) {
-        WizardProfileBean.autoCompleteThemes = autoCompleteThemes;
+        ProfileWizardBean.autoCompleteThemes = autoCompleteThemes;
     }
 
     public String getBooks() {

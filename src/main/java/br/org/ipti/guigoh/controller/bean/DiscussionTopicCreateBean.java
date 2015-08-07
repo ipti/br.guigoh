@@ -35,8 +35,8 @@ import javax.servlet.http.Part;
  * @author Joe
  */
 @ViewScoped
-@ManagedBean(name = "createTopicBean")
-public class CreateTopicBean implements Serializable {
+@ManagedBean(name = "discussionTopicCreateBean")
+public class DiscussionTopicCreateBean implements Serializable {
 
     public static final char ACTIVE = 'A', DISABLED = 'D', WARNING = 'W', TOPIC = 'T', MSG = 'M';
 

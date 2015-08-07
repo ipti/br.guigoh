@@ -24,8 +24,8 @@ import javax.faces.context.FacesContext;
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "themeBean")
-public class ThemeBean implements Serializable {
+@ManagedBean(name = "themeViewBean")
+public class ThemeViewBean implements Serializable {
 
     private Integer themeID;
     private String generalSearch, tagSelected;

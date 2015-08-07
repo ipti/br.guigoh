@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:param name="theme" value="#{createTopicBean.theme.name}"/>
+    <ui:param name="theme" value="#{discussionTopicCreateBean.theme.name}"/>
     <ui:define name="title">#{localeBean.getString(theme)} - #{localeBean.getString('Novo tópico')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
@@ -13,8 +13,8 @@
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="id" value="#{createTopicBean.themeID}"/>
-            <f:event type="preRenderComponent" listener="#{createTopicBean.init()}"/>
+            <f:viewParam name="id" value="#{discussionTopicCreateBean.themeID}"/>
+            <f:event type="preRenderComponent" listener="#{discussionTopicCreateBean.init()}"/>
         </f:metadata>
         <h:form prependId="false" id="form" enctype="multipart/form-data" acceptcharset="UTF-8">
             <h:panelGroup>
@@ -22,41 +22,41 @@
                 <h:panelGroup styleClass="create_topic_box">
                     <h:panelGroup styleClass="bread_path">
                         <h:link outcome="/home.xhtml">Home</h:link> > 
-                        <h:link outcome="/theme/view.xhtml?id=#{createTopicBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
+                        <h:link outcome="/theme/view.xhtml?id=#{discussionTopicCreateBean.theme.id}">#{localeBean.getString('Temas de interesse')}: #{localeBean.getString(theme)}</h:link> > 
                         <h:outputText value="#{localeBean.getString('Novo tópico')}"></h:outputText>
                     </h:panelGroup>
-                    <h:link outcome="/profile/view.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{createTopicBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
-                    <h:link outcome="/profile/view.xhtml?id=#{createTopicBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{createTopicBean.socialProfile.name}"></h:link>
+                    <h:link outcome="/profile/view.xhtml?id=#{discussionTopicCreateBean.socialProfile.socialProfileId}" styleClass="topic_creator_photo" style="background:url('#{discussionTopicCreateBean.socialProfile.photo}') no-repeat;background-size:77px"></h:link>
+                    <h:link outcome="/profile/view.xhtml?id=#{discussionTopicCreateBean.socialProfile.socialProfileId}" styleClass="topic_creator_name" value="#{discussionTopicCreateBean.socialProfile.name}"></h:link>
                     <h:outputText styleClass="topic_title_label" value="#{localeBean.getString('Assunto')}:"></h:outputText>
                     <h:outputText styleClass="new_title_warning" value="Campo obrigatório"/>
-                    <h:inputText styleClass="new_title" value="#{createTopicBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Um título que descreva o assunto tratado no seu tópico...')}"></h:inputText>
+                    <h:inputText styleClass="new_title" value="#{discussionTopicCreateBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Um título que descreva o assunto tratado no seu tópico...')}"></h:inputText>
                     <h:outputText styleClass="new_body_warning" value="Campo obrigatório"/>
-                    <h:inputTextarea styleClass="new_body" value="#{createTopicBean.discussionTopic.body}"></h:inputTextarea>
+                    <h:inputTextarea styleClass="new_body" value="#{discussionTopicCreateBean.discussionTopic.body}"></h:inputTextarea>
                     <h:panelGroup styleClass="attach_button"/>
-                    <h:inputFile id="file" styleClass="file" value="#{createTopicBean.fileMedia}">
-                        <f:ajax execute="@this" listener="#{createTopicBean.addMedia()}" render="files_box"/>
+                    <h:inputFile id="file" styleClass="file" value="#{discussionTopicCreateBean.fileMedia}">
+                        <f:ajax execute="@this" listener="#{discussionTopicCreateBean.addMedia()}" render="files_box"/>
                     </h:inputFile>
                     <h:panelGroup id="tag_box" styleClass="tag_box">
                         <h:panelGroup styleClass="tags_selected">
-                            <ui:repeat value="#{createTopicBean.tags}" var="tag">
+                            <ui:repeat value="#{discussionTopicCreateBean.tags}" var="tag">
                                 <h:outputText styleClass="tag_selected" value="##{tag.name}"></h:outputText>
                             </ui:repeat>
                         </h:panelGroup>
                         <h:outputText styleClass="tags_label" value="Tags:"></h:outputText>
-                        <h:inputText id="tag_input" styleClass="tag_input" value="#{createTopicBean.tagInput}" pt:placeholder="#"/>
+                        <h:inputText id="tag_input" styleClass="tag_input" value="#{discussionTopicCreateBean.tagInput}" pt:placeholder="#"/>
                         <h:commandButton styleClass="tag_submit" value="  ">
-                            <f:ajax execute="tag_input" listener="#{createTopicBean.addTag()}" render="tag_box"></f:ajax>
+                            <f:ajax execute="tag_input" listener="#{discussionTopicCreateBean.addTag()}" render="tag_box"></f:ajax>
                         </h:commandButton>
                     </h:panelGroup>
                     <h:panelGroup id="files_box" styleClass="files_box">
-                        <ui:repeat value="#{createTopicBean.fileList}" var="file">
+                        <ui:repeat value="#{discussionTopicCreateBean.fileList}" var="file">
                             <h:outputText styleClass="file_attach_image"></h:outputText>
                             <h:panelGroup styleClass="attached_file_box">
                                 <h:outputText value="Anexo: "></h:outputText>
                                 <h:outputText styleClass="reply_attached_file" value="#{file.submittedFileName}"></h:outputText>
                             </h:panelGroup>
                             <h:commandLink styleClass="remove_media">
-                                <f:ajax execute="@this" listener="#{createTopicBean.removeMedia(file)}" render=":form:files_box"/>
+                                <f:ajax execute="@this" listener="#{discussionTopicCreateBean.removeMedia(file)}" render=":form:files_box"/>
                             </h:commandLink>
                         </ui:repeat>
                     </h:panelGroup>
@@ -64,10 +64,10 @@
                         <img id="post_topic_icon" src="/resources/common/images/green-plus.png"/>
                         <span class="post_topic_label">#{localeBean.getString('Postar')}</span>
                     </h:panelGroup>
-                    <h:commandLink styleClass="submit" action="#{createTopicBean.createTopic()}">
+                    <h:commandLink styleClass="submit" action="#{discussionTopicCreateBean.createTopic()}">
                         <f:ajax execute="@form" />
                     </h:commandLink>
-                    <h:link styleClass="back_button_container" outcome="/theme/view.xhtml?id=#{createTopicBean.theme.id}"> 
+                    <h:link styleClass="back_button_container" outcome="/theme/view.xhtml?id=#{discussionTopicCreateBean.theme.id}"> 
                         <img id="back_button_icon" src="/resources/common/images/back.png"/>
                         <span class="back_button_label">#{localeBean.getString('Voltar')}</span>
                     </h:link>

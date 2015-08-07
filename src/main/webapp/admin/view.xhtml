@@ -7,37 +7,37 @@
     <ui:define name="title">#{localeBean.getString("Autorização")}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/admin-authorization.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/admin-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:event type="preRenderComponent" listener="#{adminBean.init()}"/>
+            <f:event type="preRenderComponent" listener="#{adminViewBean.init()}"/>
         </f:metadata>
         <h:form>
             <div id="content_box" >
                 <div id="admin_box">
-                    <h:panelGroup id="permission_box" rendered="#{adminBean.admin}">
+                    <h:panelGroup id="permission_box" rendered="#{adminViewBean.admin}">
 
                         <!-- CODIGO BACKUP EM AUTHXHTML-PENDINGUSERS.TXT -->
 
                         <h:outputText styleClass="authorization_title" value="#{localeBean.getString('Permissões')}"/>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="#{localeBean.getString('Cadastros pendentes')} (#{adminBean.pendingUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros pendentes')} (#{adminViewBean.pendingUserList.size()})"/>
                                 <span id="expand_pending_users" class="expand">[+]</span>
                                 <span id="collapse_pending_users" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="pending_users_box">
-                                <ui:repeat value="#{adminBean.pendingUserList}" var="pendingUsers">
+                                <ui:repeat value="#{adminViewBean.pendingUserList}" var="pendingUsers">
                                     <ui:param value="#{pendingUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="user_box_#{pendingUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{pendingUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{pendingUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Aceitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptUser(pendingUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.acceptUser(pendingUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                         <h:commandButton value= "#{localeBean.getString('Rejeitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineUser(pendingUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.declineUser(pendingUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -45,17 +45,17 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="#{localeBean.getString('Cadastros ativos')} (#{adminBean.activeUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros ativos')} (#{adminViewBean.activeUserList.size()})"/>
                                 <span id="expand_active_users" class="expand">[+]</span>
                                 <span id="collapse_active_users" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="active_users_box">
-                                <ui:repeat value="#{adminBean.activeUserList}" var="activeUsers">
+                                <ui:repeat value="#{adminViewBean.activeUserList}" var="activeUsers">
                                     <ui:param value="#{activeUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="user_box_#{activeUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{activeUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{activeUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Desativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateUser(activeUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.deactivateUser(activeUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -63,17 +63,17 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_users_panel">
                             <h:panelGroup styleClass="authorization_users">
-                                <h:outputText value="#{localeBean.getString('Cadastros inativos')} (#{adminBean.inactiveUserList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Cadastros inativos')} (#{adminViewBean.inactiveUserList.size()})"/>
                                 <span id="expand_inactive_users" class="expand">[+]</span>
                                 <span id="collapse_inactive_users" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="inactive_users_box">
-                                <ui:repeat value="#{adminBean.inactiveUserList}" var="inactiveUsers">
+                                <ui:repeat value="#{adminViewBean.inactiveUserList}" var="inactiveUsers">
                                     <ui:param value="#{inactiveUsers.users.socialProfile.socialProfileId}" name="id"/>
                                     <div id="submitted_user_box_#{inactiveUsers.users.socialProfile.socialProfileId}" class="user_box">
                                         <h:link outcome="/profile/view.xhtml?id=#{inactiveUsers.users.socialProfile.socialProfileId}" styleClass="user" value="#{inactiveUsers.users.socialProfile.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Ativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateUser(inactiveUsers.users.authorization.tokenId)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.activateUser(inactiveUsers.users.authorization.tokenId)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -81,20 +81,20 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="#{localeBean.getString('Objetos Educacionais pendentes')} (#{adminBean.pendingEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais pendentes')} (#{adminViewBean.pendingEducationalObjectList.size()})"/>
                                 <span id="expand_pending_objects" class="expand">[+]</span>
                                 <span id="collapse_pending_objects" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="pending_objects_box">
-                                <ui:repeat value="#{adminBean.pendingEducationalObjectList}" var="pendingEducationalObject">
+                                <ui:repeat value="#{adminViewBean.pendingEducationalObjectList}" var="pendingEducationalObject">
                                     <ui:param value="#{pendingEducationalObject.id}" name="id"/>
                                     <div id="submitted_object_box_#{pendingEducationalObject.id}" class="object_box">
                                         <h:link outcome="/educational-object/view.xhtml?id=#{pendingEducationalObject.id}" styleClass="submitted_object" value="#{pendingEducationalObject.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Aceitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.acceptEducationalObject(id)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.acceptEducationalObject(id)}"/>
                                         </h:commandButton>
                                         <h:commandButton value="#{localeBean.getString('Rejeitar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.declineEducationalObject(id)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.declineEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -102,17 +102,17 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="#{localeBean.getString('Objetos Educacionais ativos')} (#{adminBean.activeEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais ativos')} (#{adminViewBean.activeEducationalObjectList.size()})"/>
                                 <span id="expand_active_objects" class="expand">[+]</span>
                                 <span id="collapse_active_objects" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="active_objects_box">
-                                <ui:repeat value="#{adminBean.activeEducationalObjectList}" var="activeEducationalObject">
+                                <ui:repeat value="#{adminViewBean.activeEducationalObjectList}" var="activeEducationalObject">
                                     <ui:param value="#{activeEducationalObject.id}" name="id"/>
                                     <div id="active_object_box_#{activeEducationalObject.id}" class="object_box">
                                         <h:link outcome="/educational-object/view.xhtml?id=#{activeEducationalObject.id}" styleClass="submitted_object" value="#{activeEducationalObject.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Desativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.deactivateEducationalObject(id)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.deactivateEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -120,17 +120,17 @@
                         </h:panelGroup>
                         <h:panelGroup styleClass="authorization_objects_panel">
                             <h:panelGroup styleClass="authorization_objects">
-                                <h:outputText value="#{localeBean.getString('Objetos Educacionais inativos')} (#{adminBean.inactiveEducationalObjectList.size()})"/>
+                                <h:outputText value="#{localeBean.getString('Objetos Educacionais inativos')} (#{adminViewBean.inactiveEducationalObjectList.size()})"/>
                                 <span id="expand_inactive_objects" class="expand">[+]</span>
                                 <span id="collapse_inactive_objects" class="collapse">[-]</span>
                             </h:panelGroup>
                             <div id="inactive_objects_box">
-                                <ui:repeat value="#{adminBean.inactiveEducationalObjectList}" var="inactiveEducationalObject">
+                                <ui:repeat value="#{adminViewBean.inactiveEducationalObjectList}" var="inactiveEducationalObject">
                                     <ui:param value="#{inactiveEducationalObject.id}" name="id"/>
                                     <div id="inactive_object_box_#{inactiveEducationalObject.id}" class="object_box">
                                         <h:link outcome="/educational-object/view.xhtml?id=#{inactiveEducationalObject.id}" styleClass="submitted_object" value="#{inactiveEducationalObject.name}"/>
                                         <h:commandButton value="#{localeBean.getString('Ativar')}">
-                                            <f:ajax event="click" render="@form" listener="#{adminBean.activateEducationalObject(id)}"/>
+                                            <f:ajax event="click" render="@form" listener="#{adminViewBean.activateEducationalObject(id)}"/>
                                         </h:commandButton>
                                     </div>
                                 </ui:repeat>
@@ -144,7 +144,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/admin-authorization.js"></script>
+        <script type="text/javascript" src="/resources/common/js/admin-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

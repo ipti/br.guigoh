@@ -21,7 +21,7 @@
                             <li ><span></span><a href="/">Reportar Erros</a></li>
                             <li ><span></span><a href="/">Sobre</a></li>
                             <li ><span></span><a href="/">Ajuda</a></li>-->
-                            <li class="first"><h:commandLink action="/admin/authorization.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></li>
+                            <li class="first"><h:commandLink action="/admin/view.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></li>
                             <li class="first"><h:commandLink action="#{headerBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></li>
                         </h:panelGroup>
                         <ui:param name="url" value="#{request.servletPath}"/>

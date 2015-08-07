@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')} - #{educationalObjectBean.educationalObject.name}</ui:define>
+    <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')} - #{educationalObjectViewBean.educationalObject.name}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
         <link rel="stylesheet" href="../resources/common/css/educational-object-view.css"/>
@@ -12,22 +12,22 @@
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:viewParam name="id" value="#{educationalObjectBean.educationalObjectID}"/>
-            <f:event type="preRenderComponent" listener="#{educationalObjectBean.init()}"/>
+            <f:viewParam name="id" value="#{educationalObjectViewBean.educationalObjectID}"/>
+            <f:event type="preRenderComponent" listener="#{educationalObjectViewBean.init()}"/>
         </f:metadata>
         <h:form>
             <h:outputText styleClass="educational-object-title" value="#{localeBean.getString('Objeto Educacional')}"/>
             <div class="educational-object-box">
                 <div class="cnt-right">
                     <div id="wrap-right">
-                        <ui:repeat value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaPreview">
+                        <ui:repeat value="#{educationalObjectViewBean.educationalObjectMediaList}" var="mediaPreview">
                             <h:outputText class="media-url" value="#{mediaPreview.media}"/>
                         </ui:repeat>
                     </div>
                 </div>
                 <div class="cnt-left">
                     <div id="wrap-left">
-                        <h3 id="educational-object-name">#{educationalObjectBean.educationalObject.name}</h3>
+                        <h3 id="educational-object-name">#{educationalObjectViewBean.educationalObject.name}</h3>
                         <div id="educational-object">
                             <h:outputText styleClass="recommend" value="#{localeBean.getString('Recomendar este Objeto Educacional')}"></h:outputText>
                             <div id="recommend-box">
@@ -41,34 +41,34 @@
                             </ul>
                         </div>
                         <h:panelGroup styleClass="educational-object-info">
-                            <p><strong>#{localeBean.getString('Tags: ')}</strong><ui:repeat value="#{educationalObjectBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
-                            <ui:param name="educationalObjectTheme" value="#{educationalObjectBean.educationalObject.themeId.name}"/>
-                            <p><strong>#{localeBean.getString('Tema: ')}</strong><h:link id="educational-object-theme" outcome="/theme/theme.xhtml?id=#{educationalObjectBean.educationalObject.themeId.id}" value="#{localeBean.getString(educationalObjectTheme)}"/></p>
-                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><h:link id="educational-object-publisher" outcome="/profile/view.xhtml?id=#{educationalObjectBean.educationalObject.socialProfileId.socialProfileId}" value="#{educationalObjectBean.educationalObject.socialProfileId.name}"/></p>    
+                            <p><strong>#{localeBean.getString('Tags: ')}</strong><ui:repeat value="#{educationalObjectViewBean.educationalObject.tagsCollection}" var="tag"><h:outputText value="##{tag.name} "></h:outputText></ui:repeat></p>
+                            <ui:param name="educationalObjectTheme" value="#{educationalObjectViewBean.educationalObject.themeId.name}"/>
+                            <p><strong>#{localeBean.getString('Tema: ')}</strong><h:link id="educational-object-theme" outcome="/theme/theme.xhtml?id=#{educationalObjectViewBean.educationalObject.themeId.id}" value="#{localeBean.getString(educationalObjectTheme)}"/></p>
+                            <p><strong>#{localeBean.getString('Publicado por: ')}</strong><h:link id="educational-object-publisher" outcome="/profile/view.xhtml?id=#{educationalObjectViewBean.educationalObject.socialProfileId.socialProfileId}" value="#{educationalObjectViewBean.educationalObject.socialProfileId.name}"/></p>    
                         </h:panelGroup>
                         <div id="download-box">
                             <span class="title">#{localeBean.getString('Lista de arquivos')}</span>
                             <br/><span id="preview-info">#{localeBean.getString('(Para pré-visualizar um arquivo, clique sobre seu nome.)')}</span>
                             <h:dataTable styleClass="media-table" rowClasses="media-table-row"
-                                         columnClasses=" , media-size-column, media-download-column" value="#{educationalObjectBean.educationalObjectMediaList}" var="mediaInfo">
+                                         columnClasses=" , media-size-column, media-download-column" value="#{educationalObjectViewBean.educationalObjectMediaList}" var="mediaInfo">
                                 <h:column headerClass="media-name-header">
                                     <f:facet name="header">#{localeBean.getString('NomeArquivo')}</f:facet>
                                     <h:outputLabel styleClass="media-name" value="#{mediaInfo.name}.#{mediaInfo.type}"/>
                                 </h:column>
                                 <!--                                <h:column headerClass="media-size-header">
                                                                     <f:facet name="header">HT{localeBean.getString('Tamanho')}</f:facet>
-                                                                    <h:outputText value="HT{educationalObjectBean.getMediaSize(mediaInfo.size)}"/>
+                                                                    <h:outputText value="HT{educationalObjectViewBean.getMediaSize(mediaInfo.size)}"/>
                                                                 </h:column>-->
                                 <!--                                <h:column>
                                                                     <f:facet name="header"/>
-                                                                    <h:commandLink styleClass="media-download" action="HT{educationalObjectBean.downloadMedia(mediaInfo.media, mediaInfo.type)}" value="HT{localeBean.getString('Download')}"/>
+                                                                    <h:commandLink styleClass="media-download" action="HT{educationalObjectViewBean.downloadMedia(mediaInfo.media, mediaInfo.type)}" value="HT{localeBean.getString('Download')}"/>
                                                                 </h:column>-->
                             </h:dataTable>
                         </div>
                         <div id="more-info">
                             <h5 class="title">#{localeBean.getString('Sobre os Autores')}</h5>
                             <div id="authors-list">
-                                <ui:repeat value="#{educationalObjectBean.authorList}" var="author">
+                                <ui:repeat value="#{educationalObjectViewBean.authorList}" var="author">
                                     <div class="author-box">
                                         <p><strong>#{localeBean.getString('Nome: ')}</strong><span>#{author.name}</span></p>
                                         <p><strong>#{localeBean.getString('Email: ')}</strong><span>#{author.email}</span></p>

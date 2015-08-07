@@ -35,8 +35,8 @@ import javax.servlet.http.Part;
  * @author ipti004
  */
 @ViewScoped
-@ManagedBean(name = "submitFormBean")
-public class SubmitFormBean implements Serializable {
+@ManagedBean(name = "educationalObjectSubmitBean")
+public class EducationalObjectSubmitBean implements Serializable {
 
     private EducationalObject educationalObject;
 

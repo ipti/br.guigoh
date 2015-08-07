@@ -24,8 +24,8 @@ import javax.faces.context.FacesContext;
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "friendBean")
-public class FriendBean implements Serializable {
+@ManagedBean(name = "friendViewBean")
+public class FriendViewBean implements Serializable {
 
     private Users user;
     private SocialProfile userSocialProfile;

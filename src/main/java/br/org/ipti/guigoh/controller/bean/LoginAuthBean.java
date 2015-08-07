@@ -30,8 +30,8 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.mail.EmailException;
 
 @ViewScoped
-@ManagedBean(name = "loginBean")
-public class LoginBean implements Serializable {
+@ManagedBean(name = "loginAuthBean")
+public class LoginAuthBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
     public static final String CONFIRMATION_ACCESS = "CA", DEFAULT = "DE", PENDING_ACCESS = "PC";
@@ -96,7 +96,7 @@ public class LoginBean implements Serializable {
                 emailactivation.setCode(MD5Generator.generate(userToRecover.getUsername() + RandomGenerator.generate(5)));
                 SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                 SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(userToRecover.getToken());
-                String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
+                String mailText = trans.getWord("Olá, ") + socialProfile.getName().split(" ")[0] + trans.getWord("!Recebemos uma solicitação de recuperação de conta através desse e-mail. Se não foi você quem solicitou, ignore esta mensagem. Para concluir o processo, será preciso que você clique no link abaixo. Após ser redirecionado, altere sua senha imediatamente.") + "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + userToRecover.getUsername();
                 MailService.sendMail(mailText, trans.getWord("Recuperação de conta"), userToRecover.getUsername());
                 if (emailActivationJpaController.findEmailActivationByUsername(userToRecover.getUsername()).getUsername() != null) {
                     emailActivationJpaController.edit(emailactivation);
@@ -184,9 +184,9 @@ public class LoginBean implements Serializable {
                     String newUserAccount = "Novo cadastro de usuário";
                     String mailtext = "Um novo usuário se cadastrou no Guigoh e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                 //mailtext = trans.getWord(mailtext);
-                    //mailtext += "http://rts.guigoh.com:8080/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                    //mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
-                    //Modificar http://artecomciencia.guigoh.com/auth/login.xhtml?code=codigo&user=usuario                                
+                    //mailtext += "http://rts.guigoh.com:8080/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                    //mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();
+                    //Modificar http://artecomciencia.guigoh.com/login/auth.xhtml?code=codigo&user=usuario                                
                     //newUserAccount = trans.getWord(newUserAccount);
                     for (UserAuthorization userAuthorization : userAuthorizationJpaController.findAuthorizationsByRole("AD")) {
                     //tempTrans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());

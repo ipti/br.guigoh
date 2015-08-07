@@ -52,8 +52,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author IPTI
  */
 @SessionScoped
-@ManagedBean(name = "profileBean")
-public class ProfileBean implements Serializable {
+@ManagedBean(name = "profileViewBean")
+public class ProfileViewBean implements Serializable {
 
     private Users user;
     private SocialProfile socialProfile;
@@ -83,7 +83,7 @@ public class ProfileBean implements Serializable {
     private Boolean curriculumEdit3;
     private Boolean curriculumEdit4;
     private Boolean edit;
-    private WizardProfileBean wizardProfileBean;
+    private ProfileWizardBean wizardProfileBean;
     private Translator trans;
     private EducationsJpaController educationsJpaController;
     private ExperiencesJpaController experiencesJpaController;
@@ -101,7 +101,7 @@ public class ProfileBean implements Serializable {
             interestsTypeJpaController = new InterestsTypeJpaController();
             socialProfileJpaController = new SocialProfileJpaController();
             user = new Users();
-            wizardProfileBean = new WizardProfileBean();
+            wizardProfileBean = new ProfileWizardBean();
             wizardProfileBean.init();
             socialProfile = new SocialProfile();
             trans = new Translator();
@@ -757,11 +757,11 @@ public class ProfileBean implements Serializable {
         this.curriculumEdit4 = curriculumEdit4;
     }
 
-    public WizardProfileBean getWizardProfileBean() {
+    public ProfileWizardBean getWizardProfileBean() {
         return wizardProfileBean;
     }
 
-    public void setWizardProfileBean(WizardProfileBean wizardProfileBean) {
+    public void setWizardProfileBean(ProfileWizardBean wizardProfileBean) {
         this.wizardProfileBean = wizardProfileBean;
     }
 }

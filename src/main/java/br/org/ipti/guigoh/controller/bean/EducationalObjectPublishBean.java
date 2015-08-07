@@ -18,8 +18,8 @@ import javax.faces.context.FacesContext;
  * @author ipti004
  */
 @ViewScoped
-@ManagedBean(name = "publishEnvironmentBean")
-public class PublishEnvironmentBean implements Serializable{
+@ManagedBean(name = "educationalObjectPublishBean")
+public class EducationalObjectPublishBean implements Serializable{
     
     private List<EducationalObject> educationalObjectList;
     

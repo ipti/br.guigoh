@@ -44,8 +44,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 @SessionScoped
-@ManagedBean(name = "registerBean")
-public class RegisterBean implements Serializable {
+@ManagedBean(name = "loginCreateBean")
+public class LoginCreateBean implements Serializable {
 
     public static final String SALT = "8g9erh9gejh";
     public static final String CONFIRMATION_PENDING = "CP", DEFAULT = "DE",
@@ -105,8 +105,8 @@ public class RegisterBean implements Serializable {
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Guigoh.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
                             trans.setLocale(languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym());
                             mailtext = trans.getWord(mailtext);
-                            mailtext += "http://artecomciencia.guigoh.com/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-//                            mailtext += "http://rts.guigoh.com:8080/auth/login.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+                            mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
+//                            mailtext += "http://rts.guigoh.com:8080/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));

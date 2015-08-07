@@ -32,8 +32,8 @@ import javax.servlet.http.Part;
  * @author IPTI
  */
 @ViewScoped
-@ManagedBean(name = "viewTopicBean")
-public class ViewTopicBean implements Serializable {
+@ManagedBean(name = "discussionTopicViewBean")
+public class DiscussionTopicViewBean implements Serializable {
 
     private static final char TOPIC = 'T', MESSAGE = 'M';
 

@@ -24,8 +24,8 @@ import javax.faces.context.FacesContext;
  * @author ipti008
  */
 @ViewScoped
-@ManagedBean(name = "educationalObjectBean")
-public class EducationalObjectBean implements Serializable {
+@ManagedBean(name = "educationalObjectViewBean")
+public class EducationalObjectViewBean implements Serializable {
 
     private int educationalObjectID;
 

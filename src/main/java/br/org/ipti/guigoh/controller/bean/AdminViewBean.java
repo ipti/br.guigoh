@@ -30,8 +30,8 @@ import org.apache.commons.mail.EmailException;
  * @author Joe
  */
 @ViewScoped
-@ManagedBean(name = "adminBean")
-public class AdminBean implements Serializable {
+@ManagedBean(name = "adminViewBean")
+public class AdminViewBean implements Serializable {
 
     public static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
     FIRST_ACCESS = "FC", PENDING_ACCESS = "PC", ADMIN = "AD", REVISER = "RE",
@@ -131,8 +131,8 @@ public class AdminBean implements Serializable {
             trans.setLocale(user.getUsers().getSocialProfile().getLanguageId().getAcronym());
             mailSubject = trans.getWord(mailSubject);
             mailText = trans.getWord(mailText);
-            mailText += "http://artecomciencia.guigoh.com/auth/login.xhtml";
-//            mailText += "http://rts.guigoh.com:8080/auth/login.xhtml";
+            mailText += "http://artecomciencia.guigoh.com/login/auth.xhtml";
+//            mailText += "http://rts.guigoh.com:8080/login/auth.xhtml";
             MailService.sendMail(mailText, mailSubject, user.getUsers().getUsername());
             trans.setLocale(CookieService.getCookie("locale"));
             getActiveUsers();

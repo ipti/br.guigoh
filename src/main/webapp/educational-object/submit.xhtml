@@ -13,7 +13,7 @@
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
-            <f:event type="preRenderComponent" listener="#{submitFormBean.init()}"/>
+            <f:event type="preRenderComponent" listener="#{educationalObjectSubmitBean.init()}"/>
         </f:metadata>
         <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
             <h:panelGroup styleClass="register_box">
@@ -47,17 +47,17 @@
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Qual o nome do seu Objeto Educacional?')}"/>
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 40 caracteres.')}"/>
                         <h:outputText styleClass="educational_object_name_warning" value="#{localeBean.getString('O campo NOME não pode ser vazio.')}"/>
-                        <h:inputText styleClass="educational_object_name" maxlength="40" value="#{submitFormBean.educationalObject.name}"/>
+                        <h:inputText styleClass="educational_object_name" maxlength="40" value="#{educationalObjectSubmitBean.educationalObject.name}"/>
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Qual é o tema principal tratado pelo Objeto Educacional?')}"/>
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Apenas uma opção.')}"/>
                         <h:outputText styleClass="educational_object_theme_warning" value="#{localeBean.getString('Selecione ao menos uma opção.')}"/>
-                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" converter="entityConverter" value="#{submitFormBean.educationalObject.themeId}">
-                            <f:selectItems  id="theme" value="#{submitFormBean.interestThemesList}" var="theme" itemLabel="#{localeBean.getString(theme.name)}" itemValue="#{theme}"/>
+                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" converter="entityConverter" value="#{educationalObjectSubmitBean.educationalObject.themeId}">
+                            <f:selectItems  id="theme" value="#{educationalObjectSubmitBean.interestThemesList}" var="theme" itemLabel="#{localeBean.getString(theme.name)}" itemValue="#{theme}"/>
                         </h:selectOneRadio>
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Palavras chave')}"/>
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Digite as palavras separadas por vírgula. Limite de 7 palavras-chave.')}"/>
                         <h:outputText styleClass="educational_object_tags_warning" value="#{localeBean.getString('Digite ao menos uma palavra chave.')}"/>
-                        <h:inputText styleClass="educational_object_tags" value="#{submitFormBean.tags}"/>
+                        <h:inputText styleClass="educational_object_tags" value="#{educationalObjectSubmitBean.tags}"/>
                     </h:panelGroup>
                     <h:panelGroup id="form3" styleClass="form3_body">
                         <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Autores')}"/>
@@ -69,23 +69,23 @@
                         <h:outputText styleClass="educational_object_author_warning" value="#{localeBean.getString('Insira ao menos 1 autor.')}"/>
                         <h:panelGrid id="author_add" columns="2" styleClass="educational_object_author">
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Nome')}:"/>
-                            <h:inputText styleClass="educational_object_author_name" value="#{submitFormBean.author.name}"/>
+                            <h:inputText styleClass="educational_object_author_name" value="#{educationalObjectSubmitBean.author.name}"/>
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('E-mail')}:"/>
-                            <h:inputText styleClass="educational_object_author_email" value="#{submitFormBean.author.email}"/>
+                            <h:inputText styleClass="educational_object_author_email" value="#{educationalObjectSubmitBean.author.email}"/>
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Telefone')}:"/>
-                            <h:inputText styleClass="educational_object_author_phone"  value="#{submitFormBean.author.phone}"/>
+                            <h:inputText styleClass="educational_object_author_phone"  value="#{educationalObjectSubmitBean.author.phone}"/>
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Site')}:"/>
-                            <h:inputText styleClass="educational_object_author_site" value="#{submitFormBean.author.site}"/>
+                            <h:inputText styleClass="educational_object_author_site" value="#{educationalObjectSubmitBean.author.site}"/>
                         </h:panelGrid>
                         <h:panelGroup styleClass="button_author_add" >
                             <img id="button_add_icon" src="/resources/common/images/green-plus.png"/>
                             <span class="button_add_label">#{localeBean.getString('Adicionar')}</span>
                         </h:panelGroup>
                         <h:commandLink styleClass="add">
-                            <f:ajax render='authors_added' execute='form3' listener="#{submitFormBean.addAuthor()}"/>
+                            <f:ajax render='authors_added' execute='form3' listener="#{educationalObjectSubmitBean.addAuthor()}"/>
                         </h:commandLink>
                         <h:panelGroup id="authors_added" styleClass="authors_added">
-                            <ui:repeat value="#{submitFormBean.authorList}" var="author">
+                            <ui:repeat value="#{educationalObjectSubmitBean.authorList}" var="author">
                                 <ui:param name="author" value="#{author}"/>
                                 <h:panelGrid styleClass="author_added" columns="2">
                                     <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Nome')}:"/><h:outputText styleClass="authors_added_value" value="#{author.name}"/>
@@ -106,7 +106,7 @@
                             <h:outputText styleClass="educational_object_image_type_warning" value="#{localeBean.getString('A imagem deve ser do tipo bmp, jpg, jpeg, png ou gif.')}"/>
                             <h:graphicImage id="selectImage" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{submitFormBean.imageFile}"/>
+                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{educationalObjectSubmitBean.imageFile}"/>
                         </h:panelGroup>
                         <div id="noImage"/>
                         <img id="image" src=""/>
@@ -118,15 +118,15 @@
                             <h:outputText styleClass="educational_object_media_type_warning" value="#{localeBean.getString('As mídias devem ser dos tipos especificados acima.')}"/>
                             <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{submitFormBean.mediaFile1}"/>
+                            <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{educationalObjectSubmitBean.mediaFile1}"/>
                             <br/>
                             <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{submitFormBean.mediaFile2}"/>
+                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{educationalObjectSubmitBean.mediaFile2}"/>
                             <br/>
                             <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
                             <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{submitFormBean.mediaFile3}"/>
+                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{educationalObjectSubmitBean.mediaFile3}"/>
                         </h:panelGroup>
                     </h:panelGroup>
                     <h:panelGroup id="form5">
@@ -212,7 +212,7 @@
                         <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
                     </h:panelGroup>
                     <h:commandLink id="submit" styleClass="submit">
-                        <f:ajax execute="@form" listener="#{submitFormBean.submitForm()}"/>
+                        <f:ajax execute="@form" listener="#{educationalObjectSubmitBean.submitForm()}"/>
                     </h:commandLink>
                     <span class="button_back">
                         <img id="button_back_icon" src="/resources/common/images/back.png"/>

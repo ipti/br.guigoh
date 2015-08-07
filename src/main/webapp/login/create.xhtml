@@ -15,12 +15,12 @@
         <link href="../resources/lib/css/slick.min.css" rel="stylesheet"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/reset.css"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/global.css"></link>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/auth-login.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/login.css"></link>
         <!-- END PAGE STYLES -->
         <link rel="shortcut icon" href="/resources/common/images/guigoh.png"></link>
     </h:head>
     <h:body>
-        <f:event type="preRenderComponent" listener="#{registerBean.init()}"/>
+        <f:event type="preRenderComponent" listener="#{loginCreateBean.init()}"/>
         <header>
             <div class="container">
                 <div class="header-logo">
@@ -42,22 +42,22 @@
                                 <p style="font-size: 22px">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
                                 <div class="col-2">
-                                    <h:inputText pt:placeholder="Nome" value="#{registerBean.socialProfile.name}"></h:inputText>
-                                    <h:inputText pt:placeholder="E-mail" value="#{registerBean.user.username}"></h:inputText>
-                                    <h:inputSecret pt:placeholder="Senha" value="#{registerBean.user.password}"></h:inputSecret>
+                                    <h:inputText pt:placeholder="Nome" value="#{loginCreateBean.socialProfile.name}"></h:inputText>
+                                    <h:inputText pt:placeholder="E-mail" value="#{loginCreateBean.user.username}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="Senha" value="#{loginCreateBean.user.password}"></h:inputSecret>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.user.secretQuestionId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.user.secretQuestionId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
+                                            <f:selectItems value="#{loginCreateBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <hr></hr>
                                 </div>
                                 <div class="col-2">
-                                    <h:inputText pt:placeholder="sobrenome" value="#{registerBean.lastName}"></h:inputText>
-                                    <h:inputText pt:placeholder="confirmação de e-mail" value="#{registerBean.usernameConfirm}"></h:inputText>
-                                    <h:inputSecret pt:placeholder="confirmação de senha" value="#{registerBean.passwordConfirm}"></h:inputSecret>
-                                    <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{registerBean.user.secretAnswer}"></h:inputText>
+                                    <h:inputText pt:placeholder="sobrenome" value="#{loginCreateBean.lastName}"></h:inputText>
+                                    <h:inputText pt:placeholder="confirmação de e-mail" value="#{loginCreateBean.usernameConfirm}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="confirmação de senha" value="#{loginCreateBean.passwordConfirm}"></h:inputSecret>
+                                    <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{loginCreateBean.user.secretAnswer}"></h:inputText>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -65,49 +65,49 @@
                                 <p>Alguns dados sobre sua instituição de ensino.</p>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.subnetworkId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.subnetworkId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork}" itemLabel="#{subnetwork.description}" />
+                                            <f:selectItems value="#{loginCreateBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork}" itemLabel="#{subnetwork.description}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.roleId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.roleId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o seu cargo" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.roleList}" var="role" itemValue="#{role}" itemLabel="#{role.name}" />
+                                            <f:selectItems value="#{loginCreateBean.roleList}" var="role" itemValue="#{role}" itemLabel="#{role.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.languageId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.languageId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o idioma" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.languageList}" var="language" itemValue="#{language}" itemLabel="#{language.description}" />
+                                            <f:selectItems value="#{loginCreateBean.languageList}" var="language" itemValue="#{language}" itemLabel="#{language.description}" />
                                         </h:selectOneMenu>
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.countryId}" converter="entityConverter" >
-                                            <f:ajax event="valueChange" execute="@this" render="state city" listener="#{registerBean.loadState}"/>
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.countryId}" converter="entityConverter" >
+                                            <f:ajax event="valueChange" execute="@this" render="state city" listener="#{loginCreateBean.loadState}"/>
                                             <f:selectItem itemLabel="Selecione o país" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.countryList}" var="country" itemValue="#{country}" itemLabel="#{country.name}" />
+                                            <f:selectItems value="#{loginCreateBean.countryList}" var="country" itemValue="#{country}" itemLabel="#{country.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <h:panelGroup layout="block" class="select" id="state">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.stateId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.stateId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o estado" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.stateList}" var="state" itemValue="#{state}" itemLabel="#{state.name}" />
-                                            <f:ajax render="city" listener="#{registerBean.loadCity()}"/>
+                                            <f:selectItems value="#{loginCreateBean.stateList}" var="state" itemValue="#{state}" itemLabel="#{state.name}" />
+                                            <f:ajax render="city" listener="#{loginCreateBean.loadCity()}"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="select" id="city">
-                                        <h:selectOneMenu value="#{registerBean.socialProfile.cityId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.cityId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione a cidade" itemValue=""/>
-                                            <f:selectItems value="#{registerBean.cityList}" var="city" itemValue="#{city}" itemLabel="#{city.name}" />
+                                            <f:selectItems value="#{loginCreateBean.cityList}" var="city" itemValue="#{city}" itemLabel="#{city.name}" />
                                         </h:selectOneMenu>
                                     </h:panelGroup>
                                 </div>
                                 <div class="buttons col-1">
-                                    <a class="back pull-left" href="../auth/login.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
-                                    <h:commandLink action="#{registerBean.register()}">
+                                    <a class="back pull-left" href="auth.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
+                                    <h:commandLink action="#{loginCreateBean.register()}">
                                         <button class="submit pointer">Cadastre-se</button>
                                     </h:commandLink>
                                 </div>
@@ -139,7 +139,7 @@
         <!-- BEGIN PAGE SCRIPTS -->
         <script type="text/javascript" src="../resources/lib/js/jquery-1.11.3.min.js"/>
         <script type="text/javascript" src="../resources/lib/js/slick.min.js"/>
-        <script type="text/javascript" src="../resources/common/js/auth-register.js"/>
+        <script type="text/javascript" src="../resources/common/js/login-create.js"/>
         <!-- END PAGE SCRIPTS -->
     </h:body>
 </html>
