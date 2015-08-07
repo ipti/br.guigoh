@@ -290,7 +290,7 @@ public class ProfileViewBean implements Serializable {
     public void searchFriendEvent() {
         try {
             friendList = new ArrayList<>();
-            friendList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
+            friendList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
             organizeFriendList(friendList);
         } catch (Exception e) {
         }

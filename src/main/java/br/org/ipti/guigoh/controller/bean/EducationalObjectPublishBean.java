@@ -26,11 +26,11 @@ public class EducationalObjectPublishBean implements Serializable{
     public void init(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadEducationalObjectList();
+            getEducationalObjects();
         }
     }
     
-    private void loadEducationalObjectList(){
+    private void getEducationalObjects(){
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         educationalObjectList = educationalObjectJpaController.getLatestFourActiveEducationalObjects();
     }

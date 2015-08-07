@@ -42,35 +42,35 @@ public class ThemeViewBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadInterest();
-            loadTags();
-            loadDiscussionTopics();
-            loadEducationalObjectsByTheme();
+            getInterests();
+            getTags();
+            getDiscussionTopics();
+            getEducationalObjects();
         }
     }
 
-    private void loadInterest() {
+    private void getInterests() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interest = interestsJpaController.findInterestsByID(themeID);
+        interest = interestsJpaController.findInterestsById(themeID);
     }
 
-    private void loadTags() {
+    private void getTags() {
         TagsJpaController tagsJpaController = new TagsJpaController();
         tagList = tagsJpaController.findTagsEntities();
     }
 
-    private void loadDiscussionTopics() {
+    private void getDiscussionTopics() {
         discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByTheme(themeID);
     }
 
-    private void loadEducationalObjectsByTheme() {
+    private void getEducationalObjects() {
         educationalObjectList = educationalObjectJpaController.getActiveEducationalObjectsByTheme(themeID);
     }
 
     public void generalSearchEvent() {
         discussionTopicList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
-        discussionTopicList = discussionTopicJpaController.loadDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
+        discussionTopicList = discussionTopicJpaController.getDiscussionTopicsByExpression(generalSearch, tagSelected, themeID);
         educationalObjectList = educationalObjectJpaController.getEducationalObjectsByExpression(generalSearch, tagSelected, themeID);
     }
 

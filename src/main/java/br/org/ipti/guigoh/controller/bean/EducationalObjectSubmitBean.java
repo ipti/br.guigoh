@@ -53,7 +53,7 @@ public class EducationalObjectSubmitBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadInterestThemes();
+            getInterestThemes();
         }
     }
 
@@ -105,7 +105,7 @@ public class EducationalObjectSubmitBean implements Serializable {
                 tag.setName(tagValue);
                 tagsJpaController.create(tag);
             } else { 
-                tagsJpaController.createTagsEducationalObject(tagDB, educationalObject);
+                tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
             }
         }
         AuthorJpaController authorJpaController = new AuthorJpaController();
@@ -139,7 +139,7 @@ public class EducationalObjectSubmitBean implements Serializable {
         educationalObjectMediaJpaController.create(educationalObjectMedia);
     }
 
-    private void loadInterestThemes() {
+    private void getInterestThemes() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }

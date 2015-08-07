@@ -37,9 +37,9 @@ public class EducationalObjectViewBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            findEducationalObject(educationalObjectID);
-            getAuthorsByEducationalObject(educationalObjectID);
-            getMediasByEducationalObject(educationalObjectID);
+            getEducationalObject(educationalObjectID);
+            getAuthors(educationalObjectID);
+            getMedias(educationalObjectID);
         }
     }
 
@@ -57,19 +57,19 @@ public class EducationalObjectViewBean implements Serializable {
         DownloadService.downloadFileFromURL(path, type);
     }
 
-    private void findEducationalObject(Integer id) {
+    private void getEducationalObject(Integer id) {
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         educationalObject = educationalObjectJpaController.findEducationalObject(id);
     }
 
-    private void getAuthorsByEducationalObject(Integer educationalObjectID) {
+    private void getAuthors(Integer educationalObjectID) {
         AuthorJpaController authorJpaController = new AuthorJpaController();
-        authorList = authorJpaController.getAuthorsByEducationalObject(educationalObjectID);
+        authorList = authorJpaController.findAuthorsByEducationalObjectId(educationalObjectID);
     }
 
-    private void getMediasByEducationalObject(Integer educationalObjectID) {
+    private void getMedias(Integer educationalObjectID) {
         EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-        educationalObjectMediaList = educationalObjectMediaJpaController.getMediasByEducationalObject(educationalObjectID);
+        educationalObjectMediaList = educationalObjectMediaJpaController.findMediasByEducationalObjectId(educationalObjectID);
     }
     
     private void initGlobalVariables() {

@@ -50,13 +50,9 @@ public class MessengerEndpoint {
         friendList.addAll(Arrays.asList(sessionFriends.split(",")));
         String json;
         for (Session s : session.getOpenSessions()) {
-            UserAuthorization userAuthorization = userAuthorizationJpaController.findUserAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
-            if (userAuthorization.getRoles().equals(ADMIN)) {
-                json = Json.createObjectBuilder()
-                        .add("onlineUsers", session.getOpenSessions().size()).build().toString();
-                s.getBasicRemote().sendObject(json);
+            if (!onlineUsers.contains((String) s.getUserProperties().get("user"))) {
+                onlineUsers.add((String) s.getUserProperties().get("user"));
             }
-            onlineUsers.add((String) s.getUserProperties().get("user"));
         }
         String offlineMessages = loadOfflineMessages(user);
         if (offlineMessages != null) {
@@ -78,6 +74,12 @@ public class MessengerEndpoint {
                 json = Json.createObjectBuilder()
                         .add("status", "online")
                         .add("id", user).build().toString();
+                s.getBasicRemote().sendObject(json);
+            }
+            UserAuthorization userAuthorization = userAuthorizationJpaController.findUserAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
+            if (userAuthorization.getRoles().equals(ADMIN)) {
+                json = Json.createObjectBuilder()
+                        .add("onlineUsers", onlineUsers.size()).build().toString();
                 s.getBasicRemote().sendObject(json);
             }
         }

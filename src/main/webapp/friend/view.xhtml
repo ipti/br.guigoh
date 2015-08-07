@@ -49,7 +49,7 @@
                         <hr class="contacts_line" />
                         <h:form class="contacts_search">
                             <h:inputText id="searchFriends" styleClass="contacts_search_friends_box" value="#{friendViewBean.friendInputSearch}" autocomplete="off">
-                                <f:ajax listener="#{friendViewBean.searchFriendEvent()}" execute="searchFriends" render="friends" event="keyup"/>
+                                <f:ajax listener="#{friendViewBean.searchFriendsEvent()}" execute="searchFriends" render="friends" event="keyup"/>
                             </h:inputText>
                             <input type="button" value="" title="Pesquisar em contatos" class="contacts_button_friends_submit" />
                             <span class="clear"></span>

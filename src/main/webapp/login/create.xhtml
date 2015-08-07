@@ -86,7 +86,7 @@
                                 <div class="col-2">
                                     <div class="select">
                                         <h:selectOneMenu value="#{loginCreateBean.socialProfile.countryId}" converter="entityConverter" >
-                                            <f:ajax event="valueChange" execute="@this" render="state city" listener="#{loginCreateBean.loadState}"/>
+                                            <f:ajax event="valueChange" execute="@this" render="state city" listener="#{loginCreateBean.loadStates}"/>
                                             <f:selectItem itemLabel="Selecione o país" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.countryList}" var="country" itemValue="#{country}" itemLabel="#{country.name}" />
                                         </h:selectOneMenu>
@@ -95,7 +95,7 @@
                                         <h:selectOneMenu value="#{loginCreateBean.socialProfile.stateId}" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o estado" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.stateList}" var="state" itemValue="#{state}" itemLabel="#{state.name}" />
-                                            <f:ajax render="city" listener="#{loginCreateBean.loadCity()}"/>
+                                            <f:ajax render="city" listener="#{loginCreateBean.loadCities()}"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="select" id="city">

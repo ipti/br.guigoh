@@ -111,9 +111,9 @@ public class DiscussionTopicCreateBean implements Serializable {
                 Tags tagDB = tagsJpaController.findTagByName(t.getName());
                 if (tagDB == null) {
                     tagsJpaController.create(t);
-                    tagsJpaController.createTagsDiscussionTopic(t, discussionTopic);
+                    tagsJpaController.createTagsXDiscussionTopic(t, discussionTopic);
                 } else {
-                    tagsJpaController.createTagsDiscussionTopic(tagDB, discussionTopic);
+                    tagsJpaController.createTagsXDiscussionTopic(tagDB, discussionTopic);
                 }
             }
             if (!fileList.isEmpty()) {
@@ -155,7 +155,7 @@ public class DiscussionTopicCreateBean implements Serializable {
         user.setToken(CookieService.getCookie("token"));
         
         socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-        theme = interestsJpaController.findInterestsByID(themeID);
+        theme = interestsJpaController.findInterestsById(themeID);
     }
 
     public DiscussionTopic getDiscussionTopic() {

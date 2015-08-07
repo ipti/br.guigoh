@@ -605,7 +605,7 @@ public class ProfileWizardBean implements Serializable {
         try {
             editWizard(panel);
             UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
-            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(user.getToken());
+            UserAuthorization authorization = userAuthorizationJpaController.findUserAuthorization(user.getToken());
             authorization.setStatus("AC");
             userAuthorizationJpaController.edit(authorization);
             return "profile";

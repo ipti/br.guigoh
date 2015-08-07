@@ -41,11 +41,11 @@ public class FriendViewBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            loadFriends();
+            getFriends();
         }
     }
 
-    public void loadFriends() {
+    private void getFriends() {
         acceptedList = pendingList = new ArrayList<>();
         acceptedList = friendsJpaController.findFriendsByToken(user.getToken());
         pendingList = friendsJpaController.findPendingFriendsByToken(user.getToken());
@@ -67,28 +67,28 @@ public class FriendViewBean implements Serializable {
         });
     }
 
-    public void searchFriendEvent() {
+    public void searchFriendsEvent() {
         acceptedList = new ArrayList<>();
-        acceptedList = friendsJpaController.loadFriendSearchList(user.getToken(), friendInputSearch);
+        acceptedList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
         organizeFriendList(acceptedList);
     }
 
     public void searchUsersEvent() {
         socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = friendsJpaController.loadUserSearchList(userInputSearch);
+            socialProfileList = friendsJpaController.findUserSearchList(userInputSearch);
 
         }
     }
 
     public void removeFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
         friendsJpaController.removeFriend(user, id);
-        loadFriends();
+        getFriends();
     }
 
     public void acceptFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
         friendsJpaController.acceptFriend(user, id);
-        loadFriends();
+        getFriends();
     }
 
     private void initGlobalVariables() {
