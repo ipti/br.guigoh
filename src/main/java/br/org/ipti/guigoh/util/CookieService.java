@@ -33,7 +33,7 @@ public class CookieService {
         return value;
     }
     
-    public static String getCookieByRequest(String name, HttpServletRequest request){
+    public static String getCookie(String name, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         String value = null;
         if (cookies != null) {

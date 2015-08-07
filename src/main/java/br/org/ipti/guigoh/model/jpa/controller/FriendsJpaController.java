@@ -309,7 +309,7 @@ public class FriendsJpaController implements Serializable {
         }
     }
 
-    public List<Friends> loadFriendSearchList(String token, String str) {
+    public List<Friends> findFriendSearchList(String token, String str) {
         EntityManager em = getEntityManager();
         try {
             List<Friends> friendsList = (List<Friends>) em.createNativeQuery("select distinct f.* from friends f "
@@ -326,7 +326,7 @@ public class FriendsJpaController implements Serializable {
         }
     }
 
-    public List<SocialProfile> loadUserSearchList(String str) {
+    public List<SocialProfile> findUserSearchList(String str) {
         EntityManager em = getEntityManager();
         try {
             List<SocialProfile> usersList = (List<SocialProfile>) em.createNativeQuery("select * from social_profile "
@@ -336,19 +336,6 @@ public class FriendsJpaController implements Serializable {
                 return new ArrayList<>();
             }
             return usersList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public void updateRecommendQut(Friends friend) {
-        EntityManager em = getEntityManager();
-        try {
-            String sql = "update friends set recommenders = (recommenders+1) where "
-                    + "token_friend_1 = '" + friend.getTokenFriend1().getToken() + "' "
-                    + "and token_friend_2 = '" + friend.getTokenFriend2().getToken() + "'";
-            Query query = em.createNamedQuery(sql);
-            query.executeUpdate();
         } finally {
             em.close();
         }

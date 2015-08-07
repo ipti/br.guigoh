@@ -15,10 +15,6 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-/**
- *
- * @author ipti004
- */
 @ViewScoped
 @ManagedBean(name = "localeBean")
 public class LocaleBean implements Serializable {

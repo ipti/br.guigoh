@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -40,12 +39,12 @@ public class UserAuthorizationJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(UserAuthorization authorization) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(UserAuthorization userAuthorization) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
-        Users usersOrphanCheck = authorization.getUsers();
+        Users usersOrphanCheck = userAuthorization.getUsers();
         if (usersOrphanCheck != null) {
-            UserAuthorization oldAuthorizationOfUsers = usersOrphanCheck.getAuthorization();
-            if (oldAuthorizationOfUsers != null) {
+            UserAuthorization oldUserAuthorizationOfUsers = usersOrphanCheck.getUserAuthorization();
+            if (oldUserAuthorizationOfUsers != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
@@ -59,14 +58,14 @@ public class UserAuthorizationJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Users users = authorization.getUsers();
+            Users users = userAuthorization.getUsers();
             if (users != null) {
                 users = em.getReference(users.getClass(), users.getUsername());
-                authorization.setUsers(users);
+                userAuthorization.setUsers(users);
             }
-            em.persist(authorization);
+            em.persist(userAuthorization);
             if (users != null) {
-                users.setAuthorization(authorization);
+                users.setUserAuthorization(userAuthorization);
                 users = em.merge(users);
             }
             em.getTransaction().commit();
@@ -76,8 +75,8 @@ public class UserAuthorizationJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findAuthorization(authorization.getTokenId()) != null) {
-                throw new PreexistingEntityException("Authorization " + authorization + " already exists.", ex);
+            if (findUserAuthorization(userAuthorization.getTokenId()) != null) {
+                throw new PreexistingEntityException("Authorization " + userAuthorization + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -87,17 +86,17 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
 
-    public void edit(UserAuthorization authorization) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(UserAuthorization userAuthorization) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            UserAuthorization persistentAuthorization = em.find(UserAuthorization.class, authorization.getTokenId());
-            Users usersOld = persistentAuthorization.getUsers();
-            Users usersNew = authorization.getUsers();
+            UserAuthorization persistentUserAuthorization = em.find(UserAuthorization.class, userAuthorization.getTokenId());
+            Users usersOld = persistentUserAuthorization.getUsers();
+            Users usersNew = userAuthorization.getUsers();
             List<String> illegalOrphanMessages = null;
             if (usersNew != null && !usersNew.equals(usersOld)) {
-                UserAuthorization oldAuthorizationOfUsers = usersNew.getAuthorization();
+                UserAuthorization oldAuthorizationOfUsers = usersNew.getUserAuthorization();
                 if (oldAuthorizationOfUsers != null) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
@@ -110,15 +109,15 @@ public class UserAuthorizationJpaController implements Serializable {
             }
             if (usersNew != null) {
                 usersNew = em.getReference(usersNew.getClass(), usersNew.getUsername());
-                authorization.setUsers(usersNew);
+                userAuthorization.setUsers(usersNew);
             }
-            authorization = em.merge(authorization);
+            userAuthorization = em.merge(userAuthorization);
             if (usersOld != null && !usersOld.equals(usersNew)) {
-                usersOld.setAuthorization(null);
+                usersOld.setUserAuthorization(null);
                 usersOld = em.merge(usersOld);
             }
             if (usersNew != null && !usersNew.equals(usersOld)) {
-                usersNew.setAuthorization(authorization);
+                usersNew.setUserAuthorization(userAuthorization);
                 usersNew = em.merge(usersNew);
             }
             em.getTransaction().commit();
@@ -130,8 +129,8 @@ public class UserAuthorizationJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = authorization.getTokenId();
-                if (findAuthorization(id) == null) {
+                String id = userAuthorization.getTokenId();
+                if (findUserAuthorization(id) == null) {
                     throw new NonexistentEntityException("The authorization with id " + id + " no longer exists.");
                 }
             }
@@ -148,19 +147,19 @@ public class UserAuthorizationJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            UserAuthorization authorization;
+            UserAuthorization userAuthorization;
             try {
-                authorization = em.getReference(UserAuthorization.class, id);
-                authorization.getTokenId();
+                userAuthorization = em.getReference(UserAuthorization.class, id);
+                userAuthorization.getTokenId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The authorization with id " + id + " no longer exists.", enfe);
             }
-            Users users = authorization.getUsers();
+            Users users = userAuthorization.getUsers();
             if (users != null) {
-                users.setAuthorization(null);
+                users.setUserAuthorization(null);
                 users = em.merge(users);
             }
-            em.remove(authorization);
+            em.remove(userAuthorization);
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -215,7 +214,7 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
-    public List<UserAuthorization> findAuthorizationsByRole(String role){
+    public List<UserAuthorization> findUserAuthorizationsByRole(String role){
         EntityManager em = getEntityManager();
         try{
             List<UserAuthorization> authorizationList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization where roles = '" + role + "'",
@@ -226,15 +225,15 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
-    public List<UserAuthorization> findAuthorizationEntities() {
-        return findAuthorizationEntities(true, -1, -1);
+    public List<UserAuthorization> findUserAuthorizationEntities() {
+        return findUserAuthorizationEntities(true, -1, -1);
     }
 
-    public List<UserAuthorization> findAuthorizationEntities(int maxResults, int firstResult) {
-        return findAuthorizationEntities(false, maxResults, firstResult);
+    public List<UserAuthorization> findUserAuthorizationEntities(int maxResults, int firstResult) {
+        return findUserAuthorizationEntities(false, maxResults, firstResult);
     }
 
-    private List<UserAuthorization> findAuthorizationEntities(boolean all, int maxResults, int firstResult) {
+    private List<UserAuthorization> findUserAuthorizationEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -250,7 +249,7 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
 
-    public UserAuthorization findAuthorization(String id) {
+    public UserAuthorization findUserAuthorization(String id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(UserAuthorization.class, id);
@@ -259,7 +258,7 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
 
-    public int getAuthorizationCount() {
+    public int getUserAuthorizationCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -272,16 +271,16 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
-     public List<UserAuthorization> findAuthorizationsBySubnetwork(Integer subnetwork) {
+     public List<UserAuthorization> findUserAuthorizationsBySubnetwork(Integer subnetwork) {
         EntityManager em = getEntityManager();
         try {
-            List<UserAuthorization> authorizationList = (List<UserAuthorization>) em.createNativeQuery("select a.* from user_authorization a "
+            List<UserAuthorization> userAuthorizationList = (List<UserAuthorization>) em.createNativeQuery("select a.* from user_authorization a "
                     + "join social_profile s on a.token_id = s.token_id "
                     + "where a.status = 'PC' and s.subnetwork_id = '" + subnetwork + "'", UserAuthorization.class).getResultList();
-            if (authorizationList == null) {
+            if (userAuthorizationList == null) {
                 return new ArrayList<>();
             }
-            return authorizationList;
+            return userAuthorizationList;
         } finally {
             em.close();
         }

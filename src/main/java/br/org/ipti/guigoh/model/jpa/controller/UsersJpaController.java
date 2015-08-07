@@ -54,10 +54,10 @@ public class UsersJpaController implements Serializable {
                 socialProfile = em.getReference(socialProfile.getClass(), socialProfile.getTokenId());
                 users.setSocialProfile(socialProfile);
             }
-            UserAuthorization authorization = users.getAuthorization();
-            if (authorization != null) {
-                authorization = em.getReference(authorization.getClass(), authorization.getTokenId());
-                users.setAuthorization(authorization);
+            UserAuthorization userAuthorization = users.getUserAuthorization();
+            if (userAuthorization != null) {
+                userAuthorization = em.getReference(userAuthorization.getClass(), userAuthorization.getTokenId());
+                users.setUserAuthorization(userAuthorization);
             }
             SecretQuestion secretQuestionId = users.getSecretQuestionId();
             if (secretQuestionId != null) {
@@ -80,14 +80,14 @@ public class UsersJpaController implements Serializable {
                 socialProfile.setUsers(users);
                 socialProfile = em.merge(socialProfile);
             }
-            if (authorization != null) {
-                Users oldUsersOfAuthorization = authorization.getUsers();
-                if (oldUsersOfAuthorization != null) {
-                    oldUsersOfAuthorization.setAuthorization(null);
-                    oldUsersOfAuthorization = em.merge(oldUsersOfAuthorization);
+            if (userAuthorization != null) {
+                Users oldUsersOfUserAuthorization = userAuthorization.getUsers();
+                if (oldUsersOfUserAuthorization != null) {
+                    oldUsersOfUserAuthorization.setUserAuthorization(null);
+                    oldUsersOfUserAuthorization = em.merge(oldUsersOfUserAuthorization);
                 }
-                authorization.setUsers(users);
-                authorization = em.merge(authorization);
+                userAuthorization.setUsers(users);
+                userAuthorization = em.merge(userAuthorization);
             }
             if (secretQuestionId != null) {
                 secretQuestionId.getUsersCollection().add(users);
@@ -128,8 +128,8 @@ public class UsersJpaController implements Serializable {
             Users persistentUsers = em.find(Users.class, users.getUsername());
             SocialProfile socialProfileOld = persistentUsers.getSocialProfile();
             SocialProfile socialProfileNew = users.getSocialProfile();
-            UserAuthorization authorizationOld = persistentUsers.getAuthorization();
-            UserAuthorization authorizationNew = users.getAuthorization();
+            UserAuthorization userAuthorizationOld = persistentUsers.getUserAuthorization();
+            UserAuthorization userAuthorizationNew = users.getUserAuthorization();
             SecretQuestion secretQuestionIdOld = persistentUsers.getSecretQuestionId();
             SecretQuestion secretQuestionIdNew = users.getSecretQuestionId();
             Collection<UserContactInfo> userContactInfoCollectionOld = persistentUsers.getUserContactInfoCollection();
@@ -141,11 +141,11 @@ public class UsersJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("You must retain SocialProfile " + socialProfileOld + " since its users field is not nullable.");
             }
-            if (authorizationOld != null && !authorizationOld.equals(authorizationNew)) {
+            if (userAuthorizationOld != null && !userAuthorizationOld.equals(userAuthorizationNew)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("You must retain Authorization " + authorizationOld + " since its users field is not nullable.");
+                illegalOrphanMessages.add("You must retain Authorization " + userAuthorizationOld + " since its users field is not nullable.");
             }
             for (UserContactInfo userContactInfoCollectionOldUserContactInfo : userContactInfoCollectionOld) {
                 if (!userContactInfoCollectionNew.contains(userContactInfoCollectionOldUserContactInfo)) {
@@ -162,9 +162,9 @@ public class UsersJpaController implements Serializable {
                 socialProfileNew = em.getReference(socialProfileNew.getClass(), socialProfileNew.getTokenId());
                 users.setSocialProfile(socialProfileNew);
             }
-            if (authorizationNew != null) {
-                authorizationNew = em.getReference(authorizationNew.getClass(), authorizationNew.getTokenId());
-                users.setAuthorization(authorizationNew);
+            if (userAuthorizationNew != null) {
+                userAuthorizationNew = em.getReference(userAuthorizationNew.getClass(), userAuthorizationNew.getTokenId());
+                users.setUserAuthorization(userAuthorizationNew);
             }
             if (secretQuestionIdNew != null) {
                 secretQuestionIdNew = em.getReference(secretQuestionIdNew.getClass(), secretQuestionIdNew.getId());
@@ -187,14 +187,14 @@ public class UsersJpaController implements Serializable {
                 socialProfileNew.setUsers(users);
                 socialProfileNew = em.merge(socialProfileNew);
             }
-            if (authorizationNew != null && !authorizationNew.equals(authorizationOld)) {
-                Users oldUsersOfAuthorization = authorizationNew.getUsers();
-                if (oldUsersOfAuthorization != null) {
-                    oldUsersOfAuthorization.setAuthorization(null);
-                    oldUsersOfAuthorization = em.merge(oldUsersOfAuthorization);
+            if (userAuthorizationNew != null && !userAuthorizationNew.equals(userAuthorizationOld)) {
+                Users oldUsersOfUserAuthorization = userAuthorizationNew.getUsers();
+                if (oldUsersOfUserAuthorization != null) {
+                    oldUsersOfUserAuthorization.setUserAuthorization(null);
+                    oldUsersOfUserAuthorization = em.merge(oldUsersOfUserAuthorization);
                 }
-                authorizationNew.setUsers(users);
-                authorizationNew = em.merge(authorizationNew);
+                userAuthorizationNew.setUsers(users);
+                userAuthorizationNew = em.merge(userAuthorizationNew);
             }
             if (secretQuestionIdOld != null && !secretQuestionIdOld.equals(secretQuestionIdNew)) {
                 secretQuestionIdOld.getUsersCollection().remove(users);
@@ -257,12 +257,12 @@ public class UsersJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Users (" + users + ") cannot be destroyed since the SocialProfile " + socialProfileOrphanCheck + " in its socialProfile field has a non-nullable users field.");
             }
-            UserAuthorization authorizationOrphanCheck = users.getAuthorization();
-            if (authorizationOrphanCheck != null) {
+            UserAuthorization userAuthorizationOrphanCheck = users.getUserAuthorization();
+            if (userAuthorizationOrphanCheck != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Users (" + users + ") cannot be destroyed since the Authorization " + authorizationOrphanCheck + " in its authorization field has a non-nullable users field.");
+                illegalOrphanMessages.add("This Users (" + users + ") cannot be destroyed since the Authorization " + userAuthorizationOrphanCheck + " in its authorization field has a non-nullable users field.");
             }
             Collection<UserContactInfo> userContactInfoCollectionOrphanCheck = users.getUserContactInfoCollection();
             for (UserContactInfo userContactInfoCollectionOrphanCheckUserContactInfo : userContactInfoCollectionOrphanCheck) {

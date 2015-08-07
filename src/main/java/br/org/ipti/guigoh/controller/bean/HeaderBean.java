@@ -14,10 +14,6 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-/**
- *
- * @author Joe
- */
 @SessionScoped
 @ManagedBean(name = "headerBean")
 public class HeaderBean implements Serializable {
@@ -32,8 +28,8 @@ public class HeaderBean implements Serializable {
 
     public void init() {
         initGlobalVariables();
-        loadSocialProfile();
-        loadAuthorization();
+        getLoggedSocialProfile();
+        checkUserAuthorization();
         getRegisteredUsersQuantity();
     }
 
@@ -42,15 +38,15 @@ public class HeaderBean implements Serializable {
         return "logout";
     }
 
-    private void loadSocialProfile() {
+    private void getLoggedSocialProfile() {
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         socialProfile.setName(socialProfile.getName().split(" ")[0]);
     }
 
-    private void loadAuthorization() {
+    private void checkUserAuthorization() {
         UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
-        authorization = userAuthorizationJpaController.findAuthorization(socialProfile.getTokenId());
+        authorization = userAuthorizationJpaController.findUserAuthorization(socialProfile.getTokenId());
         if (authorization != null) {
             if (authorization.getRoles().equals(ADMIN)) {
                 admin = true;

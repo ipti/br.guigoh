@@ -254,27 +254,7 @@ public class TagsJpaController implements Serializable {
         }
     }
     
-    public List<Tags> findTagsByText(String tags) {
-        EntityManager em = getEntityManager();
-        try {
-            if (tags.equals("") || tags == null) {
-                return new ArrayList<Tags>();
-            }
-            String ttemp = tags.toUpperCase().replaceAll(" ", "");
-            List<Tags> tagstemp = (List<Tags>) em.createNativeQuery("select * from tags "
-                    + "where UPPER(name) like '" + ttemp.toUpperCase() + "%' ", Tags.class).getResultList();
-            if (tagstemp.isEmpty()) {
-                return new ArrayList<Tags>();
-            }
-            return tagstemp;
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
-
-    public void createTagsDiscussionTopic(Tags tags, DiscussionTopic discussionTopic) throws RollbackFailureException, Exception {
+    public void createTagsXDiscussionTopic(Tags tags, DiscussionTopic discussionTopic) throws RollbackFailureException, Exception {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {
@@ -304,7 +284,7 @@ public class TagsJpaController implements Serializable {
         }
     }
     
-    public void createTagsEducationalObject(Tags tag, EducationalObject educationalObject) throws RollbackFailureException, Exception {
+    public void createTagsXEducationalObject(Tags tag, EducationalObject educationalObject) throws RollbackFailureException, Exception {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
         try {

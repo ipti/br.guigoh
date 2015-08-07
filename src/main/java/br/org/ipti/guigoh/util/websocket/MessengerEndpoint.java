@@ -50,8 +50,8 @@ public class MessengerEndpoint {
         friendList.addAll(Arrays.asList(sessionFriends.split(",")));
         String json;
         for (Session s : session.getOpenSessions()) {
-            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
-            if (authorization.getRoles().equals(ADMIN)) {
+            UserAuthorization userAuthorization = userAuthorizationJpaController.findUserAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
+            if (userAuthorization.getRoles().equals(ADMIN)) {
                 json = Json.createObjectBuilder()
                         .add("onlineUsers", session.getOpenSessions().size()).build().toString();
                 s.getBasicRemote().sendObject(json);
@@ -139,7 +139,7 @@ public class MessengerEndpoint {
         String json;
         int count = 0;
         for (Session s : session.getOpenSessions()) {
-            UserAuthorization authorization = userAuthorizationJpaController.findAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
+            UserAuthorization authorization = userAuthorizationJpaController.findUserAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
             if (authorization.getRoles().equals(ADMIN)) {
                 json = Json.createObjectBuilder()
                         .add("onlineUsers", session.getOpenSessions().size()).build().toString();

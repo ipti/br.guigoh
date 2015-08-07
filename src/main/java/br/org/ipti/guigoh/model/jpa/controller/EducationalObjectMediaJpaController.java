@@ -185,11 +185,11 @@ public class EducationalObjectMediaJpaController implements Serializable {
         }
     }
     
-    public List<EducationalObjectMedia> getMediasByEducationalObject(Integer educationalObjectID){
+    public List<EducationalObjectMedia> findMediasByEducationalObjectId(Integer educationalObjectId){
         EntityManager em = getEntityManager();
         try{
             List<EducationalObjectMedia> educationalObjectMediaList = (List<EducationalObjectMedia>)em.createNativeQuery("select * from educational_object_media eom"
-                    + " where educational_object_id = " + educationalObjectID, EducationalObjectMedia.class).getResultList();
+                    + " where educational_object_id = " + educationalObjectId, EducationalObjectMedia.class).getResultList();
             return educationalObjectMediaList;
         } finally{
             em.close();

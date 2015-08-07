@@ -279,7 +279,7 @@ public class DiscussionTopicJpaController implements Serializable {
         }
     }
 
-    public List<DiscussionTopic> loadDiscussionTopicsByExpression(String expression, String tag, Integer id) {
+    public List<DiscussionTopic> getDiscussionTopicsByExpression(String expression, String tag, Integer id) {
         EntityManager em = getEntityManager();
         try {
 

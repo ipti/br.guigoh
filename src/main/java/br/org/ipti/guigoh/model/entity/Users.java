@@ -78,8 +78,6 @@ public class Users implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private SocialProfile socialProfile;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
-    private UserAuthorization authorization;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private EmailActivation emailActivation;
     @JoinColumn(name = "secret_question_id", referencedColumnName = "id")
     @ManyToOne
@@ -183,14 +181,6 @@ public class Users implements Serializable {
 
     public void setSocialProfile(SocialProfile socialProfile) {
         this.socialProfile = socialProfile;
-    }
-
-    public UserAuthorization getAuthorization() {
-        return authorization;
-    }
-
-    public void setAuthorization(UserAuthorization authorization) {
-        this.authorization = authorization;
     }
 
     public EmailActivation getEmailActivation() {

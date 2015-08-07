@@ -52,8 +52,8 @@ public class Upload extends HttpServlet {
                         || (item.getContentType().equals("image/png"))) && item.getSize() < 1000000) {
                     //String caminho = getServletContext().getRealPath();
                     try {
-                        user.setToken(CookieService.getCookieByRequest("token", request));
-                        user.setUsername(CookieService.getCookieByRequest("user", request));
+                        user.setToken(CookieService.getCookie("token", request));
+                        user.setUsername(CookieService.getCookie("user", request));
                         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                         SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
 
