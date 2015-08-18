@@ -319,7 +319,30 @@ public class DiscussionTopicJpaController implements Serializable {
                     + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
                     + "where dtm.status = 'A') "
-                    + "as news order by data desc limit 5").getResultList();
+                    + "as news order by data desc limit 4").getResultList();
+            List<NewActivity> newActivityList = new ArrayList<>();
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+            for (Object[] obj : objectList) {
+                NewActivity newActivity = new NewActivity((Integer) obj[0], (SocialProfile) socialProfileJpaController.findSocialProfileBySocialProfileId((Integer) obj[1]), (String) obj[2], (Date) obj[3], (String) obj[4]);
+                newActivityList.add(newActivity);
+            }
+            return newActivityList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<NewActivity> getMoreActivities(Date date) {
+        EntityManager em = getEntityManager();
+        try {
+            List<Object[]> objectList = em.createNativeQuery("select * from "
+                    + "(select id as id, social_profile_id, title, data, 'T' as type from discussion_topic "
+                    + "where status = 'A' and data < '" + date + "'"
+                    + "union "
+                    + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
+                    + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
+                    + "where dtm.status = 'A' and data < '" + date + "') "
+                    + "as news order by data desc limit 4").getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
             for (Object[] obj : objectList) {

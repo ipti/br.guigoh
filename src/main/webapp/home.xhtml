@@ -51,61 +51,28 @@
             <aside>
                 <h:panelGroup layout="block" id="aside-container" class="aside-container">
                     <h3>Novidades na rede</h3>
-                    <div class="aside-list-item">
-                        <img class="aside-list-image" src="http://placehold.it/75x75"/>
-                        <p class="aside-profile-name"><a href="#">Laís Thiele Carvalho</a></p>
-                        <p class="aside-profile-action">comentou no tópico</p>
-                        <p class="aside-object-title"><a href="">"Manual do Objeto Educacional - Arte com Ciência"</a></p>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="aside-list-item">
-                        <img class="aside-list-image" src="http://placehold.it/75x75"/>
-                        <p class="aside-profile-name"><a href="#">Dândolo Santos</a></p>
-                        <p class="aside-profile-action">comentou no tópico</p>
-                        <p class="aside-object-title"><a href="">"Manual do Objeto Educacional - Arte com Ciência</a></p>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="aside-list-item">
-                        <img class="aside-list-image" src="http://placehold.it/75x75"/>
-                        <p class="aside-profile-name"><a href="#">Dândolo Santos</a></p>
-                        <p class="aside-profile-action">criou o tópico</p>
-                        <p class="aside-object-title"><a href="">"Manual do Objeto Educacional - Arte com Ciência"</a></p>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="aside-list-item">
-                        <img class="aside-list-image" src="http://placehold.it/75x75"/>
-                        <p class="aside-profile-name"><a href="#">Marcel Magalhães</a></p>
-                        <p class="aside-profile-action">criou o tópico</p>
-                        <p class="aside-object-title"><a href="">"Introdução à edição de vídeo"</a></p>
-                        <div class="clear"></div>
-                    </div>
+                    <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
+                        <div class="aside-list-item">
+                            <a href="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
+                            <p class="aside-profile-name"><a href="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}">#{newActivity.socialProfile.name}</a></p>
+                            <h:outputText class="aside-profile-action" value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
+                            <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
+                            <p class="aside-object-title"><a href="/discussion-topic/view.xhtml?id=#{newActivity.id}">&quot;#{newActivity.title}&quot;</a></p>
+                            <div class="clear"></div>
+                        </div>
+                    </ui:repeat>
                 </h:panelGroup>
                 <div class="load-more">
                     <hr/>
-                    <h:commandLink value="Carregar mais" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
+                    <h:commandLink value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
                         <f:ajax render="aside-container"/>
                     </h:commandLink>
-                    <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
+                    <h:outputText styleClass="no-more" value="Não há mais Novidades na Rede" rendered="#{!homeBean.existsMoreActivities}"/>
                     <hr/>
                 </div>
             </aside>
             <div class="clear"></div>
         </h:form>
-
-        <h:panelGroup styleClass="right_column">
-            <h:outputText styleClass="network_news" value="#{localeBean.getString('Novidades na rede').toUpperCase()}"/>
-            <h:panelGroup class="user_feed">
-                <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
-                    <h:link styleClass="publisher_image" outcome="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}" style="background:url('#{newActivity.socialProfile.photo}') no-repeat center center;background-size:77px;"></h:link>
-                    <h:panelGroup styleClass="text_feed">
-                        <h:link styleClass="user_news_name" outcome="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}" value="#{newActivity.socialProfile.name}"></h:link>
-                        <h:outputText value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
-                        <h:outputText value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
-                        <h:link styleClass="social_news_name" outcome="/discussion-topic/view.xhtml?id=#{newActivity.id}" value="&quot;#{newActivity.title}&quot;"/>
-                    </h:panelGroup>
-                </ui:repeat>
-            </h:panelGroup>
-        </h:panelGroup>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">

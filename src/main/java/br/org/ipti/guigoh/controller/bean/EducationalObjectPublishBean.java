@@ -32,7 +32,7 @@ public class EducationalObjectPublishBean implements Serializable{
     
     private void getEducationalObjects(){
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
-        educationalObjectList = educationalObjectJpaController.getLatestFourActiveEducationalObjects();
+        educationalObjectList = educationalObjectJpaController.getLatestActiveEducationalObjects(4);
     }
     
     private void initGlobalVariables() {

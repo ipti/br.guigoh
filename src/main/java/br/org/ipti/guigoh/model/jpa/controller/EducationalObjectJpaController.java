@@ -372,29 +372,18 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
 
-    public List<EducationalObject> getLatestFourActiveEducationalObjects() {
+    public List<EducationalObject> getLatestActiveEducationalObjects(int quantity) {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' order by date desc limit 4", EducationalObject.class).getResultList();
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<EducationalObject> getLatestFiveActiveEducationalObjects() {
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' order by date desc limit 5", EducationalObject.class).getResultList();
+                    + "where status = 'AC' order by date desc limit " + quantity, EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
         }
     }
 
-    public List<EducationalObject> loadMoreEducationalObjects(Date date) {
+    public List<EducationalObject> getMoreEducationalObjects(Date date) {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "

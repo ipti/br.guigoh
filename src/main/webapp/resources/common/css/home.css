@@ -153,8 +153,14 @@ aside h3 {
 .aside-list-image {
     float: left;
     padding-right: 10px;
+    width: 75px;
+    height: 75px;
 }
 
 .aside-object-title {
     line-height: 14px;
+}
+
+.aside-profile-action {
+    display: block;
 }
