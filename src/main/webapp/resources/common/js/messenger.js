@@ -91,7 +91,7 @@ function onMessageReceived(evt) {
         $('#msg_' + id + ' #messages').prepend(messages);
         $('#msg_' + id + ' #messages').scrollTop($('#msg_' + id + ' #messages').prop("scrollHeight"));
     } else if (typeof msg.onlineUsers !== 'undefined') {
-        $('#registered_users_online').text("| " + msg.onlineUsers + " online");
+        $('#registered_users_online').text(msg.onlineUsers + " online");
     }
 }
 

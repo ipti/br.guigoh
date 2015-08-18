@@ -145,7 +145,7 @@ hr {
 .greetings a {
     color: #333;
 }
-.header-profile img {
+.header-profile .profile-picture {
     float: right;
     width: 110px;
     height: 110px;
@@ -158,6 +158,51 @@ hr {
     width: 18px;
     height: 18px;
     cursor: pointer;
+    float: right;
+}
+
+#user-menu-box{
+    display: none;
+    text-align: left;
+    margin: 30px 0 0px -140px;
+    width: 180px;
+    height: 145px;
+    background: white;
+    position: relative;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    border: 1px solid #C1C1C1;
+}
+
+#user-menu-box p{
+    color: gray;
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+#user-menu-box:before {
+    content:"";
+    position: absolute;
+    right: 22px;
+    bottom: 145px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #C1C1C1;
+}
+
+#user-menu-box:after {
+    content:"";
+    position: absolute;
+    right: 24px;
+    bottom: 145px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
 }
 
 .registered_users_quantity, #registered_users_online{
@@ -177,7 +222,7 @@ hr {
 #history{background:url(../images/magnifer.png) no-repeat;float:right;width:20px;height:20px;cursor:pointer}
 #close{background:url(../images/close.png) no-repeat;float:right;width:20px;height:20px;cursor:pointer}
 .textmessage{width:145px}
-.localeLogon{float:right;margin-right:10px}
+.header-top-separator{margin:0 5px 0 5px !important}
 .logoutContainer{float:right;}
 
 /** Layer de conteúdo **/
