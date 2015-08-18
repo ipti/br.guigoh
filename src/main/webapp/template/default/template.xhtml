@@ -12,6 +12,8 @@ and open the template in the editor.
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <!-- BEGIN PAGE STYLES -->
+        <link href="/resources/common/css/reset.css" rel="stylesheet"/>
+        <link href="/resources/common/css/global.css" rel="stylesheet"/>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/general.css"></link>
         <ui:insert name="styles"></ui:insert>
         <!-- END PAGE STYLES -->
@@ -20,9 +22,13 @@ and open the template in the editor.
         <title><ui:insert name="title"></ui:insert></title>
     </h:head>
     <body>
-        <ui:include src="/template/default/header.xhtml"></ui:include>
-        <div id="content" >
-            <ui:insert name="content"></ui:insert>
+        <div class="container">
+            <header>
+                <ui:include src="/template/default/header.xhtml"></ui:include>
+            </header>
+            <section id="content" >
+                <ui:insert name="content"></ui:insert>
+            </section>
         </div>
         <div class="messenger_container">
             <div class="messenger">

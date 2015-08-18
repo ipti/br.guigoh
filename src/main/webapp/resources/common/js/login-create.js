@@ -55,3 +55,10 @@ jsf.ajax.addOnEvent(function (data) {
             break;
     }
 });
+
+$(document).ready(function () {
+    $.post("../ping.html");
+    window.setInterval(function () {
+        $.post("../ping.html");
+    }, 1500000);
+})

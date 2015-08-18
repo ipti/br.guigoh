@@ -22,7 +22,6 @@ import javax.inject.Named;
 @Named
 public class HomeBean implements Serializable {
 
-    private List<Interests> interestThemesList = new ArrayList<>();
     private List<EducationalObject> educationalObjectList = new ArrayList<>();
     private List<NewActivity> newActivityList = new ArrayList();
 
@@ -33,16 +32,10 @@ public class HomeBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            getInterestThemes();
             getEducationalObjects();
             getLastDiscussionTopicActivities();
             checkIfExistsMoreEducationalObjects();
         }
-    }
-
-    private void getInterestThemes() {
-        InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
     }
 
     private void getEducationalObjects() {
@@ -70,18 +63,6 @@ public class HomeBean implements Serializable {
     private void getLastDiscussionTopicActivities() {
         DiscussionTopicJpaController discussionTopicJpaController = new DiscussionTopicJpaController();
         newActivityList = discussionTopicJpaController.getLastActivities();
-    }
-
-    public String getMD5(String value) {
-        return MD5Generator.generate(value);
-    }
-
-    public List<Interests> getInterestThemesList() {
-        return interestThemesList;
-    }
-
-    public void setInterestThemesList(List<Interests> interestThemesList) {
-        this.interestThemesList = interestThemesList;
     }
 
     public List<NewActivity> getNewActivityList() {

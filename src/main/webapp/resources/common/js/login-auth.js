@@ -39,6 +39,13 @@ jsf.ajax.addOnEvent(function (data) {
     }
 });
 
+$(document).ready(function () {
+    $.post("../ping.html");
+    window.setInterval(function () {
+        $.post("../ping.html");
+    }, 1500000);
+})
+
 if (navigator.appName == 'Microsoft Internet Explorer')
 {
     window.location = '/resources/notsupported.htm';

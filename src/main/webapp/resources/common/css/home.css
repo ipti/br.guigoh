@@ -1,47 +1,160 @@
-@charset "utf-8";
-/**RESET**/
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: Arial, Helvetica, sans-serif; vertical-align: baseline;}
-:focus {outline: 0;}
-ol, ul {list-style: none;}
-strong {font-weight: bold;}
-/* CSS Document */
-.clear {display:block;clear:both;}
-.home_title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}
-.home_box {display: block; width: 900px; margin: 5px 0px 0px 24px;border:1px solid #ababab;}
-.left_column{display: block; float: left; margin: 30px 0px 0px 0px; width: 240px;}
-.middle_column{display: block; float: left; width: 360px; padding: 30px 10px 0px 20px; border-right: 1px solid #b6b7b2;border-left: 1px solid #b6b7b2;}
-.right_column{display: block; width: 250px; float: left; padding: 30px 0px 0px 15px;overflow: hidden;}
-.interest_themes_label_box{display:block;padding-bottom:30px}
-.interest_themes_label{font-weight: bold;font-size:14px;margin:0 0 25px 20px;}
-.theme_icon{float:left;width:22px;height:22px;margin:-4px 10px 0 -6px}
-.interest_theme{text-decoration: none;display:block;padding:5px 0 5px 8px;border-top:1px solid #ababab;color:black;font-size:13px}
-.interest_theme:hover{background-color:black;color:white}
-.last_objects_label{font-weight: bold;font-size:14px;margin:0 0 25px 0px;}
-.publish_new_object_container{float:right;background-color:#b9d331;border-radius:5px;display:block;width:172px;height:51px;text-decoration: none;margin:25px 10px 20px;}
-#publish_new_object_lamp{float:left}
-.publish_new_object_label{font-size:13px;color:black;float:left;width:120px;margin:10px 0 0 0}
-.network_news{font-size:14px;font-weight:bold;margin:0 0 32px;display:block}
-.publisher_image{float:left; margin-right:9px;height:77px;width:77px;background:url(../images/avatar.png) no-repeat;background-size:77px}
-.text_feed {font-size:11px;display:block;height:77px;margin:0 0 15px;border-bottom:1px solid lightgray;padding-bottom:15px;}   
-.more_objects{float:right;cursor:pointer;margin:10px 0 20px 0;width:80px;display:none}
-#more_objects_icon{margin:6px 0 0 10px;float:right;width:17px;height:9px;background:url(../images/plus.png) no-repeat;}
-.user_news_name {color:black;text-decoration: underline; display:block;margin-bottom:5px}
-.social_news_name {color:black;text-decoration: underline;display:block;margin: 2px 4px 0px 4px;}
-.theme_news_name {margin-left: 4px;}
-.user_feed { display: block; width: 240px; height: auto; margin-bottom: 40px; }
-.list_objects{clear:both;display:block;margin-bottom:-30px;}
-.educational_object_image{width:100px;height:100px;float:left;margin-right:15px}
-.educational_object_name{font-size:15px; text-decoration: none;color: black;font-weight: bold;}
-.educational_object{display:block;height:120px;margin-bottom:20px;padding:5px 0 5px 5px;border-bottom:1px solid lightgray}
-.educational_object_publisher{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
-.container_description{float:left;margin-top:7px}
-.educational_object_theme{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
-.educational_object_label_sended{color:#939598;font-size:11px;float:left;margin:0px 5px 0 0}
-.educational_object_label_by{color:#939598;font-size:11px;float:left;margin:-5px 5px 0 0}
-.educational_object_date{display:block;font-size:11px;color:#939598;margin:2px 0 20px}
-.clock_icon {margin-left:-3px;display: block; width: 18px; height: 18px; float: left; background:url(../images/clocks.png) no-repeat; }
-#show_more{color:blue;font-size:11px;display:block;text-align:center;margin:40px 0 10px 0;}
-#no_more{color:#989898;font-size:11px;display:block;text-align:center;margin:40px 0 10px 0;font-style:italic;}
+/** Coluna principal **/
 
+.column {
+    width: 600px;
+    float: left;
+}
 
-//retirado float:left do .educational_object_name. Repor quando consertar o home.js pra encurtar os nomes
+.column-list-item {
+    font-size: 12px;
+    border-bottom: 1px solid #C1C1C1;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.column-list-item:nth-last-child(2) {
+    margin: 0;
+}
+
+.column-list-item a {
+    color: #000;
+}
+
+.column-list-image {
+    float: left;
+    margin-right: 15px;
+    height: 95px;
+    width: 95px;
+}
+
+.column-object-title {
+    font-weight: bold;
+    font-size: 15px;
+    width: 90%;
+}
+
+.column-object-title a {
+    text-decoration: none;
+}
+
+.column-object-author {
+    font-size: 12px;
+    font-weight: normal;
+    color: gray;
+}
+
+.column-object-author a {
+    text-decoration: underline;
+    color: gray;
+}
+
+.column-object-date {
+    line-height: 10px;
+    font-size:11px;
+    color: gray;
+}
+
+.column-object-date img {
+    padding-right: 5px;
+    margin-bottom: -3px;
+}
+
+.column-object-description {
+    padding-top: 24px;
+    line-height: 17px;
+    float: left;
+    width: 80%;
+}
+
+.column-object-description span {
+    color: gray;
+}
+
+.column-object-comments {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 15px;
+}
+
+.column-object-comments img {
+    padding-right: 5px;
+    margin-bottom: -8px;
+}
+
+.load-more a {
+    color: gray;
+    text-decoration: none;
+    font-size: 11px;
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+.load-more a:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: 0; 
+    height: 0; 
+
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid gray;
+}
+
+.no-more {
+    color: gray;
+    text-decoration: none;
+    font-size: 11px;
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+
+/** Barra Lateral **/
+
+aside {
+    width: 260px;
+    float: right;
+}
+
+.aside-container {
+    background: #DCDFD6;
+    border-top: 5px solid #999C95;
+    padding: 15px 20px;
+}
+
+aside h3 {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.aside-list-item {
+    font-size: 11px;
+    line-height: 18px;
+    border-bottom: 1px solid #C1C1C1;
+    padding: 20px 0;
+}
+
+.aside-list-item:last-child {
+    border: none;
+}
+
+.aside-list-item a {
+    color: #000;
+}
+
+.aside-list-image {
+    float: left;
+    padding-right: 10px;
+}
+
+.aside-object-title {
+    line-height: 14px;
+}
