@@ -42,7 +42,11 @@ public class HomeBean implements Serializable {
     }
 
     private void getEducationalObjects() {
-        educationalObjectList = educationalObjectJpaController.getLatestActiveEducationalObjects(4);
+        educationalObjectList = educationalObjectJpaController.getLatestActiveEducationalObjects(6);
+    }
+    
+    private void getActivities() {
+        newActivityList = discussionTopicJpaController.getLastActivities(6);
     }
 
     public void getMoreEducationalObjects() {
@@ -81,10 +85,6 @@ public class HomeBean implements Serializable {
         }
     }
 
-    private void getActivities() {
-        newActivityList = discussionTopicJpaController.getLastActivities(4);
-    }
-    
     private void initGlobalVariables() {
         educationalObjectJpaController = new EducationalObjectJpaController();
         discussionTopicJpaController = new DiscussionTopicJpaController();

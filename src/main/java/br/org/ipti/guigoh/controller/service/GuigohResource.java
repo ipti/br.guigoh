@@ -5,11 +5,9 @@
 package br.org.ipti.guigoh.controller.service;
 
 import br.org.ipti.guigoh.model.entity.Friends;
-import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.util.List;
 import javax.ws.rs.Consumes;
