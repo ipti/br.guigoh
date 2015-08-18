@@ -61,15 +61,15 @@
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>
+                    <div class="load-more">
+                        <hr/>
+                        <h:commandLink value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
+                            <f:ajax render="aside-container"/>
+                        </h:commandLink>
+                        <h:outputText styleClass="no-more" value="Não há mais Novidades na Rede" rendered="#{!homeBean.existsMoreActivities}"/>
+                        <hr/>
+                    </div>
                 </h:panelGroup>
-                <div class="load-more">
-                    <hr/>
-                    <h:commandLink value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
-                        <f:ajax render="aside-container"/>
-                    </h:commandLink>
-                    <h:outputText styleClass="no-more" value="Não há mais Novidades na Rede" rendered="#{!homeBean.existsMoreActivities}"/>
-                    <hr/>
-                </div>
             </aside>
             <div class="clear"></div>
         </h:form>

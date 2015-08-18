@@ -309,7 +309,7 @@ public class DiscussionTopicJpaController implements Serializable {
         }
     }
 
-    public List<NewActivity> getLastActivities() {
+    public List<NewActivity> getLastActivities(int quantity) {
         EntityManager em = getEntityManager();
         try {
             List<Object[]> objectList = em.createNativeQuery("select * from "
@@ -319,7 +319,7 @@ public class DiscussionTopicJpaController implements Serializable {
                     + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
                     + "where dtm.status = 'A') "
-                    + "as news order by data desc limit 4").getResultList();
+                    + "as news order by data desc limit " + quantity).getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
             for (Object[] obj : objectList) {
@@ -336,12 +336,12 @@ public class DiscussionTopicJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<Object[]> objectList = em.createNativeQuery("select * from "
-                    + "(select id as id, social_profile_id, title, data, 'T' as type from discussion_topic "
-                    + "where status = 'A' and data < '" + date + "'"
+                    + "(select id as id, social_profile_id, title, data, 'T' as type from discussion_topic dt "
+                    + "where status = 'A' and dt.data < '" + date + "'"
                     + "union "
                     + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
-                    + "where dtm.status = 'A' and data < '" + date + "') "
+                    + "where dtm.status = 'A' and dtm.data < '" + date + "') "
                     + "as news order by data desc limit 4").getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();

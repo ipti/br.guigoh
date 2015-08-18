@@ -35,7 +35,7 @@ public class HomeBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             getEducationalObjects();
-            getLastDiscussionTopicActivities();
+            getActivities();
             checkIfExistsMoreEducationalObjects();
             checkIfExistsMoreActivities();
         }
@@ -74,10 +74,15 @@ public class HomeBean implements Serializable {
     }
     
     private void checkIfExistsMoreActivities(){
+        if (discussionTopicJpaController.getMoreActivities(newActivityList.get(newActivityList.size() - 1).getData()).isEmpty()) {
+            setExistsMoreActivities(false);
+        } else {
+            setExistsMoreActivities(true);
+        }
     }
 
-    private void getLastDiscussionTopicActivities() {
-        newActivityList = discussionTopicJpaController.getLastActivities();
+    private void getActivities() {
+        newActivityList = discussionTopicJpaController.getLastActivities(4);
     }
     
     private void initGlobalVariables() {
