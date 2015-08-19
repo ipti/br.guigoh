@@ -161,6 +161,11 @@ aside h3 {
     line-height: 14px;
 }
 
+.aside-object-title a {
+    float: left;
+    width: 60%;
+}
+
 .aside-profile-action {
     display: block;
 }

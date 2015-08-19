@@ -16,12 +16,22 @@ $(document).ready(function () {
     });
     $(".messenger").on('click', 'span', (function () {
         $("#messenger_friends").toggle();
+        if ($("#messenger_friends").is(":visible")){
+            $("#messenger-menu").css("background-color", "#5a5a5a");
+            $("#messenger-menu").css("color", "#fdfdfd");
+            $("#messenger-menu").css("border-color", "#5a5a5a");
+        } else {
+            $("#messenger_friends").css("height", "");
+            $("#messenger-menu").css("background-color", "#fdfdfd");
+            $("#messenger-menu").css("color", "gray");
+        }
         if ($("#messenger_friends").height() > 250) {
             $("#messenger_friends").css("height", "250px");
         } else {
             $("#messenger_friends").css("height", "");
         }
     }));
+    $('#messenger_friends').on('DOMMouseScroll mousewheel', preventScrolling);
     $(document).on('keypress', '#messageInputs .textmessage', function (e) {
         if (e.which == 13) {
             $(this).parent().find('#sendMessage').click();
@@ -44,10 +54,16 @@ function messengerFriends() {
             for (var i = 0; i < friends.length; i++)
             {
                 friends_ids += friends[i].id + ",";
-                $('#messenger_friends').append("<li id='friend_" + friends[i].id + "' name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'><span id='friend_photo'/>" + friends[i].name + "</li>");
-                $("#friend_" + friends[i].id + " #friend_photo").css("background", "url('" + friends[i].photo + "') no-repeat center center");
-                $("#friend_" + friends[i].id + " #friend_photo").css("background-size", "25px");
-                $("#messenger_friends li").css("color", "red");
+                $('#messenger_friends').append(
+                        "<li id='friend_" + friends[i].id + "' name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'>"
+                    +   "<img class='friend-photo' src='" + friends[i].photo + "'/>"
+                    +   "<div class='friend-name'>" + friends[i].name + "</div>"
+                    +   "</li>");
+                $('.friend-name').each(function(){
+                    if ($(this).text().length > 26){
+                        $(this).text($(this).text().substring(0, 23) + "...");
+                    }
+                })
             }
             wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friends_ids));
             wsocket.onmessage = onMessageReceived;
@@ -65,9 +81,9 @@ function onMessageReceived(evt) {
         }
         $('#messenger-menu strong').text('(' + friends.length + ')');
         $.each($("#messenger_friends li"), function () {
-            $(this).css("color", "red");
+            $(this).find(".friend-online").remove();
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
-                $(this).css("color", "green");
+                $(this).find(".friend-name").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
                 var friend = $(this);
                 $(this).remove();
                 $("#messenger_friends").prepend(friend);
@@ -160,3 +176,32 @@ function sendMessage(event) {
         $('#msg_' + id + ' #textmessage_' + id).val("");
     }
 }
+
+function preventScrolling(ev) {
+    var $this = $(this),
+            scrollTop = this.scrollTop,
+            scrollHeight = this.scrollHeight,
+            height = $this.height(),
+            delta = (ev.type == 'DOMMouseScroll' ?
+                    ev.originalEvent.detail * -40 :
+                    ev.originalEvent.wheelDelta),
+            up = delta > 0;
+
+    var prevent = function () {
+        ev.stopPropagation();
+        ev.preventDefault();
+        ev.returnValue = false;
+        return false;
+    }
+
+    if (!up && -delta > scrollHeight - height - scrollTop) {
+        // Scrolling down, but this will take us past the bottom.
+        $this.scrollTop(scrollHeight);
+
+        return prevent();
+    } else if (up && delta > scrollTop) {
+        // Scrolling up, but this will take us past the top.
+        $this.scrollTop(0);
+        return prevent();
+    }
+};
