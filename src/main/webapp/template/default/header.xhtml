@@ -23,8 +23,6 @@
                 <span class="header-top-separator">|</span>
                 <!--<a href="#">Ajuda do Guigoh</a>-->
                 <span class="first"><h:commandLink action="/admin/view.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></span>
-                <span class="header-top-separator">|</span>
-                <span class="first"><h:commandLink action="#{headerBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></span>
             </p>
             
         </div>
@@ -36,7 +34,7 @@
             </div>
             <nav class="nav-main">
                 <ul>
-                    <li class="menu-icons active">
+                    <li class="menu-icons">
                         <a class="menu-icon-one" href="/educational-object/publish.xhtml">Biblioteca de Objetos Educacionais</a>
                     </li>
                     <li class="menu-icons">
@@ -57,14 +55,14 @@
             <div class="header-profile">
                 <div class="greetings">
                     <p>Oi,</p>
-                    <p><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a></p>
+                    <p><a class="user" href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a></p>
                     <div class="down-arrow">
-                        <div id="user-menu-box">
-                            <p>MEU PERFIL</p>
-                            <p>EDITAR MEU PERFIL</p>
-                            <p>MINHA CONTA</p>
-                            <p>SOBRE O GUIGOH</p>
-                            <p>SAIR</p>
+                        <div id="user-menu-box" data-collapse="true">
+                            <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">meu perfil</a></span></p>
+                            <p><img src="../resources/common/images/icon-profile-edit.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">editar meu perfil</h:commandLink></span></p>
+                            <!--<p><img src="../resources/common/images/icon-account.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">minha conta</h:commandLink></span></p>-->
+                            <!--<p><img src="../resources/common/images/icon-guigoh-gray.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">sobre o guigoh</h:commandLink></span></p>-->
+                            <p><img src="../resources/common/images/icon-close.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></span></p>
                         </div>
                     </div>
                 </div>

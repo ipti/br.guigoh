@@ -1,3 +1,5 @@
+var index = 2;
+
 $(document).ready(function(){
     $(document).on('click','.reply_attach_button', function() {
         $(".file").click();

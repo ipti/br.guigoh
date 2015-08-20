@@ -143,7 +143,7 @@ hr {
     font-weight: bold;
 }
 
-.greetings a {
+.greetings .user {
     color: #333;
 }
 .header-profile .profile-picture {
@@ -166,9 +166,10 @@ hr {
 #user-menu-box{
     display: none;
     text-align: left;
+    text-transform: uppercase;
     margin: 30px 0 0px -140px;
     width: 180px;
-    height: 145px;
+    height: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
     background: white;
     position: relative;
     -moz-border-radius: 10px;
@@ -177,17 +178,27 @@ hr {
     border: 1px solid #C1C1C1;
 }
 
-#user-menu-box p{
+#user-menu-box a{
     color: gray;
-    margin-left: 50px;
-    margin-top: 10px;
+    text-decoration: none;
+}
+
+#user-menu-box p{
+    margin-left: 15px;
+    line-height: 10px;
+}
+
+#user-menu-box img{
+    padding: 5px 5px 0 0;
+    position: relative;
+    top: 6px;
 }
 
 #user-menu-box:before {
     content:"";
     position: absolute;
     right: 22px;
-    bottom: 145px;
+    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
@@ -199,7 +210,7 @@ hr {
     content:"";
     position: absolute;
     right: 24px;
-    bottom: 145px;
+    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
     width: 0;
     height: 0;
     border-left: 8px solid transparent;

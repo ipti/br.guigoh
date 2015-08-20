@@ -1,3 +1,5 @@
+var index = 0;
+
 $(document).ready(function () {
     displayPreview();
     var mediaName = $(".media-name");
