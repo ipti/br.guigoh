@@ -1,3 +1,5 @@
+var index = 1;
+
 $(document).ready(function() {
     var width = $(".page_progress").width();
     var page = 1;

@@ -1,7 +1,5 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+var index = 2;
+
 $(document).ready(function() {
     $(document).on('click','.attach_button',function() {
         $(".file").click();
