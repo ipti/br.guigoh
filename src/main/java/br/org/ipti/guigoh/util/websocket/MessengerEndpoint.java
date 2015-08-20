@@ -10,8 +10,10 @@ import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -97,6 +99,7 @@ public class MessengerEndpoint {
                 messengerMessages.setSocialProfileIdReceiver(Integer.parseInt(obj.getString("receiverId")));
                 messengerMessages.setSocialProfileIdSender(Integer.parseInt(obj.getString("senderId")));
                 Timestamp ts = utilJpaController.getTimestampServerTime();
+                String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(ts);
                 messengerMessages.setMessageDate(ts);
                 messengerMessages.setMessageDelivered('N');
                 messengerMessagesJpaController.create(messengerMessages);
@@ -108,11 +111,21 @@ public class MessengerEndpoint {
                                 .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
                                 .add("receiverId", obj.getString("receiverId"))
                                 .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                                .add("received", ts.toString())
+                                .add("received", date)
                                 .add("type", obj.getString("type")).build()
                                 .toString());
                     }
                 }
+                session.getBasicRemote().sendObject(Json.createObjectBuilder()
+                                .add("message", obj.getString("message"))
+                                .add("senderId", obj.getString("senderId"))
+                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
+                                .add("receiverId", obj.getString("receiverId"))
+                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
+                                .add("received", date)
+                                .add("type", obj.getString("type"))
+                                .add("himself", "").build()
+                                .toString());
                 break;
             case "MSG_SENT":
                 List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(obj.getString("receiverId")));
@@ -167,13 +180,14 @@ public class MessengerEndpoint {
         List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(id));
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {
+            String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(messengerMessages.getMessageDate());
             jsonArrayBuilder.add(Json.createObjectBuilder()
                     .add("message", messengerMessages.getMessage())
                     .add("senderId", messengerMessages.getSocialProfileIdSender())
                     .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdSender()).getName())
                     .add("receiverId", messengerMessages.getSocialProfileIdReceiver())
                     .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
-                    .add("received", messengerMessages.getMessageDate().toString())
+                    .add("received", date)
                     .add("type", "NEW_MSG"));
         });
         JsonArray jsonArray = jsonArrayBuilder.build();
@@ -192,13 +206,14 @@ public class MessengerEndpoint {
         }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {
+            String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(messengerMessages.getMessageDate());
             jsonArrayBuilder.add(Json.createObjectBuilder()
                     .add("message", messengerMessages.getMessage())
                     .add("senderId", messengerMessages.getSocialProfileIdSender())
                     .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdSender()).getName())
                     .add("receiverId", messengerMessages.getSocialProfileIdReceiver())
                     .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
-                    .add("received", messengerMessages.getMessageDate().toString())
+                    .add("received", date)
                     .add("type", "NEW_MSG"));
         });
         JsonArray jsonArray = jsonArrayBuilder.build();

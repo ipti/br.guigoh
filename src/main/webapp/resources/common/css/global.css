@@ -295,18 +295,55 @@ hr {
 }
 
 .messenger_boxes div.messages {
-    height:111px; 
-    max-height: 111px;
-    overflow:auto;
-    width:220px;
-    border-radius:5px;
-    border:1px solid #000; 
-    text-indent:3px;
-    background-color:white
+    height:145px; 
+    max-height: 145px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 5px 7px;
+    text-indent: 3px;
+    background-color: white;
 }
 
-.messages p {
-    font-size:11px
+.message {
+    width: 70%
+} 
+
+.your-message { 
+    float: right;
+    margin: 0 5px 0 0;
+}
+
+.friend-message {
+    float:left;
+    text-indent: 0
+}
+
+.message-inner-container {
+    display: block;
+    clear: both;
+    width: 100%;
+    height: 6px;
+}
+
+.message-inner-container p {
+    line-height: 15px;
+}
+
+.icon-container {
+    margin: 5px 0 3px 0;
+}
+
+.message-text {
+    font-size: 11px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-all;
+    text-justify: auto
+}
+
+.message-date {
+    font-size: 9px;
+    color: gray;
 }
 
 .messenger_title {
@@ -329,8 +366,25 @@ hr {
     box-shadow: 0px 0px 3px #000;
 }
 
-.textmessage {
-    width:145px
+.textarea-container {
+    height: 45px;
+    margin: 0 7px;
+    border-radius: 10px;
+    border: 1px solid #ccc
+}
+
+.send-message {
+    resize: none;
+    border: none;
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;  
+    outline: none;
+    text-indent: 3px;
+    font-size: 11px;
 }
 
 .header-top-separator {
@@ -348,6 +402,14 @@ hr {
     color: #404095;
     font-size: 20px;
     margin-bottom: 50px;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
 }
 
 ::-webkit-scrollbar {
