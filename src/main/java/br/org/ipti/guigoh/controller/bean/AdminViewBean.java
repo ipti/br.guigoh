@@ -30,9 +30,9 @@ import org.apache.commons.mail.EmailException;
  * @author Joe
  */
 @ViewScoped
-@Named
+@Named 
 public class AdminViewBean implements Serializable {
-
+ 
     private static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
     FIRST_ACCESS = "FC", ADMIN = "AD", REVISER = "RE",
     ACCEPTED = "AC", REJECTED = "RE", DEACTIVATED = "DE";
