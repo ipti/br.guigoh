@@ -1,6 +1,6 @@
-var index = 0;
-
 $(document).ready(function () {
+    $(".menu-icon-one").parent().addClass("active");
+    
     displayPreview();
     var mediaName = $(".media-name");
     var mediaRow = $(".media-table-row");

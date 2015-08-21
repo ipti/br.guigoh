@@ -1,1 +1,3 @@
-var index = 3;
+$(document).ready(function(){
+    $(".menu-icon-four").parent().addClass("active");
+});
