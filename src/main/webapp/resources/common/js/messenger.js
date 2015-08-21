@@ -46,6 +46,8 @@ $(document).ready(function () {
     $(document).on('focus', '.send-message', function () {
         $(this).closest(".box").find(".new-messages").remove();
         $(this).closest(".box").find(".new").removeClass("new").addClass("old");
+        json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
+        wsocket.send(json);
     })
 });
 
@@ -162,8 +164,6 @@ function showBox(id, name, message, received, himself) {
     }
     $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
     $('#box-' + id).show();
-    json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
-    wsocket.send(json);
 }
 
 function createBox(id, name) {
@@ -259,4 +259,3 @@ function preventScrolling(ev) {
         return prevent();
     }
 }
-;
