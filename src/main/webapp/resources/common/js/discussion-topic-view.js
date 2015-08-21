@@ -1,6 +1,6 @@
-var index = 2;
-
 $(document).ready(function(){
+    $(".menu-icon-three").parent().addClass("active");
+    
     $(document).on('click','.reply_attach_button', function() {
         $(".file").click();
     });

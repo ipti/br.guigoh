@@ -1,6 +1,6 @@
-var index = 1;
-
 $(document).ready(function() {
+    $(".menu-icon-two").parent().addClass("active");
+    
     var width = $(".page_progress").width();
     var page = 1;
     $(".educational_object_author_phone").mask("(99) 9999-9999");
