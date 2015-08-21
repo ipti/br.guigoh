@@ -177,6 +177,7 @@ hr {
     border-radius: 10px;
     border: 1px solid #C1C1C1;
     cursor: default;
+    right: -24px;
 }
 
 #user-menu-box a{
