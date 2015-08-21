@@ -28,12 +28,10 @@ $(document).ready(function () {
         if ($(this).parent().height() > 33) {
             $(this).parent().css("height", "33px");
             $(this).parent().css("margin-top", "210px");
-            $(this).next(".messenger-content").hide();
 
         } else {
             $(this).parent().css("height", "243px");
             $(this).parent().css("margin-top", "0");
-            $(this).next(".messenger-content").show();
         }
     })
     $('#messenger_friends').on('DOMMouseScroll mousewheel', preventScrolling);
