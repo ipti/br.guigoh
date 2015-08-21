@@ -12,6 +12,7 @@ and open the template in the editor.
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <!-- BEGIN PAGE STYLES -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
         <link href="/resources/common/css/reset.css" rel="stylesheet"/>
         <link href="/resources/common/css/global.css" rel="stylesheet"/>
         <ui:insert name="styles"></ui:insert>
@@ -36,6 +37,10 @@ and open the template in the editor.
                 </span>
 
                 <ul id="messenger_friends"></ul>
+                <audio id="new-message-sound" controls="controls" style="display: none">
+                    <source src="../../resources/common/medias/horse.mp3" type="audio/mpeg"/>
+                    <source src="../../resources/common/medias/horse.ogg" type="audio/ogg"/>
+                </audio>
             </div>
             <div class="messenger_boxes"></div>
         </div>

@@ -18,3 +18,12 @@ jsf.ajax.addOnEvent(function (data) {
             break;
     }
 });
+
+$(document).on('click', function (e) {
+    if ($(e.target).closest($(".down-arrow")).length > 0){
+        $("#user-menu-box").show();
+    } else if ($(e.target).closest("#user-menu-box").length === 0) {
+        $("#user-menu-box").hide();
+    }
+    console.log(e.target);
+});

@@ -176,11 +176,17 @@ hr {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     border: 1px solid #C1C1C1;
+    cursor: default;
 }
 
 #user-menu-box a{
     color: gray;
     text-decoration: none;
+}
+
+#user-menu-box a:hover{
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 #user-menu-box p{

@@ -34,8 +34,7 @@ $(document).ready(function () {
             $(this).parent().css("margin-top", "0");
         }
     })
-    $('#messenger_friends').on('DOMMouseScroll mousewheel', preventScrolling);
-    $(document).on('DOMMouseScroll mousewheel', '.messages', preventScrolling);
+    $(document).on('DOMMouseScroll mousewheel', '#messenger_friends, .messages', preventScrolling);
     $(document).on('keypress', '.send-message', function (e) {
         if (e.keyCode == 13 && !e.shiftKey)
         {
@@ -46,6 +45,7 @@ $(document).ready(function () {
     $(document).on('focus', '.send-message', function () {
         $(this).closest(".box").find(".new-messages").remove();
         $(this).closest(".box").find(".new").removeClass("new").addClass("old");
+        $(this).closest(".box").css("background-color", "#9d9d9d");
         json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
         wsocket.send(json);
     })
@@ -113,35 +113,20 @@ function onMessageReceived(evt) {
             showBox(msg.receiverId, msg.receiverName, msg.message, msg.received, logged_social_profile_id);
         } else {
             showBox(msg.senderId, msg.senderName, msg.message, msg.received, null);
-            var box = $("#box-" + msg.senderId);
-            if (!box.find(".send-message").is(':focus')) {
-                var length = box.find(".friend-message.new").length;
-                if (length > 0) {
-                    box.children(".messenger_title").children(".new-messages").remove();
-                    box.children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
-                }
-            } else {
-                box.find(".new").removeClass("new").addClass("old");
-            }
+            showNewMessagesQuantity(msg.senderId);
         }
     } else if (typeof msg.offlineMessages !== 'undefined') {
         var offlineMessages = JSON.parse(msg.offlineMessages);
         $.each(offlineMessages, function () {
             showBox(this.senderId, this.senderName, this.message, this.received, null);
         });
-        $.each($(".box"), function () {
-            var length = $(this).find(".friend-message.new").length;
-            if (length > 0) {
-                $(this).children(".messenger_title").children(".new-messages").remove();
-                $(this).children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
-            }
-        });
+        showNewMessagesQuantity(null);
     } else if (typeof msg.historyMessages !== 'undefined') {
         var historyMessages = JSON.parse(msg.historyMessages);
         var messageContainer = '';
         var id;
         $.each(historyMessages, function () {
-            messageContainer += loadMessageContainer(this.senderId, this.message, this.received, false);
+            messageContainer += loadMessageBlock(this.senderId, this.message, this.received, false);
             id = (logged_social_profile_id === this.senderId) ? this.receiverId : this.senderId;
         });
         $('#box-' + id + ' .messages').prepend(messageContainer);
@@ -159,7 +144,7 @@ function showBox(id, name, message, received, himself) {
         wsocket.send(json);
     }
     if (message !== null) {
-        var messageContainer = loadMessageContainer((himself !== null) ? himself : id, message, received, true);
+        var messageContainer = loadMessageBlock((himself !== null) ? himself : id, message, received, true);
         $('#box-' + id + ' .messages').append(messageContainer);
     }
     $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
@@ -219,7 +204,7 @@ function sendMessage(input) {
     }
 }
 
-function loadMessageContainer(id, message, date, recent) {
+function loadMessageBlock(id, message, date, recent) {
     var classe = (id === logged_social_profile_id ? "your-message" : "friend-message");
     var direction = (id === logged_social_profile_id ? "right" : "left");
     var time = recent ? "new" : "old";
@@ -257,5 +242,31 @@ function preventScrolling(ev) {
         // Scrolling up, but this will take us past the top.
         $this.scrollTop(0);
         return prevent();
+    }
+}
+
+function showNewMessagesQuantity(id) {
+    if (id !== null) {
+        var box = $("#box-" + id);
+        if (!box.find(".send-message").is(':focus')) {
+            var length = box.find(".friend-message.new").length;
+            if (length > 0) {
+                box.children(".messenger_title").children(".new-messages").remove();
+                box.children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
+                box.css("background-color", "gray");
+                $("#new-message-sound")[0].play();
+            }
+        } else {
+            box.find(".new").removeClass("new").addClass("old");
+        }
+    } else {
+        $.each($(".box"), function () {
+            var length = $(this).find(".friend-message.new").length;
+            if (length > 0) {
+                $(this).children(".messenger_title").children(".new-messages").remove();
+                $(this).children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
+                $(this).css("background-color", "gray");
+            }
+        });
     }
 }
