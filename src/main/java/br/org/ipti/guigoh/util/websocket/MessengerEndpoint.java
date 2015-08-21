@@ -128,7 +128,7 @@ public class MessengerEndpoint {
                                 .toString());
                 break;
             case "MSG_SENT":
-                List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(obj.getString("receiverId")));
+                List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getFriendNonReadMessages(Integer.parseInt(obj.getString("receiverId")), Integer.parseInt(obj.getString("senderId")));
                 for (MessengerMessages mm : messengerMessagesList) {
                     mm.setMessageDelivered('Y');
                     messengerMessagesJpaController.edit(mm);
@@ -177,7 +177,7 @@ public class MessengerEndpoint {
     }
 
     private String loadOfflineMessages(String id) throws RollbackFailureException, Exception {
-        List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getNonReadMessages(Integer.parseInt(id));
+        List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getAllNonReadMessages(Integer.parseInt(id));
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {
             String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(messengerMessages.getMessageDate());
