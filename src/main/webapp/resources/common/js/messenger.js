@@ -33,7 +33,7 @@ $(document).ready(function () {
             $(this).parent().css("height", "243px");
             $(this).parent().css("margin-top", "0");
         }
-    })
+    });
     $(document).on('DOMMouseScroll mousewheel', '#messenger_friends, .messages', preventScrolling);
     $(document).on('keypress', '.send-message', function (e) {
         if (e.keyCode == 13 && !e.shiftKey)
@@ -48,9 +48,21 @@ $(document).ready(function () {
         $(this).closest(".box").css("background-color", "#9d9d9d");
         json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
         wsocket.send(json);
-    })
+    });
 });
 
+window.onbeforeunload = function () {
+    $.each(Cookies.get(), function (name, value) {
+        if (/^collapsed-box/.test(name)) {
+            Cookies.remove(name);
+        }
+    });
+    $.each($(".box"), function () {
+        if ($(this).height() === 33 && $(this).find(".new-messages").length) {
+            Cookies.set('collapsed-' + $(this).attr("id"), $(this).attr("id"));
+        }
+    });
+};
 function messengerFriends() {
     $.ajax({
         type: "GET",
@@ -269,4 +281,11 @@ function showNewMessagesQuantity(id) {
             }
         });
     }
+    $.each($(".box"), function(){
+        if (Cookies.get("collapsed-" + $(this).attr("id"))){
+            $(this).css("height", "33px");
+            $(this).css("margin-top", "210px");
+            Cookies.remove("collapsed-" + $(this).attr("id"));
+        }
+    });
 }
