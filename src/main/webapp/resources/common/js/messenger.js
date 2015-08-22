@@ -63,6 +63,7 @@ window.onbeforeunload = function () {
         }
     });
 };
+
 function messengerFriends() {
     $.ajax({
         type: "GET",
@@ -121,7 +122,7 @@ function onMessageReceived(evt) {
 
         });
     } else if (typeof msg.message !== 'undefined') {
-        if (typeof msg.himself !== 'undefined') {
+        if (msg.himself === true) {
             showBox(msg.receiverId, msg.receiverName, msg.message, msg.received, logged_social_profile_id);
         } else {
             showBox(msg.senderId, msg.senderName, msg.message, msg.received, null);

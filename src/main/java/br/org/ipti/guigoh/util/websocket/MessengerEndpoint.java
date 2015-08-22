@@ -9,6 +9,7 @@ import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,27 +106,11 @@ public class MessengerEndpoint {
                 messengerMessagesJpaController.create(messengerMessages);
                 for (Session s : session.getOpenSessions()) {
                     if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                        s.getBasicRemote().sendObject(Json.createObjectBuilder()
-                                .add("message", obj.getString("message"))
-                                .add("senderId", obj.getString("senderId"))
-                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
-                                .add("receiverId", obj.getString("receiverId"))
-                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                                .add("received", date)
-                                .add("type", obj.getString("type")).build()
-                                .toString());
+                        sendObject(s, obj, false, date);
+                    } else if (s.isOpen() && obj.getString("senderId").equals(s.getUserProperties().get("user"))){
+                        sendObject(s, obj, true, date);
                     }
                 }
-                session.getBasicRemote().sendObject(Json.createObjectBuilder()
-                                .add("message", obj.getString("message"))
-                                .add("senderId", obj.getString("senderId"))
-                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
-                                .add("receiverId", obj.getString("receiverId"))
-                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                                .add("received", date)
-                                .add("type", obj.getString("type"))
-                                .add("himself", "").build()
-                                .toString());
                 break;
             case "MSG_SENT":
                 List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getFriendNonReadMessages(Integer.parseInt(obj.getString("receiverId")), Integer.parseInt(obj.getString("senderId")));
@@ -218,5 +203,18 @@ public class MessengerEndpoint {
         });
         JsonArray jsonArray = jsonArrayBuilder.build();
         return jsonArray.toString();
+    }
+    
+    private void sendObject(Session session, JsonObject obj, boolean himself, String date) throws IOException, EncodeException{
+        session.getBasicRemote().sendObject(Json.createObjectBuilder()
+                                .add("message", obj.getString("message"))
+                                .add("senderId", obj.getString("senderId"))
+                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
+                                .add("receiverId", obj.getString("receiverId"))
+                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
+                                .add("received", date)
+                                .add("himself", himself)
+                                .add("type", obj.getString("type")).build()
+                                .toString());
     }
 }
