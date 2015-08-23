@@ -53,13 +53,15 @@ $(document).ready(function () {
 
 window.onbeforeunload = function () {
     $.each(Cookies.get(), function (name, value) {
-        if (/^collapsed-box/.test(name)) {
+        if (/box/.test(name)) {
             Cookies.remove(name);
         }
     });
     $.each($(".box"), function () {
-        if ($(this).height() === 33 && $(this).find(".new-messages").length) {
-            Cookies.set('collapsed-' + $(this).attr("id"), $(this).attr("id"));
+        if ($(this).height() === 33) {
+            Cookies.set('collapsed-' + $(this).attr("id"), $(this).attr("socialprofileid"));
+        } else {
+            Cookies.set($(this).attr("id"), $(this).attr("socialprofileid"));
         }
     });
 };
@@ -147,6 +149,7 @@ function onMessageReceived(evt) {
     } else if (typeof msg.onlineUsers !== 'undefined') {
         $('#registered_users_online').text(msg.onlineUsers + " online");
     }
+    persistBoxesStates();
 }
 
 function showBox(id, name, message, received, himself) {
@@ -185,13 +188,8 @@ function createBox(id, name) {
 function openMessengerBox() {
     var name = $(this).attr('name');
     var id = $(this).attr('socialprofileid');
-    if ($('#box-' + id).length > 0) {
-        if (!$('#box-' + id).is(":visible")) {
-            $('#box-' + id).show();
-            $('#send-message-' + id).focus().select();
-        } else {
-            $('#box-' + id).remove();
-        }
+    if ($('#box-' + id).length) {
+        $('#box-' + id).remove();
     } else {
         var messenger_boxes_count = $('.messenger_boxes .box').size();
         if (messenger_boxes_count !== 0) {
@@ -282,11 +280,20 @@ function showNewMessagesQuantity(id) {
             }
         });
     }
-    $.each($(".box"), function(){
-        if (Cookies.get("collapsed-" + $(this).attr("id"))){
-            $(this).css("height", "33px");
-            $(this).css("margin-top", "210px");
-            Cookies.remove("collapsed-" + $(this).attr("id"));
+}
+
+function persistBoxesStates() {
+    $.each(Cookies.get(), function (name, value) {
+        if (/box/.test(name)) {
+            if (!$("#box-" + value).length) {
+                var friendName = $('#messenger_friends').find("li[socialprofileid=" + value + "]").attr("name");
+                showBox(value, friendName, null, null, null);
+            }
+            if (/collapsed/.test(name)) {
+                $("#box-" + value).css("height", "33px");
+                $("#box-" + value).css("margin-top", "210px");
+            }
+            Cookies.remove(name);
         }
     });
 }
