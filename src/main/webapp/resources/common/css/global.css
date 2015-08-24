@@ -225,7 +225,7 @@ hr {
     border-bottom: 8px solid white;
 }
 
-.registered_users_quantity, #registered_users_online{
+.registered-users-quantity, #registered-users-online{
     color:white
 }
 
@@ -264,14 +264,14 @@ hr {
     margin-top: 6px;
 }
 
-#messenger_friends {
+#messenger-friends {
     display: none;
     overflow-y: scroll;
     background-color: #E6EADF;
     max-height: 250px;
 }
 
-#messenger_friends li {
+#messenger-friends li {
     cursor: pointer;
     font-size: 11px;
     height: 31px;
@@ -296,14 +296,14 @@ hr {
     margin: 6px 6px 0 0;
 }
 
-.messenger_boxes {
+.messenger-boxes {
     z-index:10;
     position:fixed; 
     left:20px; 
     bottom:0; 
 }
 
-.messenger_boxes .box {
+.messenger-boxes .box {
     border-bottom: 0px; 
     border-top-left-radius: 10px; 
     border-top-right-radius: 10px; 
@@ -320,7 +320,7 @@ hr {
     height: inherit;
 }
 
-.messenger_boxes div.messages {
+.messenger-boxes div.messages {
     height:145px; 
     max-height: 145px;
     overflow-y: auto;
@@ -372,7 +372,7 @@ hr {
     color: gray;
 }
 
-.messenger_title {
+.messenger-title {
     cursor: pointer;
     font-size: 11px;
     padding: 0 10px;
