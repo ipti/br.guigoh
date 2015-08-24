@@ -30,19 +30,19 @@ and open the template in the editor.
                 <ui:insert name="content"></ui:insert>
             </section>
         </div>
-        <div class="messenger_container">
+        <div class="messenger-container">
             <div class="messenger"> 
-                <span id="messenger-menu">#{localeBean.getString('Bate-Papo')} <strong>(0)</strong>
+                <span id="messenger-menu" class="messenger-menu-collapsed">Bate-Papo <strong>(0)</strong>
                     <img id="online-icon" src="../../resources/common/images/online-dot.png"></img>
                 </span>
 
-                <ul id="messenger_friends"></ul>
+                <ul id="messenger-friends"></ul>
                 <audio id="new-message-sound" controls="controls" style="display: none">
-                    <source src="../../resources/common/medias/horse.mp3" type="audio/mpeg"/>
-                    <source src="../../resources/common/medias/horse.ogg" type="audio/ogg"/>
+                    <source src="../../resources/common/medias/new-message-sound.mp3" type="audio/mpeg"/>
+                    <source src="../../resources/common/medias/new-message-sound.ogg" type="audio/ogg"/>
                 </audio>
             </div>
-            <div class="messenger_boxes"></div>
+            <div class="messenger-boxes"></div>
         </div>
         <!-- BEGIN PAGE SCRIPTS -->
         <script src="/resources/lib/js/jquery-1.11.3.min.js"></script>

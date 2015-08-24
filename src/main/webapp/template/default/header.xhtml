@@ -9,9 +9,9 @@
     <h:form>
         <div class="header-top">
             <p>
-                <h:outputText styleClass="registered_users_quantity" rendered="#{headerBean.admin}" value="#{headerBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
+                <h:outputText styleClass="registered-users-quantity" rendered="#{headerBean.admin}" value="#{headerBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
                 <span class="header-top-separator">|</span>
-                <span id="registered_users_online"></span>
+                <span id="registered-users-online"></span>
                 <span class="header-top-separator">|</span>
                 <!--<a href="#">SELECT LANGUAGE</a>-->
                 <ui:param name="url" value="#{request.servletPath}"/>

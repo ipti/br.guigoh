@@ -3,38 +3,27 @@ var friends = [];
 
 $(document).ready(function () {
     messengerFriends();
-    $('#messenger_friends').on('click', 'li', openMessengerBox);
+    $('#messenger-friends').on('click', 'li', openMessengerBox);
     $(document).on('click', '.messageButton', openMessengerBox);
     $(document).on('click', '.close', function () {
         $('#box-' + $(this).attr('socialprofileid')).remove();
     });
     $(".messenger").on('click', 'span', (function () {
-        $("#messenger_friends").toggle();
-        if ($("#messenger_friends").is(":visible")) {
-            $("#messenger-menu").css("background-color", "#5a5a5a");
-            $("#messenger-menu").css("color", "#fdfdfd");
-            $("#messenger-menu").css("border-color", "#5a5a5a");
+        $("#messenger-friends").toggle();
+        if ($("#messenger-friends").is(":visible")) {
+            $("#messenger-menu").removeClass("messenger-menu-collapsed");
         } else {
-            $("#messenger-menu").css("background-color", "#fdfdfd");
-            $("#messenger-menu").css("color", "gray");
-        }
-        if ($("#messenger_friends").height() > 250) {
-            $("#messenger_friends").css("height", "250px");
-        } else {
-            $("#messenger_friends").css("height", "");
+            $("#messenger-menu").addClass("messenger-menu-collapsed");
         }
     }));
-    $(document).on('click', '.messenger_title', function () {
-        if ($(this).parent().height() > 33) {
-            $(this).parent().css("height", "33px");
-            $(this).parent().css("margin-top", "210px");
-
+    $(document).on('click', '.messenger-title', function () {
+        if (!$(this).parent().hasClass("box-collapsed")) {
+            $(this).parent().addClass("box-collapsed");
         } else {
-            $(this).parent().css("height", "243px");
-            $(this).parent().css("margin-top", "0");
+            $(this).parent().removeClass("box-collapsed");
         }
     });
-    $(document).on('DOMMouseScroll mousewheel', '#messenger_friends, .messages', preventScrolling);
+    $(document).on('DOMMouseScroll mousewheel', '#messenger-friends, .messages', preventScrolling);
     $(document).on('keypress', '.send-message', function (e) {
         if (e.keyCode == 13 && !e.shiftKey)
         {
@@ -43,9 +32,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('focus', '.send-message', function () {
-        $(this).closest(".box").find(".new-messages").remove();
-        $(this).closest(".box").find(".new").removeClass("new").addClass("old");
-        $(this).closest(".box").css("background-color", "#9d9d9d");
+        messagesViewed($(this).closest(".box"));
         json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
         wsocket.send(json);
     });
@@ -53,16 +40,19 @@ $(document).ready(function () {
 
 window.onbeforeunload = function () {
     $.each(Cookies.get(), function (name, value) {
-        if (/^collapsed-box/.test(name)) {
+        if (/box/.test(name)) {
             Cookies.remove(name);
         }
     });
     $.each($(".box"), function () {
-        if ($(this).height() === 33 && $(this).find(".new-messages").length) {
-            Cookies.set('collapsed-' + $(this).attr("id"), $(this).attr("id"));
+        if ($(this).hasClass("box-collapsed")) {
+            Cookies.set('collapsed-' + $(this).attr("id"), $(this).attr("socialprofileid"));
+        } else {
+            Cookies.set($(this).attr("id"), $(this).attr("socialprofileid"));
         }
     });
 };
+
 function messengerFriends() {
     $.ajax({
         type: "GET",
@@ -72,24 +62,23 @@ function messengerFriends() {
         },
         dataType: 'json',
         success: function (friends) {
-            $('#messenger_friends p').html('');
-            $('#messenger_friends li').remove();
-            var friends_ids = "";
+            $('#messenger-friends p').html('');
+            $('#messenger-friends li').remove();
+            var friendsIds = "";
             for (var i = 0; i < friends.length; i++)
             {
-                friends_ids += friends[i].id + ",";
-                $('#messenger_friends').append(
-                        "<li id='friend_" + friends[i].id + "' name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'>"
+                friendsIds += friends[i].id + ",";
+                $('#messenger-friends').append(
+                        "<li name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'>"
                         + "<img class='friend-photo' src='" + friends[i].photo + "'/>"
                         + "<div class='friend-name'>" + friends[i].name + "</div>"
                         + "</li>");
                 $('.friend-name').each(function () {
-                    if ($(this).text().length > 26) {
-                        $(this).text($(this).text().substring(0, 23) + "...");
-                    }
+                    $(this).text(changeNameLength($(this).text(), 26));
                 })
             }
-            wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friends_ids));
+            wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
+            wsocket.onopen = persistBoxesAfterPageReload;
             wsocket.onmessage = onMessageReceived;
         }
     });
@@ -104,24 +93,24 @@ function onMessageReceived(evt) {
             friends.pop(msg.id);
         }
         $('#messenger-menu strong').text('(' + friends.length + ')');
-        $.each($("#messenger_friends li"), function () {
+        $.each($("#messenger-friends li"), function () {
             $(this).find(".friend-online").remove();
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
                 $(this).find(".friend-name").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
                 var friend = $(this);
                 $(this).remove();
-                $("#messenger_friends").prepend(friend);
+                $("#messenger-friends").prepend(friend);
             }
         });
-        $.each($(".messenger_boxes .box"), function () {
+        $.each($(".messenger-boxes .box"), function () {
             $(this).find(".friend-online").remove();
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
-                $(this).find(".messenger_title").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
+                $(this).find(".messenger-title").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
             }
 
         });
     } else if (typeof msg.message !== 'undefined') {
-        if (typeof msg.himself !== 'undefined') {
+        if (msg.himself === true) {
             showBox(msg.receiverId, msg.receiverName, msg.message, msg.received, logged_social_profile_id);
         } else {
             showBox(msg.senderId, msg.senderName, msg.message, msg.received, null);
@@ -144,19 +133,29 @@ function onMessageReceived(evt) {
         $('#box-' + id + ' .messages').prepend(messageContainer);
         $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
     } else if (typeof msg.onlineUsers !== 'undefined') {
-        $('#registered_users_online').text(msg.onlineUsers + " online");
+        $('#registered-users-online').text(msg.onlineUsers + " online");
     }
 }
 
 function showBox(id, name, message, received, himself) {
     var json;
     if ($('#box-' + id).length === 0) {
-        $('.messenger_boxes').append(createBox(id, name));
-        json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_HISTORY"}';
+        $('.messenger-boxes').append(createBox(id, name));
+        json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_HISTORY", "himself":"' + (himself !== null ? "true" : "false") + '"}';
         wsocket.send(json);
+        if (himself !== null) {
+            message = null;
+        }
     }
     if (message !== null) {
-        var messageContainer = loadMessageBlock((himself !== null) ? himself : id, message, received, true);
+        var friendId;
+        if (himself !== null) {
+            friendId = himself;
+            messagesViewed($("#box-" + id));
+        } else {
+            friendId = id;
+        }
+        var messageContainer = loadMessageBlock(friendId, message, received, true);
         $('#box-' + id + ' .messages').append(messageContainer);
     }
     $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
@@ -164,12 +163,10 @@ function showBox(id, name, message, received, himself) {
 }
 
 function createBox(id, name) {
-    if (name.length > 23) {
-        name = name.substring(0, 20) + "...";
-    }
-    var online = $("#messenger_friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
+    name = changeNameLength(name, 23);
+    var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
     var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "'>"
-            + "<div class='messenger_title'>" + name
+            + "<div class='messenger-title'>" + name
             + "<img src='../../resources/common/images/close.png' class='close' socialprofileid='" + id + "'/>"
             + online
             + "</div>"
@@ -184,21 +181,16 @@ function createBox(id, name) {
 function openMessengerBox() {
     var name = $(this).attr('name');
     var id = $(this).attr('socialprofileid');
-    if ($('#box-' + id).length > 0) {
-        if (!$('#box-' + id).is(":visible")) {
-            $('#box-' + id).show();
-            $('#send-message-' + id).focus().select();
-        } else {
-            $('#box-' + id).remove();
-        }
+    if ($('#box-' + id).length) {
+        $('#box-' + id).remove();
     } else {
-        var messenger_boxes_count = $('.messenger_boxes .box').size();
-        if (messenger_boxes_count !== 0) {
-            var messenger_boxes_width = $('.messenger_boxes .box').css('width').replace('px', '');
-            var body_size = $('body').css('width').replace('px', '');
+        var boxesQuantity = $('.messenger-boxes .box').size();
+        if (boxesQuantity !== 0) {
+            var boxWidth = $('.messenger-boxes .box').css('width').replace('px', '');
+            var bodySize = $('body').css('width').replace('px', '');
         }
-        if (messenger_boxes_count === 0 || body_size * 2 / 3 > messenger_boxes_width * (messenger_boxes_count + 1)) {
-            showBox(id, name, null, null, null);
+        if (boxesQuantity === 0 || bodySize * 2 / 3 > boxWidth * (boxesQuantity + 1)) {
+            showBox(id, name, null, null, logged_social_profile_id);
             $('#send-message-' + id).focus().select();
         }
     }
@@ -263,8 +255,8 @@ function showNewMessagesQuantity(id) {
         if (!box.find(".send-message").is(':focus')) {
             var length = box.find(".friend-message.new").length;
             if (length > 0) {
-                box.children(".messenger_title").children(".new-messages").remove();
-                box.children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
+                box.children(".messenger-title").children(".new-messages").remove();
+                box.children(".messenger-title").append("<span class='new-messages'> [" + length + "]</span>");
                 box.css("background-color", "gray");
                 $("#new-message-sound")[0].play();
             }
@@ -275,17 +267,36 @@ function showNewMessagesQuantity(id) {
         $.each($(".box"), function () {
             var length = $(this).find(".friend-message.new").length;
             if (length > 0) {
-                $(this).children(".messenger_title").children(".new-messages").remove();
-                $(this).children(".messenger_title").append("<span class='new-messages'> [" + length + "]</span>");
+                $(this).children(".messenger-title").children(".new-messages").remove();
+                $(this).children(".messenger-title").append("<span class='new-messages'> [" + length + "]</span>");
                 $(this).css("background-color", "gray");
             }
         });
     }
-    $.each($(".box"), function(){
-        if (Cookies.get("collapsed-" + $(this).attr("id"))){
-            $(this).css("height", "33px");
-            $(this).css("margin-top", "210px");
-            Cookies.remove("collapsed-" + $(this).attr("id"));
+}
+
+function persistBoxesAfterPageReload() {
+    $.each(Cookies.get(), function (name, value) {
+        if (/box/.test(name)) {
+            if ($("#box-" + value).length === 0) {
+                var friendName = $('#messenger-friends').find("li[socialprofileid=" + value + "]").attr("name");
+                showBox(value, friendName, null, null, logged_social_profile_id);
+            }
+            if (/collapsed/.test(name)) {
+                $("#box-" + value).addClass("box-collapsed")
+            }
+            Cookies.remove(name);
         }
     });
+}
+
+function messagesViewed(box) {
+    box.find(".new-messages").remove();
+    box.find(".new").removeClass("new").addClass("old");
+    box.find(".messenger-content").css("height", "inherit");
+    box.css("background-color", "#9d9d9d");
+}
+
+function changeNameLength(name, limit) {
+    return (name.length > limit) ? name.substring(0, limit - 3) + "..." : name;
 }

@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -105,27 +104,11 @@ public class MessengerEndpoint {
                 messengerMessagesJpaController.create(messengerMessages);
                 for (Session s : session.getOpenSessions()) {
                     if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                        s.getBasicRemote().sendObject(Json.createObjectBuilder()
-                                .add("message", obj.getString("message"))
-                                .add("senderId", obj.getString("senderId"))
-                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
-                                .add("receiverId", obj.getString("receiverId"))
-                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                                .add("received", date)
-                                .add("type", obj.getString("type")).build()
-                                .toString());
+                        sendObject(s, obj, false, date);
+                    } else if (s.isOpen() && obj.getString("senderId").equals(s.getUserProperties().get("user"))) {
+                        sendObject(s, obj, true, date);
                     }
                 }
-                session.getBasicRemote().sendObject(Json.createObjectBuilder()
-                                .add("message", obj.getString("message"))
-                                .add("senderId", obj.getString("senderId"))
-                                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
-                                .add("receiverId", obj.getString("receiverId"))
-                                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                                .add("received", date)
-                                .add("type", obj.getString("type"))
-                                .add("himself", "").build()
-                                .toString());
                 break;
             case "MSG_SENT":
                 List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getFriendNonReadMessages(Integer.parseInt(obj.getString("receiverId")), Integer.parseInt(obj.getString("senderId")));
@@ -135,10 +118,16 @@ public class MessengerEndpoint {
                 }
                 break;
             case "MSG_HISTORY":
-                String json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
-                for (Session s : session.getOpenSessions()) {
-                    if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                        s.getBasicRemote().sendObject(json);
+                String json;
+                if (obj.getString("himself").equals("true")) {
+                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), true)).build().toString();
+                    session.getBasicRemote().sendObject(json);
+                } else {
+                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), false)).build().toString();
+                    for (Session s : session.getOpenSessions()) {
+                        if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                            s.getBasicRemote().sendObject(json);
+                        }
                     }
                 }
                 break;
@@ -198,11 +187,14 @@ public class MessengerEndpoint {
         }
     }
 
-    private String loadHistoryMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {
+    private String loadHistoryMessages(String senderId, String receiverId, boolean himself) throws RollbackFailureException, Exception {
         List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(Integer.parseInt(receiverId), Integer.parseInt(senderId));
         List<MessengerMessages> messengerMessagesList = new ArrayList<>();
         for (int i = lastTenMessagesList.size(); i > 0; i--) {
             messengerMessagesList.add(lastTenMessagesList.get(i - 1));
+        }
+        if (himself) {
+            messengerMessagesList.addAll(messengerMessagesJpaController.getFriendNonReadMessages(Integer.parseInt(senderId), Integer.parseInt(receiverId)));
         }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {
@@ -218,5 +210,18 @@ public class MessengerEndpoint {
         });
         JsonArray jsonArray = jsonArrayBuilder.build();
         return jsonArray.toString();
+    }
+
+    private void sendObject(Session session, JsonObject obj, boolean himself, String date) throws IOException, EncodeException {
+        session.getBasicRemote().sendObject(Json.createObjectBuilder()
+                .add("message", obj.getString("message"))
+                .add("senderId", obj.getString("senderId"))
+                .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
+                .add("receiverId", obj.getString("receiverId"))
+                .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
+                .add("received", date)
+                .add("himself", himself)
+                .add("type", obj.getString("type")).build()
+                .toString());
     }
 }
