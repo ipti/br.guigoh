@@ -22,7 +22,7 @@
                 <h:commandLink styleClass="locale frFR" action="#{localeBean.changeLocale(url, 'frFR')}" value="FRA"/>
                 <span class="header-top-separator">|</span>
                 <!--<a href="#">Ajuda do Guigoh</a>-->
-                <span class="first"><h:commandLink action="/admin/view.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">Admin</h:commandLink></span>
+                <span class="first"><h:commandLink action="/admin/view.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">#{localeBean.getString('Admin')}</h:commandLink></span>
             </p>
             
         </div>
@@ -35,31 +35,31 @@
             <nav class="nav-main">
                 <ul>
                     <li class="menu-icons">
-                        <a class="menu-icon-one" href="">Biblioteca de Objetos Educacionais</a>
+                        <a class="menu-icon-one" href="">#{localeBean.getString('Biblioteca de Objetos Educacionais')}</a>
                     </li>
                     <li class="menu-icons">
-                        <a class="menu-icon-two" href="/educational-object/publish.xhtml">Publicação de Objetos Educacionais</a>
+                        <a class="menu-icon-two" href="/educational-object/publish.xhtml">#{localeBean.getString('Publicação de Objetos Educacionais')}</a>
                     </li>
                     <li class="menu-icons">
-                        <a class="menu-icon-three" href="">Grupo de Estudos</a>
+                        <a class="menu-icon-three" href="">#{localeBean.getString('Grupo de Estudos')}</a>
                     </li>
                     <li class="menu-icons">
-                        <a class="menu-icon-four" href="/friend/view.xhtml">Amigos</a>
+                        <a class="menu-icon-four" href="/friend/view.xhtml">#{localeBean.getString('Amigos')}</a>
                     </li>
                     <li class="menu-icons">
-                        <a class="menu-icon-five" href="">Buscar</a>
+                        <a class="menu-icon-five" href="">#{localeBean.getString('Buscar')}</a>
                     </li>
                     <div class="clear"></div>
                 </ul>
             </nav>
             <div class="header-profile">
                 <div class="greetings">
-                    <p>Oi,</p>
+                    <p>#{localeBean.getString('Olá, ')}</p>
                     <p><a class="user" href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a></p>
                     <div class="down-arrow"/>
                     <div id="user-menu-box">
-                        <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">meu perfil</a></span></p>
-                        <p><img src="../resources/common/images/icon-profile-edit.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">editar meu perfil</a></span></p>
+                        <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Meu perfil')}</a></span></p>
+                        <p><img src="../resources/common/images/icon-profile-edit.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Editar meu perfil')}</a></span></p>
                         <!--<p><img src="../resources/common/images/icon-account.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">minha conta</h:commandLink></span></p>-->
                         <!--<p><img src="../resources/common/images/icon-guigoh-gray.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">sobre o guigoh</h:commandLink></span></p>-->
                         <p><img src="../resources/common/images/icon-close.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></span></p>

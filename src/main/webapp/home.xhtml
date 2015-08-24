@@ -14,14 +14,14 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
         </f:metadata>
-        <h1>Últimos objetos educacionais</h1>
+        <h1>#{localeBean.getString("Últimos objetos educacionais")}</h1>
         <h:form prependId="false">
             <h:panelGroup layout="block" id="object-column" class="column">
                 <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject" >
                     <div class="column-list-item">
                         <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="column-list-image" src="#{educationalObject.image}"/></a>
                         <h2 class="column-object-title"><a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a></h2>
-                        <small class="column-object-author"> Publicado por 
+                        <small class="column-object-author"> #{localeBean.getString("Publicado por")} 
                             <a href="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a>
                         </small>
                         <p class="column-object-date"><img src="/resources/common/images/clock.png"/>
@@ -41,7 +41,7 @@
                 </ui:repeat>
                 <div class="load-more">
                     <hr/>
-                    <h:commandLink class="load-more-objects" value="Carregar mais" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
+                    <h:commandLink class="load-more-objects" value="#{localeBean.getString('Carregar mais')}" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
                         <f:ajax render="object-column"/>
                     </h:commandLink>
                     <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
@@ -50,7 +50,7 @@
             </h:panelGroup>
             <aside>
                 <h:panelGroup layout="block" id="aside-container" class="aside-container">
-                    <h3>Novidades na rede</h3>
+                    <h3>#{localeBean.getString("Novidades na rede")}</h3>
                     <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
                         <div class="aside-list-item">
                             <a href="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
@@ -66,7 +66,7 @@
                         <h:commandLink class="load-more-activities" value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
                             <f:ajax render="aside-container"/>
                         </h:commandLink>
-                        <h:outputText styleClass="no-more" value="Não há mais Novidades na Rede" rendered="#{!homeBean.existsMoreActivities}"/>
+                        <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Novidades na Rede')}" rendered="#{!homeBean.existsMoreActivities}"/>
                         <hr/>
                     </div>
                 </h:panelGroup>
