@@ -9,12 +9,10 @@ import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -120,11 +118,17 @@ public class MessengerEndpoint {
                 }
                 break;
             case "MSG_HISTORY":
-                String json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
-                for (Session s : session.getOpenSessions()) {
+                String json; 
+                if (obj.getString("himself").equals("true")){
+                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), true)).build().toString();
+                    session.getBasicRemote().sendObject(json);
+                } else{
+                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), false)).build().toString();
+                    for (Session s : session.getOpenSessions()) {
                     if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
                         s.getBasicRemote().sendObject(json);
                     }
+                }
                 }
                 break;
         }
@@ -183,11 +187,14 @@ public class MessengerEndpoint {
         }
     }
 
-    private String loadHistoryMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {
+    private String loadHistoryMessages(String senderId, String receiverId, boolean himself) throws RollbackFailureException, Exception {
         List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(Integer.parseInt(receiverId), Integer.parseInt(senderId));
         List<MessengerMessages> messengerMessagesList = new ArrayList<>();
         for (int i = lastTenMessagesList.size(); i > 0; i--) {
             messengerMessagesList.add(lastTenMessagesList.get(i - 1));
+        }
+        if (himself){
+            messengerMessagesList.addAll(messengerMessagesJpaController.getAllNonReadMessages(Integer.parseInt(senderId)));
         }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {

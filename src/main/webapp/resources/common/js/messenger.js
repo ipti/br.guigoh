@@ -156,11 +156,24 @@ function showBox(id, name, message, received, himself) {
     var json;
     if ($('#box-' + id).length === 0) {
         $('.messenger_boxes').append(createBox(id, name));
-        json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_HISTORY"}';
+        json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_HISTORY", "himself":"' + (himself !== null ? "true" : "false") + '"}';
         wsocket.send(json);
+        if (himself !== null) {
+            message = null;
+        }
     }
     if (message !== null) {
-        var messageContainer = loadMessageBlock((himself !== null) ? himself : id, message, received, true);
+        var friendId;
+        if (himself !== null) {
+            friendId = himself;
+            $("#box-" + id).find(".new-messages").remove();
+            $("#box-" + id).css("background-color", "#9d9d9d");
+            $("#box-" + id).find(".messenger-content").css("height", "inherit");
+            $("#box-" + id).find(".new").removeClass("new").addClass("old");
+        } else {
+            friendId = id;
+        }
+        var messageContainer = loadMessageBlock(friendId, message, received, true);
         $('#box-' + id + ' .messages').append(messageContainer);
     }
     $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
@@ -197,7 +210,7 @@ function openMessengerBox() {
             var body_size = $('body').css('width').replace('px', '');
         }
         if (messenger_boxes_count === 0 || body_size * 2 / 3 > messenger_boxes_width * (messenger_boxes_count + 1)) {
-            showBox(id, name, null, null, null);
+            showBox(id, name, null, null, logged_social_profile_id);
             $('#send-message-' + id).focus().select();
         }
     }
@@ -287,7 +300,7 @@ function persistBoxesStates() {
         if (/box/.test(name)) {
             if (!$("#box-" + value).length) {
                 var friendName = $('#messenger_friends').find("li[socialprofileid=" + value + "]").attr("name");
-                showBox(value, friendName, null, null, null);
+                showBox(value, friendName, null, null, logged_social_profile_id);
             }
             if (/collapsed/.test(name)) {
                 $("#box-" + value).css("height", "33px");
