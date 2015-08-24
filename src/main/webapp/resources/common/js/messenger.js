@@ -11,27 +11,16 @@ $(document).ready(function () {
     $(".messenger").on('click', 'span', (function () {
         $("#messenger_friends").toggle();
         if ($("#messenger_friends").is(":visible")) {
-            $("#messenger-menu").css("background-color", "#5a5a5a");
-            $("#messenger-menu").css("color", "#fdfdfd");
-            $("#messenger-menu").css("border-color", "#5a5a5a");
+            $("#messenger-menu").removeClass("messenger-menu-collapsed");
         } else {
-            $("#messenger-menu").css("background-color", "#fdfdfd");
-            $("#messenger-menu").css("color", "gray");
-        }
-        if ($("#messenger_friends").height() > 250) {
-            $("#messenger_friends").css("height", "250px");
-        } else {
-            $("#messenger_friends").css("height", "");
+            $("#messenger-menu").addClass("messenger-menu-collapsed");
         }
     }));
     $(document).on('click', '.messenger_title', function () {
-        if ($(this).parent().height() > 33) {
-            $(this).parent().css("height", "33px");
-            $(this).parent().css("margin-top", "210px");
-
+        if (!$(this).parent().hasClass("box-collapsed")) {
+            $(this).parent().addClass("box-collapsed");
         } else {
-            $(this).parent().css("height", "243px");
-            $(this).parent().css("margin-top", "0");
+            $(this).parent().removeClass("box-collapsed");
         }
     });
     $(document).on('DOMMouseScroll mousewheel', '#messenger_friends, .messages', preventScrolling);
@@ -43,9 +32,7 @@ $(document).ready(function () {
         }
     });
     $(document).on('focus', '.send-message', function () {
-        $(this).closest(".box").find(".new-messages").remove();
-        $(this).closest(".box").find(".new").removeClass("new").addClass("old");
-        $(this).closest(".box").css("background-color", "#9d9d9d");
+        messagesViewed($(this).closest(".box"));
         json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
         wsocket.send(json);
     });
@@ -93,6 +80,7 @@ function messengerFriends() {
                 })
             }
             wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friends_ids));
+            wsocket.onopen = persistBoxesAfterPageReload;
             wsocket.onmessage = onMessageReceived;
         }
     });
@@ -149,7 +137,6 @@ function onMessageReceived(evt) {
     } else if (typeof msg.onlineUsers !== 'undefined') {
         $('#registered_users_online').text(msg.onlineUsers + " online");
     }
-    persistBoxesStates();
 }
 
 function showBox(id, name, message, received, himself) {
@@ -166,10 +153,7 @@ function showBox(id, name, message, received, himself) {
         var friendId;
         if (himself !== null) {
             friendId = himself;
-            $("#box-" + id).find(".new-messages").remove();
-            $("#box-" + id).css("background-color", "#9d9d9d");
-            $("#box-" + id).find(".messenger-content").css("height", "inherit");
-            $("#box-" + id).find(".new").removeClass("new").addClass("old");
+            messagesViewed($("#box-" + id));
         } else {
             friendId = id;
         }
@@ -295,18 +279,24 @@ function showNewMessagesQuantity(id) {
     }
 }
 
-function persistBoxesStates() {
+function persistBoxesAfterPageReload() {
     $.each(Cookies.get(), function (name, value) {
         if (/box/.test(name)) {
-            if (!$("#box-" + value).length) {
+            if ($("#box-" + value).length === 0) {
                 var friendName = $('#messenger_friends').find("li[socialprofileid=" + value + "]").attr("name");
                 showBox(value, friendName, null, null, logged_social_profile_id);
             }
             if (/collapsed/.test(name)) {
-                $("#box-" + value).css("height", "33px");
-                $("#box-" + value).css("margin-top", "210px");
+                $("#box-" + value).addClass("box-collapsed")
             }
             Cookies.remove(name);
         }
     });
+}
+
+function messagesViewed(box) {
+    box.find(".new-messages").remove();
+    box.find(".new").removeClass("new").addClass("old");
+    box.find(".messenger-content").css("height", "inherit");
+    box.css("background-color", "#9d9d9d");
 }

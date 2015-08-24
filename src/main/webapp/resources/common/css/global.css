@@ -239,8 +239,9 @@ hr {
 
 #messenger-menu {
     text-transform: uppercase; 
-    background-color: #fdfdfd;
-    color: gray;
+    background-color: #5a5a5a;
+    color: #fdfdfd;
+    border-color: #5a5a5a !important;
     display:block;
     cursor:pointer; 
     font-weight: bold; 
@@ -252,6 +253,12 @@ hr {
     border-radius: 8px 8px 0 0;
 }
 
+.messenger-menu-collapsed {
+    background-color: #fdfdfd !important;
+    color: gray !important;
+}
+
+
 #online-icon {
     float: right;
     margin-top: 6px;
@@ -261,6 +268,7 @@ hr {
     display: none;
     overflow-y: scroll;
     background-color: #E6EADF;
+    max-height: 250px;
 }
 
 #messenger_friends li {
@@ -403,6 +411,11 @@ hr {
     outline: none;
     text-indent: 3px;
     font-size: 11px;
+}
+
+.box-collapsed {
+    height: 33px !important;
+    margin-top: 210px;
 }
 
 .header-top-separator {
