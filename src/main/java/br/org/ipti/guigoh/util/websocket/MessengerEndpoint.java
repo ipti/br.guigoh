@@ -127,15 +127,7 @@ public class MessengerEndpoint {
                 break;
             case "LAST_MSGS":
                 String json = Json.createObjectBuilder().add("lastMessages", loadLastMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
-                if (obj.getString("himself").equals("true")) {
-                    session.getBasicRemote().sendObject(json);
-                } else {
-                    for (Session s : session.getOpenSessions()) {
-                        if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
-                            s.getBasicRemote().sendObject(json);
-                        }
-                    }
-                }
+                session.getBasicRemote().sendObject(json);
                 break;
         }
     }
