@@ -32,7 +32,7 @@ $(document).ready(function () {
             sendMessage(this);
         }
     });
-    $(document).on('focus', '.send-message', function(){
+    $(document).on('focus', '.send-message', function () {
         focusChat($(this).attr("socialprofileid"));
     });
 });
@@ -129,29 +129,29 @@ function onMessageReceived(evt) {
             messageContainer += loadMessageBlock(this.senderId, this.message, this.date, recent);
             id = (logged_social_profile_id === this.senderId) ? this.receiverId : this.senderId;
         });
-        $('#box-' + id + ' .messages').prepend(messageContainer);
-        $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
+        if (!$('#box-' + id + ' .messages').find(".message").length) {
+            $('#box-' + id + ' .messages').prepend(messageContainer);
+            $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
+        }
         showNewMessagesQuantity(null);
-        if (focus){
+        if (focus) {
             focusChat(id);
             focus = false;
         }
     } else if (typeof msg.onlineUsers !== 'undefined') {
         $('#registered-users-online').text(msg.onlineUsers + " online");
+    } else if (typeof msg.saw !== 'undefined') {
+        messagesViewed($("#box-" + msg.saw));
     }
 }
 
 function showBox(id, name, message, date, himself, recent) {
     var json;
-    if ($('#box-' + id).length === 0) {
+    if (!$('#box-' + id).length) {
         $('.messenger-boxes').append(createBox(id, name));
         json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"LAST_MSGS", "himself":"' + (himself !== null ? "true" : "false") + '"}';
         wsocket.send(json);
-        if (himself !== null) {
-            message = null;
-        }
-    }
-    if (message !== null) {
+    } else if (message !== null) {
         var friendId;
         if (himself !== null) {
             friendId = himself;

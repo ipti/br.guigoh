@@ -117,6 +117,13 @@ public class MessengerEndpoint {
                     mm.setMessageDelivered('Y');
                     messengerMessagesJpaController.edit(mm);
                 }
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
+                        String json = Json.createObjectBuilder()
+                                .add("saw", obj.getString("senderId")).build().toString();
+                        s.getBasicRemote().sendObject(json);
+                    }
+                }
                 break;
             case "LAST_MSGS":
                 String json = Json.createObjectBuilder().add("lastMessages", loadLastMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
