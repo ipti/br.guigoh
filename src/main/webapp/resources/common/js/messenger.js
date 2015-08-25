@@ -1,5 +1,6 @@
 var wsocket = '';
 var friends = [];
+var focus = false;
 
 $(document).ready(function () {
     messengerFriends();
@@ -31,12 +32,8 @@ $(document).ready(function () {
             sendMessage(this);
         }
     });
-    $(document).on('focus', '.send-message', function () {
-        if ($(this).closest(".box").find(".friend-message.new").length) {
-            messagesViewed($(this).closest(".box"));
-            json = '{"senderId":"' + $(this).closest(".box").attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
-            wsocket.send(json);
-        }
+    $(document).on('focus', '.send-message', function(){
+        focusChat($(this).attr("socialprofileid"));
     });
 });
 
@@ -123,7 +120,6 @@ function onMessageReceived(evt) {
         $.each(offlineMessages, function () {
             showBox(this.id, this.name, null, null, null, null);
         });
-        pop = false;
     } else if (typeof msg.lastMessages !== 'undefined') {
         var lastMessages = JSON.parse(msg.lastMessages);
         var messageContainer = '';
@@ -136,6 +132,10 @@ function onMessageReceived(evt) {
         $('#box-' + id + ' .messages').prepend(messageContainer);
         $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
         showNewMessagesQuantity(null);
+        if (focus){
+            focusChat(id);
+            focus = false;
+        }
     } else if (typeof msg.onlineUsers !== 'undefined') {
         $('#registered-users-online').text(msg.onlineUsers + " online");
     }
@@ -196,6 +196,7 @@ function openMessengerBox() {
         if (boxesQuantity === 0 || bodySize * 2 / 3 > boxWidth * (boxesQuantity + 1)) {
             showBox(id, name, null, null, logged_social_profile_id, null);
             $('#send-message-' + id).focus().select();
+            focus = true;
         }
     }
 }
@@ -296,9 +297,17 @@ function persistBoxesAfterPageReload() {
     });
 }
 
+function focusChat(id) {
+    var box = $("#box-" + id);
+    if (box.find(".friend-message.new").length) {
+        messagesViewed(box);
+        json = '{"senderId":"' + box.attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
+        wsocket.send(json);
+    }
+}
+
 function messagesViewed(box) {
     box.find(".new-messages").remove();
     box.find(".new").removeClass("new").addClass("old");
-    box.find(".messenger-content").css("height", "inherit");
     box.css("background-color", "#9d9d9d");
 }
