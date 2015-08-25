@@ -57,6 +57,7 @@ p {
 
 .main-register input[type=text], .main-register input[type=password] {
     width: 285px !important;
+    outline: none;
 }
 
 .main-register {
@@ -172,6 +173,7 @@ input {
     padding: 0 10px;
     font-style: italic;
     font-size: 12px;
+    outline: none;
 }
 
 input[type=text], input[type=password] {
@@ -180,6 +182,7 @@ input[type=text], input[type=password] {
 
 div.select select {
     background-color: transparent;
+    outline: none;
     width: 307px;
     padding: 0px 5px;
     line-height: 1;
@@ -201,6 +204,10 @@ div.select {
     background: url(../images/arrow-select.png) no-repeat 279px 6px #fff;
     border-radius: 5px;
     margin-bottom: 15px;
+}
+
+.presentation{
+    font-size:22px;
 }
 
 .pointer{
