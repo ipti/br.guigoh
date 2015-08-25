@@ -18,3 +18,7 @@ jsf.ajax.addOnEvent(function (data) {
             break;
     }
 });
+
+function changeNameLength(name, limit) {
+    return (name.length > limit) ? name.substring(0, limit - 3) + "..." : name;
+}

@@ -160,7 +160,14 @@ hr {
     height: 18px;
     cursor: pointer;
     margin-top: 2px;
-    float: right;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.pull-left {
+    float: left !important;
 }
 
 #user-menu-box{

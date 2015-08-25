@@ -24,35 +24,54 @@
 
 .category-name {
     float: left;
-    color: #C1C1C1;
+    color: gray;
     margin-top: -13px;
     background-color: #e6eadf;
     padding-right: 10px;
 }
 
-.col-left {
+.col {
     float: left;
     width: 34%;
 }
 
-.col-middle {
-    float: left;
-    width: 34%;
-}
-
-.col-right {
+.col:nth-child(3n) {
     float: left;
     width: 32%;
-}
-
-.col-1 {
-    float: left;
-    width: 100%;
-    margin: 0 0 20px 0;
 }
 
 .user {
     width: 283px;
     height: 89px;
     border: 1px solid #C1C1C1;
+    margin-bottom: 20px;
+}
+
+.image {
+    height: 90px;
+    width: 90px;
+    margin-right: 25px;
+    float: left;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 13px;
+}
+
+.user-job {
+    font-size: 12px;
+    line-height: 1;
+    color: gray;
+}
+
+.user-plus, .user-arrow {
+    margin-top: 10px;
+}
+
+.user-friend {
+    float: right;
+    width: 25px;
+    margin: 15px 10px 0 0;
 }
