@@ -9,6 +9,7 @@ import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class MessengerEndpoint {
                 onlineUsers.add((String) s.getUserProperties().get("user"));
             }
         }
-        String offlineMessages = loadOfflineMessages(user);
+        String offlineMessages = loadAllFriendIdFromOfflineMessages(user);
         if (offlineMessages != null) {
             json = Json.createObjectBuilder().add("offlineMessages", offlineMessages).build().toString();
             session.getBasicRemote().sendObject(json);
@@ -117,13 +118,11 @@ public class MessengerEndpoint {
                     messengerMessagesJpaController.edit(mm);
                 }
                 break;
-            case "MSG_HISTORY":
-                String json;
+            case "LAST_MSGS":
+                String json = Json.createObjectBuilder().add("lastMessages", loadLastMessages(obj.getString("senderId"), obj.getString("receiverId"))).build().toString();
                 if (obj.getString("himself").equals("true")) {
-                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), true)).build().toString();
                     session.getBasicRemote().sendObject(json);
                 } else {
-                    json = Json.createObjectBuilder().add("historyMessages", loadHistoryMessages(obj.getString("senderId"), obj.getString("receiverId"), false)).build().toString();
                     for (Session s : session.getOpenSessions()) {
                         if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
                             s.getBasicRemote().sendObject(json);
@@ -165,19 +164,13 @@ public class MessengerEndpoint {
         }
     }
 
-    private String loadOfflineMessages(String id) throws RollbackFailureException, Exception {
-        List<MessengerMessages> messengerMessagesList = messengerMessagesJpaController.getAllNonReadMessages(Integer.parseInt(id));
+    private String loadAllFriendIdFromOfflineMessages(String receiverId) throws RollbackFailureException, Exception {
+        List<Integer> idList = messengerMessagesJpaController.getAllIdFromOfflineMessages(Integer.parseInt(receiverId));
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        messengerMessagesList.stream().forEach((messengerMessages) -> {
-            String date = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(messengerMessages.getMessageDate());
+        idList.stream().forEach((senderId) -> {
             jsonArrayBuilder.add(Json.createObjectBuilder()
-                    .add("message", messengerMessages.getMessage())
-                    .add("senderId", messengerMessages.getSocialProfileIdSender())
-                    .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdSender()).getName())
-                    .add("receiverId", messengerMessages.getSocialProfileIdReceiver())
-                    .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
-                    .add("received", date)
-                    .add("type", "NEW_MSG"));
+                    .add("id", senderId)
+                    .add("name", socialProfileJpaController.findSocialProfileBySocialProfileId(senderId).getName()));
         });
         JsonArray jsonArray = jsonArrayBuilder.build();
         if (jsonArray.isEmpty()) {
@@ -187,14 +180,11 @@ public class MessengerEndpoint {
         }
     }
 
-    private String loadHistoryMessages(String senderId, String receiverId, boolean himself) throws RollbackFailureException, Exception {
+    private String loadLastMessages(String senderId, String receiverId) throws RollbackFailureException, Exception {
         List<MessengerMessages> lastTenMessagesList = messengerMessagesJpaController.getLastTenMessages(Integer.parseInt(receiverId), Integer.parseInt(senderId));
         List<MessengerMessages> messengerMessagesList = new ArrayList<>();
         for (int i = lastTenMessagesList.size(); i > 0; i--) {
             messengerMessagesList.add(lastTenMessagesList.get(i - 1));
-        }
-        if (himself) {
-            messengerMessagesList.addAll(messengerMessagesJpaController.getFriendNonReadMessages(Integer.parseInt(senderId), Integer.parseInt(receiverId)));
         }
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         messengerMessagesList.stream().forEach((messengerMessages) -> {
@@ -205,8 +195,8 @@ public class MessengerEndpoint {
                     .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdSender()).getName())
                     .add("receiverId", messengerMessages.getSocialProfileIdReceiver())
                     .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(messengerMessages.getSocialProfileIdReceiver()).getName())
-                    .add("received", date)
-                    .add("type", "NEW_MSG"));
+                    .add("date", date)
+                    .add("read", String.valueOf(messengerMessages.getMessageDelivered())));
         });
         JsonArray jsonArray = jsonArrayBuilder.build();
         return jsonArray.toString();
@@ -219,9 +209,9 @@ public class MessengerEndpoint {
                 .add("senderName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("senderId"))).getName())
                 .add("receiverId", obj.getString("receiverId"))
                 .add("receiverName", socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt(obj.getString("receiverId"))).getName())
-                .add("received", date)
+                .add("date", date)
                 .add("himself", himself)
-                .add("type", obj.getString("type")).build()
+                .add("read", "N").build()
                 .toString());
     }
 }

@@ -324,7 +324,7 @@ hr {
 .messenger-content {
     border: 1px solid #afafaf;  
     background-color: white;
-    height: inherit;
+    height: 100%;
 }
 
 .messenger-boxes div.messages {

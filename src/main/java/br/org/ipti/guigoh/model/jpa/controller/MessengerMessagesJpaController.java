@@ -159,15 +159,15 @@ public class MessengerMessagesJpaController implements Serializable {
         }
     }
     
-    public List<MessengerMessages> getAllNonReadMessages(Integer socialProfileId){
+    public List<Integer> getAllIdFromOfflineMessages(Integer socialProfileId){
         EntityManager em = getEntityManager();
         try {
-            List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
-                    + "where message_delivered = 'N' and social_profile_id_receiver = '" + socialProfileId + "'", MessengerMessages.class).getResultList();
-            if (messengerMessagesList == null){
-                messengerMessagesList = new ArrayList<>();
+            List<Integer> socialProfileIdList = (List<Integer>) em.createNativeQuery("select distinct social_profile_id_sender from messenger_messages "
+                    + "where message_delivered = 'N' and social_profile_id_receiver = '" + socialProfileId + "'").getResultList();
+            if (socialProfileIdList == null){
+                socialProfileIdList = new ArrayList<>();
             }
-            return messengerMessagesList;
+            return socialProfileIdList;
         } finally {
             em.close();
         }
@@ -191,7 +191,7 @@ public class MessengerMessagesJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<MessengerMessages> messengerMessagesList = (List<MessengerMessages>) em.createNativeQuery("select * from messenger_messages "
-                    + "where message_delivered = 'Y' and ((social_profile_id_receiver = '"+loggedSocialProfileId+"' and social_profile_id_sender = '"+socialProfileId+"') or (social_profile_id_receiver = '"+socialProfileId+"' and social_profile_id_sender = '"+loggedSocialProfileId+"')) order by message_date desc limit 10", MessengerMessages.class).getResultList();
+                    + "where (social_profile_id_receiver = '"+loggedSocialProfileId+"' and social_profile_id_sender = '"+socialProfileId+"') or (social_profile_id_receiver = '"+socialProfileId+"' and social_profile_id_sender = '"+loggedSocialProfileId+"') order by message_date desc limit 10", MessengerMessages.class).getResultList();
             if (messengerMessagesList == null){
                 messengerMessagesList = new ArrayList<>();
             }
