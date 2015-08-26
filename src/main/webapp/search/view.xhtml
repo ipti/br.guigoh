@@ -16,7 +16,7 @@
         </f:metadata>
         <h1>Buscar</h1>
         <h:form prependId="false">
-
+            
             <h:inputText class="general-search" value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
                 <f:ajax event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
             </h:inputText>
@@ -32,7 +32,9 @@
                                     <p class="user-name">
                                         <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">#{socialProfile.name}</a></p>
                                     <p class="user-job">#{socialProfile.occupationsId.name}</p>
-                                    <img class="user-plus" src="../resources/common/images/plus.png"/>
+                                    <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId)}">
+                                        <img class="user-plus" src="../resources/common/images/plus.png"/>
+                                    </ui:fragment>
                                 </div>
                             </div>
                         </ui:repeat>

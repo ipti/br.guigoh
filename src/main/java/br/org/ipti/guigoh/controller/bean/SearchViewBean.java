@@ -7,6 +7,7 @@ package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class SearchViewBean implements Serializable {
     private List<EducationalObject> educationalObjectList;
 
     private SocialProfileJpaController socialProfileJpaController;
+    private FriendsJpaController friendsJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -38,10 +40,13 @@ public class SearchViewBean implements Serializable {
 
     public void renderSearchResult() {
         if (generalSearch.length() >= 3) {
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch);
+            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, false);
         } else {
             socialProfileList.clear();
         }
+    }
+    
+    public void isFriend(String friendTokenId){
     }
 
     private void initGlobalVariables() {
@@ -51,6 +56,7 @@ public class SearchViewBean implements Serializable {
         educationalObjectList = new ArrayList<>();
 
         socialProfileJpaController = new SocialProfileJpaController();
+        friendsJpaController = new FriendsJpaController();
     }
 
     public String getGeneralSearch() {

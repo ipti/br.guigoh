@@ -325,21 +325,6 @@ public class FriendsJpaController implements Serializable {
             em.close();
         }
     }
-
-    public List<SocialProfile> findUserSearchList(String str) {
-        EntityManager em = getEntityManager();
-        try {
-            List<SocialProfile> usersList = (List<SocialProfile>) em.createNativeQuery("select * from social_profile "
-                    + "where (UPPER(name) like '" + str.toUpperCase() + "%') "
-                    + "", SocialProfile.class).getResultList();
-            if (usersList == null) {
-                return new ArrayList<>();
-            }
-            return usersList;
-        } finally {
-            em.close();
-        }
-    }
     
     public void addFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
