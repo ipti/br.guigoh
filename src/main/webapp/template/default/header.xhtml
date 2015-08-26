@@ -55,9 +55,9 @@
             <div class="header-profile">
                 <div class="greetings">
                     <p>#{localeBean.getString('Olá, ')}</p>
-                    <p><a class="user" href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a></p>
+                    <p><a class="logged-user" href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{headerBean.socialProfile.name}</a></p>
                     <div class="down-arrow pull-right"/>
-                    <div id="user-menu-box">
+                    <div id="logged-user-menu-box">
                         <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Meu perfil')}</a></span></p>
                         <p><img src="../resources/common/images/icon-profile-edit.jpg"></img><span class="first"><a href="/profile/view.xhtml?id=#{headerBean.socialProfile.socialProfileId}">#{localeBean.getString('Editar meu perfil')}</a></span></p>
                         <!--<p><img src="../resources/common/images/icon-account.jpg"></img><span class="first"><h:commandLink action="#{headerBean.logout()}">minha conta</h:commandLink></span></p>-->
