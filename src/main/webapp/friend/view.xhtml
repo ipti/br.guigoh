@@ -22,9 +22,9 @@
                 <ui:repeat value="#{friendViewBean.acceptedList}" var="friend">
                     <div class="col">
                         <div class="user">
-                            <a href="#{friendViewBean.goToProfile(friend.tokenFriend2.socialProfile.socialProfileId)}"><img class="image" src="#{friend.tokenFriend2.socialProfile.photo}"></img></a>
+                            <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{friend.tokenFriend2.socialProfile.photo}"></img></a>
                             <p class="user-name">
-                                <a href="#{friendViewBean.goToProfile(friend.tokenFriend2.socialProfile.socialProfileId)}">#{friend.tokenFriend2.socialProfile.name}</a>
+                                <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}">#{friend.tokenFriend2.socialProfile.name}</a>
                             </p>
                             <p class="user-job">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
                             <img class="user-arrow"/>
@@ -38,9 +38,9 @@
                 <ui:repeat value="#{friendViewBean.pendingList}" var="pending">
                     <div class="col">
                         <div class="user">
-                            <a href="#{friendViewBean.goToProfile(pending.tokenFriend2.socialProfile.socialProfileId)}"><img class="image" src="#{pending.tokenFriend2.socialProfile.photo}"></img></a>
+                            <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{pending.tokenFriend2.socialProfile.photo}"></img></a>
                             <p class="user-name">
-                                <a href="#{friendViewBean.goToProfile(pending.tokenFriend2.socialProfile.socialProfileId)}">#{pending.tokenFriend2.socialProfile.name}</a>
+                                <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}">#{pending.tokenFriend2.socialProfile.name}</a>
                             </p>
                             <p class="user-job">#{pending.tokenFriend2.socialProfile.occupationsId.name}</p>
                             <h:commandLink id="add_pending_friend" class="accept_button fa fa-check-circle" title="#{localeBean.getString('Aceitar')}" action="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">

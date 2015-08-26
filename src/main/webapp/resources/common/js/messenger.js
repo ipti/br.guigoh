@@ -73,7 +73,7 @@ function messengerFriends() {
                         + "<div class='friend-name'>" + friends[i].name + "</div>"
                         + "</li>");
                 $('.friend-name').each(function () {
-                    $(this).text(changeNameLength($(this).text(), 26));
+                    $(this).text(changeNameLength($(this).text(), 26, false));
                 })
             }
             wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
@@ -167,7 +167,7 @@ function showBox(id, name, message, date, himself, recent) {
 }
 
 function createBox(id, name) {
-    name = changeNameLength(name, 23);
+    name = changeNameLength(name, 23, false);
     var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
     var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "'>"
             + "<div class='messenger-title'>" + name

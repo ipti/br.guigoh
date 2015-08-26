@@ -902,18 +902,26 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-    /**
-     *
-     * @return
-     */
+    
     public List findAllSocialProfileAuthorization(Integer subnetworkdId) {
         EntityManager em = getEntityManager();
-        
         try {
             Query y = em.createNativeQuery("select s.*,a.* from social_profile s "
                     + "join authorization a on s.token_id = a.token_id "
                     + "where s.subnetwork_id = "+ subnetworkdId, "SocialProfileAuthorization");
             return y.getResultList();
+        
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<SocialProfile> findSocialProfilesByName(String name){
+        EntityManager em = getEntityManager();
+        try {
+            List<SocialProfile> socialProfileList = (List<SocialProfile>) 
+                    em.createNativeQuery("select * from social_profile where upper(name) like '%" + name.toUpperCase() + "%'", SocialProfile.class).getResultList();
+            return socialProfileList;
         
         } finally {
             em.close();

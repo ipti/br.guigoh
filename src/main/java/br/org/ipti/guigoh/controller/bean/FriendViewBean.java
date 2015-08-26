@@ -53,10 +53,6 @@ public class FriendViewBean implements Serializable {
         organizeFriendList(pendingList);
     }
 
-    public String goToProfile(Integer id) {
-        return "/profile/view.xhtml?id=" + id;
-    }
-
     private void organizeFriendList(List<Friends> list) {
         list.stream()
                 .filter((friend) -> (user.getToken().equals(friend.getTokenFriend2().getToken())))
