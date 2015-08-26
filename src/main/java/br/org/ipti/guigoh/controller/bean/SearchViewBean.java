@@ -6,9 +6,12 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.util.CookieService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,7 @@ public class SearchViewBean implements Serializable {
     private List<EducationalObject> educationalObjectList;
 
     private SocialProfileJpaController socialProfileJpaController;
+    private EducationalObjectJpaController educationalObjectJpaController;
     private FriendsJpaController friendsJpaController;
 
     public void init() {
@@ -40,13 +44,17 @@ public class SearchViewBean implements Serializable {
 
     public void renderSearchResult() {
         if (generalSearch.length() >= 3) {
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, false);
+            SocialProfile mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, mySocialProfile.getTokenId(), false, 3);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjectsByName(generalSearch, 3);
         } else {
             socialProfileList.clear();
+            educationalObjectList.clear();
         }
     }
     
-    public void isFriend(String friendTokenId){
+    public Friends isFriend(String friendTokenId){
+        return friendsJpaController.isFriend(friendTokenId, CookieService.getCookie("token"));
     }
 
     private void initGlobalVariables() {
@@ -57,6 +65,7 @@ public class SearchViewBean implements Serializable {
 
         socialProfileJpaController = new SocialProfileJpaController();
         friendsJpaController = new FriendsJpaController();
+        educationalObjectJpaController = new EducationalObjectJpaController();
     }
 
     public String getGeneralSearch() {

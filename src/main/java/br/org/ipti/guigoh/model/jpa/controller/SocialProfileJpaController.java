@@ -35,11 +35,9 @@ import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
-import br.org.ipti.guigoh.util.CookieService;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -917,12 +915,15 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
     
-    public List<SocialProfile> findSocialProfilesByName(String name, boolean includeSessionUser){
+    public List<SocialProfile> findSocialProfilesByName(String name, String token, boolean includeSessionUser, int limit){
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
             if (!includeSessionUser){
-                partialQuery = "and token_id <> '" + CookieService.getCookie("token") + "'";
+                partialQuery = "and token_id <> '" + token + "' ";
+            }
+            if (limit > 0){
+                partialQuery += "limit " + limit;
             }
             List<SocialProfile> socialProfileList = (List<SocialProfile>) 
                     em.createNativeQuery("select * from social_profile where upper(name) like '%" + name.toUpperCase() + "%' " + partialQuery, SocialProfile.class).getResultList();

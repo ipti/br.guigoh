@@ -325,7 +325,7 @@ public class FriendsJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public void addFriend(Users user, Integer socialProfileId) throws PreexistingEntityException, RollbackFailureException, Exception {
         try {
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
@@ -407,6 +407,22 @@ public class FriendsJpaController implements Serializable {
             }
         } else {
             return findFriends(friendPK);
+        }
+    }
+
+    public Friends isFriend(String friendTokenId, String tokenId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<Friends> friendList = (List<Friends>) em.createNativeQuery("select * from friends "
+                    + "where ((token_friend_2 = '" + friendTokenId + "' and token_friend_1 = '" + tokenId + "')"
+                    + "or (token_friend_1 = '" + friendTokenId + "' and token_friend_2 = '" + tokenId + "'))", Friends.class).getResultList();
+            if (friendList.isEmpty()) {
+                return null;
+            } else {
+                return friendList.get(0);
+            }
+        } finally {
+            em.close();
         }
     }
 

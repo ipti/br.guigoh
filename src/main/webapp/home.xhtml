@@ -24,7 +24,8 @@
                         <small class="column-object-author"> #{localeBean.getString("Publicado por")} 
                             <a href="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a>
                         </small>
-                        <p class="column-object-date"><img src="/resources/common/images/clock.png"/>
+                        <p class="column-object-date">
+                            <img src="/resources/common/images/clock.png"/>
                             <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
                                 <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                             </h:outputText>

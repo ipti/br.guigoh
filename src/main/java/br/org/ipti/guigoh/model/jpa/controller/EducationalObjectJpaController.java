@@ -21,6 +21,7 @@ import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
+import br.org.ipti.guigoh.util.CookieService;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -465,14 +466,22 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
 
-    public Timestamp getServerTime() {
+    public List<EducationalObject> findEducationalObjectsByName(String name, int limit){
         EntityManager em = getEntityManager();
         try {
-            Timestamp serverTime = (Timestamp) em.createNativeQuery("SELECT date_trunc('seconds', now()::timestamp);").getSingleResult();
-            return serverTime;
+            String partialQuery = "";
+            if (limit > 0){
+                partialQuery = " limit " + limit;
+            }
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) 
+                    em.createNativeQuery("select distinct eo.* from educational_object eo "
+                            + "join educational_object_tag eot on eot.educational_object_id = eo.id "
+                            + "join tags t on eot.tag_id = t.id "
+                            + "where eo.status = 'AC' and (upper(eo.name) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')" + partialQuery, EducationalObject.class).getResultList();
+            return educationalObjectList;
+        
         } finally {
             em.close();
         }
     }
-
 }

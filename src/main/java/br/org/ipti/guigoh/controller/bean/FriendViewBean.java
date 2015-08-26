@@ -72,7 +72,7 @@ public class FriendViewBean implements Serializable {
     public void searchUsersEvent() {
         socialProfileList = new ArrayList<>();
         if (!userInputSearch.equals("")) {
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(userInputSearch, false);
+            socialProfileList = socialProfileJpaController.findSocialProfilesByName(userInputSearch, userSocialProfile.getTokenId(), false, 0);
         }
     }
 
