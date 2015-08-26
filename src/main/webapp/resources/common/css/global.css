@@ -148,7 +148,7 @@ hr {
     font-weight: bold;
 }
 
-.greetings .user {
+.greetings .logged-user {
     color: #333;
 }
 .header-profile .profile-picture {
@@ -175,7 +175,7 @@ hr {
     float: left !important;
 }
 
-#user-menu-box{
+#logged-user-menu-box{
     display: none;
     text-align: left;
     text-transform: uppercase;
@@ -192,28 +192,28 @@ hr {
     right: -24px;
 }
 
-#user-menu-box a{
+#logged-user-menu-box a{
     color: gray;
     text-decoration: none;
 }
 
-#user-menu-box a:hover{
+#logged-user-menu-box a:hover{
     text-decoration: underline;
     cursor: pointer;
 }
 
-#user-menu-box p{
+#logged-user-menu-box p{
     margin-left: 15px;
     line-height: 10px;
 }
 
-#user-menu-box img{
+#logged-user-menu-box img{
     padding: 5px 5px 0 0;
     position: relative;
     top: 6px;
 }
 
-#user-menu-box:before {
+#logged-user-menu-box:before {
     content:"";
     position: absolute;
     right: 22px;
@@ -225,7 +225,7 @@ hr {
     border-bottom: 10px solid #C1C1C1;
 }
 
-#user-menu-box:after {
+#logged-user-menu-box:after {
     content:"";
     position: absolute;
     right: 24px;
