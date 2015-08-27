@@ -9,10 +9,12 @@
     <h:form>
         <div class="header-top">
             <p>
-                <h:outputText styleClass="registered-users-quantity" rendered="#{headerBean.admin}" value="#{headerBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
-                <span class="header-top-separator">|</span>
-                <span id="registered-users-online"></span>
-                <span class="header-top-separator">|</span>
+                <ui:fragment rendered="#{headerBean.admin}">
+                    <h:outputText styleClass="registered-users-quantity"  value="#{headerBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
+                    <span class="header-top-separator">|</span>
+                    <span id="registered-users-online">0 online</span>
+                    <span class="header-top-separator">|</span>
+                </ui:fragment>
                 <!--<a href="#">SELECT LANGUAGE</a>-->
                 <ui:param name="url" value="#{request.servletPath}"/>
                 <h:commandLink styleClass="locale ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}" value="PORT"/>
@@ -20,11 +22,13 @@
                 <h:commandLink styleClass="locale enUS" action="#{localeBean.changeLocale(url, 'enUS')}" value="ENG"/>
                 <span class="header-top-separator">|</span>
                 <h:commandLink styleClass="locale frFR" action="#{localeBean.changeLocale(url, 'frFR')}" value="FRA"/>
-                <span class="header-top-separator">|</span>
                 <!--<a href="#">Ajuda do Guigoh</a>-->
-                <span class="first"><h:commandLink action="/admin/view.xhtml?faces-redirect=true" rendered="#{headerBean.admin || headerBean.reviser}">#{localeBean.getString('Admin')}</h:commandLink></span>
+                <ui:fragment rendered="#{headerBean.admin || headerBean.reviser}">
+                    <span class="header-top-separator">|</span>
+                    <h:commandLink action="/admin/view.xhtml?faces-redirect=true" >#{localeBean.getString('Admin')}</h:commandLink>
+                </ui:fragment>
             </p>
-            
+
         </div>
         <div class="header-navbar">
             <div class="header-logo">

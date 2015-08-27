@@ -16,11 +16,12 @@
         </f:metadata>
         <h1>Buscar</h1>
         <h:form prependId="false">
-
-            <h:inputText class="general-search" value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
-                <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
-            </h:inputText>
-
+            <div class="general-search">
+                <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
+                    <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
+                </h:inputText>
+                <img src="../resources/common/images/magnifying-glass.png"/>
+            </div>
             <h:panelGroup id="search-result">
                 <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">
                     <h3 class="category-name">Pessoas</h3>
@@ -46,7 +47,10 @@
                                             </h:commandLink>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                            <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                            <h:commandLink>
+                                                <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                                <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                            </h:commandLink>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
                                             <h:commandLink>
