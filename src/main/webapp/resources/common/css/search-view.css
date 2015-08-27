@@ -85,10 +85,46 @@
     font-size: 20px;
 }
 
-.user-friend {
+.user-chat {
+    margin-top: 15px;
+    float: left;
+    cursor: pointer;
+}
+
+.user-chat img {
+    width: 15px;
+    float: left;
+    margin: 0 5px 0 0;
+}
+
+.user-chat span {
+    font-size: 11px;
+    margin-top: -3px;
+    float: left;
+    color: gray;
+    font-weight: bold;
+}
+
+.user-friend-status {
     float: right;
     width: 25px;
-    margin: 15px 10px 0 0;
+    margin: 9px 0 0 0;
+    padding: 4px 7px;
+    border-top-left-radius: 5px;
+    border-top: 1px solid #C1C1C1;
+    border-left: 1px solid #C1C1C1;
+}
+
+.user-friend-status.add {
+    background-color: #31bc7a;
+}
+
+.user-friend-status.pending {
+    background-color: #ddc345;
+}
+
+.user-friend-status.remove {
+    background-color: #d1303d;
 }
 
 .result-date {

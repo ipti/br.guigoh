@@ -4,10 +4,11 @@ var focus = false;
 var sound = true;
 
 $(document).ready(function () {
-    messengerFriends();
-    $('#messenger-friends').on('click', 'li', openMessengerBox);
-    $(document).on('click', '.messageButton', openMessengerBox);
-    $(document).on('click', '.close', function () {
+    messengerFriends()
+    $(document).on('click', '#messenger-friends li', function(){
+        openMessengerBox($(this).attr('socialprofileid'), $(this).attr('name'));
+    });
+    $(document).on('click', '.close-chat', function () {
         $('#box-' + $(this).attr('socialprofileid')).remove();
     });
     $(".messenger").on('click', 'span', (function () {
@@ -74,7 +75,7 @@ function messengerFriends() {
                         + "<div class='friend-name'>" + friends[i].name + "</div>"
                         + "</li>");
                 $('.friend-name').each(function () {
-                    $(this).text(changeNameLength($(this).text(), 26, false));
+                    $(this).text(changeNameLength($(this).text(), 26));
                 })
             }
             wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
@@ -167,11 +168,11 @@ function showBox(id, name, message, date, himself, recent) {
 }
 
 function createBox(id, name) {
-    name = changeNameLength(name, 23, false);
+    name = changeNameLength(name, 23);
     var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
     var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "'>"
             + "<div class='messenger-title'><span class='messenger-user-name'>" + name + "</span>"
-            + "<img src='../../resources/common/images/close.png' class='close' socialprofileid='" + id + "'/>"
+            + "<img src='../../resources/common/images/close-chat.png' class='close-chat' socialprofileid='" + id + "'/>"
             + online
             + "</div>"
             + "<div class='messenger-content'>"
@@ -182,9 +183,7 @@ function createBox(id, name) {
     return box;
 }
 
-function openMessengerBox() {
-    var name = $(this).attr('name');
-    var id = $(this).attr('socialprofileid');
+function openMessengerBox(id, name) {
     if ($('#box-' + id).length) {
         $('#box-' + id).remove();
     } else {

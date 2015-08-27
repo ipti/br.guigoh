@@ -175,6 +175,10 @@ hr {
     float: left !important;
 }
 
+.hidden {
+    display: none;
+}
+
 .load-more a {
     color: gray;
     text-decoration: none;
@@ -416,13 +420,14 @@ hr {
     padding: 7px 15px 3px 15px;
 }
 
-.close {
+.close-chat {
     float: right;
     cursor: pointer;
     margin: 6px 0 0 0;  
+    width: 11px;
 }
 
-.close:hover {
+.close-chat:hover {
     box-shadow: 0px 0px 3px #000;
 }
 
