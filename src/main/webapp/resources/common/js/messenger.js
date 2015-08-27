@@ -5,11 +5,13 @@ var sound = true;
 
 $(document).ready(function () {
     messengerFriends()
-    $(document).on('click', '#messenger-friends li', function(){
+    $(document).on('click', '#messenger-friends li', function () {
         openMessengerBox($(this).attr('socialprofileid'), $(this).attr('name'));
     });
     $(document).on('click', '.close-chat', function () {
-        $('#box-' + $(this).attr('socialprofileid')).remove();
+        var box = $('#box-' + $(this).attr('socialprofileid'));
+        organizeBoxes(box);
+        $(box).remove();
     });
     $(".messenger").on('click', 'span', (function () {
         $("#messenger-friends").toggle();
@@ -169,8 +171,10 @@ function showBox(id, name, message, date, himself, recent) {
 
 function createBox(id, name) {
     name = changeNameLength(name, 23);
+    var boxesQuantity = $(".box").length;
+    var position = "style='left: " + ((243 * boxesQuantity) + (20 * (boxesQuantity + 1))) + "px'"
     var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
-    var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "'>"
+    var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "' " + position + ">"
             + "<div class='messenger-title'><span class='messenger-user-name'>" + name + "</span>"
             + "<img src='../../resources/common/images/close-chat.png' class='close-chat' socialprofileid='" + id + "'/>"
             + online
@@ -185,7 +189,9 @@ function createBox(id, name) {
 
 function openMessengerBox(id, name) {
     if ($('#box-' + id).length) {
-        $('#box-' + id).remove();
+        var box = $('#box-' + id);
+        organizeBoxes(box);
+        $(box).remove();
     } else {
         var boxesQuantity = $('.messenger-boxes .box').size();
         if (boxesQuantity !== 0) {
@@ -301,4 +307,12 @@ function messagesViewed(box) {
     box.find(".new-messages").remove();
     box.find(".new").removeClass("new").addClass("old");
     box.css("background-color", "#9d9d9d");
+}
+
+function organizeBoxes(box) {
+    var nextBox = $(box).next();
+    if (nextBox.length) {
+        organizeBoxes(nextBox);
+        nextBox.css("left", box.offset().left);
+    }
 }
