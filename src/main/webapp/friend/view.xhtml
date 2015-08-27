@@ -20,47 +20,62 @@
             <h:inputText class="friend-search pull-right" value="#{friendViewBean.friendInputSearch}" pt:placeholder="Buscar amigos">
                 <f:ajax execute="@form" event="keyup" listener="#{friendViewBean.searchFriendsEvent()}" render="search-result"></f:ajax>
             </h:inputText>
-            
+
             <div class="clear"></div>
 
-            <div>
-                <ui:repeat value="#{friendViewBean.pendingList}" var="pending">
-                    <div class="col">
-                        <div class="user">
-                            <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{pending.tokenFriend2.socialProfile.photo}"></img></a>
-                            <p class="user-name">
-                                <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}">#{pending.tokenFriend2.socialProfile.name}</a>
-                            </p>
-                            <p class="user-job">#{pending.tokenFriend2.socialProfile.occupationsId.name}</p>
-                            <h:commandLink id="add_pending_friend" class="accept_button fa fa-check-circle" title="#{localeBean.getString('Aceitar')}" action="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
-                                <f:ajax execute="add_pending_friend" render="@form"/>
-                            </h:commandLink>
-                            <h:commandLink id="remove_pending_friend" class="reject_button fa fa-times-circle" title="#{localeBean.getString('Rejeitar')}" action="#{friendViewBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}">
-                                <f:ajax execute="remove_pending_friend" render="@form"/>
-                            </h:commandLink>
+            <h:panelGroup id="pending">
+                <div id="pending-list">
+                    <ui:repeat value="#{friendViewBean.pendingList}" var="pending">
+                        <div class="col">
+                            <div class="user">
+                                <h:outputText class="hidden social-profile-id" value="#{pending.tokenFriend2.socialProfile.socialProfileId}"/>
+                                <h:outputText class="hidden social-profile-name" value="#{pending.tokenFriend2.socialProfile.name}"/>
+                                <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{pending.tokenFriend2.socialProfile.photo}"></img></a>
+                                <p class="user-name">
+                                    <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}">#{pending.tokenFriend2.socialProfile.name}</a>
+                                </p>
+                                <p class="user-job">#{pending.tokenFriend2.socialProfile.occupationsId.name}</p>
+                                <div class="user-chat">
+                                    <img src="../resources/common/images/chat.png"/>
+                                    <span>#{localeBean.getString('Bate-papo')}</span>
+                                </div>
+                                <h:commandLink>
+                                    <img class="user-friend-status accept" src="../resources/common/images/add-friend.png"/>
+                                    <f:ajax listener="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
+                                </h:commandLink>
+                                <h:commandLink>
+                                    <img class="user-friend-status reject" src="../resources/common/images/remove-friend.png"/>
+                                    <f:ajax listener="#{friendViewBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
+                                </h:commandLink>
+                            </div>
                         </div>
-                    </div>
-                </ui:repeat>
-            </div>
+                    </ui:repeat>
+                </div>
+            </h:panelGroup>
 
             <div class="clear"></div>
             <h1 id="title_friends">#{localeBean.getString("Amigos")} (#{friendViewBean.acceptedList.size()})</h1>
             <h:panelGroup id="search-result">
                 <div class="clear"></div>
-                <div id="user-list" class="category">
+                <div id="user-list">
                     <ui:repeat value="#{friendViewBean.acceptedList}" var="friend" varStatus="friendindex">
                         <div class="col">
                             <div class="user">
+                                <h:outputText class="hidden social-profile-id" value="#{friend.tokenFriend2.socialProfile.socialProfileId}"/>
+                                <h:outputText class="hidden social-profile-name" value="#{friend.tokenFriend2.socialProfile.name}"/>
                                 <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{friend.tokenFriend2.socialProfile.photo}"></img></a>
                                 <p class="user-name">
                                     <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}">#{friend.tokenFriend2.socialProfile.name}</a>
                                 </p>
                                 <p class="user-job">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
-                                <div class="user-arrow pull-left"/>
-                                <div class="user-menu-box" friendindex="#{friendindex.index}">
-                                    <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a onclick="showBox('#{friend.tokenFriend2.socialProfile.socialProfileId}', '#{friend.tokenFriend2.socialProfile.name}', null, null, null, null)" href="#">#{localeBean.getString('Bate-papo')}</a></span></p>
-                                    <p><img src="../resources/common/images/icon-close.jpg"></img><span class="first"><h:commandLink action="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}">#{localeBean.getString('Remover amigo')}</h:commandLink></span></p>
+                                <div class="user-chat">
+                                    <img src="../resources/common/images/chat.png"/>
+                                    <span>#{localeBean.getString('Bate-papo')}</span>
                                 </div>
+                                <h:commandLink>
+                                    <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
+                                    <f:ajax listener="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
+                                </h:commandLink>
                             </div>
                         </div>
                     </ui:repeat>
