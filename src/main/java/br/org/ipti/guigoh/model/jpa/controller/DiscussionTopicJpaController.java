@@ -354,4 +354,19 @@ public class DiscussionTopicJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public List<DiscussionTopic> findDiscussionTopicsByName(String name) {
+        EntityManager em = getEntityManager();
+        try {
+            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) 
+                    em.createNativeQuery("select distinct dt.* from discussion_topic dt "
+                            + "join topic_tags tt on tt.discussion_topic_id = dt.id "
+                            + "join tags t on tt.tags_id = t.id "
+                            + "where dt.status = 'A' and (upper(dt.title) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')", DiscussionTopic.class).getResultList();
+            return discussionTopicList;
+        
+        } finally {
+            em.close();
+        }
+    }
 }

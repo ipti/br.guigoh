@@ -65,7 +65,11 @@
     text-decoration: none;
 }
 
-.user-job {
+.topic-author {
+    margin-bottom: 5px;
+}
+
+.user-job, .topic-author {
     font-size: 12px;
     line-height: 1;
     color: gray;
@@ -77,6 +81,7 @@
 }
 
 .user-clock {
+    margin-top: 9px;
     font-size: 20px;
 }
 

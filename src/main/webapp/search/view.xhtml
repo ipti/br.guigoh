@@ -38,10 +38,13 @@
                                             <img class="user-friend" src="../resources/common/images/friend.png"/>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                            <span class="user-plus fa fa-clock-o"/>
+                                            <span class="user-clock fa fa-clock-o"/>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
-                                            <img class="user-plus" src="../resources/common/images/plus.png"/>
+                                            <h:commandLink>
+                                                <img class="user-plus" src="../resources/common/images/plus.png"/>
+                                                <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                            </h:commandLink>
                                         </ui:fragment>
                                     </div>
                                 </div>
@@ -90,55 +93,39 @@
                     </h:panelGroup>
                     <div class="clear"></div>
                 </ui:fragment>
-                <!--                                <h3 class="category-name">Grupos de Estudo</h3>
-                                                <div id="study-group-list" class="category">
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                            <img class="user-plus" src="../resources/common/images/plus.png"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                            <div class="user-arrow down-arrow pull-left"></div>
-                                                            <img class="user-friend" src="../resources/common/images/friend.png"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="user">
-                                                            <img class="image" src="../resources/common/images/avatar.png"></img>
-                                                            <p class="user-name">Ana Paula Martins</p>
-                                                            <p class="user-job">Desenvolvedora</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clear"></div>
-                                                </div>-->
+                <ui:fragment rendered="#{!searchViewBean.discussionTopicList.isEmpty()}">
+                    <h3 class="category-name">Grupos de Estudo</h3>
+                    <h:panelGroup layout="block" id="study-group-list" class="category">
+                        <ui:repeat value="#{searchViewBean.discussionTopicList}" var="discussionTopic" varStatus="status">
+                            <ui:fragment rendered="#{status.index lt searchViewBean.topicLimit}">
+                                <div class="col">
+                                    <div class="result-box">
+                                        <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}"><img class="image" src="#{discussionTopic.socialProfileId.photo}"></img></a>
+                                        <p class="result-name">
+                                            <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}">#{discussionTopic.title}</a>
+                                        </p>
+                                        <p class="topic-author">#{discussionTopic.socialProfileId.name}</p>
+                                        <div class="result-date">
+                                            <img src="/resources/common/images/clock.png"/>
+                                            <h:outputText value="#{discussionTopic.data}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                            </h:outputText>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </ui:repeat>
+                        <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.discussionTopicList.size() gt searchViewBean.topicLimit}">
+                            <hr/>
+                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                <f:ajax listener="#{searchViewBean.increaseLimit('DT')}" render="study-group-list"/>
+                            </h:commandLink>
+                            <hr/>
+                        </h:panelGroup>
+                        <div class="clear"></div>
+                    </h:panelGroup>
+                    <div class="clear"></div>
+                </ui:fragment>
             </h:panelGroup>
         </h:form>
     </ui:define>

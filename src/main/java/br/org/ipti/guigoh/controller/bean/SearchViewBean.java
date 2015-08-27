@@ -5,12 +5,15 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
+import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,12 +34,16 @@ public class SearchViewBean implements Serializable {
     private Integer userLimit;
     private Integer objectLimit;
     private Integer topicLimit;
+    
+    private SocialProfile mySocialProfile;
 
     private List<SocialProfile> socialProfileList;
     private List<EducationalObject> educationalObjectList;
+    private List<DiscussionTopic> discussionTopicList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
+    private DiscussionTopicJpaController discussionTopicJpaController;
     private FriendsJpaController friendsJpaController;
 
     public void init() {
@@ -48,17 +55,23 @@ public class SearchViewBean implements Serializable {
     public void renderSearchResult() {
         if (generalSearch.length() >= 3) {
             userLimit = objectLimit = topicLimit = 3;
-            SocialProfile mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
             socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, mySocialProfile.getTokenId(), false);
             educationalObjectList = educationalObjectJpaController.findEducationalObjectsByName(generalSearch);
+            discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByName(generalSearch);
         } else {
             socialProfileList.clear();
             educationalObjectList.clear();
+            discussionTopicList.clear();
         }
     }
 
     public Friends isFriend(String friendTokenId) {
         return friendsJpaController.isFriend(friendTokenId, CookieService.getCookie("token"));
+    }
+    
+    public void addFriend(Integer id) throws RollbackFailureException, Exception{
+        socialProfileJpaController.findSocialProfile(generalSearch);
+        friendsJpaController.addFriend(mySocialProfile.getUsers(), id);
     }
 
     public void increaseLimit(String type) {
@@ -81,13 +94,17 @@ public class SearchViewBean implements Serializable {
         userLimit = 3;
         objectLimit = 3;
         topicLimit = 3;
-
+        
         socialProfileList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
+        discussionTopicList = new ArrayList<>();
 
         socialProfileJpaController = new SocialProfileJpaController();
         friendsJpaController = new FriendsJpaController();
         educationalObjectJpaController = new EducationalObjectJpaController();
+        discussionTopicJpaController = new DiscussionTopicJpaController();
+        
+        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
     }
 
     public String getGeneralSearch() {
@@ -138,4 +155,11 @@ public class SearchViewBean implements Serializable {
         this.topicLimit = topicLimit;
     }
 
+    public List<DiscussionTopic> getDiscussionTopicList() {
+        return discussionTopicList;
+    }
+
+    public void setDiscussionTopicList(List<DiscussionTopic> discussionTopicList) {
+        this.discussionTopicList = discussionTopicList;
+    }
 }
