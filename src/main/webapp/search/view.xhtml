@@ -29,20 +29,28 @@
                             <ui:fragment rendered="#{status.index lt searchViewBean.userLimit}">
                                 <div class="col">
                                     <div class="result-box">
+                                        <h:outputText class="hidden social-profile-id" value="#{socialProfile.socialProfileId}"/>
+                                        <h:outputText class="hidden social-profile-name" value="#{socialProfile.name}"/>
                                         <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
                                         <p class="result-name">
                                             <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">#{socialProfile.name}</a></p>
                                         <p class="user-job">#{socialProfile.occupationsId.name}</p>
+                                        <div class="user-chat">
+                                            <img src="../resources/common/images/chat.png"/>
+                                            <span>Bate-papo</span>
+                                        </div>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
-                                            <div class="user-arrow down-arrow pull-left"></div>
-                                            <img class="user-friend" src="../resources/common/images/friend.png"/>
+                                            <h:commandLink>
+                                                <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
+                                                <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                            </h:commandLink>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                            <span class="user-clock fa fa-clock-o"/>
+                                            <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
                                             <h:commandLink>
-                                                <img class="user-plus" src="../resources/common/images/plus.png"/>
+                                                <img class="user-friend-status add" src="../resources/common/images/add-friend.png"/>
                                                 <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                             </h:commandLink>
                                         </ui:fragment>
@@ -52,7 +60,7 @@
                         </ui:repeat>
                         <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
                             <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
+                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
                                 <f:ajax listener="#{searchViewBean.increaseLimit('SP')}" render="user-list"/>
                             </h:commandLink>
                             <hr/>
@@ -85,7 +93,7 @@
                         <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.educationalObjectList.size() gt searchViewBean.objectLimit}">
                             <hr/>
                             <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{searchViewBean.increaseLimit('OE')}" render="object-list"/>
+                                <f:ajax listener="#{searchViewBean.increaseLimit('EO')}" render="object-list"/>
                             </h:commandLink>
                             <hr/>
                         </h:panelGroup>

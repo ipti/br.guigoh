@@ -49,6 +49,7 @@ public class SearchViewBean implements Serializable {
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
+            mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         }
     }
 
@@ -70,13 +71,16 @@ public class SearchViewBean implements Serializable {
     }
     
     public void addFriend(Integer id) throws RollbackFailureException, Exception{
-        socialProfileJpaController.findSocialProfile(generalSearch);
         friendsJpaController.addFriend(mySocialProfile.getUsers(), id);
+    }
+    
+    public void removeFriend(Integer id) throws RollbackFailureException, Exception{
+        friendsJpaController.removeFriend(mySocialProfile.getUsers(), id);
     }
 
     public void increaseLimit(String type) {
         switch (type) {
-            case "OE":
+            case "EO":
                 objectLimit += 6;
                 break;
             case "SP":
@@ -103,8 +107,6 @@ public class SearchViewBean implements Serializable {
         friendsJpaController = new FriendsJpaController();
         educationalObjectJpaController = new EducationalObjectJpaController();
         discussionTopicJpaController = new DiscussionTopicJpaController();
-        
-        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
     }
 
     public String getGeneralSearch() {
