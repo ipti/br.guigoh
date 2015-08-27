@@ -31,9 +31,9 @@
     display: none;
     text-align: left;
     text-transform: uppercase;
-    margin: 30px 0 0px -140px;
-    width: 180px;
-    height: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    margin: 30px 0 0px 145px;
+    width: 160px;
+    height: 70px; /*mudar pra 155px quando colocar o resto dos links do menu*/
     background: white;
     position: relative;
     -moz-border-radius: 10px;
@@ -41,12 +41,38 @@
     border-radius: 10px;
     border: 1px solid #C1C1C1;
     cursor: default;
-    right: -24px;
+}
+
+.user-menu-box:before {
+    content:"";
+    position: absolute;
+    right: 22px;
+    bottom: 70px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #C1C1C1;
+}
+
+.user-menu-box:after {
+    content:"";
+    position: absolute;
+    right: 24px;
+    bottom: 70px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
 }
 
 .user-menu-box a{
     color: gray;
     text-decoration: none;
+    font-size: 10px;
+    font-weight: bold;
+    color: gray;
 }
 
 .user-menu-box a:hover{
@@ -63,30 +89,6 @@
     padding: 5px 5px 0 0;
     position: relative;
     top: 6px;
-}
-
-.user-menu-box:before {
-    content:"";
-    position: absolute;
-    right: 22px;
-    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #C1C1C1;
-}
-
-.user-menu-box:after {
-    content:"";
-    position: absolute;
-    right: 24px;
-    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid white;
 }
 
 #title_friends{

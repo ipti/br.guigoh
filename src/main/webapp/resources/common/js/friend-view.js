@@ -17,14 +17,20 @@ jsf.ajax.addOnEvent(function (data) {
     }
 });
 
+var friendIndex;
+
 $(document).on('click', function (e) {
+    friendIndex = $(e.target).closest("div").siblings(".user-menu-box").attr("friendindex");
+    
     if ($(e.target).closest($(".user-arrow")).length > 0){
-        $(".user-menu-box").toggle();
+        //$(".user-menu-box").hide();
+        $(".user-menu-box[friendindex = " + friendIndex + "]").toggle();
     } else if ($(e.target).closest(".user-menu-box").length === 0) {
         $(".user-menu-box").hide();
     }
+    console.log($(e.target).closest($(".user-arrow")).length);
 });
 
 $(".user-menu-box a").click(function(){
-    $(".user-menu-box").toggle();
+    $(".user-menu-box[friendindex = " + friendIndex + "]").toggle();   
 });

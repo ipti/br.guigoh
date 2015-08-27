@@ -19,7 +19,7 @@
             <input class="friend-search pull-right" placeholder="Buscar amigos" type="text"/>
             <div class="clear"></div>
             <div id="user-list" class="category">
-                <ui:repeat value="#{friendViewBean.acceptedList}" var="friend">
+                <ui:repeat value="#{friendViewBean.acceptedList}" var="friend" varStatus="friendindex">
                     <div class="col">
                         <div class="user">
                             <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{friend.tokenFriend2.socialProfile.photo}"></img></a>
@@ -28,7 +28,7 @@
                             </p>
                             <p class="user-job">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
                             <div class="user-arrow pull-right"/>
-                            <div class="user-menu-box">
+                            <div class="user-menu-box" friendindex="#{friendindex.index}">
                                 <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a onclick="showBox('#{friend.tokenFriend2.socialProfile.socialProfileId}', '#{friend.tokenFriend2.socialProfile.name}', null, null, null, null)" href="#">#{localeBean.getString('Bate-papo')}</a></span></p>
                                 <p><img src="../resources/common/images/icon-close.jpg"></img><span class="first"><h:commandLink action="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}">#{localeBean.getString('Remover amigo')}</h:commandLink></span></p>
                             </div>
