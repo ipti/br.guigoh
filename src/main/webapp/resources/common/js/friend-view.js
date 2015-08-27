@@ -13,6 +13,12 @@ $(".friend-search").on('keypress', function (e) {
     }
 });
 
+$(document).on("click", ".user-chat", function(){
+    var id = $(this).closest(".user").find(".social-profile-id").text();
+    var name = $(this).closest(".user").find(".social-profile-name").text();    
+    openMessengerBox(id, name);
+});
+
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
         $.each($(".user-name a, .user-job"), function () {
@@ -33,7 +39,6 @@ $(document).on('click', function (e) {
     } else if ($(e.target).closest(".user-menu-box").length === 0) {
         $(".user-menu-box").hide();
     }
-    console.log($(e.target).closest($(".user-arrow")).length);
 });
 
 $(".user-menu-box a").click(function () {
