@@ -411,14 +411,14 @@ hr {
     font-weight: bold;
     color: #fdfdfd;
     display: block;
-    padding: 7px 15px 3px 15px;
+    padding: 7px 9px 3px 15px;
 }
 
 .close-chat {
     float: right;
     cursor: pointer;
-    margin: 6px 0 0 0;  
     width: 11px;
+    padding: 6px;
 }
 
 .close-chat:hover {
