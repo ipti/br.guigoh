@@ -27,13 +27,16 @@
                                 <a href="/profile/view.xhtml?id=#{friend.tokenFriend2.socialProfile.socialProfileId}">#{friend.tokenFriend2.socialProfile.name}</a>
                             </p>
                             <p class="user-job">#{friend.tokenFriend2.socialProfile.occupationsId.name}</p>
-                            <div class="user-arrow pull-right"/>
+                            <div class="user-arrow pull-left"/>
                             <div class="user-menu-box" friendindex="#{friendindex.index}">
                                 <p><img src="../resources/common/images/icon-profile.jpg"></img><span class="first"><a onclick="showBox('#{friend.tokenFriend2.socialProfile.socialProfileId}', '#{friend.tokenFriend2.socialProfile.name}', null, null, null, null)" href="#">#{localeBean.getString('Bate-papo')}</a></span></p>
                                 <p><img src="../resources/common/images/icon-close.jpg"></img><span class="first"><h:commandLink action="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}">#{localeBean.getString('Remover amigo')}</h:commandLink></span></p>
                             </div>
                         </div>
                     </div>
+
+                    
+
                 </ui:repeat>
             </div>
             <div class="clear"></div>
