@@ -93,11 +93,11 @@
 }
 
 #title_friends{
-    margin-bottom: 10px !important;
+    margin-top: 30px;
 }
 
 #title_pending{
-    margin-top: 30px;
+    margin-bottom: 10px !important;
 }
 
 .accept_button {

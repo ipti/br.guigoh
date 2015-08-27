@@ -27,6 +27,8 @@ import javax.inject.Named;
 @Named
 public class FriendViewBean implements Serializable {
 
+    private Integer userLimit;
+    
     private Users user;
     private SocialProfile userSocialProfile;
 
@@ -64,9 +66,16 @@ public class FriendViewBean implements Serializable {
     }
 
     public void searchFriendsEvent() {
-        acceptedList = new ArrayList<>();
-        acceptedList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
-        organizeFriendList(acceptedList);
+        if (friendInputSearch.length() == 0){
+            getFriends();
+        } else if (friendInputSearch.length() >= 3) {
+            userLimit = 3;
+            acceptedList = new ArrayList<>();
+            acceptedList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
+            organizeFriendList(acceptedList);
+        } else {
+            acceptedList.clear();
+        }
     }
 
     public void searchUsersEvent() {
@@ -91,6 +100,7 @@ public class FriendViewBean implements Serializable {
         socialProfileJpaController = new SocialProfileJpaController();
         
         friendInputSearch = userInputSearch = "";
+        userLimit = 3;
         
         user = new Users();
         
@@ -98,6 +108,14 @@ public class FriendViewBean implements Serializable {
         user.setToken(CookieService.getCookie("token"));
         
         userSocialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
+    }
+
+    public Integer getUserLimit() {
+        return userLimit;
+    }
+
+    public void setUserLimit(Integer userLimit) {
+        this.userLimit = userLimit;
     }
 
     public List getPendingList() {
