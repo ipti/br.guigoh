@@ -83,28 +83,6 @@
     margin-bottom: -8px;
 }
 
-.load-more a {
-    color: gray;
-    text-decoration: none;
-    font-size: 11px;
-    text-align: center;
-    width: 100%;
-    display: block;
-}
-
-.load-more a:before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-    width: 0; 
-    height: 0; 
-
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid gray;
-}
-
 .no-more {
     color: gray;
     text-decoration: none;

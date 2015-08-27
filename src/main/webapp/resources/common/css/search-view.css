@@ -42,7 +42,7 @@
 
 .result-box {
     width: 283px;
-    height: 89px;
+    height: 90px;
     border: 1px solid #C1C1C1;
     margin-bottom: 20px;
 }
@@ -97,4 +97,8 @@
     float: left;
     margin: 0 3px 0 0;
     height: 12px;
+}
+
+.load-more.search { 
+    margin-bottom: 15px;
 }

@@ -28,6 +28,9 @@ import javax.inject.Named;
 public class SearchViewBean implements Serializable {
 
     private String generalSearch;
+    private Integer userLimit;
+    private Integer objectLimit;
+    private Integer topicLimit;
 
     private List<SocialProfile> socialProfileList;
     private List<EducationalObject> educationalObjectList;
@@ -44,21 +47,40 @@ public class SearchViewBean implements Serializable {
 
     public void renderSearchResult() {
         if (generalSearch.length() >= 3) {
+            userLimit = objectLimit = topicLimit = 3;
             SocialProfile mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, mySocialProfile.getTokenId(), false, 3);
-            educationalObjectList = educationalObjectJpaController.findEducationalObjectsByName(generalSearch, 3);
+            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, mySocialProfile.getTokenId(), false);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjectsByName(generalSearch);
         } else {
             socialProfileList.clear();
             educationalObjectList.clear();
         }
     }
-    
-    public Friends isFriend(String friendTokenId){
+
+    public Friends isFriend(String friendTokenId) {
         return friendsJpaController.isFriend(friendTokenId, CookieService.getCookie("token"));
+    }
+
+    public void increaseLimit(String type) {
+        switch (type) {
+            case "OE":
+                objectLimit += 6;
+                break;
+            case "SP":
+                userLimit += 6;
+                break;
+            case "DT":
+                topicLimit += 6;
+                break;
+            
+        }
     }
 
     private void initGlobalVariables() {
         generalSearch = "";
+        userLimit = 3;
+        objectLimit = 3;
+        topicLimit = 3;
 
         socialProfileList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();
@@ -90,6 +112,30 @@ public class SearchViewBean implements Serializable {
 
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
+    }
+
+    public Integer getUserLimit() {
+        return userLimit;
+    }
+
+    public void setUserLimit(Integer userLimit) {
+        this.userLimit = userLimit;
+    }
+
+    public Integer getObjectLimit() {
+        return objectLimit;
+    }
+
+    public void setObjectLimit(Integer objectLimit) {
+        this.objectLimit = objectLimit;
+    }
+
+    public Integer getTopicLimit() {
+        return topicLimit;
+    }
+
+    public void setTopicLimit(Integer topicLimit) {
+        this.topicLimit = topicLimit;
     }
 
 }

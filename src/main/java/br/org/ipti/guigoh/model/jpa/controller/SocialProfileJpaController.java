@@ -915,15 +915,12 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
     
-    public List<SocialProfile> findSocialProfilesByName(String name, String token, boolean includeSessionUser, int limit){
+    public List<SocialProfile> findSocialProfilesByName(String name, String token, boolean includeSessionUser){
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
             if (!includeSessionUser){
                 partialQuery = "and token_id <> '" + token + "' ";
-            }
-            if (limit > 0){
-                partialQuery += "limit " + limit;
             }
             List<SocialProfile> socialProfileList = (List<SocialProfile>) 
                     em.createNativeQuery("select * from social_profile where upper(name) like '%" + name.toUpperCase() + "%' " + partialQuery, SocialProfile.class).getResultList();
