@@ -188,17 +188,13 @@ function createBox(id, name) {
 }
 
 function openMessengerBox(id, name) {
-    if ($('#box-' + id).length) {
-        var box = $('#box-' + id);
-        organizeBoxes(box);
-        $(box).remove();
-    } else {
+    if (!$('#box-' + id).length) {
         var boxesQuantity = $('.messenger-boxes .box').size();
         if (boxesQuantity !== 0) {
             var boxWidth = $('.messenger-boxes .box').css('width').replace('px', '');
             var bodySize = $('body').css('width').replace('px', '');
         }
-        if (boxesQuantity === 0 || bodySize * 2 / 3 > boxWidth * (boxesQuantity + 1)) {
+        if (boxesQuantity === 0 || bodySize * 0.8 > boxWidth * (boxesQuantity + 1)) {
             showBox(id, name, null, null, logged_social_profile_id, null);
             $('#send-message-' + id).focus().select();
             focus = true;

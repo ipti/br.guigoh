@@ -5,8 +5,9 @@
     padding: 0px 5px;
     border: 1px solid #bbbdb8;
     height: 20px;
+    margin-top: -50px;
     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    border-radius: 7px;
     font-size: 14px;
     text-indent: 10px;
     margin-bottom: 40px;
@@ -90,14 +91,6 @@
     padding: 5px 5px 0 0;
     position: relative;
     top: 6px;
-}
-
-#title_friends{
-    margin-top: 30px;
-}
-
-#title_pending{
-    margin-bottom: 10px !important;
 }
 
 .accept_button {

@@ -24,7 +24,8 @@ function changeNameLength(name, limit) {
 }
 
 function eventExceptions(data) {
-    if ($(data.source).parent().hasClass("general-search")) {
+    if ($(data.source).parent().hasClass("general-search")
+            || $(data.source).hasClass("friend-search")) {
         return true;
     } else {
         return false;

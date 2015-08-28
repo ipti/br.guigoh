@@ -8,10 +8,8 @@ import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
 import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Friends;
-import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,23 +25,20 @@ import javax.inject.Named;
 @Named
 public class FriendViewBean implements Serializable {
 
-    private Integer userLimit;
-    
     private Users user;
-    private SocialProfile userSocialProfile;
 
     private List<Friends> acceptedList, pendingList;
-    private List<SocialProfile> socialProfileList;
 
-    private String friendInputSearch, userInputSearch;
+    private String friendInputSearch;
+    private boolean hasFriend;
 
     private FriendsJpaController friendsJpaController;
-    private SocialProfileJpaController socialProfileJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             getFriends();
+            hasFriend = acceptedList.isEmpty();
         }
     }
 
@@ -59,29 +54,18 @@ public class FriendViewBean implements Serializable {
         list.stream()
                 .filter((friend) -> (user.getToken().equals(friend.getTokenFriend2().getToken())))
                 .forEach((friend) -> {
-            Users userFriend = friend.getTokenFriend1();
-            friend.setTokenFriend1(friend.getTokenFriend2());
-            friend.setTokenFriend2(userFriend);
-        });
+                    Users userFriend = friend.getTokenFriend1();
+                    friend.setTokenFriend1(friend.getTokenFriend2());
+                    friend.setTokenFriend2(userFriend);
+                });
     }
 
     public void searchFriendsEvent() {
-        if (friendInputSearch.length() == 0){
+        if (friendInputSearch.length() == 0) {
             getFriends();
-        } else if (friendInputSearch.length() >= 3) {
-            userLimit = 3;
-            acceptedList = new ArrayList<>();
+        } else {
             acceptedList = friendsJpaController.findFriendSearchList(user.getToken(), friendInputSearch);
             organizeFriendList(acceptedList);
-        } else {
-            acceptedList.clear();
-        }
-    }
-
-    public void searchUsersEvent() {
-        socialProfileList = new ArrayList<>();
-        if (!userInputSearch.equals("")) {
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(userInputSearch, userSocialProfile.getTokenId(), false);
         }
     }
 
@@ -97,25 +81,13 @@ public class FriendViewBean implements Serializable {
 
     private void initGlobalVariables() {
         friendsJpaController = new FriendsJpaController();
-        socialProfileJpaController = new SocialProfileJpaController();
-        
-        friendInputSearch = userInputSearch = "";
-        userLimit = 3;
-        
+
+        friendInputSearch = "";
+
         user = new Users();
-        
+
         user.setUsername(CookieService.getCookie("user"));
         user.setToken(CookieService.getCookie("token"));
-        
-        userSocialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-    }
-
-    public Integer getUserLimit() {
-        return userLimit;
-    }
-
-    public void setUserLimit(Integer userLimit) {
-        this.userLimit = userLimit;
     }
 
     public List getPendingList() {
@@ -142,14 +114,6 @@ public class FriendViewBean implements Serializable {
         this.friendInputSearch = friendInputSearch;
     }
 
-    public String getUserInputSearch() {
-        return userInputSearch;
-    }
-
-    public void setUserInputSearch(String userInputSearch) {
-        this.userInputSearch = userInputSearch;
-    }
-
     public Users getUser() {
         return user;
     }
@@ -158,19 +122,11 @@ public class FriendViewBean implements Serializable {
         this.user = user;
     }
 
-    public List<SocialProfile> getSocialProfileList() {
-        return socialProfileList;
+    public boolean isHasFriend() {
+        return hasFriend;
     }
 
-    public void setSocialProfileList(List<SocialProfile> socialProfileList) {
-        this.socialProfileList = socialProfileList;
-    }
-
-    public SocialProfile getUserSocialProfile() {
-        return userSocialProfile;
-    }
-
-    public void setUserSocialProfile(SocialProfile userSocialProfile) {
-        this.userSocialProfile = userSocialProfile;
+    public void setHasFriend(boolean hasFriend) {
+        this.hasFriend = hasFriend;
     }
 }
