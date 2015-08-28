@@ -16,7 +16,9 @@ $(document).ready(function () {
     $(".messenger").on('click', 'span', (function () {
         $("#messenger-friends").toggle();
         if ($("#messenger-friends").is(":visible")) {
-            $("#messenger-menu").removeClass("messenger-menu-collapsed");
+            if ($("#messenger-friends").children().length) {
+                $("#messenger-menu").removeClass("messenger-menu-collapsed");
+            }
         } else {
             $("#messenger-menu").addClass("messenger-menu-collapsed");
         }
