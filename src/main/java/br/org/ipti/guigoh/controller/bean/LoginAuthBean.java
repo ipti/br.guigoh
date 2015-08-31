@@ -70,11 +70,6 @@ public class LoginAuthBean implements Serializable {
                 case "IC":
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta está desativada. Contate o administrador."), null));
                     break;
-                case "FC":
-                    CookieService.addCookie("user", registeredUser.getUsername());
-                    CookieService.addCookie("token", registeredUser.getToken());
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/profile/wizard.xhtml");
-                    break;
             }
         } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Confirme seu registro através do seu e-mail."), null));

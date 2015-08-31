@@ -205,8 +205,8 @@ hr {
     display: none;
     text-align: left;
     text-transform: uppercase;
-    width: 188px;
-    height: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    width: 150px;
+    height: 70px;
     background: white;
     position: absolute;
     -moz-border-radius: 10px;
@@ -243,7 +243,7 @@ hr {
     content:"";
     position: absolute;
     right: 22px;
-    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    bottom: 70px;
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
@@ -255,7 +255,7 @@ hr {
     content:"";
     position: absolute;
     right: 24px;
-    bottom: 95px; /*mudar pra 155px quando colocar o resto dos links do menu*/
+    bottom: 70px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
