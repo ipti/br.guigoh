@@ -116,15 +116,15 @@ function onMessageReceived(evt) {
         });
     } else if (typeof msg.message !== 'undefined') {
         if (msg.himself === true) {
-            showBox(msg.receiverId, msg.receiverName, msg.message, msg.date, logged_social_profile_id, true);
+            showBox(msg.receiverId, msg.receiverName, logged_social_profile_id, msg.message, msg.date, true);
         } else {
-            showBox(msg.senderId, msg.senderName, msg.message, msg.date, null, true);
+            showBox(msg.senderId, msg.senderName, null, msg.message, msg.date, true);
             showNewMessagesQuantity(msg.senderId);
         }
     } else if (typeof msg.offlineMessages !== 'undefined') {
         var offlineMessages = JSON.parse(msg.offlineMessages);
         $.each(offlineMessages, function () {
-            showBox(this.id, this.name, null, null, null, null);
+            showBox(this.id, this.name);
         });
         sound = false;
     } else if (typeof msg.lastMessages !== 'undefined') {
@@ -147,16 +147,18 @@ function onMessageReceived(evt) {
         $('#registered-users-online').text(msg.onlineUsers + " online");
     } else if (typeof msg.saw !== 'undefined') {
         messagesViewed($("#box-" + msg.saw));
+    } else if (typeof msg.dateToHimself !== 'undefined') {
+        showNewMessageDate(msg.receiverId, msg.dateToHimself);
     }
 }
 
-function showBox(id, name, message, date, himself, recent) {
+function showBox(id, name, himself, message, date, recent) {
     var json;
     if (!$('#box-' + id).length) {
         $('.messenger-boxes').append(createBox(id, name));
         json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"LAST_MSGS"}';
         wsocket.send(json);
-    } else if (message !== null) {
+    } else if (message !== undefined) {
         var friendId;
         if (himself !== null) {
             friendId = himself;
@@ -197,7 +199,7 @@ function openMessengerBox(id, name) {
             var bodySize = $('body').css('width').replace('px', '');
         }
         if (boxesQuantity === 0 || bodySize * 0.75 > boxWidth * (boxesQuantity + 1)) {
-            showBox(id, name, null, null, logged_social_profile_id, null);
+            showBox(id, name, logged_social_profile_id);
             $('#send-message-' + id).focus().select();
             focus = true;
         }
@@ -212,13 +214,16 @@ function sendMessage(input) {
         var json = '{"message":"' + message + '", "senderId":"' + logged_social_profile_id + '",'
                 + '"receiverId":"' + id + '", "type":"NEW_MSG"}';
         wsocket.send(json);
+        var messageContainer = loadMessageBlock(id, message, "", true, "right");
+        $('#box-' + id + ' .messages').append(messageContainer);
+        $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
         $('#box-' + id + ' #send-message-' + id).val("");
     }
 }
 
-function loadMessageBlock(id, message, date, recent) {
-    var classe = (id === logged_social_profile_id ? "your-message" : "friend-message");
-    var direction = (id === logged_social_profile_id ? "right" : "left");
+function loadMessageBlock(id, message, date, recent, direction) {
+    direction = (direction !== undefined) ? direction : (id === logged_social_profile_id ? "right" : "left");
+    var classe = (direction === "right" ? "your-message" : "friend-message");
     var time = recent ? "new" : "old";
     var container = "<div class='message " + classe + " " + time + "'>"
             + "<div class='message-inner-container icon-container'><img class='float-" + direction + "' src='../../resources/common/images/triangle-" + direction + ".png'/></div>"
@@ -282,7 +287,7 @@ function persistBoxesAfterPageReload() {
         if (/box/.test(cookieName)) {
             var id = cookieName.split("-")[1];
             if ($("#box-" + id).length === 0) {
-                showBox(id, name, null, null, logged_social_profile_id, null);
+                showBox(id, name, logged_social_profile_id);
             }
             if (/collapsed/.test(cookieName)) {
                 $("#box-" + id).addClass("box-collapsed")
@@ -313,4 +318,10 @@ function organizeBoxes(box) {
         organizeBoxes(nextBox);
         nextBox.css("left", box.offset().left);
     }
+}
+
+function showNewMessageDate(id, date){
+    var box = $("#box-" + id);
+    box.find(".message .message-date:empty:first").text(date);
+    $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
 }
