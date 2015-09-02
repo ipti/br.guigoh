@@ -1,29 +1,81 @@
-#publish_environment_box{display: block; width: 900px; margin: 5px 0px 0px 24px;border:1px solid #ababab;overflow:hidden}
-#passoapasso{clear:both;height:110px;margin:15px 0;}
-.passo1,.passo2,.passo3{width:139px;margin:0 7px 15px 0;float:left;}
-.passo1 .img-passo,.passo2 .img-passo,.passo3 .img-passo{width:25px;height:25px;float:left;margin-right:10px;vertical-align:top;background:url(../images/numeros_pp.png) no-repeat;}
-.passo1 span,.passo2 span,.passo3 span{float:left;line-height:13px;width:100px;font-size:11px;}
-.passo2 .img-passo{background-position:0 -26px;}
-.passo3 .img-passo{background-position:0 -52px;}
-.passo1 .figuras,.passo2 .figuras,.passo3 .figuras{clear:both;margin:15px 25px;}
-.about-educational-object{clear:both;margin:50px auto 20px;padding:20px;background-color:#82CFD7;}
-.about-educational-object p{line-height:18px;font-size:14px;text-align:justify}
-.about-eo{margin:20px auto;padding:20px;background-color:#FFE9A4;}
-.about-eo p{line-height:18px;font-size:14px;text-align:justify}
-#register_educational_object{color:blue}
-#wrap-left h2{font-size:19px;}
-.cnt-left{width:475px;margin:15px 0 0;float:left;}
-#wrap-left{margin:10px 0px 10px 20px;}
-.cnt-right{width:400px;height:auto;float:right;margin:15px 5px 15px 0px;border-left:1px solid #ababab;}
-#wrap-right{margin:0 0 -25px 15px;}
-.publish_environment_title{color:#404094;font-size:25px;display:block;width:400px;margin:40px 0 0 60px;}
-.title{font-size:14px;font-weight:bold;display:block;margin:15px 0 25px}
-.educational_object_image{width:100px;height:100px;float:left;margin-right:10px}
-.educational_object_name{display:block;font-size: 15px !important;margin-top:5px;text-decoration: none}
-.educational_object{display:block;width:370px;height:110px;margin-bottom:10px;border-bottom:1px solid lightgray;padding:5px 0 5px 5px}
-.educational_object_publisher{float:left}
-.educational_object_theme{float:left}
-.educational_object span{font-size:12px;color:black}
-.educational_object a{font-size:12px;color:black}
-.educational_object_label{font-weight:bold;float:left;margin-right:5px}
-.educational_object_date{float:left}
+#enviroment-info{
+    width: 560px;
+    float: left;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+#enviroment-info p:nth-child(1){
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#step-by-step-info p{
+    color: #6b6e65;
+    font-size: 12px;
+    line-height: 14px;
+    margin: 0 20px;
+}
+
+#step-by-step-info img{
+    display: block;
+    margin: 10px auto;
+}
+
+#step-by-step-info div{
+    float: left;
+    width: 33%;
+}
+
+#educational-object-info{
+    width: 260px;
+    float: right;
+    font-size: 12px;
+    background-color: #dbded3;
+    border-top: 5px solid #9a9c97;
+}
+
+#submit-container{
+    width: 100%
+}
+
+#submit-educational-object{
+    margin: 30px 0 30px 140px;
+    padding: 25px 15px 25px 25px;
+    border-radius: 8px;
+    background-color: #a9a9a9;
+    font-weight: bold;
+    font-size: 14px;
+    width: 43%;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+#submit-educational-object img{
+    float: left;
+    margin: -10px 13px 0 -10px;
+}
+
+#submit-educational-object a{
+    color: white;
+    text-decoration: none;
+}
+
+#educational-object-info p:first-of-type{
+    font-weight: bold;
+    font-size: 14px;
+    margin: 15px 20px 15px 20px;
+}
+
+#educational-object-info p{
+    margin: 5px 20px 0px 20px;
+    line-height: 18px;    
+}
+
+#educational-object-info p:last-of-type{
+    margin: 5px 20px 20px 20px;
+}
+
+#educational-object-info img{
+    margin-bottom: -8px;
+}

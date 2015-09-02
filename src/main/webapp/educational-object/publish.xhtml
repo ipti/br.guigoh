@@ -14,70 +14,44 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{educationalObjectPublishBean.init()}"/>
         </f:metadata>
-        <h:form>
-            <h:outputText styleClass="publish_environment_title" value="#{localeBean.getString('Ambiente de Publicação')}"></h:outputText>
-            <div id="publish_environment_box">
-
-                <div class="cnt-right">
-                    <div id="wrap-right">
-                        <h5 class="title">#{localeBean.getString('Últimas publicadas').toUpperCase()}</h5>
-                        <div id="latest-published">
-                            <ui:repeat value="#{educationalObjectPublishBean.educationalObjectList}" var="educationalObject" >
-                                <h:panelGroup styleClass="educational_object">
-                                    <h:link outcome="/educational-object/view.xhtml?id=#{educationalObject.id}" styleClass="educational_object_image" style="background:url('#{educationalObject.image}') no-repeat;background-size: 100px"/>
-                                    <h:link outcome="/educational-object/view.xhtml?id=#{educationalObject.id}" styleClass="educational_object_name" value="#{educationalObject.name}"/>
-                                    <br/>
-                                    <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Publicado por')}:"/>
-                                    <h:link outcome="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}" styleClass="educational_object_publisher" value="#{educationalObject.socialProfileId.name}"/>
-                                    <br/>
-                                    <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Tema')}:"/>
-                                    <ui:param value="#{educationalObject.themeId.name}" name="themeName"/>
-                                    <h:link outcome="/theme/view.xhtml?id=#{educationalObject.themeId.id}" styleClass="educational_object_theme" value="#{localeBean.getString(themeName)}"/>
-                                    <br/>
-                                    <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Data')}:"/>
-                                    <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
-                                    </h:outputText>
-                                </h:panelGroup>
-                            </ui:repeat>
-                        </div>
-                    </div>
+        <h1>Publicação de Objetos Educacionais</h1>
+        <div id="enviroment-info">
+            <p>Esse ambiente é uma maneira de compartilhar conhecimento online.</p>
+            <p>Você pode submeter um objeto educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros.</p>
+            <p>Então, compartilhe já o seu conhecimento!</p>
+            <div id="submit-container">
+                <div id="submit-educational-object">
+                    <a href="submit.xhtml">
+                        <img src="../resources/common/images/icon-lamp-publish.png"/>
+                        <p>PUBLICAR UM</p>
+                        <p>OBJETO EDUCACIONAL</p>
+                    </a>
                 </div>
-
-                <div class="cnt-left">
-                    <div id="wrap-left">
-                        <div id="passoapasso">
-                            <div class="passo1">
-                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
-                                <span class="txt-pp">#{localeBean.getString('Preencher o formulário de registro de Objetos Educacionais')}</span>
-                                <img src="../resources/common/images/seta_pp.png" class="figuras" alt="seta" />
-                            </div>
-                            <div class="passo2">
-                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
-                                <span class="txt-pp">#{localeBean.getString('Aguardar a leitura das informações pela equipe de revisores')}</span>
-                                <img src="../resources/common/images/oculos_pp1.png" class="figuras" alt="oculos" />
-                            </div>
-                            <div class="passo3">
-                                <img src="../resources/common/images/pixel.png" class="img-passo" alt="pixel" />
-                                <span class="txt-pp">#{localeBean.getString('Sua experiência será publicada pelo administrador do Espaço')}</span>
-                                <img src="../resources/common/images/ts_pp.png" class="figuras" alt="imagem ts" />
-                            </div>
-                        </div>
-                        <h2><a id="register_educational_object" href="submit.xhtml">#{localeBean.getString('Publicar')}</a> #{localeBean.getString('um Objeto Educacional.')}</h2>
-                        <div class="about-educational-object">
-                            <p><strong>#{localeBean.getString('Esse ambiente')}</strong> #{localeBean.getString('é uma maneira de compartilhar conhecimento on-line. Você pode submeter um objeto educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros. Então, compartilhe já o seu conhecimento!')}</p>
-                        </div>
-                        <div class="about-eo">
-                            <p>
-                                <strong>#{localeBean.getString('O que é um Objeto Educacional?')}</strong><br/>
-                                #{localeBean.getString('Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social.')} 
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </h:form>
+            <div id="step-by-step-info">
+                <div>
+                    <img src="../resources/common/images/publication-step1.png"/>
+                    <p>Preencher o formulário de registro de Objetos Educacionais;</p>
+                </div>
+                <div>
+                    <img src="../resources/common/images/publication-step2.png"/>
+                    <p>Seu Objeto Educacional será enviado para revisão, por nossa equipe de revisores;</p>
+                </div>
+                <div>
+                    <img src="../resources/common/images/publication-step3.png"/>
+                    <p>Sua experiência será publicada pelo administrador do espaço.</p>
+                </div>
+            </div>
+        </div>
+        <div id="educational-object-info">
+            <p>O QUE É UM OBJETO EDUCACIONAL?</p>
+            <p>Um Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social.</p>
+            <p>Quer saber como produzir o seu próprio Objeto Educacional sobre um tema específico? Acesse nosso Manual:</p>
+            <a id="educational-object-manual" href="http://cdn.guigoh.com/guigoh/discussionFiles/topic/12/ManualOE-ACC-WEB.pdf">
+                <img src="../resources/common/images/banner-manual.png"/>
+            </a>
+        </div>
+        <div class="clear"></div>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
