@@ -1,117 +1,337 @@
-@charset "utf-8";
-/* CSS Document */
-.profile_menu {position: relative; width: 900px; top: -22px; left: 50px;}
-.profile_menu ul {position: absolute; top: -8px;}
-.profile_menu li {display: inline-block; width:120px; height:28px; background-color: #9f9f9f; border: solid 1px #898989;-webkit-box-shadow: 0px 0px 12px rgba(197, 199, 190, 1); -moz-box-shadow:0px 0px 12px rgba(197, 199, 190, 1); box-shadow:0px 0px 12px rgba(197, 199, 190, 1);cursor: pointer; padding: 0px 6px 0px 26px; margin-right: 50px;}
-.profile_menu li:hover {background-color: #fff; height:32px; }
-.profile_menu a {text-decoration:none; color: #ffffff; position: relative; top: -1px; width: 154px; height: 30px; right: 52px; display: block; text-align: center; padding: 6px 0px 0px 55px; margin-left: -32px;}
-.profile_menu a:hover {color:#9f9f9f; text-decoration:none; position: relative; top: -1px; width: 154px; height: 30px; right: 52px; display: block; text-align: center; padding: 6px 0px 0px 55px; margin-left: -32px;}
-.widget_profile {margin-left: 26px;}
-.widget_curriculum {margin-left: 12px;}
-.widget_multimedia {margin-left: 12px;}
-.widget_network {margin-left: -6px;}
-.profile_info {width:460px; height:300px; float: left;}
-.profile_avatar {background:url(../images/avatar.png) no-repeat; width:56px; height:57px; border: 1px solid #909090; padding: 10px 10px 10px 10px;background-position: 10px; margin: 20px 0px 0px 50px; float: left;}
-.name {width: 100%; position: relative; top: 22px; left: 16px; color: #cf7353; font: 14px Arial, Helvetica, sans-serif; font-weight: bold; font-size: 18px;display:block;width:345px}
-.name input{width:180px}
-.occupation {width: 100%; position: relative; top: 28px; left: 16px; color: #818080; font: 14px Arial, Helvetica, sans-serif; font-weight: lighter; font-size: 16px;display:block;width:345px}
-.email {width: 100%; position: relative; top: 36px; left: 16px; color: #2e3092; font: 14px Arial, Helvetica, sans-serif; font-weight: lighter; font-size: 13px;display:block;width:360px}
-.profile_avatar p{width:360px; position: absolute; margin: 90px 0px 0px -10px; border: 1px solid #d1d1d1; border-radius: 2px; padding: 10px 10px 10px 10px; background-color:#dcdcdc; color:#797979;}
-.resume { font-size:12px; }
-.resume textarea{width:300px}
-.button_add_edit{float:right;margin: 20px 40px 10px 0px; padding-top: 2px; text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:62px; height:18px; text-align:center; border-radius:2px; font-size:12px; }
-.button_add_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; cursor:pointer; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
-.button_added_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
-.button_friend{text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:88px; height:21px; text-align:center; position:relative; left:215px; top:18px; border-radius:2px; font-size:14px;}
+#content {
+    padding: 0 0 35px 0 !important;
+}
 
-/* Temas de Interesse */
-.profile_objects {width:360px; float: right; position: relative; right: 80px;}
-.clear {display:block;clear:both;}
-.objects_name {width: 100%; position: relative; top: 22px; left: 16px; color: #818080; font: 14px Arial, Helvetica, sans-serif; font-weight: normal; font-size: 20px;}
-.objects {width: 400px; height: 300px; position: relative; top: 14px; left: 18px;}
-.objects_info {width: 100%; position: relative; top: 118px; left: 90px; color: #818080; font: 14px Arial, Helvetica, sans-serif; font-weight: lighter; font-size: 15px; font-style:italic;}
-.objects_documents {width:150px; height:104px; display:block; background-color:#dedede; border: 1px solid #d1d1d1; float: left;}
-.objects_images {width:210px; height:170px; display:block; background-color:#dedede; border: 1px solid #d1d1d1; float: left; margin-left: 10px;}
-.objects_videos {width:150px; height:104px; display:block; background-color:#dedede; border: 1px solid #d1d1d1; float: left; margin-top: -56px;}
-.objects_audios {width:210px; height:40px; display:block; background-color:#dedede; border: 1px solid #d1d1d1; float: left; margin:10px 0px 0px 10px;}
-.profile_interests {display: block; height: 260px;}
-.interests {position: absolute; margin: -17px 0px 0px 50px; border: 1px solid #969696; border-radius: 2px; padding: 10px 10px 10px 10px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold;}
-.line {width: 800px;}
-.theme_buttons li {float:left; background:url(../images/button.png) no-repeat; width:138px; height:32px;text-align:center; cursor:pointer; display: inline-block;position: relative; top: 40px; left: 80px; margin: 20px 100px 20px 20px;}
-.theme_buttons li:hover {background:url(../images/button_hover.png) no-repeat; width:138px; height:32px;}
-.theme_buttons a {text-decoration:none; font-size:14px;color:#e8f4ef; text-shadow: 0.1em 0.1em #876256; position: relative; top: 5px;}
+#content h1 {
+    margin-bottom: 0 !important;
+}
 
-/* Interesses Culturais */
-.profile_cultural {height: 320px;}
-.cultural {position: absolute; margin: -17px 0px 0px 50px; border: 1px solid #969696; border-radius: 2px; padding: 10px 10px 10px 10px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold;}
-.int_cultural {display:block; height:180px; margin:30px 0px 0px 104px; clear:both; color:#818080;}
-.icon_book {display:block; height:30px; background:url(../images/icons_cultural.png) no-repeat;}
-.icon_music {display:block; height:32px; background:url(../images/icons_cultural.png) no-repeat; background-position: 0px -37px;}
-.icon_movie {display:block; height:32px; background:url(../images/icons_cultural.png) no-repeat; background-position: 0px -77px;}
-font {display:block; margin:4px 50px 0px -4px; float:left;}
-.cultural_item p {float:left; margin:-8px 0px 44px 32px;font-style:italic;}
-.cultural_music {background-position: 0px -37px;}
+.profile-resume {
+	padding: 30px 0 0 0;
+}
 
-/* Esportes e Hobbies */
-.profile_sports {height:280px;}
-.sports_hobbies {position: absolute; margin: -17px 0px 0px 50px; border: 1px solid #969696; border-radius: 2px; padding: 10px 10px 10px 10px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold;}
-.icon_sports{display:block; height:32px; background:url(../images/icons_sports.png) no-repeat;background-position: 9px 0px;}
-.icon_hobbies {display:block; height:22px; background:url(../images/icons_sports.png) no-repeat; background-position: 8px -37px;}
+.profile-image {
+	padding: 5px;
+    border: 1px solid #c1c1c1;
+    background-color: #fff;
+    width: 125px;
+    height: 125px;
+    border-radius: 3px;
+    margin: -75px 20px 0 35px;
+  	float:left;
+  	position: relative;
+}
 
-/* Curriculum */
-.curriculum_info {float:left; width:500px; height:140px;}
-.curriculum_info_left {float:right; width:350px; padding-top:24px;}
-.button_download {text-decoration:none; color:#FFF; border:1px solid #248c1e; background-color: #71bf44; display:block; width:130px; height:21px; text-align:center; padding-top:4px; border-radius:2px; margin-left:200px; font-size:14px;}
-.availability {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
-.availability span {font-weight:lighter;}
-.gender {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
-.gender span {font-weight:lighter;}
-.scholarity {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
-.scholarity span {font-weight:lighter;}
-.phone_number {color:#818080; width:330px; text-align:right; float:left; display:block; margin-top:8px; font-weight:600; font-size:14px;}
-.phone_number span {font-weight:lighter;}
-.request_phone { width: 100px; }
-.line2 {margin-right: 20px;}
+.profile-name {
+	float: left;
+}
 
-.curriculum_address {height:160px;}
-.curriculum_icon_address {float:left; position:relative; background:url(../images/icons_curriculum.png) no-repeat; width:40px; height:40px; margin: -17px 0px 0px 32px;}
-.address {margin: -17px 0px -17px -22px; border: 1px solid #969696; border-radius: 2px; padding: 10px 22px 10px 22px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold }
+.profile-name h1 {
+	color: #404095;
+	font-size: 20px;
+}
 
-.text_curriculum {color:#818080;padding:40px 0px 0px 74px;}
-.text_left {display:block; clear:both;float:left; width:510px; }
-.text_right {display:block; float:left; width:276px; color:#818080; text-align:right;margin-bottom:35px}
+.profile-name p {
+	color: #989b94;
+	font-size: 18px;
+        height: 19px;
+}
 
-.curriculum_education {height:160px;}
-.curriculum_icon_educ {float:left; position:relative; background:url(../images/icons_curriculum.png) no-repeat; background-position:0px -42px; width:40px; height:40px; margin: -17px 0px 0px 32px;}
-.education {margin: -17px 0px -17px -22px; border: 1px solid #969696; border-radius: 2px; padding: 10px 22px 10px 22px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold }
+.profile-status {
+	float: right;
+	width: 425px;
+	text-align: right;
+	color: #989b94;
+	font-style: italic;
+	margin-right: 40px;
+}
 
-.curriculum_experience {height:160px;margin:30px 0 0}
-.curriculum_icon_exp {float:left; position:relative; background:url(../images/icons_curriculum.png) no-repeat; background-position:0px -84px; width:40px; height:40px; margin: -17px 0px 0px 32px;}
-.experience {margin:-17px 0px -17px -22px; border: 1px solid #969696; border-radius: 2px; padding: 10px 22px 10px 22px; background-color:#fff; color:#cf7353; text-transform: uppercase; font-size: 14px; font-weight: bold;}
-.tab{display:none}
-#tab_social{display:block;}
+.profile-resume button {
+	margin: 5px 0 0 10px;
+}
 
-.button {display: block;  margin: -21px 0px 0px 250px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
-.button:hover {background-color: #a94750;}
+.profile-tabs {
+	border-bottom: 1px solid #c1c1c1;
+	width: calc(100% - 35px);
+	float: right;
+	margin-bottom: 35px;
+}
 
-.button_profile1{display: block;  margin: -21px 0px 0px 378px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
-.button_profile1:hover {background-color: #a94750;}
-.occupation_edit{width: 100%; position: relative; top: 28px; left: 16px; color: #818080; font: 14px Arial, Helvetica, sans-serif; font-weight: lighter; font-size: 12px;display:block;width:294px}
-.occupation_menu{float:left;margin:35px 0px 0px 18px;width:130px}
-.occupation_edit_name{float:left;margin:34px 0px 0px 5px;width:130px}
+.profile-tabs ul {
+	float: right;
+}
+.profile-tabs li {
+	float: left;
+	height: 30px;
+	margin-top: 15px;
+}
 
-.multiselect_box{margin:25px 0px 0px 135px;display:block}
+.profile-tabs a {
+	text-transform: uppercase;
+    padding: 10px 20px;
+    border-top: 1px solid #c1c1c1;
+    border-left: 1px solid #c1c1c1;
+    border-right: 1px solid #c1c1c1;
+    margin-right: 25px;
+    text-decoration: none;
+    color: #989b94;
+    font-size: 11px;
+    font-weight: bold;
+}
 
-.button_curriculum1{display: block; float: left; margin-left: -60px; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:52px; height:21px; text-align:center; border-radius:2px; font-size:11px; padding-top:2px;}
-.button_curriculum1:hover{background-color: #a94750;}
+.profile-tabs li.active a {
+	color: #333;
+	border-bottom: 1px solid #e6eadf;
+}
 
-.institutions{margin:24px 0px 10px 0px;}
+.profile-tabs a:hover {
+	color: #333;
+}
 
-.curriculum_edit_box{display:block;margin:35px 35px 30px 50px}
-.curriculum2_edit_box_grid input{margin:0px 0px 0px 0px}
-.curriculum3_edit_box_grid input{margin:0px 25px 0px 0px}
-.curriculum4_edit_box_grid input{margin:0px 10px 0px 0px}
-.edit_label{font-size:12px;color:#818080}
-.remove_button {display: block; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:19px; text-align:center; border-radius:2px; font-size:10px; float: right; margin: 0px 0px 0px 15px; cursor:pointer}
-.change_avatar{display: block; text-decoration:none; color:#FFF; border:1px solid #a94750; background-color: #cf535f; width:76px; text-align:center; border-radius:2px; font-size:10px; float: right; margin: 50px -10px 0px 0px; cursor:pointer}
-.messageButton{float:right;margin:-33px 27px 0 0;font-size:12px;color:#818080;cursor:pointer}
+#profile-container-objects, #profile-container-resume {
+	display: none;
+}
+
+.profile-column-left {
+	padding-left: 35px;
+	float: left;
+	padding-right: 35px;
+	width: 665px;
+}
+
+.profile-column-right {
+	padding-right: 35px;
+	padding-left: 20px;
+	font-size: 11px;
+	border-left: 1px solid #c1c1c1;
+	float: left;
+	line-height: 12px;
+	width: 169px;
+}
+
+.profile-about-list {
+	padding: 15px 0 15px 55px;
+	line-height: 18px;
+}
+
+.profile-about-list:first-child h3 {
+	line-height: 14px;
+}
+
+.profile-about-title {
+	width: 90px;
+	margin-right: 15px;
+	float: left;
+	text-align: right;
+}
+.profile-about-title h3 {
+	font-weight: bold;
+	font-size: 11px;
+	color: #989b94;
+}
+
+.profile-about-description {
+	font-size: 14px;
+	margin-left: 105px;
+	padding-top: 10px;
+}
+
+.profile-about-description a {
+	color: #404095;
+	font-weight: bold;
+}
+
+#profile-container-about hr {
+	width: 175px;
+	padding-left: 40px;
+	margin-left: 95px;
+}
+
+#profile-icon-heart {
+	margin-right: -13px;
+    margin-bottom: -4px;
+}
+
+#profile-icon-music {
+	margin-right: -12px;
+}
+
+#profile-icon-book {
+	margin-right: -13px;
+    margin-bottom: 3px;
+}
+
+#profile-icon-movie {
+	margin-right: -17px;
+    margin-bottom: 8px;
+}
+
+#profile-icon-sport{
+	margin-right: -14px;
+    margin-bottom: -4px;
+}
+
+#profile-icon-hobbie {
+	margin-right: -14px;
+}
+
+#profile-icon-mail img, #profile-icon-birthday img{
+	clear: both;
+	float: left;
+	margin-right: 10px
+}
+
+#profile-icon-birthday {
+	margin-top: 10px;
+    line-height: 25px;
+}
+
+
+.profile-resume-left {
+	float: left;
+}
+
+.profile-resume-right {
+	float: right;
+	text-align: right;
+	font-size: 11px;
+    line-height: 13px;
+}
+
+.profile-resume-title {
+	text-transform: uppercase;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.profile-resume-name {
+	font-size: 20px;
+}
+
+.profile-resume-ocupation {
+	color: #989b94;
+    font-size: 20px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.italic {
+	font-style: italic;
+}
+
+#profile-container-resume > .profile-column-right {
+	border: none;
+	text-align: center;
+}
+
+.profile-history-container {
+	border-bottom: 1px solid #c1c1c1;
+	padding-top: 30px;
+}
+.profile-history-title {
+	background-color: #E6EADF;
+    margin-bottom: -1px;
+    text-align: left;
+    display: table;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 11px;
+    padding-right: 5px;
+}
+
+.profile-history-list {
+	padding: 20px 0 0 0;
+	line-height: 18px;
+}
+
+.profile-history-list:first-child h3 {
+	line-height: 14px;
+}
+
+.profile-history-date {
+	width: 145px;
+	margin-right: 15px;
+	float: left;
+	text-align: right;
+}
+.profile-history-date h3 {
+	font-weight: bold;
+	font-size: 11px;
+	text-transform: uppercase;
+}
+
+.profile-history-description {
+	float: left;
+	font-size: 14px;
+	width: 480px;
+}
+
+.profile-history-description a {
+	color: #404095;
+	font-weight: bold;
+}
+
+.btn-gray {
+	background: #9A9A9A;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 22px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-object-number {
+    color: #404095;
+    font-weight: bold;
+    line-height: 12px;
+    text-align: center;
+}
+
+.profile-object-number span {
+    font-size: 80px;
+    line-height: 100px;
+}
+
+/** Pode colocar no layout.css **/
+
+.item-box-container	{
+	width: 315px;
+	height: 100px;
+	border: 1px solid #c1c1c1;
+	line-height: 18px;
+	float: left;
+	margin: 0 15px 20px 0;
+}
+
+.item-box-img {
+	float: left;
+	margin-right: 20px;
+}
+
+.item-box-title {
+	padding-top: 10px;
+}
+
+.item-box-aux {
+	font-size: 12px;
+}
+
+.item-box-title-bold {
+	font-weight: bold;
+	font-size: 14px;
+    padding-top: 10px;
+}
+
+.item-box-date {
+	font-size: 12px;
+	color: #989b94;
+}
+
+.item-box-date img {
+	margin-right: 5px;
+	vertical-align: text-bottom;
+}

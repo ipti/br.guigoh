@@ -1,4 +1,4 @@
-package br.org.ipti.guigoh.model.jpa.exceptions;
+package br.org.ipti.guigoh.model.jpa.controller.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

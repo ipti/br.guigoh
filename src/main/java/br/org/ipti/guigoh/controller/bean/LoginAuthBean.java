@@ -14,7 +14,7 @@ import br.org.ipti.guigoh.model.jpa.controller.NetworksJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.util.MailService;
@@ -69,11 +69,6 @@ public class LoginAuthBean implements Serializable {
                     break;
                 case "IC":
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta está desativada. Contate o administrador."), null));
-                    break;
-                case "FC":
-                    CookieService.addCookie("user", registeredUser.getUsername());
-                    CookieService.addCookie("token", registeredUser.getToken());
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/profile/wizard.xhtml");
                     break;
             }
         } else if (registeredUser != null && user.getPassword().equals(registeredUser.getPassword()) && registeredUser.getStatus().equals("CP")) {

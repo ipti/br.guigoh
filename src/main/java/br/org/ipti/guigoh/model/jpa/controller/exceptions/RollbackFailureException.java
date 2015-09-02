@@ -1,4 +1,4 @@
-package br.org.ipti.guigoh.model.jpa.exceptions;
+package br.org.ipti.guigoh.model.jpa.controller.exceptions;
 
 public class RollbackFailureException extends Exception {
     public RollbackFailureException(String message, Throwable cause) {

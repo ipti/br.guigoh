@@ -6,10 +6,9 @@ import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +106,11 @@ public class MessengerEndpoint {
                     if (s.isOpen() && obj.getString("receiverId").equals(s.getUserProperties().get("user"))) {
                         sendObject(s, obj, false, date);
                     } else if (s.isOpen() && obj.getString("senderId").equals(s.getUserProperties().get("user"))) {
-                        sendObject(s, obj, true, date);
+                        if (!session.equals(s)) {
+                            sendObject(s, obj, true, date);
+                        } else {
+                            sendDateToHimself(session, obj.getString("receiverId"), date);
+                        }
                     }
                 }
                 break;
@@ -211,6 +214,13 @@ public class MessengerEndpoint {
                 .add("date", date)
                 .add("himself", himself)
                 .add("read", "N").build()
+                .toString());
+    }
+
+    private void sendDateToHimself(Session session, String receiverId, String date) throws IOException, EncodeException {
+        session.getBasicRemote().sendObject(Json.createObjectBuilder()
+                .add("receiverId", receiverId)
+                .add("dateToHimself", date).build()
                 .toString());
     }
 }

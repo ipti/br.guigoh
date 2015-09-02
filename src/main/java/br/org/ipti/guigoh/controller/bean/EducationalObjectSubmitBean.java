@@ -141,7 +141,7 @@ public class EducationalObjectSubmitBean implements Serializable {
 
     private void getInterestThemes() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interestThemesList = interestsJpaController.findInterestsByInterestsTypeName("Themes");
+        interestThemesList = interestsJpaController.findInterestsEntities();
     }
 
     private void initGlobalVariables() {

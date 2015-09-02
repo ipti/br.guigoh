@@ -12,7 +12,7 @@ $(document).on("click", ".user-chat", function(){
     var id = $(this).closest(".result-box").find(".social-profile-id").text();
     var name = $(this).closest(".result-box").find(".social-profile-name").text();
     openMessengerBox(id, name);
-})
+});
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {

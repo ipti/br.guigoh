@@ -4,8 +4,8 @@
  */
 package br.org.ipti.guigoh.model.jpa.controller;
 
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Config;
 import java.io.Serializable;
 import java.util.List;

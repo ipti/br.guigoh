@@ -7,7 +7,7 @@
     <ui:define name="title">Buscar</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/search-view.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/search-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
@@ -16,11 +16,12 @@
         </f:metadata>
         <h1>Buscar</h1>
         <h:form prependId="false">
-
-            <h:inputText class="general-search" value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
-                <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
-            </h:inputText>
-
+            <div class="general-search">
+                <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
+                    <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
+                </h:inputText>
+                <img src="../resources/common/images/magnifying-glass.png"/>
+            </div>
             <h:panelGroup id="search-result">
                 <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">
                     <h3 class="category-name">Pessoas</h3>
@@ -46,7 +47,10 @@
                                             </h:commandLink>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                            <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                            <h:commandLink>
+                                                <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                                <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                            </h:commandLink>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
                                             <h:commandLink>
@@ -139,7 +143,7 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/search-view.js"></script>
+        <script type="text/javascript" src="../resources/common/js/search-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -24,11 +24,10 @@ function changeNameLength(name, limit) {
 }
 
 function eventExceptions(data) {
-    if ($(data.source).hasClass("general-search")) {
-        if ($(data.source).val().length >= 3) {
-            return false;
-        } else {
-            return true;
-        }
+    if ($(data.source).parent().hasClass("general-search")
+            || $(data.source).hasClass("friend-search")) {
+        return true;
+    } else {
+        return false;
     }
 }

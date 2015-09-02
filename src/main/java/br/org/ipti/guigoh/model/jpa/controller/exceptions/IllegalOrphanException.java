@@ -1,4 +1,4 @@
-package br.org.ipti.guigoh.model.jpa.exceptions;
+package br.org.ipti.guigoh.model.jpa.controller.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

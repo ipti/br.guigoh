@@ -13,8 +13,9 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +35,7 @@ import org.apache.commons.mail.EmailException;
 public class AdminViewBean implements Serializable {
  
     private static final String ACTIVE_ACCESS = "AC", INACTIVE_ACCESS = "IC",
-    FIRST_ACCESS = "FC", ADMIN = "AD", REVISER = "RE",
-    ACCEPTED = "AC", REJECTED = "RE", DEACTIVATED = "DE";
+    ADMIN = "AD", REVISER = "RE", ACCEPTED = "AC", REJECTED = "RE", DEACTIVATED = "DE";
 
     private boolean admin, reviser;
 
@@ -53,7 +53,7 @@ public class AdminViewBean implements Serializable {
     private EducationalObjectJpaController educationalObjectJpaController;
     private UserAuthorizationJpaController userAuthorizationJpaController;
 
-    public void init() {
+    public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             
@@ -84,9 +84,9 @@ public class AdminViewBean implements Serializable {
         }
     }
 
-    private void checkAuthorization() {
+    private void checkAuthorization() throws IOException {
         if (!admin && !reviser) {
-            FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, "islogged");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         }
     }
 
@@ -123,7 +123,7 @@ public class AdminViewBean implements Serializable {
     public void acceptUser(String token) throws NonexistentEntityException, RollbackFailureException, Exception {
         try {
             UserAuthorization user = userAuthorizationJpaController.findUserAuthorization(token);
-            user.setStatus(FIRST_ACCESS);
+            user.setStatus(ACTIVE_ACCESS);
             userAuthorizationJpaController.edit(user);
             String mailSubject = "Cadastro aceito";
             String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"

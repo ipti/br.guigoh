@@ -5,9 +5,9 @@
 package br.org.ipti.guigoh.model.jpa.controller;
 
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.FriendsPK;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
@@ -312,15 +312,15 @@ public class FriendsJpaController implements Serializable {
     public List<Friends> findFriendSearchList(String token, String str) {
         EntityManager em = getEntityManager();
         try {
-            List<Friends> friendsList = (List<Friends>) em.createNativeQuery("select distinct f.* from friends f "
+            List<Friends> friendList = (List<Friends>) em.createNativeQuery("select distinct f.* from friends f "
                     + "join social_profile sp on ((f.token_friend_2 = sp.token_id) or (f.token_friend_1 = sp.token_id)) "
-                    + "where (UPPER(sp.name) like '" + str.toUpperCase() + "%') "
+                    + "where (UPPER(sp.name) like '%" + str.toUpperCase() + "%') "
                     + "and f.status = 'AC' "
                     + "and (f.token_friend_1 = '" + token + "' or f.token_friend_2 = '" + token + "')", Friends.class).getResultList();
-            if (friendsList == null) {
+            if (friendList == null) {
                 return new ArrayList<>();
             }
-            return friendsList;
+            return friendList;
         } finally {
             em.close();
         }

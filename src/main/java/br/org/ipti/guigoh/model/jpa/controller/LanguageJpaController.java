@@ -5,8 +5,8 @@
 package br.org.ipti.guigoh.model.jpa.controller;
 
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Language;
 import java.io.Serializable;
 import javax.persistence.Query;

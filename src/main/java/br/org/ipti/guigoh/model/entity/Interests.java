@@ -53,15 +53,7 @@ public class Interests implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "name")
     private String name;
-    @JoinTable(name = "social_profile_interests", joinColumns = {
-        @JoinColumn(name = "interests_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "social_profile_id", referencedColumnName = "social_profile_id")})
-    @ManyToMany
-    private Collection<SocialProfile> socialProfileCollection;
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
-    @ManyToOne
-    private InterestsType typeId;
-
+    
     public Interests() {
     }
 
@@ -88,23 +80,6 @@ public class Interests implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @XmlTransient
-    public Collection<SocialProfile> getSocialProfileCollection() {
-        return socialProfileCollection;
-    }
-
-    public void setSocialProfileCollection(Collection<SocialProfile> socialProfileCollection) {
-        this.socialProfileCollection = socialProfileCollection;
-    }
-
-    public InterestsType getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(InterestsType typeId) {
-        this.typeId = typeId;
     }
 
     @Override

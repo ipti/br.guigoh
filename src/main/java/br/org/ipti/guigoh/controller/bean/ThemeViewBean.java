@@ -51,7 +51,7 @@ public class ThemeViewBean implements Serializable {
 
     private void getInterests() {
         InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interest = interestsJpaController.findInterestsById(themeID);
+        interest = interestsJpaController.findInterests(themeID);
     }
 
     private void getTags() {

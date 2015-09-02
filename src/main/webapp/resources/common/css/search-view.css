@@ -1,6 +1,9 @@
 .general-search {
-    background: url(../images/magnifying-glass.png) no-repeat 98% 4px #dcdcdc;
-    background-size: 20px;
+    position: relative;
+}
+
+.general-search input {
+    background: #dcdcdc;
     width: 77%;
     padding: 0px 5px;
     border: 1px solid #bbbdb8;
@@ -10,11 +13,16 @@
     font-size: 18px;
     text-indent: 10px;
     margin-bottom: 55px;
-    display: block;
 }
 
-.general-search:focus {
+.general-search input:focus {
     outline: none;
+}
+
+.general-search img {
+    position: absolute;
+    width: 20px;
+    margin: 4px 0 0 -35px;
 }
 
 .category {
@@ -128,7 +136,7 @@
 }
 
 .result-date {
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1;
     color: gray;
     height: 12px;

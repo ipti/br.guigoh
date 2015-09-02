@@ -5,16 +5,20 @@ var sound = true;
 
 $(document).ready(function () {
     messengerFriends()
-    $(document).on('click', '#messenger-friends li', function(){
+    $(document).on('click', '#messenger-friends li', function () {
         openMessengerBox($(this).attr('socialprofileid'), $(this).attr('name'));
     });
     $(document).on('click', '.close-chat', function () {
-        $('#box-' + $(this).attr('socialprofileid')).remove();
+        var box = $('#box-' + $(this).attr('socialprofileid'));
+        organizeBoxes(box);
+        $(box).remove();
     });
     $(".messenger").on('click', 'span', (function () {
         $("#messenger-friends").toggle();
         if ($("#messenger-friends").is(":visible")) {
-            $("#messenger-menu").removeClass("messenger-menu-collapsed");
+            if ($("#messenger-friends").children().length) {
+                $("#messenger-menu").removeClass("messenger-menu-collapsed");
+            }
         } else {
             $("#messenger-menu").addClass("messenger-menu-collapsed");
         }
@@ -112,15 +116,15 @@ function onMessageReceived(evt) {
         });
     } else if (typeof msg.message !== 'undefined') {
         if (msg.himself === true) {
-            showBox(msg.receiverId, msg.receiverName, msg.message, msg.date, logged_social_profile_id, true);
+            showBox(msg.receiverId, msg.receiverName, logged_social_profile_id, msg.message, msg.date, true);
         } else {
-            showBox(msg.senderId, msg.senderName, msg.message, msg.date, null, true);
+            showBox(msg.senderId, msg.senderName, null, msg.message, msg.date, true);
             showNewMessagesQuantity(msg.senderId);
         }
     } else if (typeof msg.offlineMessages !== 'undefined') {
         var offlineMessages = JSON.parse(msg.offlineMessages);
         $.each(offlineMessages, function () {
-            showBox(this.id, this.name, null, null, null, null);
+            showBox(this.id, this.name);
         });
         sound = false;
     } else if (typeof msg.lastMessages !== 'undefined') {
@@ -143,16 +147,18 @@ function onMessageReceived(evt) {
         $('#registered-users-online').text(msg.onlineUsers + " online");
     } else if (typeof msg.saw !== 'undefined') {
         messagesViewed($("#box-" + msg.saw));
+    } else if (typeof msg.dateToHimself !== 'undefined') {
+        showNewMessageDate(msg.receiverId, msg.dateToHimself);
     }
 }
 
-function showBox(id, name, message, date, himself, recent) {
+function showBox(id, name, himself, message, date, recent) {
     var json;
     if (!$('#box-' + id).length) {
         $('.messenger-boxes').append(createBox(id, name));
         json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"LAST_MSGS"}';
         wsocket.send(json);
-    } else if (message !== null) {
+    } else if (message !== undefined) {
         var friendId;
         if (himself !== null) {
             friendId = himself;
@@ -169,8 +175,10 @@ function showBox(id, name, message, date, himself, recent) {
 
 function createBox(id, name) {
     name = changeNameLength(name, 23);
+    var boxesQuantity = $(".box").length;
+    var position = "style='left: " + ((243 * boxesQuantity) + (20 * (boxesQuantity + 1))) + "px'"
     var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
-    var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "'>"
+    var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "' " + position + ">"
             + "<div class='messenger-title'><span class='messenger-user-name'>" + name + "</span>"
             + "<img src='../../resources/common/images/close-chat.png' class='close-chat' socialprofileid='" + id + "'/>"
             + online
@@ -184,16 +192,14 @@ function createBox(id, name) {
 }
 
 function openMessengerBox(id, name) {
-    if ($('#box-' + id).length) {
-        $('#box-' + id).remove();
-    } else {
+    if (!$('#box-' + id).length) {
         var boxesQuantity = $('.messenger-boxes .box').size();
         if (boxesQuantity !== 0) {
             var boxWidth = $('.messenger-boxes .box').css('width').replace('px', '');
             var bodySize = $('body').css('width').replace('px', '');
         }
-        if (boxesQuantity === 0 || bodySize * 2 / 3 > boxWidth * (boxesQuantity + 1)) {
-            showBox(id, name, null, null, logged_social_profile_id, null);
+        if (boxesQuantity === 0 || bodySize * 0.75 > boxWidth * (boxesQuantity + 1)) {
+            showBox(id, name, logged_social_profile_id);
             $('#send-message-' + id).focus().select();
             focus = true;
         }
@@ -208,13 +214,16 @@ function sendMessage(input) {
         var json = '{"message":"' + message + '", "senderId":"' + logged_social_profile_id + '",'
                 + '"receiverId":"' + id + '", "type":"NEW_MSG"}';
         wsocket.send(json);
+        var messageContainer = loadMessageBlock(id, message, "", true, "right");
+        $('#box-' + id + ' .messages').append(messageContainer);
+        $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
         $('#box-' + id + ' #send-message-' + id).val("");
     }
 }
 
-function loadMessageBlock(id, message, date, recent) {
-    var classe = (id === logged_social_profile_id ? "your-message" : "friend-message");
-    var direction = (id === logged_social_profile_id ? "right" : "left");
+function loadMessageBlock(id, message, date, recent, direction) {
+    direction = (direction !== undefined) ? direction : (id === logged_social_profile_id ? "right" : "left");
+    var classe = (direction === "right" ? "your-message" : "friend-message");
     var time = recent ? "new" : "old";
     var container = "<div class='message " + classe + " " + time + "'>"
             + "<div class='message-inner-container icon-container'><img class='float-" + direction + "' src='../../resources/common/images/triangle-" + direction + ".png'/></div>"
@@ -278,7 +287,7 @@ function persistBoxesAfterPageReload() {
         if (/box/.test(cookieName)) {
             var id = cookieName.split("-")[1];
             if ($("#box-" + id).length === 0) {
-                showBox(id, name, null, null, logged_social_profile_id, null);
+                showBox(id, name, logged_social_profile_id);
             }
             if (/collapsed/.test(cookieName)) {
                 $("#box-" + id).addClass("box-collapsed")
@@ -301,4 +310,18 @@ function messagesViewed(box) {
     box.find(".new-messages").remove();
     box.find(".new").removeClass("new").addClass("old");
     box.css("background-color", "#9d9d9d");
+}
+
+function organizeBoxes(box) {
+    var nextBox = $(box).next();
+    if (nextBox.length) {
+        organizeBoxes(nextBox);
+        nextBox.css("left", box.offset().left);
+    }
+}
+
+function showNewMessageDate(id, date){
+    var box = $("#box-" + id);
+    box.find(".message .message-date:empty:first").text(date);
+    $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
 }

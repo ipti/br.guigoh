@@ -8,38 +8,5 @@
     <application></application>   
     <lifecycle>
         <phase-listener>br.org.ipti.guigoh.controller.listener.AuthorizeListener</phase-listener>
-    </lifecycle>
-
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>islogged</from-outcome>
-            <to-view-id>/home.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>logout</from-outcome>
-            <to-view-id>/login/auth.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>profile</from-outcome>
-            <to-view-id>/profile/view.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>wizard</from-outcome>
-            <to-view-id>/profile/wizard.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>   
+    </lifecycle> 
 </faces-config>

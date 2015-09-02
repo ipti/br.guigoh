@@ -1,4 +1,4 @@
-package br.org.ipti.guigoh.model.jpa.exceptions;
+package br.org.ipti.guigoh.model.jpa.controller.exceptions;
 
 public class PreexistingEntityException extends Exception {
     public PreexistingEntityException(String message, Throwable cause) {
