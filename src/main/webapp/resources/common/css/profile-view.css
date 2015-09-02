@@ -7,67 +7,171 @@
 }
 
 .profile-resume {
-	padding: 30px 0 0 0;
+    padding: 30px 0 0 0;
 }
 
 .profile-image {
-	padding: 5px;
+    padding: 5px;
     border: 1px solid #c1c1c1;
     background-color: #fff;
     width: 125px;
     height: 125px;
     border-radius: 3px;
     margin: -75px 20px 0 35px;
-  	float:left;
-  	position: relative;
+    float:left;
+    position: relative;
+}
+
+.profile-image img {
+    width: 125px;
+    height: 125px;
+}
+
+.profile-image .edit-photo {
+    float: right;
+    color: whitesmoke;
+    cursor: pointer;
+    font-size: 20px;
+    margin: -44px 5px 0px 0;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+.image-cropping-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.jcrop-holder {
+    margin: 0 auto;
+}
+
+.image-cropping-modal:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.image-cropping-modal > div {
+    width: 50%;
+    position: relative;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 15px 0 0 0;
+    background: #e6eadf;
+}
+
+.photo-container {
+    display: block;
+    margin: 0 0 15px 0;
+}
+
+.original-uploaded-image {
+    display: block;
+    margin: 0 auto;
+    max-height: 500px;
+    max-width: 100%;
+}
+
+.image-cropping-button {
+    float: right;
+    color: #e6eadf;
+    background-color: gray;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.image-cropping-button:hover {
+    background: black;
+}
+
+.image-cropping-button.cancel {
+    margin-right: 10px;
+}
+
+.close-image-cropping-modal {
+    background: gray; 
+    color: #e6eadf;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.close-image-cropping-modal:hover { 
+    background: black;
+}
+
+.profile-image .edit-photo:hover {
+    box-shadow: 0px 0px 3px black
 }
 
 .profile-name {
-	float: left;
+    float: left;
 }
 
 .profile-name h1 {
-	color: #404095;
-	font-size: 20px;
+    color: #404095;
+    font-size: 20px;
 }
 
 .profile-name p {
-	color: #989b94;
-	font-size: 18px;
-        height: 19px;
+    color: #989b94;
+    font-size: 18px;
+    height: 19px;
 }
 
 .profile-status {
-	float: right;
-	width: 425px;
-	text-align: right;
-	color: #989b94;
-	font-style: italic;
-	margin-right: 40px;
+    float: right;
+    width: 425px;
+    text-align: right;
+    color: #989b94;
+    font-style: italic;
+    margin-right: 40px;
 }
 
 .profile-resume button {
-	margin: 5px 0 0 10px;
+    margin: 5px 0 0 10px;
 }
 
 .profile-tabs {
-	border-bottom: 1px solid #c1c1c1;
-	width: calc(100% - 35px);
-	float: right;
-	margin-bottom: 35px;
+    border-bottom: 1px solid #c1c1c1;
+    width: calc(100% - 35px);
+    float: right;
+    margin-bottom: 35px;
 }
 
 .profile-tabs ul {
-	float: right;
+    float: right;
 }
 .profile-tabs li {
-	float: left;
-	height: 30px;
-	margin-top: 15px;
+    float: left;
+    height: 30px;
+    margin-top: 15px;
 }
 
-.profile-tabs a {
-	text-transform: uppercase;
+.profile-tabs span {
+    text-transform: uppercase;
     padding: 10px 20px;
     border-top: 1px solid #c1c1c1;
     border-left: 1px solid #c1c1c1;
@@ -77,161 +181,162 @@
     color: #989b94;
     font-size: 11px;
     font-weight: bold;
+    cursor: pointer;
 }
 
-.profile-tabs li.active a {
-	color: #333;
-	border-bottom: 1px solid #e6eadf;
+.profile-tabs li.active span {
+    color: #333;
+    border-bottom: 1px solid #e6eadf;
 }
 
-.profile-tabs a:hover {
-	color: #333;
+.profile-tabs span:hover {
+    color: #333;
 }
 
 #profile-container-objects, #profile-container-resume {
-	display: none;
+    display: none;
 }
 
 .profile-column-left {
-	padding-left: 35px;
-	float: left;
-	padding-right: 35px;
-	width: 665px;
+    padding-left: 35px;
+    float: left;
+    padding-right: 35px;
+    width: 665px;
 }
 
 .profile-column-right {
-	padding-right: 35px;
-	padding-left: 20px;
-	font-size: 11px;
-	border-left: 1px solid #c1c1c1;
-	float: left;
-	line-height: 12px;
-	width: 169px;
+    padding-right: 35px;
+    padding-left: 20px;
+    font-size: 11px;
+    border-left: 1px solid #c1c1c1;
+    float: left;
+    line-height: 12px;
+    width: 169px;
 }
 
 .profile-about-list {
-	padding: 15px 0 15px 55px;
-	line-height: 18px;
+    padding: 15px 0 15px 55px;
+    line-height: 18px;
 }
 
 .profile-about-list:first-child h3 {
-	line-height: 14px;
+    line-height: 14px;
 }
 
 .profile-about-title {
-	width: 90px;
-	margin-right: 15px;
-	float: left;
-	text-align: right;
+    width: 90px;
+    margin-right: 15px;
+    float: left;
+    text-align: right;
 }
 .profile-about-title h3 {
-	font-weight: bold;
-	font-size: 11px;
-	color: #989b94;
+    font-weight: bold;
+    font-size: 11px;
+    color: #989b94;
 }
 
 .profile-about-description {
-	font-size: 14px;
-	margin-left: 105px;
-	padding-top: 10px;
+    font-size: 14px;
+    margin-left: 105px;
+    padding-top: 10px;
 }
 
 .profile-about-description a {
-	color: #404095;
-	font-weight: bold;
+    color: #404095;
+    font-weight: bold;
 }
 
 #profile-container-about hr {
-	width: 175px;
-	padding-left: 40px;
-	margin-left: 95px;
+    width: 175px;
+    padding-left: 40px;
+    margin-left: 95px;
 }
 
 #profile-icon-heart {
-	margin-right: -13px;
+    margin-right: -13px;
     margin-bottom: -4px;
 }
 
 #profile-icon-music {
-	margin-right: -12px;
+    margin-right: -12px;
 }
 
 #profile-icon-book {
-	margin-right: -13px;
+    margin-right: -13px;
     margin-bottom: 3px;
 }
 
 #profile-icon-movie {
-	margin-right: -17px;
+    margin-right: -17px;
     margin-bottom: 8px;
 }
 
 #profile-icon-sport{
-	margin-right: -14px;
+    margin-right: -14px;
     margin-bottom: -4px;
 }
 
 #profile-icon-hobbie {
-	margin-right: -14px;
+    margin-right: -14px;
 }
 
 #profile-icon-mail img, #profile-icon-birthday img{
-	clear: both;
-	float: left;
-	margin-right: 10px
+    clear: both;
+    float: left;
+    margin-right: 10px
 }
 
 #profile-icon-birthday {
-	margin-top: 10px;
+    margin-top: 10px;
     line-height: 25px;
 }
 
 
 .profile-resume-left {
-	float: left;
+    float: left;
 }
 
 .profile-resume-right {
-	float: right;
-	text-align: right;
-	font-size: 11px;
+    float: right;
+    text-align: right;
+    font-size: 11px;
     line-height: 13px;
 }
 
 .profile-resume-title {
-	text-transform: uppercase;
+    text-transform: uppercase;
     font-weight: bold;
     font-size: 13px;
 }
 
 .profile-resume-name {
-	font-size: 20px;
+    font-size: 20px;
 }
 
 .profile-resume-ocupation {
-	color: #989b94;
+    color: #989b94;
     font-size: 20px;
 }
 
 .bold {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .italic {
-	font-style: italic;
+    font-style: italic;
 }
 
 #profile-container-resume > .profile-column-right {
-	border: none;
-	text-align: center;
+    border: none;
+    text-align: center;
 }
 
 .profile-history-container {
-	border-bottom: 1px solid #c1c1c1;
-	padding-top: 30px;
+    border-bottom: 1px solid #c1c1c1;
+    padding-top: 30px;
 }
 .profile-history-title {
-	background-color: #E6EADF;
+    background-color: #E6EADF;
     margin-bottom: -1px;
     text-align: left;
     display: table;
@@ -243,39 +348,39 @@
 }
 
 .profile-history-list {
-	padding: 20px 0 0 0;
-	line-height: 18px;
+    padding: 20px 0 0 0;
+    line-height: 18px;
 }
 
 .profile-history-list:first-child h3 {
-	line-height: 14px;
+    line-height: 14px;
 }
 
 .profile-history-date {
-	width: 145px;
-	margin-right: 15px;
-	float: left;
-	text-align: right;
+    width: 145px;
+    margin-right: 15px;
+    float: left;
+    text-align: right;
 }
 .profile-history-date h3 {
-	font-weight: bold;
-	font-size: 11px;
-	text-transform: uppercase;
+    font-weight: bold;
+    font-size: 11px;
+    text-transform: uppercase;
 }
 
 .profile-history-description {
-	float: left;
-	font-size: 14px;
-	width: 480px;
+    float: left;
+    font-size: 14px;
+    width: 480px;
 }
 
 .profile-history-description a {
-	color: #404095;
-	font-weight: bold;
+    color: #404095;
+    font-weight: bold;
 }
 
 .btn-gray {
-	background: #9A9A9A;
+    background: #9A9A9A;
     border: none;
     color: #fff;
     border-radius: 8px;
@@ -299,39 +404,39 @@
 /** Pode colocar no layout.css **/
 
 .item-box-container	{
-	width: 315px;
-	height: 100px;
-	border: 1px solid #c1c1c1;
-	line-height: 18px;
-	float: left;
-	margin: 0 15px 20px 0;
+    width: 315px;
+    height: 100px;
+    border: 1px solid #c1c1c1;
+    line-height: 18px;
+    float: left;
+    margin: 0 15px 20px 0;
 }
 
 .item-box-img {
-	float: left;
-	margin-right: 20px;
+    float: left;
+    margin-right: 20px;
 }
 
 .item-box-title {
-	padding-top: 10px;
+    padding-top: 10px;
 }
 
 .item-box-aux {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .item-box-title-bold {
-	font-weight: bold;
-	font-size: 14px;
+    font-weight: bold;
+    font-size: 14px;
     padding-top: 10px;
 }
 
 .item-box-date {
-	font-size: 12px;
-	color: #989b94;
+    font-size: 12px;
+    color: #989b94;
 }
 
 .item-box-date img {
-	margin-right: 5px;
-	vertical-align: text-bottom;
+    margin-right: 5px;
+    vertical-align: text-bottom;
 }
