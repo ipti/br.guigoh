@@ -5,8 +5,8 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.util.CookieService;
-import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;

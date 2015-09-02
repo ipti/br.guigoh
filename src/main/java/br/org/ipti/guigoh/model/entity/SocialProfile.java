@@ -9,15 +9,12 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -58,6 +55,27 @@ entities = {
     @EntityResult(entityClass = UserAuthorization.class)
 })
 public class SocialProfile implements Serializable {
+    @Size(max = 10)
+    @Column(name = "birth_date")
+    private String birthDate;
+    @Size(max = 150)
+    @Column(name = "matters_of_interest")
+    private String mattersOfInterest;
+    @Size(max = 150)
+    @Column(name = "musics")
+    private String musics;
+    @Size(max = 150)
+    @Column(name = "books")
+    private String books;
+    @Size(max = 150)
+    @Column(name = "movies")
+    private String movies;
+    @Size(max = 150)
+    @Column(name = "sports")
+    private String sports;
+    @Size(max = 150)
+    @Column(name = "hobbies")
+    private String hobbies;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileId")
     private Collection<EducationalObject> educationalObjectCollection;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
@@ -116,8 +134,6 @@ public class SocialProfile implements Serializable {
     @Size(max = 15)
     @Column(name = "phone_alternative")
     private String phoneAlternative;
-    @ManyToMany(mappedBy = "socialProfileCollection")
-    private Collection<Interests> interestsCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "socialProfile")
     private SocialProfileVisibility socialProfileVisibility;
     @JoinColumn(name = "token_id", referencedColumnName = "token", insertable = false, updatable = false)
@@ -259,15 +275,6 @@ public class SocialProfile implements Serializable {
 
     public void setPhoneAlternative(String phoneAlternative) {
         this.phoneAlternative = phoneAlternative;
-    }
-
-    @XmlTransient
-    public Collection<Interests> getInterestsCollection() {
-        return interestsCollection;
-    }
-
-    public void setInterestsCollection(Collection<Interests> interestsCollection) {
-        this.interestsCollection = interestsCollection;
     }
 
     public SocialProfileVisibility getSocialProfileVisibility() {
@@ -443,5 +450,61 @@ public class SocialProfile implements Serializable {
 
     public void setEducationalObjectCollection(Collection<EducationalObject> educationalObjectCollection) {
         this.educationalObjectCollection = educationalObjectCollection;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getMattersOfInterest() {
+        return mattersOfInterest;
+    }
+
+    public void setMattersOfInterest(String mattersOfInterest) {
+        this.mattersOfInterest = mattersOfInterest;
+    }
+
+    public String getMusics() {
+        return musics;
+    }
+
+    public void setMusics(String musics) {
+        this.musics = musics;
+    }
+
+    public String getBooks() {
+        return books;
+    }
+
+    public void setBooks(String books) {
+        this.books = books;
+    }
+
+    public String getMovies() {
+        return movies;
+    }
+
+    public void setMovies(String movies) {
+        this.movies = movies;
+    }
+
+    public String getSports() {
+        return sports;
+    }
+
+    public void setSports(String sports) {
+        this.sports = sports;
+    }
+
+    public String getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(String hobbies) {
+        this.hobbies = hobbies;
     }
 }

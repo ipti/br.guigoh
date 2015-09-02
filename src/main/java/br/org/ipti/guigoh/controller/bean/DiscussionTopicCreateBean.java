@@ -155,7 +155,7 @@ public class DiscussionTopicCreateBean implements Serializable {
         user.setToken(CookieService.getCookie("token"));
         
         socialProfile = socialProfileJpaController.findSocialProfile(user.getToken());
-        theme = interestsJpaController.findInterestsById(themeID);
+        theme = interestsJpaController.findInterests(themeID);
     }
 
     public DiscussionTopic getDiscussionTopic() {

@@ -4,10 +4,10 @@
  */
 package br.org.ipti.guigoh.model.jpa.controller;
 
-import br.org.ipti.guigoh.model.jpa.exceptions.IllegalOrphanException;
-import br.org.ipti.guigoh.model.jpa.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.PreexistingEntityException;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;

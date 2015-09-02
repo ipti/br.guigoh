@@ -14,7 +14,7 @@ import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicMsgJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
 import java.io.File;

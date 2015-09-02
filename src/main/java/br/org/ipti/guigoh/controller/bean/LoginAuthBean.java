@@ -14,7 +14,7 @@ import br.org.ipti.guigoh.model.jpa.controller.NetworksJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.MD5Generator;
 import br.org.ipti.guigoh.util.MailService;

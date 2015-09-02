@@ -6,7 +6,7 @@ import br.org.ipti.guigoh.model.jpa.controller.MessengerMessagesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
-import br.org.ipti.guigoh.model.jpa.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Timestamp;
