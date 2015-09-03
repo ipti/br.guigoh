@@ -14,17 +14,17 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{searchViewBean.init()}"/>
         </f:metadata>
-        <h1>Buscar</h1>
+        <h1>#{localeBean.getString("Buscar")}</h1>
         <h:form prependId="false">
             <div class="general-search">
-                <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="Procure pessoas, objetos educacionais e grupos de estudo">
+                <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="#{localeBean.getString('Procure pessoas, Objetos Educacionais e grupos de estudo')}">
                     <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
                 </h:inputText>
                 <img src="../resources/common/images/magnifying-glass.png"/>
             </div>
             <h:panelGroup id="search-result">
                 <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">
-                    <h3 class="category-name">Pessoas</h3>
+                    <h3 class="category-name">#{localeBean.getString("Pessoas")}</h3>
                     <h:panelGroup layout="block" id="user-list" class="category">
                         <ui:repeat value="#{searchViewBean.socialProfileList}" var="socialProfile" varStatus="status">
                             <ui:fragment rendered="#{status.index lt searchViewBean.userLimit}">
@@ -38,7 +38,7 @@
                                         <p class="user-job">#{socialProfile.occupationsId.name}</p>
                                         <div class="user-chat">
                                             <img src="../resources/common/images/chat.png"/>
-                                            <span>Bate-papo</span>
+                                            <span>#{localeBean.getString("Bate-papo")}</span>
                                         </div>
                                         <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
                                             <h:commandLink>
@@ -74,7 +74,7 @@
                     <div class="clear"></div>
                 </ui:fragment>
                 <ui:fragment rendered="#{!searchViewBean.educationalObjectList.isEmpty()}">
-                    <h3 class="category-name">Objetos Educacionais</h3>
+                    <h3 class="category-name">#{localeBean.getString("Objetos Educacionais")}</h3>
                     <h:panelGroup layout="block" id="object-list" class="category">
                         <ui:repeat value="#{searchViewBean.educationalObjectList}" var="educationalObject" varStatus="status">
                             <ui:fragment rendered="#{status.index lt searchViewBean.objectLimit}">
@@ -106,7 +106,7 @@
                     <div class="clear"></div>
                 </ui:fragment>
                 <ui:fragment rendered="#{!searchViewBean.discussionTopicList.isEmpty()}">
-                    <h3 class="category-name">Grupos de Estudo</h3>
+                    <h3 class="category-name">#{localeBean.getString("Grupos de Estudo")}</h3>
                     <h:panelGroup layout="block" id="study-group-list" class="category">
                         <ui:repeat value="#{searchViewBean.discussionTopicList}" var="discussionTopic" varStatus="status">
                             <ui:fragment rendered="#{status.index lt searchViewBean.topicLimit}">
