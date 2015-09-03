@@ -14,39 +14,39 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{educationalObjectPublishBean.init()}"/>
         </f:metadata>
-        <h1>Publicação de Objetos Educacionais</h1>
+        <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
         <div id="enviroment-info">
-            <p>Esse ambiente é uma maneira de compartilhar conhecimento online.</p>
-            <p>Você pode submeter um objeto educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros.</p>
-            <p>Então, compartilhe já o seu conhecimento!</p>
+            <p>#{localeBean.getString("Esse ambiente é uma maneira de compartilhar conhecimento online.")}</p>
+            <p>#{localeBean.getString("Você pode submeter um Objeto Educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros.")}</p>
+            <p>#{localeBean.getString("Então, compartilhe já o seu conhecimento!")}</p>
             <div id="submit-container">
                 <a href="submit.xhtml">
                     <div id="submit-educational-object">
                         <img src="../resources/common/images/icon-lamp-publish.png"/>
-                        <p>PUBLICAR UM</p>
-                        <p>OBJETO EDUCACIONAL</p>
+                        <p>#{localeBean.getString("Publicar um")}</p>
+                        <p>#{localeBean.getString("Objeto Educacional")}</p>
                     </div>
                 </a>
             </div>
             <div id="step-by-step-info">
                 <div id="step1">
                     <img src="../resources/common/images/publication-step1.png"/>
-                    <p>Preencher o formulário de registro de Objetos Educacionais;</p>
+                    <p>#{localeBean.getString("Preencher o formulário de registro de Objetos Educacionais;")}</p>
                 </div>
                 <div id="step2">
                     <img src="../resources/common/images/publication-step2.png"/>
-                    <p>Seu Objeto Educacional será enviado para revisão, por nossa equipe de revisores;</p>
+                    <p>#{localeBean.getString("Seu Objeto Educacional será enviado para revisão, por nossa equipe de revisores;")}</p>
                 </div>
                 <div id="step3">
                     <img src="../resources/common/images/publication-step3.png"/>
-                    <p>Sua experiência será publicada pelo administrador do espaço.</p>
+                    <p>#{localeBean.getString("Sua experiência será publicada pelo administrador do espaço.")}</p>
                 </div>
             </div>
         </div>
         <div id="educational-object-info">
-            <p>O QUE É UM OBJETO EDUCACIONAL?</p>
-            <p>Um Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social.</p>
-            <p>Quer saber como produzir o seu próprio Objeto Educacional sobre um tema específico? Acesse nosso Manual:</p>
+            <p>#{localeBean.getString("O que é um Objeto Educacional?")}</p>
+            <p>#{localeBean.getString("Um Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social.")}</p>
+            <p>#{localeBean.getString("Quer saber como produzir o seu próprio Objeto Educacional sobre um tema específico? Acesse nosso Manual:")}</p>
             <a id="educational-object-manual" href="http://cdn.guigoh.com/guigoh/discussionFiles/topic/12/ManualOE-ACC-WEB.pdf" target="blank">
                 <img src="../resources/common/images/banner-manual.png"/>
             </a>

@@ -16,7 +16,7 @@
         </f:metadata>
         <h:form prependId="false"> 
             <ui:fragment rendered="#{!friendViewBean.pendingList.isEmpty()}">
-                <h1 id="title_pending">Solicitações pendentes (#{friendViewBean.pendingList.size()})</h1>
+                <h1 id="title_pending">#{localeBean.getString('Solicitações pendentes')} (#{friendViewBean.pendingList.size()})</h1>
                 <ui:repeat value="#{friendViewBean.pendingList}" var="pending">
                     <div class="col">
                         <div class="user">
@@ -46,7 +46,7 @@
             <div class="clear"></div>
             <h1 id="title_friends">#{localeBean.getString("Amigos")} (#{friendViewBean.acceptedList.size()})</h1>
             <ui:fragment rendered="#{!friendViewBean.hasFriend}">
-                <h:inputText class="friend-search pull-right" value="#{friendViewBean.friendInputSearch}" pt:placeholder="Buscar amigos">
+                <h:inputText class="friend-search pull-right" value="#{friendViewBean.friendInputSearch}" pt:placeholder="#{localeBean.getString('Buscar amigos')}">
                     <f:ajax event="keyup" listener="#{friendViewBean.searchFriendsEvent()}" render="friend-list"></f:ajax>
                 </h:inputText>
             </ui:fragment>
