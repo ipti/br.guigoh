@@ -89,7 +89,7 @@ public class EducationalObjectSubmitBean implements Serializable {
         educationalObjectJpaController.create(educationalObject);
 //        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
         String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
-        UploadService.uploadFile(imageFile, imagePath);
+        UploadService.uploadFile(imageFile, imagePath, null);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectJpaController.edit(educationalObject);
         tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
@@ -134,7 +134,7 @@ public class EducationalObjectSubmitBean implements Serializable {
         educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
         educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
         educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-        UploadService.uploadFile(part, mediaPath);
+        UploadService.uploadFile(part, mediaPath, null);
         EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
         educationalObjectMediaJpaController.create(educationalObjectMedia);
     }

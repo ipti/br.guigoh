@@ -21,8 +21,9 @@
                 <div class="profile-image">
                     <img src="#{profileViewBean.socialProfile.photo}"/>
                     <div class="edit-photo fa fa-pencil"></div>
-                    <h:inputFile id="browse-photo" styleClass="hidden" value="#{educationalObjectSubmitBean.imageFile}"/>
+                    <h:inputFile id="browse-photo" pt:accept="image/x-png, image/jpeg" styleClass="hidden" value="#{profileViewBean.uploadedPhoto}"/>
                 </div>
+                <p class="image-error"></p>
                 <div class="profile-name">
                     <h1>#{profileViewBean.socialProfile.name}</h1>
                     <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
@@ -232,17 +233,27 @@
             <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
             <h:panelGroup layout="block" id="image-cropping-modal" class="image-cropping-modal">
                 <div>
-                    <a href="#close" title="Close" class="close-image-cropping-modal">X</a>
+                    <h1 class="modal-title">Cortar foto</h1>
+                    <hr/>
+                    <a href="#close" title="Close" id="close-image-cropping-modal" class="close-image-cropping-modal">X</a>
                     <div class="photo-container">
                         <img class="original-uploaded-image"/>
                     </div>
                     <hr/>
-                    <h:commandLink styleClass="image-cropping-button">
-                        Cortar e salvar
-                        <f:ajax execute="image-cropping-modal" listener="#{profileViewBean.uploadPhoto}"/>
-                    </h:commandLink>
-                    <a href="#close" title="Close" class="image-cropping-button cancel">Cancelar</a>
-                    <div class="clear"></div>
+                    <div class="modal-buttons">
+                        <span class="image-cropping-button cut-photo">
+                            Cortar e salvar
+                        </span>
+                        <h:commandLink styleClass="upload-photo">
+                            <f:ajax execute="coord-x coord-y coord-w coord-h browse-photo" listener="#{profileViewBean.uploadPhoto}"/>
+                        </h:commandLink>
+                        <h:inputHidden id="coord-x" value="#{profileViewBean.cropCoordinates[0]}"/>
+                        <h:inputHidden id="coord-y" value="#{profileViewBean.cropCoordinates[1]}"/>
+                        <h:inputHidden id="coord-w" value="#{profileViewBean.cropCoordinates[2]}"/>
+                        <h:inputHidden id="coord-h" value="#{profileViewBean.cropCoordinates[3]}"/>
+                        <a href="#close" title="Close" class="image-cropping-button cancel">Cancelar</a>
+                        <div class="clear"></div>
+                    </div>
                 </div>
             </h:panelGroup>
         </h:form>

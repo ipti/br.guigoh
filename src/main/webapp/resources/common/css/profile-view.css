@@ -64,22 +64,28 @@
 .image-cropping-modal > div {
     width: 50%;
     position: relative;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 15px 0 0 0;
+    margin: 3% auto;
+    padding: 20px 0;
+    border-radius: 15px;
     background: #e6eadf;
+}
+
+.modal-title {
+    padding: 0 0 10px 15px;
+}
+
+.modal-buttons {
+    margin-right: 15px;
 }
 
 .photo-container {
     display: block;
-    margin: 0 0 15px 0;
+    margin: 15px 0;
 }
 
 .original-uploaded-image {
     display: block;
     margin: 0 auto;
-    max-height: 500px;
-    max-width: 100%;
 }
 
 .image-cropping-button {
@@ -92,6 +98,10 @@
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
+}
+
+.cut-photo{
+    cursor: pointer;
 }
 
 .image-cropping-button:hover {
@@ -124,6 +134,13 @@
 
 .profile-image .edit-photo:hover {
     box-shadow: 0px 0px 3px black
+}
+
+.image-error {
+    float: left;
+    margin-top: -25px;
+    color: red;
+    font-size: 13px;
 }
 
 .profile-name {

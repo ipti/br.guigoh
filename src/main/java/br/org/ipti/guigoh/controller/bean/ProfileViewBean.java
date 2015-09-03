@@ -8,11 +8,17 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.UploadService;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -23,30 +29,57 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileViewBean implements Serializable {
 
     private SocialProfile socialProfile;
-    
+
     private SocialProfileJpaController socialProfileJpaController;
-    
-    public void init(){
+
+    private Part uploadedPhoto;
+    private Integer[] cropCoordinates;
+
+    public void init() {
         initGlobalVariables();
     }
-    
-    private void initGlobalVariables(){
+
+    public void uploadPhoto() throws IOException {
+        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator + socialProfile.getSocialProfileId() + File.separator + "photo" + File.separator;
+        UploadService.uploadFile(uploadedPhoto, basePath, cropCoordinates);
+        //http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type
+    }
+
+    private void initGlobalVariables() {
         socialProfileJpaController = new SocialProfileJpaController();
-        
+
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
             socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         } else {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.valueOf(request.getParameter("id")));
         }
+        
+        cropCoordinates = new Integer[6];
     }
-    
+
     public SocialProfile getSocialProfile() {
         return socialProfile;
     }
 
     public void setSocialProfile(SocialProfile socialProfile) {
         this.socialProfile = socialProfile;
+    }
+
+    public Part getUploadedPhoto() {
+        return uploadedPhoto;
+    }
+
+    public void setUploadedPhoto(Part uploadedPhoto) {
+        this.uploadedPhoto = uploadedPhoto;
+    }
+
+    public Integer[] getCropCoordinates() {
+        return cropCoordinates;
+    }
+
+    public void setCropCoordinates(Integer[] cropCoordinates) {
+        this.cropCoordinates = cropCoordinates;
     }
 
 }
