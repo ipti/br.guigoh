@@ -14,7 +14,7 @@
     color: #6b6e65;
     font-size: 12px;
     line-height: 14px;
-    margin: 0 20px;
+    text-align: center;
 }
 
 #step-by-step-info img{
@@ -24,7 +24,16 @@
 
 #step-by-step-info div{
     float: left;
-    width: 33%;
+    width: 26%;
+    margin: 0 20px;
+}
+
+#step1 p{
+    margin-top: 16px;
+}
+
+#step2 p{
+    margin-top: 30px;
 }
 
 #educational-object-info{
@@ -39,6 +48,10 @@
     width: 100%
 }
 
+#submit-container a{
+    text-decoration: none;
+}
+
 #submit-educational-object{
     margin: 30px 0 30px 140px;
     padding: 25px 15px 25px 25px;
@@ -48,7 +61,6 @@
     font-size: 14px;
     width: 43%;
     line-height: 20px;
-    cursor: pointer;
 }
 
 #submit-educational-object img{
@@ -56,9 +68,8 @@
     margin: -10px 13px 0 -10px;
 }
 
-#submit-educational-object a{
+#submit-educational-object p{
     color: white;
-    text-decoration: none;
 }
 
 #educational-object-info p:first-of-type{
