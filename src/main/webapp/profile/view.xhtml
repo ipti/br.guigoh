@@ -7,6 +7,7 @@
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
+        <link type="text/css" rel="StyleSheet" media="all" href="/resources/lib/css/jquery.Jcrop.min.css"></link>
         <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/profile-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
@@ -14,220 +15,241 @@
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{profileViewBean.init()}"/>
         </f:metadata>
-        <img src="http://placehold.it/960x195" height="195"/>
-        <div class="profile-resume">
-            <div class="profile-image">
-                <img src="http://placehold.it/125x125"/>
-            </div>
-            <div class="profile-name">
-                <h1>#{profileViewBean.socialProfile.name}</h1>
-                <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
-                <button class="down-arrow"></button>
-            </div>
-            <div class="profile-status">
-                <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div class="profile-tabs">
-            <ul>
-                <li id="profile-tab-about" class="active"><a href="#">Sobre</a></li>
-                <li id="profile-tab-objects"><a href="#">Objetos Educacionais</a></li>
-                <li id="profile-tab-resume"><a href="#">Currículo</a></li>
-            </ul>
-        </div>
-        <div class="clear"></div>
-        <div id="profile-container-about">
-            <div class="profile-column-left">
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-heart" src="../resources/common/images/heart.png"/>
-                            Matérias<br/> de Interesse
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
-                    </div>
-                    <div class="clear"></div>
+        <h:form prependId="false" enctype="multipart/form-data">
+            <img src="http://placehold.it/960x195" height="195"/>
+            <div class="profile-resume">
+                <div class="profile-image">
+                    <img src="#{profileViewBean.socialProfile.photo}"/>
+                    <div class="edit-photo fa fa-pencil"></div>
+                    <h:inputFile id="browse-photo" styleClass="hidden" value="#{educationalObjectSubmitBean.imageFile}"/>
                 </div>
-                <hr />
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-music" src="../resources/common/images/music.png"/>
-                            Músicas
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>
-                            <a href="#">#português</a> 
-                            <a href="#">#fisica</a> 
-                            <a href="#">#quimica</a> 
-                        </p>
-                    </div>
-                    <div class="clear"></div>
+                <div class="profile-name">
+                    <h1>#{profileViewBean.socialProfile.name}</h1>
+                    <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
+                    <button class="down-arrow"></button>
                 </div>
-                <hr />
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-book" src="../resources/common/images/book.png"/>
-                            Livros
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>dfghsdfth</p>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <hr />
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-movie" src="../resources/common/images/movie.png"/>
-                            Filmes
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>dfghsdfth</p>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <hr />
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-sport" src="../resources/common/images/sport.png"/>
-                            Esportes
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>dfghsdfth</p>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <hr />
-                <div class="profile-about-list">
-                    <div class="profile-about-title">
-                        <h3>
-                            <img id="profile-icon-hobbie" src="../resources/common/images/hobbie.png"/>
-                            Hobbies
-                        </h3>
-                    </div>
-                    <div class="profile-about-description">
-                        <p>dfghsdfth</p>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div class="profile-column-right">
-                <p id="profile-icon-mail"><img src="../resources/common/images/mail.png"/><span>#{profileViewBean.socialProfile.users.username}</span></p>
-                <p id="profile-icon-birthday"><img src="../resources/common/images/birthday.png"/>17/09/1993</p>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div id="profile-container-objects">
-            <div class="profile-column-left">
-                <div class="item-box-container">
-                    <img class="item-box-img" src="http://placehold.it/100x100"/>
-                    <p class="item-box-title">Ator/Roterist...</p>
-                    <p class="item-box-aux">em</p>
-                    <p class="item-box-title-bold">As cores de Janaína</p>
-                    <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                </div>
-                <div class="item-box-container">
-                    <img class="item-box-img" src="http://placehold.it/100x100"/>
-                    <p class="item-box-title">Ator/Roterist...</p>
-                    <p class="item-box-aux">em</p>
-                    <p class="item-box-title-bold">As cores de Janaína</p>
-                    <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                </div>
-                <div class="item-box-container">
-                    <img class="item-box-img" src="http://placehold.it/100x100"/>
-                    <p class="item-box-title">Ator/Roterist...</p>
-                    <p class="item-box-aux">em</p>
-                    <p class="item-box-title-bold">As cores de Janaína</p>
-                    <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                </div>
-            </div>
-            <div class="profile-column-right">
-                <p class="profile-object-number"><span>03</span><br />Objetos <br />Educacionais <br />publicados</p>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div id="profile-container-resume">
-            <div class="profile-column-left">
-                <div class="profile-resume-left">
-                    <p class="profile-resume-title">Currículo</p>
-                    <p class="profile-resume-name">Tiago Câmara</p>
-                    <p class="profile-resume-ocupation">estudante</p>
-                </div>
-                <div class="profile-resume-right">
-                    <p class="bold">agjunior.sd@gmail.com</p>
-                    <p class="bold">(79) 9876-4321</p><br/>
-                    <p>Rua Jardim das Acácias, 420</p>
-                    <p>Bairro Laranjeiras. 03006-090</p>
-                    <p>Aracaju - SE - Brasil</p>
+                <div class="profile-status">
+                    <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
                 </div>
                 <div class="clear"></div>
-                <div class="profile-resume-history">
-                    <div class="profile-history-container">
-                        <p class="profile-history-title">Educação</p>
-                    </div>
-                    <div class="profile-history-list">
-                        <div class="profile-history-date">
-                            <h3>02/2013 - Atual</h3>
+            </div>
+            <div class="profile-tabs">
+                <ul>
+                    <li id="profile-tab-about" class="active"><span>Sobre</span></li>
+                    <li id="profile-tab-objects"><span>Objetos Educacionais</span></li>
+                    <li id="profile-tab-resume"><span>Currículo</span></li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <div id="profile-container-about">
+                <div class="profile-column-left">
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-heart" src="../resources/common/images/heart.png"/>
+                                Matérias<br/> de Interesse
+                            </h3>
                         </div>
-                        <div class="profile-history-description">
-                            <p>Ensino Médio Completo</p>
-                            <p class="italic">Colégio Fulano de Tal</p>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="profile-history-list">
-                        <div class="profile-history-date">
-                            <h3>02/2013 - 05/2014</h3>
-                        </div>
-                        <div class="profile-history-description">
-                            <p>Ensino Médio Completo</p>
-                            <p class="italic">Colégio Fulano de Tal</p>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="profile-history-container">
-                        <p class="profile-history-title">Experiência</p>
-                    </div>
-                    <div class="profile-history-list">
-                        <div class="profile-history-date">
-                            <h3>02/2013 - Atual</h3>
-                        </div>
-                        <div class="profile-history-description">
-                            <p>Ensino Médio Completo</p>
-                            <p class="italic">Colégio Fulano de Tal</p>
+                        <div class="profile-about-description">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
                         </div>
                         <div class="clear"></div>
                     </div>
-                    <div class="profile-history-list">
-                        <div class="profile-history-date">
-                            <h3>02/2013 - 05/2014</h3>
+                    <hr />
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-music" src="../resources/common/images/music.png"/>
+                                Músicas
+                            </h3>
                         </div>
-                        <div class="profile-history-description">
-                            <p>Ensino Médio Completo</p>
-                            <p class="italic">Colégio Fulano de Tal</p>
+                        <div class="profile-about-description">
+                            <p>
+                                <a href="#">#português</a> 
+                                <a href="#">#fisica</a> 
+                                <a href="#">#quimica</a> 
+                            </p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <hr />
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-book" src="../resources/common/images/book.png"/>
+                                Livros
+                            </h3>
+                        </div>
+                        <div class="profile-about-description">
+                            <p>dfghsdfth</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <hr />
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-movie" src="../resources/common/images/movie.png"/>
+                                Filmes
+                            </h3>
+                        </div>
+                        <div class="profile-about-description">
+                            <p>dfghsdfth</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <hr />
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-sport" src="../resources/common/images/sport.png"/>
+                                Esportes
+                            </h3>
+                        </div>
+                        <div class="profile-about-description">
+                            <p>dfghsdfth</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <hr />
+                    <div class="profile-about-list">
+                        <div class="profile-about-title">
+                            <h3>
+                                <img id="profile-icon-hobbie" src="../resources/common/images/hobbie.png"/>
+                                Hobbies
+                            </h3>
+                        </div>
+                        <div class="profile-about-description">
+                            <p>dfghsdfth</p>
                         </div>
                         <div class="clear"></div>
                     </div>
                 </div>
+                <div class="profile-column-right">
+                    <p id="profile-icon-mail"><img src="../resources/common/images/mail.png"/><span>#{profileViewBean.socialProfile.users.username}</span></p>
+                    <p id="profile-icon-birthday"><img src="../resources/common/images/birthday.png"/>17/09/1993</p>
+                </div>
+                <div class="clear"></div>
             </div>
-            <div class="profile-column-right">
-                <button class="btn-gray">Gerar PDF</button>
+            <div id="profile-container-objects">
+                <div class="profile-column-left">
+                    <div class="item-box-container">
+                        <img class="item-box-img" src="http://placehold.it/100x100"/>
+                        <p class="item-box-title">Ator/Roterist...</p>
+                        <p class="item-box-aux">em</p>
+                        <p class="item-box-title-bold">As cores de Janaína</p>
+                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
+                    </div>
+                    <div class="item-box-container">
+                        <img class="item-box-img" src="http://placehold.it/100x100"/>
+                        <p class="item-box-title">Ator/Roterist...</p>
+                        <p class="item-box-aux">em</p>
+                        <p class="item-box-title-bold">As cores de Janaína</p>
+                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
+                    </div>
+                    <div class="item-box-container">
+                        <img class="item-box-img" src="http://placehold.it/100x100"/>
+                        <p class="item-box-title">Ator/Roterist...</p>
+                        <p class="item-box-aux">em</p>
+                        <p class="item-box-title-bold">As cores de Janaína</p>
+                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
+                    </div>
+                </div>
+                <div class="profile-column-right">
+                    <p class="profile-object-number"><span>03</span><br />Objetos <br />Educacionais <br />publicados</p>
+                </div>
+                <div class="clear"></div>
             </div>
-            <div class="clear"></div>
-        </div>
+            <div id="profile-container-resume">
+                <div class="profile-column-left">
+                    <div class="profile-resume-left">
+                        <p class="profile-resume-title">Currículo</p>
+                        <p class="profile-resume-name">Tiago Câmara</p>
+                        <p class="profile-resume-ocupation">estudante</p>
+                    </div>
+                    <div class="profile-resume-right">
+                        <p class="bold">agjunior.sd@gmail.com</p>
+                        <p class="bold">(79) 9876-4321</p><br/>
+                        <p>Rua Jardim das Acácias, 420</p>
+                        <p>Bairro Laranjeiras. 03006-090</p>
+                        <p>Aracaju - SE - Brasil</p>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="profile-resume-history">
+                        <div class="profile-history-container">
+                            <p class="profile-history-title">Educação</p>
+                        </div>
+                        <div class="profile-history-list">
+                            <div class="profile-history-date">
+                                <h3>02/2013 - Atual</h3>
+                            </div>
+                            <div class="profile-history-description">
+                                <p>Ensino Médio Completo</p>
+                                <p class="italic">Colégio Fulano de Tal</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="profile-history-list">
+                            <div class="profile-history-date">
+                                <h3>02/2013 - 05/2014</h3>
+                            </div>
+                            <div class="profile-history-description">
+                                <p>Ensino Médio Completo</p>
+                                <p class="italic">Colégio Fulano de Tal</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="profile-history-container">
+                            <p class="profile-history-title">Experiência</p>
+                        </div>
+                        <div class="profile-history-list">
+                            <div class="profile-history-date">
+                                <h3>02/2013 - Atual</h3>
+                            </div>
+                            <div class="profile-history-description">
+                                <p>Ensino Médio Completo</p>
+                                <p class="italic">Colégio Fulano de Tal</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="profile-history-list">
+                            <div class="profile-history-date">
+                                <h3>02/2013 - 05/2014</h3>
+                            </div>
+                            <div class="profile-history-description">
+                                <p>Ensino Médio Completo</p>
+                                <p class="italic">Colégio Fulano de Tal</p>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-column-right">
+                    <button class="btn-gray">Gerar PDF</button>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
+            <h:panelGroup layout="block" id="image-cropping-modal" class="image-cropping-modal">
+                <div>
+                    <a href="#close" title="Close" class="close-image-cropping-modal">X</a>
+                    <div class="photo-container">
+                        <img class="original-uploaded-image"/>
+                    </div>
+                    <hr/>
+                    <h:commandLink styleClass="image-cropping-button">
+                        Cortar e salvar
+                        <f:ajax execute="image-cropping-modal" listener="#{profileViewBean.uploadPhoto}"/>
+                    </h:commandLink>
+                    <a href="#close" title="Close" class="image-cropping-button cancel">Cancelar</a>
+                    <div class="clear"></div>
+                </div>
+            </h:panelGroup>
+        </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
+        <script type="text/javascript" src="/resources/lib/js/jquery.Jcrop.min.js"></script>
         <script type="text/javascript" src="/resources/common/js/profile-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
