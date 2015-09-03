@@ -11,9 +11,6 @@
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
-        <f:metadata>
-            <f:event type="preRenderComponent" listener="#{educationalObjectPublishBean.init()}"/>
-        </f:metadata>
         <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
         <div id="enviroment-info">
             <p>#{localeBean.getString("Esse ambiente é uma maneira de compartilhar conhecimento online.")}</p>
