@@ -87,8 +87,9 @@ public class EducationalObjectSubmitBean implements Serializable {
         educationalObject.setStatus("PE");
         educationalObject.setDate(utilJpaController.getTimestampServerTime());
         educationalObjectJpaController.create(educationalObject);
-//        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
-        String imagePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "image" + File.separator;
+        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" 
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() 
+                + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath, null);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
         educationalObjectJpaController.edit(educationalObject);
@@ -104,7 +105,7 @@ public class EducationalObjectSubmitBean implements Serializable {
                 tag.setEducationalObjectCollection(educationalObjectList);
                 tag.setName(tagValue);
                 tagsJpaController.create(tag);
-            } else { 
+            } else {
                 tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
             }
         }
@@ -125,8 +126,9 @@ public class EducationalObjectSubmitBean implements Serializable {
     }
 
     private void submitFile(Part part) throws IOException, Exception {
-//        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
-        String mediaPath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() + File.separator + "media" + File.separator;
+        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" 
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() 
+                + File.separator + "media" + File.separator;
         EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
         educationalObjectMedia.setEducationalObjectId(educationalObject);
         educationalObjectMedia.setSize(part.getSize());

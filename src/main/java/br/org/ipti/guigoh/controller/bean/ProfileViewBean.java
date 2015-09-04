@@ -10,7 +10,6 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
@@ -54,7 +53,7 @@ public class ProfileViewBean implements Serializable {
     }
 
     public void uploadPhoto(String type) throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
-        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator
+        String basePath = File.separator + "home" + File.separator + "www" + File.separator
                 + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator
                 + socialProfile.getSocialProfileId() + File.separator + type + File.separator;
         String linkPath = "http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "/" + type + "/" + uploadedPhoto.getSubmittedFileName();
