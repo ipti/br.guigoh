@@ -31,3 +31,15 @@ function eventExceptions(data) {
         return false;
     }
 }
+
+function getTrackerCoords(c, image)
+{
+    // fix crop size: find ratio dividing current per real size
+    var ratioW = $("." + image)[0].naturalWidth / $("." + image).width();
+    var ratioH = $("." + image)[0].naturalHeight / $("." + image).height();
+    var currentRatio = Math.min(ratioW, ratioH);
+    $('#' + image + '-tracker-x').val(Math.round(c.x * currentRatio));
+    $('#' + image + '-tracker-y').val(Math.round(c.y * currentRatio));
+    $('#' + image + '-tracker-w').val(Math.round(c.w * currentRatio));
+    $('#' + image + '-tracker-h').val(Math.round(c.h * currentRatio));
+}

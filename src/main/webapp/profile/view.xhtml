@@ -16,24 +16,31 @@
             <f:event type="preRenderComponent" listener="#{profileViewBean.init()}"/>
         </f:metadata>
         <h:form prependId="false" enctype="multipart/form-data">
-            <img src="http://placehold.it/960x195" height="195"/>
+            <div class="profile-cover-image">
+                <img src="#{profileViewBean.socialProfile.coverPhoto}"/>
+                <h:panelGroup rendered="#{profileViewBean.himself}" class="edit-photo cover-photo fa fa-pencil"/>
+            </div>
             <div class="profile-resume">
                 <div class="profile-image">
                     <img src="#{profileViewBean.socialProfile.photo}"/>
-                    <div class="edit-photo fa fa-pencil"></div>
-                    <h:inputFile id="browse-photo" pt:accept="image/x-png, image/jpeg" styleClass="hidden" value="#{profileViewBean.uploadedPhoto}"/>
+                    <h:panelGroup rendered="#{profileViewBean.himself}" class="edit-photo photo fa fa-pencil"/>
                 </div>
                 <p class="image-error"></p>
                 <div class="profile-name">
                     <h1>#{profileViewBean.socialProfile.name}</h1>
                     <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
-                    <button class="down-arrow"></button>
                 </div>
                 <div class="profile-status">
                     <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
                 </div>
-                <div class="clear"></div>
+                <div class="clear"/>
             </div>
+            <ui:fragment rendered="#{!profileViewBean.himself}">
+                <div class="profile-options">
+                    <img class="friend" src="../resources/common/images/remove-friend-gray.png"/>
+                    <img class="open-chat" src="../resources/common/images/chat.png"/>
+                </div>
+            </ui:fragment>
             <div class="profile-tabs">
                 <ul>
                     <li id="profile-tab-about" class="active"><span>Sobre</span></li>
@@ -231,7 +238,7 @@
                 <div class="clear"></div>
             </div>
             <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
-            <h:panelGroup layout="block" id="image-cropping-modal" class="image-cropping-modal">
+            <div id="image-cropping-modal" class="image-cropping-modal">
                 <div>
                     <h1 class="modal-title">Cortar foto</h1>
                     <hr/>
@@ -244,18 +251,18 @@
                         <span class="image-cropping-button cut-photo">
                             Cortar e salvar
                         </span>
-                        <h:commandLink styleClass="upload-photo">
-                            <f:ajax execute="coord-x coord-y coord-w coord-h browse-photo" listener="#{profileViewBean.uploadPhoto}"/>
-                        </h:commandLink>
-                        <h:inputHidden id="coord-x" value="#{profileViewBean.cropCoordinates[0]}"/>
-                        <h:inputHidden id="coord-y" value="#{profileViewBean.cropCoordinates[1]}"/>
-                        <h:inputHidden id="coord-w" value="#{profileViewBean.cropCoordinates[2]}"/>
-                        <h:inputHidden id="coord-h" value="#{profileViewBean.cropCoordinates[3]}"/>
                         <a href="#close" title="Close" class="image-cropping-button cancel">Cancelar</a>
                         <div class="clear"></div>
                     </div>
                 </div>
-            </h:panelGroup>
+            </div>
+            <h:commandLink styleClass="upload-photo" action="#{profileViewBean.uploadPhoto('photo')}"/>
+            <h:commandLink styleClass="upload-cover-photo" action="#{profileViewBean.uploadPhoto('cover')}"/>
+            <h:inputFile id="browse-photo" pt:accept="image/x-png, image/jpeg" styleClass="hidden" value="#{profileViewBean.uploadedPhoto}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-x" value="#{profileViewBean.cropCoordinates[0]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-y" value="#{profileViewBean.cropCoordinates[1]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-w" value="#{profileViewBean.cropCoordinates[2]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-h" value="#{profileViewBean.cropCoordinates[3]}"/>
         </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->

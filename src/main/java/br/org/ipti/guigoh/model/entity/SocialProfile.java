@@ -109,9 +109,12 @@ public class SocialProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "social_profile_id")
     private int socialProfileId;
-    @Size(max = 100)
+    @Size(max = 200)
     @Column(name = "photo")
     private String photo;
+    @Size(max = 200)
+    @Column(name = "cover_photo")
+    private String coverPhoto;
     @Size(max = 20)
     @Column(name = "zipcode")
     private String zipcode;
@@ -507,4 +510,13 @@ public class SocialProfile implements Serializable {
     public void setHobbies(String hobbies) {
         this.hobbies = hobbies;
     }
+
+    public String getCoverPhoto() {
+        return coverPhoto;
+    }
+
+    public void setCoverPhoto(String coverPhoto) {
+        this.coverPhoto = coverPhoto;
+    }
+    
 }

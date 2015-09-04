@@ -10,6 +10,12 @@
     padding: 30px 0 0 0;
 }
 
+.profile-cover-image img{
+    width: 960px;
+    height: 200px;
+    background: #ccc;
+}
+
 .profile-image {
     padding: 5px;
     border: 1px solid #c1c1c1;
@@ -27,14 +33,19 @@
     height: 125px;
 }
 
-.profile-image .edit-photo {
+.edit-photo {
     float: right;
     color: whitesmoke;
     cursor: pointer;
     font-size: 20px;
-    margin: -44px 5px 0px 0;
     padding: 6px;
     border-radius: 5px;
+    background-color: black;
+    margin: -44px 5px 0px 0;
+}
+
+.edit-photo:hover {
+    box-shadow: 0px 0px 3px whitesmoke
 }
 
 .image-cropping-modal {
@@ -132,10 +143,6 @@
     background: black;
 }
 
-.profile-image .edit-photo:hover {
-    box-shadow: 0px 0px 3px black
-}
-
 .image-error {
     float: left;
     margin-top: -25px;
@@ -165,6 +172,23 @@
     color: #989b94;
     font-style: italic;
     margin-right: 40px;
+}
+
+.profile-options {
+    top: 10px;
+    position: relative;
+    left: 75px;
+}
+
+.profile-options img:last-child {
+    left: 35px;
+}
+
+.profile-options img {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    cursor: pointer;
 }
 
 .profile-resume button {

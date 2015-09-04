@@ -6,11 +6,10 @@ package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,16 +32,30 @@ public class ProfileViewBean implements Serializable {
     private SocialProfileJpaController socialProfileJpaController;
 
     private Part uploadedPhoto;
+
     private Integer[] cropCoordinates;
+
+    private Boolean himself;
 
     public void init() {
         initGlobalVariables();
     }
 
-    public void uploadPhoto() throws IOException {
-        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator + socialProfile.getSocialProfileId() + File.separator + "photo" + File.separator;
+    public void uploadPhoto(String type) throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
+        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator 
+                + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator 
+                + socialProfile.getSocialProfileId() + File.separator + type + File.separator;
+        String linkPath = "http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "/" + type + "/" + uploadedPhoto.getSubmittedFileName();
         UploadService.uploadFile(uploadedPhoto, basePath, cropCoordinates);
-        //http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "." + type
+        switch (type) {
+            case "photo":
+                socialProfile.setPhoto(linkPath);
+                break;
+            case "cover":
+                socialProfile.setCoverPhoto(linkPath);
+                break;
+        }
+        socialProfileJpaController.edit(socialProfile);
     }
 
     private void initGlobalVariables() {
@@ -54,8 +67,10 @@ public class ProfileViewBean implements Serializable {
         } else {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.valueOf(request.getParameter("id")));
         }
-        
+
         cropCoordinates = new Integer[6];
+
+        himself = socialProfile.getTokenId().equals(CookieService.getCookie("token"));
     }
 
     public SocialProfile getSocialProfile() {
@@ -80,6 +95,14 @@ public class ProfileViewBean implements Serializable {
 
     public void setCropCoordinates(Integer[] cropCoordinates) {
         this.cropCoordinates = cropCoordinates;
+    }
+
+    public Boolean getHimself() {
+        return himself;
+    }
+
+    public void setHimself(Boolean himself) {
+        this.himself = himself;
     }
 
 }
