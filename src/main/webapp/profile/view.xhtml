@@ -62,13 +62,13 @@
             </ui:fragment>
             <div class="profile-tabs">
                 <ul>
-                    <li id="profile-tab-about" class="active"><span>Sobre</span></li>
-                    <li id="profile-tab-objects"><span>Objetos Educacionais</span></li>
-                    <li id="profile-tab-resume"><span>Currículo</span></li>
+                    <li id="profile-tab-about" class="active"><span class="tab tab-about">Sobre</span></li>
+                    <li id="profile-tab-objects"><span class="tab tab-objects">Objetos Educacionais</span></li>
+                    <li id="profile-tab-resume"><span class="tab tab-resume">Currículo</span></li>
                 </ul>
             </div>
             <div class="clear"></div>
-            <div id="profile-container-about">
+            <div id="profile-container-about" class="profile-container">
                 <div class="profile-column-left">
                     <div class="profile-about-list">
                         <div class="profile-about-title">
@@ -154,12 +154,12 @@
                 </div>
                 <div class="clear"></div>
             </div>
-            <div id="profile-container-objects">
+            <div id="profile-container-objects" class="profile-container">
                 <div class="profile-column-left">
                     <ui:repeat value="#{profileViewBean.educationalObjectList}" var="educationalObject">
                         <div class="item-box-container">
                             <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
-                            <p class="item-box-title">Ator/Roterist...</p>
+                            <p class="item-box-title">Publicador</p>
                             <p class="item-box-aux">em</p>
                             <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
                             <div class="item-box-date">
@@ -176,7 +176,7 @@
                 </div>
                 <div class="clear"></div>
             </div>
-            <div id="profile-container-resume">
+            <div id="profile-container-resume" class="profile-container">
                 <div class="profile-column-left">
                     <div class="profile-resume-left">
                         <p class="profile-resume-title">Currículo</p>

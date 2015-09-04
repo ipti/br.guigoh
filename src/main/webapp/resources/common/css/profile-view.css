@@ -467,6 +467,7 @@
 }
 
 .item-box-title {
+    height: 18px;
     padding-top: 10px;
 }
 
@@ -483,7 +484,7 @@
 }
 
 .item-box-title-bold p{
-    padding-top: 10px;
+    margin-top: 10px;
 }
 
 .item-box-date {

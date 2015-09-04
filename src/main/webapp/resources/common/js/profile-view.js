@@ -2,9 +2,12 @@ var edit;
 
 $(document).ready(function () {
     $("#profile-icon-mail span").text(changeNameLength($("#profile-icon-mail span").text(), 20));
+    $('.item-box-title-bold p').each(function () {
+        $(this).text(changeNameLength($(this).text(), 23));
+    });
 });
 
-$('.open-chat').click(function(){
+$('.open-chat').click(function () {
     var id = $("#social-profile-id").val();
     var name = $("#social-profile-name").val();
     openMessengerBox(id, name);
@@ -31,7 +34,7 @@ $('#browse-photo').change(function (e) {
         reader.onloadend = function () {
             if (file.type.split("/")[0] === 'image') {
                 $('.original-uploaded-image').show();
-                $('.original-uploaded-image').attr("src", reader.result).load(function() {
+                $('.original-uploaded-image').attr("src", reader.result).load(function () {
                     var imageWidth = $(this).width();
                     var imageHeight = $(this).height();
                     if (imageWidth > widthMin && imageHeight > heightMin) {
@@ -80,31 +83,19 @@ $('.close-image-cropping-modal, .image-cropping-button.cancel').click(function (
 
 })
 
-$('#profile-tab-about').click(function () {
-    $('#profile-container-about').show();
-    $('#profile-container-objects').hide();
-    $('#profile-container-resume').hide();
-    $('#profile-tab-about').addClass('active');
-    $('#profile-tab-objects').removeClass('active');
-    $('#profile-tab-resume').removeClass('active');
-});
-
-$('#profile-tab-objects').click(function () {
-    $('#profile-container-about').hide();
-    $('#profile-container-objects').show();
-    $('#profile-container-resume').hide();
-    $('#profile-tab-about').removeClass('active');
-    $('#profile-tab-objects').addClass('active');
-    $('#profile-tab-resume').removeClass('active');
-});
-
-$('#profile-tab-resume').click(function () {
-    $('#profile-container-about').hide();
-    $('#profile-container-objects').hide();
-    $('#profile-container-resume').show();
-    $('#profile-tab-about').removeClass('active');
-    $('#profile-tab-objects').removeClass('active');
-    $('#profile-tab-resume').addClass('active');
+$('.tab').click(function () {
+    if (!$(this).parent().hasClass('active')) {
+        $('.tab').not(this).parent().removeClass('active');
+        $(this).parent().addClass('active');
+        $('.profile-container').hide();
+        if ($(this).hasClass("tab-about")) {
+            $('#profile-container-about').show();
+        } else if ($(this).hasClass("tab-objects")) {
+            $('#profile-container-objects').show();
+        } else if ($(this).hasClass("tab-resume")) {
+            $('#profile-container-resume').show();
+        }
+    }
 });
 
 jsf.ajax.addOnEvent(function (data) {
