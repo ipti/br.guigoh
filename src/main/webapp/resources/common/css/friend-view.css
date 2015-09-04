@@ -161,6 +161,10 @@
     font-weight: bold;
 }
 
+.user-friend-status-container {
+    float: right
+}
+
 .user-friend-status {
     float: right;
     width: 25px;

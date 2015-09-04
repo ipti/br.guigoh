@@ -4,8 +4,13 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
+import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
@@ -13,6 +18,7 @@ import br.org.ipti.guigoh.util.UploadService;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -28,8 +34,12 @@ import javax.servlet.http.Part;
 public class ProfileViewBean implements Serializable {
 
     private SocialProfile socialProfile;
+    
+    private List<EducationalObject> educationalObjectList;
 
     private SocialProfileJpaController socialProfileJpaController;
+    private FriendsJpaController friendsJpaController;
+    private EducationalObjectJpaController educationalObjectJpaController;
 
     private Part uploadedPhoto;
 
@@ -38,12 +48,14 @@ public class ProfileViewBean implements Serializable {
     private Boolean himself;
 
     public void init() {
-        initGlobalVariables();
+        if (!FacesContext.getCurrentInstance().isPostback()){
+            initGlobalVariables();
+        }
     }
 
     public void uploadPhoto(String type) throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
-        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator 
-                + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator 
+        String basePath = System.getProperty("user.home") + File.separator + "home" + File.separator + "www" + File.separator
+                + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "users" + File.separator
                 + socialProfile.getSocialProfileId() + File.separator + type + File.separator;
         String linkPath = "http://cdn.guigoh.com/guigoh/users/" + socialProfile.getSocialProfileId() + "/" + type + "/" + uploadedPhoto.getSubmittedFileName();
         UploadService.uploadFile(uploadedPhoto, basePath, cropCoordinates);
@@ -58,8 +70,22 @@ public class ProfileViewBean implements Serializable {
         socialProfileJpaController.edit(socialProfile);
     }
 
+    public Friends isFriend() {
+        return friendsJpaController.isFriend(socialProfile.getTokenId(), CookieService.getCookie("token"));
+    }
+
+    public void addFriend() throws RollbackFailureException, Exception {
+        friendsJpaController.addFriend(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")).getUsers(), socialProfile.getSocialProfileId());
+    }
+
+    public void removeFriend() throws RollbackFailureException, Exception {
+        friendsJpaController.removeFriend(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")).getUsers(), socialProfile.getSocialProfileId());
+    }
+
     private void initGlobalVariables() {
         socialProfileJpaController = new SocialProfileJpaController();
+        friendsJpaController = new FriendsJpaController();
+        educationalObjectJpaController = new EducationalObjectJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
@@ -67,6 +93,7 @@ public class ProfileViewBean implements Serializable {
         } else {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.valueOf(request.getParameter("id")));
         }
+        educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
 
         cropCoordinates = new Integer[6];
 
@@ -105,6 +132,13 @@ public class ProfileViewBean implements Serializable {
         this.himself = himself;
     }
 
+    public List<EducationalObject> getEducationalObjectList() {
+        return educationalObjectList;
+    }
+
+    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
+        this.educationalObjectList = educationalObjectList;
+    }
 }
 //    public void downloadPDF() throws FileNotFoundException, DocumentException, IOException {
 //        Document doc = null;

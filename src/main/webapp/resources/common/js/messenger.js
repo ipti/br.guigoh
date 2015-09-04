@@ -51,9 +51,9 @@ window.onbeforeunload = function () {
     });
     $.each($(".box"), function () {
         if ($(this).hasClass("box-collapsed")) {
-            Cookies.set('collapsed_' + $(this).attr("id"), $(this).find(".messenger-user-name").text());
+            Cookies.set('collapsed_' + $(this).attr("id"), $(this).find(".messenger-user-name").attr('title'));
         } else {
-            Cookies.set($(this).attr("id"), $(this).find(".messenger-user-name").text());
+            Cookies.set($(this).attr("id"), $(this).find(".messenger-user-name").attr('title'));
         }
     });
 };
@@ -76,7 +76,7 @@ function messengerFriends() {
                 $('#messenger-friends').append(
                         "<li name='" + friends[i].name + "' socialprofileid='" + friends[i].id + "'>"
                         + "<img class='friend-photo' src='" + friends[i].photo + "'/>"
-                        + "<div class='friend-name'>" + friends[i].name + "</div>"
+                        + "<div class='friend-name' title='" + friends[i].name + "'>" + friends[i].name + "</div>"
                         + "</li>");
                 $('.friend-name').each(function () {
                     $(this).text(changeNameLength($(this).text(), 26));
@@ -174,12 +174,11 @@ function showBox(id, name, himself, message, date, recent) {
 }
 
 function createBox(id, name) {
-    name = changeNameLength(name, 23);
     var boxesQuantity = $(".box").length;
     var position = "style='left: " + ((243 * boxesQuantity) + (20 * (boxesQuantity + 1))) + "px'"
     var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
     var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "' " + position + ">"
-            + "<div class='messenger-title'><span class='messenger-user-name'>" + name + "</span>"
+            + "<div class='messenger-title'><span class='messenger-user-name' title='" + name + "'>" + changeNameLength(name, 23) + "</span>"
             + "<img src='../../resources/common/images/close-chat.png' class='close-chat' socialprofileid='" + id + "'/>"
             + online
             + "</div>"

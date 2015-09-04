@@ -34,8 +34,8 @@
                                         <h:outputText class="hidden social-profile-name" value="#{socialProfile.name}"/>
                                         <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
                                         <p class="result-name">
-                                            <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">#{socialProfile.name}</a></p>
-                                        <p class="user-job">#{socialProfile.occupationsId.name}</p>
+                                            <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}" title="#{socialProfile.name}">#{socialProfile.name}</a></p>
+                                        <p class="user-job" title="#{socialProfile.occupationsId.name}">#{socialProfile.occupationsId.name}</p>
                                         <div class="user-chat">
                                             <img src="../resources/common/images/chat.png"/>
                                             <span>#{localeBean.getString("Bate-papo")}</span>

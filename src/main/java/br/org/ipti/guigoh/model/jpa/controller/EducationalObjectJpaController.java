@@ -480,4 +480,16 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public List<EducationalObject> findEducationalObjectsBySocialProfileId(Integer id){
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) 
+                    em.createNativeQuery("select * from educational_object "
+                            + "where status = 'AC' and social_profile_id = " + id, EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
 }

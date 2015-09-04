@@ -16,6 +16,8 @@
             <f:event type="preRenderComponent" listener="#{profileViewBean.init()}"/>
         </f:metadata>
         <h:form prependId="false" enctype="multipart/form-data">
+            <h:inputHidden id="social-profile-id" value="#{profileViewBean.socialProfile.socialProfileId}"/>
+            <h:inputHidden id="social-profile-name" value="#{profileViewBean.socialProfile.name}"/>
             <div class="profile-cover-image">
                 <img src="#{profileViewBean.socialProfile.coverPhoto}"/>
                 <h:panelGroup rendered="#{profileViewBean.himself}" class="edit-photo cover-photo fa fa-pencil"/>
@@ -36,10 +38,27 @@
                 <div class="clear"/>
             </div>
             <ui:fragment rendered="#{!profileViewBean.himself}">
-                <div class="profile-options">
-                    <img class="friend" src="../resources/common/images/remove-friend-gray.png"/>
+                <h:panelGroup layout="block" id="profile-options" class="profile-options">
+                    <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'AC'}">
+                        <h:commandLink>
+                            <img class="friend-status" src="../resources/common/images/remove-friend-gray.png"/>
+                            <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
+                        </h:commandLink>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'PE'}">
+                        <h:commandLink>
+                            <img class="friend-status" src="../resources/common/images/pending-friend-gray.png"/>
+                            <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
+                        </h:commandLink>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{profileViewBean.isFriend().status eq null}">
+                        <h:commandLink>
+                            <img class="friend-status" src="../resources/common/images/add-friend-gray.png"/>
+                            <f:ajax listener="#{profileViewBean.addFriend}" render="profile-options"/>
+                        </h:commandLink>
+                    </ui:fragment>
                     <img class="open-chat" src="../resources/common/images/chat.png"/>
-                </div>
+                </h:panelGroup>
             </ui:fragment>
             <div class="profile-tabs">
                 <ul>
@@ -59,7 +78,7 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                            <p>#{profileViewBean.socialProfile.mattersOfInterest}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -72,11 +91,7 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>
-                                <a href="#">#português</a> 
-                                <a href="#">#fisica</a> 
-                                <a href="#">#quimica</a> 
-                            </p>
+                            <p>#{profileViewBean.socialProfile.musics}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -89,7 +104,7 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>dfghsdfth</p>
+                            <p>#{profileViewBean.socialProfile.books}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -102,7 +117,7 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>dfghsdfth</p>
+                            <p>#{profileViewBean.socialProfile.movies}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -115,7 +130,7 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>dfghsdfth</p>
+                            <p>#{profileViewBean.socialProfile.sports}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -128,43 +143,36 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>dfghsdfth</p>
+                            <p>#{profileViewBean.socialProfile.hobbies}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
                 </div>
                 <div class="profile-column-right">
-                    <p id="profile-icon-mail"><img src="../resources/common/images/mail.png"/><span>#{profileViewBean.socialProfile.users.username}</span></p>
-                    <p id="profile-icon-birthday"><img src="../resources/common/images/birthday.png"/>17/09/1993</p>
+                    <p id="profile-icon-mail"><img src="../resources/common/images/mail.png"/><span title="#{profileViewBean.socialProfile.users.username}">#{profileViewBean.socialProfile.users.username}</span></p>
+                    <p id="profile-icon-birthday"><img src="../resources/common/images/birthday.png"/>#{profileViewBean.socialProfile.birthDate}</p>
                 </div>
                 <div class="clear"></div>
             </div>
             <div id="profile-container-objects">
                 <div class="profile-column-left">
-                    <div class="item-box-container">
-                        <img class="item-box-img" src="http://placehold.it/100x100"/>
-                        <p class="item-box-title">Ator/Roterist...</p>
-                        <p class="item-box-aux">em</p>
-                        <p class="item-box-title-bold">As cores de Janaína</p>
-                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                    </div>
-                    <div class="item-box-container">
-                        <img class="item-box-img" src="http://placehold.it/100x100"/>
-                        <p class="item-box-title">Ator/Roterist...</p>
-                        <p class="item-box-aux">em</p>
-                        <p class="item-box-title-bold">As cores de Janaína</p>
-                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                    </div>
-                    <div class="item-box-container">
-                        <img class="item-box-img" src="http://placehold.it/100x100"/>
-                        <p class="item-box-title">Ator/Roterist...</p>
-                        <p class="item-box-aux">em</p>
-                        <p class="item-box-title-bold">As cores de Janaína</p>
-                        <p class="item-box-date"><img src="../resources/common/images/clock.png"/>06/01/2015</p>
-                    </div>
+                    <ui:repeat value="#{profileViewBean.educationalObjectList}" var="educationalObject">
+                        <div class="item-box-container">
+                            <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
+                            <p class="item-box-title">Ator/Roterist...</p>
+                            <p class="item-box-aux">em</p>
+                            <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
+                            <div class="item-box-date">
+                                <img src="../resources/common/images/clock.png"/>
+                                <h:outputText value="#{educationalObject.date}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                </h:outputText>
+                            </div>
+                        </div>
+                    </ui:repeat>
                 </div>
                 <div class="profile-column-right">
-                    <p class="profile-object-number"><span>03</span><br />Objetos <br />Educacionais <br />publicados</p>
+                    <p class="profile-object-number"><span>#{profileViewBean.educationalObjectList.size()}</span><br />Objetos <br />Educacionais <br />publicados</p>
                 </div>
                 <div class="clear"></div>
             </div>

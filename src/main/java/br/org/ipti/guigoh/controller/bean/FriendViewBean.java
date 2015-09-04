@@ -38,7 +38,6 @@ public class FriendViewBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             getFriends();
-            hasFriend = acceptedList.isEmpty();
         }
     }
 
@@ -48,6 +47,7 @@ public class FriendViewBean implements Serializable {
         pendingList = friendsJpaController.findPendingFriendsByToken(user.getToken());
         organizeFriendList(acceptedList);
         organizeFriendList(pendingList);
+        hasFriend = acceptedList.isEmpty();
     }
 
     private void organizeFriendList(List<Friends> list) {
