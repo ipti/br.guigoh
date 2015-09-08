@@ -8,9 +8,11 @@ import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.Experiences;
 import br.org.ipti.guigoh.model.entity.Friends;
+import br.org.ipti.guigoh.model.entity.Occupations;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
@@ -33,6 +35,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -51,16 +54,19 @@ public class ProfileViewBean implements Serializable {
     private SocialProfile socialProfile;
 
     private List<EducationalObject> educationalObjectList;
+    private List<String> editFieldList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
+    private OccupationsJpaController occupationsJpaController;
 
     private Part uploadedPhoto;
 
     private Integer[] cropCoordinates;
 
     private Boolean himself;
+    private String editableFieldValue;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -95,6 +101,35 @@ public class ProfileViewBean implements Serializable {
 
     public void removeFriend() throws RollbackFailureException, Exception {
         friendsJpaController.removeFriend(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")).getUsers(), socialProfile.getSocialProfileId());
+    }
+
+    public void showEditField(String field) {
+        switch (field) {
+            case "occupation":
+                editableFieldValue = (socialProfile.getOccupationsId() == null) ? "" : socialProfile.getOccupationsId().getName();
+                break;
+        }
+        editFieldList.add(field);
+    }
+
+    public void editField(String field) throws Exception {
+        switch (field) {
+            case "occupation":
+                Occupations occupation = null;
+                if (editableFieldValue != null) {
+                    occupation = occupationsJpaController.findOccupationByName(editableFieldValue);
+                    if (occupation == null) {
+                        occupation = new Occupations();
+                        occupation.setName(editableFieldValue);
+                        occupationsJpaController.create(occupation);
+                    }
+                }
+                socialProfile.setOccupationsId(occupation);
+                socialProfileJpaController.edit(socialProfile);
+                break;
+        }
+        editableFieldValue = "";
+        editFieldList.remove(field);
     }
 
     public void downloadPDF() throws FileNotFoundException, DocumentException, IOException {
@@ -132,7 +167,7 @@ public class ProfileViewBean implements Serializable {
             addressParagraph1 += (socialProfile.getAddress() != null) ? socialProfile.getAddress() : "";
             addressParagraph1 += (socialProfile.getAddress() != null && socialProfile.getNumber() != null) ? ", " : "";
             addressParagraph1 += (socialProfile.getNumber() != null) ? socialProfile.getNumber() : "";
-            addressParagraph1 += (!"".equals(addressParagraph1) && socialProfile.getNeighborhood() != null) ? " - Bairro " + socialProfile.getNeighborhood(): "";
+            addressParagraph1 += (!"".equals(addressParagraph1) && socialProfile.getNeighborhood() != null) ? " - Bairro " + socialProfile.getNeighborhood() : "";
 
             Paragraph pEnd1 = new Paragraph(addressParagraph1, f5);
             Paragraph pEnd2 = new Paragraph(socialProfile.getCityId().getName() + ", " + socialProfile.getStateId().getName() + ", " + socialProfile.getCountryId().getName(), f5);
@@ -207,6 +242,7 @@ public class ProfileViewBean implements Serializable {
         socialProfileJpaController = new SocialProfileJpaController();
         friendsJpaController = new FriendsJpaController();
         educationalObjectJpaController = new EducationalObjectJpaController();
+        occupationsJpaController = new OccupationsJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
@@ -215,6 +251,7 @@ public class ProfileViewBean implements Serializable {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.valueOf(request.getParameter("id")));
         }
         educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
+        editFieldList = new ArrayList<>();
 
         cropCoordinates = new Integer[6];
 
@@ -260,4 +297,21 @@ public class ProfileViewBean implements Serializable {
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
     }
+
+    public List<String> getEditFieldList() {
+        return editFieldList;
+    }
+
+    public void setEditFieldList(List<String> editFieldList) {
+        this.editFieldList = editFieldList;
+    }
+
+    public String getEditableFieldValue() {
+        return editableFieldValue;
+    }
+
+    public void setEditableFieldValue(String editableFieldValue) {
+        this.editableFieldValue = editableFieldValue;
+    }
+
 }

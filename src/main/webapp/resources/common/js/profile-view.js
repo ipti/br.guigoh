@@ -7,6 +7,16 @@ $(document).ready(function () {
     });
 });
 
+$(document).on("keypress", '.editable-field', function (e) {
+    if (e.keyCode === 13) {
+        $(this).parent().children('.edit-button').click();
+    }
+});
+
+$(document).on("click", ".add-new, .edit-pencil", function(){
+    $(this).closest(".editable-container").find('.add-new-action').click();
+});
+
 $('.open-chat').click(function () {
     var id = $("#social-profile-id").val();
     var name = $("#social-profile-name").val();
@@ -102,6 +112,10 @@ jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
         if ($(data.source).hasClass("upload-photo")) {
             document.getElementById("close-image-cropping-modal").click();
+        } else if ($(data.source).hasClass("add-new-action")) {
+            if ($(data.source).hasClass("occupation")) {
+                $('#occupation-input').focus();
+            }
         }
     }
 });

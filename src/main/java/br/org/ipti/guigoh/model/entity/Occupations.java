@@ -19,7 +19,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -45,9 +44,6 @@ public class Occupations implements Serializable {
     @NotNull
     @Column(name = "name")
     private String name;
-    @JoinColumn(name = "occupations_type_id", referencedColumnName = "id")
-    @ManyToOne
-    private OccupationsType occupationsTypeId;
     @OneToMany(mappedBy = "occupationsId")
     private Collection<SocialProfile> socialProfileCollection;
     @OneToMany(mappedBy = "nameId")
@@ -79,14 +75,6 @@ public class Occupations implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public OccupationsType getOccupationsTypeId() {
-        return occupationsTypeId;
-    }
-
-    public void setOccupationsTypeId(OccupationsType occupationsTypeId) {
-        this.occupationsTypeId = occupationsTypeId;
     }
 
     @XmlTransient
