@@ -45,9 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SocialProfile.findByAddress", query = "SELECT s FROM SocialProfile s WHERE s.address = :address"),
     @NamedQuery(name = "SocialProfile.findByNeighborhood", query = "SELECT s FROM SocialProfile s WHERE s.neighborhood = :neighborhood"),
     @NamedQuery(name = "SocialProfile.findByNumber", query = "SELECT s FROM SocialProfile s WHERE s.number = :number"),
-    @NamedQuery(name = "SocialProfile.findByPhone", query = "SELECT s FROM SocialProfile s WHERE s.phone = :phone"),
-    @NamedQuery(name = "SocialProfile.findByComplement", query = "SELECT s FROM SocialProfile s WHERE s.complement = :complement"),
-    @NamedQuery(name = "SocialProfile.findByPhoneAlternative", query = "SELECT s FROM SocialProfile s WHERE s.phoneAlternative = :phoneAlternative")})
+    @NamedQuery(name = "SocialProfile.findByPhone", query = "SELECT s FROM SocialProfile s WHERE s.phone = :phone")})
 @SqlResultSetMapping(  
     name = "SocialProfileAuthorization",
 entities = {
@@ -131,12 +129,6 @@ public class SocialProfile implements Serializable {
     @Size(max = 15)
     @Column(name = "phone")
     private String phone;
-    @Size(max = 50)
-    @Column(name = "complement")
-    private String complement;
-    @Size(max = 15)
-    @Column(name = "phone_alternative")
-    private String phoneAlternative;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "socialProfile")
     private SocialProfileVisibility socialProfileVisibility;
     @JoinColumn(name = "token_id", referencedColumnName = "token", insertable = false, updatable = false)
@@ -262,22 +254,6 @@ public class SocialProfile implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getComplement() {
-        return complement;
-    }
-
-    public void setComplement(String complement) {
-        this.complement = complement;
-    }
-
-    public String getPhoneAlternative() {
-        return phoneAlternative;
-    }
-
-    public void setPhoneAlternative(String phoneAlternative) {
-        this.phoneAlternative = phoneAlternative;
     }
 
     public SocialProfileVisibility getSocialProfileVisibility() {

@@ -290,7 +290,21 @@
 
 .profile-about-description a {
     color: #404095;
-    font-weight: bold;
+}
+
+.add-new {
+    color: gray !important;
+    font-size: 14px;
+    cursor: pointer;
+    font-style: normal !important;
+}
+
+.add-new:hover span {
+    text-decoration: underline;
+}
+
+.add-new i {
+    padding-right: 3px;
 }
 
 #profile-container-about hr {
@@ -434,6 +448,7 @@
     padding: 5px 22px;
     font-weight: bold;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .profile-object-number {

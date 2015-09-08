@@ -30,10 +30,20 @@
                 <p class="image-error"></p>
                 <div class="profile-name">
                     <h1>#{profileViewBean.socialProfile.name}</h1>
-                    <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
+                    <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name != null}">
+                        <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name == null and profileViewBean.himself}">
+                        <a class="add-new"><i class="fa fa-plus-square"></i> <span>Adicionar ocupação</span></a>
+                    </ui:fragment>
                 </div>
                 <div class="profile-status">
-                    <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
+                    <ui:fragment rendered="#{profileViewBean.socialProfile.description != null}">
+                        <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{profileViewBean.socialProfile.description == null and profileViewBean.himself}">
+                        <a class="add-new"><i class="fa fa-plus-square"></i> <span>Adicionar uma descrição</span></a>
+                    </ui:fragment>
                 </div>
                 <div class="clear"/>
             </div>
@@ -78,7 +88,12 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.mattersOfInterest}</p>
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest != null}">
+                                <p>#{profileViewBean.socialProfile.mattersOfInterest}</p>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest == null}">
+                                <a class="add-new"><i class="fa fa-plus-square"></i> <span>Adicionar matérias de interesse</span></a>
+                            </ui:fragment>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -180,68 +195,78 @@
                 <div class="profile-column-left">
                     <div class="profile-resume-left">
                         <p class="profile-resume-title">Currículo</p>
-                        <p class="profile-resume-name">Tiago Câmara</p>
-                        <p class="profile-resume-ocupation">estudante</p>
+                        <p class="profile-resume-name">#{profileViewBean.socialProfile.name}</p>
+                        <p class="profile-resume-ocupation">#{profileViewBean.socialProfile.occupationsId.name}</p>
                     </div>
                     <div class="profile-resume-right">
-                        <p class="bold">agjunior.sd@gmail.com</p>
-                        <p class="bold">(79) 9876-4321</p><br/>
-                        <p>Rua Jardim das Acácias, 420</p>
-                        <p>Bairro Laranjeiras. 03006-090</p>
-                        <p>Aracaju - SE - Brasil</p>
+                        <p class="bold">#{profileViewBean.socialProfile.users.username}</p>
+                        <p class="bold">#{profileViewBean.socialProfile.phone}</p><br/>
+                        <p>
+                            #{profileViewBean.socialProfile.address}<ui:fragment rendered="#{profileViewBean.socialProfile.address != null and profileViewBean.socialProfile.number != null}">, </ui:fragment>
+                            #{profileViewBean.socialProfile.number}
+                        </p>
+                        <p> 
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null}">Bairro #{profileViewBean.socialProfile.neighborhood}</ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null and profileViewBean.socialProfile.zipcode != null}">. </ui:fragment>
+                                #{profileViewBean.socialProfile.zipcode}
+                        </p>
+                        <p>#{profileViewBean.socialProfile.cityId.name} - #{profileViewBean.socialProfile.stateId.name} - #{profileViewBean.socialProfile.countryId.name}</p>
                     </div>
                     <div class="clear"></div>
                     <div class="profile-resume-history">
                         <div class="profile-history-container">
                             <p class="profile-history-title">Educação</p>
                         </div>
-                        <div class="profile-history-list">
-                            <div class="profile-history-date">
-                                <h3>02/2013 - Atual</h3>
+                        <ui:repeat value="#{profileViewBean.socialProfile.educationsCollection}" var="education">
+                            <div class="profile-history-list">
+                                <div class="profile-history-date">
+                                    <h3>
+                                        <h:outputText value="#{education.dataBegin}">
+                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText> 
+                                        - 
+                                        <h:outputText value="#{education.dataEnd}">
+                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText>
+                                    </h3>
+                                </div>
+                                <div class="profile-history-description">
+                                    <p>#{education.nameId.scholarityId.description}</p>
+                                    <p>#{education.nameId.name}</p>
+                                    <p class="italic">#{education.locationId.name}</p>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="profile-history-description">
-                                <p>Ensino Médio Completo</p>
-                                <p class="italic">Colégio Fulano de Tal</p>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="profile-history-list">
-                            <div class="profile-history-date">
-                                <h3>02/2013 - 05/2014</h3>
-                            </div>
-                            <div class="profile-history-description">
-                                <p>Ensino Médio Completo</p>
-                                <p class="italic">Colégio Fulano de Tal</p>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
+                        </ui:repeat>
                         <div class="profile-history-container">
                             <p class="profile-history-title">Experiência</p>
                         </div>
-                        <div class="profile-history-list">
-                            <div class="profile-history-date">
-                                <h3>02/2013 - Atual</h3>
+                        <ui:repeat value="#{profileViewBean.socialProfile.experiencesCollection}" var="experience">
+                            <div class="profile-history-list">
+                                <div class="profile-history-date">
+                                    <h3>
+                                        <h:outputText value="#{experience.dataBegin}">
+                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText> 
+                                        - 
+                                        <h:outputText value="#{experience.dataEnd}">
+                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText>
+                                    </h3>
+                                </div>
+                                <div class="profile-history-description">
+                                    <p>#{experience.nameId.name}</p>
+                                    <p class="italic">#{experience.locationId.name}</p>
+                                </div>
+                                <div class="clear"></div>
                             </div>
-                            <div class="profile-history-description">
-                                <p>Ensino Médio Completo</p>
-                                <p class="italic">Colégio Fulano de Tal</p>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="profile-history-list">
-                            <div class="profile-history-date">
-                                <h3>02/2013 - 05/2014</h3>
-                            </div>
-                            <div class="profile-history-description">
-                                <p>Ensino Médio Completo</p>
-                                <p class="italic">Colégio Fulano de Tal</p>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
+                        </ui:repeat>
                     </div>
                 </div>
                 <div class="profile-column-right">
-                    <button class="btn-gray">Gerar PDF</button>
+                    <h:commandLink class="btn-gray" action="#{profileViewBean.downloadPDF()}">
+                        Gerar PDF
+                    </h:commandLink>
                 </div>
                 <div class="clear"></div>
             </div>
