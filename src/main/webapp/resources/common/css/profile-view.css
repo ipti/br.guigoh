@@ -15,6 +15,10 @@
     height: 200px;
 }
 
+.profile-cover-image:hover .edit-photo {
+    display: block;
+} 
+
 .profile-cover-image img{
     width: 960px;
     height: 200px;
@@ -34,6 +38,10 @@
     position: relative;
 }
 
+.profile-image:hover .edit-photo {
+    display: block;
+} 
+
 .profile-image img {
     width: 125px;
     height: 125px;
@@ -43,6 +51,7 @@
     float: right;
     color: gray;
     cursor: pointer;
+    display: none;
     font-size: 20px;
     padding: 6px;
     border-radius: 5px;
