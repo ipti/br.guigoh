@@ -34,7 +34,9 @@
                         <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('occupation')}">
                             <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name != null}">
                                 <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
-                                <i class="edit-pencil fa fa-pencil"></i>
+                                <ui:fragment rendered="#{profileViewBean.himself}">
+                                    <i class="edit-pencil fa fa-pencil"></i>
+                                </ui:fragment>
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name == null and profileViewBean.himself}">
                                 <a class="add-new">
@@ -56,12 +58,32 @@
                     </h:panelGroup>
                 </div>
                 <div class="profile-status">
-                    <ui:fragment rendered="#{profileViewBean.socialProfile.description != null}">
-                        <blockquote>#{profileViewBean.socialProfile.description}</blockquote>
-                    </ui:fragment>
-                    <ui:fragment rendered="#{profileViewBean.socialProfile.description == null and profileViewBean.himself}">
-                        <a class="add-new"><i class="fa fa-plus-square"></i> <span>Adicionar uma descrição</span></a>
-                    </ui:fragment>
+                    <h:panelGroup layout="block" id="editable-profile-status" class="editable-container">
+                        <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('description')}">
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.description != null}">
+                                <p>#{profileViewBean.socialProfile.description}</p>
+                                <ui:fragment rendered="#{profileViewBean.himself}">
+                                    <i class="edit-pencil fa fa-pencil"></i>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.description == null and profileViewBean.himself}">
+                                <a class="add-new">
+                                    <i class="fa fa-plus-square"></i> 
+                                    <span>Adicionar uma descrição</span>
+                                </a>
+                            </ui:fragment>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{profileViewBean.editFieldList.contains('description')}">
+                            <h:inputTextarea pt:placeholder="Quem é você?" id="description-input" styleClass="editable-field editable-textarea" value="#{profileViewBean.editableFieldValue}"/>
+                            <h:commandLink styleClass="edit-button">
+                                <i class="fa fa-chevron-circle-right"></i>
+                                <f:ajax listener="#{profileViewBean.editField('description')}" execute="description-input" render="editable-profile-status"></f:ajax>
+                            </h:commandLink>
+                        </ui:fragment>
+                        <h:commandLink styleClass="add-new-action description">
+                            <f:ajax listener="#{profileViewBean.showEditField('description')}" render="editable-profile-status"></f:ajax>
+                        </h:commandLink>
+                    </h:panelGroup>
                 </div>
                 <div class="clear"/>
             </div>
@@ -106,12 +128,32 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest != null}">
-                                <p>#{profileViewBean.socialProfile.mattersOfInterest}</p>
-                            </ui:fragment>
-                            <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest == null}">
-                                <a class="add-new"><i class="fa fa-plus-square"></i> <span>Adicionar matérias de interesse</span></a>
-                            </ui:fragment>
+                            <h:panelGroup layout="block" id="editable-profile-matters" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('mattersOfInterest')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest != null}">
+                                        <p>#{profileViewBean.socialProfile.mattersOfInterest}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('mattersOfInterest')}">
+                                    <h:inputText pt:placeholder="Quais assuntos lhe interessa?" id="matters-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('mattersOfInterest')}" execute="matters-input" render="editable-profile-matters"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action matters">
+                                    <f:ajax listener="#{profileViewBean.showEditField('mattersOfInterest')}" render="editable-profile-matters"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -124,7 +166,32 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.musics}</p>
+                            <h:panelGroup layout="block" id="editable-profile-musics" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('musics')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.musics != null}">
+                                        <p>#{profileViewBean.socialProfile.musics}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.musics == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('musics')}">
+                                    <h:inputText pt:placeholder="Quais músicas você gosta de ouvir?" id="musics-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('musics')}" execute="musics-input" render="editable-profile-musics"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action musics">
+                                    <f:ajax listener="#{profileViewBean.showEditField('musics')}" render="editable-profile-musics"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -137,7 +204,32 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.books}</p>
+                            <h:panelGroup layout="block" id="editable-profile-books" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('books')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.books != null}">
+                                        <p>#{profileViewBean.socialProfile.books}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.books == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('books')}">
+                                    <h:inputText pt:placeholder="Quais livros você gostou de ler?" id="books-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('books')}" execute="books-input" render="editable-profile-books"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action books">
+                                    <f:ajax listener="#{profileViewBean.showEditField('books')}" render="editable-profile-books"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -150,7 +242,32 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.movies}</p>
+                            <h:panelGroup layout="block" id="editable-profile-movies" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('movies')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.movies != null}">
+                                        <p>#{profileViewBean.socialProfile.movies}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.movies == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('movies')}">
+                                    <h:inputText pt:placeholder="Quais filmes você assistiu e adorou?" id="movies-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('movies')}" execute="movies-input" render="editable-profile-movies"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action movies">
+                                    <f:ajax listener="#{profileViewBean.showEditField('movies')}" render="editable-profile-movies"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -163,7 +280,32 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.sports}</p>
+                            <h:panelGroup layout="block" id="editable-profile-sports" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('sports')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.sports != null}">
+                                        <p>#{profileViewBean.socialProfile.sports}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.sports == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('sports')}">
+                                    <h:inputText pt:placeholder="Quais esportes você gosta de praticar?" id="sports-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('sports')}" execute="sports-input" render="editable-profile-sports"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action sports">
+                                    <f:ajax listener="#{profileViewBean.showEditField('sports')}" render="editable-profile-sports"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -176,14 +318,67 @@
                             </h3>
                         </div>
                         <div class="profile-about-description">
-                            <p>#{profileViewBean.socialProfile.hobbies}</p>
+                            <h:panelGroup layout="block" id="editable-profile-hobbies" class="editable-container">
+                                <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('hobbies')}">
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.hobbies != null}">
+                                        <p>#{profileViewBean.socialProfile.hobbies}</p>
+                                        <ui:fragment rendered="#{profileViewBean.himself}">
+                                            <i class="edit-pencil fa fa-pencil"></i>
+                                        </ui:fragment>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{profileViewBean.socialProfile.hobbies == null and profileViewBean.himself}">
+                                        <a class="add-new">
+                                            <i class="fa fa-plus-square"></i> 
+                                            <span>Adicionar</span>
+                                        </a>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.editFieldList.contains('hobbies')}">
+                                    <h:inputText pt:placeholder="Quais são seus hobbies?" id="hobbies-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:commandLink styleClass="edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('hobbies')}" execute="hobbies-input" render="editable-profile-hobbies"></f:ajax>
+                                    </h:commandLink>
+                                </ui:fragment>
+                                <h:commandLink styleClass="add-new-action hobbies">
+                                    <f:ajax listener="#{profileViewBean.showEditField('hobbies')}" render="editable-profile-hobbies"></f:ajax>
+                                </h:commandLink>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
                     </div>
                 </div>
                 <div class="profile-column-right">
                     <p id="profile-icon-mail"><img src="../resources/common/images/mail.png"/><span title="#{profileViewBean.socialProfile.users.username}">#{profileViewBean.socialProfile.users.username}</span></p>
-                    <p id="profile-icon-birthday"><img src="../resources/common/images/birthday.png"/>#{profileViewBean.socialProfile.birthDate}</p>
+                    <p id="profile-icon-birthday">
+                        <img src="../resources/common/images/birthday.png"/>
+                        <h:panelGroup layout="block" id="editable-profile-birth-date" class="editable-container">
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('birthDate')}">
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.birthDate != null}">
+                                    <p>#{profileViewBean.socialProfile.birthDate}</p>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <i class="edit-pencil fa fa-pencil"></i>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.birthDate == null and profileViewBean.himself}">
+                                    <a class="add-new">
+                                        <i class="fa fa-plus-square"></i> 
+                                        <span>Adicionar</span>
+                                    </a>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('birthDate')}">
+                                <h:inputText pt:placeholder="Data de nascimento" id="birth-date-input" maxlength="10" styleClass="editable-field editable-birth-date" value="#{profileViewBean.editableFieldValue}"/>
+                                <h:commandLink styleClass="edit-button">
+                                    <i class="fa fa-chevron-circle-right"></i>
+                                    <f:ajax listener="#{profileViewBean.editField('birthDate')}" execute="birth-date-input" render="editable-profile-birth-date"></f:ajax>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action birth-date">
+                                <f:ajax listener="#{profileViewBean.showEditField('birthDate')}" render="editable-profile-birth-date"></f:ajax>
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </p>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -319,6 +514,7 @@
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
         <script type="text/javascript" src="/resources/lib/js/jquery.Jcrop.min.js"></script>
+        <script type="text/javascript" src="/resources/lib/js/jquery.mask.min.js"></script>
         <script type="text/javascript" src="/resources/common/js/profile-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->

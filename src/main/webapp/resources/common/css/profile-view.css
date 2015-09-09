@@ -41,12 +41,12 @@
 
 .edit-photo {
     float: right;
-    color: whitesmoke;
+    color: gray;
     cursor: pointer;
     font-size: 20px;
     padding: 6px;
     border-radius: 5px;
-    background-color: black;
+    background-color: #e6eadf;
     margin: -44px 5px 0px 0;
 }
 
@@ -181,6 +181,10 @@
     margin-right: 40px;
 }
 
+.profile-status p {
+    display: inline;
+}
+
 .profile-options {
     top: 10px;
     position: relative;
@@ -253,13 +257,13 @@
 }
 
 .profile-column-right {
-    padding-right: 35px;
+    padding-right: 20px;
     padding-left: 20px;
     font-size: 11px;
     border-left: 1px solid #c1c1c1;
     float: right;
     line-height: 12px;
-    width: 169px;
+    width: 184px;
 }
 
 .profile-about-list {
@@ -289,8 +293,9 @@
     padding-top: 10px;
 }
 
-.profile-about-description a {
-    color: #404095;
+.profile-about-description p {
+    display: inline;
+    width: 90%;
 }
 
 .add-new {
@@ -317,20 +322,45 @@
     text-indent: 10px;
 }
 
+.editable-textarea {
+    resize: none;
+    width: 250px;
+}
+
+.editable-social-interest {
+    width: 450px;
+}
+
+#editable-profile-birth-date {
+    margin: 18px 0 0 0;
+    display: block;
+}
+
+#editable-profile-birth-date p{
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.editable-birth-date {
+    width: 135px;
+    margin-top: -3px !important;
+}
+
 .edit-button {
-    color: black;
+    color: black !important;
     text-decoration: none;
 }
 
 .edit-pencil {
-    margin: 0 0 0 5px;
+    margin: 0 0 0 10px;
     display: none;
     color: gray;
     cursor: pointer;
 }
 
+
 .editable-container:hover .edit-pencil{
-    display: inline;
+    display: inline-block;
 }
 
 #profile-container-about hr {

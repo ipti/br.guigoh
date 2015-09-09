@@ -13,7 +13,7 @@ $(document).on("keypress", '.editable-field', function (e) {
     }
 });
 
-$(document).on("click", ".add-new, .edit-pencil", function(){
+$(document).on("click", ".add-new, .edit-pencil", function () {
     $(this).closest(".editable-container").find('.add-new-action').click();
 });
 
@@ -108,6 +108,19 @@ $('.tab').click(function () {
     }
 });
 
+$(document).on("keyup", '#birth-date-input', function () {
+    var reg = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
+    var birthDate = $(this).val();
+    if (birthDate.length === 10) {
+        if (!birthDate.match(reg)) {
+            $(this).val("");
+        }
+        if (birthDate.split("/")[2] > new Date().getFullYear()){
+            $(this).val("");
+        }
+    }
+});
+
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
         if ($(data.source).hasClass("upload-photo")) {
@@ -115,6 +128,23 @@ jsf.ajax.addOnEvent(function (data) {
         } else if ($(data.source).hasClass("add-new-action")) {
             if ($(data.source).hasClass("occupation")) {
                 $('#occupation-input').focus();
+            } else if ($(data.source).hasClass("description")) {
+                $('#description-input').focus();
+            } else if ($(data.source).hasClass("matters")) {
+                $('#matters-input').focus();
+            } else if ($(data.source).hasClass("musics")) {
+                $('#musics-input').focus();
+            } else if ($(data.source).hasClass("books")) {
+                $('#books-input').focus();
+            } else if ($(data.source).hasClass("movies")) {
+                $('#movies-input').focus();
+            } else if ($(data.source).hasClass("sports")) {
+                $('#sports-input').focus();
+            } else if ($(data.source).hasClass("hobbies")) {
+                $('#hobbies-input').focus();
+            } else if ($(data.source).hasClass("birth-date")) {
+                $('#birth-date-input').mask("99/99/9999");
+                $('#birth-date-input').focus();
             }
         }
     }

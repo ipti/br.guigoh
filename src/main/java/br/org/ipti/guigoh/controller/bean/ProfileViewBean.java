@@ -8,10 +8,12 @@ import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.Experiences;
 import br.org.ipti.guigoh.model.entity.Friends;
+import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Occupations;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
@@ -55,11 +57,13 @@ public class ProfileViewBean implements Serializable {
 
     private List<EducationalObject> educationalObjectList;
     private List<String> editFieldList;
+    private List<Interests> interestList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
     private OccupationsJpaController occupationsJpaController;
+    private InterestsJpaController interestsJpaController;
 
     private Part uploadedPhoto;
 
@@ -108,6 +112,30 @@ public class ProfileViewBean implements Serializable {
             case "occupation":
                 editableFieldValue = (socialProfile.getOccupationsId() == null) ? "" : socialProfile.getOccupationsId().getName();
                 break;
+            case "description":
+                editableFieldValue = socialProfile.getDescription();
+                break;
+            case "mattersOfInterest":
+                editableFieldValue = socialProfile.getMattersOfInterest();
+                break;
+            case "musics":
+                editableFieldValue = socialProfile.getMusics();
+                break;
+            case "books":
+                editableFieldValue = socialProfile.getBooks();
+                break;
+            case "movies":
+                editableFieldValue = socialProfile.getMovies();
+                break;
+            case "sports":
+                editableFieldValue = socialProfile.getSports();
+                break;
+            case "hobbies":
+                editableFieldValue = socialProfile.getHobbies();
+                break;
+            case "birthDate":
+                editableFieldValue = socialProfile.getBirthDate();
+                break;
         }
         editFieldList.add(field);
     }
@@ -125,9 +153,33 @@ public class ProfileViewBean implements Serializable {
                     }
                 }
                 socialProfile.setOccupationsId(occupation);
-                socialProfileJpaController.edit(socialProfile);
+                break;
+            case "description":
+                socialProfile.setDescription(editableFieldValue);
+                break;
+            case "mattersOfInterest":
+                socialProfile.setMattersOfInterest(editableFieldValue);
+                break;
+            case "musics":
+                socialProfile.setMusics(editableFieldValue);
+                break;
+            case "books":
+                socialProfile.setBooks(editableFieldValue);
+                break;
+            case "movies":
+                socialProfile.setMovies(editableFieldValue);
+                break;
+            case "sports":
+                socialProfile.setSports(editableFieldValue);
+                break;
+            case "hobbies":
+                socialProfile.setHobbies(editableFieldValue);
+                break;
+            case "birthDate":
+                socialProfile.setBirthDate(editableFieldValue);
                 break;
         }
+        socialProfileJpaController.edit(socialProfile);
         editableFieldValue = "";
         editFieldList.remove(field);
     }
@@ -243,6 +295,7 @@ public class ProfileViewBean implements Serializable {
         friendsJpaController = new FriendsJpaController();
         educationalObjectJpaController = new EducationalObjectJpaController();
         occupationsJpaController = new OccupationsJpaController();
+        interestsJpaController = new InterestsJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
@@ -252,6 +305,7 @@ public class ProfileViewBean implements Serializable {
         }
         educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
         editFieldList = new ArrayList<>();
+        interestList = interestsJpaController.findInterestsEntities();
 
         cropCoordinates = new Integer[6];
 
@@ -314,4 +368,11 @@ public class ProfileViewBean implements Serializable {
         this.editableFieldValue = editableFieldValue;
     }
 
+    public List<Interests> getInterestList() {
+        return interestList;
+    }
+
+    public void setInterestList(List<Interests> interestList) {
+        this.interestList = interestList;
+    }
 }
