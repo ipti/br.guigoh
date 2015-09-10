@@ -114,7 +114,7 @@ $(document).on("keyup", '#birth-date-input, .editable-education-initial-date, .e
     if (birthDate.indexOf("_") === -1) {
         if (!birthDate.match(reg) || (birthDate.split("/")[2] > new Date().getFullYear())) {
             $(this).val("");
-            $(this).mask("99/99/9999")
+            $(this).mask("99/99/9999");
         }
     }
 });
@@ -167,12 +167,13 @@ jsf.ajax.addOnEvent(function (data) {
             } else if ($(data.source).hasClass("address")) {
                 $('.editable-address').focusTextToEnd();
                 $('.editable-cep').mask("99999-999");
-            } else if ($(data.source).hasClass("new-education")) {
+            } else if ($(data.source).hasClass("education")) {
                 $('.editable-education-initial-date, .editable-education-final-date').mask("99/99/9999");
                 $('.editable-education-initial-date').focusTextToEnd();
-                
+            } else if ($(data.source).hasClass("experience")) {
+                $('.editable-experience-initial-date, .editable-experience-final-date').mask("99/99/9999");
+                $('.editable-experience-initial-date').focusTextToEnd();
             }
-            
         }
         $('select').each(changeSelectColors);
         $('select').on("change", changeSelectColors);

@@ -212,15 +212,12 @@ public class ExperiencesLocationJpaController implements Serializable {
         }
     }
 
-    public ExperiencesLocation findExperiencesLocationByName(ExperiencesLocation locationId) {
+    public ExperiencesLocation findExperiencesLocationByName(String name) {
         EntityManager em = getEntityManager();
         try {
-            ExperiencesLocation occupationstemp = (ExperiencesLocation) em.createNativeQuery("select * from experiences_location "
-                    + "where (UPPER(name) like '" + locationId.getName().toUpperCase() + "') ", ExperiencesLocation.class).getSingleResult();
-            if (occupationstemp == null) {
-                return new ExperiencesLocation();
-            }
-            return occupationstemp;
+            ExperiencesLocation occupation = (ExperiencesLocation) em.createNativeQuery("select * from experiences_location "
+                    + "where (UPPER(name) like '" + name.toUpperCase() + "') ", ExperiencesLocation.class).getSingleResult();
+            return occupation;
         } catch (NoResultException e) {
             return null;
         } finally {

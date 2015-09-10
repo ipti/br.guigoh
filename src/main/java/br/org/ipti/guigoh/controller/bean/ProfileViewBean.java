@@ -10,8 +10,8 @@ import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.EducationsLocation;
 import br.org.ipti.guigoh.model.entity.EducationsName;
-import br.org.ipti.guigoh.model.entity.EducationsPK;
 import br.org.ipti.guigoh.model.entity.Experiences;
+import br.org.ipti.guigoh.model.entity.ExperiencesLocation;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Occupations;
@@ -24,6 +24,8 @@ import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationsLocationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationsNameJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.ExperiencesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.ExperiencesLocationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
@@ -85,11 +87,13 @@ public class ProfileViewBean implements Serializable {
     private EducationsJpaController educationsJpaController;
     private EducationsNameJpaController educationsNameJpaController;
     private EducationsLocationJpaController educationsLocationJpaController;
+    private ExperiencesJpaController experiencesJpaController;
     private InterestsJpaController interestsJpaController;
     private CityJpaController cityJpaController;
     private StateJpaController stateJpaController;
     private CountryJpaController countryJpaController;
     private ScholarityJpaController scholarityJpaController;
+    private ExperiencesLocationJpaController experiencesLocationJpaController;
 
     private Part uploadedPhoto;
 
@@ -177,10 +181,11 @@ public class ProfileViewBean implements Serializable {
                 loadStates();
                 loadCities();
                 break;
-            case "new-education":
+            case "education":
                 editableFieldValues = new Object[7];
                 break;
-            case "old-education":
+            case "experience":
+                editableFieldValues = new Object[7];
                 break;
         }
         editFieldList.add(field);
@@ -193,6 +198,16 @@ public class ProfileViewBean implements Serializable {
 
     public void loadCities() {
         cityList = (editableFieldValues[5] != null) ? cityJpaController.findCitiesByStateId(Integer.parseInt((String) editableFieldValues[5])) : new ArrayList<>();
+    }
+
+    public void removeEducation(Educations education) throws NonexistentEntityException, RollbackFailureException, Exception {
+        socialProfile.getEducationsCollection().remove(education);
+        educationsJpaController.destroy(education.getEducationsPK());
+    }
+
+    public void removeExperience(Experiences experience) throws RollbackFailureException, Exception {
+        socialProfile.getExperiencesCollection().remove(experience);
+        experiencesJpaController.destroy(experience.getExperiencesPK());
     }
 
     public void editField(String field) throws Exception {
@@ -245,33 +260,27 @@ public class ProfileViewBean implements Serializable {
                 socialProfile.setStateId((editableFieldValues[5] != null) ? stateJpaController.findState(Integer.parseInt((String) editableFieldValues[5])) : null);
                 socialProfile.setCountryId((editableFieldValues[6] != null) ? countryJpaController.findCountry(Integer.parseInt((String) editableFieldValues[6])) : null);
                 break;
-            case "new-education":
+            case "education":
                 if (editableFieldValues[0] != null && editableFieldValues[2] != null && editableFieldValues[3] != null && editableFieldValues[4] != null) {
                     Educations education = new Educations();
-                    if (editableFieldValues[3] != null) {
-                        EducationsName educationName = educationsNameJpaController.findEducationsNameByName((String) editableFieldValues[3]);
-                        if (educationName == null) {
-                            educationName = new EducationsName();
-                            educationName.setName((String) editableFieldValues[3]);
-                            educationName.setScholarityId(scholarityJpaController.findScholarity(Integer.parseInt((String) editableFieldValues[2])));
-                            educationsNameJpaController.create(educationName);
-                        }
-                        education.setNameId(educationName);
+                    EducationsName educationName = educationsNameJpaController.findEducationsNameByName((String) editableFieldValues[3]);
+                    if (educationName == null) {
+                        educationName = new EducationsName();
+                        educationName.setName((String) editableFieldValues[3]);
+                        educationName.setScholarityId(scholarityJpaController.findScholarity(Integer.parseInt((String) editableFieldValues[2])));
+                        educationsNameJpaController.create(educationName);
                     }
-                    if (editableFieldValues[4] != null) {
-                        EducationsLocation educationLocation = educationsLocationJpaController.findEducationsLocationByName((String) editableFieldValues[4]);
-                        if (educationLocation == null) {
-                            educationLocation = new EducationsLocation();
-                            educationLocation.setName((String) editableFieldValues[4]);
-                            educationsLocationJpaController.create(educationLocation);
-                        }
-                        education.setLocationId(educationLocation);
+                    education.setNameId(educationName);
+                    EducationsLocation educationLocation = educationsLocationJpaController.findEducationsLocationByName((String) editableFieldValues[4]);
+                    if (educationLocation == null) {
+                        educationLocation = new EducationsLocation();
+                        educationLocation.setName((String) editableFieldValues[4]);
+                        educationsLocationJpaController.create(educationLocation);
                     }
+                    education.setLocationId(educationLocation);
                     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    if (editableFieldValues[0] != null) {
-                        Date initialDate = new Date(format.parse((String) editableFieldValues[0]).getTime());
-                        education.setDataBegin(initialDate);
-                    }
+                    Date initialDate = new Date(format.parse((String) editableFieldValues[0]).getTime());
+                    education.setDataBegin(initialDate);
                     if (editableFieldValues[1] != null) {
                         Date finalDate = new Date(format.parse((String) editableFieldValues[1]).getTime());
                         education.setDataEnd(finalDate);
@@ -281,7 +290,34 @@ public class ProfileViewBean implements Serializable {
                     socialProfile.getEducationsCollection().add(education);
                 }
                 break;
-            case "old-education":
+            case "experience":
+                if (editableFieldValues[0] != null && editableFieldValues[2] != null && editableFieldValues[3] != null) {
+                    Experiences experience = new Experiences();
+                    Occupations experienceOccupation = occupationsJpaController.findOccupationByName((String) editableFieldValues[2]);
+                    if (experienceOccupation == null) {
+                        experienceOccupation = new Occupations();
+                        experienceOccupation.setName((String) editableFieldValues[2]);
+                        occupationsJpaController.create(experienceOccupation);
+                    }
+                    experience.setNameId(experienceOccupation);
+                    ExperiencesLocation experienceLocation = experiencesLocationJpaController.findExperiencesLocationByName((String) editableFieldValues[3]);
+                    if (experienceLocation == null) {
+                        experienceLocation = new ExperiencesLocation();
+                        experienceLocation.setName((String) editableFieldValues[3]);
+                        experiencesLocationJpaController.create(experienceLocation);
+                    }
+                    experience.setLocationId(experienceLocation);
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    Date initialDate = new Date(format.parse((String) editableFieldValues[0]).getTime());
+                    experience.setDataBegin(initialDate);
+                    if (editableFieldValues[1] != null) {
+                        Date finalDate = new Date(format.parse((String) editableFieldValues[1]).getTime());
+                        experience.setDataEnd(finalDate);
+                    }
+                    experience.setSocialProfile(socialProfile);
+                    experiencesJpaController.create(experience);
+                    socialProfile.getExperiencesCollection().add(experience);
+                }
                 break;
         }
         socialProfileJpaController.edit(socialProfile);
@@ -365,12 +401,14 @@ public class ProfileViewBean implements Serializable {
             for (Educations education : socialProfile.getEducationsCollection()) {
                 DateFormat data = new SimpleDateFormat("dd/MM/yyyy");
                 String dataBegin = data.format(education.getDataBegin().getTime());
-                String dataEnd = data.format(education.getDataEnd().getTime());
-                Paragraph pEdu1 = new Paragraph(education.getNameId().getName() + "     " + dataBegin + " - " + dataEnd, f5);
-                Paragraph pEdu2 = new Paragraph(education.getLocationId().getName(), f5);
-                pEdu2.setSpacingAfter(10);
+                String dataEnd = (education.getDataEnd() != null) ? data.format(education.getDataEnd().getTime()) : "Hoje";
+                Paragraph pEdu1 = new Paragraph(education.getNameId().getScholarityId().getDescription(), f5);
+                Paragraph pEdu2 = new Paragraph(education.getNameId().getName() + "     " + dataBegin + " - " + dataEnd, f5);
+                Paragraph pEdu3 = new Paragraph(education.getLocationId().getName(), f5);
+                pEdu3.setSpacingAfter(10);
                 doc.add(pEdu1);
                 doc.add(pEdu2);
+                doc.add(pEdu3);
             }
 
             if (!socialProfile.getExperiencesCollection().isEmpty()) {
@@ -380,7 +418,7 @@ public class ProfileViewBean implements Serializable {
             for (Experiences experience : socialProfile.getExperiencesCollection()) {
                 DateFormat data = new SimpleDateFormat("dd/MM/yyyy");
                 String dataBegin = data.format(experience.getDataBegin().getTime());
-                String dataEnd = data.format(experience.getDataEnd().getTime());
+                String dataEnd = (experience.getDataEnd() != null) ? data.format(experience.getDataEnd().getTime()) : "Hoje";
                 Paragraph pExp1 = new Paragraph(experience.getNameId().getName() + "     " + dataBegin + " - " + dataEnd, f5);
                 Paragraph pExp2 = new Paragraph(experience.getLocationId().getName(), f5);
                 pExp2.setSpacingAfter(10);
@@ -414,6 +452,8 @@ public class ProfileViewBean implements Serializable {
         educationsJpaController = new EducationsJpaController();
         educationsNameJpaController = new EducationsNameJpaController();
         educationsLocationJpaController = new EducationsLocationJpaController();
+        experiencesJpaController = new ExperiencesJpaController();
+        experiencesLocationJpaController = new ExperiencesLocationJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {

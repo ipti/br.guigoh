@@ -418,17 +418,18 @@
     display: inline-block;
 }
 
-#editable-profile-education .add-new {
+#editable-profile-education .add-new, #editable-profile-experience .add-new {
     margin: 20px 0 0 30px;
     display: block;
 }
 
-#education-inputs {
+#education-inputs, #experience-inputs {
     margin: 20px 0 0 0;
     display: inline-block;
 }
 
-.editable-education-initial-date, .editable-education-final-date {
+.editable-education-initial-date, .editable-education-final-date,
+.editable-experience-initial-date, .editable-experience-final-date{
     margin-right: 5px;
     float: left;
     width: 110px;
@@ -460,12 +461,18 @@
     width: 220px;
 }
 
-.editable-education-name, .editable-education-location {
+.editable-education-name, .editable-education-location,
+.editable-experience-location{
     width: 100%;
     margin-top: 3px;
 }
 
-.education-edit-button {
+.editable-experience-occupation {
+    width: 220px;
+    float: left;
+}
+
+.education-edit-button, .experience-edit-button {
     float: right;
 }
 
@@ -580,8 +587,9 @@
 }
 
 .profile-history-list {
-    padding: 20px 0 0 0;
+    margin: 20px 0 0 0;
     line-height: 18px;
+    display: inline-block;
 }
 
 .profile-history-list:first-child h3 {
@@ -603,12 +611,24 @@
 .profile-history-description {
     float: left;
     font-size: 14px;
-    width: 480px;
 }
 
 .profile-history-description a {
     color: #404095;
     font-weight: bold;
+}
+
+.profile-history-list:hover .remove-eduexp {
+    display: inline;
+}
+
+.remove-eduexp {
+    display: none;
+    float: left;
+    margin: 0 0 0 20px;
+    cursor: pointer;
+    padding: 0 6px 6px 6px;
+    color: gray;
 }
 
 .btn-gray {

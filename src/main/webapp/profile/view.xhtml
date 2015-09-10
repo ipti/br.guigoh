@@ -574,16 +574,23 @@
                                         <p>#{education.nameId.name}</p>
                                         <p class="italic">#{education.locationId.name}</p>
                                     </div>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <h:commandLink styleClass="remove-eduexp">
+                                            <f:ajax listener="#{profileViewBean.removeEducation(education)}" render="editable-profile-education"/>
+                                            <i class="fa fa-times"></i>
+                                        </h:commandLink> 
+                                    </ui:fragment>
                                     <div class="clear"></div>
                                 </div>
                             </ui:repeat>
-                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('new-education') and profileViewBean.himself}">
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('education') and profileViewBean.himself}">
                                 <a class="add-new">
                                     <i class="fa fa-plus-square"></i> 
                                     <span>Adicionar</span>
                                 </a>
                             </ui:fragment>
-                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('new-education')}">
+                            <br/>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('education')}">
                                 <h:panelGroup id="education-inputs" layout="block">
                                     <h:inputText pt:placeholder="Data de início*" styleClass="editable-field editable-education-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
                                     <h:inputText pt:placeholder="Data de término" styleClass="editable-field editable-education-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
@@ -597,37 +604,70 @@
                                     <h:inputText pt:placeholder="Local*" styleClass="editable-field editable-education-location" value="#{profileViewBean.editableFieldValues[4]}"/><br/>
                                     <h:commandLink styleClass="edit-button education-edit-button">
                                         <i class="fa fa-chevron-circle-right"></i>
-                                        <f:ajax listener="#{profileViewBean.editField('new-education')}" execute="education-inputs" render="editable-profile-education"></f:ajax>
+                                        <f:ajax listener="#{profileViewBean.editField('education')}" execute="education-inputs" render="editable-profile-education"></f:ajax>
                                     </h:commandLink>
                                 </h:panelGroup>
                             </ui:fragment>
-                            <h:commandLink styleClass="add-new-action new-education">
-                                <f:ajax listener="#{profileViewBean.showEditField('new-education')}" render="editable-profile-education"></f:ajax>
+                            <h:commandLink styleClass="add-new-action education">
+                                <f:ajax listener="#{profileViewBean.showEditField('education')}" render="editable-profile-education"></f:ajax>
                             </h:commandLink>
                         </h:panelGroup>
                         <div class="profile-history-container">
                             <p class="profile-history-title">Experiência</p>
                         </div>
-                        <ui:repeat value="#{profileViewBean.socialProfile.experiencesCollection}" var="experience">
-                            <div class="profile-history-list">
-                                <div class="profile-history-date">
-                                    <h3>
-                                        <h:outputText value="#{experience.dataBegin}">
-                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                        </h:outputText> 
-                                        - 
-                                        <h:outputText value="#{experience.dataEnd}">
-                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                        </h:outputText>
-                                    </h3>
+                        <h:panelGroup layout="block" id="editable-profile-experience" class="editable-container">
+                            <ui:repeat value="#{profileViewBean.socialProfile.experiencesCollection}" var="experience">
+                                <div class="profile-history-list">
+                                    <div class="profile-history-date">
+                                        <h3>
+                                            <h:outputText value="#{experience.dataBegin}">
+                                                <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                            </h:outputText> 
+                                            - 
+                                            <h:outputText value="#{experience.dataEnd}">
+                                                <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                            </h:outputText>
+                                            <ui:fragment rendered="#{experience.dataEnd == null}">
+                                                <h:outputText value="ATUAL"/>
+                                            </ui:fragment>
+                                        </h3>
+                                    </div>
+                                    <div class="profile-history-description">
+                                        <p>#{experience.nameId.name}</p>
+                                        <p class="italic">#{experience.locationId.name}</p>
+                                    </div>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <h:commandLink styleClass="remove-eduexp">
+                                            <f:ajax listener="#{profileViewBean.removeExperience(experience)}" render="editable-profile-experience"/>
+                                            <i class="fa fa-times"></i>
+                                        </h:commandLink> 
+                                    </ui:fragment>
+                                    <div class="clear"></div>
                                 </div>
-                                <div class="profile-history-description">
-                                    <p>#{experience.nameId.name}</p>
-                                    <p class="italic">#{experience.locationId.name}</p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </ui:repeat>
+                            </ui:repeat>
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('experience') and profileViewBean.himself}">
+                                <a class="add-new">
+                                    <i class="fa fa-plus-square"></i> 
+                                    <span>Adicionar</span>
+                                </a>
+                            </ui:fragment>
+                            <br/>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('experience')}">
+                                <h:panelGroup id="experience-inputs" layout="block">
+                                    <h:inputText pt:placeholder="Data de início*" styleClass="editable-field editable-experience-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                    <h:inputText pt:placeholder="Data de término" styleClass="editable-field editable-experience-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
+                                    <h:inputText pt:placeholder="Ocupação*" styleClass="editable-field editable-experience-occupation" value="#{profileViewBean.editableFieldValues[2]}"/><br/>
+                                    <h:inputText pt:placeholder="Local*" styleClass="editable-field editable-experience-location" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                    <h:commandLink styleClass="edit-button experience-edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('experience')}" execute="experience-inputs" render="editable-profile-experience"></f:ajax>
+                                    </h:commandLink>
+                                </h:panelGroup>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action experience">
+                                <f:ajax listener="#{profileViewBean.showEditField('experience')}" render="editable-profile-experience"></f:ajax>
+                            </h:commandLink>
+                        </h:panelGroup>
                     </div>
                 </div>
                 <div class="profile-column-right">
