@@ -31,6 +31,10 @@ public class EducationsPK implements Serializable {
 
     public EducationsPK() {
     }
+    
+    public EducationsPK(String tokenId) {
+        this.tokenId = tokenId;
+    }
 
     public EducationsPK(int id, String tokenId) {
         this.id = id;

@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 $(document).on("keypress", '.editable-field', function (e) {
     if (e.keyCode === 13) {
-        $(this).closest('.editable-container').children('.edit-button').click();
+        $(this).closest('.editable-container').find('.edit-button').click();
     }
 });
 
@@ -108,15 +108,13 @@ $('.tab').click(function () {
     }
 });
 
-$(document).on("keyup", '#birth-date-input', function () {
+$(document).on("keyup", '#birth-date-input, .editable-education-initial-date, .editable-education-final-date', function () {
     var reg = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
     var birthDate = $(this).val();
     if (birthDate.indexOf("_") === -1) {
-        if (!birthDate.match(reg)) {
+        if (!birthDate.match(reg) || (birthDate.split("/")[2] > new Date().getFullYear())) {
             $(this).val("");
-        }
-        if (birthDate.split("/")[2] > new Date().getFullYear()) {
-            $(this).val("");
+            $(this).mask("99/99/9999")
         }
     }
 });
@@ -167,13 +165,17 @@ jsf.ajax.addOnEvent(function (data) {
                     }
                 }).trigger('focusout');
             } else if ($(data.source).hasClass("address")) {
-                $('#address-input').focusTextToEnd();
+                $('.editable-address').focusTextToEnd();
                 $('.editable-cep').mask("99999-999");
+            } else if ($(data.source).hasClass("new-education")) {
+                $('.editable-education-initial-date, .editable-education-final-date').mask("99/99/9999");
+                $('.editable-education-initial-date').focusTextToEnd();
+                
             }
+            
         }
         $('select').each(changeSelectColors);
         $('select').on("change", changeSelectColors);
-        $('select').on("change", checkLength);
     }
 });
 

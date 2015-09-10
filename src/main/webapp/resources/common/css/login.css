@@ -17,6 +17,18 @@ section, header {
     margin: 0 auto;
 }
 
+::-webkit-input-placeholder { 
+    color: gray; 
+} 
+
+input:-moz-placeholder { 
+    color: gray; 
+} 
+
+textarea:-moz-placeholder { 
+    color: gray; 
+}​
+
 hr {
     border: 0;
     background-color: #CACACA;
@@ -257,10 +269,10 @@ div.select {
 }
 
 .mirror{
--moz-transform: scaleX(-1);
--o-transform: scaleX(-1);
--webkit-transform: scaleX(-1);
-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 .question{

@@ -46,16 +46,10 @@ function getTrackerCoords(c, image)
 
 function changeSelectColors() {
     if ($(this).children('option:first-child').is(':selected')) {
-        $(this).css("color", "rgba(0, 0, 0, 0.5)");
+        $(this).css("color", "gray");
     } else {
         $(this).css("color", "black");
     }
     $(this).children("option").not(":eq(0)").css("color", "black");
-    $(this).children("option:first-child").css("color", "rgba(0, 0, 0, 0.5)");
-}
-function checkLength() {
-    if ($(this).children("option:selected").text().trim().length > 45) {
-        var string = $(this).children("option:selected").text();
-        $(this).children("option:selected").text(string.substring(0, 45) + "...");
-    }
+    $(this).children("option:first-child").css("color", "gray");
 }

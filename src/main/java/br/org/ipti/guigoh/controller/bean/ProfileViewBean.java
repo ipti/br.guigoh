@@ -8,18 +8,26 @@ import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.entity.Country;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
+import br.org.ipti.guigoh.model.entity.EducationsLocation;
+import br.org.ipti.guigoh.model.entity.EducationsName;
+import br.org.ipti.guigoh.model.entity.EducationsPK;
 import br.org.ipti.guigoh.model.entity.Experiences;
 import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Occupations;
+import br.org.ipti.guigoh.model.entity.Scholarity;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.State;
 import br.org.ipti.guigoh.model.jpa.controller.CityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.CountryJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsLocationJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationsNameJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.StateJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
@@ -44,6 +52,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -67,15 +76,20 @@ public class ProfileViewBean implements Serializable {
     private List<City> cityList;
     private List<State> stateList;
     private List<Country> countryList;
+    private List<Scholarity> scholarityList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
     private OccupationsJpaController occupationsJpaController;
+    private EducationsJpaController educationsJpaController;
+    private EducationsNameJpaController educationsNameJpaController;
+    private EducationsLocationJpaController educationsLocationJpaController;
     private InterestsJpaController interestsJpaController;
     private CityJpaController cityJpaController;
     private StateJpaController stateJpaController;
     private CountryJpaController countryJpaController;
+    private ScholarityJpaController scholarityJpaController;
 
     private Part uploadedPhoto;
 
@@ -163,12 +177,17 @@ public class ProfileViewBean implements Serializable {
                 loadStates();
                 loadCities();
                 break;
+            case "new-education":
+                editableFieldValues = new Object[7];
+                break;
+            case "old-education":
+                break;
         }
         editFieldList.add(field);
     }
-    
+
     public void loadStates() {
-        stateList = (editableFieldValues[6] != null) ? stateJpaController.findStatesByCountryId(Integer.parseInt((String) editableFieldValues[6])): new ArrayList<>();
+        stateList = (editableFieldValues[6] != null) ? stateJpaController.findStatesByCountryId(Integer.parseInt((String) editableFieldValues[6])) : new ArrayList<>();
         cityList = new ArrayList<>();
     }
 
@@ -226,9 +245,48 @@ public class ProfileViewBean implements Serializable {
                 socialProfile.setStateId((editableFieldValues[5] != null) ? stateJpaController.findState(Integer.parseInt((String) editableFieldValues[5])) : null);
                 socialProfile.setCountryId((editableFieldValues[6] != null) ? countryJpaController.findCountry(Integer.parseInt((String) editableFieldValues[6])) : null);
                 break;
+            case "new-education":
+                if (editableFieldValues[0] != null && editableFieldValues[2] != null && editableFieldValues[3] != null && editableFieldValues[4] != null) {
+                    Educations education = new Educations();
+                    if (editableFieldValues[3] != null) {
+                        EducationsName educationName = educationsNameJpaController.findEducationsNameByName((String) editableFieldValues[3]);
+                        if (educationName == null) {
+                            educationName = new EducationsName();
+                            educationName.setName((String) editableFieldValues[3]);
+                            educationName.setScholarityId(scholarityJpaController.findScholarity(Integer.parseInt((String) editableFieldValues[2])));
+                            educationsNameJpaController.create(educationName);
+                        }
+                        education.setNameId(educationName);
+                    }
+                    if (editableFieldValues[4] != null) {
+                        EducationsLocation educationLocation = educationsLocationJpaController.findEducationsLocationByName((String) editableFieldValues[4]);
+                        if (educationLocation == null) {
+                            educationLocation = new EducationsLocation();
+                            educationLocation.setName((String) editableFieldValues[4]);
+                            educationsLocationJpaController.create(educationLocation);
+                        }
+                        education.setLocationId(educationLocation);
+                    }
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    if (editableFieldValues[0] != null) {
+                        Date initialDate = new Date(format.parse((String) editableFieldValues[0]).getTime());
+                        education.setDataBegin(initialDate);
+                    }
+                    if (editableFieldValues[1] != null) {
+                        Date finalDate = new Date(format.parse((String) editableFieldValues[1]).getTime());
+                        education.setDataEnd(finalDate);
+                    }
+                    education.setSocialProfile(socialProfile);
+                    educationsJpaController.create(education);
+                    socialProfile.getEducationsCollection().add(education);
+                }
+                break;
+            case "old-education":
+                break;
         }
         socialProfileJpaController.edit(socialProfile);
         editableFieldValue = "";
+        editableFieldValues = new Object[7];
         editFieldList.remove(field);
     }
 
@@ -269,8 +327,13 @@ public class ProfileViewBean implements Serializable {
             addressParagraph1 += (socialProfile.getNumber() != null) ? socialProfile.getNumber() : "";
             addressParagraph1 += (!"".equals(addressParagraph1) && socialProfile.getNeighborhood() != null) ? " - Bairro " + socialProfile.getNeighborhood() : "";
 
+            String addressParagraph2 = "";
+            addressParagraph2 += (socialProfile.getCityId() != null) ? socialProfile.getCityId().getName() + ", " : "";
+            addressParagraph2 += (socialProfile.getStateId() != null) ? socialProfile.getStateId().getName() + ", " : "";
+            addressParagraph2 += (socialProfile.getCountryId() != null) ? socialProfile.getCountryId().getName() : "";
+
             Paragraph pEnd1 = new Paragraph(addressParagraph1, f5);
-            Paragraph pEnd2 = new Paragraph(socialProfile.getCityId().getName() + ", " + socialProfile.getStateId().getName() + ", " + socialProfile.getCountryId().getName(), f5);
+            Paragraph pEnd2 = new Paragraph(addressParagraph2, f5);
             Paragraph pEnd3 = new Paragraph(socialProfile.getZipcode(), f5);
 
             p1.setAlignment(Element.ALIGN_CENTER);
@@ -347,6 +410,10 @@ public class ProfileViewBean implements Serializable {
         cityJpaController = new CityJpaController();
         stateJpaController = new StateJpaController();
         countryJpaController = new CountryJpaController();
+        scholarityJpaController = new ScholarityJpaController();
+        educationsJpaController = new EducationsJpaController();
+        educationsNameJpaController = new EducationsNameJpaController();
+        educationsLocationJpaController = new EducationsLocationJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
@@ -360,6 +427,7 @@ public class ProfileViewBean implements Serializable {
         countryList = countryJpaController.findCountryEntities();
         stateList = new ArrayList<>();
         cityList = new ArrayList<>();
+        scholarityList = scholarityJpaController.findScholarityEntities();
 
         cropCoordinates = new Integer[6];
         editableFieldValues = new Object[7];
@@ -461,5 +529,13 @@ public class ProfileViewBean implements Serializable {
 
     public void setCountryList(List<Country> countryList) {
         this.countryList = countryList;
+    }
+
+    public List<Scholarity> getScholarityList() {
+        return scholarityList;
+    }
+
+    public void setScholarityList(List<Scholarity> scholarityList) {
+        this.scholarityList = scholarityList;
     }
 }

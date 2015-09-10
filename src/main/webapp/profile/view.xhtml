@@ -447,7 +447,7 @@
                                     </ui:fragment>
                                 </ui:fragment>
                                 <ui:fragment rendered="#{profileViewBean.socialProfile.phone == null and profileViewBean.himself}">
-                                    <a class="add-new">
+                                    <a class="add-new add-new-phone">
                                         <i class="fa fa-plus-square"></i> 
                                         <span>Adicionar telefone</span>
                                     </a>
@@ -516,21 +516,21 @@
                                     <h:inputText pt:placeholder="Número" pt:type="number" styleClass="editable-field editable-number" value="#{profileViewBean.editableFieldValues[1]}"/><br/>
                                     <h:inputText pt:placeholder="Bairro" styleClass="editable-field editable-neighborhood" value="#{profileViewBean.editableFieldValues[2]}"/>
                                     <h:inputText pt:placeholder="CEP" styleClass="editable-field editable-cep" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
-                                    <div class="select">
-                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[6]}" class="country">
+                                    <div class="select location">
+                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[6]}" class="country"> 
                                             <f:selectItem itemLabel="País" itemValue=""/>
                                             <f:selectItems value="#{profileViewBean.countryList}" var="country" itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                             <f:ajax event="change" listener="#{profileViewBean.loadStates()}" render="state-container city-container"/>
                                         </h:selectOneMenu>
                                     </div>
-                                    <h:panelGroup layout="block" id="state-container" class="select">
+                                    <h:panelGroup layout="block" id="state-container" class="select location">
                                         <h:selectOneMenu value="#{profileViewBean.editableFieldValues[5]}" class="state">
                                             <f:selectItem itemLabel="Estado" itemValue=""/>
                                             <f:selectItems value="#{profileViewBean.stateList}" var="state" itemLabel="#{state.name}" itemValue="#{state.id}"/>
                                             <f:ajax listener="#{profileViewBean.loadCities()}" render="city-container"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
-                                    <h:panelGroup layout="block" id="city-container" class="select">
+                                    <h:panelGroup layout="block" id="city-container" class="select location">
                                         <h:selectOneMenu value="#{profileViewBean.editableFieldValues[4]}" class="city">
                                             <f:selectItem itemLabel="Cidade" itemValue=""/>
                                             <f:selectItems value="#{profileViewBean.cityList}" var="city" itemLabel="#{city.name}" itemValue="#{city.id}"/>
@@ -552,27 +552,59 @@
                         <div class="profile-history-container">
                             <p class="profile-history-title">Educação</p>
                         </div>
-                        <ui:repeat value="#{profileViewBean.socialProfile.educationsCollection}" var="education">
-                            <div class="profile-history-list">
-                                <div class="profile-history-date">
-                                    <h3>
-                                        <h:outputText value="#{education.dataBegin}">
-                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                        </h:outputText> 
-                                        - 
-                                        <h:outputText value="#{education.dataEnd}">
-                                            <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                        </h:outputText>
-                                    </h3>
+                        <h:panelGroup layout="block" id="editable-profile-education" class="editable-container">
+                            <ui:repeat value="#{profileViewBean.socialProfile.educationsCollection}" var="education">
+                                <div class="profile-history-list">
+                                    <div class="profile-history-date">
+                                        <h3>
+                                            <h:outputText value="#{education.dataBegin}">
+                                                <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                            </h:outputText> 
+                                            - 
+                                            <h:outputText value="#{education.dataEnd}">
+                                                <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                            </h:outputText>
+                                            <ui:fragment rendered="#{education.dataEnd == null}">
+                                                <h:outputText value="ATUAL"/>
+                                            </ui:fragment>
+                                        </h3>
+                                    </div>
+                                    <div class="profile-history-description">
+                                        <p>#{education.nameId.scholarityId.description}</p>
+                                        <p>#{education.nameId.name}</p>
+                                        <p class="italic">#{education.locationId.name}</p>
+                                    </div>
+                                    <div class="clear"></div>
                                 </div>
-                                <div class="profile-history-description">
-                                    <p>#{education.nameId.scholarityId.description}</p>
-                                    <p>#{education.nameId.name}</p>
-                                    <p class="italic">#{education.locationId.name}</p>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                        </ui:repeat>
+                            </ui:repeat>
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('new-education') and profileViewBean.himself}">
+                                <a class="add-new">
+                                    <i class="fa fa-plus-square"></i> 
+                                    <span>Adicionar</span>
+                                </a>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('new-education')}">
+                                <h:panelGroup id="education-inputs" layout="block">
+                                    <h:inputText pt:placeholder="Data de início*" styleClass="editable-field editable-education-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                    <h:inputText pt:placeholder="Data de término" styleClass="editable-field editable-education-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
+                                    <div class="select scholarity">
+                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[2]}" styleClass="editable-education-scholarity">
+                                            <f:selectItem itemLabel="Nível de ensino*" itemValue=""/>
+                                            <f:selectItems value="#{profileViewBean.scholarityList}" var="scholarity" itemLabel="#{scholarity.description}" itemValue="#{scholarity.id}"/>
+                                        </h:selectOneMenu>
+                                    </div><br/>
+                                    <h:inputText pt:placeholder="Curso*" styleClass="editable-field editable-education-name" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                    <h:inputText pt:placeholder="Local*" styleClass="editable-field editable-education-location" value="#{profileViewBean.editableFieldValues[4]}"/><br/>
+                                    <h:commandLink styleClass="edit-button education-edit-button">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <f:ajax listener="#{profileViewBean.editField('new-education')}" execute="education-inputs" render="editable-profile-education"></f:ajax>
+                                    </h:commandLink>
+                                </h:panelGroup>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action new-education">
+                                <f:ajax listener="#{profileViewBean.showEditField('new-education')}" render="editable-profile-education"></f:ajax>
+                            </h:commandLink>
+                        </h:panelGroup>
                         <div class="profile-history-container">
                             <p class="profile-history-title">Experiência</p>
                         </div>

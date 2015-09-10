@@ -10,10 +10,26 @@ input:focus {
     outline: none;
 }
 
+::-webkit-input-placeholder { 
+    color: gray; 
+} 
+
+input:-moz-placeholder { 
+    color: gray; 
+} 
+
+textarea:-moz-placeholder { 
+    color: gray; 
+}​
+
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
 }
 
 textarea:focus {

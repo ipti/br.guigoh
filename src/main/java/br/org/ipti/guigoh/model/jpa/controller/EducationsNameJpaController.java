@@ -242,15 +242,12 @@ public class EducationsNameJpaController implements Serializable {
         }
     }
 
-    public EducationsName findEducationsNameByName(EducationsName nameId) {
+    public EducationsName findEducationsNameByName(String name) {
         EntityManager em = getEntityManager();
         try {
-            EducationsName educationsNametemp = (EducationsName) em.createNativeQuery("select * from educations_name "
-                    + "where (UPPER(name) like '" + nameId.getName().toUpperCase() + "') ", EducationsName.class).getSingleResult();
-            if (educationsNametemp == null) {
-                return new EducationsName();
-            }
-            return educationsNametemp;
+            EducationsName educationsName = (EducationsName) em.createNativeQuery("select * from educations_name "
+                    + "where (UPPER(name) like '" + name.toUpperCase() + "') ", EducationsName.class).getSingleResult();
+            return educationsName;
         } catch (NoResultException e) {
             return null;
         } finally {
