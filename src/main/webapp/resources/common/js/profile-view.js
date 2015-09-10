@@ -50,9 +50,9 @@ $('#browse-photo').change(function (e) {
                     if (imageWidth > widthMin && imageHeight > heightMin) {
                         $('.image-error').text("");
                         if (imageWidth > imageHeight) {
-                            $(this).css("max-width", "750px");
+                            $(this).css("max-width", "650px");
                         } else {
-                            $(this).css("max-height", "500px");
+                            $(this).css("max-height", "400px");
                         }
                         document.getElementById("open-image-cropping-modal").click();
                         $(this).Jcrop({
