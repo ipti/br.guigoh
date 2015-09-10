@@ -7,15 +7,15 @@
     <ui:define name="title">#{localeBean.getString('Perfil')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/lib/css/jquery.Jcrop.min.css"></link>
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/profile-view.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/lib/css/jquery.Jcrop.min.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/profile-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="content">
         <f:metadata>
             <f:event type="preRenderComponent" listener="#{profileViewBean.init()}"/>
         </f:metadata>
-        <h:form prependId="false" enctype="multipart/form-data">
+        <h:form prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
             <h:inputHidden id="social-profile-id" value="#{profileViewBean.socialProfile.socialProfileId}"/>
             <h:inputHidden id="social-profile-name" value="#{profileViewBean.socialProfile.name}"/>
             <div class="profile-cover-image">
@@ -30,7 +30,7 @@
                 <p class="image-error"></p>
                 <div class="profile-name">
                     <h1>#{profileViewBean.socialProfile.name}</h1>
-                    <h:panelGroup layout="block" id="editable-profile-name" class="editable-container">
+                    <h:panelGroup layout="block" id="editable-profile-occupation" class="editable-container">
                         <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('occupation')}">
                             <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name != null}">
                                 <p>#{profileViewBean.socialProfile.occupationsId.name}</p>
@@ -49,11 +49,11 @@
                             <h:inputText pt:placeholder="Qual a sua ocupação?" id="occupation-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
                             <h:commandLink styleClass="edit-button">
                                 <i class="fa fa-chevron-circle-right"></i>
-                                <f:ajax listener="#{profileViewBean.editField('occupation')}" execute="occupation-input" render="editable-profile-name profile-resume-left"></f:ajax>
+                                <f:ajax listener="#{profileViewBean.editField('occupation')}" execute="occupation-input" render="editable-profile-occupation editable-profile-occupation-2"></f:ajax>
                             </h:commandLink>
                         </ui:fragment>
                         <h:commandLink styleClass="add-new-action occupation">
-                            <f:ajax listener="#{profileViewBean.showEditField('occupation')}" render="editable-profile-name"></f:ajax>
+                            <f:ajax listener="#{profileViewBean.showEditField('occupation')}" render="editable-profile-occupation"></f:ajax>
                         </h:commandLink>
                     </h:panelGroup>
                 </div>
@@ -61,7 +61,7 @@
                     <h:panelGroup layout="block" id="editable-profile-status" class="editable-container">
                         <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('description')}">
                             <ui:fragment rendered="#{profileViewBean.socialProfile.description != null}">
-                                <p>#{profileViewBean.socialProfile.description}</p>
+                                <p class="inline">#{profileViewBean.socialProfile.description}</p>
                                 <ui:fragment rendered="#{profileViewBean.himself}">
                                     <i class="edit-pencil fa fa-pencil"></i>
                                 </ui:fragment>
@@ -407,25 +407,145 @@
             <div id="profile-container-resume" class="profile-container">
                 <div class="profile-column-left">
                     <div class="profile-resume-left">
-                        <h:panelGroup layout="block" id="profile-resume-left">
-                            <p class="profile-resume-title">Currículo</p>
-                            <p class="profile-resume-name">#{profileViewBean.socialProfile.name}</p>
-                            <p class="profile-resume-ocupation">#{profileViewBean.socialProfile.occupationsId.name}</p>
+                        <p class="profile-resume-title">Currículo</p>
+                        <p class="profile-resume-name">#{profileViewBean.socialProfile.name}</p>
+                        <h:panelGroup layout="block" id="editable-profile-occupation-2" class="editable-container">
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('occupation')}">
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name != null}">
+                                    <p class="profile-resume-occupation">#{profileViewBean.socialProfile.occupationsId.name}</p>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <i class="edit-pencil fa fa-pencil"></i>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name == null and profileViewBean.himself}">
+                                    <a class="add-new">
+                                        <i class="fa fa-plus-square"></i> 
+                                        <span>Adicionar ocupação</span>
+                                    </a>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('occupation')}">
+                                <h:inputText pt:placeholder="Qual a sua ocupação?" id="occupation-2-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
+                                <h:commandLink styleClass="edit-button">
+                                    <i class="fa fa-chevron-circle-right"></i>
+                                    <f:ajax listener="#{profileViewBean.editField('occupation')}" execute="occupation-2-input" render="editable-profile-occupation-2 editable-profile-occupation"></f:ajax>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action occupation-2">
+                                <f:ajax listener="#{profileViewBean.showEditField('occupation')}" render="editable-profile-occupation-2"></f:ajax>
+                            </h:commandLink>
                         </h:panelGroup>
                     </div>
                     <div class="profile-resume-right">
                         <p class="bold">#{profileViewBean.socialProfile.users.username}</p>
-                        <p class="bold">#{profileViewBean.socialProfile.phone}</p><br/>
-                        <p>
-                            #{profileViewBean.socialProfile.address}<ui:fragment rendered="#{profileViewBean.socialProfile.address != null and profileViewBean.socialProfile.number != null}">, </ui:fragment>
-                                #{profileViewBean.socialProfile.number}
-                        </p>
-                        <p> 
-                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null}">Bairro #{profileViewBean.socialProfile.neighborhood}</ui:fragment>
-                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null and profileViewBean.socialProfile.zipcode != null}">. </ui:fragment>
-                                #{profileViewBean.socialProfile.zipcode}
-                        </p>
-                        <p>#{profileViewBean.socialProfile.cityId.name} - #{profileViewBean.socialProfile.stateId.name} - #{profileViewBean.socialProfile.countryId.name}</p>
+                        <h:panelGroup layout="block" id="editable-profile-phone" class="editable-container">
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('phone')}">
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.phone != null}">
+                                    <p class="bold inline">#{profileViewBean.socialProfile.phone}</p>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <i class="edit-pencil fa fa-pencil"></i>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.phone == null and profileViewBean.himself}">
+                                    <a class="add-new">
+                                        <i class="fa fa-plus-square"></i> 
+                                        <span>Adicionar telefone</span>
+                                    </a>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('phone')}">
+                                <h:inputText pt:placeholder="Telefone" id="phone-input" maxlength="14" styleClass="editable-field " value="#{profileViewBean.editableFieldValue}"/>
+                                <h:commandLink styleClass="edit-button">
+                                    <i class="fa fa-chevron-circle-right"></i>
+                                    <f:ajax listener="#{profileViewBean.editField('phone')}" execute="phone-input" render="editable-profile-phone"></f:ajax>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action phone">
+                                <f:ajax listener="#{profileViewBean.showEditField('phone')}" render="editable-profile-phone"></f:ajax>
+                            </h:commandLink>
+                        </h:panelGroup>
+                        <br/>
+                        <h:panelGroup layout="block" id="editable-profile-address" class="editable-container">
+                            <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('address')}">
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.address != null
+                                                         or profileViewBean.socialProfile.number != null 
+                                                         or profileViewBean.socialProfile.neighborhood != null 
+                                                         or profileViewBean.socialProfile.zipcode != null 
+                                                         or profileViewBean.socialProfile.cityId.name != null 
+                                                         or profileViewBean.socialProfile.stateId.name != null 
+                                                         or profileViewBean.socialProfile.countryId.name != null }">
+                                    <div class="inline-block">
+                                        <p>
+                                            #{profileViewBean.socialProfile.address}<ui:fragment rendered="#{profileViewBean.socialProfile.address != null and profileViewBean.socialProfile.number != null}">, </ui:fragment>
+                                                #{profileViewBean.socialProfile.number}
+                                        </p>
+                                        <p> 
+                                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null}">Bairro #{profileViewBean.socialProfile.neighborhood}</ui:fragment>
+                                            <ui:fragment rendered="#{profileViewBean.socialProfile.neighborhood != null and profileViewBean.socialProfile.zipcode != null}">. </ui:fragment>
+                                                #{profileViewBean.socialProfile.zipcode}
+                                        </p>
+                                        <p>
+                                            #{profileViewBean.socialProfile.cityId.name}
+                                            <ui:fragment rendered="#{profileViewBean.socialProfile.cityId.name != null}"> - </ui:fragment> 
+                                                #{profileViewBean.socialProfile.stateId.name}
+                                            <ui:fragment rendered="#{profileViewBean.socialProfile.stateId.name != null}"> - </ui:fragment> 
+                                                #{profileViewBean.socialProfile.countryId.name}
+                                        </p>
+                                    </div>
+                                    <ui:fragment rendered="#{profileViewBean.himself}">
+                                        <i class="edit-pencil fa fa-pencil"></i>
+                                    </ui:fragment>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{profileViewBean.socialProfile.address == null 
+                                                         and profileViewBean.socialProfile.number == null 
+                                                         and profileViewBean.socialProfile.neighborhood == null 
+                                                         and profileViewBean.socialProfile.zipcode == null 
+                                                         and profileViewBean.socialProfile.cityId.name == null 
+                                                         and profileViewBean.socialProfile.stateId.name == null 
+                                                         and profileViewBean.socialProfile.countryId.name == null 
+                                                         and profileViewBean.himself}">
+                                    <a class="add-new">
+                                        <i class="fa fa-plus-square"></i> 
+                                        <span>Adicionar endereço</span>
+                                    </a>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.editFieldList.contains('address')}">
+                                <h:panelGroup id="address-inputs" layout="block">
+                                    <h:inputText pt:placeholder="Endereço" styleClass="editable-field editable-address" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                    <h:inputText pt:placeholder="Número" pt:type="number" styleClass="editable-field editable-number" value="#{profileViewBean.editableFieldValues[1]}"/><br/>
+                                    <h:inputText pt:placeholder="Bairro" styleClass="editable-field editable-neighborhood" value="#{profileViewBean.editableFieldValues[2]}"/>
+                                    <h:inputText pt:placeholder="CEP" styleClass="editable-field editable-cep" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                    <div class="select">
+                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[6]}" class="country">
+                                            <f:selectItem itemLabel="País" itemValue=""/>
+                                            <f:selectItems value="#{profileViewBean.countryList}" var="country" itemLabel="#{country.name}" itemValue="#{country.id}"/>
+                                            <f:ajax event="change" listener="#{profileViewBean.loadStates()}" render="state-container city-container"/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <h:panelGroup layout="block" id="state-container" class="select">
+                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[5]}" class="state">
+                                            <f:selectItem itemLabel="Estado" itemValue=""/>
+                                            <f:selectItems value="#{profileViewBean.stateList}" var="state" itemLabel="#{state.name}" itemValue="#{state.id}"/>
+                                            <f:ajax listener="#{profileViewBean.loadCities()}" render="city-container"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" id="city-container" class="select">
+                                        <h:selectOneMenu value="#{profileViewBean.editableFieldValues[4]}" class="city">
+                                            <f:selectItem itemLabel="Cidade" itemValue=""/>
+                                            <f:selectItems value="#{profileViewBean.cityList}" var="city" itemLabel="#{city.name}" itemValue="#{city.id}"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:commandLink styleClass="edit-button">
+                                    <i class="fa fa-chevron-circle-right"></i>
+                                    <f:ajax listener="#{profileViewBean.editField('address')}" execute="address-inputs" render="editable-profile-address"></f:ajax>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <h:commandLink styleClass="add-new-action address">
+                                <f:ajax listener="#{profileViewBean.showEditField('address')}" render="editable-profile-address"></f:ajax>
+                            </h:commandLink>
+                        </h:panelGroup>
                     </div>
                     <div class="clear"></div>
                     <div class="profile-resume-history">
@@ -515,9 +635,9 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/lib/js/jquery.Jcrop.min.js"></script>
-        <script type="text/javascript" src="/resources/lib/js/jquery.mask.min.js"></script>
-        <script type="text/javascript" src="/resources/common/js/profile-view.js"></script>
+        <script type="text/javascript" src="../resources/lib/js/jquery.Jcrop.min.js"></script>
+        <script type="text/javascript" src="../resources/lib/js/jquery.maskedinput.min.js"></script>
+        <script type="text/javascript" charset="UTF-8" src="../resources/common/js/profile-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

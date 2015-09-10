@@ -14,10 +14,6 @@
     display: block;
 }
 
-.friend-search:focus {
-    outline: none;
-}
-
 .user-arrow {
     background: url('../images/menu-icons.png') no-repeat;
     background-position: -708px -94px;

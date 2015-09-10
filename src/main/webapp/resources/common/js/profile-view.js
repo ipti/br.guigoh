@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 $(document).on("keypress", '.editable-field', function (e) {
     if (e.keyCode === 13) {
-        $(this).parent().children('.edit-button').click();
+        $(this).closest('.editable-container').children('.edit-button').click();
     }
 });
 
@@ -111,13 +111,19 @@ $('.tab').click(function () {
 $(document).on("keyup", '#birth-date-input', function () {
     var reg = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
     var birthDate = $(this).val();
-    if (birthDate.length === 10) {
+    if (birthDate.indexOf("_") === -1) {
         if (!birthDate.match(reg)) {
             $(this).val("");
         }
-        if (birthDate.split("/")[2] > new Date().getFullYear()){
+        if (birthDate.split("/")[2] > new Date().getFullYear()) {
             $(this).val("");
         }
+    }
+});
+
+$(document).on("keyup", '.editable-number', function (e) {
+    if ($(this).val() > 9999) {
+        $(this).val($(this).val().slice(0,4));
     }
 });
 
@@ -127,25 +133,55 @@ jsf.ajax.addOnEvent(function (data) {
             document.getElementById("close-image-cropping-modal").click();
         } else if ($(data.source).hasClass("add-new-action")) {
             if ($(data.source).hasClass("occupation")) {
-                $('#occupation-input').focus();
+                $('#occupation-input').focusTextToEnd();
             } else if ($(data.source).hasClass("description")) {
-                $('#description-input').focus();
+                $('#description-input').focusTextToEnd();
             } else if ($(data.source).hasClass("matters")) {
-                $('#matters-input').focus();
+                $('#matters-input').focusTextToEnd();
             } else if ($(data.source).hasClass("musics")) {
-                $('#musics-input').focus();
+                $('#musics-input').focusTextToEnd();
             } else if ($(data.source).hasClass("books")) {
-                $('#books-input').focus();
+                $('#books-input').focusTextToEnd();
             } else if ($(data.source).hasClass("movies")) {
-                $('#movies-input').focus();
+                $('#movies-input').focusTextToEnd();
             } else if ($(data.source).hasClass("sports")) {
-                $('#sports-input').focus();
+                $('#sports-input').focusTextToEnd();
             } else if ($(data.source).hasClass("hobbies")) {
-                $('#hobbies-input').focus();
+                $('#hobbies-input').focusTextToEnd();
             } else if ($(data.source).hasClass("birth-date")) {
                 $('#birth-date-input').mask("99/99/9999");
-                $('#birth-date-input').focus();
+                $('#birth-date-input').focusTextToEnd();
+            } else if ($(data.source).hasClass("occupation-2")) {
+                $('#occupation-2-input').focusTextToEnd();
+            } else if ($(data.source).hasClass("phone")) {
+                $('#phone-input').focusTextToEnd();
+                $('#phone-input').focusout(function () {
+                    var phone, element;
+                    element = $(this);
+                    element.unmask();
+                    phone = element.val().replace(/\D/g, '');
+                    if (phone.length > 10) {
+                        element.mask("(99) 99999-999?9");
+                    } else {
+                        element.mask("(99) 9999-9999?9");
+                    }
+                }).trigger('focusout');
+            } else if ($(data.source).hasClass("address")) {
+                $('#address-input').focusTextToEnd();
+                $('.editable-cep').mask("99999-999");
             }
         }
+        $('select').each(changeSelectColors);
+        $('select').on("change", changeSelectColors);
+        $('select').on("change", checkLength);
     }
 });
+
+(function ($) {
+    $.fn.focusTextToEnd = function () {
+        this.focus();
+        var $thisVal = this.val();
+        this.val('').val($thisVal);
+        return this;
+    }
+}(jQuery));

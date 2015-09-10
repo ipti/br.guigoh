@@ -6,6 +6,20 @@ html, body {
     height: 100%;
 }
 
+input:focus {
+    outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+textarea:focus {
+    outline: none;
+}
+
 body {
     background: url(../images/bg-stripe.png) #A9A9A9;
     font-family: verdana, "Bitstream Vera Sans", "DejaVu Sans",arial, sans-serif;

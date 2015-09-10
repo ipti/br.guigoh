@@ -15,10 +15,6 @@
     margin-bottom: 55px;
 }
 
-.general-search input:focus {
-    outline: none;
-}
-
 .general-search img {
     position: absolute;
     width: 20px;

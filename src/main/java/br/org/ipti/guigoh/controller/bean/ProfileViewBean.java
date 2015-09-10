@@ -4,6 +4,8 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
+import br.org.ipti.guigoh.model.entity.City;
+import br.org.ipti.guigoh.model.entity.Country;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.Experiences;
@@ -11,11 +13,15 @@ import br.org.ipti.guigoh.model.entity.Friends;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Occupations;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.entity.State;
+import br.org.ipti.guigoh.model.jpa.controller.CityJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.CountryJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.StateJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
@@ -58,12 +64,18 @@ public class ProfileViewBean implements Serializable {
     private List<EducationalObject> educationalObjectList;
     private List<String> editFieldList;
     private List<Interests> interestList;
+    private List<City> cityList;
+    private List<State> stateList;
+    private List<Country> countryList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
     private OccupationsJpaController occupationsJpaController;
     private InterestsJpaController interestsJpaController;
+    private CityJpaController cityJpaController;
+    private StateJpaController stateJpaController;
+    private CountryJpaController countryJpaController;
 
     private Part uploadedPhoto;
 
@@ -71,6 +83,7 @@ public class ProfileViewBean implements Serializable {
 
     private Boolean himself;
     private String editableFieldValue;
+    private Object[] editableFieldValues;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -136,8 +149,31 @@ public class ProfileViewBean implements Serializable {
             case "birthDate":
                 editableFieldValue = socialProfile.getBirthDate();
                 break;
+            case "phone":
+                editableFieldValue = socialProfile.getPhone();
+                break;
+            case "address":
+                editableFieldValues[0] = socialProfile.getAddress();
+                editableFieldValues[1] = socialProfile.getNumber();
+                editableFieldValues[2] = socialProfile.getNeighborhood();
+                editableFieldValues[3] = socialProfile.getZipcode();
+                editableFieldValues[4] = (socialProfile.getCityId() == null) ? null : String.valueOf(socialProfile.getCityId().getId());
+                editableFieldValues[5] = (socialProfile.getStateId() == null) ? null : String.valueOf(socialProfile.getStateId().getId());
+                editableFieldValues[6] = (socialProfile.getCountryId() == null) ? null : String.valueOf(socialProfile.getCountryId().getId());
+                loadStates();
+                loadCities();
+                break;
         }
         editFieldList.add(field);
+    }
+    
+    public void loadStates() {
+        stateList = (editableFieldValues[6] != null) ? stateJpaController.findStatesByCountryId(Integer.parseInt((String) editableFieldValues[6])): new ArrayList<>();
+        cityList = new ArrayList<>();
+    }
+
+    public void loadCities() {
+        cityList = (editableFieldValues[5] != null) ? cityJpaController.findCitiesByStateId(Integer.parseInt((String) editableFieldValues[5])) : new ArrayList<>();
     }
 
     public void editField(String field) throws Exception {
@@ -177,6 +213,18 @@ public class ProfileViewBean implements Serializable {
                 break;
             case "birthDate":
                 socialProfile.setBirthDate(editableFieldValue);
+                break;
+            case "phone":
+                socialProfile.setPhone(editableFieldValue);
+                break;
+            case "address":
+                socialProfile.setAddress((String) editableFieldValues[0]);
+                socialProfile.setNumber((String) editableFieldValues[1]);
+                socialProfile.setNeighborhood((String) editableFieldValues[2]);
+                socialProfile.setZipcode((String) editableFieldValues[3]);
+                socialProfile.setCityId((editableFieldValues[4] != null) ? cityJpaController.findCity(Integer.parseInt((String) editableFieldValues[4])) : null);
+                socialProfile.setStateId((editableFieldValues[5] != null) ? stateJpaController.findState(Integer.parseInt((String) editableFieldValues[5])) : null);
+                socialProfile.setCountryId((editableFieldValues[6] != null) ? countryJpaController.findCountry(Integer.parseInt((String) editableFieldValues[6])) : null);
                 break;
         }
         socialProfileJpaController.edit(socialProfile);
@@ -296,6 +344,9 @@ public class ProfileViewBean implements Serializable {
         educationalObjectJpaController = new EducationalObjectJpaController();
         occupationsJpaController = new OccupationsJpaController();
         interestsJpaController = new InterestsJpaController();
+        cityJpaController = new CityJpaController();
+        stateJpaController = new StateJpaController();
+        countryJpaController = new CountryJpaController();
 
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
@@ -306,8 +357,12 @@ public class ProfileViewBean implements Serializable {
         educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
         editFieldList = new ArrayList<>();
         interestList = interestsJpaController.findInterestsEntities();
+        countryList = countryJpaController.findCountryEntities();
+        stateList = new ArrayList<>();
+        cityList = new ArrayList<>();
 
         cropCoordinates = new Integer[6];
+        editableFieldValues = new Object[7];
 
         himself = socialProfile.getTokenId().equals(CookieService.getCookie("token"));
     }
@@ -374,5 +429,37 @@ public class ProfileViewBean implements Serializable {
 
     public void setInterestList(List<Interests> interestList) {
         this.interestList = interestList;
+    }
+
+    public Object[] getEditableFieldValues() {
+        return editableFieldValues;
+    }
+
+    public void setEditableFieldValues(Object[] editableFieldValues) {
+        this.editableFieldValues = editableFieldValues;
+    }
+
+    public List<City> getCityList() {
+        return cityList;
+    }
+
+    public void setCityList(List<City> cityList) {
+        this.cityList = cityList;
+    }
+
+    public List<State> getStateList() {
+        return stateList;
+    }
+
+    public void setStateList(List<State> stateList) {
+        this.stateList = stateList;
+    }
+
+    public List<Country> getCountryList() {
+        return countryList;
+    }
+
+    public void setCountryList(List<Country> countryList) {
+        this.countryList = countryList;
     }
 }
