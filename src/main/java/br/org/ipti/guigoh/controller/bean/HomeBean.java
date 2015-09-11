@@ -24,10 +24,10 @@ public class HomeBean implements Serializable {
 
     private Boolean existsMoreEducationalObjects;
     private Boolean existsMoreActivities;
-    
+
     private EducationalObjectJpaController educationalObjectJpaController;
     private DiscussionTopicJpaController discussionTopicJpaController;
-    
+
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
@@ -41,7 +41,7 @@ public class HomeBean implements Serializable {
     private void getEducationalObjects() {
         educationalObjectList = educationalObjectJpaController.getLatestActiveEducationalObjects(6);
     }
-    
+
     private void getActivities() {
         newActivityList = discussionTopicJpaController.getLastActivities(6);
     }
@@ -57,14 +57,18 @@ public class HomeBean implements Serializable {
     }
 
     private void checkIfExistsMoreEducationalObjects() {
-        if (educationalObjectJpaController.getMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()) {
-            setExistsMoreEducationalObjects(false);
+        if (!educationalObjectList.isEmpty()) {
+            if (educationalObjectJpaController.getMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()) {
+                setExistsMoreEducationalObjects(false);
+            } else {
+                setExistsMoreEducationalObjects(true);
+            }
         } else {
-            setExistsMoreEducationalObjects(true);
+            setExistsMoreEducationalObjects(false);
         }
     }
-    
-    public void getMoreActivities(){
+
+    public void getMoreActivities() {
         List<NewActivity> outList = newActivityList;
         List<NewActivity> moreActivities = discussionTopicJpaController.getMoreActivities(newActivityList.get(newActivityList.size() - 1).getData());
         moreActivities.stream().forEach((temp) -> {
@@ -73,12 +77,16 @@ public class HomeBean implements Serializable {
         setNewActivityList(outList);
         checkIfExistsMoreActivities();
     }
-    
-    private void checkIfExistsMoreActivities(){
-        if (discussionTopicJpaController.getMoreActivities(newActivityList.get(newActivityList.size() - 1).getData()).isEmpty()) {
-            setExistsMoreActivities(false);
+
+    private void checkIfExistsMoreActivities() {
+        if (!newActivityList.isEmpty()) {
+            if (discussionTopicJpaController.getMoreActivities(newActivityList.get(newActivityList.size() - 1).getData()).isEmpty()) {
+                setExistsMoreActivities(false);
+            } else {
+                setExistsMoreActivities(true);
+            }
         } else {
-            setExistsMoreActivities(true);
+            setExistsMoreActivities(false);
         }
     }
 
@@ -118,5 +126,5 @@ public class HomeBean implements Serializable {
     public void setExistsMoreActivities(Boolean existsMoreActivities) {
         this.existsMoreActivities = existsMoreActivities;
     }
-    
+
 }

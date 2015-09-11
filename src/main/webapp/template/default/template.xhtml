@@ -9,6 +9,7 @@ and open the template in the editor.
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:insert name="metadata"></ui:insert>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <!-- BEGIN PAGE STYLES -->
@@ -24,11 +25,77 @@ and open the template in the editor.
     <body>
         <div class="container">
             <header>
-                <ui:include src="/template/default/header.xhtml"></ui:include>
+                <h:form>
+                    <div class="header-top">
+                        <p>
+                            <ui:fragment rendered="#{templateBean.admin}">
+                                <h:outputText styleClass="registered-users-quantity"  value="#{templateBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
+                                <span class="header-top-separator">|</span>
+                                <span id="registered-users-online">0 online</span>
+                                <span class="header-top-separator">|</span>
+                            </ui:fragment>
+                            <!--<a href="#">SELECT LANGUAGE</a>-->
+                            <ui:param name="url" value="#{request.servletPath}"/>
+                            <h:commandLink styleClass="locale ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}" value="PORT"/>
+                            <span class="header-top-separator">|</span>
+                            <h:commandLink styleClass="locale enUS" action="#{localeBean.changeLocale(url, 'enUS')}" value="ENG"/>
+                            <span class="header-top-separator">|</span>
+                            <h:commandLink styleClass="locale frFR" action="#{localeBean.changeLocale(url, 'frFR')}" value="FRA"/>
+                            <!--<a href="#">Ajuda do Guigoh</a>-->
+                            <ui:fragment rendered="#{templateBean.admin || templateBean.reviser}">
+                                <span class="header-top-separator">|</span>
+                                <h:commandLink action="/admin/view.xhtml?faces-redirect=true" >#{localeBean.getString('Admin')}</h:commandLink>
+                            </ui:fragment>
+                        </p>
+
+                    </div>
+                    <div class="header-navbar">
+                        <div class="header-logo">
+                            <a href="/home.xhtml">
+                                <img src="../../resources/common/images/logo-guigoh-art.png"/>
+                            </a>						
+                        </div>
+                        <nav class="nav-main">
+                            <ul>
+                                <li class="menu-icons">
+                                    <a class="menu-icon-one" href="">#{localeBean.getString('Biblioteca de Objetos Educacionais')}</a>
+                                </li>
+                                <li class="menu-icons">
+                                    <a class="menu-icon-two" href="/educational-object/publish.xhtml">#{localeBean.getString('Publicação de Objetos Educacionais')}</a>
+                                </li>
+                                <li class="menu-icons">
+                                    <a class="menu-icon-three" href="/study-group/view.xhtml?id=#{templateBean.interestId}">#{localeBean.getString('Grupo de Estudos')}</a>
+                                </li>
+                                <li class="menu-icons">
+                                    <a class="menu-icon-four" href="/friend/view.xhtml">#{localeBean.getString('Amigos')}</a>
+                                </li>
+                                <li class="menu-icons">
+                                    <a class="menu-icon-five" href="/search/view.xhtml">#{localeBean.getString('Buscar')}</a>
+                                </li>
+                                <div class="clear"></div>
+                            </ul>
+                        </nav>
+                        <div class="header-profile">
+                            <div class="greetings">
+                                <p>#{localeBean.getString('Olá, ')}</p>
+                                <p><a class="logged-user" href="/profile/view.xhtml?id=#{templateBean.socialProfile.socialProfileId}">#{templateBean.socialProfile.name}</a></p>
+                                <div class="down-arrow pull-right"/>
+                                <div id="logged-user-menu-box">
+                                    <p><img src="../resources/common/images/icon-profile.jpg"></img><a href="/profile/view.xhtml?id=#{templateBean.socialProfile.socialProfileId}">#{localeBean.getString('Meu perfil')}</a></p>
+                                    <!--<p><img src="../resources/common/images/icon-account.jpg"></img><span class="first"><h:commandLink action="#{templateBean.logout()}">minha conta</h:commandLink></span></p>-->
+                                    <!--<p><img src="../resources/common/images/icon-guigoh-gray.jpg"></img><span class="first"><h:commandLink action="#{templateBean.logout()}">sobre o guigoh</h:commandLink></span></p>-->
+                                    <p><img src="../resources/common/images/icon-close.jpg"></img><h:commandLink action="#{templateBean.logout()}">#{localeBean.getString('Sair')}</h:commandLink></p>
+                                </div>
+                            </div>
+                            <a href="/profile/view.xhtml?id=#{templateBean.socialProfile.socialProfileId}">
+                                <img class="profile-picture" src="#{templateBean.socialProfile.photo}"/>
+                            </a>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </h:form>
             </header>
-            <section id="content" >
-                <ui:insert name="content"></ui:insert>
-            </section>
+            <ui:insert name="content"></ui:insert>
         </div>
         <div class="messenger-container">
             <div class="messenger"> 
@@ -49,11 +116,10 @@ and open the template in the editor.
         <script src="/resources/lib/js/jquery-migrate-1.2.1.min.js"></script>
         <script src="/resources/lib/js/js.cookie.min.js"></script>
         <script type="text/javascript">
-            var logged_social_profile_id = #{headerBean.socialProfile.socialProfileId};
+            var logged_social_profile_id = #{templateBean.socialProfile.socialProfileId};
         </script>
         <script src="/resources/common/js/messenger.js"></script>
-        <script src="/resources/common/js/general.js"></script>
-        <script src="/resources/common/js/header.js"></script>
+        <script src="/resources/common/js/global.js"></script>
         <ui:insert name="scripts"></ui:insert>
         <!-- END PAGE SCRIPTS -->
     </body>

@@ -265,41 +265,11 @@ public class DiscussionTopicJpaController implements Serializable {
         }
     }
 
-    public List<DiscussionTopic> findDiscussionTopicsByTheme(Integer id) {
+    public List<DiscussionTopic> findDiscussionTopicsByInterestId(Integer id, Integer quantity) {
         EntityManager em = getEntityManager();
         try {
             List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
-                    + "where theme_id = " + id + " and status = 'A' order by data DESC", DiscussionTopic.class).getResultList();
-            if (discussionTopicList == null) {
-                return new ArrayList<>();
-            }
-            return discussionTopicList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<DiscussionTopic> getDiscussionTopicsByExpression(String expression, String tag, Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-
-            String sql = "select distinct dt.* from discussion_topic dt "
-                    + "left join discussion_topic_msg dtm on dt.id = dtm.discussion_topic_id ";
-            if (tag != null) {
-                if (!tag.equals("")) {
-                    sql += "join topic_tags tt on dt.id = tt.discussion_topic_id ";
-                }
-            }
-            sql += "where dt.theme_id = " + id + " and dt.status = 'A' and "
-                    + "((UPPER(dt.title) like '%" + expression.toUpperCase() + "%') "
-                    + "or (UPPER(dt.body) like '%" + expression.toUpperCase() + "%') "
-                    + "or (UPPER(dtm.reply) like '%" + expression.toUpperCase() + "%')) ";
-            if (tag != null) {
-                if (!tag.equals("")) {
-                    sql += "and tt.tags_id = (select id from tags where name = '" + tag + "') ";
-                }
-            }
-            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery(sql, DiscussionTopic.class).getResultList();
+                    + "where theme_id = " + id + " and status = 'A' order by data DESC limit " + quantity, DiscussionTopic.class).getResultList();
             if (discussionTopicList == null) {
                 return new ArrayList<>();
             }
@@ -365,6 +335,30 @@ public class DiscussionTopicJpaController implements Serializable {
                             + "where dt.status = 'A' and (upper(dt.title) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')", DiscussionTopic.class).getResultList();
             return discussionTopicList;
         
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<DiscussionTopic> findMostAcessedTopics(Integer interestId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) 
+                    em.createNativeQuery("select * from discussion_topic "
+                            + "where status = 'A' and theme_id = '" + interestId + "' order by views limit 3 ", DiscussionTopic.class).getResultList();
+            return discussionTopicList;
+        
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<DiscussionTopic> getMoreDiscussionTopics(Integer interestId, Date date) {
+        EntityManager em = getEntityManager();
+        try {
+            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
+                    + "where status = 'A' and theme_id = '" + interestId + "' and data < '" + date + "' order by data desc limit 5", DiscussionTopic.class).getResultList();
+            return discussionTopicList;
         } finally {
             em.close();
         }

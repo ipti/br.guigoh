@@ -59,7 +59,6 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 /**
@@ -98,10 +97,11 @@ public class ProfileViewBean implements Serializable {
     private Part uploadedPhoto;
 
     private Integer[] cropCoordinates;
+    private Object[] editableFieldValues;
 
     private Boolean himself;
     private String editableFieldValue;
-    private Object[] editableFieldValues;
+    private Integer socialProfileId;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -211,6 +211,14 @@ public class ProfileViewBean implements Serializable {
     }
 
     public void editField(String field) throws Exception {
+        if (editableFieldValue != null && editableFieldValue.equals("")) {
+            editableFieldValue = null;
+        }
+        for (int i = 0; i < editableFieldValues.length; i++) {
+            if (editableFieldValues[i] != null && editableFieldValues[i].equals("")) {
+                editableFieldValues[i] = null;
+            }
+        }
         switch (field) {
             case "occupation":
                 Occupations occupation = null;
@@ -252,10 +260,10 @@ public class ProfileViewBean implements Serializable {
                 socialProfile.setPhone(editableFieldValue);
                 break;
             case "address":
-                socialProfile.setAddress((String) editableFieldValues[0]);
-                socialProfile.setNumber((String) editableFieldValues[1]);
-                socialProfile.setNeighborhood((String) editableFieldValues[2]);
-                socialProfile.setZipcode((String) editableFieldValues[3]);
+                socialProfile.setAddress((editableFieldValues[0] != null) ? (String) editableFieldValues[0] : null);
+                socialProfile.setNumber((editableFieldValues[1] != null) ? (String) editableFieldValues[1] : null);
+                socialProfile.setNeighborhood((editableFieldValues[2] != null) ? (String) editableFieldValues[2] : null);
+                socialProfile.setZipcode((editableFieldValues[3] != null) ? (String) editableFieldValues[3] : null);
                 socialProfile.setCityId((editableFieldValues[4] != null) ? cityJpaController.findCity(Integer.parseInt((String) editableFieldValues[4])) : null);
                 socialProfile.setStateId((editableFieldValues[5] != null) ? stateJpaController.findState(Integer.parseInt((String) editableFieldValues[5])) : null);
                 socialProfile.setCountryId((editableFieldValues[6] != null) ? countryJpaController.findCountry(Integer.parseInt((String) editableFieldValues[6])) : null);
@@ -455,11 +463,10 @@ public class ProfileViewBean implements Serializable {
         experiencesJpaController = new ExperiencesJpaController();
         experiencesLocationJpaController = new ExperiencesLocationJpaController();
 
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
+        if (socialProfileId == null) {
             socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         } else {
-            socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.valueOf(request.getParameter("id")));
+            socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
         }
         educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
         editFieldList = new ArrayList<>();
@@ -577,5 +584,13 @@ public class ProfileViewBean implements Serializable {
 
     public void setScholarityList(List<Scholarity> scholarityList) {
         this.scholarityList = scholarityList;
+    }
+
+    public Integer getSocialProfileId() {
+        return socialProfileId;
+    }
+
+    public void setSocialProfileId(Integer socialProfileId) {
+        this.socialProfileId = socialProfileId;
     }
 }

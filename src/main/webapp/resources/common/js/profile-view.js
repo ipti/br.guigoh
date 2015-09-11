@@ -119,12 +119,6 @@ $(document).on("keyup", '#birth-date-input, .editable-education-initial-date, .e
     }
 });
 
-$(document).on("keyup", '.editable-number', function (e) {
-    if ($(this).val() > 9999) {
-        $(this).val($(this).val().slice(0,4));
-    }
-});
-
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
         if ($(data.source).hasClass("upload-photo")) {

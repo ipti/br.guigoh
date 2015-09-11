@@ -7,73 +7,75 @@
     <ui:define name="title">#{localeBean.getString('Início')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/home.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+        <f:event type="preRenderView" listener="#{homeBean.init()}"/>
+    </ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:event type="preRenderComponent" listener="#{homeBean.init()}"/>
-        </f:metadata>
-        <h1>#{localeBean.getString("Últimos objetos educacionais")}</h1>
-        <h:form prependId="false">
-            <h:panelGroup layout="block" id="object-column" class="column">
-                <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject" >
-                    <div class="column-list-item">
-                        <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="column-list-image" src="#{educationalObject.image}"/></a>
-                        <h2 class="column-object-title"><a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a></h2>
-                        <small class="column-object-author"> #{localeBean.getString("Publicado por")} 
-                            <a href="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a>
-                        </small>
-                        <p class="column-object-date">
-                            <img src="/resources/common/images/clock.png"/>
-                            <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                            </h:outputText>
-                        </p>
-                        <p class="column-object-description">
-                            <!--descritivo do objeto educacional-->
-                            <ui:repeat var="tag" value="#{educationalObject.tagsCollection}">
-                                <span>##{tag.name}</span>
-                            </ui:repeat>
-                        </p>
-                        <p class="column-object-comments"><img src="/resources/common/images/comments.png"/>0</p>
-                        <div class="clear"></div>
-                    </div>
-                </ui:repeat>
-                <div class="load-more">
-                    <hr/>
-                    <h:commandLink class="load-more-objects" value="#{localeBean.getString('Carregar mais')}" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
-                        <f:ajax render="object-column"/>
-                    </h:commandLink>
-                    <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
-                    <hr/>
-                </div>
-            </h:panelGroup>
-            <aside>
-                <h:panelGroup layout="block" id="aside-container" class="aside-container">
-                    <h3>#{localeBean.getString("Novidades na rede")}</h3>
-                    <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
-                        <div class="aside-list-item">
-                            <a href="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
-                            <p class="aside-profile-name"><a href="/profile/view.xhtml?id=#{newActivity.socialProfile.socialProfileId}">#{newActivity.socialProfile.name}</a></p>
-                            <h:outputText class="aside-profile-action" value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
-                            <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
-                            <p class="aside-object-title"><a href="/discussion-topic/view.xhtml?id=#{newActivity.id}">&quot;#{newActivity.title}&quot;</a></p>
+        <section id="content">
+            <h1>#{localeBean.getString("Últimos objetos educacionais")}</h1>
+            <h:form prependId="false">
+                <h:panelGroup layout="block" id="object-column" class="column">
+                    <ui:repeat value="#{homeBean.educationalObjectList}" var="educationalObject" >
+                        <div class="column-list-item">
+                            <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="column-list-image" src="#{educationalObject.image}"/></a>
+                            <h2 class="column-object-title"><a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a></h2>
+                            <small class="column-object-author"> #{localeBean.getString("Publicado por")} 
+                                <a href="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a>
+                            </small>
+                            <p class="column-object-date">
+                                <img src="/resources/common/images/clock.png"/>
+                                <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                </h:outputText>
+                            </p>
+                            <p class="column-object-description">
+                                <!--descritivo do objeto educacional-->
+                                <ui:repeat var="tag" value="#{educationalObject.tagsCollection}">
+                                    <span class="tag">##{tag.name}</span>
+                                </ui:repeat>
+                            </p>
+                            <p class="column-object-comments"><img src="/resources/common/images/comments.png"/>0</p>
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>
                     <div class="load-more">
                         <hr/>
-                        <h:commandLink class="load-more-activities" value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
-                            <f:ajax render="aside-container"/>
+                        <h:commandLink class="load-more-objects" value="#{localeBean.getString('Carregar mais')}" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
+                            <f:ajax render="object-column"/>
                         </h:commandLink>
-                        <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Novidades na Rede')}" rendered="#{!homeBean.existsMoreActivities}"/>
+                        <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
                         <hr/>
                     </div>
                 </h:panelGroup>
-            </aside>
-            <div class="clear"></div>
-        </h:form>
+                <aside>
+                    <h:panelGroup layout="block" id="aside-container" class="aside-container">
+                        <h3>#{localeBean.getString("Novidades na rede")}</h3>
+                        <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
+                            <div class="aside-list-item">
+                                <a href="/discussion-topic/view.xhtml?id=#{newActivity.id}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
+                                <p class="aside-profile-name"><a href="/discussion-topic/view.xhtml?id=#{newActivity.id}">#{newActivity.socialProfile.name}</a></p>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
+                                <p class="aside-object-title"><a href="/discussion-topic/view.xhtml?id=#{newActivity.id}">&quot;#{newActivity.title}&quot;</a></p>
+                                <div class="clear"></div>
+                            </div>
+                        </ui:repeat>
+                        <div class="load-more">
+                            <hr/>
+                            <h:commandLink class="load-more-activities" value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
+                                <f:ajax render="aside-container"/>
+                            </h:commandLink>
+                            <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Novidades na Rede')}" rendered="#{!homeBean.existsMoreActivities}"/>
+                            <hr/>
+                        </div>
+                    </h:panelGroup>
+                </aside>
+                <div class="clear"></div>
+            </h:form>
+        </section>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">

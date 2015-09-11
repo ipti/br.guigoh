@@ -30,7 +30,6 @@ public class LocaleBean implements Serializable {
 
     public LocaleBean() throws RollbackFailureException, Exception {
         initGlobalVariables();
-        changeLocale("", locale);
     }
 
     public String getString(String string) {

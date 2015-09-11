@@ -5,6 +5,7 @@
 package br.org.ipti.guigoh.model.entity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "DiscussionTopic.findByStatus", query = "SELECT d FROM DiscussionTopic d WHERE d.status = :status"),
     @NamedQuery(name = "DiscussionTopic.findByTitle", query = "SELECT d FROM DiscussionTopic d WHERE d.title = :title")})
 public class DiscussionTopic implements Serializable {
+    @Column(name = "views")
+    private BigInteger views;
     @Basic(optional = false)
     @NotNull
     @Column(name = "status")
@@ -209,6 +212,14 @@ public class DiscussionTopic implements Serializable {
 
     public void setStatus(Character status) {
         this.status = status;
+    }
+
+    public BigInteger getViews() {
+        return views;
+    }
+
+    public void setViews(BigInteger views) {
+        this.views = views;
     }
     
 }

@@ -6,6 +6,7 @@ package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
@@ -17,8 +18,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 @ViewScoped
-@Named 
-public class HeaderBean implements Serializable {
+@Named
+public class TemplateBean implements Serializable {
 
     private static final String ADMIN = "AD", REVISER = "RE";
 
@@ -26,13 +27,15 @@ public class HeaderBean implements Serializable {
     private UserAuthorization authorization;
 
     private Boolean admin, reviser;
-    private Integer registeredUsersCount;
+    private Integer registeredUsersCount, interestId;
 
     public void init() {
-        initGlobalVariables();
-        getLoggedSocialProfile();
-        checkUserAuthorization();
-        getRegisteredUsersQuantity();
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            initGlobalVariables();
+            getLoggedSocialProfile();
+            checkUserAuthorization();
+            getRegisteredUsersQuantity();
+        }
     }
 
     public void logout() throws IOException {
@@ -68,6 +71,9 @@ public class HeaderBean implements Serializable {
         socialProfile = new SocialProfile();
 
         admin = reviser = false;
+        
+        InterestsJpaController interestsJpaController = new InterestsJpaController();
+        interestId = interestsJpaController.findInterestsEntities(1, 0).get(0).getId();
     }
 
     public SocialProfile getSocialProfile() {
@@ -108,5 +114,13 @@ public class HeaderBean implements Serializable {
 
     public void setRegisteredUsersCount(Integer registeredUsersCount) {
         this.registeredUsersCount = registeredUsersCount;
+    }
+
+    public Integer getInterestId() {
+        return interestId;
+    }
+
+    public void setInterestId(Integer interestId) {
+        this.interestId = interestId;
     }
 }

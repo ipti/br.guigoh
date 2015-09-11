@@ -10,136 +10,139 @@
         <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/search-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
+    <ui:define name="metadata">
+        <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+        <f:event type="preRenderView" listener="#{searchViewBean.init()}"/>
+    </ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:event type="preRenderComponent" listener="#{searchViewBean.init()}"/>
-        </f:metadata>
-        <h1>#{localeBean.getString("Buscar")}</h1>
-        <h:form prependId="false">
-            <div class="general-search">
-                <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="#{localeBean.getString('Procure pessoas, Objetos Educacionais e grupos de estudo')}">
-                    <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
-                </h:inputText>
-                <img src="../resources/common/images/magnifying-glass.png"/>
-            </div>
-            <h:panelGroup id="search-result">
-                <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">
-                    <h3 class="category-name">#{localeBean.getString("Pessoas")}</h3>
-                    <h:panelGroup layout="block" id="user-list" class="category">
-                        <ui:repeat value="#{searchViewBean.socialProfileList}" var="socialProfile" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt searchViewBean.userLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <h:outputText class="hidden social-profile-id" value="#{socialProfile.socialProfileId}"/>
-                                        <h:outputText class="hidden social-profile-name" value="#{socialProfile.name}"/>
-                                        <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
-                                        <p class="result-name">
-                                            <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}" title="#{socialProfile.name}">#{socialProfile.name}</a></p>
-                                        <p class="user-job" title="#{socialProfile.occupationsId.name}">#{socialProfile.occupationsId.name}</p>
-                                        <div class="user-chat">
-                                            <img src="../resources/common/images/chat.png"/>
-                                            <span>#{localeBean.getString("Bate-papo")}</span>
-                                        </div>
-                                        <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
-                                            <h:commandLink>
-                                                <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
-                                                <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                            </h:commandLink>
-                                        </ui:fragment>
-                                        <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                            <h:commandLink>
-                                                <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
-                                                <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                            </h:commandLink>
-                                        </ui:fragment>
-                                        <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
-                                            <h:commandLink>
-                                                <img class="user-friend-status add" src="../resources/common/images/add-friend.png"/>
-                                                <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                            </h:commandLink>
-                                        </ui:fragment>
-                                    </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{searchViewBean.increaseLimit('SP')}" render="user-list"/>
-                            </h:commandLink>
-                            <hr/>
-                        </h:panelGroup>
-                        <div class="clear"></div>
-                    </h:panelGroup>
-                    <div class="clear"></div>
-                </ui:fragment>
-                <ui:fragment rendered="#{!searchViewBean.educationalObjectList.isEmpty()}">
-                    <h3 class="category-name">#{localeBean.getString("Objetos Educacionais")}</h3>
-                    <h:panelGroup layout="block" id="object-list" class="category">
-                        <ui:repeat value="#{searchViewBean.educationalObjectList}" var="educationalObject" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt searchViewBean.objectLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="image" src="#{educationalObject.image}"></img></a>
-                                        <p class="result-name">
-                                            <a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a>
-                                        </p>
-                                        <div class="result-date">
-                                            <img src="/resources/common/images/clock.png"/>
-                                            <h:outputText value="#{educationalObject.date}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                            </h:outputText>
+        <section id="content">
+            <h1>#{localeBean.getString("Buscar")}</h1>
+            <h:form prependId="false">
+                <div class="general-search">
+                    <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="#{localeBean.getString('Procure pessoas, Objetos Educacionais e grupos de estudo')}">
+                        <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
+                    </h:inputText>
+                    <img src="../resources/common/images/magnifying-glass.png"/>
+                </div>
+                <h:panelGroup id="search-result">
+                    <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">
+                        <h3 class="category-name">#{localeBean.getString("Pessoas")}</h3>
+                        <h:panelGroup layout="block" id="user-list" class="category">
+                            <ui:repeat value="#{searchViewBean.socialProfileList}" var="socialProfile" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt searchViewBean.userLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <h:outputText class="hidden social-profile-id" value="#{socialProfile.socialProfileId}"/>
+                                            <h:outputText class="hidden social-profile-name" value="#{socialProfile.name}"/>
+                                            <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
+                                            <p class="result-name">
+                                                <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}" title="#{socialProfile.name}">#{socialProfile.name}</a></p>
+                                            <p class="user-job" title="#{socialProfile.occupationsId.name}">#{socialProfile.occupationsId.name}</p>
+                                            <div class="user-chat">
+                                                <img src="../resources/common/images/chat.png"/>
+                                                <span>#{localeBean.getString("Bate-papo")}</span>
+                                            </div>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
+                                                <h:commandLink>
+                                                    <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
+                                                    <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
+                                                <h:commandLink>
+                                                    <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                                    <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
+                                                <h:commandLink>
+                                                    <img class="user-friend-status add" src="../resources/common/images/add-friend.png"/>
+                                                    <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
+                                            </ui:fragment>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.educationalObjectList.size() gt searchViewBean.objectLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{searchViewBean.increaseLimit('EO')}" render="object-list"/>
-                            </h:commandLink>
-                            <hr/>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{searchViewBean.increaseLimit('SP')}" render="user-list"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
+                            <div class="clear"></div>
                         </h:panelGroup>
                         <div class="clear"></div>
-                    </h:panelGroup>
-                    <div class="clear"></div>
-                </ui:fragment>
-                <ui:fragment rendered="#{!searchViewBean.discussionTopicList.isEmpty()}">
-                    <h3 class="category-name">#{localeBean.getString("Grupos de Estudo")}</h3>
-                    <h:panelGroup layout="block" id="study-group-list" class="category">
-                        <ui:repeat value="#{searchViewBean.discussionTopicList}" var="discussionTopic" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt searchViewBean.topicLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}"><img class="image" src="#{discussionTopic.socialProfileId.photo}"></img></a>
-                                        <p class="result-name">
-                                            <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}">#{discussionTopic.title}</a>
-                                        </p>
-                                        <p class="topic-author">#{discussionTopic.socialProfileId.name}</p>
-                                        <div class="result-date">
-                                            <img src="/resources/common/images/clock.png"/>
-                                            <h:outputText value="#{discussionTopic.data}">
-                                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                            </h:outputText>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!searchViewBean.educationalObjectList.isEmpty()}">
+                        <h3 class="category-name">#{localeBean.getString("Objetos Educacionais")}</h3>
+                        <h:panelGroup layout="block" id="object-list" class="category">
+                            <ui:repeat value="#{searchViewBean.educationalObjectList}" var="educationalObject" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt searchViewBean.objectLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="image" src="#{educationalObject.image}"></img></a>
+                                            <p class="result-name">
+                                                <a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a>
+                                            </p>
+                                            <div class="result-date">
+                                                <img src="/resources/common/images/clock.png"/>
+                                                <h:outputText value="#{educationalObject.date}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                                </h:outputText>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.discussionTopicList.size() gt searchViewBean.topicLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{searchViewBean.increaseLimit('DT')}" render="study-group-list"/>
-                            </h:commandLink>
-                            <hr/>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.educationalObjectList.size() gt searchViewBean.objectLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{searchViewBean.increaseLimit('EO')}" render="object-list"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
+                            <div class="clear"></div>
                         </h:panelGroup>
                         <div class="clear"></div>
-                    </h:panelGroup>
-                    <div class="clear"></div>
-                </ui:fragment>
-            </h:panelGroup>
-        </h:form>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!searchViewBean.discussionTopicList.isEmpty()}">
+                        <h3 class="category-name">#{localeBean.getString("Grupos de Estudo")}</h3>
+                        <h:panelGroup layout="block" id="study-group-list" class="category">
+                            <ui:repeat value="#{searchViewBean.discussionTopicList}" var="discussionTopic" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt searchViewBean.topicLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}"><img class="image" src="#{discussionTopic.socialProfileId.photo}"></img></a>
+                                            <p class="result-name">
+                                                <a href="/discussion-topic/view.xhtml?id=#{discussionTopic.id}">#{discussionTopic.title}</a>
+                                            </p>
+                                            <p class="topic-author">#{discussionTopic.socialProfileId.name}</p>
+                                            <div class="result-date">
+                                                <img src="/resources/common/images/clock.png"/>
+                                                <h:outputText value="#{discussionTopic.data}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                                </h:outputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.discussionTopicList.size() gt searchViewBean.topicLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{searchViewBean.increaseLimit('DT')}" render="study-group-list"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
+                            <div class="clear"></div>
+                        </h:panelGroup>
+                        <div class="clear"></div>
+                    </ui:fragment>
+                </h:panelGroup>
+            </h:form>
+        </section>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
