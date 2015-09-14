@@ -265,20 +265,6 @@ public class DiscussionTopicJpaController implements Serializable {
         }
     }
 
-    public List<DiscussionTopic> findDiscussionTopicsByInterestId(Integer id, Integer quantity) {
-        EntityManager em = getEntityManager();
-        try {
-            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
-                    + "where theme_id = " + id + " and status = 'A' order by data DESC limit " + quantity, DiscussionTopic.class).getResultList();
-            if (discussionTopicList == null) {
-                return new ArrayList<>();
-            }
-            return discussionTopicList;
-        } finally {
-            em.close();
-        }
-    }
-
     public List<NewActivity> getLastActivities(int quantity) {
         EntityManager em = getEntityManager();
         try {
@@ -301,7 +287,7 @@ public class DiscussionTopicJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<NewActivity> getMoreActivities(Date date) {
         EntityManager em = getEntityManager();
         try {
@@ -324,41 +310,42 @@ public class DiscussionTopicJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public List<DiscussionTopic> findDiscussionTopicsByName(String name) {
-        EntityManager em = getEntityManager();
-        try {
-            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) 
-                    em.createNativeQuery("select distinct dt.* from discussion_topic dt "
-                            + "join topic_tags tt on tt.discussion_topic_id = dt.id "
-                            + "join tags t on tt.tags_id = t.id "
-                            + "where dt.status = 'A' and (upper(dt.title) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')", DiscussionTopic.class).getResultList();
-            return discussionTopicList;
-        
-        } finally {
-            em.close();
-        }
-    }
-    
+
     public List<DiscussionTopic> findMostAcessedTopics(Integer interestId) {
         EntityManager em = getEntityManager();
         try {
-            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) 
-                    em.createNativeQuery("select * from discussion_topic "
-                            + "where status = 'A' and theme_id = '" + interestId + "' order by views limit 3 ", DiscussionTopic.class).getResultList();
+            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
+                    + "where status = 'A' and theme_id = '" + interestId + "' order by views limit 3 ", DiscussionTopic.class).getResultList();
             return discussionTopicList;
-        
+
         } finally {
             em.close();
         }
     }
-    
-    public List<DiscussionTopic> getMoreDiscussionTopics(Integer interestId, Date date) {
+
+    public List<DiscussionTopic> findDiscussionTopics(String name, Date date, Integer interestId, Integer limit) {
         EntityManager em = getEntityManager();
         try {
-            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
-                    + "where status = 'A' and theme_id = '" + interestId + "' and data < '" + date + "' order by data desc limit 5", DiscussionTopic.class).getResultList();
+            String partialQuery = "";
+            if (name != null) {
+                partialQuery += " and (upper(dt.title) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')";
+            }
+            if (interestId != null) {
+                partialQuery += " and theme_id = '" + interestId + "'";
+            }
+            if (date != null) {
+                partialQuery += " and data < '" + date + "'";
+            }
+            partialQuery += " order by data desc";
+            if (limit != null) {
+                partialQuery += " limit " + limit;
+            }
+            List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select distinct dt.* from discussion_topic dt "
+                    + "left join topic_tags tt on tt.discussion_topic_id = dt.id "
+                    + "left join tags t on tt.tags_id = t.id "
+                    + "where dt.status = 'A' " + partialQuery, DiscussionTopic.class).getResultList();
             return discussionTopicList;
+
         } finally {
             em.close();
         }

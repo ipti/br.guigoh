@@ -39,7 +39,7 @@ public class HomeBean implements Serializable {
     }
 
     private void getEducationalObjects() {
-        educationalObjectList = educationalObjectJpaController.getLatestActiveEducationalObjects(6);
+        educationalObjectList = educationalObjectJpaController.findEducationalObjects(null, null, null, 6);
     }
 
     private void getActivities() {
@@ -48,7 +48,7 @@ public class HomeBean implements Serializable {
 
     public void getMoreEducationalObjects() {
         List<EducationalObject> outList = educationalObjectList;
-        List<EducationalObject> moreObjects = educationalObjectJpaController.getMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate());
+        List<EducationalObject> moreObjects = educationalObjectJpaController.findEducationalObjects(null, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), null, 5);
         moreObjects.stream().forEach((temp) -> {
             outList.add(temp);
         });
@@ -58,7 +58,7 @@ public class HomeBean implements Serializable {
 
     private void checkIfExistsMoreEducationalObjects() {
         if (!educationalObjectList.isEmpty()) {
-            if (educationalObjectJpaController.getMoreEducationalObjects(educationalObjectList.get(educationalObjectList.size() - 1).getDate()).isEmpty()) {
+            if (educationalObjectJpaController.findEducationalObjects(null, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), null, null).isEmpty()) {
                 setExistsMoreEducationalObjects(false);
             } else {
                 setExistsMoreEducationalObjects(true);

@@ -35,9 +35,14 @@
             </div>
             <section id="group">
                 <div class="title">
-                    <h1>#{localeBean.getString('Grupos de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
+                    <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
                 <div class="column-button">
+                    <ui:fragment rendered="#{studyGroupViewBean.hasTopic}">
+                        <h:inputText class="topic-search" value="#{studyGroupViewBean.search}" pt:placeholder="#{localeBean.getString('Procure tópicos')}">
+                            <f:ajax event="keyup" listener="#{studyGroupViewBean.searchTopicEvent()}" render="column"></f:ajax>
+                        </h:inputText>
+                    </ui:fragment>
                     <a class="new-topic" href="../discussion-topic/create.xhtml?id=#{studyGroupViewBean.interestId}">#{localeBean.getString('Novo tópico').toUpperCase()}</a>
                 </div>
                 <h:panelGroup layout="block" class="column" id="column">
@@ -64,8 +69,8 @@
                     </ui:repeat>
                     <div class="load-more">
                         <hr/>
-                        <h:commandLink class="load-more-topics" value="#{localeBean.getString('Carregar mais')}" action="#{studyGroupViewBean.getMoreDiscussionTopics()}" rendered="#{studyGroupViewBean.existsMoreDiscussionTopics}">
-                            <f:ajax render="column"/>
+                        <h:commandLink class="load-more-topics" value="#{localeBean.getString('Carregar mais')}" rendered="#{studyGroupViewBean.existsMoreDiscussionTopics}">
+                            <f:ajax render="column" listener="#{studyGroupViewBean.getMoreDiscussionTopics()}"/>
                         </h:commandLink>
                         <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Tópicos')}" rendered="#{!studyGroupViewBean.existsMoreDiscussionTopics}"/>
                         <hr/>

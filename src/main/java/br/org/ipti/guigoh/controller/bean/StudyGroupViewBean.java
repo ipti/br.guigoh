@@ -26,6 +26,8 @@ public class StudyGroupViewBean implements Serializable {
 
     private Integer interestId;
     private Boolean existsMoreDiscussionTopics;
+    private String search;
+    private Boolean hasTopic;
 
     private Interests interest;
 
@@ -44,7 +46,7 @@ public class StudyGroupViewBean implements Serializable {
 
     public void getMoreDiscussionTopics() {
         List<DiscussionTopic> outList = discussionTopicList;
-        List<DiscussionTopic> moreTopics = discussionTopicJpaController.getMoreDiscussionTopics(interestId, discussionTopicList.get(discussionTopicList.size() - 1).getData());
+        List<DiscussionTopic> moreTopics = discussionTopicJpaController.findDiscussionTopics(search, discussionTopicList.get(discussionTopicList.size() - 1).getData(), interestId, 5);
         moreTopics.stream().forEach((temp) -> {
             outList.add(temp);
         });
@@ -54,7 +56,7 @@ public class StudyGroupViewBean implements Serializable {
 
     private void checkIfExistsMoreDiscussionTopics() {
         if (!discussionTopicList.isEmpty()) {
-            if (discussionTopicJpaController.getMoreDiscussionTopics(interestId, discussionTopicList.get(discussionTopicList.size() - 1).getData()).isEmpty()) {
+            if (discussionTopicJpaController.findDiscussionTopics(search, discussionTopicList.get(discussionTopicList.size() - 1).getData(), interestId, null).isEmpty()) {
                 setExistsMoreDiscussionTopics(false);
             } else {
                 setExistsMoreDiscussionTopics(true);
@@ -62,6 +64,15 @@ public class StudyGroupViewBean implements Serializable {
         } else {
             setExistsMoreDiscussionTopics(false);
         }
+    }
+
+    public void searchTopicEvent() {
+        if (search.length() >= 3) {
+            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(search, null, interestId, 6);
+        } else {
+            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(null, null, interestId, 6);
+        }
+        checkIfExistsMoreDiscussionTopics();
     }
 
     private void initGlobalVariables() throws IOException {
@@ -72,9 +83,10 @@ public class StudyGroupViewBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
             interest = interestsJpaController.findInterests(interestId);
-            discussionTopicList = discussionTopicJpaController.findDiscussionTopicsByInterestId(interestId, 6);
+            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(search, null, interestId, 6);
             mostAcessedDiscussionTopicList = discussionTopicJpaController.findMostAcessedTopics(interestId);
             interestList = interestsJpaController.findInterestsEntities();
+            hasTopic = !discussionTopicList.isEmpty();
         }
     }
 
@@ -124,5 +136,21 @@ public class StudyGroupViewBean implements Serializable {
 
     public void setExistsMoreDiscussionTopics(Boolean existsMoreDiscussionTopics) {
         this.existsMoreDiscussionTopics = existsMoreDiscussionTopics;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public Boolean getHasTopic() {
+        return hasTopic;
+    }
+
+    public void setHasTopic(Boolean hasTopic) {
+        this.hasTopic = hasTopic;
     }
 }

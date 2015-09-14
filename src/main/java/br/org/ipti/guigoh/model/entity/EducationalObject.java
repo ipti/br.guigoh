@@ -8,6 +8,7 @@ import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -44,6 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Column(name = "views")
+    private BigInteger views;
     @Size(max = 150)
     @Column(name = "image")
     private String image;
@@ -203,5 +206,12 @@ public class EducationalObject implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-    
+
+    public BigInteger getViews() {
+        return views;
+    }
+
+    public void setViews(BigInteger views) {
+        this.views = views;
+    }
 }

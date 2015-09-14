@@ -362,50 +362,6 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
 
-    public List<EducationalObject> getActiveEducationalObjectsByTheme(Integer theme_id) {
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' and theme_id = " + theme_id + " order by date desc", EducationalObject.class).getResultList();
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<EducationalObject> getLatestActiveEducationalObjects(int quantity) {
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' order by date desc limit " + quantity, EducationalObject.class).getResultList();
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<EducationalObject> getMoreEducationalObjects(Date date) {
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' and date < '" + date + "' order by date desc limit 5", EducationalObject.class).getResultList();
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<EducationalObject> getAllActiveEducationalObjects() {
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' order by date desc", EducationalObject.class).getResultList();
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-
     public List<EducationalObject> getPendingEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
@@ -439,48 +395,6 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
 
-    public List<EducationalObject> getEducationalObjectsByExpression(String expression, String tag, Integer id) {
-        EntityManager em = getEntityManager();
-        try {
-
-            String sql = "select distinct eo.* from educational_object eo ";
-            if (tag != null) {
-                if (!tag.equals("")) {
-                    sql += "join educational_object_tag eot on eo.id = eot.educational_object_id ";
-                }
-            }
-            sql += "where eo.theme_id = " + id + " and eo.status = 'AC' and "
-                    + "UPPER(eo.name) like '%" + expression.toUpperCase() + "%' ";
-            if (tag != null) {
-                if (!tag.equals("")) {
-                    sql += "and eot.tag_id = (select id from tags where name = '" + tag + "') ";
-                }
-            }
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery(sql, EducationalObject.class).getResultList();
-            if (educationalObjectList == null) {
-            return new ArrayList<EducationalObject>();
-        }
-            return educationalObjectList;
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<EducationalObject> findEducationalObjectsByName(String name){
-        EntityManager em = getEntityManager();
-        try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) 
-                    em.createNativeQuery("select distinct eo.* from educational_object eo "
-                            + "join educational_object_tag eot on eot.educational_object_id = eo.id "
-                            + "join tags t on eot.tag_id = t.id "
-                            + "where eo.status = 'AC' and (upper(eo.name) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')", EducationalObject.class).getResultList();
-            return educationalObjectList;
-        
-        } finally {
-            em.close();
-        }
-    }
-    
     public List<EducationalObject> findEducationalObjectsBySocialProfileId(Integer id){
         EntityManager em = getEntityManager();
         try {
@@ -488,6 +402,46 @@ public class EducationalObjectJpaController implements Serializable {
                     em.createNativeQuery("select * from educational_object "
                             + "where status = 'AC' and social_profile_id = " + id, EducationalObject.class).getResultList();
             return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> findMostAcessedEducationalObjects(Integer interestId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
+                    + "where status = 'AC' and theme_id = '" + interestId + "' order by views limit 3 ", EducationalObject.class).getResultList();
+            return educationalObjectList;
+
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> findEducationalObjects(String name, Date date, Integer interestId, Integer limit) {
+        EntityManager em = getEntityManager();
+        try {
+            String partialQuery = "";
+            if (name != null) {
+                partialQuery += " and (upper(eo.name) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')";
+            }
+            if (interestId != null) {
+                partialQuery += " and theme_id = '" + interestId + "'";
+            }
+            if (date != null) {
+                partialQuery += " and date < '" + date + "'";
+            }
+            partialQuery += " order by date desc";
+            if (limit != null) {
+                partialQuery += " limit " + limit;
+            }
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select distinct eo.* from educational_object eo "
+                            + "left join educational_object_tag eot on eot.educational_object_id = eo.id "
+                            + "left join tags t on eot.tag_id = t.id "
+                            + "where eo.status = 'AC' " + partialQuery, EducationalObject.class).getResultList();
+            return educationalObjectList;
+
         } finally {
             em.close();
         }
