@@ -53,6 +53,8 @@ entities = {
     @EntityResult(entityClass = UserAuthorization.class)
 })
 public class SocialProfile implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileFk")
+    private Collection<EducationalObjectMessage> educationalObjectMessageCollection;
     @Size(max = 10)
     @Column(name = "birth_date")
     private String birthDate;
@@ -493,6 +495,15 @@ public class SocialProfile implements Serializable {
 
     public void setCoverPhoto(String coverPhoto) {
         this.coverPhoto = coverPhoto;
+    }
+
+    @XmlTransient
+    public Collection<EducationalObjectMessage> getEducationalObjectMessageCollection() {
+        return educationalObjectMessageCollection;
+    }
+
+    public void setEducationalObjectMessageCollection(Collection<EducationalObjectMessage> educationalObjectMessageCollection) {
+        this.educationalObjectMessageCollection = educationalObjectMessageCollection;
     }
     
 }

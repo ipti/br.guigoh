@@ -7,9 +7,13 @@ package br.org.ipti.guigoh.controller.bean;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
+import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.util.DownloadService;
 import java.io.IOException;
 import java.io.Serializable;
@@ -27,56 +31,48 @@ import javax.inject.Named;
 @Named
 public class EducationalObjectViewBean implements Serializable {
 
-    private int educationalObjectID;
+    private Integer educationalObjectId;
 
     private EducationalObject educationalObject;
 
-    private List<Author> authorList;
-    private List<EducationalObjectMedia> educationalObjectMediaList;
+    private List<Interests> interestList;
+    
+    private EducationalObjectJpaController educationalObjectJpaController;
+    private InterestsJpaController interestsJpaController;
+    private UsersJpaController usersJpaController;
 
-    public void init() {
+    public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            getEducationalObject(educationalObjectID);
-            getAuthors(educationalObjectID);
-            getMedias(educationalObjectID);
         }
     }
 
-    public String getMediaSize(Integer size) {
-        double convertedSizeMB = Math.ceil((double) size / Math.pow(1024, 2) * 10) / 10;
-        double convertedSizeKB = Math.ceil(((double) size / 1024) * 10) / 10;
-        if (convertedSizeMB > 1) {
-            return convertedSizeMB + "MB";
+    public Integer getIdByEmail(String email) {
+        Users user = usersJpaController.findUsers(email);
+        if (user != null) {
+            return user.getSocialProfile().getSocialProfileId();
         } else {
-            return convertedSizeKB + "KB";
+            return null;
         }
     }
-
+    
     public void downloadMedia(String path, String type) throws IOException {
         DownloadService.downloadFileFromURL(path, type);
     }
 
-    private void getEducationalObject(Integer id) {
-        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
-        educationalObject = educationalObjectJpaController.findEducationalObject(id);
-    }
-
-    private void getAuthors(Integer educationalObjectID) {
-        AuthorJpaController authorJpaController = new AuthorJpaController();
-        authorList = authorJpaController.findAuthorsByEducationalObjectId(educationalObjectID);
-    }
-
-    private void getMedias(Integer educationalObjectID) {
-        EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-        educationalObjectMediaList = educationalObjectMediaJpaController.findMediasByEducationalObjectId(educationalObjectID);
-    }
-    
-    private void initGlobalVariables() {
+    private void initGlobalVariables() throws IOException {
+        educationalObjectJpaController = new EducationalObjectJpaController();
+        interestsJpaController = new InterestsJpaController();
+        usersJpaController = new UsersJpaController();
+        
         educationalObject = new EducationalObject();
         
-        authorList = new ArrayList<>();
-        educationalObjectMediaList = new ArrayList<>();
+        if (educationalObjectId == null) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+        } else {
+            educationalObject = educationalObjectJpaController.findEducationalObject(educationalObjectId);
+            interestList = interestsJpaController.findInterestsEntities();
+        }
     }
 
     public EducationalObject getEducationalObject() {
@@ -87,27 +83,19 @@ public class EducationalObjectViewBean implements Serializable {
         this.educationalObject = educationalObject;
     }
 
-    public int getEducationalObjectID() {
-        return educationalObjectID;
+    public Integer getEducationalObjectId() {
+        return educationalObjectId;
     }
 
-    public void setEducationalObjectID(int educationalObjectID) {
-        this.educationalObjectID = educationalObjectID;
+    public void setEducationalObjectId(Integer educationalObjectId) {
+        this.educationalObjectId = educationalObjectId;
     }
 
-    public List<Author> getAuthorList() {
-        return authorList;
+    public List<Interests> getInterestList() {
+        return interestList;
     }
 
-    public void setAuthorList(List<Author> authorList) {
-        this.authorList = authorList;
-    }
-
-    public List<EducationalObjectMedia> getEducationalObjectMediaList() {
-        return educationalObjectMediaList;
-    }
-
-    public void setEducationalObjectMediaList(List<EducationalObjectMedia> educationalObjectMediaList) {
-        this.educationalObjectMediaList = educationalObjectMediaList;
+    public void setInterestList(List<Interests> interestList) {
+        this.interestList = interestList;
     }
 }

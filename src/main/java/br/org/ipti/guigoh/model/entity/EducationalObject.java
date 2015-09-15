@@ -45,6 +45,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Size(max = 200)
+    @Column(name = "description")
+    private String description;
+    @JoinTable(name = "educational_object_like", joinColumns = {
+        @JoinColumn(name = "educational_object_fk", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "social_profile_fk", referencedColumnName = "social_profile_id")})
+    @ManyToMany
+    private Collection<SocialProfile> socialProfileCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "educationalObjectFk")
+    private Collection<EducationalObjectMessage> educationalObjectMessageCollection;
     @Column(name = "views")
     private BigInteger views;
     @Size(max = 150)
@@ -213,5 +223,31 @@ public class EducationalObject implements Serializable {
 
     public void setViews(BigInteger views) {
         this.views = views;
+    }
+
+    @XmlTransient
+    public Collection<SocialProfile> getSocialProfileCollection() {
+        return socialProfileCollection;
+    }
+
+    public void setSocialProfileCollection(Collection<SocialProfile> socialProfileCollection) {
+        this.socialProfileCollection = socialProfileCollection;
+    }
+
+    @XmlTransient
+    public Collection<EducationalObjectMessage> getEducationalObjectMessageCollection() {
+        return educationalObjectMessageCollection;
+    }
+
+    public void setEducationalObjectMessageCollection(Collection<EducationalObjectMessage> educationalObjectMessageCollection) {
+        this.educationalObjectMessageCollection = educationalObjectMessageCollection;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

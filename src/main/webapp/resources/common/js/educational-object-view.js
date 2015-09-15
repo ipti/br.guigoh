@@ -64,10 +64,3 @@ function displayPreview() {
     });
     mediaName.first().click();
 }
-function openRecommendBox() {
-    $("#recommend-box").css("display", "block");
-}
-function closeRecommendBox() {
-    $("#email-recommend").val("");
-    $("#recommend-box").css("display", "none");
-}

@@ -20,6 +20,7 @@ import java.util.Collection;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
+import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
 import br.org.ipti.guigoh.util.CookieService;
 import java.sql.Timestamp;
@@ -53,6 +54,12 @@ public class EducationalObjectJpaController implements Serializable {
         if (educationalObject.getEducationalObjectMediaCollection() == null) {
             educationalObject.setEducationalObjectMediaCollection(new ArrayList<EducationalObjectMedia>());
         }
+        if (educationalObject.getSocialProfileCollection() == null) {
+            educationalObject.setSocialProfileCollection(new ArrayList<SocialProfile>());
+        }
+        if (educationalObject.getEducationalObjectMessageCollection() == null) {
+            educationalObject.setEducationalObjectMessageCollection(new ArrayList<EducationalObjectMessage>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -85,6 +92,18 @@ public class EducationalObjectJpaController implements Serializable {
                 attachedEducationalObjectMediaCollection.add(educationalObjectMediaCollectionEducationalObjectMediaToAttach);
             }
             educationalObject.setEducationalObjectMediaCollection(attachedEducationalObjectMediaCollection);
+            Collection<SocialProfile> attachedSocialProfileCollection = new ArrayList<SocialProfile>();
+            for (SocialProfile socialProfileCollectionSocialProfileToAttach : educationalObject.getSocialProfileCollection()) {
+                socialProfileCollectionSocialProfileToAttach = em.getReference(socialProfileCollectionSocialProfileToAttach.getClass(), socialProfileCollectionSocialProfileToAttach.getTokenId());
+                attachedSocialProfileCollection.add(socialProfileCollectionSocialProfileToAttach);
+            }
+            educationalObject.setSocialProfileCollection(attachedSocialProfileCollection);
+            Collection<EducationalObjectMessage> attachedEducationalObjectMessageCollection = new ArrayList<EducationalObjectMessage>();
+            for (EducationalObjectMessage educationalObjectMessageCollectionEducationalObjectMessageToAttach : educationalObject.getEducationalObjectMessageCollection()) {
+                educationalObjectMessageCollectionEducationalObjectMessageToAttach = em.getReference(educationalObjectMessageCollectionEducationalObjectMessageToAttach.getClass(), educationalObjectMessageCollectionEducationalObjectMessageToAttach.getId());
+                attachedEducationalObjectMessageCollection.add(educationalObjectMessageCollectionEducationalObjectMessageToAttach);
+            }
+            educationalObject.setEducationalObjectMessageCollection(attachedEducationalObjectMessageCollection);
             em.persist(educationalObject);
             if (socialProfileId != null) {
                 socialProfileId.getEducationalObjectCollection().add(educationalObject);
@@ -109,6 +128,19 @@ public class EducationalObjectJpaController implements Serializable {
                 if (oldEducationalObjectIdOfEducationalObjectMediaCollectionEducationalObjectMedia != null) {
                     oldEducationalObjectIdOfEducationalObjectMediaCollectionEducationalObjectMedia.getEducationalObjectMediaCollection().remove(educationalObjectMediaCollectionEducationalObjectMedia);
                     oldEducationalObjectIdOfEducationalObjectMediaCollectionEducationalObjectMedia = em.merge(oldEducationalObjectIdOfEducationalObjectMediaCollectionEducationalObjectMedia);
+                }
+            }
+            for (SocialProfile socialProfileCollectionSocialProfile : educationalObject.getSocialProfileCollection()) {
+                socialProfileCollectionSocialProfile.getEducationalObjectCollection().add(educationalObject);
+                socialProfileCollectionSocialProfile = em.merge(socialProfileCollectionSocialProfile);
+            }
+            for (EducationalObjectMessage educationalObjectMessageCollectionEducationalObjectMessage : educationalObject.getEducationalObjectMessageCollection()) {
+                EducationalObject oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage = educationalObjectMessageCollectionEducationalObjectMessage.getEducationalObjectFk();
+                educationalObjectMessageCollectionEducationalObjectMessage.setEducationalObjectFk(educationalObject);
+                educationalObjectMessageCollectionEducationalObjectMessage = em.merge(educationalObjectMessageCollectionEducationalObjectMessage);
+                if (oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage != null) {
+                    oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage.getEducationalObjectMessageCollection().remove(educationalObjectMessageCollectionEducationalObjectMessage);
+                    oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage = em.merge(oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage);
                 }
             }
             em.getTransaction().commit();
@@ -142,6 +174,10 @@ public class EducationalObjectJpaController implements Serializable {
             Collection<Author> authorCollectionNew = educationalObject.getAuthorCollection();
             Collection<EducationalObjectMedia> educationalObjectMediaCollectionOld = persistentEducationalObject.getEducationalObjectMediaCollection();
             Collection<EducationalObjectMedia> educationalObjectMediaCollectionNew = educationalObject.getEducationalObjectMediaCollection();
+            Collection<SocialProfile> socialProfileCollectionOld = persistentEducationalObject.getSocialProfileCollection();
+            Collection<SocialProfile> socialProfileCollectionNew = educationalObject.getSocialProfileCollection();
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionOld = persistentEducationalObject.getEducationalObjectMessageCollection();
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionNew = educationalObject.getEducationalObjectMessageCollection();
             List<String> illegalOrphanMessages = null;
             for (EducationalObjectMedia educationalObjectMediaCollectionOldEducationalObjectMedia : educationalObjectMediaCollectionOld) {
                 if (!educationalObjectMediaCollectionNew.contains(educationalObjectMediaCollectionOldEducationalObjectMedia)) {
@@ -149,6 +185,14 @@ public class EducationalObjectJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain EducationalObjectMedia " + educationalObjectMediaCollectionOldEducationalObjectMedia + " since its educationalObjectId field is not nullable.");
+                }
+            }
+            for (EducationalObjectMessage educationalObjectMessageCollectionOldEducationalObjectMessage : educationalObjectMessageCollectionOld) {
+                if (!educationalObjectMessageCollectionNew.contains(educationalObjectMessageCollectionOldEducationalObjectMessage)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EducationalObjectMessage " + educationalObjectMessageCollectionOldEducationalObjectMessage + " since its educationalObjectFk field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -183,6 +227,20 @@ public class EducationalObjectJpaController implements Serializable {
             }
             educationalObjectMediaCollectionNew = attachedEducationalObjectMediaCollectionNew;
             educationalObject.setEducationalObjectMediaCollection(educationalObjectMediaCollectionNew);
+            Collection<SocialProfile> attachedSocialProfileCollectionNew = new ArrayList<SocialProfile>();
+            for (SocialProfile socialProfileCollectionNewSocialProfileToAttach : socialProfileCollectionNew) {
+                socialProfileCollectionNewSocialProfileToAttach = em.getReference(socialProfileCollectionNewSocialProfileToAttach.getClass(), socialProfileCollectionNewSocialProfileToAttach.getTokenId());
+                attachedSocialProfileCollectionNew.add(socialProfileCollectionNewSocialProfileToAttach);
+            }
+            socialProfileCollectionNew = attachedSocialProfileCollectionNew;
+            educationalObject.setSocialProfileCollection(socialProfileCollectionNew);
+            Collection<EducationalObjectMessage> attachedEducationalObjectMessageCollectionNew = new ArrayList<EducationalObjectMessage>();
+            for (EducationalObjectMessage educationalObjectMessageCollectionNewEducationalObjectMessageToAttach : educationalObjectMessageCollectionNew) {
+                educationalObjectMessageCollectionNewEducationalObjectMessageToAttach = em.getReference(educationalObjectMessageCollectionNewEducationalObjectMessageToAttach.getClass(), educationalObjectMessageCollectionNewEducationalObjectMessageToAttach.getId());
+                attachedEducationalObjectMessageCollectionNew.add(educationalObjectMessageCollectionNewEducationalObjectMessageToAttach);
+            }
+            educationalObjectMessageCollectionNew = attachedEducationalObjectMessageCollectionNew;
+            educationalObject.setEducationalObjectMessageCollection(educationalObjectMessageCollectionNew);
             educationalObject = em.merge(educationalObject);
             if (socialProfileIdOld != null && !socialProfileIdOld.equals(socialProfileIdNew)) {
                 socialProfileIdOld.getEducationalObjectCollection().remove(educationalObject);
@@ -235,6 +293,29 @@ public class EducationalObjectJpaController implements Serializable {
                     }
                 }
             }
+            for (SocialProfile socialProfileCollectionOldSocialProfile : socialProfileCollectionOld) {
+                if (!socialProfileCollectionNew.contains(socialProfileCollectionOldSocialProfile)) {
+                    socialProfileCollectionOldSocialProfile.getEducationalObjectCollection().remove(educationalObject);
+                    socialProfileCollectionOldSocialProfile = em.merge(socialProfileCollectionOldSocialProfile);
+                }
+            }
+            for (SocialProfile socialProfileCollectionNewSocialProfile : socialProfileCollectionNew) {
+                if (!socialProfileCollectionOld.contains(socialProfileCollectionNewSocialProfile)) {
+                    socialProfileCollectionNewSocialProfile.getEducationalObjectCollection().add(educationalObject);
+                    socialProfileCollectionNewSocialProfile = em.merge(socialProfileCollectionNewSocialProfile);
+                }
+            }
+            for (EducationalObjectMessage educationalObjectMessageCollectionNewEducationalObjectMessage : educationalObjectMessageCollectionNew) {
+                if (!educationalObjectMessageCollectionOld.contains(educationalObjectMessageCollectionNewEducationalObjectMessage)) {
+                    EducationalObject oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage = educationalObjectMessageCollectionNewEducationalObjectMessage.getEducationalObjectFk();
+                    educationalObjectMessageCollectionNewEducationalObjectMessage.setEducationalObjectFk(educationalObject);
+                    educationalObjectMessageCollectionNewEducationalObjectMessage = em.merge(educationalObjectMessageCollectionNewEducationalObjectMessage);
+                    if (oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage != null && !oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage.equals(educationalObject)) {
+                        oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage.getEducationalObjectMessageCollection().remove(educationalObjectMessageCollectionNewEducationalObjectMessage);
+                        oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage = em.merge(oldEducationalObjectFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -277,6 +358,13 @@ public class EducationalObjectJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This EducationalObject (" + educationalObject + ") cannot be destroyed since the EducationalObjectMedia " + educationalObjectMediaCollectionOrphanCheckEducationalObjectMedia + " in its educationalObjectMediaCollection field has a non-nullable educationalObjectId field.");
             }
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionOrphanCheck = educationalObject.getEducationalObjectMessageCollection();
+            for (EducationalObjectMessage educationalObjectMessageCollectionOrphanCheckEducationalObjectMessage : educationalObjectMessageCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This EducationalObject (" + educationalObject + ") cannot be destroyed since the EducationalObjectMessage " + educationalObjectMessageCollectionOrphanCheckEducationalObjectMessage + " in its educationalObjectMessageCollection field has a non-nullable educationalObjectFk field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -299,6 +387,11 @@ public class EducationalObjectJpaController implements Serializable {
             for (Author authorCollectionAuthor : authorCollection) {
                 authorCollectionAuthor.getEducationalObjectCollection().remove(educationalObject);
                 authorCollectionAuthor = em.merge(authorCollectionAuthor);
+            }
+            Collection<SocialProfile> socialProfileCollection = educationalObject.getSocialProfileCollection();
+            for (SocialProfile socialProfileCollectionSocialProfile : socialProfileCollection) {
+                socialProfileCollectionSocialProfile.getEducationalObjectCollection().remove(educationalObject);
+                socialProfileCollectionSocialProfile = em.merge(socialProfileCollectionSocialProfile);
             }
             em.remove(educationalObject);
             em.getTransaction().commit();

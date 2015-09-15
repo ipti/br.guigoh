@@ -87,8 +87,8 @@ public class EducationalObjectSubmitBean implements Serializable {
         educationalObject.setStatus("PE");
         educationalObject.setDate(utilJpaController.getTimestampServerTime());
         educationalObjectJpaController.create(educationalObject);
-        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" 
-                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() 
+        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
                 + File.separator + "image" + File.separator;
         UploadService.uploadFile(imageFile, imagePath, null);
         educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
@@ -126,19 +126,21 @@ public class EducationalObjectSubmitBean implements Serializable {
     }
 
     private void submitFile(Part part) throws IOException, Exception {
-        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" 
-                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId() 
+        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
                 + File.separator + "media" + File.separator;
-        EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-        educationalObjectMedia.setEducationalObjectId(educationalObject);
-        educationalObjectMedia.setSize(part.getSize());
-        String[] fileSplit = part.getSubmittedFileName().split("\\.");
-        educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-        educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-        educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-        UploadService.uploadFile(part, mediaPath, null);
-        EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-        educationalObjectMediaJpaController.create(educationalObjectMedia);
+        boolean success = UploadService.uploadFile(part, mediaPath, null);
+        if (success) {
+            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
+            educationalObjectMedia.setEducationalObjectId(educationalObject);
+            educationalObjectMedia.setSize(part.getSize());
+            String[] fileSplit = part.getSubmittedFileName().split("\\.");
+            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
+            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
+            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+            educationalObjectMediaJpaController.create(educationalObjectMedia);
+        }
     }
 
     private void getInterestThemes() {

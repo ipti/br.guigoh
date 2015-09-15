@@ -34,6 +34,7 @@ import br.org.ipti.guigoh.model.entity.DiscussionTopicWarnings;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -54,7 +55,7 @@ public class SocialProfileJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(SocialProfile socialProfile) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException, br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException, br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void create(SocialProfile socialProfile) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         if (socialProfile.getExperiencesCollection() == null) {
             socialProfile.setExperiencesCollection(new ArrayList<Experiences>());
         }
@@ -73,6 +74,9 @@ public class SocialProfileJpaController implements Serializable {
         if (socialProfile.getEducationalObjectCollection() == null) {
             socialProfile.setEducationalObjectCollection(new ArrayList<EducationalObject>());
         }
+        if (socialProfile.getEducationalObjectMessageCollection() == null) {
+            socialProfile.setEducationalObjectMessageCollection(new ArrayList<EducationalObjectMessage>());
+        }
         List<String> illegalOrphanMessages = null;
         Users usersOrphanCheck = socialProfile.getUsers();
         if (usersOrphanCheck != null) {
@@ -85,7 +89,7 @@ public class SocialProfileJpaController implements Serializable {
             }
         }
         if (illegalOrphanMessages != null) {
-            throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException(illegalOrphanMessages);
+            throw new IllegalOrphanException(illegalOrphanMessages);
         }
         EntityManager em = null;
         try {
@@ -182,6 +186,12 @@ public class SocialProfileJpaController implements Serializable {
                 attachedEducationalObjectCollection.add(educationalObjectCollectionEducationalObjectToAttach);
             }
             socialProfile.setEducationalObjectCollection(attachedEducationalObjectCollection);
+            Collection<EducationalObjectMessage> attachedEducationalObjectMessageCollection = new ArrayList<EducationalObjectMessage>();
+            for (EducationalObjectMessage educationalObjectMessageCollectionEducationalObjectMessageToAttach : socialProfile.getEducationalObjectMessageCollection()) {
+                educationalObjectMessageCollectionEducationalObjectMessageToAttach = em.getReference(educationalObjectMessageCollectionEducationalObjectMessageToAttach.getClass(), educationalObjectMessageCollectionEducationalObjectMessageToAttach.getId());
+                attachedEducationalObjectMessageCollection.add(educationalObjectMessageCollectionEducationalObjectMessageToAttach);
+            }
+            socialProfile.setEducationalObjectMessageCollection(attachedEducationalObjectMessageCollection);
             em.persist(socialProfile);
             if (socialProfileVisibility != null) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibility.getSocialProfile();
@@ -286,15 +296,24 @@ public class SocialProfileJpaController implements Serializable {
                     oldSocialProfileIdOfEducationalObjectCollectionEducationalObject = em.merge(oldSocialProfileIdOfEducationalObjectCollectionEducationalObject);
                 }
             }
+            for (EducationalObjectMessage educationalObjectMessageCollectionEducationalObjectMessage : socialProfile.getEducationalObjectMessageCollection()) {
+                SocialProfile oldSocialProfileFkOfEducationalObjectMessageCollectionEducationalObjectMessage = educationalObjectMessageCollectionEducationalObjectMessage.getSocialProfileFk();
+                educationalObjectMessageCollectionEducationalObjectMessage.setSocialProfileFk(socialProfile);
+                educationalObjectMessageCollectionEducationalObjectMessage = em.merge(educationalObjectMessageCollectionEducationalObjectMessage);
+                if (oldSocialProfileFkOfEducationalObjectMessageCollectionEducationalObjectMessage != null) {
+                    oldSocialProfileFkOfEducationalObjectMessageCollectionEducationalObjectMessage.getEducationalObjectMessageCollection().remove(educationalObjectMessageCollectionEducationalObjectMessage);
+                    oldSocialProfileFkOfEducationalObjectMessageCollectionEducationalObjectMessage = em.merge(oldSocialProfileFkOfEducationalObjectMessageCollectionEducationalObjectMessage);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             if (findSocialProfile(socialProfile.getTokenId()) != null) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException("SocialProfile " + socialProfile + " already exists.", ex);
+                throw new PreexistingEntityException("SocialProfile " + socialProfile + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -304,7 +323,7 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
 
-    public void edit(SocialProfile socialProfile) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException, br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException, br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void edit(SocialProfile socialProfile) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -344,6 +363,8 @@ public class SocialProfileJpaController implements Serializable {
             Collection<DiscussionTopicMsg> discussionTopicMsgCollectionNew = socialProfile.getDiscussionTopicMsgCollection();
             Collection<EducationalObject> educationalObjectCollectionOld = persistentSocialProfile.getEducationalObjectCollection();
             Collection<EducationalObject> educationalObjectCollectionNew = socialProfile.getEducationalObjectCollection();
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionOld = persistentSocialProfile.getEducationalObjectMessageCollection();
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionNew = socialProfile.getEducationalObjectMessageCollection();
             List<String> illegalOrphanMessages = null;
             if (socialProfileVisibilityOld != null && !socialProfileVisibilityOld.equals(socialProfileVisibilityNew)) {
                 if (illegalOrphanMessages == null) {
@@ -408,8 +429,16 @@ public class SocialProfileJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain EducationalObject " + educationalObjectCollectionOldEducationalObject + " since its socialProfileId field is not nullable.");
                 }
             }
+            for (EducationalObjectMessage educationalObjectMessageCollectionOldEducationalObjectMessage : educationalObjectMessageCollectionOld) {
+                if (!educationalObjectMessageCollectionNew.contains(educationalObjectMessageCollectionOldEducationalObjectMessage)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EducationalObjectMessage " + educationalObjectMessageCollectionOldEducationalObjectMessage + " since its socialProfileFk field is not nullable.");
+                }
+            }
             if (illegalOrphanMessages != null) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException(illegalOrphanMessages);
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             if (socialProfileVisibilityNew != null) {
                 socialProfileVisibilityNew = em.getReference(socialProfileVisibilityNew.getClass(), socialProfileVisibilityNew.getSocialProfileId());
@@ -497,6 +526,13 @@ public class SocialProfileJpaController implements Serializable {
             }
             educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
             socialProfile.setEducationalObjectCollection(educationalObjectCollectionNew);
+            Collection<EducationalObjectMessage> attachedEducationalObjectMessageCollectionNew = new ArrayList<EducationalObjectMessage>();
+            for (EducationalObjectMessage educationalObjectMessageCollectionNewEducationalObjectMessageToAttach : educationalObjectMessageCollectionNew) {
+                educationalObjectMessageCollectionNewEducationalObjectMessageToAttach = em.getReference(educationalObjectMessageCollectionNewEducationalObjectMessageToAttach.getClass(), educationalObjectMessageCollectionNewEducationalObjectMessageToAttach.getId());
+                attachedEducationalObjectMessageCollectionNew.add(educationalObjectMessageCollectionNewEducationalObjectMessageToAttach);
+            }
+            educationalObjectMessageCollectionNew = attachedEducationalObjectMessageCollectionNew;
+            socialProfile.setEducationalObjectMessageCollection(educationalObjectMessageCollectionNew);
             socialProfile = em.merge(socialProfile);
             if (socialProfileVisibilityNew != null && !socialProfileVisibilityNew.equals(socialProfileVisibilityOld)) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibilityNew.getSocialProfile();
@@ -653,18 +689,29 @@ public class SocialProfileJpaController implements Serializable {
                     }
                 }
             }
+            for (EducationalObjectMessage educationalObjectMessageCollectionNewEducationalObjectMessage : educationalObjectMessageCollectionNew) {
+                if (!educationalObjectMessageCollectionOld.contains(educationalObjectMessageCollectionNewEducationalObjectMessage)) {
+                    SocialProfile oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage = educationalObjectMessageCollectionNewEducationalObjectMessage.getSocialProfileFk();
+                    educationalObjectMessageCollectionNewEducationalObjectMessage.setSocialProfileFk(socialProfile);
+                    educationalObjectMessageCollectionNewEducationalObjectMessage = em.merge(educationalObjectMessageCollectionNewEducationalObjectMessage);
+                    if (oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage != null && !oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage.equals(socialProfile)) {
+                        oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage.getEducationalObjectMessageCollection().remove(educationalObjectMessageCollectionNewEducationalObjectMessage);
+                        oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage = em.merge(oldSocialProfileFkOfEducationalObjectMessageCollectionNewEducationalObjectMessage);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 String id = socialProfile.getTokenId();
                 if (findSocialProfile(id) == null) {
-                    throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException("The socialProfile with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The socialProfile with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -675,7 +722,7 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException, br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException, br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -685,7 +732,7 @@ public class SocialProfileJpaController implements Serializable {
                 socialProfile = em.getReference(SocialProfile.class, id);
                 socialProfile.getTokenId();
             } catch (EntityNotFoundException enfe) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException("The socialProfile with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The socialProfile with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
             SocialProfileVisibility socialProfileVisibilityOrphanCheck = socialProfile.getSocialProfileVisibility();
@@ -737,8 +784,15 @@ public class SocialProfileJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the EducationalObject " + educationalObjectCollectionOrphanCheckEducationalObject + " in its educationalObjectCollection field has a non-nullable socialProfileId field.");
             }
+            Collection<EducationalObjectMessage> educationalObjectMessageCollectionOrphanCheck = socialProfile.getEducationalObjectMessageCollection();
+            for (EducationalObjectMessage educationalObjectMessageCollectionOrphanCheckEducationalObjectMessage : educationalObjectMessageCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the EducationalObjectMessage " + educationalObjectMessageCollectionOrphanCheckEducationalObjectMessage + " in its educationalObjectMessageCollection field has a non-nullable socialProfileFk field.");
+            }
             if (illegalOrphanMessages != null) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException(illegalOrphanMessages);
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Users users = socialProfile.getUsers();
             if (users != null) {
@@ -796,7 +850,7 @@ public class SocialProfileJpaController implements Serializable {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             throw ex;
         } finally {

@@ -1,6 +1,6 @@
-$(document).ready(function(){
-    $(".menu-icon-one").parent().addClass("active");    
-    
+$(document).ready(function () {
+    $(".menu-icon-one").parent().addClass("active");
+
     $('.aside-image-title').find('a').each(function () {
         $(this).text(changeNameLength($(this).text(), 27));
     });
@@ -8,7 +8,7 @@ $(document).ready(function(){
     $('.column-object-description').children('span').each(function () {
         $(this).text(changeNameLength($(this).text(), 100));
     });
-    
+
     $('.column-object-title').find('a').each(function () {
         $(this).text(changeNameLength($(this).text(), 50));
     });
@@ -27,7 +27,13 @@ $(window).scroll(function () {
 });
 
 jsf.ajax.addOnEvent(function (data) {
-    $('.column-object-description').children('span').each(function () {
-        $(this).text(changeNameLength($(this).text(), 100));
-    });
+    if ($(data.source).hasClass("load-more-objects")
+            || $(data.source).hasClass("educational-object-search")) {
+        $('.column-object-description').children('span').each(function () {
+            $(this).text(changeNameLength($(this).text(), 100));
+        });
+        $('.column-object-title').find('a').each(function () {
+            $(this).text(changeNameLength($(this).text(), 50));
+        });
+    }
 });

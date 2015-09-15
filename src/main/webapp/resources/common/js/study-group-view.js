@@ -8,7 +8,7 @@ $(document).ready(function () {
     $('.column-object-description').children('span').each(function () {
         $(this).text(changeNameLength($(this).text(), 100));
     });
-    
+
     $('.column-object-title').find('a').each(function () {
         $(this).text(changeNameLength($(this).text(), 50));
     });
@@ -27,7 +27,13 @@ $(window).scroll(function () {
 });
 
 jsf.ajax.addOnEvent(function (data) {
-    $('.column-object-description').children('span').each(function () {
-        $(this).text(changeNameLength($(this).text(), 100));
-    });
+    if ($(data.source).hasClass("load-more-topics")
+            || $(data.source).hasClass("topic-search")) {
+        $('.column-object-description').children('span').each(function () {
+            $(this).text(changeNameLength($(this).text(), 100));
+        });
+        $('.column-object-title').find('a').each(function () {
+            $(this).text(changeNameLength($(this).text(), 50));
+        });
+    }
 });

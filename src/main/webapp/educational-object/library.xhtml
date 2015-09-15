@@ -57,12 +57,12 @@
                                 </h:outputText>
                             </p>
                             <p class="column-object-description">
-                                <!--<span>#{discussionTopic.body}</span>-->
+                                <span>#{educationalObject.description}</span>
                                 <ui:repeat value="#{educationalObject.tagsCollection}" var="tag">
                                     <span class="tag">##{tag.name}</span>
                                 </ui:repeat>
                             </p>
-                            <p class="column-object-comments"><img src="../resources/common/images/comments.png"/>0</p>
+                            <p class="column-object-comments"><img src="../resources/common/images/comments.png"/>#{educationalObject.educationalObjectMessageCollection.size()}</p>
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>

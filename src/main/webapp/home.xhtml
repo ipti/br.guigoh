@@ -32,12 +32,12 @@
                                 </h:outputText>
                             </p>
                             <p class="column-object-description">
-                                <!--descritivo do objeto educacional-->
+                                <span>#{educationalObject.description}</span>
                                 <ui:repeat var="tag" value="#{educationalObject.tagsCollection}">
                                     <span class="tag">##{tag.name}</span>
                                 </ui:repeat>
                             </p>
-                            <p class="column-object-comments"><img src="/resources/common/images/comments.png"/>0</p>
+                            <p class="column-object-comments"><img src="/resources/common/images/comments.png"/>#{educationalObject.educationalObjectMessageCollection.size()}</p>
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>
