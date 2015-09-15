@@ -46,12 +46,12 @@
                                 <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name == null and profileViewBean.himself}">
                                     <a class="add-new">
                                         <i class="fa fa-plus-square"></i> 
-                                        <span>Adicionar ocupação</span>
+                                        <span>#{localeBean.getString('Adicionar ocupação')}</span>
                                     </a>
                                 </ui:fragment>
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.editFieldList.contains('occupation')}">
-                                <h:inputText pt:placeholder="Qual a sua ocupação?" id="occupation-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
+                                <h:inputText pt:placeholder="#{localeBean.getString('Qual a sua ocupação?')}" id="occupation-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
                                 <h:commandLink styleClass="edit-button">
                                     <i class="fa fa-chevron-circle-right"></i>
                                     <f:ajax listener="#{profileViewBean.editField('occupation')}" execute="occupation-input" render="editable-profile-occupation editable-profile-occupation-2"></f:ajax>
@@ -74,12 +74,12 @@
                                 <ui:fragment rendered="#{profileViewBean.socialProfile.description == null and profileViewBean.himself}">
                                     <a class="add-new">
                                         <i class="fa fa-plus-square"></i> 
-                                        <span>Adicionar uma descrição</span>
+                                        <span>#{localeBean.getString('Adicionar uma descrição')}</span>
                                     </a>
                                 </ui:fragment>
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.editFieldList.contains('description')}">
-                                <h:inputTextarea pt:placeholder="Quem é você?" id="description-input" styleClass="editable-field editable-textarea" value="#{profileViewBean.editableFieldValue}"/>
+                                <h:inputTextarea pt:placeholder="#{localeBean.getString('Quem é você?')}" id="description-input" styleClass="editable-field editable-textarea" value="#{profileViewBean.editableFieldValue}"/>
                                 <h:commandLink styleClass="edit-button">
                                     <i class="fa fa-chevron-circle-right"></i>
                                     <f:ajax listener="#{profileViewBean.editField('description')}" execute="description-input" render="editable-profile-status"></f:ajax>
@@ -117,9 +117,9 @@
                 </ui:fragment>
                 <div class="profile-tabs">
                     <ul>
-                        <li id="profile-tab-about" class="active"><span class="tab tab-about">Sobre</span></li>
-                        <li id="profile-tab-objects"><span class="tab tab-objects">Objetos Educacionais</span></li>
-                        <li id="profile-tab-resume"><span class="tab tab-resume">Currículo</span></li>
+                        <li id="profile-tab-about" class="active"><span class="tab tab-about">#{localeBean.getString('Sobre')}</span></li>
+                        <li id="profile-tab-objects"><span class="tab tab-objects">#{localeBean.getString('Objetos Educacionais')}</span></li>
+                        <li id="profile-tab-resume"><span class="tab tab-resume">#{localeBean.getString('Currículo')}</span></li>
                     </ul>
                 </div>
                 <div class="clear"></div>
@@ -129,7 +129,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-heart" src="../resources/common/images/heart.png"/>
-                                    Matérias<br/> de Interesse
+                                    #{localeBean.getString('Matérias')}<br/> #{localeBean.getString('de Interesse')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -144,12 +144,12 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.mattersOfInterest == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{profileViewBean.editFieldList.contains('mattersOfInterest')}">
-                                        <h:inputText pt:placeholder="Quais assuntos lhe interessa?" id="matters-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Quais assuntos lhe interessa?')}" id="matters-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
                                         <h:commandLink styleClass="edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('mattersOfInterest')}" execute="matters-input" render="editable-profile-matters"></f:ajax>
@@ -167,7 +167,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-music" src="../resources/common/images/music.png"/>
-                                    Músicas
+                                    #{localeBean.getString('Músicas')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -182,12 +182,12 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.musics == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{profileViewBean.editFieldList.contains('musics')}">
-                                        <h:inputText pt:placeholder="Quais músicas você gosta de ouvir?" id="musics-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Quais músicas você gosta de ouvir?')}" id="musics-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
                                         <h:commandLink styleClass="edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('musics')}" execute="musics-input" render="editable-profile-musics"></f:ajax>
@@ -205,7 +205,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-book" src="../resources/common/images/book.png"/>
-                                    Livros
+                                    #{localeBean.getString('Livros')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -220,12 +220,12 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.books == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{profileViewBean.editFieldList.contains('books')}">
-                                        <h:inputText pt:placeholder="Quais livros você gostou de ler?" id="books-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Quais livros você gostou de ler?')}" id="books-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
                                         <h:commandLink styleClass="edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('books')}" execute="books-input" render="editable-profile-books"></f:ajax>
@@ -243,7 +243,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-movie" src="../resources/common/images/movie.png"/>
-                                    Filmes
+                                    #{localeBean.getString('Filmes')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -258,7 +258,7 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.movies == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
@@ -281,7 +281,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-sport" src="../resources/common/images/sport.png"/>
-                                    Esportes
+                                    #{localeBean.getString('Esportes')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -296,12 +296,12 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.sports == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{profileViewBean.editFieldList.contains('sports')}">
-                                        <h:inputText pt:placeholder="Quais esportes você gosta de praticar?" id="sports-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Quais esportes você gosta de praticar?')}" id="sports-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
                                         <h:commandLink styleClass="edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('sports')}" execute="sports-input" render="editable-profile-sports"></f:ajax>
@@ -319,7 +319,7 @@
                             <div class="profile-about-title">
                                 <h3>
                                     <img id="profile-icon-hobbie" src="../resources/common/images/hobbie.png"/>
-                                    Hobbies
+                                    #{localeBean.getString('Hobbies')}
                                 </h3>
                             </div>
                             <div class="profile-about-description">
@@ -334,12 +334,12 @@
                                         <ui:fragment rendered="#{profileViewBean.socialProfile.hobbies == null and profileViewBean.himself}">
                                             <a class="add-new">
                                                 <i class="fa fa-plus-square"></i> 
-                                                <span>Adicionar</span>
+                                                <span>#{localeBean.getString('Adicionar')}</span>
                                             </a>
                                         </ui:fragment>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{profileViewBean.editFieldList.contains('hobbies')}">
-                                        <h:inputText pt:placeholder="Quais são seus hobbies?" id="hobbies-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Quais são seus hobbies?')}" id="hobbies-input" styleClass="editable-field editable-social-interest " value="#{profileViewBean.editableFieldValue}"/>
                                         <h:commandLink styleClass="edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('hobbies')}" execute="hobbies-input" render="editable-profile-hobbies"></f:ajax>
@@ -368,12 +368,12 @@
                                     <ui:fragment rendered="#{profileViewBean.socialProfile.birthDate == null and profileViewBean.himself}">
                                         <a class="add-new">
                                             <i class="fa fa-plus-square"></i> 
-                                            <span>Adicionar</span>
+                                            <span>#{localeBean.getString('Adicionar')}</span>
                                         </a>
                                     </ui:fragment>
                                 </ui:fragment>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('birthDate')}">
-                                    <h:inputText pt:placeholder="Data de nascimento" id="birth-date-input" maxlength="10" styleClass="editable-field editable-birth-date" value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:inputText pt:placeholder="#{localeBean.getString('Data de nascimento')}" id="birth-date-input" maxlength="10" styleClass="editable-field editable-birth-date" value="#{profileViewBean.editableFieldValue}"/>
                                     <h:commandLink styleClass="edit-button">
                                         <i class="fa fa-chevron-circle-right"></i>
                                         <f:ajax listener="#{profileViewBean.editField('birthDate')}" execute="birth-date-input" render="editable-profile-birth-date"></f:ajax>
@@ -392,8 +392,8 @@
                         <ui:repeat value="#{profileViewBean.educationalObjectList}" var="educationalObject">
                             <div class="item-box-container">
                                 <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
-                                <p class="item-box-title">Publicador</p>
-                                <p class="item-box-aux">em</p>
+                                <p class="item-box-title">#{localeBean.getString('Publicador')}</p>
+                                <p class="item-box-aux">#{localeBean.getString('em')}</p>
                                 <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
                                 <div class="item-box-date">
                                     <img src="../resources/common/images/clock.png"/>
@@ -405,14 +405,14 @@
                         </ui:repeat>
                     </div>
                     <div class="profile-column-right">
-                        <p class="profile-object-number"><span>#{profileViewBean.educationalObjectList.size()}</span><br />Objetos <br />Educacionais <br />publicados</p>
+                        <p class="profile-object-number"><span>#{profileViewBean.educationalObjectList.size()}</span><br />#{localeBean.getString('Objetos invertido')} <br />#{localeBean.getString('Educacionais invertido')} <br />#{localeBean.getString('publicados')}</p>
                     </div>
                     <div class="clear"></div>
                 </div>
                 <div id="profile-container-resume" class="profile-container">
                     <div class="profile-column-left">
                         <div class="profile-resume-left">
-                            <p class="profile-resume-title">Currículo</p>
+                            <p class="profile-resume-title">#{localeBean.getString('Currículo')}</p>
                             <p class="profile-resume-name">#{profileViewBean.socialProfile.name}</p>
                             <h:panelGroup layout="block" id="editable-profile-occupation-2" class="editable-container">
                                 <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('occupation')}">
@@ -425,12 +425,12 @@
                                     <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name == null and profileViewBean.himself}">
                                         <a class="add-new">
                                             <i class="fa fa-plus-square"></i> 
-                                            <span>Adicionar ocupação</span>
+                                            <span>#{localeBean.getString('Adicionar ocupação')}</span>
                                         </a>
                                     </ui:fragment>
                                 </ui:fragment>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('occupation')}">
-                                    <h:inputText pt:placeholder="Qual a sua ocupação?" id="occupation-2-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:inputText pt:placeholder="#{localeBean.getString('Qual a sua ocupação?')}" id="occupation-2-input" styleClass="editable-field" value="#{profileViewBean.editableFieldValue}"/>
                                     <h:commandLink styleClass="edit-button">
                                         <i class="fa fa-chevron-circle-right"></i>
                                         <f:ajax listener="#{profileViewBean.editField('occupation')}" execute="occupation-2-input" render="editable-profile-occupation-2 editable-profile-occupation"></f:ajax>
@@ -454,12 +454,12 @@
                                     <ui:fragment rendered="#{profileViewBean.socialProfile.phone == null and profileViewBean.himself}">
                                         <a class="add-new add-new-phone">
                                             <i class="fa fa-plus-square"></i> 
-                                            <span>Adicionar telefone</span>
+                                            <span>#{localeBean.getString('Adicionar telefone')}</span>
                                         </a>
                                     </ui:fragment>
                                 </ui:fragment>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('phone')}">
-                                    <h:inputText pt:placeholder="Telefone" id="phone-input" maxlength="14" styleClass="editable-field " value="#{profileViewBean.editableFieldValue}"/>
+                                    <h:inputText pt:placeholder="#{localeBean.getString('Telefone')}" id="phone-input" maxlength="14" styleClass="editable-field " value="#{profileViewBean.editableFieldValue}"/>
                                     <h:commandLink styleClass="edit-button">
                                         <i class="fa fa-chevron-circle-right"></i>
                                         <f:ajax listener="#{profileViewBean.editField('phone')}" execute="phone-input" render="editable-profile-phone"></f:ajax>
@@ -511,33 +511,33 @@
                                                              and profileViewBean.himself}">
                                         <a class="add-new">
                                             <i class="fa fa-plus-square"></i> 
-                                            <span>Adicionar endereço</span>
+                                            <span>#{localeBean.getString('Adicionar endereço')}</span>
                                         </a>
                                     </ui:fragment>
                                 </ui:fragment>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('address')}">
                                     <h:panelGroup id="address-inputs" layout="block">
-                                        <h:inputText pt:placeholder="Endereço" styleClass="editable-field editable-address" value="#{profileViewBean.editableFieldValues[0]}"/>
-                                        <h:inputText pt:placeholder="Número" styleClass="editable-field editable-number" value="#{profileViewBean.editableFieldValues[1]}"/><br/>
-                                        <h:inputText pt:placeholder="Bairro" styleClass="editable-field editable-neighborhood" value="#{profileViewBean.editableFieldValues[2]}"/>
-                                        <h:inputText pt:placeholder="CEP" styleClass="editable-field editable-cep" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Endereço')}" styleClass="editable-field editable-address" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Número')}" styleClass="editable-field editable-number" value="#{profileViewBean.editableFieldValues[1]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Bairro')}" styleClass="editable-field editable-neighborhood" value="#{profileViewBean.editableFieldValues[2]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('CEP')}" styleClass="editable-field editable-cep" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
                                         <div class="select location">
                                             <h:selectOneMenu value="#{profileViewBean.editableFieldValues[6]}" class="country"> 
-                                                <f:selectItem itemLabel="País" itemValue=""/>
+                                                <f:selectItem itemLabel="#{localeBean.getString('País')}" itemValue=""/>
                                                 <f:selectItems value="#{profileViewBean.countryList}" var="country" itemLabel="#{country.name}" itemValue="#{country.id}"/>
                                                 <f:ajax event="change" listener="#{profileViewBean.loadStates()}" render="state-container city-container"/>
                                             </h:selectOneMenu>
                                         </div>
                                         <h:panelGroup layout="block" id="state-container" class="select location">
                                             <h:selectOneMenu value="#{profileViewBean.editableFieldValues[5]}" class="state">
-                                                <f:selectItem itemLabel="Estado" itemValue=""/>
+                                                <f:selectItem itemLabel="#{localeBean.getString('Estado')}" itemValue=""/>
                                                 <f:selectItems value="#{profileViewBean.stateList}" var="state" itemLabel="#{state.name}" itemValue="#{state.id}"/>
                                                 <f:ajax listener="#{profileViewBean.loadCities()}" render="city-container"/>
                                             </h:selectOneMenu>
                                         </h:panelGroup>
                                         <h:panelGroup layout="block" id="city-container" class="select location">
                                             <h:selectOneMenu value="#{profileViewBean.editableFieldValues[4]}" class="city">
-                                                <f:selectItem itemLabel="Cidade" itemValue=""/>
+                                                <f:selectItem itemLabel="#{localeBean.getString('Cidade')}" itemValue=""/>
                                                 <f:selectItems value="#{profileViewBean.cityList}" var="city" itemLabel="#{city.name}" itemValue="#{city.id}"/>
                                             </h:selectOneMenu>
                                         </h:panelGroup>
@@ -555,7 +555,7 @@
                         <div class="clear"></div>
                         <div class="profile-resume-history">
                             <div class="profile-history-container">
-                                <p class="profile-history-title">Educação</p>
+                                <p class="profile-history-title">#{localeBean.getString('Educação')}</p>
                             </div>
                             <h:panelGroup layout="block" id="editable-profile-education" class="editable-container">
                                 <ui:repeat value="#{profileViewBean.socialProfile.educationsCollection}" var="education">
@@ -570,7 +570,7 @@
                                                     <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                                                 </h:outputText>
                                                 <ui:fragment rendered="#{education.dataEnd == null}">
-                                                    <h:outputText value="ATUAL"/>
+                                                    <h:outputText value="#{localeBean.getString('ATUAL')}"/>
                                                 </ui:fragment>
                                             </h3>
                                         </div>
@@ -591,22 +591,22 @@
                                 <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('education') and profileViewBean.himself}">
                                     <a class="add-new">
                                         <i class="fa fa-plus-square"></i> 
-                                        <span>Adicionar</span>
+                                        <span>#{localeBean.getString('Adicionar')}</span>
                                     </a>
                                 </ui:fragment>
                                 <br/>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('education')}">
                                     <h:panelGroup id="education-inputs" layout="block">
-                                        <h:inputText pt:placeholder="Data de início*" styleClass="editable-field editable-education-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
-                                        <h:inputText pt:placeholder="Data de término" styleClass="editable-field editable-education-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Data de início')}*" styleClass="editable-field editable-education-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Data de término')}" styleClass="editable-field editable-education-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
                                         <div class="select scholarity">
                                             <h:selectOneMenu value="#{profileViewBean.editableFieldValues[2]}" styleClass="editable-education-scholarity">
-                                                <f:selectItem itemLabel="Nível de ensino*" itemValue=""/>
+                                                <f:selectItem itemLabel="#{localeBean.getString('Nível de ensino')}*" itemValue=""/>
                                                 <f:selectItems value="#{profileViewBean.scholarityList}" var="scholarity" itemLabel="#{scholarity.description}" itemValue="#{scholarity.id}"/>
                                             </h:selectOneMenu>
                                         </div><br/>
-                                        <h:inputText pt:placeholder="Curso*" styleClass="editable-field editable-education-name" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
-                                        <h:inputText pt:placeholder="Local*" styleClass="editable-field editable-education-location" value="#{profileViewBean.editableFieldValues[4]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Curso')}*" styleClass="editable-field editable-education-name" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Local')}*" styleClass="editable-field editable-education-location" value="#{profileViewBean.editableFieldValues[4]}"/><br/>
                                         <h:commandLink styleClass="edit-button education-edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('education')}" execute="education-inputs" render="editable-profile-education"></f:ajax>
@@ -618,7 +618,7 @@
                                 </h:commandLink>
                             </h:panelGroup>
                             <div class="profile-history-container">
-                                <p class="profile-history-title">Experiência</p>
+                                <p class="profile-history-title">#{localeBean.getString('Experiência')}</p>
                             </div>
                             <h:panelGroup layout="block" id="editable-profile-experience" class="editable-container">
                                 <ui:repeat value="#{profileViewBean.socialProfile.experiencesCollection}" var="experience">
@@ -633,7 +633,7 @@
                                                     <f:convertDateTime pattern="MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                                                 </h:outputText>
                                                 <ui:fragment rendered="#{experience.dataEnd == null}">
-                                                    <h:outputText value="ATUAL"/>
+                                                    <h:outputText value="#{localeBean.getString('ATUAL')}"/>
                                                 </ui:fragment>
                                             </h3>
                                         </div>
@@ -653,16 +653,16 @@
                                 <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('experience') and profileViewBean.himself}">
                                     <a class="add-new">
                                         <i class="fa fa-plus-square"></i> 
-                                        <span>Adicionar</span>
+                                        <span>#{localeBean.getString('Adicionar')}</span>
                                     </a>
                                 </ui:fragment>
                                 <br/>
                                 <ui:fragment rendered="#{profileViewBean.editFieldList.contains('experience')}">
                                     <h:panelGroup id="experience-inputs" layout="block">
-                                        <h:inputText pt:placeholder="Data de início*" styleClass="editable-field editable-experience-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
-                                        <h:inputText pt:placeholder="Data de término" styleClass="editable-field editable-experience-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
-                                        <h:inputText pt:placeholder="Ocupação*" styleClass="editable-field editable-experience-occupation" value="#{profileViewBean.editableFieldValues[2]}"/><br/>
-                                        <h:inputText pt:placeholder="Local*" styleClass="editable-field editable-experience-location" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Data de início')}*" styleClass="editable-field editable-experience-initial-date" value="#{profileViewBean.editableFieldValues[0]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Data de término')}" styleClass="editable-field editable-experience-final-date" value="#{profileViewBean.editableFieldValues[1]}"/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Ocupação')}*" styleClass="editable-field editable-experience-occupation" value="#{profileViewBean.editableFieldValues[2]}"/><br/>
+                                        <h:inputText pt:placeholder="#{localeBean.getString('Local')}*" styleClass="editable-field editable-experience-location" value="#{profileViewBean.editableFieldValues[3]}"/><br/>
                                         <h:commandLink styleClass="edit-button experience-edit-button">
                                             <i class="fa fa-chevron-circle-right"></i>
                                             <f:ajax listener="#{profileViewBean.editField('experience')}" execute="experience-inputs" render="editable-profile-experience"></f:ajax>
@@ -677,7 +677,7 @@
                     </div>
                     <div class="profile-column-right">
                         <h:commandLink class="btn-gray" action="#{profileViewBean.downloadPDF()}">
-                            Gerar PDF
+                            #{localeBean.getString('Gerar PDF')}
                         </h:commandLink>
                     </div>
                     <div class="clear"></div>
@@ -685,7 +685,7 @@
                 <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
                 <div id="image-cropping-modal" class="image-cropping-modal">
                     <div>
-                        <h1 class="modal-title">Cortar foto</h1>
+                        <h1 class="modal-title">#{localeBean.getString('Cortar foto')}</h1>
                         <hr/>
                         <a href="#close" title="Close" id="close-image-cropping-modal" class="close-image-cropping-modal">X</a>
                         <div class="photo-container">
@@ -694,9 +694,9 @@
                         <hr/>
                         <div class="modal-buttons">
                             <span class="image-cropping-button cut-photo">
-                                Cortar e salvar
+                                #{localeBean.getString('Cortar e salvar')}
                             </span>
-                            <a href="#close" title="Close" class="image-cropping-button cancel">Cancelar</a>
+                            <a href="#close" title="Close" class="image-cropping-button cancel">#{localeBean.getString('Cancelar')}</a>
                             <div class="clear"></div>
                         </div>
                     </div>
