@@ -7,6 +7,7 @@ package br.org.ipti.guigoh.controller.bean;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
+import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
@@ -18,6 +19,7 @@ import br.org.ipti.guigoh.util.DownloadService;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -32,6 +34,7 @@ import javax.inject.Named;
 public class EducationalObjectViewBean implements Serializable {
 
     private Integer educationalObjectId;
+    private String message;
 
     private EducationalObject educationalObject;
 
@@ -55,10 +58,6 @@ public class EducationalObjectViewBean implements Serializable {
             return null;
         }
     }
-    
-    public void downloadMedia(String path, String type) throws IOException {
-        DownloadService.downloadFileFromURL(path, type);
-    }
 
     private void initGlobalVariables() throws IOException {
         educationalObjectJpaController = new EducationalObjectJpaController();
@@ -71,6 +70,7 @@ public class EducationalObjectViewBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
             educationalObject = educationalObjectJpaController.findEducationalObject(educationalObjectId);
+            Collections.sort((List<EducationalObjectMessage>) educationalObject.getEducationalObjectMessageCollection(), (c1, c2) -> c2.getDate().compareTo(c1.getDate()));
             interestList = interestsJpaController.findInterestsEntities();
         }
     }
@@ -97,5 +97,13 @@ public class EducationalObjectViewBean implements Serializable {
 
     public void setInterestList(List<Interests> interestList) {
         this.interestList = interestList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

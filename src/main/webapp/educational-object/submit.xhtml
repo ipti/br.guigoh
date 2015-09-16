@@ -11,10 +11,13 @@
         <link rel="stylesheet" href="../resources/lib/css/jquery-ui.min.css"/>
     </ui:define>
     <!-- END PAGE STYLES -->
-    <ui:define name="content">
+    <ui:define name="metadata">
         <f:metadata>
-            <f:event type="preRenderComponent" listener="#{educationalObjectSubmitBean.init()}"/>
+            <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+            <f:event type="preRenderView" listener="#{educationalObjectSubmitBean.init()}"/>
         </f:metadata>
+    </ui:define>
+    <ui:define name="content">
         <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
             <h:panelGroup styleClass="register_box">
                 <h:panelGroup styleClass="ctn-form_title">

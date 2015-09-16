@@ -19,21 +19,21 @@
         </f:metadata>
     </ui:define>
     <ui:define name="content">
-        <h:form>
-            <div class="content-tags">
-                <p>
-                    <ui:repeat value="#{educationalObjectLibraryBean.interestList}" var="interest">
-                        <ui:param name="name" value="#{interest.name}"></ui:param>
-                        <ui:fragment rendered="#{interest.id == param.id}">
-                            <a href="library.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{interest.id != param.id}">
-                            <a href="library.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
-                        </ui:fragment>
-                    </ui:repeat>
-                </p>
-            </div>
-            <section id="group">
+        <div class="content-tags">
+            <p>
+                <ui:repeat value="#{educationalObjectLibraryBean.interestList}" var="interest">
+                    <ui:param name="name" value="#{interest.name}"></ui:param>
+                    <ui:fragment rendered="#{interest.id == param.id}">
+                        <a href="library.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{interest.id != param.id}">
+                        <a href="library.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
+                    </ui:fragment>
+                </ui:repeat>
+            </p>
+        </div>
+        <section id="group">
+            <h:form>
                 <div class="title">
                     <h1>#{localeBean.getString('Biblioteca de Objetos Educacionais')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
@@ -89,8 +89,8 @@
                     </div>
                 </aside>
                 <div class="clear"></div>
-            </section>
-        </h:form>
+            </h:form>
+        </section>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
