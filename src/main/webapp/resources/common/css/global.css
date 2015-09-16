@@ -72,6 +72,7 @@ hr {
 
 .column-list-item:nth-last-child(2) {
     margin: 0;
+    border-bottom: 0 !important;
 }
 
 .column-list-item a {

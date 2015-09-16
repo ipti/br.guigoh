@@ -49,8 +49,10 @@
     width: 600px;
 }
 
-.media-container video {
+.media-container .media {
     border-radius: 10px;
+    width: 600px;
+    height: 337px;
 }
 
 .media-type {
@@ -65,12 +67,20 @@
     margin-right: 5px;
     border-top: none;
     border-radius: 0 0 5px 5px;
+    cursor: pointer;
 }
 
 .media-type li a {
     display: block;
-    text-indent: -999px;
     height: 40px;
+}
+
+.media {
+    display: none;
+}
+
+.media.active {
+    display: inline-block;
 }
 
 .video-icon {
@@ -102,6 +112,31 @@
 .text-icon.active, .text-icon a:hover {
     background: url(../images/media-icons.png) no-repeat #787878;
     background-position: -124px 3px;
+}
+
+.object-resume {
+    color: gray;
+    margin-top: 20px;
+    font-size: 13px;
+    float: left;
+}
+
+.object-resume a {
+    color: gray;
+}
+
+.object-resume img {
+    margin: 4px 5px 0 0;
+    float: left;
+}
+
+.object-like {
+    float: right;
+    margin-top: 18px;
+}
+
+.object-like.active, .object-like:hover {
+    box-shadow:0 1px 1px #999;
 }
 
 .object-description {

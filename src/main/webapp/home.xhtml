@@ -41,13 +41,14 @@
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>
-                    <div class="load-more">
-                        <hr/>
-                        <h:commandLink class="load-more-objects" value="#{localeBean.getString('Carregar mais')}" action="#{homeBean.getMoreEducationalObjects()}" rendered="#{homeBean.existsMoreEducationalObjects}">
-                            <f:ajax render="object-column"/>
-                        </h:commandLink>
-                        <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Objetos Educacionais')}" rendered="#{!homeBean.existsMoreEducationalObjects}"/>
-                        <hr/>
+                    <div>
+                        <h:panelGroup layout="block" class="load-more" rendered="#{homeBean.existsMoreEducationalObjects}">
+                            <hr/>
+                            <h:commandLink class="load-more-objects" value="#{localeBean.getString('Carregar mais')}" action="#{homeBean.getMoreEducationalObjects()}">
+                                <f:ajax render="object-column"/>
+                            </h:commandLink>
+                            <hr/>
+                        </h:panelGroup>
                     </div>
                 </h:panelGroup>
                 <aside>
@@ -63,13 +64,14 @@
                                 <div class="clear"></div>
                             </div>
                         </ui:repeat>
-                        <div class="load-more">
-                            <hr/>
-                            <h:commandLink class="load-more-activities" value="" action="#{homeBean.getMoreActivities()}" rendered="#{homeBean.existsMoreActivities}">
-                                <f:ajax render="aside-container"/>
-                            </h:commandLink>
-                            <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Novidades na Rede')}" rendered="#{!homeBean.existsMoreActivities}"/>
-                            <hr/>
+                        <div>
+                            <h:panelGroup layout="block" class="load-more" rendered="#{homeBean.existsMoreActivities}">
+                                <hr/>
+                                <h:commandLink class="load-more-activities" value="" action="#{homeBean.getMoreActivities()}">
+                                    <f:ajax render="aside-container"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
                         </div>
                     </h:panelGroup>
                 </aside>

@@ -67,13 +67,14 @@
                             <div class="clear"></div>
                         </div>
                     </ui:repeat>
-                    <div class="load-more">
-                        <hr/>
-                        <h:commandLink class="load-more-topics" value="#{localeBean.getString('Carregar mais')}" rendered="#{studyGroupViewBean.existsMoreDiscussionTopics}">
-                            <f:ajax render="column" listener="#{studyGroupViewBean.getMoreDiscussionTopics()}"/>
-                        </h:commandLink>
-                        <h:outputText styleClass="no-more" value="#{localeBean.getString('Não há mais Tópicos')}" rendered="#{!studyGroupViewBean.existsMoreDiscussionTopics}"/>
-                        <hr/>
+                    <div>
+                        <h:panelGroup layout="block" class="load-more" rendered="#{studyGroupViewBean.existsMoreDiscussionTopics}">
+                            <hr/>
+                            <h:commandLink class="load-more-topics" value="#{localeBean.getString('Carregar mais')}">
+                                <f:ajax render="column" listener="#{studyGroupViewBean.getMoreDiscussionTopics()}"/>
+                            </h:commandLink>
+                            <hr/>
+                        </h:panelGroup>
                     </div>
                 </h:panelGroup>
                 <aside>

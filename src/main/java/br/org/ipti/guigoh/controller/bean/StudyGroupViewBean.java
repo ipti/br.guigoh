@@ -50,19 +50,19 @@ public class StudyGroupViewBean implements Serializable {
         moreTopics.stream().forEach((temp) -> {
             outList.add(temp);
         });
-        setDiscussionTopicList(outList);
+        discussionTopicList = outList;
         checkIfExistsMoreDiscussionTopics();
     }
 
     private void checkIfExistsMoreDiscussionTopics() {
         if (!discussionTopicList.isEmpty()) {
             if (discussionTopicJpaController.findDiscussionTopics(search, discussionTopicList.get(discussionTopicList.size() - 1).getData(), interestId, null).isEmpty()) {
-                setExistsMoreDiscussionTopics(false);
+                existsMoreDiscussionTopics = false;
             } else {
-                setExistsMoreDiscussionTopics(true);
+                existsMoreDiscussionTopics = true;
             }
         } else {
-            setExistsMoreDiscussionTopics(false);
+            existsMoreDiscussionTopics = false;
         }
     }
 

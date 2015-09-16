@@ -50,19 +50,19 @@ public class EducationalObjectLibraryBean implements Serializable {
         moreEducationalObjects.stream().forEach((temp) -> {
             outList.add(temp);
         });
-        setEducationalObjectList(outList);
+        educationalObjectList = outList;
         checkIfExistsMoreEducationalObjects();
     }
 
     private void checkIfExistsMoreEducationalObjects() {
         if (!educationalObjectList.isEmpty()) {
             if (educationalObjectJpaController.findEducationalObjects(search, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), interestId, null).isEmpty()) {
-                setExistsMoreEducationalObjects(false);
+                existsMoreEducationalObjects = false;
             } else {
-                setExistsMoreEducationalObjects(true);
+                existsMoreEducationalObjects = true;
             }
         } else {
-            setExistsMoreEducationalObjects(false);
+            existsMoreEducationalObjects = false;
         }
     }
 

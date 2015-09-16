@@ -52,19 +52,19 @@ public class HomeBean implements Serializable {
         moreObjects.stream().forEach((temp) -> {
             outList.add(temp);
         });
-        setEducationalObjectList(outList);
+        educationalObjectList = outList;
         checkIfExistsMoreEducationalObjects();
     }
 
     private void checkIfExistsMoreEducationalObjects() {
         if (!educationalObjectList.isEmpty()) {
             if (educationalObjectJpaController.findEducationalObjects(null, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), null, null).isEmpty()) {
-                setExistsMoreEducationalObjects(false);
+                existsMoreEducationalObjects = false;
             } else {
-                setExistsMoreEducationalObjects(true);
+                existsMoreEducationalObjects = true;
             }
         } else {
-            setExistsMoreEducationalObjects(false);
+            existsMoreEducationalObjects = false;
         }
     }
 
@@ -74,19 +74,19 @@ public class HomeBean implements Serializable {
         moreActivities.stream().forEach((temp) -> {
             outList.add(temp);
         });
-        setNewActivityList(outList);
+        newActivityList = outList;
         checkIfExistsMoreActivities();
     }
 
     private void checkIfExistsMoreActivities() {
         if (!newActivityList.isEmpty()) {
             if (discussionTopicJpaController.getMoreActivities(newActivityList.get(newActivityList.size() - 1).getData()).isEmpty()) {
-                setExistsMoreActivities(false);
+                existsMoreActivities = false;
             } else {
-                setExistsMoreActivities(true);
+                existsMoreActivities = true;
             }
         } else {
-            setExistsMoreActivities(false);
+            existsMoreActivities = false;
         }
     }
 

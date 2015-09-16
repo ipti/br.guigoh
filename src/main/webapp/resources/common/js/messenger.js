@@ -232,35 +232,6 @@ function loadMessageBlock(id, message, date, recent, direction) {
     return container;
 }
 
-function preventScrolling(ev) {
-    var $this = $(this),
-            scrollTop = this.scrollTop,
-            scrollHeight = this.scrollHeight,
-            height = $this.height(),
-            delta = (ev.type == 'DOMMouseScroll' ?
-                    ev.originalEvent.detail * -40 :
-                    ev.originalEvent.wheelDelta),
-            up = delta > 0;
-
-    var prevent = function () {
-        ev.stopPropagation();
-        ev.preventDefault();
-        ev.returnValue = false;
-        return false;
-    }
-
-    if (!up && -delta > scrollHeight - height - scrollTop) {
-        // Scrolling down, but this will take us past the bottom.
-        $this.scrollTop(scrollHeight);
-
-        return prevent();
-    } else if (up && delta > scrollTop) {
-        // Scrolling up, but this will take us past the top.
-        $this.scrollTop(0);
-        return prevent();
-    }
-}
-
 function showNewMessagesQuantity(id) {
     var box = $("#box-" + id);
     var length = box.find(".friend-message.new").length;

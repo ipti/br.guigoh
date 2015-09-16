@@ -39,21 +39,58 @@
                 </div>
                 <div class="column">
                     <div class="media-container">
-                        <video width="600" height="337" controls="controls">
-                            <source src="http://cdn.guigoh.com/guigoh/educationalobjects/1/media/Obj Edu 01 - Figuras de Linguagem.mp4" type="video/mp4"/>
-                        </video>
+                        <ui:repeat value="#{educationalObjectViewBean.educationalObject.educationalObjectMediaCollection}" var="media" varStatus="status">
+                            <ui:fragment rendered="#{media.type == 'mp4' || media.type == 'wmv' || media.type == 'mpeg' || media.type == 'avi'}">
+                                <video controls="controls" class="media" media="#{status.index}">
+                                    <source src="#{media.media}" type="video/#{media.type}"/>
+                                </video>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{media.type == 'wav' || media.type == 'mp3' || media.type == 'wma' || media.type == 'ogg'}">
+                                <audio controls="controls" class="media" media="#{status.index}">
+                                    <source src="#{media.media}" type="audio/#{media.type}"/>
+                                </audio> 
+                            </ui:fragment>
+                            <ui:fragment rendered="#{media.type == 'pdf'}">
+                                <iframe class="media" media="#{status.index}" src='#{media.media}'/>
+                            </ui:fragment>
+                        </ui:repeat>
                     </div>
                     <ul class="media-type">
-                        <li class="video-icon active">
-                            <a href="#">video</a>
-                        </li>
-                        <li class="audio-icon">
-                            <a href="#">audio</a>
-                        </li>
-                        <li class="text-icon">
-                            <a href="#">text</a>
-                        </li>
+                        <ui:repeat value="#{educationalObjectViewBean.educationalObject.educationalObjectMediaCollection}" var="media" varStatus="status">
+                            <ui:fragment rendered="#{media.type == 'mp4' || media.type == 'wmv' || media.type == 'mpeg' || media.type == 'avi'}">
+                                <li class="tab video-icon" media="#{status.index}"></li>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{media.type == 'wav' || media.type == 'mp3' || media.type == 'wma'}">
+                                <li class="tab audio-icon" media="#{status.index}"></li>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{media.type == 'pdf'}">
+                                <li class="tab text-icon" media="#{status.index}"></li>
+                            </ui:fragment>
+                        </ui:repeat>
                     </ul>
+                    <div class="clear"></div>
+                    <div class="object-resume">
+                        <span>#{localeBean.getString('Publicado por')}</span>
+                        <a href="../profile/view.xhtml?id=#{educationalObjectViewBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectViewBean.educationalObject.socialProfileId.name}</a>
+                        <span>#{localeBean.getString('em')}</span>
+                        <a href="../study-group/view.xhtml?id=#{educationalObjectViewBean.educationalObject.themeId.id}">##{educationalObjectViewBean.educationalObject.themeId.name}</a>
+                        <br/>
+                        <img src="../resources/common/images/clock.png"/>
+                        <h:outputText class="date" value="#{educationalObjectViewBean.educationalObject.date}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                        </h:outputText>
+                    </div>
+                    <h:panelGroup layout="block" class="object-like" id="object-like">
+                        <h:commandLink>
+                            <ui:fragment rendered="#{educationalObjectViewBean.like}">
+                                <img src="../resources/common/images/like-icon-false.png"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{!educationalObjectViewBean.like}">
+                                <img src="../resources/common/images/like-icon-false.png"/>
+                            </ui:fragment>
+                            <f:ajax listener="#{educationalObjectViewBean.likeObject}" render="object-like"/>
+                        </h:commandLink>
+                    </h:panelGroup>
                 </div>
                 <aside>
                     <div class="aside-container">
@@ -92,18 +129,18 @@
                     </div>
                 </aside>
                 <div class="clear"></div>
-                <div class="comment-label">
+                <h:panelGroup layout="block" id="comment-label" class="comment-label">
                     <img src="../resources/common/images/comments.png"/>
                     <span>#{localeBean.getString('Comentários')} (#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size()})</span>
-                </div>
+                </h:panelGroup>
                 <div class="illusory-textarea">
-                    <h:inputTextarea class="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
+                    <h:inputTextarea class="message-textarea" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
                     <hr/>
-                    <h:commandLink value="#{localeBean.getString('Publicar').toUpperCase()}">
-
+                    <h:commandLink class="publish-link" value="#{localeBean.getString('Publicar').toUpperCase()}">
+                        <f:ajax execute="message-textarea" listener="#{educationalObjectViewBean.publishMessage}" render="comment-label messages-container message-textarea"/>
                     </h:commandLink>
                 </div>
-                <div class="messages-container">
+                <h:panelGroup layout="block" id="messages-container" class="messages-container">
                     <ui:repeat value="#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection}" var="message" varStatus="status">
                         <div class="message-container">
                             <a href="../profile/view.xhtml?id=#{message.socialProfileFk.socialProfileId}"><img src="#{message.socialProfileFk.photo}"/></a>
@@ -116,7 +153,14 @@
                         </div>
                         <ui:fragment rendered="#{status.index lt educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size() - 1}"><hr/></ui:fragment>
                     </ui:repeat>
-                </div>
+                    <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
+                        <hr/>
+                        <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                            <f:ajax listener="#{searchViewBean.increaseLimit('SP')}" render="user-list"/>
+                        </h:commandLink>
+                        <hr/>
+                    </h:panelGroup>
+                </h:panelGroup>
                 <div class="clear"></div>
             </h:form>
         </section>
