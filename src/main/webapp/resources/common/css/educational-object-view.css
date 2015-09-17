@@ -210,6 +210,13 @@
     font-weight: bold;
 }
 
+.max-length {
+    font-size: 10px;
+    float: right;
+    color: gray;
+    margin-right: 10px;
+}
+
 .illusory-textarea {
     background-color: white;
     position: relative;

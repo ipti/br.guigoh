@@ -28,7 +28,7 @@ public class AuthorizeListener implements PhaseListener {
         // Obtém a página que atualmente está interagindo com o ciclo
         // Se for a página 'login.jsp' seta a variável como true
         boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("login") > -1;
-        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("register") > -1;
+        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("create") > -1;
         // Obtém a sessão atual
         // Resgata o nome do usuário logado
         Users user = new Users();
@@ -58,11 +58,9 @@ public class AuthorizeListener implements PhaseListener {
             // Verifica se o usuário não está na página de registro
             if (!isRegisterPage) {
                 if (user.getUsername() != null) {
-                    // Verifica se o usuário está logado e se não está na página de login
-                    if (!isLoginPage && ((user.getUsername().equals("")) || (user.getUsername().isEmpty()))) {
-                        // Redireciona o fluxo para a página de login
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/login/auth.xhtml");
-                    } else if (isLoginPage && !user.getUsername().equals("")) {
+                    CookieService.addCookie("user", user.getUsername());
+                    CookieService.addCookie("token", user.getToken());
+                    if (isLoginPage) {
                         // Se o usuário logado tentar acessar a página de login, ele é redirecionado para a página inicial
                         FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
                     }

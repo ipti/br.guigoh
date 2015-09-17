@@ -3,16 +3,35 @@ $(document).ready(function () {
 
     $(".media-type li").first().addClass("active");
     $(".media").first().addClass("active");
-    
+
     $('.message-textarea').on('DOMMouseScroll mousewheel', preventScrolling);
 
-    $('.message-textarea').keypress(function (e) {
+
+    var maxLength = 200;
+    $(document).on('keypress', '.message-textarea', function (e) {
         if (e.keyCode === 13 && !e.shiftKey)
         {
-            $('.publish-link').click();
-            $('.publish-link').val("");
+            e.preventDefault();
+            if ($(this).val().trim() !== "") {
+                $('.publish-link').click();
+                $('.message-textarea').val("");
+                $('.max-length').text("(" + maxLength + ")");
+            }
         }
     });
+
+    $('.max-length').text("(" + maxLength + ")");
+    $(document).on('keyup', '.message-textarea', function (e) {
+        var length = $(this).val().length;
+        length = maxLength - length;
+        $('.max-length').text("(" + length + ")");
+    });
+});
+
+$(window).scroll(function () {
+    if ($(window).scrollTop() + $(window).height() === $(document).height()) {
+        $('.load-more-messages').click();
+    }
 });
 
 $('.tab').click(function () {

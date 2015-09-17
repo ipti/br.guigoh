@@ -134,29 +134,32 @@
                     <span>#{localeBean.getString('Comentários')} (#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size()})</span>
                 </h:panelGroup>
                 <div class="illusory-textarea">
-                    <h:inputTextarea class="message-textarea" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
+                    <h:inputTextarea class="message-textarea" pt:maxlength="200" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
                     <hr/>
                     <h:commandLink class="publish-link" value="#{localeBean.getString('Publicar').toUpperCase()}">
                         <f:ajax execute="message-textarea" listener="#{educationalObjectViewBean.publishMessage}" render="comment-label messages-container message-textarea"/>
                     </h:commandLink>
+                    <span class="max-length"></span>
                 </div>
                 <h:panelGroup layout="block" id="messages-container" class="messages-container">
                     <ui:repeat value="#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection}" var="message" varStatus="status">
-                        <div class="message-container">
-                            <a href="../profile/view.xhtml?id=#{message.socialProfileFk.socialProfileId}"><img src="#{message.socialProfileFk.photo}"/></a>
-                            <a href="../profile/view.xhtml?id=#{message.socialProfileFk.socialProfileId}" class="author">#{message.socialProfileFk.name}</a>
-                            <span>#{localeBean.getString('às')} </span>
-                            <h:outputText class="date" value="#{message.date}">
-                                <f:convertDateTime pattern="HH:mm, dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                            </h:outputText>
-                            <span class="text">#{message.message}</span>
-                        </div>
-                        <ui:fragment rendered="#{status.index lt educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size() - 1}"><hr/></ui:fragment>
+                        <ui:fragment rendered="#{status.index lt educationalObjectViewBean.messagesLimit}">
+                            <div class="message-container">
+                                <a href="../profile/view.xhtml?id=#{message.socialProfileFk.socialProfileId}"><img src="#{message.socialProfileFk.photo}"/></a>
+                                <a href="../profile/view.xhtml?id=#{message.socialProfileFk.socialProfileId}" class="author">#{message.socialProfileFk.name}</a>
+                                <span>#{localeBean.getString('às')} </span>
+                                <h:outputText class="date" value="#{message.date}">
+                                    <f:convertDateTime pattern="HH:mm, dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                </h:outputText>
+                                <span class="text">#{message.message}</span>
+                            </div>
+                            <ui:fragment rendered="#{status.index lt educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size() - 1}"><hr/></ui:fragment>
+                        </ui:fragment>
                     </ui:repeat>
-                    <h:panelGroup layout="block" class="load-more search" rendered="#{searchViewBean.socialProfileList.size() gt searchViewBean.userLimit}">
+                    <h:panelGroup layout="block" class="load-more" rendered="#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size() gt educationalObjectViewBean.messagesLimit}">
                         <hr/>
-                        <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                            <f:ajax listener="#{searchViewBean.increaseLimit('SP')}" render="user-list"/>
+                        <h:commandLink class="load-more-messages" value="#{localeBean.getString('Carregar mais')}">
+                            <f:ajax listener="#{educationalObjectViewBean.increaseMessagesLimit()}" render="messages-container"/>
                         </h:commandLink>
                         <hr/>
                     </h:panelGroup>
