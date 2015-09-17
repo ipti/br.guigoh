@@ -83,10 +83,10 @@
                     <h:panelGroup layout="block" class="object-like" id="object-like">
                         <h:commandLink>
                             <ui:fragment rendered="#{educationalObjectViewBean.like}">
-                                <img src="../resources/common/images/like-icon-true.png"/>
+                                <div class="like-icon active"/>
                             </ui:fragment>
                             <ui:fragment rendered="#{!educationalObjectViewBean.like}">
-                                <img src="../resources/common/images/like-icon-false.png"/>
+                                <div class="like-icon"/>
                             </ui:fragment>
                             <f:ajax listener="#{educationalObjectViewBean.likeObject}" render="object-like"/>
                         </h:commandLink>

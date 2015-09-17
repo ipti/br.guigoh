@@ -135,8 +135,14 @@
     margin-top: 18px;
 }
 
-.object-like.active, .object-like:hover {
-    box-shadow:0 1px 1px #999;
+.like-icon {
+    background: url(../images/like-icon-false.png) no-repeat;
+    width: 43px;
+    height: 41px;
+}
+
+.like-icon.active, .like-icon:hover {
+    background: url(../images/like-icon-true.png);
 }
 
 .object-description {
