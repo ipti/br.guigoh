@@ -50,7 +50,7 @@
                             <a href="../educational-object/view.xhtml?id=#{educationalObject.id}"><img class="column-list-image" src="#{educationalObject.image}"/></a>
                             <h2 class="column-object-title"><a href="../educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a>
                             </h2>
-                            <small class="column-object-autor"> #{localeBean.getString('Publicado por')} <a href="../profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a></small>
+                            <small class="column-object-author"> #{localeBean.getString('Publicado por')} <a href="../profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a></small>
                             <p class="column-object-date"><img src="../resources/common/images/clock.png"/>
                                 <h:outputText styleClass="educational_object_date" value="#{educationalObject.date}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>

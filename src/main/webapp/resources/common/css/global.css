@@ -129,6 +129,10 @@ hr {
     width: 80%;
 }
 
+.column-object-description span:first-child {
+    white-space: pre-wrap;
+}
+
 .column-object-description .tag {
     color: gray;
 }

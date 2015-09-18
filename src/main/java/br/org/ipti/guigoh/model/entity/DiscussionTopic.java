@@ -156,6 +156,7 @@ public class DiscussionTopic implements Serializable {
         this.discussionTopicMsgCollection = discussionTopicMsgCollection;
     }
 
+    @XmlTransient
     public List<DiscussionTopicFiles> getDiscussionTopicFilesList() {
         return discussionTopicFilesList;
     }

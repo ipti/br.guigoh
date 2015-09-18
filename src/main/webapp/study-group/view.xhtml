@@ -37,6 +37,65 @@
                 <div class="title">
                     <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
+                <h:panelGroup layout="block" id="column">
+                    <div class="column-list-item">
+                        <div class="column-left">
+                            <a href="../profile/view.xhtml?id=#{studyGroupViewBean.discussionTopic.id}"><img class="column-list-image" src="#{studyGroupViewBean.discussionTopic.socialProfileId.photo}"/></a>
+                        </div>
+                        <div class="column-right">
+                            <h2 class="column-object-title">
+                                <span class="topic-title">#{studyGroupViewBean.discussionTopic.title}</span>
+                                <span class="column-object-date"><img src="../resources/common/images/clock.png"/>
+                                    <h:outputText styleClass="educational_object_date" value="#{studyGroupViewBean.discussionTopic.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
+                                </span>
+                            </h2>
+                            <small class="column-object-author"> #{localeBean.getString('Publicado por')} <a href="../profile/view.xhtml?id=#{studyGroupViewBean.discussionTopic.id}">#{studyGroupViewBean.discussionTopic.socialProfileId.name}</a></small>
+                            <p class="column-object-description">
+                                <span>#{studyGroupViewBean.discussionTopic.body}</span>
+                                <ui:repeat value="#{studyGroupViewBean.discussionTopic.tagsCollection}" var="tag">
+                                    <span class="tag">##{tag.name}</span>
+                                </ui:repeat>
+                            </p>
+                            <ui:repeat value="#{studyGroupViewBean.discussionTopic.discussionTopicFilesList}" var="discussionTopicFiles">
+                                <h:commandLink class="file_attached" action="#{studyGroupViewBean.downloadFile(discussionTopicFiles.filepath, discussionTopicFiles.fileType)}">
+                                    <img src="../resources/common/images/attach.png" />
+                                    <span>Anexo: #{discussionTopicFiles.fileName}.#{discussionTopicFiles.fileType}</span>
+                                </h:commandLink>
+                            </ui:repeat>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <ui:repeat value="#{studyGroupViewBean.discussionTopic.discussionTopicMsgCollection}" var="discussionTopicMessage">
+                        <div class="column-list-item">
+                            <div class="column-left">
+                                <a href="../profile/view.xhtml?id=#{discussionTopicMessage.socialProfileId.socialProfileId}"><img class="column-list-image" src="#{discussionTopicMessage.socialProfileId.photo}"/></a>
+                            </div>
+                            <div class="column-right">
+                                <small class="column-object-author"><a class="column-object-author" href="../profile/view.xhtml?id=#{discussionTopicMessage.socialProfileId.socialProfileId}">#{discussionTopicMessage.socialProfileId.name}</a></small>
+                                <p class="column-object-date"><img src="../resources/common/images/clock.png"/>
+                                    <h:outputText styleClass="educational_object_date" value="#{discussionTopicMessage.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
+                                </p>
+                                <p class="column-object-description">
+                                    <span>#{discussionTopicMessage.reply}</span>
+                                </p>
+                                <p class="column-object-attaches">
+                                </p>
+                                <ui:repeat value="#{discussionTopicMessage.discussionTopicFilesList}" var="discussionTopicFiles">
+                                    <h:commandLink class="file_attached" action="#{studyGroupViewBean.downloadFile(discussionTopicFiles.filepath, discussionTopicFiles.fileType)}">
+                                        <img src="../resources/common/images/attach.png" />
+                                        <span>Anexo: #{discussionTopicFiles.fileName}.#{discussionTopicFiles.fileType}</span>
+                                    </h:commandLink>
+                                </ui:repeat>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </ui:repeat>
+                    <div></div>
+                </h:panelGroup>
             </h:form>
         </section>
     </ui:define>

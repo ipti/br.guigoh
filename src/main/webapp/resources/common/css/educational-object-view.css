@@ -313,4 +313,5 @@
     display: block;
     color: black !important;
     margin-top: 5px;
+    white-space: pre-wrap;
 }

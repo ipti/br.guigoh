@@ -6,15 +6,20 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
+import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
+import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.util.DownloadService;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -31,6 +36,7 @@ public class StudyGroupViewBean implements Serializable {
     private List<Interests> interestList;
 
     private DiscussionTopicJpaController discussionTopicJpaController;
+    private DiscussionTopicFilesJpaController discussionTopicFilesJpaController;
     private InterestsJpaController interestsJpaController;
 
     public void init() throws IOException {
@@ -88,14 +94,23 @@ public class StudyGroupViewBean implements Serializable {
 //        }
 //    }
     
+    public void downloadFile(String filePath, String fileType) throws IOException {
+        DownloadService.downloadFileFromURL("http://" + filePath, fileType);
+    }
+    
     private void initGlobalVariables() throws IOException {
         discussionTopicJpaController = new DiscussionTopicJpaController();
         interestsJpaController = new InterestsJpaController();
+        discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
         
         if (discussionTopicId == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
             discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicId);
+            discussionTopic.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopic.getId(), 'T'));
+            for (DiscussionTopicMsg discussionTopicMsg : discussionTopic.getDiscussionTopicMsgCollection()){
+                discussionTopicMsg.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopicMsg.getId(), 'M'));
+            }
             interestList = interestsJpaController.findInterestsEntities();
         }
     }

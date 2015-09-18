@@ -38,3 +38,57 @@
     color: #999;
     padding-left: 10px;
 }
+
+.column-left {
+    float: left;
+}
+
+.column-right {
+    float: left;
+    width: calc(100% - 110px);
+}
+
+.column-object-description {
+    padding-top: 15px !important; 
+    width: calc(100% - 110px) !important;
+    margin-bottom: 15px;
+}
+
+.column-object-title {
+    font-weight: bold;
+    font-size: 15px;
+    float: left;
+    width: 100% !important;
+}
+
+.topic-title {
+    float: left;
+    width: 80%;
+}
+
+.column-object-date {
+    float: right;
+    margin-top: 4px;
+    font-weight: normal !important;
+}
+
+.column-object-author {
+    float: left;
+    width: 80%;
+}
+
+.file_attached {
+    float: left;
+}
+
+.file_attached img {
+    width: 25px;
+    float: left;
+    margin-right: 5px;
+}
+
+.file_attached span {
+    text-decoration: underline;
+    float: left;
+    margin-top: 2px;
+}
