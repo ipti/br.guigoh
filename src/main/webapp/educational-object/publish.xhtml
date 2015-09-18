@@ -4,62 +4,232 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:define name="title">#{localeBean.getString('Ambiente de Publicação')}</ui:define>
+    <ui:define name="title">#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link rel="stylesheet" href="../resources/common/css/educational-object-publish.css" />
+        <link rel="stylesheet" href="../resources/common/css/educational-object-submit.css" />
+        <link rel="stylesheet" href="../resources/lib/css/jquery-ui.min.css"/>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata">
         <f:metadata>
             <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+            <f:event type="preRenderView" listener="#{educationalObjectPublishBean.init()}"/>
         </f:metadata>
     </ui:define>
     <ui:define name="content">
-        <section id="content">
-            <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
-            <div id="enviroment-info">
-                <p>#{localeBean.getString("Esse ambiente é uma maneira de compartilhar conhecimento online.")}</p>
-                <p>#{localeBean.getString("Você pode submeter um Objeto Educacional, sugerir revisões existentes ou apenas ler o que outras pessoas escreveram e compartilhar esta informação com outros.")}</p>
-                <p>#{localeBean.getString("Então, compartilhe já o seu conhecimento!")}</p>
-                <div id="submit-container">
-                    <a href="submit.xhtml">
-                        <div id="submit-educational-object">
-                            <img src="../resources/common/images/icon-lamp-publish.png"/>
-                            <p>#{localeBean.getString("Publicar um")}</p>
-                            <p>#{localeBean.getString("Objeto Educacional")}</p>
-                        </div>
-                    </a>
-                </div>
-                <div id="step-by-step-info">
-                    <div id="step1">
-                        <img src="../resources/common/images/publication-step1.png"/>
-                        <p>#{localeBean.getString("Preencher o formulário de registro de Objetos Educacionais;")}</p>
-                    </div>
-                    <div id="step2">
-                        <img src="../resources/common/images/publication-step2.png"/>
-                        <p>#{localeBean.getString("Seu Objeto Educacional será enviado para revisão, por nossa equipe de revisores;")}</p>
-                    </div>
-                    <div id="step3">
-                        <img src="../resources/common/images/publication-step3.png"/>
-                        <p>#{localeBean.getString("Sua experiência será publicada pelo administrador do espaço.")}</p>
-                    </div>
-                </div>
-            </div>
-            <div id="educational-object-info">
-                <p>#{localeBean.getString("O que é um Objeto Educacional?")}</p>
-                <p>#{localeBean.getString("Um Objeto Educacional compreende produtos, técnicas e/ou metodologias reaplicáveis, desenvolvidas na interação com a comunidade e que represente efetivas soluções de transformação social.")}</p>
-                <p>#{localeBean.getString("Quer saber como produzir o seu próprio Objeto Educacional sobre um tema específico? Acesse nosso Manual:")}</p>
-                <a id="educational-object-manual" href="http://cdn.guigoh.com/guigoh/discussionFiles/topic/12/ManualOE-ACC-WEB.pdf" target="blank">
-                    <img src="../resources/common/images/banner-manual.png"/>
-                </a>
-            </div>
-            <div class="clear"></div>
-        </section>
+        <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
+            <h:panelGroup styleClass="register_box">
+                <h:panelGroup styleClass="ctn-form_title">
+                    <h:outputText styleClass="form_title" value="#{localeBean.getString('Formulário de Registro de Objetos Educacionais')}"/>
+                </h:panelGroup>
+                <h:panelGroup id="forms" styleClass="forms">
+                    <h:panelGroup styleClass="form1_body">
+                        <p class="form1_title">#{localeBean.getString('Licenciamento de seu Objeto Educacional').toUpperCase()}</p>
+                        <p>
+                            #{localeBean.getString('form license p1')}
+                        </p>
+                        <p>
+                            #{localeBean.getString('form license p2')}
+                            <strong>#{localeBean.getString('form license p2 bold')}</strong>
+                        </p>
+                        <p>
+                            #{localeBean.getString('form license p3')}
+                        </p>
+                        <p>
+                            #{localeBean.getString('form license p4')}
+                            <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.pt" title="">#{localeBean.getString('form license p4 link')}</a>
+                        </p>
+
+                        <label class="form1_highlight">
+                            <input type="checkbox" checked="true" name="license" class="radio" />
+                            #{localeBean.getString('form license label')}
+                        </label>
+                    </h:panelGroup>
+                    <h:panelGroup id="form2" styleClass="form2_body">
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Qual o nome do seu Objeto Educacional?')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 40 caracteres.')}"/>
+                        <h:outputText styleClass="educational_object_name_warning" value="#{localeBean.getString('O campo NOME não pode ser vazio.')}"/>
+                        <h:inputText styleClass="educational_object_name" maxlength="40" value="#{educationalObjectPublishBean.educationalObject.name}"/>
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Qual é o tema principal tratado pelo Objeto Educacional?')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Apenas uma opção.')}"/>
+                        <h:outputText styleClass="educational_object_theme_warning" value="#{localeBean.getString('Selecione ao menos uma opção.')}"/>
+                        <h:selectOneRadio id="themes" styleClass="educational_object_theme" converter="entityConverter" value="#{educationalObjectPublishBean.educationalObject.themeId}">
+                            <f:selectItems  id="theme" value="#{educationalObjectPublishBean.interestThemesList}" var="theme" itemLabel="#{localeBean.getString(theme.name)}" itemValue="#{theme}"/>
+                        </h:selectOneRadio>
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Palavras chave')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Digite as palavras separadas por vírgula. Limite de 7 palavras-chave.')}"/>
+                        <h:outputText styleClass="educational_object_tags_warning" value="#{localeBean.getString('Digite ao menos uma palavra chave.')}"/>
+                        <h:inputText styleClass="educational_object_tags" value="#{educationalObjectPublishBean.tags}"/>
+                    </h:panelGroup>
+                    <h:panelGroup id="form3" styleClass="form3_body">
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Autores')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Pessoal responsável pela produção deste Objeto Educacional. Limite de 4 autores.')}"/>
+                        <h:outputText styleClass="educational_object_author_warning_name" value="#{localeBean.getString('Digite um campo NOME válido. Apenas letras, mínimo de 3 caracteres')}"/>
+                        <h:outputText styleClass="educational_object_author_warning_email" value="#{localeBean.getString('Digite um campo E-MAIL válido. Ex: ____@____.__')}"/>
+                        <h:outputText styleClass="educational_object_author_warning_phone" value="#{localeBean.getString('Digite um campo TELEFONE válido.')}"/>
+                        <h:outputText styleClass="educational_object_author_warning_site" value="#{localeBean.getString('Digite um campo SITE válido. Ex: _____.___.__')}"/>
+                        <h:outputText styleClass="educational_object_author_warning" value="#{localeBean.getString('Insira ao menos 1 autor.')}"/>
+                        <h:panelGrid id="author_add" columns="2" styleClass="educational_object_author">
+                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Nome')}:"/>
+                            <h:inputText styleClass="educational_object_author_name" value="#{educationalObjectPublishBean.author.name}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('E-mail')}:"/>
+                            <h:inputText styleClass="educational_object_author_email" value="#{educationalObjectPublishBean.author.email}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Telefone')}:"/>
+                            <h:inputText styleClass="educational_object_author_phone"  value="#{educationalObjectPublishBean.author.phone}"/>
+                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Site')}:"/>
+                            <h:inputText styleClass="educational_object_author_site" value="#{educationalObjectPublishBean.author.site}"/>
+                        </h:panelGrid>
+                        <h:panelGroup styleClass="button_author_add" >
+                            <img id="button_add_icon" src="/resources/common/images/green-plus.png"/>
+                            <span class="button_add_label">#{localeBean.getString('Adicionar')}</span>
+                        </h:panelGroup>
+                        <h:commandLink styleClass="add">
+                            <f:ajax render='authors_added' execute='form3' listener="#{educationalObjectPublishBean.addAuthor()}"/>
+                        </h:commandLink>
+                        <h:panelGroup id="authors_added" styleClass="authors_added">
+                            <ui:repeat value="#{educationalObjectPublishBean.authorList}" var="author">
+                                <ui:param name="author" value="#{author}"/>
+                                <h:panelGrid styleClass="author_added" columns="2">
+                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Nome')}:"/><h:outputText styleClass="authors_added_value" value="#{author.name}"/>
+                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('E-mail')}:"/><h:outputText styleClass="authors_added_value" value="#{author.email}"/>
+                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Telefone')}:"/><h:outputText styleClass="authors_added_value" value="#{author.phone}"/>
+                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Site')}:"/><h:outputText styleClass="authors_added_value" value="#{author.site}"/>
+                                </h:panelGrid>
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="form4" styleClass="form4_body">
+                        <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Anexar arquivos')}"/>
+                        <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Fotos, vídeos, cartilhas, documentos explicativos etc.')}"/>
+                        <h:panelGroup styleClass="educational_object_image">
+                            <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Imagem')}"/>
+                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, jpeg, png e gif.')}"/>
+                            <h:outputText styleClass="educational_object_image_warning" value="#{localeBean.getString('Insira uma imagem para o Objeto Educacional.')}"/>
+                            <h:outputText styleClass="educational_object_image_type_warning" value="#{localeBean.getString('A imagem deve ser do tipo bmp, jpg, jpeg, png ou gif.')}"/>
+                            <h:graphicImage id="selectImage" value="/resources/common/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile styleClass="imageFile" id="imageFile" value="#{educationalObjectPublishBean.imageFile}"/>
+                        </h:panelGroup>
+                        <div id="noImage"/>
+                        <img id="image" src=""/>
+                        <span class="clear"></span>
+                        <h:panelGroup styleClass="educational_object_medias">
+                            <h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
+                            <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: jpg, jpeg, png, gif, bmp, mp3, wav, wma, mp4, avi, mpeg, wmv, ogg, webM, swf, pdf, doc, docx e txt.')}"/>
+                            <h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
+                            <h:outputText styleClass="educational_object_media_type_warning" value="#{localeBean.getString('As mídias devem ser dos tipos especificados acima.')}"/>
+                            <h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile1}"/>
+                            <br/>
+                            <h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile2}"/>
+                            <br/>
+                            <h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
+                            <h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
+                            <h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile3}"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="form5">
+                        <h:panelGroup styleClass="form5_body">
+                            <h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
+                            <div id="upload_progress_box">
+                                <!--<h:panelGroup id="uploaded1" styleClass="uploaded">-->
+                                <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
+                                <!--<h:panelGroup>-->
+                                <!--<span id="uploaded_file1" class="uploaded_file"/>-->
+                                <div id="progressbar">
+                                    <div class="progress-label"/>
+                                    <!--                                                0%
+                                                                                </div>-->
+                                </div>
+                                <!--                                        <div id="upload_bar1" class="upload_progress_bar">
+                                                                            <div id="upload_bg1" class="upload_progress_background">
+                                                                                <div id="upload_percent1" class="upload_progress_percent">0%</div>
+                                                                            </div>
+                                                                        </div>-->
+                                <!--</h:panelGroup>-->
+                                <!--</h:panelGroup>-->
+                                <!--                                <h:panelGroup id="uploaded2" styleClass="uploaded">
+                                                                    <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
+                                                                    <h:panelGroup>
+                                                                        <span id="uploaded_file2" class="uploaded_file"/>
+                                                                        <div id="upload_bar2" class="upload_progress_bar">
+                                                                            <div id="upload_bg2" class="upload_progress_background">
+                                                                                <div id="upload_percent2" class="upload_progress_percent">0%</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </h:panelGroup>
+                                                                </h:panelGroup>
+                                                                <h:panelGroup id="uploaded3" styleClass="uploaded">
+                                                                    <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
+                                                                    <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
+                                                                    <h:panelGroup>
+                                                                        <span id="uploaded_file3" class="uploaded_file"/>
+                                                                        <div id="upload_bar3" class="upload_progress_bar">
+                                                                            <div id="upload_bg3" class="upload_progress_background">
+                                                                                <div id="upload_percent3" class="upload_progress_percent">0%</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </h:panelGroup>
+                                                                </h:panelGroup>-->
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="form6">
+                        <h:panelGroup styleClass="form6_body">
+                            <h:outputText styleClass="educational_object_review" value="#{localeBean.getString('Seu Objeto Educacional foi enviado para a revisão.')}"/>
+                            <h:outputText styleClass="educational_object_review_tip" value="#{localeBean.getString('Em breve, seu objeto educacional será disponibilizado para todos os usuários da rede.')}"/>
+                            <a class="publish_new_object_container" href="/educational-object/submit.xhtml">
+                                <img id="publish_new_object_lamp" src="../resources/common/images/lamp.png"/>
+                                <span class="publish_new_object_label">#{localeBean.getString('Publicar um novo Objeto Educacional')}</span>
+                            </a>
+                            <a class="back_to_home_container" href="/home.xhtml">
+                                <img id="back_to_home" src="../resources/common/images/lamp.png"/>
+                                <span class="back_to_home_label">#{localeBean.getString('Voltar à pagina inicial')}</span>
+                            </a>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup styleClass="button_options">
+                    <h:link styleClass="button_cancel" outcome="/educational-object/publish.xhtml">
+                        <img id="button_cancel_icon" src="/resources/common/images/cross.png"/>
+                        <span class="button_cancel_label">#{localeBean.getString('Cancelar')}</span>
+                    </h:link>
+                    <h:panelGroup styleClass="page_progress_bar">
+                        <div class="page_progress"></div>
+                        <span class="page_progress_count">
+                            <span class="page_number">1</span>/4
+                        </span>
+                    </h:panelGroup>
+                    <span class="button_next">
+                        <img id="button_next_icon" src="/resources/common/images/forward.png"/>
+                        <span class="button_next_label">#{localeBean.getString('Avançar')}</span>
+                    </span>
+                    <h:panelGroup styleClass="button_submit">
+                        <img id="button_submit_icon" src="/resources/common/images/green-plus.png"/>
+                        <span class="button_submit_label">#{localeBean.getString('Submeter')}</span>
+                    </h:panelGroup>
+                    <h:commandLink id="submit" styleClass="submit">
+                        <f:ajax execute="@form" listener="#{educationalObjectPublishBean.submitForm()}"/>
+                    </h:commandLink>
+                    <span class="button_back">
+                        <img id="button_back_icon" src="/resources/common/images/back.png"/>
+                        <span class="button_back_label">#{localeBean.getString('Voltar')}</span>
+                    </span>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="../resources/common/js/educational-object-publish.js"/>
+        <script src="/resources/lib/js/jquery.maskedinput.min.js"/>
+        <script src="/resources/lib/js/jquery-ui.min.js"/>
+        <script src="/resources/common/js/educational-object-submit.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

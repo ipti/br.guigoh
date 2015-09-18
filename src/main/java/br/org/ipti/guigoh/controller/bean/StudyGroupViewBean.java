@@ -23,16 +23,12 @@ import javax.inject.Named;
 @ViewScoped
 @Named
 public class StudyGroupViewBean implements Serializable {
+    
+    private Integer discussionTopicId;
 
-    private Integer interestId;
-    private Boolean existsMoreDiscussionTopics;
-    private String search;
-    private Boolean hasTopic;
-
-    private Interests interest;
+    private DiscussionTopic discussionTopic;
 
     private List<Interests> interestList;
-    private List<DiscussionTopic> discussionTopicList, mostAcessedDiscussionTopicList;
 
     private DiscussionTopicJpaController discussionTopicJpaController;
     private InterestsJpaController interestsJpaController;
@@ -40,70 +36,84 @@ public class StudyGroupViewBean implements Serializable {
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            checkIfExistsMoreDiscussionTopics();
         }
     }
 
-    public void getMoreDiscussionTopics() {
-        List<DiscussionTopic> outList = discussionTopicList;
-        List<DiscussionTopic> moreTopics = discussionTopicJpaController.findDiscussionTopics(search, discussionTopicList.get(discussionTopicList.size() - 1).getData(), interestId, 5);
-        moreTopics.stream().forEach((temp) -> {
-            outList.add(temp);
-        });
-        discussionTopicList = outList;
-        checkIfExistsMoreDiscussionTopics();
-    }
-
-    private void checkIfExistsMoreDiscussionTopics() {
-        if (!discussionTopicList.isEmpty()) {
-            if (discussionTopicJpaController.findDiscussionTopics(search, discussionTopicList.get(discussionTopicList.size() - 1).getData(), interestId, null).isEmpty()) {
-                existsMoreDiscussionTopics = false;
-            } else {
-                existsMoreDiscussionTopics = true;
-            }
-        } else {
-            existsMoreDiscussionTopics = false;
-        }
-    }
-
-    public void searchTopicEvent() {
-        if (search.length() >= 3) {
-            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(search, null, interestId, 6);
-        } else {
-            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(null, null, interestId, 6);
-        }
-        checkIfExistsMoreDiscussionTopics();
-    }
-
+//    public void addMedia() throws IOException {
+//        if (fileList.size() < 3) {
+//            if (!fileMedia.getSubmittedFileName().equals("") && fileMedia.getSubmittedFileName().contains(".")) {
+//                fileList.add(fileMedia);
+//            }
+//        }
+//    }
+//
+//    public void removeMedia(Part media) {
+//        fileList.remove(media);
+//    }
+//
+//    public void replyTopic() throws RollbackFailureException, Exception {
+//        try {
+//            UtilJpaController utilJpaController = new UtilJpaController();
+//            newReply = new String(newReply.getBytes("ISO-8859-1"), "UTF-8");
+//            if (!newReply.equals("")) {
+//                DiscussionTopicMsg discussionTopicMsg = new DiscussionTopicMsg();
+//                discussionTopicMsg.setDiscussionTopicId(discussionTopic);
+//                discussionTopicMsg.setReply(newReply);
+//                discussionTopicMsg.setStatus('A');
+//                discussionTopicMsg.setSocialProfileId(socialProfile);
+//                discussionTopicMsg.setData(utilJpaController.getTimestampServerTime());
+//                discussionTopicMsgJpaController.create(discussionTopicMsg);
+//                List<DiscussionTopicFiles> dtfList = new ArrayList<>();
+//                if (!fileList.isEmpty()) {
+//                    for (Part part : fileList) {
+//                        String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "message" + File.separator + discussionTopicMsg.getId() + File.separator;
+//                        UploadService.uploadFile(part, filePath, null);
+//                        DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
+//                        String[] fileSplit = part.getSubmittedFileName().split("\\.");
+//                        discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+//                        discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
+//                        discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/message/" + discussionTopicMsg.getId() + "/" + part.getSubmittedFileName());
+//                        discussionTopicFiles.setFkType(MESSAGE);
+//                        discussionTopicFiles.setFkId(discussionTopicMsg.getId());
+//                        dtfList.add(discussionTopicFiles);
+//                        discussionTopicFilesJpaController.create(discussionTopicFiles);
+//                    }
+//                }
+//                discussionTopicMsg.setDiscussionTopicFilesList(dtfList);
+//                discussionTopicMsgList.add(discussionTopicMsg);
+//            }
+//            newReply = "";
+//            fileList = new ArrayList<>();
+//        } catch (IOException e) {
+//        }
+//    }
+    
     private void initGlobalVariables() throws IOException {
         discussionTopicJpaController = new DiscussionTopicJpaController();
         interestsJpaController = new InterestsJpaController();
-
-        if (interestId == null) {
+        
+        if (discussionTopicId == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
-            interest = interestsJpaController.findInterests(interestId);
-            discussionTopicList = discussionTopicJpaController.findDiscussionTopics(search, null, interestId, 6);
-            mostAcessedDiscussionTopicList = discussionTopicJpaController.findMostAcessedTopics(interestId);
+            discussionTopic = discussionTopicJpaController.findDiscussionTopic(discussionTopicId);
             interestList = interestsJpaController.findInterestsEntities();
-            hasTopic = !discussionTopicList.isEmpty();
         }
     }
 
-    public Interests getInterest() {
-        return interest;
+    public Integer getDiscussionTopicId() {
+        return discussionTopicId;
     }
 
-    public void setInterest(Interests interest) {
-        this.interest = interest;
+    public void setDiscussionTopicId(Integer discussionTopicId) {
+        this.discussionTopicId = discussionTopicId;
     }
 
-    public List<DiscussionTopic> getDiscussionTopicList() {
-        return discussionTopicList;
+    public DiscussionTopic getDiscussionTopic() {
+        return discussionTopic;
     }
 
-    public void setDiscussionTopicList(List<DiscussionTopic> discussionTopicList) {
-        this.discussionTopicList = discussionTopicList;
+    public void setDiscussionTopic(DiscussionTopic discussionTopic) {
+        this.discussionTopic = discussionTopic;
     }
 
     public List<Interests> getInterestList() {
@@ -112,45 +122,5 @@ public class StudyGroupViewBean implements Serializable {
 
     public void setInterestList(List<Interests> interestList) {
         this.interestList = interestList;
-    }
-
-    public Integer getInterestId() {
-        return interestId;
-    }
-
-    public void setInterestId(Integer interestId) {
-        this.interestId = interestId;
-    }
-
-    public List<DiscussionTopic> getMostAcessedDiscussionTopicList() {
-        return mostAcessedDiscussionTopicList;
-    }
-
-    public void setMostAcessedDiscussionTopicList(List<DiscussionTopic> mostAcessedDiscussionTopicList) {
-        this.mostAcessedDiscussionTopicList = mostAcessedDiscussionTopicList;
-    }
-
-    public Boolean getExistsMoreDiscussionTopics() {
-        return existsMoreDiscussionTopics;
-    }
-
-    public void setExistsMoreDiscussionTopics(Boolean existsMoreDiscussionTopics) {
-        this.existsMoreDiscussionTopics = existsMoreDiscussionTopics;
-    }
-
-    public String getSearch() {
-        return search;
-    }
-
-    public void setSearch(String search) {
-        this.search = search;
-    }
-
-    public Boolean getHasTopic() {
-        return hasTopic;
-    }
-
-    public void setHasTopic(Boolean hasTopic) {
-        this.hasTopic = hasTopic;
     }
 }

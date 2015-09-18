@@ -1,0 +1,40 @@
+.content-tags {
+    font-size: 11px;
+    background: #e6eadf;
+    padding: 5px 15px 2px;
+    border-bottom: 2px solid #c1c1c1;
+}
+
+.content-tags a {
+    text-decoration: none;
+    margin-right: 5px;
+    color: #999;
+}
+
+.content-tags a:hover {
+    color: #333;
+}
+
+.content-tags a.active {
+    color: #9caa35;
+} 
+
+#group {
+    padding: 18px 35px 50px;
+    background: #e6eadf;
+}
+
+#group .title {
+    margin-bottom: 50px;
+}
+
+#group h1 {
+    color: #404095;
+    font-size: 20px;
+    margin-bottom: 50px;
+}
+
+#group h1 span {
+    color: #999;
+    padding-left: 10px;
+}

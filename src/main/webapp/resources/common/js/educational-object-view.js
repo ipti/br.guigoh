@@ -1,3 +1,5 @@
+var maxLength;
+
 $(document).ready(function () {
     $(".menu-icon-one").parent().addClass("active");
 
@@ -7,7 +9,7 @@ $(document).ready(function () {
     $('.message-textarea').on('DOMMouseScroll mousewheel', preventScrolling);
 
 
-    var maxLength = 200;
+    maxLength = 200;
     $(document).on('keypress', '.message-textarea', function (e) {
         if (e.keyCode === 13 && !e.shiftKey)
         {
@@ -48,4 +50,8 @@ $('.tab').click(function () {
         $('.media').removeClass('active');
         media.addClass('active');
     }
+});
+
+jsf.ajax.addOnEvent(function(data){
+    $('.max-length').text("(" + maxLength + ")");
 });

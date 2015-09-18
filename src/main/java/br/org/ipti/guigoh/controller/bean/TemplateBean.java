@@ -6,6 +6,7 @@ package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
@@ -27,7 +28,7 @@ public class TemplateBean implements Serializable {
     private UserAuthorization authorization;
 
     private Boolean admin, reviser;
-    private Integer registeredUsersCount, interestId;
+    private Integer registeredUsersCount, interestId, pendingFriendsCount;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -35,6 +36,7 @@ public class TemplateBean implements Serializable {
             getLoggedSocialProfile();
             checkUserAuthorization();
             getRegisteredUsersQuantity();
+            loadPendingFriendsQuantity();
         }
     }
 
@@ -47,6 +49,11 @@ public class TemplateBean implements Serializable {
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         socialProfile.setName(socialProfile.getName().split(" ")[0]);
+    }
+    
+    public void loadPendingFriendsQuantity() {
+        FriendsJpaController friendsJpaController = new FriendsJpaController();
+        pendingFriendsCount = friendsJpaController.findPendingFriendsByToken(socialProfile.getTokenId()).size();
     }
 
     private void checkUserAuthorization() {
@@ -122,5 +129,13 @@ public class TemplateBean implements Serializable {
 
     public void setInterestId(Integer interestId) {
         this.interestId = interestId;
+    }
+
+    public Integer getPendingFriendsCount() {
+        return pendingFriendsCount;
+    }
+
+    public void setPendingFriendsCount(Integer pendingFriendsCount) {
+        this.pendingFriendsCount = pendingFriendsCount;
     }
 }

@@ -36,7 +36,7 @@ import javax.servlet.http.Part;
  */
 @ViewScoped
 @Named
-public class EducationalObjectSubmitBean implements Serializable {
+public class EducationalObjectPublishBean implements Serializable {
 
     private EducationalObject educationalObject;
 

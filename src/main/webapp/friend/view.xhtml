@@ -36,11 +36,11 @@
                                     <span>#{localeBean.getString('Bate-papo')}</span>
                                 </div>
                                 <div class="user-friend-status-container">
-                                    <h:commandLink>
+                                    <h:commandLink class="accept-user">
                                         <img class="user-friend-status accept" src="../resources/common/images/add-friend.png"/>
                                         <f:ajax listener="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>
-                                    <h:commandLink>
+                                    <h:commandLink class="reject-user">
                                         <img class="user-friend-status reject" src="../resources/common/images/remove-friend.png"/>
                                         <f:ajax listener="#{friendViewBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>

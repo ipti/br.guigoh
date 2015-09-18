@@ -4,17 +4,17 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
-    <ui:param name="themeName" value="#{studyGroupViewBean.interest.name}" />
+    <ui:param name="themeName" value="#{studyGroupViewBean.discussionTopic.themeId.name}" />
     <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/eo-library.sg-view.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/study-group-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata">
         <f:metadata>
             <f:event type="preRenderView" listener="#{templateBean.init()}"/>
-            <f:viewParam name="id" value="#{studyGroupViewBean.interestId}"/>
+            <f:viewParam name="id" value="#{studyGroupViewBean.discussionTopicId}"/>
             <f:event type="preRenderView" listener="#{studyGroupViewBean.init()}"/>
         </f:metadata>
     </ui:define>
@@ -23,11 +23,11 @@
             <p>
                 <ui:repeat value="#{studyGroupViewBean.interestList}" var="interest">
                     <ui:param name="name" value="#{interest.name}"></ui:param>
-                    <ui:fragment rendered="#{interest.id == param.id}">
-                        <a href="view.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
+                    <ui:fragment rendered="#{interest.id == studyGroupViewBean.discussionTopic.themeId.id}">
+                        <a href="library.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
                     </ui:fragment>
-                    <ui:fragment rendered="#{interest.id != param.id}">
-                        <a href="view.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
+                    <ui:fragment rendered="#{interest.id != studyGroupViewBean.discussionTopic.themeId.id}">
+                        <a href="library.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
                     </ui:fragment>
                 </ui:repeat>
             </p>
@@ -37,60 +37,6 @@
                 <div class="title">
                     <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
-                <div class="column-button">
-                    <ui:fragment rendered="#{studyGroupViewBean.hasTopic}">
-                        <h:inputText class="topic-search" value="#{studyGroupViewBean.search}" pt:placeholder="#{localeBean.getString('Procure tópicos')}">
-                            <f:ajax event="keyup" listener="#{studyGroupViewBean.searchTopicEvent()}" render="column"></f:ajax>
-                        </h:inputText>
-                    </ui:fragment>
-                    <a class="new-topic" href="../discussion-topic/create.xhtml?id=#{studyGroupViewBean.interestId}">#{localeBean.getString('Novo tópico').toUpperCase()}</a>
-                </div>
-                <h:panelGroup layout="block" class="column" id="column">
-                    <ui:repeat value="#{studyGroupViewBean.discussionTopicList}" var="discussionTopic">
-                        <div class="column-list-item">
-                            <a href="../discussion-topic/view.xhtml?id=#{discussionTopic.id}"><img class="column-list-image" src="#{discussionTopic.socialProfileId.photo}"/></a>
-                            <h2 class="column-object-title"><a href="../discussion-topic/view.xhtml?id=#{discussionTopic.id}">#{discussionTopic.title}</a>
-                            </h2>
-                            <small class="column-object-autor"> #{localeBean.getString('Publicado por')} <a href="../profile/view.xhtml?id=#{discussionTopic.socialProfileId.socialProfileId}">#{discussionTopic.socialProfileId.name}</a></small>
-                            <p class="column-object-date"><img src="../resources/common/images/clock.png"/>
-                                <h:outputText styleClass="educational_object_date" value="#{discussionTopic.data}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                </h:outputText>
-                            </p>
-                            <p class="column-object-description">
-                                <span>#{discussionTopic.body}</span>
-                                <ui:repeat value="#{discussionTopic.tagsCollection}" var="tag">
-                                    <span class="tag">##{tag.name}</span>
-                                </ui:repeat>
-                            </p>
-                            <p class="column-object-comments"><img src="../resources/common/images/comments.png"/>#{discussionTopic.discussionTopicMsgCollection.size()}</p>
-                            <div class="clear"></div>
-                        </div>
-                    </ui:repeat>
-                    <div>
-                        <h:panelGroup layout="block" class="load-more" rendered="#{studyGroupViewBean.existsMoreDiscussionTopics}">
-                            <hr/>
-                            <h:commandLink class="load-more-topics" value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax render="column" listener="#{studyGroupViewBean.getMoreDiscussionTopics()}"/>
-                            </h:commandLink>
-                            <hr/>
-                        </h:panelGroup>
-                    </div>
-                </h:panelGroup>
-                <aside>
-                    <div class="aside-container">
-                        <h3>#{localeBean.getString('Mais Acessados')}</h3>
-                        <ui:repeat value="#{studyGroupViewBean.mostAcessedDiscussionTopicList}" var="discussionTopic" varStatus="status">
-                            <div class="aside-image-item">
-                                <a href="../discussion-topic/view.xhtml?id=#{discussionTopic.id}"><img src="#{discussionTopic.socialProfileId.photo}"/></a>
-                                <h4 class="aside-image-title">#{status.index + 1}. <a href="../discussion-topic/view.xhtml?id=#{discussionTopic.id}">#{discussionTopic.title}</a></h4>
-                                <p>#{localeBean.getString('Publicado por')} <a href="../profile/view.xhtml?id=#{discussionTopic.socialProfileId.socialProfileId}">#{discussionTopic.socialProfileId.name}</a></p>	
-                                <hr/>	
-                            </div>
-                        </ui:repeat>
-                    </div>
-                </aside>
-                <div class="clear"></div>
             </h:form>
         </section>
     </ui:define>

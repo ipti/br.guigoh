@@ -25,6 +25,9 @@ jsf.ajax.addOnEvent(function (data) {
             var limit = $(this).hasClass("user-job") ? 25 : 22;
             $(this).text(changeNameLength($(this).text(), limit));
         });
+        if ($(data.source).hasClass("accept-user") || $(data.source).hasClass("reject-user")) {
+            $('.refresh-pending-friends').click();
+        }
     }
 });
 

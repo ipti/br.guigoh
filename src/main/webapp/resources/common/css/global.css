@@ -24,8 +24,8 @@ textarea:-moz-placeholder {
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+    -webkit-appearance: none; 
+    margin: 0; 
 }
 
 input[type=number] {
@@ -253,9 +253,26 @@ aside h3 {
     height: 110px;
     border-right: 1px solid #C1C1C1;
     float: left;
+    position: relative;
 }
 
-.menu-icons a {
+.menu-icons #pending-friends {
+    position: absolute;
+    right: 10px;
+    font-weight: bold;
+    top: 13px;
+    background-color: #999;
+    border-radius: 15px;
+    font-size: 11px;
+}
+
+.menu-icons #pending-friends a{
+    color: #e6eadf;
+    text-decoration: none;
+    padding: 7px;
+}
+
+.menu-icons .menu-text {
     text-decoration: none;
     width: 105px;
     display: table-cell;
@@ -272,10 +289,15 @@ aside h3 {
 }
 
 
-.menu-icons.active a, .menu-icons a:hover {
+.menu-icons.active .menu-text, .menu-icons:hover .menu-text {
     color: #323232;
     border-top: 5px solid #323232;
 }
+
+.menu-icons.active #pending-friends, .menu-icons:hover #pending-friends {
+    background-color: #323232;
+}
+
 
 .menu-icon-one {
     background: url('../images/menu-icons.png') no-repeat;
@@ -314,7 +336,7 @@ aside h3 {
     background-position: -235px -164px;
 }
 
-.menu-icons.active > .menu-icon-four, .menu-icon-four:hover {
+.menu-icons.active > .menu-icon-four, .menu-icon-four:hover, #pending-friends:hover + .menu-text {
     background-position: -360px -164px;
 }
 

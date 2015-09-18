@@ -4,9 +4,7 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
-import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
-import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
@@ -36,9 +34,8 @@ import javax.inject.Named;
 @Named
 public class EducationalObjectViewBean implements Serializable {
 
-    private Integer educationalObjectId;
+    private Integer educationalObjectId, messagesLimit;
     private String message;
-    private Integer messagesLimit;
     private Boolean like;
 
     private EducationalObject educationalObject;

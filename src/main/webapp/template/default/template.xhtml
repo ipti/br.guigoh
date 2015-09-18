@@ -25,7 +25,7 @@ and open the template in the editor.
     <body>
         <div class="container">
             <header>
-                <h:form>
+                <h:form prependId="false">
                     <div class="header-top">
                         <p>
                             <ui:fragment rendered="#{templateBean.admin}">
@@ -58,23 +58,29 @@ and open the template in the editor.
                         <nav class="nav-main">
                             <ul>
                                 <li class="menu-icons">
-                                    <a class="menu-icon-one" href="/educational-object/library.xhtml?id=#{templateBean.interestId}">#{localeBean.getString('Biblioteca de Objetos Educacionais')}</a>
+                                    <a class="menu-text menu-icon-one" href="/educational-object/library.xhtml?id=#{templateBean.interestId}">#{localeBean.getString('Biblioteca de Objetos Educacionais')}</a>
                                 </li>
                                 <li class="menu-icons">
-                                    <a class="menu-icon-two" href="/educational-object/publish.xhtml">#{localeBean.getString('Publicação de Objetos Educacionais')}</a>
+                                    <a class="menu-text menu-icon-two" href="/educational-object/pre-publish.xhtml">#{localeBean.getString('Publicação de Objetos Educacionais')}</a>
                                 </li>
                                 <li class="menu-icons">
-                                    <a class="menu-icon-three" href="/study-group/view.xhtml?id=#{templateBean.interestId}">#{localeBean.getString('Grupo de Estudos')}</a>
+                                    <a class="menu-text menu-icon-three" href="/study-group/library.xhtml?id=#{templateBean.interestId}">#{localeBean.getString('Grupo de Estudos')}</a>
                                 </li>
                                 <li class="menu-icons">
-                                    <a class="menu-icon-four" href="/friend/view.xhtml">#{localeBean.getString('Amigos')}</a>
+                                    <h:panelGroup layout="block" id="pending-friends">
+                                        <h:link class="pending-friends" outcome="/friend/view.xhtml" rendered="#{templateBean.pendingFriendsCount > 0}">#{templateBean.pendingFriendsCount}</h:link>
+                                    </h:panelGroup>
+                                    <a class="menu-text menu-icon-four" href="/friend/view.xhtml">#{localeBean.getString('Amigos')}</a>
                                 </li>
                                 <li class="menu-icons">
-                                    <a class="menu-icon-five" href="/search/view.xhtml">#{localeBean.getString('Buscar')}</a>
+                                    <a class="menu-text menu-icon-five" href="/search/view.xhtml">#{localeBean.getString('Buscar')}</a>
                                 </li>
                                 <div class="clear"></div>
                             </ul>
                         </nav>
+                        <h:commandLink class="refresh-pending-friends">
+                            <f:ajax listener="#{templateBean.loadPendingFriendsQuantity}" render="pending-friends"/>
+                        </h:commandLink>
                         <div class="header-profile">
                             <div class="greetings">
                                 <p>#{localeBean.getString('Olá, ')}</p>

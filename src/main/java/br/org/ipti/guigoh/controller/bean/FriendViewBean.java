@@ -72,11 +72,13 @@ public class FriendViewBean implements Serializable {
     public void removeFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
         friendsJpaController.removeFriend(user, id);
         getFriends();
+        friendInputSearch = "";
     }
 
     public void acceptFriend(Integer id) throws PreexistingEntityException, RollbackFailureException, Exception {
         friendsJpaController.acceptFriend(user, id);
         getFriends();
+        friendInputSearch = "";
     }
 
     private void initGlobalVariables() {

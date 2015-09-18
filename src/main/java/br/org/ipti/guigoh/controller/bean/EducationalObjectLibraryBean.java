@@ -25,9 +25,8 @@ import javax.inject.Named;
 public class EducationalObjectLibraryBean implements Serializable {
     
     private Integer interestId;
-    private Boolean existsMoreEducationalObjects;
+    private Boolean existsMoreEducationalObjects, hasEducationalObject;
     private String search;
-    private Boolean hasEducationalObject;
 
     private Interests interest;
 

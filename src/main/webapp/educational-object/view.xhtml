@@ -73,7 +73,7 @@
                         <span>#{localeBean.getString('Publicado por')}</span>
                         <a href="../profile/view.xhtml?id=#{educationalObjectViewBean.educationalObject.socialProfileId.socialProfileId}">#{educationalObjectViewBean.educationalObject.socialProfileId.name}</a>
                         <span>#{localeBean.getString('em')}</span>
-                        <a href="../study-group/view.xhtml?id=#{educationalObjectViewBean.educationalObject.themeId.id}">##{educationalObjectViewBean.educationalObject.themeId.name}</a>
+                        <a href="../study-group/library.xhtml?id=#{educationalObjectViewBean.educationalObject.themeId.id}">##{educationalObjectViewBean.educationalObject.themeId.name}</a>
                         <br/>
                         <img src="../resources/common/images/clock.png"/>
                         <h:outputText class="date" value="#{educationalObjectViewBean.educationalObject.date}">
@@ -136,7 +136,8 @@
                 <div class="illusory-textarea">
                     <h:inputTextarea class="message-textarea" pt:maxlength="200" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
                     <hr/>
-                    <h:commandLink class="publish-link" value="#{localeBean.getString('Publicar').toUpperCase()}">
+                    <h:commandLink class="publish-link">
+                        <img src="../resources/common/images/send.png"/>
                         <f:ajax execute="message-textarea" listener="#{educationalObjectViewBean.publishMessage}" render="comment-label messages-container message-textarea"/>
                     </h:commandLink>
                     <span class="max-length"></span>
