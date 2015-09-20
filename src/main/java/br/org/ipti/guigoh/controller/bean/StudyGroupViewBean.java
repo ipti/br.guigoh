@@ -13,12 +13,14 @@ import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.util.DownloadService;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 /**
@@ -95,7 +97,7 @@ public class StudyGroupViewBean implements Serializable {
 //    }
     
     public void downloadFile(String filePath, String fileType) throws IOException {
-        DownloadService.downloadFileFromURL("http://" + filePath, fileType);
+        DownloadService.downloadFileFromURL(filePath, fileType);
     }
     
     private void initGlobalVariables() throws IOException {

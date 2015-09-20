@@ -25,7 +25,7 @@ public class DownloadService {
     
     public static void downloadFileFromURL(String filePath, String fileType) throws MalformedURLException, IOException {
         File file = new File(filePath);
-        URL url = new URL(filePath);
+        URL url = new URL(!filePath.contains("http") ? "http://" + filePath : filePath);
         FileUtils.copyURLToFile(url, new File(filePath));
         downloadFile(file, fileType);
     }
