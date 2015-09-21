@@ -353,40 +353,4 @@ public class ExperiencesJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public void createInsert(Experiences experiences) throws RollbackFailureException, Exception {
-        if (experiences.getExperiencesPK() == null) {
-            experiences.setExperiencesPK(new ExperiencesPK());
-        }
-        experiences.getExperiencesPK().setTokenId(experiences.getSocialProfile().getTokenId());
-        EntityManager em = getEntityManager();
-        em.getTransaction().begin();
-        try {
-            String sql = "INSERT INTO experiences (token_id, name_id, data_begin, data_end, location_id, country_id, state_id, city_id) "
-                    + "VALUES(?1,?2,?3,?4,?5,?6,?7,null)";
-
-            Query query = em.createNativeQuery(sql);
-            query.setParameter(1, experiences.getExperiencesPK().getTokenId());
-            query.setParameter(2, experiences.getNameId().getId());
-            query.setParameter(3, experiences.getDataBegin());
-            query.setParameter(4, experiences.getDataEnd());
-            query.setParameter(5, experiences.getLocationId().getId());
-            query.setParameter(6, experiences.getCountryId().getId());
-            query.setParameter(7, experiences.getStateId().getId());
-            query.executeUpdate();
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            try {
-                em.getTransaction().rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-    
 }

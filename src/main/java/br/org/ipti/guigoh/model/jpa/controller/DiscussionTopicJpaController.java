@@ -315,7 +315,7 @@ public class DiscussionTopicJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<DiscussionTopic> discussionTopicList = (List<DiscussionTopic>) em.createNativeQuery("select * from discussion_topic "
-                    + "where status = 'A' and theme_id = '" + interestId + "' order by views limit 3 ", DiscussionTopic.class).getResultList();
+                    + "where status = 'A' and theme_id = '" + interestId + "' order by views desc limit 3 ", DiscussionTopic.class).getResultList();
             return discussionTopicList;
 
         } finally {
@@ -346,6 +346,18 @@ public class DiscussionTopicJpaController implements Serializable {
                     + "where dt.status = 'A' " + partialQuery, DiscussionTopic.class).getResultList();
             return discussionTopicList;
 
+        } finally {
+            em.close();
+        }
+    }
+
+    public void increaseViews(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery("UPDATE discussion_topic SET views = views + 1 where id = " + id);
+            query.executeUpdate();
+            em.getTransaction().commit();
         } finally {
             em.close();
         }

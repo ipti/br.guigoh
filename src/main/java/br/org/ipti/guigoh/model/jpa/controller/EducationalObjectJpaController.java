@@ -504,7 +504,7 @@ public class EducationalObjectJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
-                    + "where status = 'AC' and theme_id = '" + interestId + "' order by views limit 3 ", EducationalObject.class).getResultList();
+                    + "where status = 'AC' and theme_id = '" + interestId + "' order by views desc limit 3 ", EducationalObject.class).getResultList();
             return educationalObjectList;
 
         } finally {
@@ -535,6 +535,18 @@ public class EducationalObjectJpaController implements Serializable {
                             + "where eo.status = 'AC' " + partialQuery, EducationalObject.class).getResultList();
             return educationalObjectList;
 
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void increaseViews(Integer id) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery("UPDATE educational_object SET views = views + 1 where id = " + id);
+            query.executeUpdate();
+            em.getTransaction().commit();
         } finally {
             em.close();
         }

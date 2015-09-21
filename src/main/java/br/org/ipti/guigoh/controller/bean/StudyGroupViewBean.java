@@ -16,6 +16,7 @@ import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicMsgJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.DownloadService;
@@ -23,6 +24,7 @@ import br.org.ipti.guigoh.util.UploadService;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
@@ -57,12 +59,13 @@ public class StudyGroupViewBean implements Serializable {
     private InterestsJpaController interestsJpaController;
     private SocialProfileJpaController socialProfileJpaController;
 
-    public void init() throws IOException {
+    public void init() throws IOException, RollbackFailureException, Exception {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
+            discussionTopicJpaController.increaseViews(discussionTopic.getId());
         }
     }
-
+    
     public void addMedia(Part media) throws IOException {
         if (fileList.size() < 3) {
             if (!file.getSubmittedFileName().equals("") && file.getSubmittedFileName().contains(".")) {

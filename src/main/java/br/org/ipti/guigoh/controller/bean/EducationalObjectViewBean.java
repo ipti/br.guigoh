@@ -51,6 +51,7 @@ public class EducationalObjectViewBean implements Serializable {
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
+            educationalObjectJpaController.increaseViews(educationalObject.getId());
         }
     }
 
