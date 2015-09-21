@@ -36,6 +36,10 @@ function changeNameLength(name, limit) {
     return (name.length > limit) ? name.substring(0, limit - 3) + "..." : name;
 }
 
+function changeFileNameLength(name, limit) {
+    return (name.length > limit) ? name.substring(0, (limit/2) - 3) + "..." + name.substring(name.length - limit/2, name.length) : name;
+}
+
 function eventExceptions(data) {
     if ($(data.source).parent().hasClass("general-search")
             || $(data.source).hasClass("friend-search")

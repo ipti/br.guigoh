@@ -33,7 +33,7 @@
             </p>
         </div>
         <section id="group">
-            <h:form>
+            <h:form prependId="false" enctype="multipart/form-data">
                 <div class="title">
                     <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
@@ -67,8 +67,8 @@
                         </div>
                         <div class="clear"></div>
                     </div>
-                    <ui:repeat value="#{studyGroupViewBean.discussionTopic.discussionTopicMsgCollection}" var="discussionTopicMessage">
-                        <div class="column-list-item">
+                    <ui:repeat value="#{studyGroupViewBean.discussionTopic.discussionTopicMsgCollection}" var="discussionTopicMessage" varStatus="status">
+                        <div class="column-list-item #{status.index == studyGroupViewBean.discussionTopic.discussionTopicMsgCollection.size() - 1 ? 'last' : ''}">
                             <div class="column-left">
                                 <a href="../profile/view.xhtml?id=#{discussionTopicMessage.socialProfileId.socialProfileId}"><img class="column-list-image" src="#{discussionTopicMessage.socialProfileId.photo}"/></a>
                             </div>
@@ -95,6 +95,33 @@
                         </div>
                     </ui:repeat>
                     <div></div>
+                    <div class="reply-container">
+                        <img class="column-list-image" src="#{studyGroupViewBean.mySocialProfile.photo}"/>
+                        <div class="illusory-textarea">
+                            <h:inputTextarea class="message-textarea" id="message-textarea" pt:placeholder="#{localeBean.getString('Junte-se à conversa...')}" value="#{studyGroupViewBean.message}"/>
+                            <hr/>
+                            <h:panelGroup layout="block" id="file-list">
+                                <ui:repeat value="#{studyGroupViewBean.fileList}" var="file">
+                                    <div class="file-container">
+                                        <span class="file">#{file.submittedFileName}</span>
+                                        <h:commandLink class="remove-file">
+                                            <f:ajax listener="#{studyGroupViewBean.removeMedia(file)}" render="file-list"/>
+                                            <img src="../resources/common/images/icon-close.jpg"/>
+                                        </h:commandLink>
+                                    </div>
+                                </ui:repeat>
+                            </h:panelGroup>
+                            <h:commandLink class="publish-link">
+                                <img src="../resources/common/images/send.png"/>
+                                <f:ajax execute="message-textarea" listener="#{studyGroupViewBean.replyTopic()}" render="@form"/>
+                            </h:commandLink>
+                            <img class="attach-link" src="../resources/common/images/attach.png"/>
+                            <h:inputFile class="hidden file-input" value="#{studyGroupViewBean.file}">
+                                <f:ajax event="change" listener="#{studyGroupViewBean.addMedia(media)}" render="file-list"/>
+                            </h:inputFile>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
                 </h:panelGroup>
             </h:form>
         </section>

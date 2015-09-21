@@ -77,6 +77,10 @@
     width: 80%;
 }
 
+.column-list-item.last {
+    border-bottom: 0 !important;
+}
+
 .file_attached {
     float: left;
 }
@@ -91,4 +95,90 @@
     text-decoration: underline;
     float: left;
     margin-top: 2px;
+}
+
+.illusory-textarea {
+    background-color: white;
+    float: left;
+    position: relative;
+    width: calc(100% - 115px);
+    border-radius: 10px;
+    border: 1px solid #c1c1c1;
+    margin-bottom: 5px;
+}
+
+.illusory-textarea:before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    bottom: 110px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #C1C1C1;
+}
+
+.illusory-textarea:after {
+    content: "";
+    position: absolute;
+    left: -8px;
+    bottom: 112px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid white;
+}
+
+.message-textarea {
+    width: calc(100% - 20px);
+    height: 100px;
+    resize: none;
+    margin: 3px 3px 0 7px;
+    border: none;
+    line-height: 17px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.illusory-textarea hr {
+    margin: 0 10px;
+}
+
+.illusory-textarea a {
+    float: right;
+    margin-right: 20px;
+    margin-top: 4px;
+}
+
+.illusory-textarea img {
+    width: 25px;
+}
+
+.attach-link {
+    float: right;
+    margin-right: 20px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.reply-container {
+    margin-top: 50px;
+}
+
+.file-container {
+    float: left;
+    margin-left: 10px;
+}
+
+.file {
+    margin-top: 4px;
+    float: left;
+    font-size: 11px;
+    color: gray;
+}
+
+.remove-file {
+    margin-right: 0 !important;
 }

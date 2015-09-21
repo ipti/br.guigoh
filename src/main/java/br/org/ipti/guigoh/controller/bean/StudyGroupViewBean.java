@@ -6,16 +6,20 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
-import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.DownloadService;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -32,34 +36,40 @@ import javax.servlet.http.Part;
 public class StudyGroupViewBean implements Serializable {
     
     private Integer discussionTopicId;
+    private String message;
 
     private DiscussionTopic discussionTopic;
+    private SocialProfile mySocialProfile;
+    private Part file;
 
     private List<Interests> interestList;
+    private List<Part> fileList;
 
     private DiscussionTopicJpaController discussionTopicJpaController;
     private DiscussionTopicFilesJpaController discussionTopicFilesJpaController;
     private InterestsJpaController interestsJpaController;
+    private SocialProfileJpaController socialProfileJpaController;
+    
 
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
         }
     }
+    
+    public void addMedia(Part media) throws IOException {
+        if (fileList.size() < 3) {
+            if (!file.getSubmittedFileName().equals("") && file.getSubmittedFileName().contains(".")) {
+                fileList.add(file);
+            }
+        }
+    }
 
-//    public void addMedia() throws IOException {
-//        if (fileList.size() < 3) {
-//            if (!fileMedia.getSubmittedFileName().equals("") && fileMedia.getSubmittedFileName().contains(".")) {
-//                fileList.add(fileMedia);
-//            }
-//        }
-//    }
-//
-//    public void removeMedia(Part media) {
-//        fileList.remove(media);
-//    }
-//
-//    public void replyTopic() throws RollbackFailureException, Exception {
+    public void removeMedia(Part media) {
+        fileList.remove(media);
+    }
+
+    public void replyTopic() throws RollbackFailureException, Exception {
 //        try {
 //            UtilJpaController utilJpaController = new UtilJpaController();
 //            newReply = new String(newReply.getBytes("ISO-8859-1"), "UTF-8");
@@ -94,7 +104,9 @@ public class StudyGroupViewBean implements Serializable {
 //            fileList = new ArrayList<>();
 //        } catch (IOException e) {
 //        }
-//    }
+        message = "";
+        fileList = new ArrayList<>();
+    }
     
     public void downloadFile(String filePath, String fileType) throws IOException {
         DownloadService.downloadFileFromURL(filePath, fileType);
@@ -104,6 +116,7 @@ public class StudyGroupViewBean implements Serializable {
         discussionTopicJpaController = new DiscussionTopicJpaController();
         interestsJpaController = new InterestsJpaController();
         discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
+        socialProfileJpaController = new SocialProfileJpaController();
         
         if (discussionTopicId == null) {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
@@ -114,6 +127,8 @@ public class StudyGroupViewBean implements Serializable {
                 discussionTopicMsg.setDiscussionTopicFilesList(discussionTopicFilesJpaController.getDiscussionTopicFilesByFK(discussionTopicMsg.getId(), 'M'));
             }
             interestList = interestsJpaController.findInterestsEntities();
+            mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+            fileList = new ArrayList<>();
         }
     }
 
@@ -140,4 +155,37 @@ public class StudyGroupViewBean implements Serializable {
     public void setInterestList(List<Interests> interestList) {
         this.interestList = interestList;
     }
+
+    public SocialProfile getMySocialProfile() {
+        return mySocialProfile;
+    }
+
+    public void setMySocialProfile(SocialProfile mySocialProfile) {
+        this.mySocialProfile = mySocialProfile;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
+    }
+
+    public List<Part> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<Part> fileList) {
+        this.fileList = fileList;
+    }
+
 }
