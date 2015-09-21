@@ -14,6 +14,10 @@ $(document).ready(function () {
         }
     });
 
+    $('.file-attached a span').each(function () {
+        $(this).text(changeFileNameLength($(this).text(), 70));
+    });
+
     $(document).on('click', '.attach-link', function () {
         $('.file-input').click();
     });
@@ -25,6 +29,17 @@ jsf.ajax.addOnEvent(function (data) {
             $('.file-input').val("");
             $('.file').each(function () {
                 $(this).text(changeFileNameLength($(this).text(), 26));
+            });
+        }
+        if ($(data.source).hasClass("publish-link")) {
+            $('.file-attached a span').each(function () {
+                $(this).text(changeFileNameLength($(this).text(), 70));
+            });
+        }
+        if ($(data.source).hasClass("page-number") || $(data.source).hasClass("page-icons")) {
+            $('html, body').animate({scrollTop: 0}, 'fast');
+            $('.file-attached a span').each(function () {
+                $(this).text(changeFileNameLength($(this).text(), 70));
             });
         }
     }

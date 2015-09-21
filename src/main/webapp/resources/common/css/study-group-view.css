@@ -50,8 +50,12 @@
 
 .column-object-description {
     padding-top: 15px !important; 
-    width: calc(100% - 110px) !important;
+    width: 100% !important;
     margin-bottom: 15px;
+}
+
+.column-object-description p {
+    white-space: pre-wrap;
 }
 
 .column-object-title {
@@ -81,20 +85,28 @@
     border-bottom: 0 !important;
 }
 
-.file_attached {
+.file-attached {
+    float: left;
+    width: 100%;
+}
+
+.file-attached a{
     float: left;
 }
 
-.file_attached img {
+.file-attached a img {
     width: 25px;
     float: left;
     margin-right: 5px;
 }
 
-.file_attached span {
-    text-decoration: underline;
+.file-attached a span {
     float: left;
     margin-top: 2px;
+}
+
+.file-attached a:hover span {
+    text-decoration: underline;
 }
 
 .illusory-textarea {
@@ -135,7 +147,7 @@
     width: calc(100% - 20px);
     height: 100px;
     resize: none;
-    margin: 3px 3px 0 7px;
+    margin: 5px 3px -2px 7px;
     border: none;
     line-height: 17px;
     font-size: 12px;
@@ -164,7 +176,7 @@
 }
 
 .reply-container {
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .file-container {
@@ -181,4 +193,36 @@
 
 .remove-file {
     margin-right: 0 !important;
+}
+
+.pagination-top, .pagination-bottom {
+    text-align: right;
+}
+
+.pagination-top {
+    margin: -30px 0 14px 0;
+}
+
+.fa-step-backward, .fa-step-forward {
+    margin: 0 10px;
+}
+
+.page-number {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+.page-number:hover, .page-number.active {
+    text-decoration: underline;
+}
+
+.page-icons {
+    color: #333;
+    text-decoration: none;
+}
+
+.bold {
+    font-weight: bold;
 }

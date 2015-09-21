@@ -403,7 +403,7 @@
 }
 
 .edit-button {
-    color: black !important;
+    color: #333 !important;
     text-decoration: none;
 }
 
@@ -686,7 +686,7 @@
     font-size: 14px;
     padding-top: 10px;
     text-decoration: none;
-    color: black;
+    color: #333;
 }
 
 .item-box-title-bold p{
