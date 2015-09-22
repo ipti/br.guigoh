@@ -43,7 +43,7 @@ jsf.ajax.addOnEvent(function (data) {
             });
         }
         if ($(data.source).hasClass("tag-link") || $(data.source).hasClass("tag")) {
-            $('.tag-input').css("width", "calc(100% - " + $('.tags').css("width") + " - " + $('.tags').css("margin-right") + ")");
+            $('.tag-input').css("width", "calc(100% - " + $('.tags').css("width") + " - " + $('.tags').css("margin-right") + " - 100px)");
             if ($('.tag').length === 3) {
                 $('.tag-input').hide();
             } else {
