@@ -51,7 +51,7 @@ public class DiscussionTopicFiles implements Serializable {
     private int fkId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 500)
     @Column(name = "filepath")
     private String filepath;
     @Basic(optional = false)

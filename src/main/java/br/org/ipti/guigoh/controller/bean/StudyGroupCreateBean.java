@@ -6,14 +6,22 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
+import br.org.ipti.guigoh.model.entity.DiscussionTopicFiles;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicFilesJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.UploadService;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
@@ -32,7 +40,8 @@ public class StudyGroupCreateBean implements Serializable {
     private SocialProfile mySocialProfile;
     private Interests interest;
     private DiscussionTopic discussionTopic;
-    private Tags tag;
+
+    private String tag;
     private Integer interestId;
 
     private List<Interests> interestList;
@@ -54,17 +63,19 @@ public class StudyGroupCreateBean implements Serializable {
         if (tagList.size() < 3) {
             boolean exists = false;
             for (Tags t : tagList) {
-                if (t.getName().equals(tag.getName())){
+                if (t.getName().equals(tag)) {
                     exists = true;
                 }
             }
             if (!exists) {
+                Tags tag = new Tags();
+                tag.setName(this.tag);
                 tagList.add(tag);
-                tag = new Tags();
+                this.tag = "";
             }
         }
     }
-    
+
     public void removeTag(int index) {
         tagList.remove(index);
     }
@@ -82,43 +93,42 @@ public class StudyGroupCreateBean implements Serializable {
     }
 
     public void createTopic() throws Exception {
-//            Calendar c = Calendar.getInstance(TimeZone.getDefault());
-//            discussionTopic.setTitle(new String(discussionTopic.getTitle().getBytes("ISO-8859-1"), "UTF-8"));
-//            discussionTopic.setBody(new String(discussionTopic.getBody().getBytes("ISO-8859-1"), "UTF-8"));
-//            discussionTopic.setData(c.getTime());
-//            discussionTopic.setSocialProfileId(socialProfile);
-//            discussionTopic.setStatus(ACTIVE);
-//            discussionTopic.setThemeId(theme);
-//            DiscussionTopicJpaController discussionTopicJpaController = new DiscussionTopicJpaController();
-//            discussionTopicJpaController.create(discussionTopic);
-//            TagsJpaController tagsJpaController = new TagsJpaController();
-//            for (Tags t : tagList) {
-//                Tags tagDB = tagsJpaController.findTagByName(t.getName());
-//                if (tagDB == null) {
-//                    tagsJpaController.create(t);
-//                    tagsJpaController.createTagsXDiscussionTopic(t, discussionTopic);
-//                } else {
-//                    tagsJpaController.createTagsXDiscussionTopic(tagDB, discussionTopic);
-//                }
-//            }
-//            if (!fileList.isEmpty()) {
-//                DiscussionTopicFilesJpaController discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
-//                for (Part part : fileList) {
-//                    String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic" + File.separator + discussionTopic.getId() + File.separator;
-//                    UploadService.uploadFile(part, filePath, null);
-//                    DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
-//                    String[] fileSplit = part.getSubmittedFileName().split("\\.");
-//                    discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-//                    discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
-//                    discussionTopicFiles.setFilepath("http://cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
-//                    discussionTopicFiles.setFkType(TOPIC);
-//                    discussionTopicFiles.setFkId(discussionTopic.getId());
-//                    discussionTopicFilesJpaController.create(discussionTopicFiles);
-//                }
-//            }
-//            discussionTopic = new DiscussionTopic();
-//            tagList = new ArrayList<>();
-//            FacesContext.getCurrentInstance().getExternalContext().redirect("/theme/view.xhtml?id=" + themeID);
+        UtilJpaController utilJpaController = new UtilJpaController();
+        discussionTopic.setData(utilJpaController.getTimestampServerTime());
+        discussionTopic.setSocialProfileId(mySocialProfile);
+        discussionTopic.setStatus('A');
+        discussionTopic.setThemeId(interest);
+        discussionTopic.setViews(BigInteger.ZERO);
+        DiscussionTopicJpaController discussionTopicJpaController = new DiscussionTopicJpaController();
+        TagsJpaController tagsJpaController = new TagsJpaController();
+        discussionTopicJpaController.create(discussionTopic);
+        for (Tags t : tagList) {
+            Tags tagDB = tagsJpaController.findTagByName(t.getName());
+            if (tagDB == null) {
+                tagsJpaController.create(t);
+                tagsJpaController.createTagsXDiscussionTopic(t, discussionTopic);
+            } else {
+                tagsJpaController.createTagsXDiscussionTopic(tagDB, discussionTopic);
+            }
+        }
+        if (!fileList.isEmpty()) {
+            DiscussionTopicFilesJpaController discussionTopicFilesJpaController = new DiscussionTopicFilesJpaController();
+            for (Part part : fileList) {
+                String filePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+                        + File.separator + "guigoh" + File.separator + "discussionFiles" + File.separator + "topic"
+                        + File.separator + discussionTopic.getId() + File.separator;
+                UploadService.uploadFile(part, filePath, null);
+                DiscussionTopicFiles discussionTopicFiles = new DiscussionTopicFiles();
+                String[] fileSplit = part.getSubmittedFileName().split("\\.");
+                discussionTopicFiles.setFileName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+                discussionTopicFiles.setFileType(fileSplit[fileSplit.length - 1]);
+                discussionTopicFiles.setFilepath("cdn.guigoh.com/guigoh/discussionFiles/topic/" + discussionTopic.getId() + "/" + part.getSubmittedFileName());
+                discussionTopicFiles.setFkType('T');
+                discussionTopicFiles.setFkId(discussionTopic.getId());
+                discussionTopicFilesJpaController.create(discussionTopicFiles);
+            }
+        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/study-group/library.xhtml?id=" + interestId);
     }
 
     private void initGlobalVariables() throws IOException {
@@ -132,7 +142,6 @@ public class StudyGroupCreateBean implements Serializable {
 
             mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
             interest = interestsJpaController.findInterests(interestId);
-            tag = new Tags();
             discussionTopic = new DiscussionTopic();
 
             interestList = interestsJpaController.findInterestsEntities();
@@ -196,11 +205,11 @@ public class StudyGroupCreateBean implements Serializable {
         this.discussionTopic = discussionTopic;
     }
 
-    public Tags getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(Tags tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 

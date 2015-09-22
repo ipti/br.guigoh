@@ -35,7 +35,7 @@
                 <div class="main-container">
                     <img class="topic-creator" src="#{studyGroupCreateBean.mySocialProfile.photo}"/>
                     <div class="title-container">
-                        <h:inputText class="topic-title" value="#{studyGroupCreateBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Assunto')}..."/>
+                        <h:inputText class="topic-title" id="topic-title" autocomplete="off" value="#{studyGroupCreateBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Assunto')}..."/>
                     </div>
                     <div class="illusory-textarea">
                         <h:inputTextarea class="message-textarea" id="message-textarea" value="#{studyGroupCreateBean.discussionTopic.body}"/>
@@ -44,11 +44,11 @@
                                 <ui:repeat value="#{studyGroupCreateBean.tagList}" var="tag" varStatus="status">
                                     <h:commandLink class="tag">
                                         ##{tag.name}
-                                        <f:ajax listener="#{studyGroupCreateBean.removeTag(status.index)}" execute="" render="tags-container"/>
+                                        <f:ajax listener="#{studyGroupCreateBean.removeTag(status.index)}" render="tags-container"/>
                                     </h:commandLink>
                                 </ui:repeat>
                             </div>
-                            <h:inputText class="tag-input" id="tag-input" autocomplete="off" value="#{studyGroupCreateBean.tag.name}" pt:placeholder="#{localeBean.getString('Adicione tags aqui...')}"/>
+                            <h:inputText class="tag-input" id="tag-input" autocomplete="off"  value="#{studyGroupCreateBean.tag}" pt:placeholder="#{localeBean.getString('Adicione tags aqui...')}"/>
                             <h:commandLink class="tag-link">
                                 <f:ajax execute="tag-input" listener="#{studyGroupCreateBean.addTag()}" render="tags-container"/>
                             </h:commandLink>
@@ -68,7 +68,9 @@
                         <span class="publish-topic">
                             <img src="../resources/common/images/send.png"/>
                         </span>
-                        <h:commandLink class="publish-link" action="#{studyGroupCreateBean.createTopic()}" />
+                        <h:commandLink class="publish-link">
+                            <f:ajax  execute="@form" listener="#{studyGroupCreateBean.createTopic()}"/>
+                        </h:commandLink>
                         <img class="attach-link" src="../resources/common/images/attach.png"/>
                         <h:inputFile class="hidden file-input" value="#{studyGroupCreateBean.file}">
                             <f:ajax event="change" listener="#{studyGroupCreateBean.addMedia()}" render="file-list"/>
