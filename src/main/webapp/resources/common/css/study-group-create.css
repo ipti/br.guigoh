@@ -1,3 +1,10 @@
+/* POG pra resolver problema de scroll vertical surgindo pós ajax */
+html {
+    overflow-y: hidden; 
+}
+/* POG */
+
+
 .content-tags {
     font-size: 11px;
     background: #e6eadf;
@@ -39,91 +46,35 @@
     padding-left: 10px;
 }
 
-.column-left {
+.topic-creator {
+    width: 95px;
+    height: 95px;
+    margin-right: 15px;
     float: left;
-}
-
-.column-right {
-    float: left;
-    width: calc(100% - 110px);
-}
-
-.column-object-description {
-    padding-top: 15px !important; 
-    width: 100% !important;
-    margin-bottom: 15px;
-}
-
-.column-object-description p {
-    white-space: pre-wrap;
-}
-
-.column-object-title {
-    font-weight: bold;
-    font-size: 15px;
-    float: left;
-    width: 100% !important;
 }
 
 .topic-title {
     float: left;
-    width: 80%;
-}
-
-.column-object-date {
-    float: right;
-    margin-top: 4px;
-    font-weight: normal !important;
-}
-
-.column-object-author {
-    float: left;
-    width: 80%;
-}
-
-.column-list-item.last {
-    border-bottom: 0 !important;
-}
-
-.file-attached {
-    float: left;
     width: 100%;
+    border-radius: 10px;
+    border: 1px solid #C1C1C1;
+    height: 30px;
+    text-indent: 10px;
+    position: relative
 }
 
-.file-attached a{
-    float: left;
-}
-
-.file-attached a img {
-    width: 25px;
-    float: left;
-    margin-right: 5px;
-}
-
-.file-attached a span {
-    float: left;
-    margin-top: 2px;
-}
-
-.file-attached a:hover span {
-    text-decoration: underline;
-}
-
-.illusory-textarea {
-    background-color: white;
+.title-container {
     float: left;
     position: relative;
-    width: calc(100% - 115px);
-    border-radius: 10px;
-    border: 1px solid #c1c1c1;
+    width: calc(100% - 130px);
     margin-bottom: 5px;
 }
 
-.illusory-textarea:before {
+.title-container:before {
     content: "";
     position: absolute;
-    left: -10px;
-    bottom: 110px;
+    left: -9px;
+    top: 7px;
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
@@ -131,11 +82,11 @@
     border-right: 10px solid #C1C1C1;
 }
 
-.illusory-textarea:after {
+.title-container:after {
     content: "";
     position: absolute;
-    left: -8px;
-    bottom: 112px;
+    left: -7px;
+    top: 9px;
     width: 0;
     height: 0;
     border-top: 8px solid transparent;
@@ -143,9 +94,18 @@
     border-right: 8px solid white;
 }
 
+.illusory-textarea {
+    background-color: white;
+    float: left;
+    width: calc(100% - 130px);
+    border-radius: 10px;
+    border: 1px solid #c1c1c1;
+    margin-bottom: 5px;
+}
+
 .message-textarea {
     width: calc(100% - 20px);
-    height: 100px;
+    height: 150px;
     resize: none;
     margin: 5px 3px -2px 7px;
     border: none;
@@ -158,25 +118,15 @@
     margin: 0 10px;
 }
 
-.illusory-textarea a {
-    float: right;
-    margin-right: 20px;
-    margin-top: 4px;
-}
-
 .illusory-textarea img {
     width: 25px;
 }
 
-.attach-link {
+.attach-link, .publish-topic {
     float: right;
     margin-right: 20px;
     margin-top: 4px;
     cursor: pointer;
-}
-
-.reply-container {
-    margin-top: 20px;
 }
 
 .file-container {
@@ -197,34 +147,32 @@
     margin-top: 4px;
 }
 
-.pagination-top, .pagination-bottom {
-    text-align: right;
-}
-
-.pagination-top {
-    margin: -30px 0 14px 0;
-}
-
-.fa-step-backward, .fa-step-forward {
+.tags-container {
+    height: 30px;
+    border-top: 1px dashed gray;
     margin: 0 10px;
 }
 
-.page-number {
+.tag-input {
+    height: 20px;
+    margin-top: 3px;
+    border: 0;
+    float: left;
+    width: 100%;
+}
+
+.tags {
+    float: left;
+    margin-top: 1.5px;
+    margin-right: 5px;
+}
+
+.tag {
+    font-size: 11px;
+    background-color: #cbcbcb;
+    margin-right: 5px;
     color: #333;
     text-decoration: none;
-    font-size: 12px;
-    margin: 0 5px;
-}
-
-.page-number:hover, .page-number.active {
-    text-decoration: underline;
-}
-
-.page-icons {
-    color: #333;
-    text-decoration: none;
-}
-
-.bold {
-    font-weight: bold;
+    padding: 7px 5px;
+    border-radius: 4px;
 }

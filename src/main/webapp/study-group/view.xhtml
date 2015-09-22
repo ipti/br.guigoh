@@ -23,12 +23,7 @@
             <p>
                 <ui:repeat value="#{studyGroupViewBean.interestList}" var="interest">
                     <ui:param name="name" value="#{interest.name}"></ui:param>
-                    <ui:fragment rendered="#{interest.id == studyGroupViewBean.discussionTopic.themeId.id}">
-                        <a href="library.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
-                    </ui:fragment>
-                    <ui:fragment rendered="#{interest.id != studyGroupViewBean.discussionTopic.themeId.id}">
-                        <a href="library.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
-                    </ui:fragment>
+                    <a href="library.xhtml?id=#{interest.id}" class="#{interest.id == studyGroupViewBean.discussionTopic.themeId.id ? 'active' : ''}">##{localeBean.getString(name)}</a>
                 </ui:repeat>
             </p>
         </div>
@@ -168,7 +163,7 @@
                             </h:commandLink>
                             <img class="attach-link" src="../resources/common/images/attach.png"/>
                             <h:inputFile class="hidden file-input" value="#{studyGroupViewBean.file}">
-                                <f:ajax event="change" listener="#{studyGroupViewBean.addMedia(media)}" render="file-list"/>
+                                <f:ajax event="change" listener="#{studyGroupViewBean.addMedia()}" render="file-list"/>
                             </h:inputFile>
                         </div>
                     </div>

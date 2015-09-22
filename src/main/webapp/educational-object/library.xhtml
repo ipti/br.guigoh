@@ -23,12 +23,7 @@
             <p>
                 <ui:repeat value="#{educationalObjectLibraryBean.interestList}" var="interest">
                     <ui:param name="name" value="#{interest.name}"></ui:param>
-                    <ui:fragment rendered="#{interest.id == param.id}">
-                        <a href="library.xhtml?id=#{interest.id}" class="active">##{localeBean.getString(name)}</a>
-                    </ui:fragment>
-                    <ui:fragment rendered="#{interest.id != param.id}">
-                        <a href="library.xhtml?id=#{interest.id}">##{localeBean.getString(name)}</a>
-                    </ui:fragment>
+                    <a href="library.xhtml?id=#{interest.id}" class="#{interest.id == param.id ? 'active' : ''}">##{localeBean.getString(name)}</a>
                 </ui:repeat>
             </p>
         </div>
