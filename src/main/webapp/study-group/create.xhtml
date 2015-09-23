@@ -29,12 +29,18 @@
         </div>
         <section id="group">
             <h:form prependId="false" enctype="multipart/form-data">
-                <div class="title">
-                    <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(theme)}</span></h1>
+                <div class="title-container">
+                    <div class="title">
+                        <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(theme)}</span></h1>
+                    </div>
+                    <div class="errors">
+                        <p class="title-error">Dê um título ao tópico.</p>
+                        <p class="message-error">Descreva sobre o tópico.</p>
+                    </div>
                 </div>
                 <div class="main-container">
                     <img class="topic-creator" src="#{studyGroupCreateBean.mySocialProfile.photo}"/>
-                    <div class="title-container">
+                    <div class="topic-title-container">
                         <h:inputText class="topic-title" id="topic-title" autocomplete="off" value="#{studyGroupCreateBean.discussionTopic.title}" pt:placeholder="#{localeBean.getString('Assunto')}..."/>
                     </div>
                     <div class="illusory-textarea">

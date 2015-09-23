@@ -8,6 +8,7 @@ $(document).ready(function () {
     $('.message-textarea').on('DOMMouseScroll mousewheel', preventScrolling);
 
     $(document).on('keypress', '.message-textarea, .topic-title', function (e) {
+        $(this).hasClass("message-textarea") ? $(".message-error").hide() : $('.title-error').hide();
         if (e.keyCode === 13 && !e.shiftKey)
         {
             e.preventDefault();
@@ -19,6 +20,9 @@ $(document).ready(function () {
         if ($('.message-textarea').val().trim() !== "" && $('.topic-title').val().trim() !== "") {
             $('.publish-link').click();
         }
+        $('.message-textarea').val().trim() === "" ? $('.message-error').show() : $('.message-error').hide();
+        $('.topic-title').val().trim() === "" ? $('.title-error').show() : $('.title-error').hide();
+        
     });
 
     $(document).on("keypress", ".tag-input", function (e) {
