@@ -24,7 +24,7 @@ $(document).ready(function () {
     
     setTimeout(function(){
         $('.increase-views').click();
-    }, 5000);
+    }, 3000);
 });
 
 jsf.ajax.addOnEvent(function (data) {
