@@ -60,8 +60,11 @@ public class StudyGroupViewBean implements Serializable {
     public void init() throws IOException, RollbackFailureException, Exception {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            discussionTopicJpaController.increaseViews(discussionTopic.getId());
         }
+    }
+    
+    public void increaseViews() {
+        discussionTopicJpaController.increaseViews(discussionTopic.getId());
     }
     
     public void addMedia() throws IOException {

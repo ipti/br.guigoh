@@ -21,6 +21,10 @@ $(document).ready(function () {
     $(document).on('click', '.attach-link', function () {
         $('.file-input').click();
     });
+    
+    setTimeout(function(){
+        $('.increase-views').click();
+    }, 5000);
 });
 
 jsf.ajax.addOnEvent(function (data) {

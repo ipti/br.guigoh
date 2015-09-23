@@ -29,6 +29,9 @@
         </div>
         <section id="group">
             <h:form prependId="false" enctype="multipart/form-data">
+                <h:commandLink class="increase-views">
+                    <f:ajax listener="#{studyGroupViewBean.increaseViews()}"/>
+                </h:commandLink>
                 <div class="title">
                     <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
