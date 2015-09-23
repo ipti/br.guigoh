@@ -5,7 +5,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:param name="themeName" value="#{studyGroupLibraryBean.interest.name}" />
-    <ui:define name="title">#{localeBean.getString(themeName)}</ui:define>
+    <ui:define name="title">#{localeBean.getString('Estudos')}: #{localeBean.getString(themeName)}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
         <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/eo-sg-library.css"></link>
@@ -38,7 +38,7 @@
                             <f:ajax event="keyup" listener="#{studyGroupLibraryBean.searchTopicEvent()}" render="column"></f:ajax>
                         </h:inputText>
                     </ui:fragment>
-                    <a class="new-topic" href="../study-group/create.xhtml?id=#{studyGroupLibraryBean.interestId}">#{localeBean.getString('Novo tópico').toUpperCase()}</a>
+                    <a class="new-topic" href="../study-group/create.xhtml?id=#{studyGroupLibraryBean.interestId}">#{localeBean.getString('Novo Tópico').toUpperCase()}</a>
                 </div>
                 <h:panelGroup layout="block" class="column" id="column">
                     <ui:repeat value="#{studyGroupLibraryBean.discussionTopicList}" var="discussionTopic">

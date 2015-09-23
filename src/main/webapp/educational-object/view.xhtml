@@ -5,7 +5,7 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <ui:param name="themeName" value="#{educationalObjectViewBean.educationalObject.themeId.name}"/>
-    <ui:define name="title">#{educationalObjectViewBean.educationalObject.name}</ui:define>
+    <ui:define name="title">#{localeBean.getString('Objeto')}: #{educationalObjectViewBean.educationalObject.name}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
         <link rel="stylesheet" href="../resources/common/css/educational-object-view.css"/>
