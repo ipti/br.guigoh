@@ -1,56 +1,33 @@
-$(document).ready(function (){
+$(document).ready(function () {
 
-    $(document).on("click", "#expand_pending_users", function(){
-        $("#pending_users_box").css("display", "block");
+    $.each($(".result-name a, .subresult"), function () {
+        var limit = $(this).hasClass("subresult") ? 25 : 21;
+        $(this).text(changeNameLength($(this).text(), limit));
     });
     
-    $(document).on("click", "#collapse_pending_users", function(){
-        $("#pending_users_box").css("display", "none");
+    $('.tab').click(function () {
+        if (!$(this).parent().hasClass('active')) {
+            $(this).closest("ul").find(".tab").parent().removeClass('active');
+            $(this).parent().addClass('active');
+            $(this).closest(".admin-tabs").nextAll(':lt(2)').hide();
+            if ($(this).hasClass("tab-user-pending")) {
+                $('#user-container-pending').show();
+            } else if ($(this).hasClass("tab-user-deactivated")) {
+                $('#user-container-deactivated').show();
+            } else if ($(this).hasClass("tab-object-pending")) {
+                $('#object-container-pending').show();
+            } else if ($(this).hasClass("tab-object-deactivated")) {
+                $('#object-container-deactivated').show();
+            }
+        }
     });
-    
-    $(document).on("click", "#expand_active_users", function(){
-        $("#active_users_box").css("display", "block");
-    });
-    
-    $(document).on("click", "#collapse_active_users", function(){
-        $("#active_users_box").css("display", "none");
-    });
-    
-    $(document).on("click", "#expand_inactive_users", function(){
-        $("#inactive_users_box").css("display", "block");
-    });
-    
-    $(document).on("click", "#collapse_inactive_users", function(){
-        $("#inactive_users_box").css("display", "none");
-    });
-    
-    $(document).on("click", "#expand_pending_objects", function(){
-        $("#pending_objects_box").css("display", "block");
-    });
-    
-    $(document).on("click", "#collapse_pending_objects", function(){
-        $("#pending_objects_box").css("display", "none");
-    });
-    $(document).on("click", "#expand_active_objects", function(){
-        $("#active_objects_box").css("display", "block");
-    });
-    
-    $(document).on("click", "#collapse_active_objects", function(){
-        $("#active_objects_box").css("display", "none");
-    });
-    
-    $(document).on("click", "#expand_inactive_objects", function(){
-        $("#inactive_objects_box").css("display", "block");
-    });
-    
-    $(document).on("click", "#collapse_inactive_objects", function(){
-        $("#inactive_objects_box").css("display", "none");
-    });
-    
-    $("#collapse_pending_users").click();
-    $("#collapse_active_users").click();
-    $("#collapse_inactive_users").click();
-    $("#collapse_pending_objects").click();
-    $("#collapse_active_objects").click();
-    $("#collapse_inactive_objects").click();
+});
+
+jsf.ajax.addOnEvent(function (data) {
+    if (data.status === "success") {
+        $.each($(".result-name a, .subresult"), function () {
+            var limit = $(this).hasClass("subresult") ? 25 : 21;
+            $(this).text(changeNameLength($(this).text(), limit));
+        });
+    }
 });

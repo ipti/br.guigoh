@@ -31,9 +31,7 @@ import javax.inject.Named;
 public class SearchViewBean implements Serializable {
 
     private String generalSearch;
-    private Integer userLimit;
-    private Integer objectLimit;
-    private Integer topicLimit;
+    private Integer userLimit, objectLimit, topicLimit;
     
     private SocialProfile mySocialProfile;
 
@@ -56,7 +54,7 @@ public class SearchViewBean implements Serializable {
     public void renderSearchResult() {
         if (generalSearch.length() >= 3) {
             userLimit = objectLimit = topicLimit = 3;
-            socialProfileList = socialProfileJpaController.findSocialProfilesByName(generalSearch, mySocialProfile.getTokenId(), false);
+            socialProfileList = socialProfileJpaController.findSocialProfiles(generalSearch, mySocialProfile.getTokenId(), false);
             educationalObjectList = educationalObjectJpaController.findEducationalObjects(generalSearch, null, null, null);
             discussionTopicList = discussionTopicJpaController.findDiscussionTopics(generalSearch, null, null, null);
         } else {
@@ -95,9 +93,7 @@ public class SearchViewBean implements Serializable {
 
     private void initGlobalVariables() {
         generalSearch = "";
-        userLimit = 3;
-        objectLimit = 3;
-        topicLimit = 3;
+        userLimit = objectLimit = topicLimit = 3;
         
         socialProfileList = new ArrayList<>();
         educationalObjectList = new ArrayList<>();

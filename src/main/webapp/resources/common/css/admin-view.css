@@ -1,49 +1,137 @@
-@charset "utf-8";
-/**RESET**/
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: Arial, Helvetica, sans-serif; vertical-align: baseline;}
-:focus {outline: 0;}
-ol, ul {list-style: none;}
-strong {font-weight: bold;}
-/* CSS Document */
-.clear {display:block;clear:both;}
-.authorizationTable{   
-   border-collapse:collapse;
-   border:1px solid #000000;
-   margin: 0 auto;
+.admin-tabs {
+    border-bottom: 1px solid #c1c1c1;
+    width: 100%;
+    float: right;
+    margin-bottom: 35px;
+    position: relative;
+    margin-top: 30px;
 }
 
-.authorizationTableHeader{
-   text-align:center;
-   background:none repeat scroll 0 0 #B5B5B5;
-   border-bottom:1px solid #000000;  
-   padding:2px;
-   width: 200px;
+.admin-tabs ul {
+    float: left;
+}
+.admin-tabs li {
+    float: left;
+    height: 30px;
+    margin-top: 15px;
 }
 
-.authorizationTableOddRow{
-   text-align:center;
-   background:none repeat scroll 0 0 #FFFFFF;	
+.admin-tabs span {
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-top: 1px solid #c1c1c1;
+    border-left: 1px solid #c1c1c1;
+    border-right: 1px solid #c1c1c1;
+    margin-right: 25px;
+    text-decoration: none;
+    color: #989b94;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.authorizationTableEvenRow{
-   text-align:center;
-   background:none repeat scroll 0 0 #D3D3D3;
+.admin-tabs li.active span {
+    color: #333;
+    border-bottom: 1px solid #e6eadf;
 }
-#admin_box{margin: 20px 0 12px 0px;}
-#button_box{margin: 0 auto; width: 600px;}
 
-.buttons {cursor:pointer; width:120px; height:26px; border:1px #666 solid; border-radius:4px; margin:10px 5px 0px;}
-.authorization_alert {color:red;font-size:15px;font-weight:bold;width:266px;display:block;margin:0 auto}
-.authorization_title {font-size:15px;font-weight:bold;text-align:center;;display:block;margin:10px auto}
-.authorization_users{font-size:15px;font-weight:bold;text-align:center;;display:block;margin:10px auto}
-.authorization_users_panel{display:block;width:750px;border:1px solid #ccc; padding:10px;margin:20px auto}
-.authorization_objects{font-size:15px;font-weight:bold;text-align:center;display:block;margin:10px auto}
-.authorization_objects_alert {color:red;font-size:15px;font-weight:bold;width:329px;display:block;margin:0 auto}
-.authorization_objects_panel{display:block;width:750px;border:1px solid #ccc; padding:10px;margin:20px auto}
-.expand{color:#0000FF;font-weight:normal;cursor:pointer;margin:0 5px;}
-.collapse{color:#0000FF;font-weight:normal;cursor:pointer;}
-.user{color: #0000FF;}
-.user_box{display:block;margin:0 0 10px 0}
-.object_box{display:block;margin:0 0 10px 0}
-.publish_objects{display:block;margin:20px 0}
-.submitted_object{color: #0000FF;}
+.admin-tabs span:hover {
+    color: #333;
+}
+
+.admin-tabs .user-icon {
+    width: 70px;
+    top: -10px;
+    height: 50px;
+    right: 0;
+    background: url("../images/menu-icons.png") -375px 169px #e6eadf;
+    position: absolute;
+}
+
+.admin-tabs .object-icon {
+    width: 70px;
+    top: -10px;
+    height: 50px;
+    right: 0;
+    background: url("../images/menu-icons.png") -121px 169px #e6eadf;
+    position: absolute;
+}
+
+.user-label {
+    position: absolute;
+    right: 70px;
+    top: 11px;
+    color: gray;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#object-container-deactivated, #user-container-deactivated {
+    display: none;
+}
+
+.container {
+    margin-bottom: 50px;
+}
+
+.col {
+    float: left;
+    width: 34%;
+}
+
+.col:nth-child(3n) {
+    float: left;
+    width: 32%;
+}
+
+.result-box {
+    width: 283px;
+    height: 90px;
+    border: 1px solid #C1C1C1;
+    margin-bottom: 20px;
+    line-height: 17px;
+    position: relative;
+}
+
+.result-box p {
+    height: 17px;
+}
+
+.image {
+    height: 90px;
+    width: 90px;
+    margin-right: 15px;
+    float: left;
+}
+
+.result-name {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.result-name a {
+    color: #333;
+    text-decoration: none;
+}
+
+.subresult {
+    font-size: 11px;
+    color: gray;
+}
+
+.container-action {
+    position: absolute;
+    right: 5px;
+    bottom: 2px;
+}
+
+.container-action a {
+    color: gray;
+    padding: 3px;
+    text-decoration: none;
+}
+
+.container-action a:hover {
+    color: #333;
+}

@@ -930,7 +930,7 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
     
-    public List<SocialProfile> findSocialProfilesByName(String name, String token, boolean includeSessionUser){
+    public List<SocialProfile> findSocialProfiles(String name, String token, boolean includeSessionUser){
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
@@ -938,9 +938,13 @@ public class SocialProfileJpaController implements Serializable {
                 partialQuery = "and token_id <> '" + token + "' ";
             }
             List<SocialProfile> socialProfileList = (List<SocialProfile>) 
-                    em.createNativeQuery("select * from social_profile where upper(name) like '%" + name.toUpperCase() + "%' " + partialQuery, SocialProfile.class).getResultList();
+                    em.createNativeQuery("select distinct sp.* from social_profile sp "
+                            + "left join city c on c.id = sp.city_id "
+                            + "left join subnetwork sn on sn.id = sp.subnetwork_id "
+                            + "where (upper(sp.name) like '%" + name.toUpperCase() + "%' "
+                            + "or upper(c.name) like '%" + name.toUpperCase() + "%' "
+                            + "or upper(sn.description) like '%" + name.toUpperCase() + "%') " + partialQuery, SocialProfile.class).getResultList();
             return socialProfileList;
-        
         } finally {
             em.close();
         }

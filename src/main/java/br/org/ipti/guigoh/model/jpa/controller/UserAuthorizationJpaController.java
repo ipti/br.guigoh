@@ -174,56 +174,6 @@ public class UserAuthorizationJpaController implements Serializable {
             }
         }
     }
-
-    public List<UserAuthorization> getPendingUsers(){
-        EntityManager em = getEntityManager();
-        try {
-            List<UserAuthorization> pendingUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token_id from user_authorization where status = 'PC') "
-                    + "order by social_profile_id desc", 
-                    UserAuthorization.class).getResultList();
-            return pendingUserList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<UserAuthorization> getActiveUsers(){
-        EntityManager em = getEntityManager();
-        try {
-            List<UserAuthorization> activeUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token_id from user_authorization where status = 'AC') "
-                    + "order by social_profile_id desc", 
-                    UserAuthorization.class).getResultList();
-            return activeUserList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<UserAuthorization> getInactiveUsers(){
-        EntityManager em = getEntityManager();
-        try {
-            List<UserAuthorization> inactiveUserList = (List<UserAuthorization>) em.createNativeQuery("select * from social_profile where token_id in "
-                    + "(select token_id from user_authorization where status = 'IC') "
-                    + "order by social_profile_id desc", 
-                    UserAuthorization.class).getResultList();
-            return inactiveUserList;
-        } finally {
-            em.close();
-        }
-    }
-    
-    public List<UserAuthorization> findUserAuthorizationsByRole(String role){
-        EntityManager em = getEntityManager();
-        try{
-            List<UserAuthorization> authorizationList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization where roles = '" + role + "'",
-                    UserAuthorization.class).getResultList();
-            return authorizationList;
-        } finally {
-            em.close();
-        }
-    }
     
     public List<UserAuthorization> findUserAuthorizationEntities() {
         return findUserAuthorizationEntities(true, -1, -1);
@@ -286,4 +236,40 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
+    public List<UserAuthorization> getPendingUsers(){
+        EntityManager em = getEntityManager();
+        try {
+            List<UserAuthorization> pendingUserList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization ua "
+                    + "join social_profile sp on sp.token_id = ua.token_id "
+                    + "where status = 'PC' order by sp.social_profile_id DESC", 
+                    UserAuthorization.class).getResultList();
+            return pendingUserList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<UserAuthorization> getDeactivatedUsers(){
+        EntityManager em = getEntityManager();
+        try {
+            List<UserAuthorization> inactiveUserList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization ua "
+                    + "join social_profile sp on sp.token_id = ua.token_id "
+                    + "where status = 'IC' order by sp.social_profile_id DESC", 
+                    UserAuthorization.class).getResultList();
+            return inactiveUserList;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<UserAuthorization> findUserAuthorizationsByRole(String role){
+        EntityManager em = getEntityManager();
+        try{
+            List<UserAuthorization> authorizationList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization where roles = '" + role + "'",
+                    UserAuthorization.class).getResultList();
+            return authorizationList;
+        } finally {
+            em.close();
+        }
+    }
 }
