@@ -67,18 +67,12 @@
                         <h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Pessoal responsável pela produção deste Objeto Educacional. Limite de 4 autores.')}"/>
                         <h:outputText styleClass="educational_object_author_warning_name" value="#{localeBean.getString('Digite um campo NOME válido. Apenas letras, mínimo de 3 caracteres')}"/>
                         <h:outputText styleClass="educational_object_author_warning_email" value="#{localeBean.getString('Digite um campo E-MAIL válido. Ex: ____@____.__')}"/>
-                        <h:outputText styleClass="educational_object_author_warning_phone" value="#{localeBean.getString('Digite um campo TELEFONE válido.')}"/>
-                        <h:outputText styleClass="educational_object_author_warning_site" value="#{localeBean.getString('Digite um campo SITE válido. Ex: _____.___.__')}"/>
                         <h:outputText styleClass="educational_object_author_warning" value="#{localeBean.getString('Insira ao menos 1 autor.')}"/>
                         <h:panelGrid id="author_add" columns="2" styleClass="educational_object_author">
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Nome')}:"/>
                             <h:inputText styleClass="educational_object_author_name" value="#{educationalObjectPublishBean.author.name}"/>
                             <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('E-mail')}:"/>
                             <h:inputText styleClass="educational_object_author_email" value="#{educationalObjectPublishBean.author.email}"/>
-                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Telefone')}:"/>
-                            <h:inputText styleClass="educational_object_author_phone"  value="#{educationalObjectPublishBean.author.phone}"/>
-                            <h:outputText styleClass="educational_object_author_label" value="#{localeBean.getString('Site')}:"/>
-                            <h:inputText styleClass="educational_object_author_site" value="#{educationalObjectPublishBean.author.site}"/>
                         </h:panelGrid>
                         <h:panelGroup styleClass="button_author_add" >
                             <img id="button_add_icon" src="/resources/common/images/green-plus.png"/>
@@ -93,8 +87,6 @@
                                 <h:panelGrid styleClass="author_added" columns="2">
                                     <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Nome')}:"/><h:outputText styleClass="authors_added_value" value="#{author.name}"/>
                                     <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('E-mail')}:"/><h:outputText styleClass="authors_added_value" value="#{author.email}"/>
-                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Telefone')}:"/><h:outputText styleClass="authors_added_value" value="#{author.phone}"/>
-                                    <h:outputText styleClass="authors_added_label" value="#{localeBean.getString('Site')}:"/><h:outputText styleClass="authors_added_value" value="#{author.site}"/>
                                 </h:panelGrid>
                             </ui:repeat>
                         </h:panelGroup>
@@ -229,7 +221,7 @@
     <ui:define name="scripts">
         <script src="/resources/lib/js/jquery.maskedinput.min.js"/>
         <script src="/resources/lib/js/jquery-ui.min.js"/>
-        <script src="/resources/common/js/educational-object-submit.js"/>
+        <script src="../resources/common/js/educational-object-submit.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -77,8 +77,6 @@ $(document).ready(function () {
     $(document).on('click', '.button_author_add', function () {
         var nameValue = $(".educational_object_author_name").val();
         var emailValue = $(".educational_object_author_email").val();
-        var phoneValue = $(".educational_object_author_phone").val();
-        var siteValue = $(".educational_object_author_site").val();
         var validate = true;
         if (!String(nameValue).match("[a-z\u00C0-\u00ff A-Z]{3,40}")) {
             $(".educational_object_author_warning_name").css("display", "block");
@@ -86,18 +84,10 @@ $(document).ready(function () {
         } else if (emailValue != "" && !String(emailValue).match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")) {
             $(".educational_object_author_warning_email").css("display", "block");
             validate = false;
-        } else if (phoneValue != "" && !String(phoneValue).match("\\(\\d{2}\\) \\d{4,5}-\\d{4}")) {
-            $(".educational_object_author_warning_phone").css("display", "block");
-            validate = false;
-        } else if (siteValue != "" && !String(siteValue).match("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?\\+\\%/\\.\\w]+)?")) {
-            $(".educational_object_author_warning_site").css("display", "block");
-            validate = false;
         }
         if (validate) {
             $(".educational_object_author_warning_name").hide();
             $(".educational_object_author_warning_email").hide();
-            $(".educational_object_author_warning_phone").hide();
-            $(".educational_object_author_warning_site").hide();
             $(".add").click();
         }
     });
