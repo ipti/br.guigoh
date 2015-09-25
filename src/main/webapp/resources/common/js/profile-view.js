@@ -9,7 +9,8 @@ $(document).ready(function () {
     $('.item-box-title').each(function () {
         var role = $(this).text().trim();
         role = role.substring(0, role.length - 1);
-        $(this).text(role);
+        $(this).attr("title", role);
+        $(this).text(changeNameLength(role, 25));
         if ($(this).text().trim() === "") {
             $(this).next().text("");
         }
