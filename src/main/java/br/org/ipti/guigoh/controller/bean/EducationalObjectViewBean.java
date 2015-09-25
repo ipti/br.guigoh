@@ -93,7 +93,12 @@ public class EducationalObjectViewBean implements Serializable {
             like = true;
         }
         educationalObjectJpaController.edit(educationalObject);
-        
+    }
+    
+    public void deactivateEducationalObject() throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
+        educationalObject.setStatus("DE");
+        educationalObjectJpaController.edit(educationalObject);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/admin/view.xhtml");
     }
 
     private void initGlobalVariables() throws IOException {
@@ -162,5 +167,13 @@ public class EducationalObjectViewBean implements Serializable {
 
     public void setLike(Boolean like) {
         this.like = like;
+    }
+
+    public SocialProfile getMySocialProfile() {
+        return mySocialProfile;
+    }
+
+    public void setMySocialProfile(SocialProfile mySocialProfile) {
+        this.mySocialProfile = mySocialProfile;
     }
 }

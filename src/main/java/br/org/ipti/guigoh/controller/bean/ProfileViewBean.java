@@ -32,6 +32,7 @@ import br.org.ipti.guigoh.model.jpa.controller.OccupationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.ScholarityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.StateJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
@@ -69,7 +70,7 @@ import javax.servlet.http.Part;
 @Named
 public class ProfileViewBean implements Serializable {
 
-    private SocialProfile socialProfile;
+    private SocialProfile socialProfile, mySocialProfile;
 
     private List<EducationalObject> educationalObjectList;
     private List<String> editFieldList;
@@ -333,6 +334,12 @@ public class ProfileViewBean implements Serializable {
         editableFieldValues = new Object[7];
         editFieldList.remove(field);
     }
+    
+    public void deactivateUser() throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
+        UserAuthorizationJpaController userAuthorizationJpaController = new UserAuthorizationJpaController();
+        userAuthorizationJpaController.deactivateUser(socialProfile.getTokenId());
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/admin/view.xhtml");
+    }
 
     public void downloadPDF() throws FileNotFoundException, DocumentException, IOException {
         Document doc = null;
@@ -479,7 +486,8 @@ public class ProfileViewBean implements Serializable {
         cropCoordinates = new Integer[6];
         editableFieldValues = new Object[7];
 
-        himself = socialProfile.getTokenId().equals(CookieService.getCookie("token"));
+        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+        himself = socialProfile.getTokenId().equals(mySocialProfile.getTokenId());
     }
 
     public SocialProfile getSocialProfile() {
@@ -592,5 +600,13 @@ public class ProfileViewBean implements Serializable {
 
     public void setSocialProfileId(Integer socialProfileId) {
         this.socialProfileId = socialProfileId;
+    }
+
+    public SocialProfile getMySocialProfile() {
+        return mySocialProfile;
+    }
+
+    public void setMySocialProfile(SocialProfile mySocialProfile) {
+        this.mySocialProfile = mySocialProfile;
     }
 }

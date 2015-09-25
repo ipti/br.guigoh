@@ -272,4 +272,16 @@ public class UserAuthorizationJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public void deactivateUser(String tokenId){
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery("UPDATE user_authorization SET status = 'IC' where token_id = '" + tokenId + "'");
+            query.executeUpdate();
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -32,11 +32,25 @@
     color: #404095;
     font-size: 20px;
     margin-bottom: 50px;
+    position: relative;
 }
 
 #group h1 span {
     color: #999;
     padding-left: 10px;
+    margin-right: 20px;
+}
+
+.blocked {
+    width: 30px;
+    position: absolute;
+    top: -5px;
+}
+
+.block {
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
 .column {

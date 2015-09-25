@@ -34,7 +34,12 @@
                     </div>
                     <p class="image-error"></p>
                     <div class="profile-name">
-                        <h1>#{profileViewBean.socialProfile.name}</h1>
+                        <h1>
+                            #{profileViewBean.socialProfile.name}
+                            <ui:fragment rendered="#{profileViewBean.socialProfile.users.userAuthorization.status == 'IC'}">
+                                <img title="#{localeBean.getString('Desativado')}" class="blocked" src="../resources/common/images/blocked.png"/>
+                            </ui:fragment>
+                        </h1>
                         <h:panelGroup layout="block" id="editable-profile-occupation" class="editable-container">
                             <ui:fragment rendered="#{!profileViewBean.editFieldList.contains('occupation')}">
                                 <ui:fragment rendered="#{profileViewBean.socialProfile.occupationsId.name != null}">
@@ -113,6 +118,14 @@
                             </h:commandLink>
                         </ui:fragment>
                         <img class="open-chat" src="../resources/common/images/chat.png"/>
+                        <ui:fragment rendered="#{profileViewBean.mySocialProfile.users.userAuthorization.roles == 'AD' 
+                                                 and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'
+                                                 and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD'}">
+                            <h:commandLink class="block">
+                                <f:ajax listener="#{profileViewBean.deactivateUser()}"/>
+                                <img src="../resources/common/images/blocked.png" title="#{localeBean.getString('Bloquear usuário')}"/>
+                            </h:commandLink>
+                        </ui:fragment>
                     </h:panelGroup>
                 </ui:fragment>
                 <div class="profile-tabs">

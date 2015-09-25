@@ -14,7 +14,10 @@
     color: #6b6e65;
     font-size: 12px;
     line-height: 14px;
-    text-align: center;
+}
+
+#enviroment-info .description {
+    line-height: 18px;
 }
 
 #step-by-step-info img{
