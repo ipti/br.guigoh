@@ -5,6 +5,15 @@ $(document).ready(function () {
     $('.item-box-title-bold p').each(function () {
         $(this).text(changeNameLength($(this).text(), 23));
     });
+
+    $('.item-box-title').each(function () {
+        var role = $(this).text().trim();
+        role = role.substring(0, role.length - 1);
+        $(this).text(role);
+        if ($(this).text().trim() === "") {
+            $(this).next().text("");
+        }
+    });
 });
 
 $(document).on("keypress", '.editable-field', function (e) {

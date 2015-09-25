@@ -62,9 +62,7 @@ public class EducationalObjectPublishBean implements Serializable {
             boolean exists = false;
             for (Author a : authorList) {
                 if (a.getName().equals(this.author.getName())
-                        && a.getEmail().equals(this.author.getEmail())
-                        && a.getPhone().equals(this.author.getPhone())
-                        && a.getSite().equals(this.author.getSite())) {
+                        && a.getEmail().equals(this.author.getEmail())) {
                     exists = true;
                 }
             }

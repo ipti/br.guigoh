@@ -465,8 +465,8 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getActiveEducationalObjects(){
+
+    public List<EducationalObject> getActiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
@@ -476,8 +476,8 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public List<EducationalObject> getInactiveEducationalObjects(){
+
+    public List<EducationalObject> getInactiveEducationalObjects() {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
@@ -488,18 +488,17 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
 
-    public List<EducationalObject> findEducationalObjectsBySocialProfileId(Integer id){
+    public List<EducationalObject> findEducationalObjectsBySocialProfileId(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            List<EducationalObject> educationalObjectList = (List<EducationalObject>) 
-                    em.createNativeQuery("select * from educational_object "
-                            + "where status = 'AC' and social_profile_id = " + id, EducationalObject.class).getResultList();
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
+                    + "where status = 'AC' and social_profile_id = " + id, EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
         }
     }
-    
+
     public List<EducationalObject> findMostAcessedEducationalObjects(Integer interestId) {
         EntityManager em = getEntityManager();
         try {
@@ -511,13 +510,17 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<EducationalObject> findEducationalObjects(String name, Date date, Integer interestId, Integer limit, String status) {
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
             if (name != null) {
-                partialQuery += " and (upper(eo.name) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%')";
+                partialQuery += " and (upper(eo.name) like '%" + name.toUpperCase() + "%' or upper(t.name) like '%" + name.toUpperCase() + "%' "
+                        + "or upper(sp.name) like '%" + name.toUpperCase() + "%' "
+                        + "or upper(c.name) like '%" + name.toUpperCase() + "%' "
+                        + "or upper(i.name) like '%" + name.toUpperCase() + "%' "
+                        + "or upper(sn.description) like '%" + name.toUpperCase() + "%')";
             }
             if (interestId != null) {
                 partialQuery += " and theme_id = '" + interestId + "'";
@@ -530,16 +533,20 @@ public class EducationalObjectJpaController implements Serializable {
                 partialQuery += " limit " + limit;
             }
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select distinct eo.* from educational_object eo "
-                            + "left join educational_object_tag eot on eot.educational_object_id = eo.id "
-                            + "left join tags t on eot.tag_id = t.id "
-                            + "where eo.status = '" + status + "' " + partialQuery, EducationalObject.class).getResultList();
+                    + "left join educational_object_tag eot on eot.educational_object_id = eo.id "
+                    + "left join tags t on eot.tag_id = t.id "
+                    + "join social_profile sp on sp.social_profile_id = eo.social_profile_id "
+                    + "left join subnetwork sn on sn.id = sp.subnetwork_id "
+                    + "left join city c on c.id = sp.city_id "
+                    + "join interests i on i.id = eo.theme_id "
+                    + "where eo.status = '" + status + "' " + partialQuery, EducationalObject.class).getResultList();
             return educationalObjectList;
 
         } finally {
             em.close();
         }
     }
-    
+
     public void increaseViews(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -547,6 +554,19 @@ public class EducationalObjectJpaController implements Serializable {
             Query query = em.createNativeQuery("UPDATE educational_object SET views = views + 1 where id = " + id);
             query.executeUpdate();
             em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<EducationalObject> findParticipationInEducationalObjects(String email) {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select eo.* from educational_object eo "
+                    + "join educational_object_author eoa on eoa.educational_object_id = eo.id " 
+                    + "join author a on a.id = eoa.author_id where eo.status = 'AC' and a.email = '" + email + "' order by date desc", EducationalObject.class).getResultList();
+            return educationalObjectList;
+
         } finally {
             em.close();
         }

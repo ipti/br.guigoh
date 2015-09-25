@@ -72,13 +72,13 @@ public class ProfileViewBean implements Serializable {
 
     private SocialProfile socialProfile, mySocialProfile;
 
-    private List<EducationalObject> educationalObjectList;
     private List<String> editFieldList;
     private List<Interests> interestList;
     private List<City> cityList;
     private List<State> stateList;
     private List<Country> countryList;
     private List<Scholarity> scholarityList;
+    private List<EducationalObject> educationalObjectList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
@@ -475,7 +475,7 @@ public class ProfileViewBean implements Serializable {
         } else {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
         }
-        educationalObjectList = educationalObjectJpaController.findEducationalObjectsBySocialProfileId(socialProfile.getSocialProfileId());
+        educationalObjectList = educationalObjectJpaController.findParticipationInEducationalObjects(socialProfile.getUsers().getUsername());
         editFieldList = new ArrayList<>();
         interestList = interestsJpaController.findInterestsEntities();
         countryList = countryJpaController.findCountryEntities();
@@ -520,14 +520,6 @@ public class ProfileViewBean implements Serializable {
 
     public void setHimself(Boolean himself) {
         this.himself = himself;
-    }
-
-    public List<EducationalObject> getEducationalObjectList() {
-        return educationalObjectList;
-    }
-
-    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
-        this.educationalObjectList = educationalObjectList;
     }
 
     public List<String> getEditFieldList() {
@@ -608,5 +600,13 @@ public class ProfileViewBean implements Serializable {
 
     public void setMySocialProfile(SocialProfile mySocialProfile) {
         this.mySocialProfile = mySocialProfile;
+    }
+
+    public List<EducationalObject> getEducationalObjectList() {
+        return educationalObjectList;
+    }
+
+    public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
+        this.educationalObjectList = educationalObjectList;
     }
 }

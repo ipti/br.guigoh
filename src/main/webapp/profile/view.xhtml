@@ -403,22 +403,28 @@
                 <div id="profile-container-objects" class="profile-container">
                     <div class="profile-column-left">
                         <ui:repeat value="#{profileViewBean.educationalObjectList}" var="educationalObject">
-                            <div class="item-box-container">
-                                <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
-                                <p class="item-box-title">#{localeBean.getString('Publicador')}</p>
-                                <p class="item-box-aux">#{localeBean.getString('em')}</p>
-                                <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
-                                <div class="item-box-date">
-                                    <img src="../resources/common/images/clock.png"/>
-                                    <h:outputText value="#{educationalObject.date}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                    </h:outputText>
+                                <div class="item-box-container">
+                                    <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
+                                    <p class="item-box-title">
+                                        <ui:repeat value="#{educationalObject.authorCollection}" var="author">
+                                            <ui:fragment rendered="#{author.email == profileViewBean.socialProfile.users.username}">
+                                                #{author.authorRoleFk.name}/
+                                            </ui:fragment>
+                                        </ui:repeat>
+                                    </p>
+                                    <p class="item-box-aux">#{localeBean.getString('em')}</p>
+                                    <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
+                                    <div class="item-box-date">
+                                        <img src="../resources/common/images/clock.png"/>
+                                        <h:outputText value="#{educationalObject.date}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText>
+                                    </div>
                                 </div>
-                            </div>
                         </ui:repeat>
                     </div>
                     <div class="profile-column-right">
-                        <p class="profile-object-number"><span>#{profileViewBean.educationalObjectList.size()}</span><br />#{localeBean.getString('Objetos invertido')} <br />#{localeBean.getString('Educacionais invertido')} <br />#{localeBean.getString('publicados')}</p>
+                        <p class="profile-object-number"><span>#{profileViewBean.educationalObjectList.size()}</span><br />#{localeBean.getString('Participações')} #{localeBean.getString('em')}<br />#{localeBean.getString('Objetos invertido')} <br />#{localeBean.getString('Educacionais invertido')} <br /></p>
                     </div>
                     <div class="clear"></div>
                 </div>

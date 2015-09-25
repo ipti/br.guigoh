@@ -5,6 +5,7 @@
 package br.org.ipti.guigoh.model.jpa.controller;
 
 import br.org.ipti.guigoh.model.entity.Author;
+import br.org.ipti.guigoh.model.entity.AuthorRole;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
@@ -43,6 +44,11 @@ public class AuthorJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            AuthorRole authorRoleFk = author.getAuthorRoleFk();
+            if (authorRoleFk != null) {
+                authorRoleFk = em.getReference(authorRoleFk.getClass(), authorRoleFk.getId());
+                author.setAuthorRoleFk(authorRoleFk);
+            }
             Collection<EducationalObject> attachedEducationalObjectCollection = new ArrayList<EducationalObject>();
             for (EducationalObject educationalObjectCollectionEducationalObjectToAttach : author.getEducationalObjectCollection()) {
                 educationalObjectCollectionEducationalObjectToAttach = em.getReference(educationalObjectCollectionEducationalObjectToAttach.getClass(), educationalObjectCollectionEducationalObjectToAttach.getId());
@@ -50,6 +56,10 @@ public class AuthorJpaController implements Serializable {
             }
             author.setEducationalObjectCollection(attachedEducationalObjectCollection);
             em.persist(author);
+            if (authorRoleFk != null) {
+                authorRoleFk.getAuthorCollection().add(author);
+                authorRoleFk = em.merge(authorRoleFk);
+            }
             for (EducationalObject educationalObjectCollectionEducationalObject : author.getEducationalObjectCollection()) {
                 educationalObjectCollectionEducationalObject.getAuthorCollection().add(author);
                 educationalObjectCollectionEducationalObject = em.merge(educationalObjectCollectionEducationalObject);
@@ -75,8 +85,14 @@ public class AuthorJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Author persistentAuthor = em.find(Author.class, author.getId());
+            AuthorRole authorRoleFkOld = persistentAuthor.getAuthorRoleFk();
+            AuthorRole authorRoleFkNew = author.getAuthorRoleFk();
             Collection<EducationalObject> educationalObjectCollectionOld = persistentAuthor.getEducationalObjectCollection();
             Collection<EducationalObject> educationalObjectCollectionNew = author.getEducationalObjectCollection();
+            if (authorRoleFkNew != null) {
+                authorRoleFkNew = em.getReference(authorRoleFkNew.getClass(), authorRoleFkNew.getId());
+                author.setAuthorRoleFk(authorRoleFkNew);
+            }
             Collection<EducationalObject> attachedEducationalObjectCollectionNew = new ArrayList<EducationalObject>();
             for (EducationalObject educationalObjectCollectionNewEducationalObjectToAttach : educationalObjectCollectionNew) {
                 educationalObjectCollectionNewEducationalObjectToAttach = em.getReference(educationalObjectCollectionNewEducationalObjectToAttach.getClass(), educationalObjectCollectionNewEducationalObjectToAttach.getId());
@@ -85,6 +101,14 @@ public class AuthorJpaController implements Serializable {
             educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
             author.setEducationalObjectCollection(educationalObjectCollectionNew);
             author = em.merge(author);
+            if (authorRoleFkOld != null && !authorRoleFkOld.equals(authorRoleFkNew)) {
+                authorRoleFkOld.getAuthorCollection().remove(author);
+                authorRoleFkOld = em.merge(authorRoleFkOld);
+            }
+            if (authorRoleFkNew != null && !authorRoleFkNew.equals(authorRoleFkOld)) {
+                authorRoleFkNew.getAuthorCollection().add(author);
+                authorRoleFkNew = em.merge(authorRoleFkNew);
+            }
             for (EducationalObject educationalObjectCollectionOldEducationalObject : educationalObjectCollectionOld) {
                 if (!educationalObjectCollectionNew.contains(educationalObjectCollectionOldEducationalObject)) {
                     educationalObjectCollectionOldEducationalObject.getAuthorCollection().remove(author);
@@ -130,6 +154,11 @@ public class AuthorJpaController implements Serializable {
                 author.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The author with id " + id + " no longer exists.", enfe);
+            }
+            AuthorRole authorRoleFk = author.getAuthorRoleFk();
+            if (authorRoleFk != null) {
+                authorRoleFk.getAuthorCollection().remove(author);
+                authorRoleFk = em.merge(authorRoleFk);
             }
             Collection<EducationalObject> educationalObjectCollection = author.getEducationalObjectCollection();
             for (EducationalObject educationalObjectCollectionEducationalObject : educationalObjectCollection) {

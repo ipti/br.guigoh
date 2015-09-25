@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -34,10 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Author.findAll", query = "SELECT a FROM Author a"),
     @NamedQuery(name = "Author.findById", query = "SELECT a FROM Author a WHERE a.id = :id"),
     @NamedQuery(name = "Author.findByName", query = "SELECT a FROM Author a WHERE a.name = :name"),
-    @NamedQuery(name = "Author.findByEmail", query = "SELECT a FROM Author a WHERE a.email = :email"),
-    @NamedQuery(name = "Author.findByPhone", query = "SELECT a FROM Author a WHERE a.phone = :phone"),
-    @NamedQuery(name = "Author.findBySite", query = "SELECT a FROM Author a WHERE a.site = :site")})
+    @NamedQuery(name = "Author.findByEmail", query = "SELECT a FROM Author a WHERE a.email = :email")})
 public class Author implements Serializable {
+    @JoinColumn(name = "author_role_fk", referencedColumnName = "id")
+    @ManyToOne
+    private AuthorRole authorRoleFk;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,13 +55,6 @@ public class Author implements Serializable {
     @Size(max = 40)
     @Column(name = "email")
     private String email;
-    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Formato de telefone/fax inválido, deve ser xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 30)
-    @Column(name = "phone")
-    private String phone;
-    @Size(max = 100)
-    @Column(name = "site")
-    private String site;
     @JoinTable(name = "educational_object_author", joinColumns = {
         @JoinColumn(name = "author_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "educational_object_id", referencedColumnName = "id")})
@@ -101,23 +96,7 @@ public class Author implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
+    
     @XmlTransient
     public Collection<EducationalObject> getEducationalObjectCollection() {
         return educationalObjectCollection;
@@ -150,6 +129,14 @@ public class Author implements Serializable {
     @Override
     public String toString() {
         return "br.org.ipti.guigoh.model.entity.Author[ id=" + id + " ]";
+    }
+
+    public AuthorRole getAuthorRoleFk() {
+        return authorRoleFk;
+    }
+
+    public void setAuthorRoleFk(AuthorRole authorRoleFk) {
+        this.authorRoleFk = authorRoleFk;
     }
     
 }
