@@ -598,6 +598,7 @@ aside h3 {
 
 .message-inner-container p {
     line-height: 15px;
+    text-indent: 0;
 }
 
 .icon-container {
