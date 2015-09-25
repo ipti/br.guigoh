@@ -512,7 +512,7 @@ public class EducationalObjectJpaController implements Serializable {
         }
     }
     
-    public List<EducationalObject> findEducationalObjects(String name, Date date, Integer interestId, Integer limit) {
+    public List<EducationalObject> findEducationalObjects(String name, Date date, Integer interestId, Integer limit, String status) {
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
@@ -532,7 +532,7 @@ public class EducationalObjectJpaController implements Serializable {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select distinct eo.* from educational_object eo "
                             + "left join educational_object_tag eot on eot.educational_object_id = eo.id "
                             + "left join tags t on eot.tag_id = t.id "
-                            + "where eo.status = 'AC' " + partialQuery, EducationalObject.class).getResultList();
+                            + "where eo.status = '" + status + "' " + partialQuery, EducationalObject.class).getResultList();
             return educationalObjectList;
 
         } finally {

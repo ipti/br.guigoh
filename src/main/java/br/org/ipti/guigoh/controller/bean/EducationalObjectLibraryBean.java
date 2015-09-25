@@ -45,7 +45,7 @@ public class EducationalObjectLibraryBean implements Serializable {
 
     public void getMoreEducationalObjects() {
         List<EducationalObject> outList = educationalObjectList;
-        List<EducationalObject> moreEducationalObjects = educationalObjectJpaController.findEducationalObjects(search, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), interestId, 5);
+        List<EducationalObject> moreEducationalObjects = educationalObjectJpaController.findEducationalObjects(search, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), interestId, 5, "AC");
         moreEducationalObjects.stream().forEach((temp) -> {
             outList.add(temp);
         });
@@ -55,7 +55,7 @@ public class EducationalObjectLibraryBean implements Serializable {
 
     private void checkIfExistsMoreEducationalObjects() {
         if (!educationalObjectList.isEmpty()) {
-            if (educationalObjectJpaController.findEducationalObjects(search, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), interestId, null).isEmpty()) {
+            if (educationalObjectJpaController.findEducationalObjects(search, educationalObjectList.get(educationalObjectList.size() - 1).getDate(), interestId, null, "AC").isEmpty()) {
                 existsMoreEducationalObjects = false;
             } else {
                 existsMoreEducationalObjects = true;
@@ -67,9 +67,9 @@ public class EducationalObjectLibraryBean implements Serializable {
 
     public void searchEducationalObjectEvent() {
         if (search.length() >= 3) {
-            educationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, interestId, 6);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, interestId, 6, "AC");
         } else {
-            educationalObjectList = educationalObjectJpaController.findEducationalObjects(null, null, interestId, 6);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjects(null, null, interestId, 6, "AC");
         }
         checkIfExistsMoreEducationalObjects();
     }
@@ -82,7 +82,7 @@ public class EducationalObjectLibraryBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
             interest = interestsJpaController.findInterests(interestId);
-            educationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, interestId, 6);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, interestId, 6, "AC");
             mostAcessedEducationalObjectList = educationalObjectJpaController.findMostAcessedEducationalObjects(interestId);
             interestList = interestsJpaController.findInterestsEntities();
             hasEducationalObject = !educationalObjectList.isEmpty();

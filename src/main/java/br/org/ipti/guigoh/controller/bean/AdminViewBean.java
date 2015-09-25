@@ -31,6 +31,8 @@ import javax.inject.Named;
 public class AdminViewBean implements Serializable {
 
     private Integer pendingUsersLimit, deactivatedUsersLimit, pendingObjectsLimit, deactivatedObjectsLimit;
+    private Boolean hasPendingUsers, hasDeactivatedUsers, hasPendingObjects, hasDeactivatedObjects;
+    private String search;
 
     private SocialProfile mySocialProfile;
     private Translator trans;
@@ -82,15 +84,15 @@ public class AdminViewBean implements Serializable {
         userAuthorizationJpaController.edit(userAuthorization);
         deactivatedUserAuthorizationList.remove(userAuthorization);
     }
-    
+
     public void rejectEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
         educationalObject.setStatus("DE");
         educationalObjectJpaController.edit(educationalObject);
         pendingEducationalObjectList.remove(educationalObject);
         deactivatedEducationalObjectList.add(educationalObject);
-        
+
     }
-    
+
     public void acceptEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
         educationalObject.setStatus("AC");
         educationalObjectJpaController.edit(educationalObject);
@@ -115,6 +117,39 @@ public class AdminViewBean implements Serializable {
         }
     }
 
+    public void searchEvent(String type) {
+        switch (type) {
+            case "PU":
+                if (!search.equals("")) {
+                    pendingUserAuthorizationList = userAuthorizationJpaController.findUserAuthorizations(search, "PC");
+                } else {
+                    pendingUserAuthorizationList = userAuthorizationJpaController.getAllPendingUsers();
+                }
+                break;
+            case "DU":
+                if (!search.equals("")) {
+                    deactivatedUserAuthorizationList = userAuthorizationJpaController.findUserAuthorizations(search, "IC");
+                } else {
+                    deactivatedUserAuthorizationList = userAuthorizationJpaController.getAllDeactivatedUsers();
+                }
+                break;
+            case "PO":
+                if (!search.equals("")) {
+                    pendingEducationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, null, null, "PE");
+                } else {
+                    pendingEducationalObjectList = educationalObjectJpaController.getPendingEducationalObjects();
+                }
+                break;
+            case "DO":
+                if (!search.equals("")) {
+                    deactivatedEducationalObjectList = educationalObjectJpaController.findEducationalObjects(search, null, null, null, "DE");
+                } else {
+                    deactivatedEducationalObjectList = educationalObjectJpaController.getInactiveEducationalObjects();
+                }
+                break;
+        }
+    }
+
     private void initGlobalVariables() throws IOException {
         socialProfileJpaController = new SocialProfileJpaController();
         userAuthorizationJpaController = new UserAuthorizationJpaController();
@@ -126,14 +161,21 @@ public class AdminViewBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
         } else {
             pendingUsersLimit = deactivatedUsersLimit = pendingObjectsLimit = deactivatedObjectsLimit = 9;
-            
-            pendingUserAuthorizationList = userAuthorizationJpaController.getPendingUsers();
-            deactivatedUserAuthorizationList = userAuthorizationJpaController.getDeactivatedUsers();
+
+            pendingUserAuthorizationList = userAuthorizationJpaController.getAllPendingUsers();
+            deactivatedUserAuthorizationList = userAuthorizationJpaController.getAllDeactivatedUsers();
             pendingEducationalObjectList = educationalObjectJpaController.getPendingEducationalObjects();
             deactivatedEducationalObjectList = educationalObjectJpaController.getInactiveEducationalObjects();
             
+            hasPendingUsers = !pendingUserAuthorizationList.isEmpty();
+            hasDeactivatedUsers = !deactivatedUserAuthorizationList.isEmpty();
+            hasPendingObjects = !pendingEducationalObjectList.isEmpty();
+            hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
+
             trans = new Translator();
             trans.setLocale(CookieService.getCookie("locale"));
+            
+            search = "";
         }
     }
 
@@ -207,6 +249,46 @@ public class AdminViewBean implements Serializable {
 
     public void setDeactivatedEducationalObjectList(List<EducationalObject> deactivatedEducationalObjectList) {
         this.deactivatedEducationalObjectList = deactivatedEducationalObjectList;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public Boolean getHasPendingUsers() {
+        return hasPendingUsers;
+    }
+
+    public void setHasPendingUsers(Boolean hasPendingUsers) {
+        this.hasPendingUsers = hasPendingUsers;
+    }
+
+    public Boolean getHasDeactivatedUsers() {
+        return hasDeactivatedUsers;
+    }
+
+    public void setHasDeactivatedUsers(Boolean hasDeactivatedUsers) {
+        this.hasDeactivatedUsers = hasDeactivatedUsers;
+    }
+
+    public Boolean getHasPendingObjects() {
+        return hasPendingObjects;
+    }
+
+    public void setHasPendingObjects(Boolean hasPendingObjects) {
+        this.hasPendingObjects = hasPendingObjects;
+    }
+
+    public Boolean getHasDeactivatedObjects() {
+        return hasDeactivatedObjects;
+    }
+
+    public void setHasDeactivatedObjects(Boolean hasDeactivatedObjects) {
+        this.hasDeactivatedObjects = hasDeactivatedObjects;
     }
 
 }

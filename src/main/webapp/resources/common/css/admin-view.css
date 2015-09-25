@@ -2,7 +2,7 @@
     border-bottom: 1px solid #c1c1c1;
     width: 100%;
     float: right;
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     position: relative;
 }
 
@@ -137,4 +137,19 @@
 
 .container-action a:hover {
     color: #333;
+}
+
+.admin-search {
+    background: url(../images/magnifying-glass.png) no-repeat 98% 4px #dcdcdc;
+    background-size: 10px;
+    width: 30%;
+    padding: 0px 5px;
+    border: 1px solid #bbbdb8;
+    height: 20px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+    font-size: 14px;
+    text-indent: 10px;
+    margin-bottom: 25px;
+    display: block;
 }

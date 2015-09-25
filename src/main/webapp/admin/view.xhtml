@@ -31,6 +31,12 @@
                     <legend class="user-label">#{localeBean.getString('Usuários')}</legend>
                 </div>
                 <div id="user-container-pending" class="container">
+                    <ui:fragment rendered="#{adminViewBean.hasPendingUsers}">
+                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
+                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PU')}" render="user-pending"></f:ajax>
+                        </h:inputText>
+                    </ui:fragment>
+                    <div class="clear"></div>
                     <h:panelGroup layout="block" id="user-pending">
                         <ui:repeat value="#{adminViewBean.pendingUserAuthorizationList}" var="pendingUser" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.pendingUsersLimit}">
@@ -68,6 +74,12 @@
                     </h:panelGroup>
                 </div>
                 <div id="user-container-deactivated" class="container">
+                    <ui:fragment rendered="#{adminViewBean.hasDeactivatedUsers}">
+                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
+                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DU')}" render="user-deactivated"></f:ajax>
+                        </h:inputText>
+                    </ui:fragment>
+                    <div class="clear"></div>
                     <h:panelGroup layout="block" id="user-deactivated">
                         <ui:repeat value="#{adminViewBean.deactivatedUserAuthorizationList}" var="deactivatedUser" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedUsersLimit}">
@@ -110,6 +122,12 @@
                     <legend class="user-label">#{localeBean.getString('Objetos Educacionais')}</legend>
                 </div>
                 <div id="object-container-pending" class="container">
+                    <ui:fragment rendered="#{adminViewBean.hasPendingObjects}">
+                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
+                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PO')}" render="object-pending"></f:ajax>
+                        </h:inputText>
+                    </ui:fragment>
+                    <div class="clear"></div>
                     <h:panelGroup layout="block" id="object-pending">
                         <ui:repeat value="#{adminViewBean.pendingEducationalObjectList}" var="pendingObject" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.pendingObjectsLimit}">
@@ -119,9 +137,9 @@
                                         <p class="result-name">
                                             <a class="name" href="/educational-object/view.xhtml?id=#{pendingObject.id}" title="#{pendingObject.name}">#{pendingObject.name}</a>
                                         </p>
-                                        <p class="subresult">#{pendingObject.socialProfileId.name}</p>
-                                        <p class="subresult">#{pendingObject.socialProfileId.subnetworkId.description}</p>
-                                        <p class="subresult">#{pendingObject.themeId.name}</p>
+                                        <p class="subresult" title="#{pendingObject.socialProfileId.name}">#{pendingObject.socialProfileId.name}</p>
+                                        <p class="subresult" title="#{pendingObject.socialProfileId.subnetworkId.description}">#{pendingObject.socialProfileId.subnetworkId.description}</p>
+                                        <p class="subresult" title="#{pendingObject.themeId.name}">#{pendingObject.themeId.name}</p>
                                         <div class="container-action">
                                             <h:commandLink>
                                                 <i class="fa fa-times"></i>
@@ -146,6 +164,12 @@
                     </h:panelGroup>
                 </div>
                 <div id="object-container-deactivated" class="container">
+                    <ui:fragment rendered="#{adminViewBean.hasDeactivatedObjects}">
+                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
+                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DO')}" render="object-deactivated"></f:ajax>
+                        </h:inputText>
+                    </ui:fragment>
+                    <div class="clear"></div>
                     <h:panelGroup layout="block" id="object-deactivated">
                         <ui:repeat value="#{adminViewBean.deactivatedEducationalObjectList}" var="deactivatedObject" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedObjectsLimit}">
@@ -155,9 +179,9 @@
                                         <p class="result-name">
                                             <a class="name" href="/educational-object/view.xhtml?id=#{deactivatedObject.id}" title="#{deactivatedObject.name}">#{deactivatedObject.name}</a>
                                         </p>
-                                        <p class="subresult">#{deactivatedObject.socialProfileId.name}</p>
-                                        <p class="subresult">#{deactivatedObject.socialProfileId.subnetworkId.description}</p>
-                                        <p class="subresult">#{deactivatedObject.themeId.name}</p>
+                                        <p class="subresult" title="#{deactivatedObject.socialProfileId.name}">#{deactivatedObject.socialProfileId.name}</p>
+                                        <p class="subresult" title="#{deactivatedObject.socialProfileId.subnetworkId.description}">#{deactivatedObject.socialProfileId.subnetworkId.description}</p>
+                                        <p class="subresult" title="#{deactivatedObject.themeId.name}">#{deactivatedObject.themeId.name}</p>
                                         <div class="container-action">
                                             <h:commandLink>
                                                 <i class="fa fa-check"></i>

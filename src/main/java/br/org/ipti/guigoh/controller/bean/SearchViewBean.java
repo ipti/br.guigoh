@@ -55,7 +55,7 @@ public class SearchViewBean implements Serializable {
         if (generalSearch.length() >= 3) {
             userLimit = objectLimit = topicLimit = 3;
             socialProfileList = socialProfileJpaController.findSocialProfiles(generalSearch, mySocialProfile.getTokenId(), false);
-            educationalObjectList = educationalObjectJpaController.findEducationalObjects(generalSearch, null, null, null);
+            educationalObjectList = educationalObjectJpaController.findEducationalObjects(generalSearch, null, null, null, "AC");
             discussionTopicList = discussionTopicJpaController.findDiscussionTopics(generalSearch, null, null, null);
         } else {
             socialProfileList.clear();

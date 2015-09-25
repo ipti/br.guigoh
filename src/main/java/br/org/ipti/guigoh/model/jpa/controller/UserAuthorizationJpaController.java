@@ -236,7 +236,7 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
-    public List<UserAuthorization> getPendingUsers(){
+    public List<UserAuthorization> getAllPendingUsers(){
         EntityManager em = getEntityManager();
         try {
             List<UserAuthorization> pendingUserList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization ua "
@@ -249,7 +249,7 @@ public class UserAuthorizationJpaController implements Serializable {
         }
     }
     
-    public List<UserAuthorization> getDeactivatedUsers(){
+    public List<UserAuthorization> getAllDeactivatedUsers(){
         EntityManager em = getEntityManager();
         try {
             List<UserAuthorization> inactiveUserList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization ua "
@@ -280,6 +280,24 @@ public class UserAuthorizationJpaController implements Serializable {
             Query query = em.createNativeQuery("UPDATE user_authorization SET status = 'IC' where token_id = '" + tokenId + "'");
             query.executeUpdate();
             em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<UserAuthorization> findUserAuthorizations(String name, String type){
+        EntityManager em = getEntityManager();
+        try {
+            List<UserAuthorization> userAuthorizationList = (List<UserAuthorization>) 
+                    em.createNativeQuery("select distinct ua.* from user_authorization ua "
+                            + "join social_profile sp on sp.token_id = ua.token_id "
+                            + "left join city c on c.id = sp.city_id "
+                            + "left join subnetwork sn on sn.id = sp.subnetwork_id "
+                            + "where (upper(sp.name) like '%" + name.toUpperCase() + "%' "
+                            + "or upper(c.name) like '%" + name.toUpperCase() + "%' "
+                            + "or upper(sn.description) like '%" + name.toUpperCase() + "%')"
+                            + "and ua.status = '" + type + "' ", UserAuthorization.class).getResultList();
+            return userAuthorizationList;
         } finally {
             em.close();
         }
