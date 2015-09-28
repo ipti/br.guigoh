@@ -61,6 +61,97 @@
     transition: width 0.7s ease-in-out;
 }
 
-#informations-container, #team-container, #files-container {
+.wizard-container:not(.active){
     display: none;
+}
+
+.wizard-container.active {
+    display: block;
+}
+
+.container-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.container-description {
+    line-height: 18px;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.creative-commons-container {
+    background-color: #9c9c9c;
+    padding: 15px 25px;
+    width: 85%;
+    height: 40px;
+    margin: 30px auto 20px;
+    border-radius: 10px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+}
+
+.creative-commons-container img {
+    float: left;
+    margin-right: 20px;
+}
+
+.creative-commons-container span {
+    font-size: 12px;
+    width: 65%;
+    line-height: 17px;
+    margin-top: 3px;
+    float: left;
+}
+
+.agree-container {
+    background-color: #9c9c9c;
+    padding: 15px 25px;
+    width: 85%;
+    height: 50px;
+    margin: 0 auto 30px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.agree-container div {
+    background: white;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin: 5px 20px 0 0;
+    cursor: pointer;
+}
+
+.agree-container div i {
+    font-size: 25px;
+    margin-top: 8px;
+    color: #bbd037;
+    float: left;
+    margin: 8px;
+}
+
+.agree-container span {
+    font-size: 12px;
+    width: 87%;
+    line-height: 17px;
+    float: left;
+}
+
+.forward {
+    color: #9c9c9c;
+    float: right;
+    font-size: 30px;
+    margin: 0 20px;
+    cursor: pointer;
+}
+
+.agree-error {
+    position: absolute;
+    top: -19px;
+    left: 0;
+    color: red;
 }

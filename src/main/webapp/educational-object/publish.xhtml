@@ -22,16 +22,28 @@
             <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
             <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
                 <div class="column">
-                    <div id="licensing-container" class="wizard-container">
-                        1
+                    <div id="licensing-container" class="wizard-container active one">
+                        <p class="container-title">#{localeBean.getString('Licenciamento do seu Objeto Educacional')}</p>
+                        <p class="container-description">#{localeBean.getString('Você está prestes a publicar seu Objeto Educacional para que todos do Guigoh possam conhecê-lo e reaplicá-lo!')}</p>
+                        <p class="container-description">#{localeBean.getString('Todos os Objetos Educacionais publicados neste Espaço seguem a licença (CC) Creative Commons Atribuição-Compartilhamento pela mesma Licença 3.0 Unported. Esta é uma forma de garantir sua autoria a respeito do que for publicado, além de permitir o compartilhamento de seu Objeto Educacional com os demais parceiros, que terão o direito de reaplicá-lo.')}</p>
+                        <a href="https://br.creativecommons.org/licencas/" target="_blank" class="creative-commons-container">
+                            <img src="../resources/common/images/cc-logo.png" width="150"/>
+                            <span>#{localeBean.getString('Para conhecer melhor os detalhes dessa licença, acesse a página do Creative Commons.')}</span>
+                        </a>
+                        <div class="agree-container">
+                            <span class="agree-error hidden">#{localeBean.getString('Campo obrigatório')}.</span>
+                            <div><i class="hidden fa fa-check"></i></div>
+                            <span>#{localeBean.getString('Eu concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar o Objeto Educacional que estou prestes a publicar.')}</span>
+                        </div>
+                        <div class="forward"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
-                    <div id="informations-container" class="wizard-container">
+                    <div id="informations-container" class="wizard-container two">
                         2
                     </div>
-                    <div id="team-container" class="wizard-container">
+                    <div id="team-container" class="wizard-container three">
                         3
                     </div>
-                    <div id="files-container" class="wizard-container">
+                    <div id="files-container" class="wizard-container four">
                         4
                     </div>
                 </div>
@@ -39,10 +51,10 @@
             <aside class="aside-container">
                 <h3>#{localeBean.getString("São 4 passos para publicar um objeto educacional")}</h3>
                 <div class="steps">
-                    <div class="number-container"><span class="number active">1</span><span class="number-description">Licenciamento</span></div>
-                    <div class="number-container"><span class="number">2</span><span class="number-description">Informações</span></div>
-                    <div class="number-container"><span class="number">3</span><span class="number-description">Equipe</span></div>
-                    <div class="number-container"><span class="number">4</span><span class="number-description">Arquivos</span></div>
+                    <div class="number-container one"><span class="number active">1</span><span class="number-description">Licenciamento</span></div>
+                    <div class="number-container two"><span class="number">2</span><span class="number-description">Informações</span></div>
+                    <div class="number-container three"><span class="number">3</span><span class="number-description">Equipe</span></div>
+                    <div class="number-container four"><span class="number">4</span><span class="number-description">Arquivos</span></div>
                     <div class="clear"></div>
                 </div>
                 <div class="progress-bar">

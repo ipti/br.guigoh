@@ -1,15 +1,64 @@
+var stepOne = stepTwo = stepThree = stepFour = false;
+
 $(document).ready(function () {
     $(".menu-icon-two").parent().addClass("active");
 
     $(".active-bar").css("width", "20%");
 
     $(".number-container span").click(function () {
-        $(".number").removeClass("active").removeClass("previous");
-        $(this).parent().children(".number").addClass("active");
-        $(this).parent().prevAll(".number-container").children(".number").addClass("previous");
-        $(".active-bar").css("width", 20 * $(this).parent().children(".number").text() + "%");
+        var validated = stepValidation($(".wizard-container.active"));
+        if (validated === true) {
+            $(".number").removeClass("active").removeClass("previous");
+            $(".wizard-container").removeClass("active");
+            $(this).parent().children(".number").addClass("active");
+            $(this).parent().prevAll(".number-container").children(".number").addClass("previous");
+            $(".active-bar").css("width", 20 * $(this).parent().children(".number").text() + "%");
+            $(this).parent().hasClass("one") ? $(".wizard-container.one").addClass("active")
+                    : $(this).parent().hasClass("two") ? $(".wizard-container.two").addClass("active")
+                    : $(this).parent().hasClass("three") ? $(".wizard-container.three").addClass("active")
+                    : $(".wizard-container.four").addClass("active");
+        }
+    });
+
+    $(".forward").click(function () {
+        $(".number.active").parent().next().find(".number").click();
+    });
+
+    $(".backward").click(function () {
+        $(".number.active").parent().prev().find(".number").click();
+    });
+
+    $(".agree-container div").click(function () {
+        $(this).find("i").toggle();
+        if ($(this).children().is(":visible")) {
+            $(this).parent().css("border", "0");
+            $(".agree-error").addClass("hidden");
+        } else {
+            $(this).parent().css("border", "1px solid red");
+            $(".agree-error").removeClass("hidden");
+        }
     });
 });
+
+function stepValidation(container) {
+    if (container.hasClass("one")) {
+        if ($(".agree-container div i").is(":visible")) {
+            $(".agree-container").css('border', "0");
+            $(".agree-error").addClass("hidden");
+            return stepOne = true;
+        } else {
+            $(".agree-container").css('border', "1px solid red");
+            $(".agree-error").removeClass("hidden");
+            return stepOne = false;
+        }
+    } else if (container.hasClass("two")) {
+        return stepTwo = true;
+    } else if (container.hasClass("three")) {
+        return stepThree = true;
+    } else {
+        return stepFour = true;
+    }
+}
 
 //    var width = $(".page_progress").width();
 //    var page = 1;
