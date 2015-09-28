@@ -38,7 +38,15 @@
                         <div class="forward"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
                     <div id="informations-container" class="wizard-container two">
-                        2
+                        <p class="container-title">#{localeBean.getString('Informações do seu Objeto Educacional')}</p>
+                        <p class="container-description">#{localeBean.getString('Agora, forneça as informações básicas do seu Objeto Educacional: escolha o tema principal, dê um nome criativo à sua produção, forneça uma breve sinopse e inclua #hashtags com temas secundários para que seus amigos possam encontrar o Objeto Educacional mais facilmente.')}</p>
+                        <div class="select object-input">
+                            <h:selectOneMenu value="#{loginCreateBean.user.secretQuestionId}" converter="entityConverter">
+                                <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
+                                <f:selectItems value="#{loginCreateBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do Objeto Educacional')}" autocomplete="off" class="object-input"/>
                     </div>
                     <div id="team-container" class="wizard-container three">
                         3
