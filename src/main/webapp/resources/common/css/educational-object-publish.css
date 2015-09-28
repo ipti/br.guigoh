@@ -1,95 +1,66 @@
-#enviroment-info{
-    width: 560px;
-    float: left;
-    font-size: 12px;
-    line-height: 14px;
+.aside-container h3 {
+    line-height: 17px;
+    margin-top: 2px;
 }
 
-#enviroment-info p:nth-child(1){
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-#step-by-step-info p{
-    color: #6b6e65;
-    font-size: 12px;
-    line-height: 14px;
-}
-
-#enviroment-info .description {
-    line-height: 18px;
-}
-
-#step-by-step-info img{
+.steps {
     display: block;
-    margin: 10px auto;
+    margin-bottom: 30px;
 }
 
-#step-by-step-info div{
+.number-container {
     float: left;
-    width: 26%;
-    margin: 0 20px;
+    width: 50%;
+    text-align: center;
 }
 
-#step1 p{
-    margin-top: 16px;
-}
-
-#step2 p{
-    margin-top: 30px;
-}
-
-#educational-object-info{
-    width: 260px;
-    float: right;
-    font-size: 12px;
-    background-color: #dbded3;
-    border-top: 5px solid #9a9c97;
-}
-
-#submit-container{
-    width: 100%
-}
-
-#submit-container a{
-    text-decoration: none;
-}
-
-#submit-educational-object{
-    margin: 30px 0 30px 140px;
-    padding: 25px 15px 25px 25px;
-    border-radius: 8px;
-    background-color: #a9a9a9;
-    font-weight: bold;
-    font-size: 14px;
-    width: 43%;
-    line-height: 20px;
-}
-
-#submit-educational-object img{
+.number {
+    padding: 30px;
     float: left;
-    margin: -10px 13px 0 -10px;
+    border: 1px solid #9c9c9c;
+    color: #DCDFD6;
+    border-radius: 50px;
+    font-size: 35px;
+    margin: 20px 23px 5px;
+    text-shadow: -1px 0 #9c9c9c, 0 1px #9c9c9c, 1px 0 #9c9c9c, 0 -1px #9c9c9c;
+    filter: progid:DXImageTransform.Microsoft.Glow(Color=#9c9c9c,Strength=1); /* IE<10 */
+    cursor: pointer;
 }
 
-#submit-educational-object p{
-    color: white;
+.number.active {
+    background-color: #9c9c9c;
 }
 
-#educational-object-info p:first-of-type{
+.number.previous {
+    background-color: #bbd037;
+    text-shadow: -1px 0 #bbd037, 0 1px #bbd037, 1px 0 #bbd037, 0 -1px #bbd037;
+    filter: progid:DXImageTransform.Microsoft.Glow(Color=#bbd037,Strength=1); /* IE<10 */
+    border: 1px solid #bbd037;
+}
+
+.number-description {
+    font-size: 13px;
     font-weight: bold;
-    font-size: 14px;
-    margin: 15px 20px 15px 20px;
+    cursor: pointer;
 }
 
-#educational-object-info p{
-    margin: 5px 20px 0px 20px;
-    line-height: 18px;    
+.progress-bar {
+    height: 25px;
+    width: 80%;
+    margin: 0 auto 20px;
+    background-color: #9c9c9c;
 }
 
-#educational-object-info p:last-of-type{
-    margin: 5px 20px 20px 20px;
+.active-bar {
+    background-color: #bbd037;
+    height: 25px;
+    width: 0%;
+    -webkit-transition: width 0.7s ease-in-out;
+    -moz-transition: width 0.7s ease-in-out;
+    -o-transition: width 0.7s ease-in-out;
+    transition: width 0.7s ease-in-out;
 }
 
-#educational-object-info img{
-    margin-bottom: -8px;
+#informations-container, #team-container, #files-container {
+    display: none;
 }
