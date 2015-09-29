@@ -31,22 +31,44 @@
                             <span>#{localeBean.getString('Para conhecer melhor os detalhes dessa licença, acesse a página do Creative Commons.')}</span>
                         </a>
                         <div class="agree-container">
-                            <span class="agree-error hidden">#{localeBean.getString('Campo obrigatório')}.</span>
                             <div><i class="hidden fa fa-check"></i></div>
                             <span>#{localeBean.getString('Eu concordo com as regras definidas pela licença Creative Commons (CC) Atribuição-Compartilhamento pela mesma Licença 3.0 Unported para disponibilizar o Objeto Educacional que estou prestes a publicar.')}</span>
                         </div>
-                        <div class="forward"><i class="fa fa-chevron-circle-right"></i></div>
+                        <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
                     <div id="informations-container" class="wizard-container two">
                         <p class="container-title">#{localeBean.getString('Informações do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Agora, forneça as informações básicas do seu Objeto Educacional: escolha o tema principal, dê um nome criativo à sua produção, forneça uma breve sinopse e inclua #hashtags com temas secundários para que seus amigos possam encontrar o Objeto Educacional mais facilmente.')}</p>
                         <div class="select object-input">
-                            <h:selectOneMenu value="#{loginCreateBean.user.secretQuestionId}" converter="entityConverter">
-                                <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
-                                <f:selectItems value="#{loginCreateBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
+                            <h:selectOneMenu class="object-theme" value="#{educationalObjectPublishBean.educationalObject.themeId}" converter="entityConverter">
+                                <f:selectItem itemLabel="#{localeBean.getString('Qual o tema principal do seu Objeto?')}" itemValue=""/>
+                                <ui:param name="themeName" value="#{interest.name}"/>
+                                <f:selectItems value="#{educationalObjectPublishBean.interestList}" var="interest" itemValue="#{interest}" itemLabel="#{localeBean.getString(themeName)}" />
                             </h:selectOneMenu>
                         </div>
-                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do Objeto Educacional')}" autocomplete="off" class="object-input"/>
+                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do Objeto Educacional')}" autocomplete="off" class="object-input object-name" value="#{educationalObjectPublishBean.educationalObject.name}"/>
+                        <div class="object-textarea-container">
+                            <span class="max-length"></span>
+                            <h:inputTextarea pt:placeholder="#{localeBean.getString('Descrição do Objeto Educacional')}" pt:maxlength="200" class="object-input textarea object-description" value="#{educationalObjectPublishBean.educationalObject.description}"/>
+                        </div>
+                        <h:panelGroup layout="block" class="tags-container object-input" id="tags-container">
+                            <h:inputText class="tag-input" id="tag-input" autocomplete="off"  value="#{educationalObjectPublishBean.tag}" pt:placeholder="#Hashtags"/>
+                            <h:commandLink class="add-tag" onclick="return checkEmpty('.tag-input')">
+                                <f:ajax listener="#{educationalObjectPublishBean.addTag()}" execute="tag-input" render="tags-container tags"/>
+                                <img src="../resources/common/images/arrow-select.png"/>
+                            </h:commandLink>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="tags" id="tags">
+                            <ui:repeat value="#{educationalObjectPublishBean.tagList}" var="tag" varStatus="status">
+                                <h:commandLink class="tag">
+                                    ##{tag.name}
+                                    <f:ajax listener="#{educationalObjectPublishBean.removeTag(status.index)}" render="tags-container tags"/>
+                                </h:commandLink>
+                            </ui:repeat>
+                        </h:panelGroup>
+                        <div class="clear"></div>
+                        <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
+                        <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
                     <div id="team-container" class="wizard-container three">
                         3

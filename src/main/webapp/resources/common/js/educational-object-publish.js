@@ -6,12 +6,16 @@ $(document).ready(function () {
     $(".active-bar").css("width", "20%");
 
     $(".number-container span").click(function () {
-        var validated = stepValidation($(".wizard-container.active"));
-        if (validated === true) {
-            $(".number").removeClass("active").removeClass("previous");
+        checkValidation($(".wizard-container.active"));
+        var validated = $(this).parent().hasClass("one")
+                || ($(this).parent().hasClass("two") && stepOne)
+                || ($(this).parent().hasClass("three") && stepOne && stepTwo)
+                || ($(this).parent().hasClass("four") && stepOne && stepTwo && stepThree);
+        if (validated) {
+            $(".number").removeClass("active").removeClass("completed");
             $(".wizard-container").removeClass("active");
             $(this).parent().children(".number").addClass("active");
-            $(this).parent().prevAll(".number-container").children(".number").addClass("previous");
+            $(this).parent().prevAll(".number-container").children(".number").addClass("completed");
             $(".active-bar").css("width", 20 * $(this).parent().children(".number").text() + "%");
             $(this).parent().hasClass("one") ? $(".wizard-container.one").addClass("active")
                     : $(this).parent().hasClass("two") ? $(".wizard-container.two").addClass("active")
@@ -30,35 +34,117 @@ $(document).ready(function () {
 
     $(".agree-container div").click(function () {
         $(this).find("i").toggle();
-        if ($(this).children().is(":visible")) {
-            $(this).parent().css("border", "0");
-            $(".agree-error").addClass("hidden");
-        } else {
-            $(this).parent().css("border", "1px solid red");
-            $(".agree-error").removeClass("hidden");
+        checkErrorBorder(".agree-container div i", "checkbox");
+    });
+
+    $(".object-name, .object-description").keyup(function () {
+        checkErrorBorder(this, "input");
+    });
+
+    $(document).on("keypress", ".tag-input", function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            if ($(this).val().trim() !== "") {
+                var value = $(this).val();
+                value = value.replace("#", "");
+                $(this).val(value);
+                $('.add-tag').click();
+            }
         }
+    });
+
+    $('select').each(changeSelectColors);
+    $('select').on("change", changeSelectColors);
+    $('select').on("change", function(){
+        checkErrorBorder(this, "select");
+    });
+    
+    var maxLength = 200;
+    $('.max-length').text("(" + maxLength + ")");
+    $(document).on('keyup', '.object-description', function (e) {
+        var length = $(this).val().length;
+        length = maxLength - length;
+        $('.max-length').text("(" + length + ")");
     });
 });
 
-function stepValidation(container) {
+function checkValidation(container) {
     if (container.hasClass("one")) {
+        checkErrorBorder(".agree-container div i", "checkbox");
         if ($(".agree-container div i").is(":visible")) {
-            $(".agree-container").css('border', "0");
-            $(".agree-error").addClass("hidden");
-            return stepOne = true;
+            stepOne = true;
         } else {
-            $(".agree-container").css('border', "1px solid red");
-            $(".agree-error").removeClass("hidden");
-            return stepOne = false;
+            stepOne = false;
         }
     } else if (container.hasClass("two")) {
-        return stepTwo = true;
+        checkErrorBorder(".object-name", "input");
+        checkErrorBorder(".object-description", "input");
+        checkErrorBorder(".object-theme", "select");
+        checkErrorBorder(".tag", "tag");
+        if ($(".object-name").val() !== "" && $(".object-description").val() !== ""
+                && !$(".object-theme").children('option:first-child').is(':selected') && $('.tag').length !== 0) {
+            stepTwo = true;
+        } else {
+            stepTwo = false;
+        }
     } else if (container.hasClass("three")) {
-        return stepThree = true;
+        stepThree = true;
     } else {
-        return stepFour = true;
+        stepFour = true;
     }
 }
+
+function checkErrorBorder(element, type) {
+    switch (type) {
+        case "input":
+            if ($(element).val() !== "") {
+                $(element).css('border', "1px solid #CACACA");
+            } else {
+                $(element).css('border', "1px solid red");
+            }
+            break;
+        case "select":
+            if (!$(element).children('option:first-child').is(':selected')) {
+                $(element).css('border', "1px solid #CACACA");
+            } else {
+                $(element).css('border', "1px solid red");
+            }
+            break;
+        case "tag":
+            if ($(element).length !== 0) {
+                $('.tag-input').css('border', "1px solid #CACACA");
+            } else {
+                $('.tag-input').css('border', "1px solid red");
+            }
+            break;
+        case "checkbox":
+            if ($(element).is(":visible")) {
+                $(element).parent().parent().css('border', "0");
+            } else {
+                $(element).parent().parent().css('border', "1px solid red");
+            }
+    }
+}
+
+function checkEmpty(classe) {
+    if ($(classe).val() !== "") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+jsf.ajax.addOnEvent(function (data) {
+    if (data.status === "success") {
+        if ($(data.source).hasClass("add-tag")) {
+            if ($('.tag').length < 7) {
+                $('.tag-input').focus().select();
+            } else {
+                $('.tag-input').prop("disabled", "true");
+            }
+        }
+    }
+});
 
 //    var width = $(".page_progress").width();
 //    var page = 1;

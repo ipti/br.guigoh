@@ -40,120 +40,137 @@ public class EducationalObjectPublishBean implements Serializable {
 
     private EducationalObject educationalObject;
 
-    private List<Interests> interestThemesList;
+    private List<Interests> interestList;
     private List<Author> authorList;
+    private List<Tags> tagList;
 
     private Author author;
 
-    private String tags;
-    private boolean submitted;
+    private String tag;
 
     private transient Part imageFile, mediaFile1, mediaFile2, mediaFile3;
+    
+    private InterestsJpaController interestsJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
-            getInterestThemes();
         }
     }
-
-    public void addAuthor() throws UnsupportedEncodingException {
-        if (authorList.size() < 4) {
+    
+    public void addTag() {
+        if (tagList.size() < 7) {
             boolean exists = false;
-            for (Author a : authorList) {
-                if (a.getName().equals(this.author.getName())
-                        && a.getEmail().equals(this.author.getEmail())) {
+            for (Tags t : tagList) {
+                if (t.getName().equals(tag)) {
                     exists = true;
                 }
             }
             if (!exists) {
-                author.setName(new String(author.getName().getBytes("ISO-8859-1"), "UTF-8"));
-                authorList.add(author);
-                author = new Author();
-            }
-
-        }
-    }
-
-    public void submitForm() throws IOException, Exception {
-        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
-        UtilJpaController utilJpaController = new UtilJpaController();
-        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
-        SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
-        educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
-        educationalObject.setSocialProfileId(socialProfile);
-        educationalObject.setStatus("PE");
-        educationalObject.setDate(utilJpaController.getTimestampServerTime());
-        educationalObjectJpaController.create(educationalObject);
-        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
-                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
-                + File.separator + "image" + File.separator;
-        UploadService.uploadFile(imageFile, imagePath, null);
-        educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
-        educationalObjectJpaController.edit(educationalObject);
-        tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
-        String[] tagArray = tags.replace(" ", "").split(",");
-        List<EducationalObject> educationalObjectList = new ArrayList<>();
-        educationalObjectList.add(educationalObject);
-        TagsJpaController tagsJpaController = new TagsJpaController();
-        for (String tagValue : tagArray) {
-            Tags tagDB = tagsJpaController.findTagByName(tagValue);
-            if (tagDB == null) {
                 Tags tag = new Tags();
-                tag.setEducationalObjectCollection(educationalObjectList);
-                tag.setName(tagValue);
-                tagsJpaController.create(tag);
-            } else {
-                tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
+                tag.setName(this.tag);
+                tagList.add(tag);
+                this.tag = "";
             }
         }
-        AuthorJpaController authorJpaController = new AuthorJpaController();
-        for (Author authorOE : authorList) {
-            authorOE.setEducationalObjectCollection(educationalObjectList);
-            authorJpaController.create(authorOE);
-        }
-        if (mediaFile1 != null) {
-            submitFile(mediaFile1);
-        }
-        if (mediaFile2 != null) {
-            submitFile(mediaFile2);
-        }
-        if (mediaFile3 != null) {
-            submitFile(mediaFile3);
-        }
     }
+    
+    public void removeTag(int index) {
+        tagList.remove(index);
+    }
+//
+//    public void addAuthor() throws UnsupportedEncodingException {
+//        if (authorList.size() < 4) {
+//            boolean exists = false;
+//            for (Author a : authorList) {
+//                if (a.getName().equals(this.author.getName())
+//                        && a.getEmail().equals(this.author.getEmail())) {
+//                    exists = true;
+//                }
+//            }
+//            if (!exists) {
+//                author.setName(new String(author.getName().getBytes("ISO-8859-1"), "UTF-8"));
+//                authorList.add(author);
+//                author = new Author();
+//            }
+//
+//        }
+//    }
 
-    private void submitFile(Part part) throws IOException, Exception {
-        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
-                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
-                + File.separator + "media" + File.separator;
-        boolean success = UploadService.uploadFile(part, mediaPath, null);
-        if (success) {
-            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-            educationalObjectMedia.setEducationalObjectId(educationalObject);
-            educationalObjectMedia.setSize(part.getSize());
-            String[] fileSplit = part.getSubmittedFileName().split("\\.");
-            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-            educationalObjectMediaJpaController.create(educationalObjectMedia);
-        }
-    }
-
-    private void getInterestThemes() {
-        InterestsJpaController interestsJpaController = new InterestsJpaController();
-        interestThemesList = interestsJpaController.findInterestsEntities();
-    }
+//    public void submitForm() throws IOException, Exception {
+//        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+//        UtilJpaController utilJpaController = new UtilJpaController();
+//        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+//        SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+//        educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
+//        educationalObject.setSocialProfileId(socialProfile);
+//        educationalObject.setStatus("PE");
+//        educationalObject.setDate(utilJpaController.getTimestampServerTime());
+//        educationalObjectJpaController.create(educationalObject);
+//        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+//                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
+//                + File.separator + "image" + File.separator;
+//        UploadService.uploadFile(imageFile, imagePath, null);
+//        educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
+//        educationalObjectJpaController.edit(educationalObject);
+//        tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
+//        String[] tagArray = tags.replace(" ", "").split(",");
+//        List<EducationalObject> educationalObjectList = new ArrayList<>();
+//        educationalObjectList.add(educationalObject);
+//        TagsJpaController tagsJpaController = new TagsJpaController();
+//        for (String tagValue : tagArray) {
+//            Tags tagDB = tagsJpaController.findTagByName(tagValue);
+//            if (tagDB == null) {
+//                Tags tag = new Tags();
+//                tag.setEducationalObjectCollection(educationalObjectList);
+//                tag.setName(tagValue);
+//                tagsJpaController.create(tag);
+//            } else {
+//                tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
+//            }
+//        }
+//        AuthorJpaController authorJpaController = new AuthorJpaController();
+//        for (Author authorOE : authorList) {
+//            authorOE.setEducationalObjectCollection(educationalObjectList);
+//            authorJpaController.create(authorOE);
+//        }
+//        if (mediaFile1 != null) {
+//            submitFile(mediaFile1);
+//        }
+//        if (mediaFile2 != null) {
+//            submitFile(mediaFile2);
+//        }
+//        if (mediaFile3 != null) {
+//            submitFile(mediaFile3);
+//        }
+//    }
+//
+//    private void submitFile(Part part) throws IOException, Exception {
+//        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+//                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
+//                + File.separator + "media" + File.separator;
+//        boolean success = UploadService.uploadFile(part, mediaPath, null);
+//        if (success) {
+//            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
+//            educationalObjectMedia.setEducationalObjectId(educationalObject);
+//            educationalObjectMedia.setSize(part.getSize());
+//            String[] fileSplit = part.getSubmittedFileName().split("\\.");
+//            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+//            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
+//            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
+//            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+//            educationalObjectMediaJpaController.create(educationalObjectMedia);
+//        }
+//    }
 
     private void initGlobalVariables() {
-        submitted = false;
-
-        interestThemesList = new ArrayList<>();
+        interestsJpaController = new InterestsJpaController();
+        
+        interestList = interestsJpaController.findInterestsEntities();
         authorList = new ArrayList<>();
+        tagList = new ArrayList<>();
 
         educationalObject = new EducationalObject();
-        author = new Author();
     }
 
     public EducationalObject getEducationalObject() {
@@ -164,20 +181,20 @@ public class EducationalObjectPublishBean implements Serializable {
         this.educationalObject = educationalObject;
     }
 
-    public List<Interests> getInterestThemesList() {
-        return interestThemesList;
+    public List<Interests> getInterestList() {
+        return interestList;
     }
 
-    public void setInterestThemesList(List<Interests> interestThemesList) {
-        this.interestThemesList = interestThemesList;
+    public void setInterestList(List<Interests> interestList) {
+        this.interestList = interestList;
     }
 
-    public String getTags() {
-        return tags;
+    public String getTag() {
+        return tag;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public List<Author> getAuthorList() {
@@ -228,11 +245,12 @@ public class EducationalObjectPublishBean implements Serializable {
         this.mediaFile3 = mediaFile3;
     }
 
-    public boolean isSubmitted() {
-        return submitted;
+    public List<Tags> getTagList() {
+        return tagList;
     }
 
-    public void setSubmitted(boolean submitted) {
-        this.submitted = submitted;
+    public void setTagList(List<Tags> tagList) {
+        this.tagList = tagList;
     }
+    
 }
