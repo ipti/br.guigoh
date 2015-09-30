@@ -1,4 +1,4 @@
-var stepOne = stepTwo = stepThree = stepFour = false;
+var stepOne = stepTwo = stepThree = false;
 
 $(document).ready(function () {
     $(".menu-icon-two").parent().addClass("active");
@@ -75,6 +75,64 @@ $(document).ready(function () {
         length = maxLength - length;
         $('.max-length').text("(" + length + ")");
     });
+
+    $('.add-image').click(function () {
+        $('#browse-image').click();
+    });
+
+    $('#browse-image').change(function (e) {
+        var widthMin = 100;
+        var heightMin = 100;
+        for (var i = 0; i < e.originalEvent.target.files.length; i++) {
+            var file = e.originalEvent.target.files[i];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                if (file.type.split("/")[0] === 'image') {
+                    $('.original-uploaded-image').show();
+                    $('.original-uploaded-image').attr("src", reader.result).load(function () {
+                        var imageWidth = $(this).width();
+                        var imageHeight = $(this).height();
+                        if (imageWidth > widthMin && imageHeight > heightMin) {
+                            $('.image-error').text("");
+                            if (imageWidth > imageHeight) {
+                                $(this).css("max-width", "650px");
+                            } else {
+                                $(this).css("max-height", "400px");
+                            }
+                            document.getElementById("open-image-cropping-modal").click();
+                            $(this).Jcrop({
+                                setSelect: [0, 0, widthMin, heightMin],
+                                minSize: [widthMin, heightMin],
+                                aspectRatio: widthMin / heightMin,
+                                onSelect: function (c) {
+                                    getTrackerCoords(c, 'original-uploaded-image');
+                                }
+                            });
+                        } else {
+                            $('.image-error').text("Escolha uma imagem de tamanho mínimo de " + widthMin + "x" + heightMin + ".");
+                            $('#browse-photo').val("");
+                        }
+                    });
+                } else {
+                    $('.image-error').text("Apenas imagens são aceitas.");
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $('.close-image-cropping-modal, .image-cropping-button.cancel').click(function () {
+        setTimeout(function () {
+            $('.original-uploaded-image').data('Jcrop').destroy();
+            $('.original-uploaded-image').removeAttr('style');
+            $('#browse-photo').val("");
+        }, 400);
+    });
+    
+    $('.cut-photo').click(function(){
+        $('.upload-image').click();
+        document.getElementById("close-image-cropping-modal").click();
+    });
 });
 
 function checkValidation(container) {
@@ -108,9 +166,6 @@ function checkValidation(container) {
             $(".author-role").css('border', "1px solid red");
             stepThree = false;
         }
-
-    } else {
-        stepFour = true;
     }
 }
 
@@ -178,6 +233,10 @@ function checkAuthorEmpty(authorName, authorEmail, authorRole) {
     } else {
         return false;
     }
+}
+
+function checkMediaEmpty() {
+    return false;
 }
 
 jsf.ajax.addOnEvent(function (data) {

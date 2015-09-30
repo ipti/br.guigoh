@@ -12,25 +12,24 @@ import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
-import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorRoleJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
-import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
-import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.imageio.ImageIO;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 
@@ -52,9 +51,12 @@ public class EducationalObjectPublishBean implements Serializable {
     private Author author;
 
     private String tag;
+    private Integer[] cropCoordinates;
 
-    private transient List<Part> fileList;
-    
+    private transient File imageSampleFile;
+    private transient Part imageFile;
+    private transient List<Part> MediafileList;
+
     private InterestsJpaController interestsJpaController;
     private AuthorRoleJpaController authorRoleJpaController;
 
@@ -63,7 +65,7 @@ public class EducationalObjectPublishBean implements Serializable {
             initGlobalVariables();
         }
     }
-    
+
     public SocialProfile getSocialProfileByEmail(String email) {
         UsersJpaController usersJpaController = new UsersJpaController();
         Users user = usersJpaController.findUsers(email);
@@ -73,7 +75,7 @@ public class EducationalObjectPublishBean implements Serializable {
             return null;
         }
     }
-    
+
     public void addTag() {
         if (tagList.size() < 7) {
             boolean exists = false;
@@ -90,11 +92,11 @@ public class EducationalObjectPublishBean implements Serializable {
             }
         }
     }
-    
+
     public void removeTag(int index) {
         tagList.remove(index);
     }
-    
+
     public void addAuthor() throws UnsupportedEncodingException {
         if (authorList.size() < 10) {
             boolean exists = false;
@@ -110,12 +112,47 @@ public class EducationalObjectPublishBean implements Serializable {
             }
         }
     }
-    
+
     public void removeAuthor(Author author) {
         authorList.remove(author);
     }
 
-//    public void submitForm() throws IOException, Exception {
+    public void cropImage() throws IOException {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        imageSampleFile = new File("imageSampleFile.png");
+        inputStream = imageFile.getInputStream();
+        outputStream = new FileOutputStream(imageSampleFile);
+        try {
+            inputStream = imageFile.getInputStream();
+            outputStream = new FileOutputStream(imageSampleFile);
+            int read = 0;
+            final byte[] bytes = new byte[1024];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+            String[] fileSplit = imageFile.getSubmittedFileName().split("\\.");
+            String fileType = fileSplit[fileSplit.length - 1];
+            BufferedImage image = ImageIO.read(imageSampleFile);
+            Integer x = cropCoordinates[0];
+            Integer y = cropCoordinates[1];
+            Integer w = cropCoordinates[2];
+            Integer h = cropCoordinates[3];
+            BufferedImage out = image.getSubimage(x, y, w, h);
+            ImageIO.write(out, fileType, imageSampleFile);
+        } catch (IOException e) {
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    public void submit() throws IOException, Exception {
+        imageSampleFile.delete();
 //        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
 //        UtilJpaController utilJpaController = new UtilJpaController();
 //        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
@@ -161,38 +198,41 @@ public class EducationalObjectPublishBean implements Serializable {
 //        if (mediaFile3 != null) {
 //            submitFile(mediaFile3);
 //        }
-//    }
-//
-//    private void submitFile(Part part) throws IOException, Exception {
-//        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
-//                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
-//                + File.separator + "media" + File.separator;
-//        boolean success = UploadService.uploadFile(part, mediaPath, null);
-//        if (success) {
-//            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-//            educationalObjectMedia.setEducationalObjectId(educationalObject);
-//            educationalObjectMedia.setSize(part.getSize());
-//            String[] fileSplit = part.getSubmittedFileName().split("\\.");
-//            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-//            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-//            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-//            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-//            educationalObjectMediaJpaController.create(educationalObjectMedia);
-//        }
-//    }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+    }
+
+    private void submitFile(Part part) throws IOException, Exception {
+        String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
+                + File.separator + "media" + File.separator;
+        boolean success = UploadService.uploadFile(part, mediaPath, null);
+        if (success) {
+            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
+            educationalObjectMedia.setEducationalObjectId(educationalObject);
+            educationalObjectMedia.setSize(part.getSize());
+            String[] fileSplit = part.getSubmittedFileName().split("\\.");
+            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
+            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
+            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+            educationalObjectMediaJpaController.create(educationalObjectMedia);
+        }
+    }
 
     private void initGlobalVariables() {
         interestsJpaController = new InterestsJpaController();
         authorRoleJpaController = new AuthorRoleJpaController();
-        
+
         interestList = interestsJpaController.findInterestsEntities();
         authorRoleList = authorRoleJpaController.findAuthorRoleEntities();
         tagList = new ArrayList<>();
-        fileList = new ArrayList<>();
+        MediafileList = new ArrayList<>();
         authorList = new ArrayList<>();
 
         educationalObject = new EducationalObject();
         author = new Author();
+
+        cropCoordinates = new Integer[6];
     }
 
     public EducationalObject getEducationalObject() {
@@ -227,12 +267,12 @@ public class EducationalObjectPublishBean implements Serializable {
         this.author = author;
     }
 
-    public List<Part> getFileList() {
-        return fileList;
+    public List<Part> getMediaFileList() {
+        return MediafileList;
     }
 
-    public void setFileList(List<Part> fileList) {
-        this.fileList = fileList;
+    public void setMediaFileList(List<Part> MediafileList) {
+        this.MediafileList = MediafileList;
     }
 
     public List<Tags> getTagList() {
@@ -257,5 +297,37 @@ public class EducationalObjectPublishBean implements Serializable {
 
     public void setAuthorList(List<Author> authorList) {
         this.authorList = authorList;
+    }
+
+    public Part getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(Part imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    public List<Part> getMediafileList() {
+        return MediafileList;
+    }
+
+    public void setMediafileList(List<Part> MediafileList) {
+        this.MediafileList = MediafileList;
+    }
+
+    public Integer[] getCropCoordinates() {
+        return cropCoordinates;
+    }
+
+    public void setCropCoordinates(Integer[] cropCoordinates) {
+        this.cropCoordinates = cropCoordinates;
+    }
+
+    public File getImageSampleFile() {
+        return imageSampleFile;
+    }
+
+    public void setImageSampleFile(File imageSampleFile) {
+        this.imageSampleFile = imageSampleFile;
     }
 }

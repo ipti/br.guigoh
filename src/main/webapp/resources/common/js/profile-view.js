@@ -100,7 +100,6 @@ $('.close-image-cropping-modal, .image-cropping-button.cancel').click(function (
         $('.original-uploaded-image').removeAttr('style');
         $('#browse-photo').val("");
     }, 400);
-
 })
 
 $('.tab').click(function () {
