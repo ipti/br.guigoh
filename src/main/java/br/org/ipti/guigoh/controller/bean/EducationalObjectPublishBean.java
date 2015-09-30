@@ -5,17 +5,21 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.Author;
+import br.org.ipti.guigoh.model.entity.AuthorRole;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
+import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.AuthorRoleJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
@@ -41,20 +45,32 @@ public class EducationalObjectPublishBean implements Serializable {
     private EducationalObject educationalObject;
 
     private List<Interests> interestList;
-    private List<Author> authorList;
+    private List<AuthorRole> authorRoleList;
     private List<Tags> tagList;
+    private List<Author> authorList;
 
     private Author author;
 
     private String tag;
 
-    private transient Part imageFile, mediaFile1, mediaFile2, mediaFile3;
+    private transient List<Part> fileList;
     
     private InterestsJpaController interestsJpaController;
+    private AuthorRoleJpaController authorRoleJpaController;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
+        }
+    }
+    
+    public SocialProfile getSocialProfileByEmail(String email) {
+        UsersJpaController usersJpaController = new UsersJpaController();
+        Users user = usersJpaController.findUsers(email);
+        if (user != null) {
+            return user.getSocialProfile();
+        } else {
+            return null;
         }
     }
     
@@ -78,24 +94,26 @@ public class EducationalObjectPublishBean implements Serializable {
     public void removeTag(int index) {
         tagList.remove(index);
     }
-//
-//    public void addAuthor() throws UnsupportedEncodingException {
-//        if (authorList.size() < 4) {
-//            boolean exists = false;
-//            for (Author a : authorList) {
-//                if (a.getName().equals(this.author.getName())
-//                        && a.getEmail().equals(this.author.getEmail())) {
-//                    exists = true;
-//                }
-//            }
-//            if (!exists) {
-//                author.setName(new String(author.getName().getBytes("ISO-8859-1"), "UTF-8"));
-//                authorList.add(author);
-//                author = new Author();
-//            }
-//
-//        }
-//    }
+    
+    public void addAuthor() throws UnsupportedEncodingException {
+        if (authorList.size() < 10) {
+            boolean exists = false;
+            for (Author a : authorList) {
+                if (a.getName().equals(this.author.getName())
+                        && a.getEmail().equals(this.author.getEmail())) {
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                authorList.add(author);
+                author = new Author();
+            }
+        }
+    }
+    
+    public void removeAuthor(Author author) {
+        authorList.remove(author);
+    }
 
 //    public void submitForm() throws IOException, Exception {
 //        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
@@ -165,12 +183,16 @@ public class EducationalObjectPublishBean implements Serializable {
 
     private void initGlobalVariables() {
         interestsJpaController = new InterestsJpaController();
+        authorRoleJpaController = new AuthorRoleJpaController();
         
         interestList = interestsJpaController.findInterestsEntities();
-        authorList = new ArrayList<>();
+        authorRoleList = authorRoleJpaController.findAuthorRoleEntities();
         tagList = new ArrayList<>();
+        fileList = new ArrayList<>();
+        authorList = new ArrayList<>();
 
         educationalObject = new EducationalObject();
+        author = new Author();
     }
 
     public EducationalObject getEducationalObject() {
@@ -197,14 +219,6 @@ public class EducationalObjectPublishBean implements Serializable {
         this.tag = tag;
     }
 
-    public List<Author> getAuthorList() {
-        return authorList;
-    }
-
-    public void setAuthorList(List<Author> authorList) {
-        this.authorList = authorList;
-    }
-
     public Author getAuthor() {
         return author;
     }
@@ -213,36 +227,12 @@ public class EducationalObjectPublishBean implements Serializable {
         this.author = author;
     }
 
-    public Part getImageFile() {
-        return imageFile;
+    public List<Part> getFileList() {
+        return fileList;
     }
 
-    public void setImageFile(Part imageFile) {
-        this.imageFile = imageFile;
-    }
-
-    public Part getMediaFile1() {
-        return mediaFile1;
-    }
-
-    public void setMediaFile1(Part mediaFile1) {
-        this.mediaFile1 = mediaFile1;
-    }
-
-    public Part getMediaFile2() {
-        return mediaFile2;
-    }
-
-    public void setMediaFile2(Part mediaFile2) {
-        this.mediaFile2 = mediaFile2;
-    }
-
-    public Part getMediaFile3() {
-        return mediaFile3;
-    }
-
-    public void setMediaFile3(Part mediaFile3) {
-        this.mediaFile3 = mediaFile3;
+    public void setFileList(List<Part> fileList) {
+        this.fileList = fileList;
     }
 
     public List<Tags> getTagList() {
@@ -252,5 +242,20 @@ public class EducationalObjectPublishBean implements Serializable {
     public void setTagList(List<Tags> tagList) {
         this.tagList = tagList;
     }
-    
+
+    public List<AuthorRole> getAuthorRoleList() {
+        return authorRoleList;
+    }
+
+    public void setAuthorRoleList(List<AuthorRole> authorRoleList) {
+        this.authorRoleList = authorRoleList;
+    }
+
+    public List<Author> getAuthorList() {
+        return authorList;
+    }
+
+    public void setAuthorList(List<Author> authorList) {
+        this.authorList = authorList;
+    }
 }

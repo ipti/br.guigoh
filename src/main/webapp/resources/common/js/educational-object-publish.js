@@ -37,8 +37,10 @@ $(document).ready(function () {
         checkErrorBorder(".agree-container div i", "checkbox");
     });
 
-    $(".object-name, .object-description").keyup(function () {
-        checkErrorBorder(this, "input");
+    $(".object-name, .object-description, .author-name, .author-email").keyup(function (e) {
+        if (e.keyCode !== 9) {
+            checkErrorBorder(this, "input");
+        }
     });
 
     $(document).on("keypress", ".tag-input", function (e) {
@@ -53,12 +55,19 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("keypress", ".author-name, .author-email, .author-role", function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            $('.add-author').click();
+        }
+    });
+
     $('select').each(changeSelectColors);
-    $('select').on("change", changeSelectColors);
-    $('select').on("change", function(){
+    $(document).on("change", "select", changeSelectColors);
+    $(document).on("change", "select", function () {
         checkErrorBorder(this, "select");
     });
-    
+
     var maxLength = 200;
     $('.max-length').text("(" + maxLength + ")");
     $(document).on('keyup', '.object-description', function (e) {
@@ -88,7 +97,18 @@ function checkValidation(container) {
             stepTwo = false;
         }
     } else if (container.hasClass("three")) {
-        stepThree = true;
+        if ($(".author").length !== 0) {
+            stepThree = true;
+            $(".author-name").css('border', "1px solid #CACACA");
+            $(".author-email").css('border', "1px solid #CACACA");
+            $(".author-role").css('border', "1px solid #CACACA");
+        } else {
+            $(".author-name").css('border', "1px solid red");
+            $(".author-email").css('border', "1px solid red");
+            $(".author-role").css('border', "1px solid red");
+            stepThree = false;
+        }
+
     } else {
         stepFour = true;
     }
@@ -123,11 +143,37 @@ function checkErrorBorder(element, type) {
             } else {
                 $(element).parent().parent().css('border', "1px solid red");
             }
+            break;
+        case "email":
+            var email = $(element).val();
+            if (email.match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b")) {
+                $(element).css('border', "0");
+            } else {
+                $(element).css('border', "1px solid red");
+            }
+            break;
     }
 }
 
-function checkEmpty(classe) {
-    if ($(classe).val() !== "") {
+function checkTagEmpty(tag) {
+    if ($(tag).val() !== "") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkAuthorEmpty(authorName, authorEmail, authorRole) {
+    $(".author-email").keyup(function (e) {
+        if (e.keyCode !== 9) {
+            checkErrorBorder(this, "email");
+        }
+    });
+    checkErrorBorder(authorName, "input");
+    checkErrorBorder(authorEmail, "email");
+    checkErrorBorder(authorRole, "select");
+    var email = $(authorEmail).val();
+    if ($(authorName).val() !== "" && email.match("\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b") && !$(authorRole).children('option:first-child').is(':selected')) {
         return true;
     } else {
         return false;
@@ -142,6 +188,18 @@ jsf.ajax.addOnEvent(function (data) {
             } else {
                 $('.tag-input').prop("disabled", "true");
             }
+        }
+        if ($(data.source).hasClass("add-author")) {
+            $('select').each(changeSelectColors);
+            $('.author-name').focus().select();
+            $('.new-author-name').each(function () {
+                $(this).text(changeNameLength($(this).text(), 20));
+            });
+            $(".author-email").keyup(function (e) {
+                if (e.keyCode !== 9) {
+                    checkErrorBorder(this, "input");
+                }
+            });
         }
     }
 });

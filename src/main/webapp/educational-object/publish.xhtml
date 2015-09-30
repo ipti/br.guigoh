@@ -53,7 +53,7 @@
                         </div>
                         <h:panelGroup layout="block" class="tags-container object-input" id="tags-container">
                             <h:inputText class="tag-input" id="tag-input" autocomplete="off"  value="#{educationalObjectPublishBean.tag}" pt:placeholder="#Hashtags"/>
-                            <h:commandLink class="add-tag" onclick="return checkEmpty('.tag-input')">
+                            <h:commandLink class="add-tag" onclick="return checkTagEmpty('.tag-input')">
                                 <f:ajax listener="#{educationalObjectPublishBean.addTag()}" execute="tag-input" render="tags-container tags"/>
                                 <img src="../resources/common/images/arrow-select.png"/>
                             </h:commandLink>
@@ -71,7 +71,50 @@
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
                     <div id="team-container" class="wizard-container three">
-                        3
+                        <p class="container-title">#{localeBean.getString('Equipe do seu Objeto Educacional')}</p>
+                        <p class="container-description">#{localeBean.getString('Identifique a equipe que participou da produção do Objeto Educacional. Quem foi o diretor? E o roteirista? Adicione o e-mail de cada membro da equipe, para que o Objeto Educacional seja mostrado no perfil dos participantes. Aqui é o lugar para dar os créditos.')}</p>
+                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do membro da equipe')}" autocomplete="off" class="object-input author-name" id="author-name" value="#{educationalObjectPublishBean.author.name}"/>
+                        <h:inputText pt:placeholder="#{localeBean.getString('Email do membro da equipe')}" autocomplete="off" class="object-input author-email" id="author-email" value="#{educationalObjectPublishBean.author.email}"/>
+                        <div class="select object-input author-role-container">
+                            <h:selectOneMenu class="author-role" value="#{educationalObjectPublishBean.author.authorRoleFk}" id="author-role" converter="entityConverter">
+                                <f:selectItem itemLabel="#{localeBean.getString('Função na produção')}" itemValue=""/>
+                                <ui:param name="authorRoleName" value="#{authorRole.name}"/>
+                                <f:selectItems value="#{educationalObjectPublishBean.authorRoleList}" var="authorRole" itemValue="#{authorRole}" itemLabel="#{localeBean.getString(authorRoleName)}" />
+                            </h:selectOneMenu>
+                        </div>
+                        <h:commandLink class="add-author" onclick="return checkAuthorEmpty('.author-name', '.author-email', '.author-role')">
+                            <f:ajax listener="#{educationalObjectPublishBean.addAuthor()}" execute="author-name author-email author-role" render="author-name author-email author-role author-container"/>
+                            <img class="add-author-icon" src="../resources/common/images/add-crew.png"/>
+                            <span>#{localeBean.getString('Adicionar membro').toUpperCase()}</span>
+                        </h:commandLink>
+                        <h:panelGroup layout="block" id="author-container">
+                            <ui:repeat value="#{educationalObjectPublishBean.authorList}" var="author">
+                                <div class="col">
+                                    <div class="author">
+                                        <ui:param name="socialProfile" value="#{educationalObjectPublishBean.getSocialProfileByEmail(author.email)}"/>
+                                        <ui:fragment rendered="#{socialProfile != null}">
+                                            <a target="_blank" href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
+                                            <a class="new-author-name" target="_blank" title="#{author.name}" href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">#{author.name}</a>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{socialProfile == null}">
+                                            <img class="image" src="../resources/common/images/avatar.png"/>
+                                            <span class="new-author-name" title="#{author.name}">#{author.name}</span>
+                                        </ui:fragment>
+                                        <p class="new-author-role">#{author.authorRoleFk.name}</p>
+                                        <ui:fragment rendered="#{socialProfile != null}">
+                                            <i title="#{localeBean.getString('E-mail cadastrado no Guigoh. Clique no nome para acessar o perfil.')}" class="verified fa fa-check-square"/>
+                                        </ui:fragment>
+                                        <h:commandLink class="new-author-remove">
+                                            <img src="../resources/common/images/remove-friend-gray.png"/>
+                                            <f:ajax listener="#{educationalObjectPublishBean.removeAuthor(author)}" render="author-container"/>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </ui:repeat>
+                        </h:panelGroup>
+                        <div class="clear"></div>
+                        <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
+                        <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
                     <div id="files-container" class="wizard-container four">
                         4
