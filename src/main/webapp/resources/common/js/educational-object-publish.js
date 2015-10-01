@@ -76,8 +76,12 @@ $(document).ready(function () {
         $('.max-length').text("(" + length + ")");
     });
 
-    $('.add-image').click(function () {
+    $(document).on("click", ".add-image, .edit-image", function () {
         $('#browse-image').click();
+    });
+
+    $(document).on("click", ".add-media", function () {
+        $('#browse-media').click();
     });
 
     $('#browse-image').change(function (e) {
@@ -93,7 +97,7 @@ $(document).ready(function () {
                         var imageWidth = $(this).width();
                         var imageHeight = $(this).height();
                         if (imageWidth > widthMin && imageHeight > heightMin) {
-                            $('.image-error').text("");
+                            $('.error').text("");
                             if (imageWidth > imageHeight) {
                                 $(this).css("max-width", "650px");
                             } else {
@@ -109,12 +113,29 @@ $(document).ready(function () {
                                 }
                             });
                         } else {
-                            $('.image-error').text("Escolha uma imagem de tamanho mínimo de " + widthMin + "x" + heightMin + ".");
-                            $('#browse-photo').val("");
+                            $('.error').text("Escolha uma imagem de tamanho mínimo de " + widthMin + "x" + heightMin + ".");
+                            $('#browse-image').val("");
                         }
                     });
                 } else {
-                    $('.image-error').text("Apenas imagens são aceitas.");
+                    $('.error').text("Apenas imagens são aceitas.");
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    $('#browse-media').change(function (e) {
+        for (var i = 0; i < e.originalEvent.target.files.length; i++) {
+            var file = e.originalEvent.target.files[i];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
+                || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
+                || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
+                    $(".add-new-media").click();
+                } else {
+                    $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
                 }
             };
             reader.readAsDataURL(file);
@@ -128,8 +149,8 @@ $(document).ready(function () {
             $('#browse-photo').val("");
         }, 400);
     });
-    
-    $('.cut-photo').click(function(){
+
+    $('.cut-photo').click(function () {
         $('.upload-image').click();
         document.getElementById("close-image-cropping-modal").click();
     });
@@ -207,6 +228,20 @@ function checkErrorBorder(element, type) {
                 $(element).css('border', "1px solid red");
             }
             break;
+        case "image":
+            if ($(element).val() !== "") {
+                $(".add-image").css('border', "0");
+            } else {
+                $(".add-image").css('border', "1px solid red");
+            }
+            break;
+        case "media":
+            if ($(element).length) {
+                $(".add-media").css("color", "#9c9c9c");
+            } else {
+                $(".add-media").css("color", "red");
+            }
+            break;
     }
 }
 
@@ -236,7 +271,13 @@ function checkAuthorEmpty(authorName, authorEmail, authorRole) {
 }
 
 function checkMediaEmpty() {
-    return false;
+    if ($('.image-preview').length && $('.media').length) {
+        return true;
+    } else {
+        checkErrorBorder(".add-image", "image");
+        checkErrorBorder(".media", "media");
+        return false;
+    }
 }
 
 jsf.ajax.addOnEvent(function (data) {
@@ -258,6 +299,11 @@ jsf.ajax.addOnEvent(function (data) {
                 if (e.keyCode !== 9) {
                     checkErrorBorder(this, "input");
                 }
+            });
+        }
+        if ($(data.source).hasClass("add-new-media") || $(data.source).hasClass("remove-media")) {
+            $(".media > span").each(function () {
+                $(this).text(changeNameLength($(this).text(), 50));
             });
         }
     }

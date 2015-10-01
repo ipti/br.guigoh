@@ -12,10 +12,16 @@ import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Tags;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.AuthorJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.AuthorRoleJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMediaJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.util.UploadService;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
@@ -32,6 +39,9 @@ import javax.faces.view.ViewScoped;
 import javax.imageio.ImageIO;
 import javax.inject.Named;
 import javax.servlet.http.Part;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -51,11 +61,13 @@ public class EducationalObjectPublishBean implements Serializable {
     private Author author;
 
     private String tag;
+    private String imageSrc;
     private Integer[] cropCoordinates;
 
     private transient File imageSampleFile;
     private transient Part imageFile;
-    private transient List<Part> MediafileList;
+    private transient Part mediaFile;
+    private transient List<Part> mediaFileList;
 
     private InterestsJpaController interestsJpaController;
     private AuthorRoleJpaController authorRoleJpaController;
@@ -118,105 +130,113 @@ public class EducationalObjectPublishBean implements Serializable {
     }
 
     public void cropImage() throws IOException {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        imageSampleFile = new File("imageSampleFile.png");
-        inputStream = imageFile.getInputStream();
-        outputStream = new FileOutputStream(imageSampleFile);
-        try {
+        if (imageFile.getSize() != 0) {
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            imageSampleFile = new File("imageSampleFile");
             inputStream = imageFile.getInputStream();
             outputStream = new FileOutputStream(imageSampleFile);
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
-            }
-            String[] fileSplit = imageFile.getSubmittedFileName().split("\\.");
-            String fileType = fileSplit[fileSplit.length - 1];
-            BufferedImage image = ImageIO.read(imageSampleFile);
-            Integer x = cropCoordinates[0];
-            Integer y = cropCoordinates[1];
-            Integer w = cropCoordinates[2];
-            Integer h = cropCoordinates[3];
-            BufferedImage out = image.getSubimage(x, y, w, h);
-            ImageIO.write(out, fileType, imageSampleFile);
-        } catch (IOException e) {
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
+            try {
+                inputStream = imageFile.getInputStream();
+                outputStream = new FileOutputStream(imageSampleFile);
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+                while ((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+                String[] fileSplit = imageFile.getSubmittedFileName().split("\\.");
+                String fileType = fileSplit[fileSplit.length - 1];
+                BufferedImage image = ImageIO.read(imageSampleFile);
+                Integer x = cropCoordinates[0];
+                Integer y = cropCoordinates[1];
+                Integer w = cropCoordinates[2];
+                Integer h = cropCoordinates[3];
+                BufferedImage out = image.getSubimage(x, y, w, h);
+                ImageIO.write(out, fileType, imageSampleFile);
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("data:image/*;base64,".concat(StringUtils.newStringUtf8(Base64.encodeBase64(FileUtils.readFileToByteArray(imageSampleFile), false))));
+                imageSrc = sb.toString();
+            } catch (IOException e) {
+            } finally {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
             }
         }
+    }
+
+    public void addMedia() throws IOException {
+        if (mediaFileList.size() < 3) {
+            boolean exists = false;
+            for (Part media : mediaFileList) {
+                if (media.getName().equals(mediaFile.getName())
+                        && media.getSize() == mediaFile.getSize()) {
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                mediaFileList.add(mediaFile);
+            }
+        }
+    }
+
+    public void removeMedia(Part media) {
+        mediaFileList.remove(media);
     }
 
     public void submit() throws IOException, Exception {
         imageSampleFile.delete();
-//        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
-//        UtilJpaController utilJpaController = new UtilJpaController();
-//        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
-//        SocialProfile socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
-//        educationalObject.setName(new String(educationalObject.getName().getBytes("ISO-8859-1"), "UTF-8"));
-//        educationalObject.setSocialProfileId(socialProfile);
-//        educationalObject.setStatus("PE");
-//        educationalObject.setDate(utilJpaController.getTimestampServerTime());
-//        educationalObjectJpaController.create(educationalObject);
-//        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
-//                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
-//                + File.separator + "image" + File.separator;
-//        UploadService.uploadFile(imageFile, imagePath, null);
-//        educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
-//        educationalObjectJpaController.edit(educationalObject);
-//        tags = new String(tags.getBytes("ISO-8859-1"), "UTF-8");
-//        String[] tagArray = tags.replace(" ", "").split(",");
-//        List<EducationalObject> educationalObjectList = new ArrayList<>();
-//        educationalObjectList.add(educationalObject);
-//        TagsJpaController tagsJpaController = new TagsJpaController();
-//        for (String tagValue : tagArray) {
-//            Tags tagDB = tagsJpaController.findTagByName(tagValue);
-//            if (tagDB == null) {
-//                Tags tag = new Tags();
-//                tag.setEducationalObjectCollection(educationalObjectList);
-//                tag.setName(tagValue);
-//                tagsJpaController.create(tag);
-//            } else {
-//                tagsJpaController.createTagsXEducationalObject(tagDB, educationalObject);
-//            }
-//        }
-//        AuthorJpaController authorJpaController = new AuthorJpaController();
-//        for (Author authorOE : authorList) {
-//            authorOE.setEducationalObjectCollection(educationalObjectList);
-//            authorJpaController.create(authorOE);
-//        }
-//        if (mediaFile1 != null) {
-//            submitFile(mediaFile1);
-//        }
-//        if (mediaFile2 != null) {
-//            submitFile(mediaFile2);
-//        }
-//        if (mediaFile3 != null) {
-//            submitFile(mediaFile3);
-//        }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
-    }
-
-    private void submitFile(Part part) throws IOException, Exception {
+        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+        UtilJpaController utilJpaController = new UtilJpaController();
+        SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+        educationalObject.setSocialProfileId(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
+        educationalObject.setStatus("PE");
+        educationalObject.setDate(utilJpaController.getTimestampServerTime());
+        educationalObject.setViews(BigInteger.ZERO);
+        educationalObjectJpaController.create(educationalObject);
+        String imagePath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
+                + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
+                + File.separator + "image" + File.separator;
+        UploadService.uploadFile(imageFile, imagePath, cropCoordinates);
+        educationalObject.setImage("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/image/" + imageFile.getSubmittedFileName());
+        TagsJpaController tagsJpaController = new TagsJpaController();
+        for (Tags tag : tagList) {
+            Tags tagDB = tagsJpaController.findTagByName(tag.getName());
+            if (tagDB == null) {
+                tagsJpaController.create(tag);
+                educationalObject.getTagsCollection().add(tag);
+            } else {
+                educationalObject.getTagsCollection().add(tagDB);
+            }
+        }
+        AuthorJpaController authorJpaController = new AuthorJpaController();
+        for (Author authorOE : authorList) {
+            authorJpaController.create(authorOE);
+            educationalObject.getAuthorCollection().add(authorOE);
+        }
+        educationalObjectJpaController.edit(educationalObject);
         String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
                 + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
                 + File.separator + "media" + File.separator;
-        boolean success = UploadService.uploadFile(part, mediaPath, null);
-        if (success) {
-            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-            educationalObjectMedia.setEducationalObjectId(educationalObject);
-            educationalObjectMedia.setSize(part.getSize());
-            String[] fileSplit = part.getSubmittedFileName().split("\\.");
-            educationalObjectMedia.setName(part.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + part.getSubmittedFileName());
-            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-            educationalObjectMediaJpaController.create(educationalObjectMedia);
+        for (Part media : mediaFileList) {
+            boolean success = UploadService.uploadFile(media, mediaPath, null);
+            if (success) {
+                EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
+                educationalObjectMedia.setEducationalObjectId(educationalObject);
+                educationalObjectMedia.setSize(media.getSize());
+                String[] fileSplit = media.getSubmittedFileName().split("\\.");
+                educationalObjectMedia.setName(media.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+                educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
+                educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + media.getSubmittedFileName());
+                EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+                educationalObjectMediaJpaController.create(educationalObjectMedia);
+            }
         }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
     }
 
     private void initGlobalVariables() {
@@ -226,7 +246,7 @@ public class EducationalObjectPublishBean implements Serializable {
         interestList = interestsJpaController.findInterestsEntities();
         authorRoleList = authorRoleJpaController.findAuthorRoleEntities();
         tagList = new ArrayList<>();
-        MediafileList = new ArrayList<>();
+        mediaFileList = new ArrayList<>();
         authorList = new ArrayList<>();
 
         educationalObject = new EducationalObject();
@@ -268,11 +288,11 @@ public class EducationalObjectPublishBean implements Serializable {
     }
 
     public List<Part> getMediaFileList() {
-        return MediafileList;
+        return mediaFileList;
     }
 
-    public void setMediaFileList(List<Part> MediafileList) {
-        this.MediafileList = MediafileList;
+    public void setMediaFileList(List<Part> mediaFileList) {
+        this.mediaFileList = mediaFileList;
     }
 
     public List<Tags> getTagList() {
@@ -307,14 +327,6 @@ public class EducationalObjectPublishBean implements Serializable {
         this.imageFile = imageFile;
     }
 
-    public List<Part> getMediafileList() {
-        return MediafileList;
-    }
-
-    public void setMediafileList(List<Part> MediafileList) {
-        this.MediafileList = MediafileList;
-    }
-
     public Integer[] getCropCoordinates() {
         return cropCoordinates;
     }
@@ -323,11 +335,19 @@ public class EducationalObjectPublishBean implements Serializable {
         this.cropCoordinates = cropCoordinates;
     }
 
-    public File getImageSampleFile() {
-        return imageSampleFile;
+    public String getImageSrc() {
+        return imageSrc;
     }
 
-    public void setImageSampleFile(File imageSampleFile) {
-        this.imageSampleFile = imageSampleFile;
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public Part getMediaFile() {
+        return mediaFile;
+    }
+
+    public void setMediaFile(Part mediaFile) {
+        this.mediaFile = mediaFile;
     }
 }

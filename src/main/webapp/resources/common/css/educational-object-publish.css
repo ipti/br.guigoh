@@ -373,6 +373,45 @@ div.select {
     float: left;
 }
 
+.image-preview {
+    width: 100px;
+    height: 100px;
+}
+
+.error {
+    float: left;
+    margin-top: -25px;
+    color: red;
+    font-size: 13px;
+}
+
+#image-container {
+    width: 100px;
+    height: 100px;
+    margin-right: 30px;
+    float: left;
+}
+
+#image-container:hover .edit-image {
+    display: block;
+} 
+
+.edit-image {
+    float: right;
+    color: gray;
+    cursor: pointer;
+    display: none;
+    font-size: 20px;
+    padding: 6px;
+    border-radius: 5px;
+    background-color: #e6eadf;
+    margin: -44px 5px 0px 0;
+}
+
+.edit-image:hover {
+    box-shadow: 0px 0px 3px whitesmoke
+}
+
 .add-image span {
     font-size: 10px;
     font-weight: bold;
@@ -385,23 +424,26 @@ div.select {
     display: block;
 }
 
-.add-media {
+.add-media, .media {
     float: left;
     width: 75%;
     margin-bottom: 13px;
 }
 
-.add-media i {
+.add-media {
+    color: #9c9c9c;
+    cursor: pointer;
+}
+
+.add-media i, .media > i {
     float: left;
     margin-right: 5px;
-    color: #9c9c9c;
     font-size: 25px;
 }
 
-.add-media span {
+.add-media span, .media span {
     margin-top: 1px;
     float: left;
-    color: #9c9c9c;
     font-size: 12px;
 }
 
@@ -419,4 +461,9 @@ div.select {
 
 .modal-title {
     margin: 0 !important;
+}
+
+.remove-media {
+    color: gray;
+    float: right;
 }

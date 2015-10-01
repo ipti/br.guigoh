@@ -23,7 +23,7 @@
             <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
             <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
                 <div class="column">
-                    <div id="licensing-container" class="wizard-container one">
+                    <div id="licensing-container" class="wizard-container active one">
                         <p class="container-title">#{localeBean.getString('Licenciamento do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Você está prestes a publicar seu Objeto Educacional para que todos do Guigoh possam conhecê-lo e reaplicá-lo!')}</p>
                         <p class="container-description">#{localeBean.getString('Todos os Objetos Educacionais publicados neste Espaço seguem a licença (CC) Creative Commons Atribuição-Compartilhamento pela mesma Licença 3.0 Unported. Esta é uma forma de garantir sua autoria a respeito do que for publicado, além de permitir o compartilhamento de seu Objeto Educacional com os demais parceiros, que terão o direito de reaplicá-lo.')}</p>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
-                    <div id="informations-container" class="wizard-container two">
+                    <h:panelGroup layout="block" id="informations-container" class="wizard-container two">
                         <p class="container-title">#{localeBean.getString('Informações do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Agora, forneça as informações básicas do seu Objeto Educacional: escolha o tema principal, dê um nome criativo à sua produção, forneça uma breve sinopse e inclua #hashtags com temas secundários para que seus amigos possam encontrar o Objeto Educacional mais facilmente.')}</p>
                         <div class="select object-input">
@@ -70,11 +70,11 @@
                         <div class="clear"></div>
                         <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
-                    </div>
+                    </h:panelGroup>
                     <div id="team-container" class="wizard-container three">
                         <p class="container-title">#{localeBean.getString('Equipe do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Identifique a equipe que participou da produção do Objeto Educacional. Quem foi o diretor? E o roteirista? Adicione o e-mail de cada membro da equipe, para que o Objeto Educacional seja mostrado no perfil dos participantes. Aqui é o lugar para dar os créditos.')}</p>
-                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do membro da equipe')}" autocomplete="off" class="object-input author-name" id="author-name" value="#{educationalObjectPublishBean.author.name}"/>
+                        <h:inputText pt:placeholder="#{localeBean.getString('Nome do membro da equipe')}" autocomplete="off" class="object-input author-name" id="author-name" transient="true" value="#{educationalObjectPublishBean.author.name}"/>
                         <h:inputText pt:placeholder="#{localeBean.getString('Email do membro da equipe')}" autocomplete="off" class="object-input author-email" id="author-email" value="#{educationalObjectPublishBean.author.email}"/>
                         <div class="select object-input author-role-container">
                             <h:selectOneMenu class="author-role" value="#{educationalObjectPublishBean.author.authorRoleFk}" id="author-role" converter="entityConverter">
@@ -117,39 +117,47 @@
                         <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
-                    <div id="files-container" class="wizard-container active four">
+                    <div id="files-container" class="wizard-container four">
                         <p class="container-title">#{localeBean.getString('Arquivos do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Nesta última etapa, você deve enviar os arquivos que compõem o seu Objeto Educacional. Primeiro, escolha uma imagem avatar para representar o seu novo Objeto em nossa biblioteca de Objetos Educacionais. As dimensões mínimas de imagem são 100x100 pixels, nos formatos suportados jpg, jpeg e png.')}</p>
                         <p class="container-description">#{localeBean.getString('Depois, envie seu Objeto Educacional em até três arquivos de mídia, nos formatos suportados mp4, wmv, mpeg, avi, wav, mp3, wma, ogg e pdf.')}</p>
                         <div class="medias-container">
-                            <span class="image-error"/>
+                            <span class="error"></span>
                             <h:panelGroup layout="block" id="image-container">
-                                <ui:fragment rendered="#{educationalObjectPublishBean.imageSampleFile == null}">
+                                <ui:fragment rendered="#{educationalObjectPublishBean.imageSrc == null}">
                                     <div class="add-image">
                                         <img class="add-image-icon" src="../resources/common/images/oe-avatar.png"/>
                                         <span>#{localeBean.getString('Enviar imagem').toUpperCase()}</span>
                                     </div>
                                 </ui:fragment>
-                                <ui:fragment rendered="#{educationalObjectPublishBean.imageSampleFile != null}">
-                                    <img src="#{educationalObjectPublishBean.imageSampleFile.absolutePath}"/>
+                                <ui:fragment rendered="#{educationalObjectPublishBean.imageSrc != null}">
+                                    <img class="image-preview" src="#{educationalObjectPublishBean.imageSrc}"/>
+                                    <i class="edit-image fa fa-pencil"/>
                                 </ui:fragment>
                             </h:panelGroup>
-                            <div class="add-media">
-                                <i class="fa fa-plus-circle"/>
-                                <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
-                            </div>
-                            <div class="add-media">
-                                <i class="fa fa-plus-circle"/>
-                                <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
-                            </div>
-                            <div class="add-media">
-                                <i class="fa fa-plus-circle"/>
-                                <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
-                            </div>
+                            <h:panelGroup id="media-container">
+                                <ui:repeat value="#{educationalObjectPublishBean.mediaFileList}" var="mediaFile">
+                                    <div class="media">
+                                        <i class="fa fa-paperclip"/>
+                                        <span>#{mediaFile.submittedFileName}</span>
+                                        <h:commandLink class="remove-media">
+                                            <i class="fa fa-times"></i>
+                                            <f:ajax listener="#{educationalObjectPublishBean.removeMedia(mediaFile)}" render="media-container"/>
+                                        </h:commandLink>
+                                    </div>
+                                </ui:repeat>
+                                <ui:fragment rendered="#{educationalObjectPublishBean.mediaFileList.size() lt 3}">
+                                    <div class="add-media">
+                                        <i class="fa fa-plus-circle"/>
+                                        <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
+                                    </div>
+                                </ui:fragment>
+                            </h:panelGroup>
                         </div>
                         <div class="clear"></div>
+                        
                         <h:commandLink class="submit-object" onclick="return checkMediaEmpty()">
-                            <f:ajax execute="@form" listener="#{educationalObjectPublishBean.submit()}"/>
+                            <f:ajax execute="informations-container" listener="#{educationalObjectPublishBean.submit()}"/>
                             <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                             <span class="send-label pull-right">#{localeBean.getString('Enviar para revisão!').toUpperCase()}</span>
                         </h:commandLink>
@@ -174,6 +182,10 @@
                         </div>
                     </div>
                 </div>
+                <h:inputFile id="browse-media" pt:accept="audio/wav, audio/mp3, audio/wma, audio/ogg, application/pdf, video/mp4, video/wmv, video/mpeg, video/avi" styleClass="hidden" value="#{educationalObjectPublishBean.mediaFile}"></h:inputFile>
+                <h:commandLink class="add-new-media">
+                    <f:ajax execute="browse-media" listener="#{educationalObjectPublishBean.addMedia()}" render="media-container"/>
+                </h:commandLink>
                 <h:commandLink styleClass="upload-image">
                     <f:ajax listener="#{educationalObjectPublishBean.cropImage()}" execute="browse-image original-uploaded-image-tracker-x original-uploaded-image-tracker-y original-uploaded-image-tracker-h original-uploaded-image-tracker-w" render="image-container"/>
                 </h:commandLink>
