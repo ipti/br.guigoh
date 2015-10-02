@@ -56,11 +56,15 @@
                         <h3>#{localeBean.getString("Novidades na rede")}</h3>
                         <ui:repeat var="newActivity" value="#{homeBean.newActivityList}">
                             <div class="aside-list-item">
-                                <a href="/study-group/view.xhtml?id=#{newActivity.id}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
-                                <p class="aside-profile-name"><a href="/study-group/view.xhtml?id=#{newActivity.id}">#{newActivity.socialProfile.name}</a></p>
-                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('T')}"/>
-                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('M')}"/>
-                                <p class="aside-object-title"><a href="/study-group/view.xhtml?id=#{newActivity.id}">&quot;#{newActivity.title}&quot;</a></p>
+                                <ui:param value="#{newActivity.type.equals('DT') || newActivity.type.equals('DTM') ? 'study-group' : 'educational-object'}" name='partialUrl'></ui:param>
+                                <a href="/#{partialUrl}/view.xhtml?id=#{newActivity.id}"><img class="aside-list-image" src="#{newActivity.socialProfile.photo}"/></a>
+                                <p class="aside-profile-name"><a href="/#{partialUrl}/view.xhtml?id=#{newActivity.id}">#{newActivity.socialProfile.name}</a></p>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('criou o tópico')}" rendered="#{newActivity.type.equals('DT')}"/>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no tópico')}" rendered="#{newActivity.type.equals('DTM')}"/>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('publicou o objeto educacional')}" rendered="#{newActivity.type.equals('EO')}"/>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('comentou no objeto educacional')}" rendered="#{newActivity.type.equals('EOM')}"/>
+                                <h:outputText class="aside-profile-action" value="#{localeBean.getString('curtiu o objeto educacional')}" rendered="#{newActivity.type.equals('EOL')}"/>
+                                <p class="aside-object-title"><a href="/#{partialUrl}/view.xhtml?id=#{newActivity.id}">&quot;#{newActivity.title}&quot;</a></p>
                                 <div class="clear"></div>
                             </div>
                         </ui:repeat>

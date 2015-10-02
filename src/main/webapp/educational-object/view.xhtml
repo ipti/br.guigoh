@@ -82,9 +82,11 @@
                     <h:panelGroup layout="block" class="object-like" id="object-like">
                         <h:commandLink>
                             <ui:fragment rendered="#{educationalObjectViewBean.like}">
+                                <span class='like-count active'>#{educationalObjectViewBean.likes}</span>
                                 <div title="#{localeBean.getString('Você curtiu esse Objeto Educacional')}" class="like-icon active"/>
                             </ui:fragment>
                             <ui:fragment rendered="#{!educationalObjectViewBean.like}">
+                                <span class='like-count'>#{educationalObjectViewBean.likes}</span>
                                 <div title="#{localeBean.getString('Curta esse Objeto Educacional!')}" class="like-icon"/>
                             </ui:fragment>
                             <f:ajax listener="#{educationalObjectViewBean.likeObject}" render="object-like"/>

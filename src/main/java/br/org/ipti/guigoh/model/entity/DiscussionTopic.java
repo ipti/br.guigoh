@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "DiscussionTopic.findByStatus", query = "SELECT d FROM DiscussionTopic d WHERE d.status = :status"),
     @NamedQuery(name = "DiscussionTopic.findByTitle", query = "SELECT d FROM DiscussionTopic d WHERE d.title = :title")})
 public class DiscussionTopic implements Serializable {
+    @NotNull
     @Column(name = "views")
     private BigInteger views;
     @Basic(optional = false)

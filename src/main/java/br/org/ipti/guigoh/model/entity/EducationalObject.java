@@ -45,6 +45,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EducationalObject.findById", query = "SELECT e FROM EducationalObject e WHERE e.id = :id"),
     @NamedQuery(name = "EducationalObject.findByName", query = "SELECT e FROM EducationalObject e WHERE e.name = :name")})
 public class EducationalObject implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "views")
+    private BigInteger views;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "educationalObject")
+    private Collection<EducationalObjectLike> educationalObjectLikeCollection;
     @Size(max = 200)
     @Column(name = "description")
     private String description;
@@ -55,8 +61,6 @@ public class EducationalObject implements Serializable {
     private Collection<SocialProfile> socialProfileCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "educationalObjectFk")
     private Collection<EducationalObjectMessage> educationalObjectMessageCollection;
-    @Column(name = "views")
-    private BigInteger views;
     @Size(max = 150)
     @Column(name = "image")
     private String image;
@@ -217,13 +221,6 @@ public class EducationalObject implements Serializable {
         this.image = image;
     }
 
-    public BigInteger getViews() {
-        return views;
-    }
-
-    public void setViews(BigInteger views) {
-        this.views = views;
-    }
 
     @XmlTransient
     public Collection<SocialProfile> getSocialProfileCollection() {
@@ -249,5 +246,22 @@ public class EducationalObject implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigInteger getViews() {
+        return views;
+    }
+
+    public void setViews(BigInteger views) {
+        this.views = views;
+    }
+
+    @XmlTransient
+    public Collection<EducationalObjectLike> getEducationalObjectLikeCollection() {
+        return educationalObjectLikeCollection;
+    }
+
+    public void setEducationalObjectLikeCollection(Collection<EducationalObjectLike> educationalObjectLikeCollection) {
+        this.educationalObjectLikeCollection = educationalObjectLikeCollection;
     }
 }

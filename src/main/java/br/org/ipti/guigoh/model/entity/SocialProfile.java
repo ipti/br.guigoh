@@ -53,6 +53,8 @@ entities = {
     @EntityResult(entityClass = UserAuthorization.class)
 })
 public class SocialProfile implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfile")
+    private Collection<EducationalObjectLike> educationalObjectLikeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileFk")
     private Collection<EducationalObjectMessage> educationalObjectMessageCollection;
     @Size(max = 10)
@@ -504,6 +506,15 @@ public class SocialProfile implements Serializable {
 
     public void setEducationalObjectMessageCollection(Collection<EducationalObjectMessage> educationalObjectMessageCollection) {
         this.educationalObjectMessageCollection = educationalObjectMessageCollection;
+    }
+
+    @XmlTransient
+    public Collection<EducationalObjectLike> getEducationalObjectLikeCollection() {
+        return educationalObjectLikeCollection;
+    }
+
+    public void setEducationalObjectLikeCollection(Collection<EducationalObjectLike> educationalObjectLikeCollection) {
+        this.educationalObjectLikeCollection = educationalObjectLikeCollection;
     }
     
 }

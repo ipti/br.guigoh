@@ -269,12 +269,23 @@ public class DiscussionTopicJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<Object[]> objectList = em.createNativeQuery("select * from "
-                    + "(select id as id, social_profile_id, title, data, 'T' as type from discussion_topic "
+                    + "(select id as id, social_profile_id, title, data, 'DT' as type from discussion_topic "
                     + "where status = 'A' "
                     + "union "
-                    + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
+                    + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'DTM' as type from discussion_topic_msg dtm "
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
-                    + "where dtm.status = 'A') "
+                    + "where dtm.status = 'A' "
+                    + "union "
+                    + "select eo.id, eo.social_profile_id, eo.name, eo.date as data, 'EO' as type from educational_object eo "
+                    + "where eo.status = 'AC' "
+                    + "union "
+                    + "select eo.id, eom.social_profile_fk, eo.name, eom.date as data, 'EOM' as type from educational_object_message eom "
+                    + "join educational_object eo on eo.id = eom.educational_object_fk "
+                    + "where eo.status = 'AC' "
+                    + "union "
+                    + "select eo.id, eol.social_profile_fk, eo.name, eol.date as data, 'EOL' as type from educational_object_like eol "
+                    + "join educational_object eo on eo.id = eol.educational_object_fk "
+                    + "where eo.status = 'AC') "
                     + "as news order by data desc limit " + quantity).getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
@@ -292,12 +303,23 @@ public class DiscussionTopicJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             List<Object[]> objectList = em.createNativeQuery("select * from "
-                    + "(select id as id, social_profile_id, title, data, 'T' as type from discussion_topic dt "
+                    + "(select id as id, social_profile_id, title, data, 'DT' as type from discussion_topic dt "
                     + "where status = 'A' and dt.data < '" + date + "'"
                     + "union "
-                    + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'M' as type from discussion_topic_msg dtm "
+                    + "select dt.id as id, dtm.social_profile_id, dt.title, dtm.data, 'DTM' as type from discussion_topic_msg dtm "
                     + "join discussion_topic dt on dtm.discussion_topic_id = dt.id "
-                    + "where dtm.status = 'A' and dtm.data < '" + date + "') "
+                    + "where dtm.status = 'A' and dtm.data < '" + date + "' "
+                    + "union "
+                    + "select eo.id, eo.social_profile_id, eo.name, eo.date as data, 'EO' as type from educational_object eo "
+                    + "where eo.status = 'AC' and eo.date < '" + date + "' "
+                    + "union "
+                    + "select eo.id, eom.social_profile_fk, eo.name, eom.date as data, 'EOM' as type from educational_object_message eom "
+                    + "join educational_object eo on eo.id = eom.educational_object_fk "
+                    + "where eo.status = 'AC' and eom.date < '" + date + "' "
+                    + "union "
+                    + "select eo.id, eol.social_profile_fk, eo.name, eol.date as data, 'EOL' as type from educational_object_like eol "
+                    + "join educational_object eo on eo.id = eol.educational_object_fk "
+                    + "where eo.status = 'AC' and eol.date < '" + date + "') "
                     + "as news order by data desc limit 4").getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();

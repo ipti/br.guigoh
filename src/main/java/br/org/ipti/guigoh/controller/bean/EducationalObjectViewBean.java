@@ -5,11 +5,14 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.EducationalObjectLike;
+import br.org.ipti.guigoh.model.entity.EducationalObjectLikePK;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectLikeJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectMessageJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
@@ -35,6 +38,7 @@ import javax.inject.Named;
 public class EducationalObjectViewBean implements Serializable {
 
     private Integer educationalObjectId, messagesLimit;
+    private Long likes;
     private String message;
     private Boolean like;
 
@@ -47,6 +51,8 @@ public class EducationalObjectViewBean implements Serializable {
     private InterestsJpaController interestsJpaController;
     private UsersJpaController usersJpaController;
     private SocialProfileJpaController socialProfileJpaController;
+    private UtilJpaController utilJpaController;
+    private EducationalObjectLikeJpaController educationalObjectLikeJpaController;
 
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -67,7 +73,6 @@ public class EducationalObjectViewBean implements Serializable {
     public void publishMessage() throws Exception {
         if (!message.equals("") && message != null) {
             EducationalObjectMessageJpaController educationalObjectMessageJpaController = new EducationalObjectMessageJpaController();
-            UtilJpaController utilJpaController = new UtilJpaController();
             EducationalObjectMessage educationalObjectMessage = new EducationalObjectMessage();
             educationalObjectMessage.setEducationalObjectFk(educationalObject);
             educationalObjectMessage.setMessage(message);
@@ -85,14 +90,17 @@ public class EducationalObjectViewBean implements Serializable {
     }
 
     public void likeObject() throws NonexistentEntityException, RollbackFailureException, Exception {
-        if (educationalObject.getSocialProfileCollection().contains(mySocialProfile)){
-            educationalObject.getSocialProfileCollection().remove(mySocialProfile);
+        EducationalObjectLikeJpaController educationalObjectLikeJpaController = new EducationalObjectLikeJpaController();
+        EducationalObjectLike educationalObjectLike = new EducationalObjectLike(
+                new EducationalObjectLikePK(educationalObjectId, mySocialProfile.getSocialProfileId()), utilJpaController.getTimestampServerTime(), educationalObject, mySocialProfile);
+        if (educationalObjectLikeJpaController.findEducationalObjectLike(educationalObjectLike.getEducationalObjectLikePK()) != null){
+            educationalObjectLikeJpaController.destroy(educationalObjectLike.getEducationalObjectLikePK());
             like = false;
         } else {
-            educationalObject.getSocialProfileCollection().add(mySocialProfile);
+            educationalObjectLikeJpaController.create(educationalObjectLike);
             like = true;
         }
-        educationalObjectJpaController.edit(educationalObject);
+        likes = educationalObjectLikeJpaController.findEducationalObjectLikesQuantity(educationalObjectId);
     }
     
     public void deactivateEducationalObject() throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
@@ -106,6 +114,8 @@ public class EducationalObjectViewBean implements Serializable {
         interestsJpaController = new InterestsJpaController();
         usersJpaController = new UsersJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
+        utilJpaController = new UtilJpaController();
+        educationalObjectLikeJpaController = new EducationalObjectLikeJpaController();
 
         educationalObject = new EducationalObject();
 
@@ -117,6 +127,7 @@ public class EducationalObjectViewBean implements Serializable {
             interestList = interestsJpaController.findInterestsEntities();
             mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
             like = educationalObject.getSocialProfileCollection().contains(mySocialProfile);
+            likes = educationalObjectLikeJpaController.findEducationalObjectLikesQuantity(educationalObjectId);
             messagesLimit = 5;
         }
     }
@@ -175,5 +186,13 @@ public class EducationalObjectViewBean implements Serializable {
 
     public void setMySocialProfile(SocialProfile mySocialProfile) {
         this.mySocialProfile = mySocialProfile;
+    }
+
+    public Long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Long likes) {
+        this.likes = likes;
     }
 }

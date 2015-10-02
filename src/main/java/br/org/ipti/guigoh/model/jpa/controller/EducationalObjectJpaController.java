@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.EducationalObjectLike;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMedia;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
@@ -60,10 +61,12 @@ public class EducationalObjectJpaController implements Serializable {
         if (educationalObject.getEducationalObjectMessageCollection() == null) {
             educationalObject.setEducationalObjectMessageCollection(new ArrayList<EducationalObjectMessage>());
         }
+        if (educationalObject.getEducationalObjectLikeCollection() == null) {
+            educationalObject.setEducationalObjectLikeCollection(new ArrayList<EducationalObjectLike>());
+        }
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             SocialProfile socialProfileId = educationalObject.getSocialProfileId();
             if (socialProfileId != null) {
                 socialProfileId = em.getReference(socialProfileId.getClass(), socialProfileId.getTokenId());
@@ -104,6 +107,12 @@ public class EducationalObjectJpaController implements Serializable {
                 attachedEducationalObjectMessageCollection.add(educationalObjectMessageCollectionEducationalObjectMessageToAttach);
             }
             educationalObject.setEducationalObjectMessageCollection(attachedEducationalObjectMessageCollection);
+            Collection<EducationalObjectLike> attachedEducationalObjectLikeCollection = new ArrayList<EducationalObjectLike>();
+            for (EducationalObjectLike educationalObjectLikeCollectionEducationalObjectLikeToAttach : educationalObject.getEducationalObjectLikeCollection()) {
+                educationalObjectLikeCollectionEducationalObjectLikeToAttach = em.getReference(educationalObjectLikeCollectionEducationalObjectLikeToAttach.getClass(), educationalObjectLikeCollectionEducationalObjectLikeToAttach.getEducationalObjectLikePK());
+                attachedEducationalObjectLikeCollection.add(educationalObjectLikeCollectionEducationalObjectLikeToAttach);
+            }
+            educationalObject.setEducationalObjectLikeCollection(attachedEducationalObjectLikeCollection);
             em.persist(educationalObject);
             if (socialProfileId != null) {
                 socialProfileId.getEducationalObjectCollection().add(educationalObject);
@@ -143,6 +152,15 @@ public class EducationalObjectJpaController implements Serializable {
                     oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage = em.merge(oldEducationalObjectFkOfEducationalObjectMessageCollectionEducationalObjectMessage);
                 }
             }
+            for (EducationalObjectLike educationalObjectLikeCollectionEducationalObjectLike : educationalObject.getEducationalObjectLikeCollection()) {
+                EducationalObject oldEducationalObjectOfEducationalObjectLikeCollectionEducationalObjectLike = educationalObjectLikeCollectionEducationalObjectLike.getEducationalObject();
+                educationalObjectLikeCollectionEducationalObjectLike.setEducationalObject(educationalObject);
+                educationalObjectLikeCollectionEducationalObjectLike = em.merge(educationalObjectLikeCollectionEducationalObjectLike);
+                if (oldEducationalObjectOfEducationalObjectLikeCollectionEducationalObjectLike != null) {
+                    oldEducationalObjectOfEducationalObjectLikeCollectionEducationalObjectLike.getEducationalObjectLikeCollection().remove(educationalObjectLikeCollectionEducationalObjectLike);
+                    oldEducationalObjectOfEducationalObjectLikeCollectionEducationalObjectLike = em.merge(oldEducationalObjectOfEducationalObjectLikeCollectionEducationalObjectLike);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -161,8 +179,7 @@ public class EducationalObjectJpaController implements Serializable {
     public void edit(EducationalObject educationalObject) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             EducationalObject persistentEducationalObject = em.find(EducationalObject.class, educationalObject.getId());
             SocialProfile socialProfileIdOld = persistentEducationalObject.getSocialProfileId();
             SocialProfile socialProfileIdNew = educationalObject.getSocialProfileId();
@@ -178,6 +195,8 @@ public class EducationalObjectJpaController implements Serializable {
             Collection<SocialProfile> socialProfileCollectionNew = educationalObject.getSocialProfileCollection();
             Collection<EducationalObjectMessage> educationalObjectMessageCollectionOld = persistentEducationalObject.getEducationalObjectMessageCollection();
             Collection<EducationalObjectMessage> educationalObjectMessageCollectionNew = educationalObject.getEducationalObjectMessageCollection();
+            Collection<EducationalObjectLike> educationalObjectLikeCollectionOld = persistentEducationalObject.getEducationalObjectLikeCollection();
+            Collection<EducationalObjectLike> educationalObjectLikeCollectionNew = educationalObject.getEducationalObjectLikeCollection();
             List<String> illegalOrphanMessages = null;
             for (EducationalObjectMedia educationalObjectMediaCollectionOldEducationalObjectMedia : educationalObjectMediaCollectionOld) {
                 if (!educationalObjectMediaCollectionNew.contains(educationalObjectMediaCollectionOldEducationalObjectMedia)) {
@@ -193,6 +212,14 @@ public class EducationalObjectJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain EducationalObjectMessage " + educationalObjectMessageCollectionOldEducationalObjectMessage + " since its educationalObjectFk field is not nullable.");
+                }
+            }
+            for (EducationalObjectLike educationalObjectLikeCollectionOldEducationalObjectLike : educationalObjectLikeCollectionOld) {
+                if (!educationalObjectLikeCollectionNew.contains(educationalObjectLikeCollectionOldEducationalObjectLike)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain EducationalObjectLike " + educationalObjectLikeCollectionOldEducationalObjectLike + " since its educationalObject field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -241,6 +268,13 @@ public class EducationalObjectJpaController implements Serializable {
             }
             educationalObjectMessageCollectionNew = attachedEducationalObjectMessageCollectionNew;
             educationalObject.setEducationalObjectMessageCollection(educationalObjectMessageCollectionNew);
+            Collection<EducationalObjectLike> attachedEducationalObjectLikeCollectionNew = new ArrayList<EducationalObjectLike>();
+            for (EducationalObjectLike educationalObjectLikeCollectionNewEducationalObjectLikeToAttach : educationalObjectLikeCollectionNew) {
+                educationalObjectLikeCollectionNewEducationalObjectLikeToAttach = em.getReference(educationalObjectLikeCollectionNewEducationalObjectLikeToAttach.getClass(), educationalObjectLikeCollectionNewEducationalObjectLikeToAttach.getEducationalObjectLikePK());
+                attachedEducationalObjectLikeCollectionNew.add(educationalObjectLikeCollectionNewEducationalObjectLikeToAttach);
+            }
+            educationalObjectLikeCollectionNew = attachedEducationalObjectLikeCollectionNew;
+            educationalObject.setEducationalObjectLikeCollection(educationalObjectLikeCollectionNew);
             educationalObject = em.merge(educationalObject);
             if (socialProfileIdOld != null && !socialProfileIdOld.equals(socialProfileIdNew)) {
                 socialProfileIdOld.getEducationalObjectCollection().remove(educationalObject);
@@ -316,6 +350,17 @@ public class EducationalObjectJpaController implements Serializable {
                     }
                 }
             }
+            for (EducationalObjectLike educationalObjectLikeCollectionNewEducationalObjectLike : educationalObjectLikeCollectionNew) {
+                if (!educationalObjectLikeCollectionOld.contains(educationalObjectLikeCollectionNewEducationalObjectLike)) {
+                    EducationalObject oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike = educationalObjectLikeCollectionNewEducationalObjectLike.getEducationalObject();
+                    educationalObjectLikeCollectionNewEducationalObjectLike.setEducationalObject(educationalObject);
+                    educationalObjectLikeCollectionNewEducationalObjectLike = em.merge(educationalObjectLikeCollectionNewEducationalObjectLike);
+                    if (oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike != null && !oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike.equals(educationalObject)) {
+                        oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike.getEducationalObjectLikeCollection().remove(educationalObjectLikeCollectionNewEducationalObjectLike);
+                        oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike = em.merge(oldEducationalObjectOfEducationalObjectLikeCollectionNewEducationalObjectLike);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -341,8 +386,7 @@ public class EducationalObjectJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             EducationalObject educationalObject;
             try {
                 educationalObject = em.getReference(EducationalObject.class, id);
@@ -364,6 +408,13 @@ public class EducationalObjectJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This EducationalObject (" + educationalObject + ") cannot be destroyed since the EducationalObjectMessage " + educationalObjectMessageCollectionOrphanCheckEducationalObjectMessage + " in its educationalObjectMessageCollection field has a non-nullable educationalObjectFk field.");
+            }
+            Collection<EducationalObjectLike> educationalObjectLikeCollectionOrphanCheck = educationalObject.getEducationalObjectLikeCollection();
+            for (EducationalObjectLike educationalObjectLikeCollectionOrphanCheckEducationalObjectLike : educationalObjectLikeCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This EducationalObject (" + educationalObject + ") cannot be destroyed since the EducationalObjectLike " + educationalObjectLikeCollectionOrphanCheckEducationalObjectLike + " in its educationalObjectLikeCollection field has a non-nullable educationalObject field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
