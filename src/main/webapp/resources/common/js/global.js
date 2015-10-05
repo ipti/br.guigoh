@@ -46,7 +46,8 @@ function eventExceptions(data) {
             || $(data.source).hasClass("topic-search")
             || $(data.source).hasClass("educational-object-search")
             || $(data.source).hasClass("increase-views")
-            || $(data.source).hasClass("admin-search")) {
+            || $(data.source).hasClass("admin-search")
+            || $(data.source).hasClass("like-object")) {
         return true;
     } else {
         return false;

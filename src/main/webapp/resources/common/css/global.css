@@ -89,7 +89,7 @@ hr {
 .column-object-title {
     font-weight: bold;
     font-size: 15px;
-    width: 90%;
+    width: 80%;
 }
 
 .column-object-title a:hover {
@@ -147,6 +147,26 @@ hr {
 .column-object-comments img {
     padding-right: 5px;
     margin-bottom: -8px;
+}
+
+.column-object-likes {
+    position: absolute;
+    top: -2px;
+    right: 65px;
+    font-size: 15px;
+}
+
+.column-object-likes i{
+    padding-right: 5px;
+    margin-bottom: -8px;
+    font-size: 23px;
+    margin-top: 1px;
+    color: rgb(120, 120, 120)
+}
+
+.column-object-likes span{
+    margin-top: 2px;
+    float: right;
 }
 
 .no-more {
