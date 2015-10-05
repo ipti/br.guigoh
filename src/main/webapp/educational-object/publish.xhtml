@@ -23,7 +23,7 @@
             <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
             <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
                 <div class="column">
-                    <div id="licensing-container" class="wizard-container active one">
+                    <div id="licensing-container" class="wizard-container one">
                         <p class="container-title">#{localeBean.getString('Licenciamento do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Você está prestes a publicar seu Objeto Educacional para que todos do Guigoh possam conhecê-lo e reaplicá-lo!')}</p>
                         <p class="container-description">#{localeBean.getString('Todos os Objetos Educacionais publicados neste Espaço seguem a licença (CC) Creative Commons Atribuição-Compartilhamento pela mesma Licença 3.0 Unported. Esta é uma forma de garantir sua autoria a respeito do que for publicado, além de permitir o compartilhamento de seu Objeto Educacional com os demais parceiros, que terão o direito de reaplicá-lo.')}</p>
@@ -117,7 +117,7 @@
                         <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
-                    <div id="files-container" class="wizard-container four">
+                    <div id="files-container" class="wizard-container active four">
                         <p class="container-title">#{localeBean.getString('Arquivos do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Nesta última etapa, você deve enviar os arquivos que compõem o seu Objeto Educacional. Primeiro, escolha uma imagem avatar para representar o seu novo Objeto em nossa biblioteca de Objetos Educacionais. As dimensões mínimas de imagem são 100x100 pixels, nos formatos suportados jpg, jpeg e png.')}</p>
                         <p class="container-description">#{localeBean.getString('Depois, envie seu Objeto Educacional em até três arquivos de mídia, nos formatos suportados mp4, wmv, mpeg, avi, wav, mp3, wma, ogg e pdf.')}</p>
@@ -136,26 +136,23 @@
                                 </ui:fragment>
                             </h:panelGroup>
                             <h:panelGroup id="media-container">
-                                <ui:repeat value="#{educationalObjectPublishBean.mediaFileList}" var="mediaFile">
-                                    <div class="media">
-                                        <i class="fa fa-paperclip"/>
-                                        <span>#{mediaFile.submittedFileName}</span>
-                                        <h:commandLink class="remove-media">
-                                            <i class="fa fa-times"></i>
-                                            <f:ajax listener="#{educationalObjectPublishBean.removeMedia(mediaFile)}" render="media-container"/>
-                                        </h:commandLink>
-                                    </div>
-                                </ui:repeat>
-                                <ui:fragment rendered="#{educationalObjectPublishBean.mediaFileList.size() lt 3}">
-                                    <div class="add-media">
-                                        <i class="fa fa-plus-circle"/>
-                                        <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
-                                    </div>
-                                </ui:fragment>
+                                <span class="hidden add-media-text">#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
+                                <div class="add-media add-media-one">
+                                    <i class="fa fa-plus-circle"/>
+                                    <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
+                                </div>
+                                <div class="add-media add-media-two">
+                                    <i class="fa fa-plus-circle"/>
+                                    <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
+                                </div>
+                                <div class="add-media add-media-three">
+                                    <i class="fa fa-plus-circle"/>
+                                    <span>#{localeBean.getString('Anexar arquivo de mídia do Objeto Educacional')}</span>
+                                </div>
                             </h:panelGroup>
                         </div>
                         <div class="clear"></div>
-                        
+
                         <h:commandLink class="submit-object" onclick="return checkMediaEmpty()">
                             <f:ajax execute="informations-container" listener="#{educationalObjectPublishBean.submit()}"/>
                             <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
@@ -182,10 +179,9 @@
                         </div>
                     </div>
                 </div>
-                <h:inputFile id="browse-media" pt:accept="audio/wav, audio/mp3, audio/wma, audio/ogg, application/pdf, video/mp4, video/wmv, video/mpeg, video/avi" styleClass="hidden" value="#{educationalObjectPublishBean.mediaFile}"></h:inputFile>
-                <h:commandLink class="add-new-media">
-                    <f:ajax execute="browse-media" listener="#{educationalObjectPublishBean.addMedia()}" render="media-container"/>
-                </h:commandLink>
+                <h:inputFile id="browse-media-1" pt:accept="audio/wav, audio/mp3, audio/wma, audio/ogg, application/pdf, video/mp4, video/wmv, video/mpeg, video/avi" styleClass="hidden browse-media" value="#{educationalObjectPublishBean.mediaFile1}"></h:inputFile>
+                <h:inputFile id="browse-media-2" pt:accept="audio/wav, audio/mp3, audio/wma, audio/ogg, application/pdf, video/mp4, video/wmv, video/mpeg, video/avi" styleClass="hidden browse-media" value="#{educationalObjectPublishBean.mediaFile2}"></h:inputFile>
+                <h:inputFile id="browse-media-3" pt:accept="audio/wav, audio/mp3, audio/wma, audio/ogg, application/pdf, video/mp4, video/wmv, video/mpeg, video/avi" styleClass="hidden browse-media" value="#{educationalObjectPublishBean.mediaFile3}"></h:inputFile>
                 <h:commandLink styleClass="upload-image">
                     <f:ajax listener="#{educationalObjectPublishBean.cropImage()}" execute="browse-image original-uploaded-image-tracker-x original-uploaded-image-tracker-y original-uploaded-image-tracker-h original-uploaded-image-tracker-w" render="image-container"/>
                 </h:commandLink>
@@ -214,93 +210,7 @@
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
         <script type="text/javascript" src="../resources/lib/js/jquery.Jcrop.min.js"></script>
-        <script src="/resources/lib/js/jquery.maskedinput.min.js"/>
-        <script src="/resources/lib/js/jquery-ui.min.js"/>
         <script src="../resources/common/js/educational-object-publish.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>
-
-<!--           
-<h:panelGroup id="form4" styleClass="form4_body">
-<h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Anexar arquivos')}"/>
-<h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Fotos, vídeos, cartilhas, documentos explicativos etc.')}"/>
-<h:panelGroup styleClass="educational_object_image">
-<h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Imagem')}"/>
-<h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('A imagem para representar a Tecnologia Social no sistema. A imagem será melhor visualizada se seguir as dimensões de 100x100. Tipos de arquivos suportados: jpg, jpeg, png e gif.')}"/>
-<h:outputText styleClass="educational_object_image_warning" value="#{localeBean.getString('Insira uma imagem para o Objeto Educacional.')}"/>
-<h:outputText styleClass="educational_object_image_type_warning" value="#{localeBean.getString('A imagem deve ser do tipo bmp, jpg, jpeg, png ou gif.')}"/>
-<h:graphicImage id="selectImage" value="/resources/common/images/ico_attach_resp.png"/>
-<h:outputText id="selectedImageName" value="#{localeBean.getString('Selecione...')}"/>
-<h:inputFile styleClass="imageFile" id="imageFile" value="#{educationalObjectPublishBean.imageFile}"/>
-</h:panelGroup>
-<div id="noImage"/>
-<img id="image" src=""/>
-<span class="clear"></span>
-<h:panelGroup styleClass="educational_object_medias">
-<h:outputText styleClass="educational_object_label" value="#{localeBean.getString('Objeto Educacional')}"/>
-<h:outputText styleClass="educational_object_tip" value="#{localeBean.getString('Limite de 3 mídias. Tipos de arquivos suportados: jpg, jpeg, png, gif, bmp, mp3, wav, wma, mp4, avi, mpeg, wmv, ogg, webM, swf, pdf, doc, docx e txt.')}"/>
-<h:outputText styleClass="educational_object_media_warning" value="#{localeBean.getString('Insira ao menos 1 mídia para o Objeto Educacional.')}"/>
-<h:outputText styleClass="educational_object_media_type_warning" value="#{localeBean.getString('As mídias devem ser dos tipos especificados acima.')}"/>
-<h:graphicImage id="selectMedia1" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
-<h:outputText id="selectedMediaName1" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-<h:inputFile id="mediaFile1" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile1}"/>
-<br/>
-<h:graphicImage id="selectMedia2" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
-<h:outputText id="selectedMediaName2" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-<h:inputFile id="mediaFile2" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile2}"/>
-<br/>
-<h:graphicImage id="selectMedia3" styleClass="selectMedia" value="/resources/common/images/ico_attach_resp.png"/>
-<h:outputText id="selectedMediaName3" styleClass="selectedMediaName" value="#{localeBean.getString('Selecione...')}"/>
-<h:inputFile id="mediaFile3" styleClass="mediaFile" value="#{educationalObjectPublishBean.mediaFile3}"/>
-</h:panelGroup>
-</h:panelGroup>
-<h:panelGroup id="form5">
-<h:panelGroup styleClass="form5_body">
-<h:outputText styleClass="educational_object_upload_tip" value="#{localeBean.getString('Por favor, aguarde enquanto suas mídias são enviadas.')}"/>
-<div id="upload_progress_box">
-    <h:panelGroup id="uploaded1" styleClass="uploaded">
-    <h:graphicImage id="loading1" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
-    <h:graphicImage id="attached1" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
-    <h:panelGroup>
-    <span id="uploaded_file1" class="uploaded_file"/>
-    <div id="progressbar">
-        <div class="progress-label"/>
-                                                        0%
-                                                    </div>
-    </div>
-                                            <div id="upload_bar1" class="upload_progress_bar">
-                                                <div id="upload_bg1" class="upload_progress_background">
-                                                    <div id="upload_percent1" class="upload_progress_percent">0%</div>
-                                                </div>
-                                            </div>
-    </h:panelGroup>
-    </h:panelGroup>
-                                    <h:panelGroup id="uploaded2" styleClass="uploaded">
-                                        <h:graphicImage id="loading2" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
-                                        <h:graphicImage id="attached2" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
-                                        <h:panelGroup>
-                                            <span id="uploaded_file2" class="uploaded_file"/>
-                                            <div id="upload_bar2" class="upload_progress_bar">
-                                                <div id="upload_bg2" class="upload_progress_background">
-                                                    <div id="upload_percent2" class="upload_progress_percent">0%</div>
-                                                </div>
-                                            </div>
-                                        </h:panelGroup>
-                                    </h:panelGroup>
-                                    <h:panelGroup id="uploaded3" styleClass="uploaded">
-                                        <h:graphicImage id="loading3" styleClass="file_loading_image" value="/resources/common/images/loading.gif"/>
-                                        <h:graphicImage id="attached3" styleClass="file_attach_image" value="/resources/common/images/ico_attach.png"/>
-                                        <h:panelGroup>
-                                            <span id="uploaded_file3" class="uploaded_file"/>
-                                            <div id="upload_bar3" class="upload_progress_bar">
-                                                <div id="upload_bg3" class="upload_progress_background">
-                                                    <div id="upload_percent3" class="upload_progress_percent">0%</div>
-                                                </div>
-                                            </div>
-                                        </h:panelGroup>
-                                    </h:panelGroup>
-</div>
-</h:panelGroup>
-</h:panelGroup>
--->

@@ -66,8 +66,9 @@ public class EducationalObjectPublishBean implements Serializable {
 
     private transient File imageSampleFile;
     private transient Part imageFile;
-    private transient Part mediaFile;
-    private transient List<Part> mediaFileList;
+    private transient Part mediaFile1;
+    private transient Part mediaFile2;
+    private transient Part mediaFile3;
 
     private InterestsJpaController interestsJpaController;
     private AuthorRoleJpaController authorRoleJpaController;
@@ -169,25 +170,6 @@ public class EducationalObjectPublishBean implements Serializable {
         }
     }
 
-    public void addMedia() throws IOException {
-        if (mediaFileList.size() < 3) {
-            boolean exists = false;
-            for (Part media : mediaFileList) {
-                if (media.getName().equals(mediaFile.getName())
-                        && media.getSize() == mediaFile.getSize()) {
-                    exists = true;
-                }
-            }
-            if (!exists) {
-                mediaFileList.add(mediaFile);
-            }
-        }
-    }
-
-    public void removeMedia(Part media) {
-        mediaFileList.remove(media);
-    }
-
     public void submit() throws IOException, Exception {
         imageSampleFile.delete();
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
@@ -219,24 +201,34 @@ public class EducationalObjectPublishBean implements Serializable {
             educationalObject.getAuthorCollection().add(authorOE);
         }
         educationalObjectJpaController.edit(educationalObject);
+        if (mediaFile1 != null) {
+            submitFile(mediaFile1);
+        }
+        if (mediaFile2 != null) {
+            submitFile(mediaFile2);
+        }
+        if (mediaFile3 != null) {
+            submitFile(mediaFile3);
+        }
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+    }
+
+    private void submitFile(Part media) throws IOException, Exception {
         String mediaPath = File.separator + "home" + File.separator + "www" + File.separator + "com.guigoh.cdn"
                 + File.separator + "guigoh" + File.separator + "educationalobjects" + File.separator + educationalObject.getId()
                 + File.separator + "media" + File.separator;
-        for (Part media : mediaFileList) {
-            boolean success = UploadService.uploadFile(media, mediaPath, null);
-            if (success) {
-                EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
-                educationalObjectMedia.setEducationalObjectId(educationalObject);
-                educationalObjectMedia.setSize(media.getSize());
-                String[] fileSplit = media.getSubmittedFileName().split("\\.");
-                educationalObjectMedia.setName(media.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
-                educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
-                educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + media.getSubmittedFileName());
-                EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
-                educationalObjectMediaJpaController.create(educationalObjectMedia);
-            }
+        boolean success = UploadService.uploadFile(media, mediaPath, null);
+        if (success) {
+            EducationalObjectMedia educationalObjectMedia = new EducationalObjectMedia();
+            educationalObjectMedia.setEducationalObjectId(educationalObject);
+            educationalObjectMedia.setSize(media.getSize());
+            String[] fileSplit = media.getSubmittedFileName().split("\\.");
+            educationalObjectMedia.setName(media.getSubmittedFileName().replace("." + fileSplit[fileSplit.length - 1], ""));
+            educationalObjectMedia.setType(fileSplit[fileSplit.length - 1]);
+            educationalObjectMedia.setMedia("http://cdn.guigoh.com/guigoh/educationalobjects/" + educationalObject.getId() + "/media/" + media.getSubmittedFileName());
+            EducationalObjectMediaJpaController educationalObjectMediaJpaController = new EducationalObjectMediaJpaController();
+            educationalObjectMediaJpaController.create(educationalObjectMedia);
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
     }
 
     private void initGlobalVariables() {
@@ -246,7 +238,6 @@ public class EducationalObjectPublishBean implements Serializable {
         interestList = interestsJpaController.findInterestsEntities();
         authorRoleList = authorRoleJpaController.findAuthorRoleEntities();
         tagList = new ArrayList<>();
-        mediaFileList = new ArrayList<>();
         authorList = new ArrayList<>();
 
         educationalObject = new EducationalObject();
@@ -285,14 +276,6 @@ public class EducationalObjectPublishBean implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public List<Part> getMediaFileList() {
-        return mediaFileList;
-    }
-
-    public void setMediaFileList(List<Part> mediaFileList) {
-        this.mediaFileList = mediaFileList;
     }
 
     public List<Tags> getTagList() {
@@ -343,11 +326,28 @@ public class EducationalObjectPublishBean implements Serializable {
         this.imageSrc = imageSrc;
     }
 
-    public Part getMediaFile() {
-        return mediaFile;
+    public Part getMediaFile1() {
+        return mediaFile1;
     }
 
-    public void setMediaFile(Part mediaFile) {
-        this.mediaFile = mediaFile;
+    public void setMediaFile1(Part mediaFile1) {
+        this.mediaFile1 = mediaFile1;
     }
+
+    public Part getMediaFile2() {
+        return mediaFile2;
+    }
+
+    public void setMediaFile2(Part mediaFile2) {
+        this.mediaFile2 = mediaFile2;
+    }
+
+    public Part getMediaFile3() {
+        return mediaFile3;
+    }
+
+    public void setMediaFile3(Part mediaFile3) {
+        this.mediaFile3 = mediaFile3;
+    }
+
 }

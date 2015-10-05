@@ -424,7 +424,7 @@ div.select {
     display: block;
 }
 
-.add-media, .media {
+.add-media {
     float: left;
     width: 75%;
     margin-bottom: 13px;
@@ -432,16 +432,17 @@ div.select {
 
 .add-media {
     color: #9c9c9c;
-    cursor: pointer;
 }
 
-.add-media i, .media > i {
+.add-media i {
+    cursor: pointer;
     float: left;
     margin-right: 5px;
     font-size: 25px;
 }
 
-.add-media span, .media span {
+.add-media span {
+    cursor: pointer;
     margin-top: 1px;
     float: left;
     font-size: 12px;
@@ -465,5 +466,5 @@ div.select {
 
 .remove-media {
     color: gray;
-    float: right;
+    float: right !important;
 }
