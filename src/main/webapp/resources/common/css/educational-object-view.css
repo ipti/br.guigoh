@@ -162,7 +162,7 @@
     text-align: center;
 }
 
-.object-like:hover .like-count, .like-count.active {
+.like-count.active {
     color: #e6eadf;
 }
 
@@ -172,7 +172,7 @@
     height: 50px;
 }
 
-.like-icon.active, .like-icon:hover, .like-count:hover + .like-icon {
+.like-icon.active {
     background: url(../images/like-icon-true.png);
 }
 
