@@ -129,24 +129,21 @@ $(document).ready(function () {
         var number = $(this).attr("id") === "browse-media-1" ? "one" : ($(this).attr("id") === "browse-media-2" ? "two" : "three");
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
-            var reader = new FileReader();
-            reader.onloadend = function () {
-                if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
-                        || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
-                        || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
-                    $(".add-media-" + number).css("color", "#333");
-                    $(".add-media-" + number).children("span").text(changeNameLength(file.name, 50));
-                    if (!$(".add-media-" + number).children(".remove-media").length) {
-                        $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
-                    }
-                    if (!$(".add-media-" + number).children(".fa-paperclip").length) {
-                        $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
-                    }
-                } else {
-                    $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
+            if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
+                    || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
+                    || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
+                $(".add-media").css("color", "#9c9c9c");
+                $(".add-media-" + number).css("color", "#333");
+                $(".add-media-" + number).children("span").text(changeNameLength(file.name, 50));
+                if (!$(".add-media-" + number).children(".remove-media").length) {
+                    $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
                 }
-            };
-            reader.readAsDataURL(file);
+                if (!$(".add-media-" + number).children(".fa-paperclip").length) {
+                    $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
+                }
+            } else {
+                $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
+            }
         }
     });
 
@@ -171,6 +168,8 @@ $(document).ready(function () {
         $('.upload-image').click();
         document.getElementById("close-image-cropping-modal").click();
     });
+    
+    $('.add-media span').text($(".add-media-text").text());
 });
 
 function checkValidation(container) {
@@ -253,9 +252,18 @@ function checkErrorBorder(element, type) {
             }
             break;
         case "media":
-            if ($(element).length) {
-                $(".add-media").css("color", "#9c9c9c");
-            } else {
+            var empty = true;
+            $(".add-media").each(function(){
+                if ($(this).children().first().hasClass("fa-paperclip")) {
+                    empty = false;
+                    $(this).css("color", "#333");
+                } else {
+                    if (!empty) {
+                        $(this).css("color", "#9c9c9c");
+                    }
+                }
+            });
+            if (empty) {
                 $(".add-media").css("color", "red");
             }
             break;
@@ -288,11 +296,11 @@ function checkAuthorEmpty(authorName, authorEmail, authorRole) {
 }
 
 function checkMediaEmpty() {
-    if ($('.image-preview').length && $('.media').length) {
+    if ($('#browse-image').val() !== "" && ($('#browse-media-1').val() !== "" || $('#browse-media-2').val() !== "" || $('#browse-media-3').val() !== "")) {
         return true;
     } else {
         checkErrorBorder(".add-image", "image");
-        checkErrorBorder(".media", "media");
+        checkErrorBorder(".add-media", "media");
         return false;
     }
 }
