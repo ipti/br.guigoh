@@ -468,3 +468,26 @@ div.select {
     color: gray;
     float: right !important;
 }
+
+#upload-progress-box{
+    display:none;
+    margin-top:50px;
+    width:220px;
+    float:right;
+}
+
+#upload-progress-bar{
+    height:25px;
+}
+
+.upload-progress-label {
+    position: absolute;
+    left: 44%;
+    font-size:14px;
+    color:white;
+    font-weight:bold;
+}
+
+.ui-progressbar {
+    position: relative;
+}

@@ -1,4 +1,5 @@
 var stepOne = stepTwo = stepThree = false;
+var formData = new FormData();
 
 $(document).ready(function () {
     $(".menu-icon-two").parent().addClass("active");
@@ -126,23 +127,39 @@ $(document).ready(function () {
     });
 
     $('.browse-media').change(function (e) {
+        for (var i = 0, file; file = this.files[i]; i++) {
+            formData.append(file.name, file);
+        }
         var number = $(this).attr("id") === "browse-media-1" ? "one" : ($(this).attr("id") === "browse-media-2" ? "two" : "three");
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
-            if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
-                    || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
-                    || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
-                $(".add-media").css("color", "#9c9c9c");
-                $(".add-media-" + number).css("color", "#333");
-                $(".add-media-" + number).children("span").text(changeNameLength(file.name, 50));
-                if (!$(".add-media-" + number).children(".remove-media").length) {
-                    $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
+            var media = $(this);
+            var exists = false;
+            $('.browse-media').not(this).each(function () {
+                if ($(this).val() === media.val()) {
+                    exists = true;
                 }
-                if (!$(".add-media-" + number).children(".fa-paperclip").length) {
-                    $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
+            });
+            if (!exists) {
+                if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
+                        || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
+                        || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
+                    $(".add-media").each(function () {
+                        if (!$(this).children().first().hasClass("fa-paperclip")) {
+                            $(this).css("color", "#9c9c9c");
+                        }
+                    });
+                    $(".add-media-" + number).css("color", "#333");
+                    $(".add-media-" + number).children("span").text(changeNameLength(file.name, 50));
+                    if (!$(".add-media-" + number).children(".remove-media").length) {
+                        $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
+                    }
+                    if (!$(".add-media-" + number).children(".fa-paperclip").length) {
+                        $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
+                    }
+                } else {
+                    $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
                 }
-            } else {
-                $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
             }
         }
     });
@@ -168,7 +185,7 @@ $(document).ready(function () {
         $('.upload-image').click();
         document.getElementById("close-image-cropping-modal").click();
     });
-    
+
     $('.add-media span').text($(".add-media-text").text());
 });
 
@@ -253,7 +270,7 @@ function checkErrorBorder(element, type) {
             break;
         case "media":
             var empty = true;
-            $(".add-media").each(function(){
+            $(".add-media").each(function () {
                 if ($(this).children().first().hasClass("fa-paperclip")) {
                     empty = false;
                     $(this).css("color", "#333");
@@ -297,6 +314,9 @@ function checkAuthorEmpty(authorName, authorEmail, authorRole) {
 
 function checkMediaEmpty() {
     if ($('#browse-image').val() !== "" && ($('#browse-media-1').val() !== "" || $('#browse-media-2').val() !== "" || $('#browse-media-3').val() !== "")) {
+        $(".submit-object").hide();
+        $("#upload-progress-box").show();
+        uploadFiles();
         return true;
     } else {
         checkErrorBorder(".add-image", "image");
@@ -328,3 +348,34 @@ jsf.ajax.addOnEvent(function (data) {
         }
     }
 });
+
+$("#upload-progress-bar").progressbar({
+    value: false,
+    change: function () {
+        $(".upload-progress-label").text($("#upload-progress-bar").progressbar("value") + "%");
+    },
+    complete: function () {
+        $(".upload-progress-label").text("100%");
+    }
+});
+
+function uploadFiles() {
+    var percent;
+    var xhr = new XMLHttpRequest();
+
+    if (xhr.upload) {
+
+        xhr.upload.onloadstart = function () {
+            percent = 0;
+        }
+        xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+                percent = Math.floor(e.loaded / e.total * 100);
+                $("#upload-progress-bar").progressbar("value", percent);
+            }
+        }
+    }
+
+    xhr.open("post", "../educational-object/publish.xhtml", true);
+    xhr.send(formData);
+}

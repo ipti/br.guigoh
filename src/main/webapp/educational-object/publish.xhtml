@@ -23,7 +23,7 @@
             <h1>#{localeBean.getString("Publicação de Objetos Educacionais")}</h1>
             <h:form id="form" prependId="false" enctype="multipart/form-data" acceptcharset="UTF-8">
                 <div class="column">
-                    <div id="licensing-container" class="wizard-container one">
+                    <div id="licensing-container" class="wizard-container active one">
                         <p class="container-title">#{localeBean.getString('Licenciamento do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Você está prestes a publicar seu Objeto Educacional para que todos do Guigoh possam conhecê-lo e reaplicá-lo!')}</p>
                         <p class="container-description">#{localeBean.getString('Todos os Objetos Educacionais publicados neste Espaço seguem a licença (CC) Creative Commons Atribuição-Compartilhamento pela mesma Licença 3.0 Unported. Esta é uma forma de garantir sua autoria a respeito do que for publicado, além de permitir o compartilhamento de seu Objeto Educacional com os demais parceiros, que terão o direito de reaplicá-lo.')}</p>
@@ -117,7 +117,7 @@
                         <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
                         <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                     </div>
-                    <div id="files-container" class="wizard-container active four">
+                    <div id="files-container" class="wizard-container four">
                         <p class="container-title">#{localeBean.getString('Arquivos do seu Objeto Educacional')}</p>
                         <p class="container-description">#{localeBean.getString('Nesta última etapa, você deve enviar os arquivos que compõem o seu Objeto Educacional. Primeiro, escolha uma imagem avatar para representar o seu novo Objeto em nossa biblioteca de Objetos Educacionais. As dimensões mínimas de imagem são 100x100 pixels, nos formatos suportados jpg, jpeg e png.')}</p>
                         <p class="container-description">#{localeBean.getString('Depois, envie seu Objeto Educacional em até três arquivos de mídia, nos formatos suportados mp4, wmv, mpeg, avi, wav, mp3, wma, ogg e pdf.')}</p>
@@ -154,10 +154,15 @@
                         <div class="clear"></div>
 
                         <h:commandLink class="submit-object" onclick="return checkMediaEmpty()">
-                            <f:ajax execute="informations-container" listener="#{educationalObjectPublishBean.submit()}"/>
+                            <f:ajax execute="informations-container browse-media-1 browse-media-2 browse-media-3" listener="#{educationalObjectPublishBean.submit()}"/>
                             <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>
                             <span class="send-label pull-right">#{localeBean.getString('Enviar para revisão!').toUpperCase()}</span>
                         </h:commandLink>
+                        <div id="upload-progress-box">
+                            <div id="upload-progress-bar">
+                                <div class="upload-progress-label"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
@@ -210,6 +215,7 @@
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
         <script type="text/javascript" src="../resources/lib/js/jquery.Jcrop.min.js"></script>
+        <script type="text/javascript" src="../resources/lib/js/jquery-ui.min.js"></script>
         <script src="../resources/common/js/educational-object-publish.js"/>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
