@@ -49,6 +49,17 @@ $('.tab').click(function () {
     }
 });
 
-jsf.ajax.addOnEvent(function(data){
+function likeObject(element) {
+    if ($(element).children("span").hasClass("active")) {
+        $(element).children(".like-count").text(parseInt($(element).children(".like-count").text()) - 1);
+        $(element).children(".like-count, .like-icon").removeClass("active");
+    } else {
+        $(element).children(".like-count").text(parseInt($(element).children(".like-count").text()) + 1);
+        $(element).children(".like-count, .like-icon").addClass("active");
+    }
+    return true;
+}
+
+jsf.ajax.addOnEvent(function (data) {
     $('.max-length').text("(" + maxLength + ")");
 });

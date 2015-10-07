@@ -80,7 +80,7 @@
                         </h:outputText>
                     </div>
                     <h:panelGroup layout="block" class="object-like" id="object-like">
-                        <h:commandLink class="like-object">
+                        <h:commandLink class="like-object" onclick="return likeObject('.like-object')">
                             <ui:fragment rendered="#{educationalObjectViewBean.like}">
                                 <span class='like-count active'>#{educationalObjectViewBean.likes}</span>
                                 <div title="#{localeBean.getString('Você curtiu esse Objeto Educacional')}" class="like-icon active"/>

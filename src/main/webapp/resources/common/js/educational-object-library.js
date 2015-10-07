@@ -10,7 +10,7 @@ $(document).ready(function () {
     });
 
     $('.column-object-title').find('a').each(function () {
-        $(this).text(changeNameLength($(this).text(), 45));
+        $(this).text(changeNameLength($(this).text(), 42));
     });
 });
 
@@ -33,7 +33,7 @@ jsf.ajax.addOnEvent(function (data) {
             $(this).text(changeNameLength($(this).text(), 100));
         });
         $('.column-object-title').find('a').each(function () {
-            $(this).text(changeNameLength($(this).text(), 45));
+            $(this).text(changeNameLength($(this).text(), 42));
         });
     }
 });
