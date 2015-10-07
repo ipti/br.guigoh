@@ -28,7 +28,7 @@
             </p>
         </div>
         <section id="group">
-            <h:form prependId="false" enctype="multipart/form-data">
+            <h:form prependId="false" id="create-topic-form" enctype="multipart/form-data">
                 <div class="title-container">
                     <div class="title">
                         <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(theme)}</span></h1>
@@ -74,9 +74,7 @@
                         <span class="publish-topic">
                             <img src="../resources/common/images/send.png"/>
                         </span>
-                        <h:commandLink class="publish-link">
-                            <f:ajax  execute="@form" listener="#{studyGroupCreateBean.createTopic()}"/>
-                        </h:commandLink>
+                        <h:commandLink class="publish-link" action="#{studyGroupCreateBean.createTopic()}"></h:commandLink>
                         <img class="attach-link" src="../resources/common/images/attach.png"/>
                         <h:inputFile class="hidden file-input" value="#{studyGroupCreateBean.file}">
                             <f:ajax event="change" listener="#{studyGroupCreateBean.addMedia()}" render="file-list"/>

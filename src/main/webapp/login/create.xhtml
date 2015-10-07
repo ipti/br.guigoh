@@ -43,11 +43,11 @@
                                 <p class="presentation">Olá calouro!</p>
                                 <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
                                 <div class="col-2">
-                                    <h:inputText pt:placeholder="Nome" value="#{loginCreateBean.socialProfile.name}"></h:inputText>
-                                    <h:inputText pt:placeholder="E-mail" value="#{loginCreateBean.user.username}"></h:inputText>
-                                    <h:inputSecret pt:placeholder="Senha" value="#{loginCreateBean.user.password}"></h:inputSecret>
+                                    <h:inputText pt:placeholder="Nome" tabindex="1" value="#{loginCreateBean.socialProfile.name}"></h:inputText>
+                                    <h:inputText pt:placeholder="E-mail" tabindex="3" value="#{loginCreateBean.user.username}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="Senha" tabindex="5" value="#{loginCreateBean.user.password}"></h:inputSecret>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{loginCreateBean.user.secretQuestionId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.user.secretQuestionId}" tabindex="7" converter="entityConverter">
                                             <f:selectItem itemLabel="Pergunta secreta" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.questionsList}" var="questions" itemValue="#{questions}" itemLabel="#{questions.name}" />
                                         </h:selectOneMenu>
@@ -55,10 +55,10 @@
                                     <hr></hr>
                                 </div>
                                 <div class="col-2">
-                                    <h:inputText pt:placeholder="sobrenome" value="#{loginCreateBean.lastName}"></h:inputText>
-                                    <h:inputText pt:placeholder="confirmação de e-mail" value="#{loginCreateBean.usernameConfirm}"></h:inputText>
-                                    <h:inputSecret pt:placeholder="confirmação de senha" value="#{loginCreateBean.passwordConfirm}"></h:inputSecret>
-                                    <h:inputText pt:placeholder="resposta da pergunta secreta" value="#{loginCreateBean.user.secretAnswer}"></h:inputText>
+                                    <h:inputText pt:placeholder="sobrenome" tabindex="2"  value="#{loginCreateBean.lastName}"></h:inputText>
+                                    <h:inputText pt:placeholder="confirmação de e-mail" tabindex="4" value="#{loginCreateBean.usernameConfirm}"></h:inputText>
+                                    <h:inputSecret pt:placeholder="confirmação de senha" tabindex="6" value="#{loginCreateBean.passwordConfirm}"></h:inputSecret>
+                                    <h:inputText pt:placeholder="resposta da pergunta secreta" tabindex="8" value="#{loginCreateBean.user.secretAnswer}"></h:inputText>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -66,19 +66,19 @@
                                 <p>Alguns dados sobre sua instituição de ensino.</p>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.subnetworkId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.subnetworkId}" tabindex="9" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione sua instituição de ensino" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.subnetworkList}" var="subnetwork" itemValue="#{subnetwork}" itemLabel="#{subnetwork.description}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.roleId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.roleId}" tabindex="10" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o seu cargo" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.roleList}" var="role" itemValue="#{role}" itemLabel="#{role.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="select">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.languageId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.languageId}" tabindex="11" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o idioma" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.languageList}" var="language" itemValue="#{language}" itemLabel="#{language.description}" />
                                         </h:selectOneMenu>
@@ -86,21 +86,21 @@
                                 </div>
                                 <div class="col-2">
                                     <div class="select">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.countryId}" converter="entityConverter" >
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.countryId}" tabindex="12" converter="entityConverter" >
                                             <f:ajax event="valueChange" execute="@this" render="state city" listener="#{loginCreateBean.loadStates}"/>
                                             <f:selectItem itemLabel="Selecione o país" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.countryList}" var="country" itemValue="#{country}" itemLabel="#{country.name}" />
                                         </h:selectOneMenu>
                                     </div>
                                     <h:panelGroup layout="block" class="select" id="state">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.stateId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.stateId}" tabindex="13" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione o estado" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.stateList}" var="state" itemValue="#{state}" itemLabel="#{state.name}" />
                                             <f:ajax render="city" listener="#{loginCreateBean.loadCities()}"/>
                                         </h:selectOneMenu>
                                     </h:panelGroup>
                                     <h:panelGroup layout="block" class="select" id="city">
-                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.cityId}" converter="entityConverter">
+                                        <h:selectOneMenu value="#{loginCreateBean.socialProfile.cityId}" tabindex="14" converter="entityConverter">
                                             <f:selectItem itemLabel="Selecione a cidade" itemValue=""/>
                                             <f:selectItems value="#{loginCreateBean.cityList}" var="city" itemValue="#{city}" itemLabel="#{city.name}" />
                                         </h:selectOneMenu>

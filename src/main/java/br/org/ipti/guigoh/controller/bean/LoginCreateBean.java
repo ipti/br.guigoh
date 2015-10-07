@@ -48,9 +48,7 @@ import javax.inject.Named;
 public class LoginCreateBean implements Serializable {
 
     private static final String SALT = "8g9erh9gejh";
-    private static final String CONFIRMATION_PENDING = "CP", DEFAULT = "DE",
-            FIRST_ACCESS = "FC", PENDING_ACCESS = "PC",
-            PUBLIC = "PU", PRIVATE = "PR";
+    private static final String CONFIRMATION_PENDING = "CP", DEFAULT = "DE", PENDING_ACCESS = "PC";
 
     private Users user;
     private SocialProfile socialProfile;
@@ -106,7 +104,6 @@ public class LoginCreateBean implements Serializable {
                             trans.setLocale(languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym());
                             mailtext = trans.getWord(mailtext);
                             mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-//                            mailtext += "http://rts.guigoh.com:8080/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
                             trans.setLocale(CookieService.getCookie("locale"));
@@ -116,7 +113,7 @@ public class LoginCreateBean implements Serializable {
                             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                             socialProfileJpaController.create(socialProfile);
                             automaticConfirm(user);
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso!"), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Aguarde a confirmação do administrador."), null));
                             user = new Users();
                             socialProfile = new SocialProfile();
                             lastName = "";

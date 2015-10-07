@@ -19,12 +19,13 @@ $(document).ready(function () {
     $(document).on("click", ".publish-topic", function () {
         if ($('.message-textarea').val().trim() !== "" && $('.topic-title').val().trim() !== "") {
             $('.publish-link').click();
+            $('.publish-link').remove();
+            
         }
         $('.message-textarea').val().trim() === "" ? $('.message-error').show() : $('.message-error').hide();
         $('.topic-title').val().trim() === "" ? $('.title-error').show() : $('.title-error').hide();
-        
     });
-
+    
     $(document).on("keypress", ".tag-input", function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
