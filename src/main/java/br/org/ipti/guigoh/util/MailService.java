@@ -16,7 +16,7 @@ public class MailService {
     private final static String userAuthentication = "noreply@ipti.org.br";
     private final static String passwordUserAuthentication = "p@s4ipti";
     private final static String sender = "noreply@ipti.org.br";
-    private final static String smtp = "smtp.ipti.org.br";
+    private final static String smtp = "email-ssl.com.br";
     private final static int smtpPort = 587;
     private final static boolean authentication = false;
 

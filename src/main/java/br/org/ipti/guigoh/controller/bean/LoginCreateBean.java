@@ -81,6 +81,7 @@ public class LoginCreateBean implements Serializable {
     }
 
     public void register() throws Exception {
+        boolean emailSent = false;
         try {
             Users userTest = usersJpaController.findUsers(user.getUsername());
             if (userTest != null) {
@@ -106,6 +107,7 @@ public class LoginCreateBean implements Serializable {
                             mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
+                            emailSent = true;
                             trans.setLocale(CookieService.getCookie("locale"));
                             user.setStatus(CONFIRMATION_PENDING);
                             usersJpaController.create(user);
@@ -113,7 +115,7 @@ public class LoginCreateBean implements Serializable {
                             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                             socialProfileJpaController.create(socialProfile);
                             automaticConfirm(user);
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Aguarde a confirmação do administrador."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Confirme seu registro através de seu e-mail."), null));
                             user = new Users();
                             socialProfile = new SocialProfile();
                             lastName = "";
@@ -131,8 +133,11 @@ public class LoginCreateBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
+            if (!emailSent) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao tentar enviar o e-mail de confirmação de conta. Tente novamente mais tarde."), null));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
+            }
         }
     }
 
@@ -159,7 +164,7 @@ public class LoginCreateBean implements Serializable {
 
     public void loadStates() {
         socialProfile.setStateId(null);
-        stateList = socialProfile.getCountryId() != null ? stateJpaController.findStatesByCountryId(socialProfile.getCountryId().getId()): new ArrayList<>();
+        stateList = socialProfile.getCountryId() != null ? stateJpaController.findStatesByCountryId(socialProfile.getCountryId().getId()) : new ArrayList<>();
         cityList = new ArrayList<>();
     }
 
@@ -180,22 +185,22 @@ public class LoginCreateBean implements Serializable {
         usersJpaController = new UsersJpaController();
         SubnetworkJpaController subnetworkJpaController = new SubnetworkJpaController();
         SecretQuestionJpaController secretQuestionJpaController = new SecretQuestionJpaController();
-        
+
         user = new Users();
         socialProfile = new SocialProfile();
         trans = new Translator();
-        
+
         questionsList = secretQuestionJpaController.findSecretQuestionEntities();
         countryList = countryJpaController.findCountryEntities();
         languageList = languageJpaController.findLanguageEntities();
         subnetworkList = subnetworkJpaController.findSubnetworkEntities();
         roleList = roleJpaController.findRoleEntities();
-        
+
         stateList = new ArrayList<>();
         cityList = new ArrayList<>();
-        
+
         usernameConfirm = passwordConfirm = lastName = "";
-        
+
         trans.setLocale(CookieService.getCookie("locale"));
     }
 
