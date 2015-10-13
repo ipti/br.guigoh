@@ -45,6 +45,7 @@ p {
 }
 
 .title h1 {
+    letter-spacing: 2px;
     color: white;
     text-transform: uppercase;
     font-weight: bold;
@@ -57,8 +58,8 @@ p {
 }
 
 .main {
-    width: 565;
     float: left;
+    margin-top: 26px;
 }
 
 .col-2 {
@@ -135,8 +136,17 @@ aside .panel:last-child {
 
 .panel .forgot {
     float: left;
-    font-size:14px;
-    margin-top: 20px;
+    font-size:12px;
+    margin-top: 37px;
+}
+
+.forward i {
+    font-size: 40px;
+    color: gray;
+}
+
+.forward i:hover {
+    color: #333;
 }
 
 .black {
@@ -150,17 +160,19 @@ footer {
 
 footer img {
     margin: 5px 25px 15px;
+    width: 130px;
 }
 
 footer h3 {
     color: white;
     font-size:13px;
     padding: 2px 0 0 35px;
+    margin-top: 21px;
 }
 
 /** Buttons **/
 button {
-    background: #323232;
+    background: gray;
     border: none;
     border-radius: 5px;
     color: white;
@@ -171,6 +183,11 @@ button {
     font-weight: bold;
     font-size: 15px;
 }
+
+button:hover {
+    background: #333
+}
+
 .block {
     width: calc(100%);
 }
@@ -222,8 +239,13 @@ div.select {
     margin-bottom: 15px;
 }
 
-.presentation{
+.presentation {
     font-size:22px;
+    margin-top: 30px;
+}
+
+.sub-presentation {
+    margin-bottom: 22px;
 }
 
 .pointer{
@@ -238,13 +260,13 @@ div.select {
 
 .logo-ipti {
     position: absolute;
-    bottom: 6px;
+    bottom: 17px;
     right: 35px;
 }
 
 .header-logo {
     background: url(../images/bg-header.png) #E3E6DD;
-    height: 100px;
+    height: 133px;
     padding: 0 35px;
     position: relative;
 }
@@ -253,15 +275,19 @@ div.select {
     height: 315px;
 }
 
+.profile {
+    position: relative;
+}
+
 .msg{
     color: red;
     font-size:12px;
-    display:block;
-    margin:-19px 0px 8px 0px
 }
 
 .error{
     color:red !important;
+    position: absolute;
+    top: -30px;
 }
 
 .info{
@@ -309,4 +335,12 @@ div.select {
 
 .back{
     margin-top:37px;
+}
+
+.back i{
+    color: gray;
+}
+
+.back i:hover {
+    color: #333;
 }

@@ -150,7 +150,7 @@ $(document).ready(function () {
                         }
                     });
                     $(".add-media-" + number).css("color", "#333");
-                    $(".add-media-" + number).children("span").text(changeNameLength(file.name, 50));
+                    $(".add-media-" + number).children("span").text(changeNameLength(file.name, 53));
                     if (!$(".add-media-" + number).children(".remove-media").length) {
                         $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
                     }
@@ -338,7 +338,11 @@ jsf.ajax.addOnEvent(function (data) {
             $('select').each(changeSelectColors);
             $('.author-name').focus().select();
             $('.new-author-name').each(function () {
-                $(this).text(changeNameLength($(this).text(), 20));
+                if ($(this).children("span").length) {
+                    $(this).children("span").text(changeNameLength($(this).children("span").text(), 18));
+                } else {
+                    $(this).text(changeNameLength($(this).text(), 18));
+                }
             });
             $(".author-email").keyup(function (e) {
                 if (e.keyCode !== 9) {

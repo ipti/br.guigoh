@@ -52,7 +52,6 @@ public class LoginCreateBean implements Serializable {
 
     private Users user;
     private SocialProfile socialProfile;
-    private Translator trans;
 
     private List<SecretQuestion> questionsList;
     private List<State> stateList;
@@ -81,11 +80,10 @@ public class LoginCreateBean implements Serializable {
     }
 
     public void register() throws Exception {
-        boolean emailSent = false;
         try {
             Users userTest = usersJpaController.findUsers(user.getUsername());
             if (userTest != null) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Usuário já existe."), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já existe.", null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
                         && !lastName.equals("") && socialProfile.getLanguageId() != null && user.getSecretQuestionId() != null
@@ -102,42 +100,32 @@ public class LoginCreateBean implements Serializable {
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
                             String accountActivation = "Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Guigoh.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
-                            trans.setLocale(languageJpaController.findLanguage(socialProfile.getLanguageId().getId()).getAcronym());
-                            mailtext = trans.getWord(mailtext);
                             mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
-                            accountActivation = trans.getWord(accountActivation);
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
-                            emailSent = true;
-                            trans.setLocale(CookieService.getCookie("locale"));
                             user.setStatus(CONFIRMATION_PENDING);
                             usersJpaController.create(user);
                             emailActivationJpaController.create(emailactivation);
                             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
                             socialProfileJpaController.create(socialProfile);
                             automaticConfirm(user);
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, trans.getWord("Usuário registrado com sucesso! Confirme seu registro através de seu e-mail."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso! Confirme seu registro através de seu e-mail.", null));
                             user = new Users();
                             socialProfile = new SocialProfile();
                             lastName = "";
                             usernameConfirm = "";
                             passwordConfirm = "";
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'Senha' e 'Confirme senha' devem ser iguais."), null));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'Senha' e 'Confirme senha' devem ser iguais.", null));
                         }
                     } else {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais."), null));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Os campos 'E-mail' e 'Confirme e-mail' devem ser iguais.", null));
                     }
-
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Não foi possível realizar o cadastro. Verifique os campos abaixo."), null));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível realizar o cadastro. Verifique os campos abaixo.", null));
                 }
             }
         } catch (Exception e) {
-            if (!emailSent) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao tentar enviar o e-mail de confirmação de conta. Tente novamente mais tarde."), null));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Ocorreu um erro ao realizar o cadastro. Tente novamente."), null));
-            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao realizar o cadastro. Tente novamente.", null));
         }
     }
 
@@ -188,7 +176,6 @@ public class LoginCreateBean implements Serializable {
 
         user = new Users();
         socialProfile = new SocialProfile();
-        trans = new Translator();
 
         questionsList = secretQuestionJpaController.findSecretQuestionEntities();
         countryList = countryJpaController.findCountryEntities();
@@ -201,7 +188,6 @@ public class LoginCreateBean implements Serializable {
 
         usernameConfirm = passwordConfirm = lastName = "";
 
-        trans.setLocale(CookieService.getCookie("locale"));
     }
 
     public Users getUser() {

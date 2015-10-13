@@ -38,10 +38,10 @@
                 <h:panelGroup layout="block" class="container">
                     <div class="content">
                         <div class="main-register">
-                            <h:messages styleClass="msg" errorClass="error" infoClass="info"/>
                             <div class="profile">
+                                <h:messages styleClass="msg" errorClass="error" infoClass="info"/>
                                 <p class="presentation">Olá calouro!</p>
-                                <p>Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
+                                <p class="sub-presentation">Seu cadastro no Guigoh é simples e fácil. Por favor preencha os campos abaixo.</p>
                                 <div class="col-2">
                                     <h:inputText pt:placeholder="Nome" tabindex="1" value="#{loginCreateBean.socialProfile.name}"></h:inputText>
                                     <h:inputText pt:placeholder="E-mail" tabindex="3" value="#{loginCreateBean.user.username}"></h:inputText>
@@ -107,7 +107,7 @@
                                     </h:panelGroup>
                                 </div>
                                 <div class="buttons col-1">
-                                    <a class="back pull-left" href="auth.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i></a>
+                                    <a class="back pull-left" href="auth.xhtml"><i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw"></i></a>
                                     <h:commandLink action="#{loginCreateBean.register()}">
                                         <button class="submit pointer">Cadastre-se</button>
                                     </h:commandLink>

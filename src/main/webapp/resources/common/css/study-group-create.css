@@ -27,7 +27,7 @@ html {
 } 
 
 #group {
-    padding: 18px 35px 50px;
+    padding: 26px 35px 50px;
     background: #e6eadf;
 }
 
@@ -37,8 +37,8 @@ html {
 
 #group h1 {
     color: #404095;
-    font-size: 20px;
-    margin-bottom: 50px;
+    font-size: 24px;
+    margin-bottom: 46px;
 }
 
 #group h1 span {

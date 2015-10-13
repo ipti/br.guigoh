@@ -1,17 +1,16 @@
 .friend-search {
-    background: url(../images/magnifying-glass.png) no-repeat 98% 4px #dcdcdc;
-    background-size: 10px;
-    width: 30%;
-    padding: 0px 5px;
-    border: 1px solid #bbbdb8;
-    height: 20px;
+    background: url(../images/magnifying-glass.png) no-repeat 97% 5px #fff;
+    background-size: 17px;
     margin-top: -50px;
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 7px;
-    font-size: 14px;
-    text-indent: 10px;
     margin-bottom: 40px;
-    display: block;
+    border-radius: 5px;
+    border: 1px solid #CACACA;
+    height: 30px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    padding: 0 10px;
+    font-style: italic;
+    font-size: 12px;
+    width: 28%;
 }
 
 .user-arrow {
@@ -112,11 +111,20 @@
     margin-bottom: 20px;
 }
 
+.user.user-pending:last-child {
+    margin-bottom: 30px;
+}
+
 .image {
     height: 90px;
     width: 90px;
     margin-right: 15px;
     float: left;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+.image:hover {
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
 .user-name {
@@ -143,6 +151,14 @@
     cursor: pointer;
 }
 
+.user-chat:hover span{
+    color: #333;
+}
+
+.user-chat:hover img{
+
+}
+
 .user-chat img {
     width: 15px;
     float: left;
@@ -166,29 +182,16 @@
     width: 25px;
     margin: 7px 0 0 0;
     padding: 4px 7px;
-    border-top-left-radius: 5px;
-    border-top: 1px solid #C1C1C1;
-    border-left: 1px solid #C1C1C1;
 }
 
 .user-friend-status.accept {
     margin-left: 12px;
     float: none;
-    background-color: #31bc7a;
 }
 
 .user-friend-status.reject {
     margin-left: -1px;
     border-top-left-radius: 0 !important;
-    background-color: #d1303d;
-}
-
-.user-friend-status.pending {
-    background-color: #ddc345;
-}
-
-.user-friend-status.remove {
-    background-color: #d1303d;
 }
 
 section a {

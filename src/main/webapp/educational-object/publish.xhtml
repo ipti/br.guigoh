@@ -29,7 +29,7 @@
                         <p class="container-description">#{localeBean.getString('Todos os Objetos Educacionais publicados neste Espaço seguem a licença (CC) Creative Commons Atribuição-Compartilhamento pela mesma Licença 3.0 Unported. Esta é uma forma de garantir sua autoria a respeito do que for publicado, além de permitir o compartilhamento de seu Objeto Educacional com os demais parceiros, que terão o direito de reaplicá-lo.')}</p>
                         <a href="https://br.creativecommons.org/licencas/" target="_blank" class="creative-commons-container">
                             <img src="../resources/common/images/cc-logo.png" width="150"/>
-                            <span>#{localeBean.getString('Para conhecer melhor os detalhes dessa licença, acesse a página do Creative Commons.')}</span>
+                            <span>#{localeBean.getString('Para conhecer melhor os detalhes dessa licença, clique aqui e acesse a página do Creative Commons.')}</span>
                         </a>
                         <div class="agree-container">
                             <div><i class="hidden fa fa-check"></i></div>
@@ -95,16 +95,16 @@
                                         <ui:param name="socialProfile" value="#{educationalObjectPublishBean.getSocialProfileByEmail(author.email)}"/>
                                         <ui:fragment rendered="#{socialProfile != null}">
                                             <a target="_blank" href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}"><img class="image" src="#{socialProfile.photo}"></img></a>
-                                            <a class="new-author-name" target="_blank" title="#{author.name}" href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">#{author.name}</a>
+                                            <a class="new-author-name" target="_blank" title="#{author.name}" href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}">
+                                                <span>#{author.name}</span>
+                                                <i title="#{localeBean.getString('E-mail cadastrado no Guigoh. Clique no nome para acessar o perfil.')}" class="verified fa fa-check"/>
+                                            </a>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{socialProfile == null}">
                                             <img class="image" src="../resources/common/images/avatar.png"/>
                                             <span class="new-author-name" title="#{author.name}">#{author.name}</span>
                                         </ui:fragment>
                                         <p class="new-author-role">#{author.authorRoleFk.name}</p>
-                                        <ui:fragment rendered="#{socialProfile != null}">
-                                            <i title="#{localeBean.getString('E-mail cadastrado no Guigoh. Clique no nome para acessar o perfil.')}" class="verified fa fa-check-square"/>
-                                        </ui:fragment>
                                         <h:commandLink class="new-author-remove">
                                             <img src="../resources/common/images/remove-friend-gray.png"/>
                                             <f:ajax listener="#{educationalObjectPublishBean.removeAuthor(author)}" render="author-container"/>
@@ -150,9 +150,10 @@
                                     <span></span>
                                 </div>
                             </h:panelGroup>
+                            <div class="clear"></div>
                         </div>
                         <div class="clear"></div>
-
+                        <div class="backward pull-left"><i class="fa fa-chevron-circle-left"></i></div>
                         <h:commandLink class="submit-object" onclick="return checkMediaEmpty()">
                             <f:ajax execute="informations-container browse-media-1 browse-media-2 browse-media-3" listener="#{educationalObjectPublishBean.submit()}"/>
                             <div class="forward pull-right"><i class="fa fa-chevron-circle-right"></i></div>

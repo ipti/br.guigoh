@@ -23,7 +23,7 @@
                     <h1 id="title_pending">#{localeBean.getString('Solicitações pendentes')} (#{friendViewBean.pendingList.size()})</h1>
                     <ui:repeat value="#{friendViewBean.pendingList}" var="pending">
                         <div class="col">
-                            <div class="user">
+                            <div class="user user-pending">
                                 <h:outputText class="hidden social-profile-id" value="#{pending.tokenFriend2.socialProfile.socialProfileId}"/>
                                 <h:outputText class="hidden social-profile-name" value="#{pending.tokenFriend2.socialProfile.name}"/>
                                 <a href="/profile/view.xhtml?id=#{pending.tokenFriend2.socialProfile.socialProfileId}"><img class="image" src="#{pending.tokenFriend2.socialProfile.photo}"></img></a>
@@ -37,11 +37,11 @@
                                 </div>
                                 <div class="user-friend-status-container">
                                     <h:commandLink class="accept-user">
-                                        <img class="user-friend-status accept" src="../resources/common/images/add-friend.png"/>
+                                        <img class="user-friend-status accept" src="../resources/common/images/add-friend-gray.png"/>
                                         <f:ajax listener="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>
                                     <h:commandLink class="reject-user">
-                                        <img class="user-friend-status reject" src="../resources/common/images/remove-friend.png"/>
+                                        <img class="user-friend-status reject" src="../resources/common/images/remove-friend-gray.png"/>
                                         <f:ajax listener="#{friendViewBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>
                                 </div>
@@ -74,7 +74,7 @@
                                         <span>#{localeBean.getString('Bate-papo')}</span>
                                     </div>
                                     <h:commandLink>
-                                        <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
+                                        <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
                                         <f:ajax listener="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}" render="friend-container"/>
                                     </h:commandLink>
                                 </div>

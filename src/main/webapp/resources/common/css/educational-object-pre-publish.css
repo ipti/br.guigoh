@@ -53,17 +53,22 @@
 
 #submit-container a{
     text-decoration: none;
+    padding: 25px 15px 25px 25px;
+    display: block;
 }
 
 #submit-educational-object{
-    margin: 30px 0 30px 140px;
-    padding: 25px 15px 25px 25px;
+    margin: 30px auto 30px;
     border-radius: 8px;
     background-color: #a9a9a9;
     font-weight: bold;
     font-size: 14px;
-    width: 43%;
+    width: 50%;
     line-height: 20px;
+}
+
+#submit-educational-object:hover {
+    background-color: #333;
 }
 
 #submit-educational-object img{
@@ -78,18 +83,23 @@
 #educational-object-info p:first-of-type{
     font-weight: bold;
     font-size: 14px;
-    margin: 15px 20px 15px 20px;
+    margin: 15px 19px 15px 19px;
 }
 
 #educational-object-info p{
-    margin: 5px 20px 0px 20px;
+    margin: 5px 19px 0px 19px;
     line-height: 18px;    
 }
 
 #educational-object-info p:last-of-type{
-    margin: 5px 20px 20px 20px;
+    margin: 5px 19px 20px 19px;
 }
 
 #educational-object-info img{
     margin-bottom: -8px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+#educational-object-info img:hover {
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
