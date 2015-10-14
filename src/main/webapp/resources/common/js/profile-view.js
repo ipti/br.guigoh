@@ -150,8 +150,8 @@ jsf.ajax.addOnEvent(function (data) {
             } else if ($(data.source).hasClass("hobbies")) {
                 $('#hobbies-input').focusTextToEnd();
             } else if ($(data.source).hasClass("birth-date")) {
-                $('#birth-date-input').mask("99/99/9999");
                 $('#birth-date-input').focusTextToEnd();
+                $('#birth-date-input').mask("99/99/9999");
             } else if ($(data.source).hasClass("occupation-2")) {
                 $('#occupation-2-input').focusTextToEnd();
             } else if ($(data.source).hasClass("phone")) {
@@ -171,11 +171,11 @@ jsf.ajax.addOnEvent(function (data) {
                 $('.editable-address').focusTextToEnd();
                 $('.editable-cep').mask("99999-999");
             } else if ($(data.source).hasClass("education")) {
-                $('.editable-education-initial-date, .editable-education-final-date').mask("99/99/9999");
                 $('.editable-education-initial-date').focusTextToEnd();
+                $('.editable-education-initial-date, .editable-education-final-date').mask("99/99/9999");
             } else if ($(data.source).hasClass("experience")) {
-                $('.editable-experience-initial-date, .editable-experience-final-date').mask("99/99/9999");
                 $('.editable-experience-initial-date').focusTextToEnd();
+                $('.editable-experience-initial-date, .editable-experience-final-date').mask("99/99/9999");
             }
         }
         $('select').each(changeSelectColors);

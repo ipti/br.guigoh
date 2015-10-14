@@ -106,7 +106,11 @@
 .profile-options {
     top: 10px;
     position: relative;
-    left: 60px;
+    left: 75px;
+}
+
+.profile-options.admin {
+    left: 60px !important;
 }
 
 .profile-options > img {
@@ -242,19 +246,23 @@
     display: block;
 }
 
+#editable-profile-phone {
+    margin-bottom: 20px;
+}
+
 .select.location select {
     background-color: transparent;
-    outline: none;
     width: 130px;
-    height: 19px;
+    height: 30px;
     padding: 0px 5px;
     line-height: 1;
     margin-bottom: 15px;
-    border: 1px solid #bbbdb8;
+    border: 1px solid #CACACA;
     -moz-appearance: none;
     -webkit-appearance: none;
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    border-radius: 5px;
+    font-style: italic;
     font-size: 12px;
     text-indent: 1px;
 }
@@ -264,18 +272,21 @@
     width: 130px;
     margin-left: 5px;
     margin-bottom: 3px;
-    background: url(../images/arrow-select.png) no-repeat 110px 3px #dcdcdc;
-    background-size: 13px;
-    border-radius: 10px;
-    height: 19px;
+    background: url(../images/arrow-select.png) no-repeat 103px 5px #fff;
+    border-radius: 5px;
+    height: 30px;
 }
 
 .editable-field {
-    background: #dcdcdc;
-    border: 1px solid #bbbdb8;
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #CACACA;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    border-radius: 5px;
     text-indent: 5px;
+    font-style: italic;
+    font-size: 12px;
+    height: 30px;
+    padding: 0 5px;
 }
 
 .editable-address {
@@ -298,7 +309,8 @@
 .editable-textarea {
     resize: none;
     width: 250px;
-    font-size: 13px;
+    height: 43px !important;
+    padding: 5px !important;
 }
 
 .editable-social-interest {
@@ -316,13 +328,23 @@
 }
 
 .editable-birth-date {
-    width: 135px;
-    margin-top: -3px !important;
+    width: 120px;
+    margin-top: -10px !important;
 }
 
 .edit-button {
-    color: #333 !important;
+    color: gray;
     text-decoration: none;
+    font-size: 20px;
+    margin: 5px 0 0 5px;
+}
+
+.edit-button:hover {
+    color: #333;
+}
+
+.edit-button.edit-birthday {
+    margin-top: -5px !important;
 }
 
 .edit-pencil {
@@ -355,38 +377,38 @@
 
 .select.scholarity select {
     background-color: transparent;
-    outline: none;
     width: 220px;
-    height: 19px;
+    height: 30px;
     padding: 0px 5px;
     line-height: 1;
-    border: 1px solid #bbbdb8;
+    border: 1px solid #CACACA;
     -moz-appearance: none;
     -webkit-appearance: none;
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    border-radius: 5px;
     font-size: 12px;
+    font-style: italic;
     float: left;
     text-indent: 1px;
 }
 
 .select.scholarity {
     float: left;
-    border-radius: 10px;
-    background: url(../images/arrow-select.png) no-repeat 200px 3px #dcdcdc;
-    background-size: 13px;
-    height: 19px;
+    border-radius: 5px;
+    background: url(../images/arrow-select.png) no-repeat 192px 5px #fff;
+    overflow: hidden;
+    height: 30px;
     width: 220px;
 }
 
 .editable-education-name, .editable-education-location,
 .editable-experience-location{
-    width: 100%;
+    width: 97.5%;
     margin-top: 3px;
 }
 
 .editable-experience-occupation {
-    width: 220px;
+    width: 208px;
     float: left;
 }
 
@@ -428,10 +450,15 @@
     margin-right: -14px;
 }
 
-#profile-icon-mail img, #profile-icon-birthday img{
-    clear: both;
+#profile-icon-mail i, #profile-icon-birthday img{
     float: left;
-    margin-right: 10px
+    margin-right: 10px;
+}
+
+#profile-icon-mail i {
+    font-size: 18px;
+    color: #9c9c9c;
+    margin-top: -4px;
 }
 
 #profile-icon-birthday {
@@ -558,6 +585,10 @@
     font-weight: bold;
     cursor: pointer;
     text-decoration: none;
+}
+
+.btn-gray:hover {
+    background: #333;
 }
 
 .profile-object-number {
