@@ -19,10 +19,9 @@
             <h1>#{localeBean.getString("Buscar")}</h1>
             <h:form prependId="false">
                 <div class="general-search">
-                    <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="#{localeBean.getString('Procure pessoas, Objetos Educacionais e grupos de estudo')}">
+                    <h:inputText value="#{searchViewBean.generalSearch}" pt:placeholder="#{localeBean.getString('Procure pessoas, objetos educacionais e grupos de estudo')}">
                         <f:ajax execute="@form" event="keyup" listener="#{searchViewBean.renderSearchResult}" render="search-result"></f:ajax>
                     </h:inputText>
-                    <img src="../resources/common/images/magnifying-glass.png"/>
                 </div>
                 <h:panelGroup id="search-result">
                     <ui:fragment rendered="#{!searchViewBean.socialProfileList.isEmpty()}">

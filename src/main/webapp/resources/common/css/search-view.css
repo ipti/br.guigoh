@@ -3,16 +3,18 @@
 }
 
 .general-search input {
-    background: #dcdcdc;
-    width: 77%;
-    padding: 0px 5px;
-    border: 1px solid #bbbdb8;
-    height: 32px;
-    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    font-size: 18px;
-    text-indent: 10px;
+    background: url(../images/magnifying-glass.png) no-repeat 98% 5px #fff;
+    background-size: 17px;
+    width: 45%;
+    padding: 0 5px;
+    border-radius: 5px;
+    border: 1px solid #CACACA;
+    height: 30px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    font-size: 12px;
+    text-indent: 5px;
     margin-bottom: 55px;
+    font-style: italic;
 }
 
 .general-search img {

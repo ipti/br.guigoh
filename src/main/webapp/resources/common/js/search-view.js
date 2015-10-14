@@ -1,5 +1,7 @@
 $(document).ready(function () {
     $(".menu-icon-five").parent().addClass("active");
+    
+    $(".general-search input").focus();
 });
 
 $(".general-search").on('keypress', function (e) {

@@ -395,8 +395,17 @@ aside h3 {
     font-weight: bold;
 }
 
+.greetings p:first-of-type {
+    margin-top: 5px;
+}
+
+.greetings p:last-of-type {
+    margin-top: -5px;
+}
+
 .greetings .logged-user {
     color: #333;
+    margin-top: -5px;
 }
 .header-profile .profile-picture {
     float: right;
@@ -468,6 +477,11 @@ aside h3 {
 #logged-user-menu-box a{
     color: gray;
     text-decoration: none;
+    margin-left: 15px;
+}
+
+#logged-user-menu-box .options {
+    margin-top: 7px;
 }
 
 #logged-user-menu-box a:hover{
@@ -475,13 +489,8 @@ aside h3 {
     cursor: pointer;
 }
 
-#logged-user-menu-box p{
-    margin-left: 15px;
-    line-height: 10px;
-}
-
 #logged-user-menu-box img{
-    padding: 5px 5px 0 0;
+    padding: 0 5px 0 0;
     position: relative;
     top: 6px;
 }

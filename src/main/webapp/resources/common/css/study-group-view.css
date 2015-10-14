@@ -217,11 +217,12 @@
 }
 
 .page-number:hover, .page-number.active {
-    text-decoration: underline;
+    color: #404095;
 }
 
 .page-icons {
     color: #333;
+    margin: 0 5px;
     text-decoration: none;
 }
 

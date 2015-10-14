@@ -36,29 +36,6 @@
                     <h1>#{localeBean.getString('Grupo de Estudos')} <span>##{localeBean.getString(themeName)}</span></h1>
                 </div>
                 <h:panelGroup layout="block" id="column">
-                    <h:panelGroup layout="block" class="pagination-top">
-                        <h:commandLink class="page-icons">
-                            <f:ajax listener="#{studyGroupViewBean.changePage(0)}" render="column"/>
-                            <i class="fa fa-fast-backward"/>
-                        </h:commandLink>
-                        <h:commandLink class="page-icons">
-                            <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.currentPage - 1)}" render="column"/>
-                            <i class="fa fa-step-backward"/>
-                        </h:commandLink>
-                        <ui:repeat value="#{studyGroupViewBean.pages}" var="page">
-                            <h:commandLink class="page-number #{page == studyGroupViewBean.currentPage ? 'bold active' : ''}" value="#{page + 1}">
-                                <f:ajax listener="#{studyGroupViewBean.changePage(page)}" render="column"/>
-                            </h:commandLink>
-                        </ui:repeat>
-                        <h:commandLink class="page-icons">
-                            <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.currentPage + 1)}" render="column"/>
-                            <i class="fa fa-step-forward"/>
-                        </h:commandLink>
-                        <h:commandLink class="page-icons">
-                            <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.pages.stream().count() - 1)}" render="column"/>
-                            <i class="fa fa-fast-forward"/>
-                        </h:commandLink>
-                    </h:panelGroup>
                     <ui:fragment rendered="#{studyGroupViewBean.currentPage == 0}">
                         <div class="column-list-item">
                             <div class="column-left">
@@ -124,24 +101,25 @@
                     <h:panelGroup layout="block" class="pagination-bottom">
                         <h:commandLink class="page-icons">
                             <f:ajax listener="#{studyGroupViewBean.changePage(0)}" render="column"/>
-                            <i class="fa fa-fast-backward"/>
+                            «
                         </h:commandLink>
                         <h:commandLink class="page-icons">
                             <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.currentPage - 1)}" render="column"/>
-                            <i class="fa fa-step-backward"/>
+                            ‹
                         </h:commandLink>
-                        <ui:repeat value="#{studyGroupViewBean.pages}" var="page">
+                        <ui:repeat value="#{studyGroupViewBean.pages}" var="page" varStatus="status">
                             <h:commandLink class="page-number #{page == studyGroupViewBean.currentPage ? 'bold active' : ''}" value="#{page + 1}">
                                 <f:ajax listener="#{studyGroupViewBean.changePage(page)}" render="column"/>
                             </h:commandLink>
+                            <ui:fragment rendered="#{status.index lt studyGroupViewBean.pages.stream().count() - 1}">.</ui:fragment>
                         </ui:repeat>
                         <h:commandLink class="page-icons">
                             <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.currentPage + 1)}" render="column"/>
-                            <i class="fa fa-step-forward"/>
+                            ›
                         </h:commandLink>
                         <h:commandLink class="page-icons">
                             <f:ajax listener="#{studyGroupViewBean.changePage(studyGroupViewBean.pages.stream().count() - 1)}" render="column"/>
-                            <i class="fa fa-fast-forward"/>
+                            »
                         </h:commandLink>
                     </h:panelGroup>
                     <div class="reply-container">
