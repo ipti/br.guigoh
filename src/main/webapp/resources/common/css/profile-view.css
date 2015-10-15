@@ -79,6 +79,7 @@
 
 .profile-name {
     float: left;
+    width: 300px;
 }
 
 .profile-name h1 {
@@ -469,6 +470,7 @@
 
 .profile-resume-left {
     float: left;
+    width: 260px;
 }
 
 .profile-resume-right {
