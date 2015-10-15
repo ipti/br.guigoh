@@ -35,15 +35,31 @@ jsf.ajax.addOnEvent(function (data) {
             break;
         case "success":
             setCursors(data.status);
+            setFocus();
             break;
     }
 });
+
+function setFocus() {
+    if ($(".panel-1").length) {
+        $(".username").focusTextToEnd();
+    } else if ($(".panel-3").length) {
+        $(".email-recovery").focusTextToEnd();
+    } else if ($(".panel-4").length) {
+        $('.secret-answer').focusTextToEnd();
+    } else if ($(".panel-5").length) {
+        $(".email-recovery").focusTextToEnd();
+    } else if ($(".panel-6").length) {
+        $(".new-password").focusTextToEnd();
+    }
+}
 
 $(document).ready(function () {
     $.post("../ping.html");
     window.setInterval(function () {
         $.post("../ping.html");
     }, 1500000);
+    $(".username").focus();
 })
 
 if (navigator.appName == 'Microsoft Internet Explorer')
@@ -51,3 +67,11 @@ if (navigator.appName == 'Microsoft Internet Explorer')
     window.location = '/resources/notsupported.htm';
 }
 
+(function ($) {
+    $.fn.focusTextToEnd = function () {
+        this.focus();
+        var $thisVal = this.val();
+        this.val('').val($thisVal);
+        return this;
+    }
+}(jQuery));

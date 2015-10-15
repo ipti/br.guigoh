@@ -61,4 +61,5 @@ $(document).ready(function () {
     window.setInterval(function () {
         $.post("../ping.html");
     }, 1500000);
+    $(".name").focus();
 })

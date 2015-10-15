@@ -140,12 +140,12 @@ aside .panel:last-child {
     margin-top: 37px;
 }
 
-.forward i {
+.forward i, .backward i {
     font-size: 40px;
     color: gray;
 }
 
-.forward i:hover {
+.forward i:hover, .backward i:hover {
     color: #333;
 }
 
@@ -282,12 +282,12 @@ div.select {
 .msg{
     color: red;
     font-size:12px;
+    width: 285px;
+    margin: -15px 0 5px 0;
 }
 
 .error{
     color:red !important;
-    position: absolute;
-    top: -30px;
 }
 
 .info{
@@ -343,4 +343,18 @@ div.select {
 
 .back i:hover {
     color: #333;
+}
+
+.welcome-to {
+    font-size: 22px
+}
+
+.welcome-to-guigoh {
+    font-weight:bold; 
+    font-size: 19px;
+}
+
+.sub-welcome {
+    width: 450px; 
+    text-align: justify
 }

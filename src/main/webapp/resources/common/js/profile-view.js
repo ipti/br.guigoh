@@ -182,12 +182,3 @@ jsf.ajax.addOnEvent(function (data) {
         $('select').on("change", changeSelectColors);
     }
 });
-
-(function ($) {
-    $.fn.focusTextToEnd = function () {
-        this.focus();
-        var $thisVal = this.val();
-        this.val('').val($thisVal);
-        return this;
-    }
-}(jQuery));

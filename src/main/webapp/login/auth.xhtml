@@ -37,9 +37,9 @@
             <div class="container">
                 <div class="content">
                     <div class="main">
-                        <p><span style="font-size: 22px">Bem-vindo ao </span><span style="font-weight:bold; font-size: 19px;">GUIGOH</span>,<br/>
+                        <p><span class="welcome-to">Bem-vindo ao </span><span class="welcome-to-guigoh">GUIGOH</span>,<br/>
                             uma plataforma digital para a troca de conhecimentos.</p>
-                        <p style="width: 450px; text-align: justify">Publique e compartilhe Objetos Educacionais com 
+                        <p class="sub-welcome">Publique e compartilhe Objetos Educacionais com 
                             colegas e professores, discuta assuntos em temas 
                             de interesse e conecte-se com seus amigos.</p>
                     </div>
@@ -47,96 +47,108 @@
                         <div class="panel panel-login background">
                             <h:form prependId="false">
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('login')}">
-                                    <h3>Login</h3>
-                                    <h:messages styleClass="msg"  errorClass="error" infoClass="info"/>
-                                    <h:inputText styleClass="block" autocomplete="on" pt:placeholder="E-mail" value="#{loginAuthBean.user.username}"/>
-                                    <h:inputSecret styleClass="block" autocomplete="off" pt:placeholder="Senha" value="#{loginAuthBean.user.password}"/>
-                                    <h:commandLink styleClass="forward" action="#{loginAuthBean.login()}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                    </h:commandLink>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('recover_pass')}" class="forgot black" value="Esqueceu sua senha?">
-                                        <f:ajax execute="@this" render="@form"/>
-                                    </h:commandLink>
+                                    <div class="panel-1">
+                                        <h3>Login</h3>
+                                        <h:messages styleClass="msg"  errorClass="error" infoClass="info"/>
+                                        <h:inputText styleClass="block username" autocomplete="on" pt:placeholder="E-mail" value="#{loginAuthBean.user.username}"/>
+                                        <h:inputSecret styleClass="block" autocomplete="off" pt:placeholder="Senha" value="#{loginAuthBean.user.password}"/>
+                                        <h:commandLink styleClass="forward" action="#{loginAuthBean.login()}">
+                                            <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        </h:commandLink>
+                                        <h:commandLink action="#{loginAuthBean.recoverAccount('recover_pass')}" class="forgot black" value="Esqueceu sua senha?">
+                                            <f:ajax execute="@this" render="@form"/>
+                                        </h:commandLink>
+                                    </div>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('recover_pass')}">
-                                    <h3>Como deseja recuperar a senha?</h3>
-                                    <p class="question">
-                                        <h:commandLink styleClass="black" action="#{loginAuthBean.recoverAccount('new_pass_email')}" value="E-mail">
-                                            <i class="fa fa-envelope-o pull-left fa-2x fa-fw"></i> 
-                                            <f:ajax execute="@this" render="@form"/>
+                                    <div class="panel-2">
+                                        <h3>Como deseja recuperar a senha?</h3>
+                                        <p class="question">
+                                            <h:commandLink styleClass="black" action="#{loginAuthBean.recoverAccount('new_pass_email')}" value="E-mail">
+                                                <i class="fa fa-envelope-o pull-left fa-2x fa-fw"></i> 
+                                                <f:ajax execute="@this" render="@form"/>
+                                            </h:commandLink>
+                                        </p>
+                                        <p class="question">
+                                            <h:commandLink styleClass="black" action="#{loginAuthBean.recoverAccount('secret_question')}" value="Pergunta secreta">
+                                                <i class="fa fa-question pull-left fa-2x fa-fw"></i> 
+                                                <f:ajax execute="@this" render="@form"/>
+                                            </h:commandLink>
+                                        </p>
+                                        <h:commandLink styleClass="backward" action="#{loginAuthBean.recoverAccount('login')}">
+                                            <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
+                                            <f:ajax execute="@this" render="@form" />
                                         </h:commandLink>
-                                    </p>
-                                    <p class="question">
-                                        <h:commandLink styleClass="black" action="#{loginAuthBean.recoverAccount('secret_question')}" value="Pergunta secreta">
-                                            <i class="fa fa-question pull-left fa-2x fa-fw"></i> 
-                                            <f:ajax execute="@this" render="@form"/>
-                                        </h:commandLink>
-                                    </p>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('login')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
+                                    </div>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('secret_question')}">
-                                    <h3>Digite o e-mail de acesso ao Guigoh.</h3>
-                                    <h:messages styleClass="msg"/>
-                                    <h:inputText id="question-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{loginAuthBean.email}"></h:inputText>
-                                    <br/>
-                                    <h:commandLink styleClass="forward" action="#{loginAuthBean.loadQuestion()}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="question-recovery" render="@form"/>
-                                    </h:commandLink>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('recover_pass')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
+                                    <div class="panel-3">
+                                        <h3>Digite o e-mail de acesso ao Guigoh.</h3>
+                                        <h:messages styleClass="msg"/>
+                                        <h:inputText id="question-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{loginAuthBean.email}"></h:inputText>
+                                        <br/>
+                                        <h:commandLink styleClass="forward" action="#{loginAuthBean.loadQuestion()}">
+                                            <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                            <f:ajax execute="question-recovery" render="@form"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="backward" action="#{loginAuthBean.recoverAccount('recover_pass')}">
+                                            <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
+                                            <f:ajax execute="@this" render="@form" />
+                                        </h:commandLink>
+                                    </div>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('question')}">
-                                    <h3>Responda sua pergunta secreta.</h3>
-                                    <h:messages styleClass="msg"/>
-                                    <h:outputText styleClass="secret-question" value="#{loginAuthBean.userToRecover.secretQuestionId.name}"/><br/>
-                                    <h:inputText id="secret-answer" class="secret-answer" pt:placeholder="Resposta" value="#{loginAuthBean.secretAnswer}"/>
-                                    <br/>
-                                    <h:commandLink styleClass="forward" action="#{loginAuthBean.checkAnswer}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="secret-answer" render="@form"/>
-                                    </h:commandLink>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('secret_question')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
+                                    <div class="panel-4">
+                                        <h3>Responda sua pergunta secreta.</h3>
+                                        <h:messages styleClass="msg"/>
+                                        <h:outputText styleClass="secret-question" value="#{loginAuthBean.userToRecover.secretQuestionId.name}"/><br/>
+                                        <h:inputText id="secret-answer" class="secret-answer" pt:placeholder="Resposta" value="#{loginAuthBean.secretAnswer}"/>
+                                        <br/>
+                                        <h:commandLink styleClass="forward" action="#{loginAuthBean.checkAnswer}">
+                                            <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                            <f:ajax execute="secret-answer" render="@form"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="backward" action="#{loginAuthBean.recoverAccount('secret_question')}">
+                                            <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
+                                            <f:ajax execute="@this" render="@form" />
+                                        </h:commandLink>
+                                    </div>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('new_pass_email')}"> 
-                                    <h3>Digite o e-mail que você deseja recuperar.</h3>
-                                    <h:messages styleClass="msg"/>
-                                    <h:inputText id="email-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{loginAuthBean.email}"/>
-                                    <br/>
-                                    <h:commandLink styleClass="forward" action="#{loginAuthBean.sendPassToEmail}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                        <f:ajax execute="email-recovery" render="@form"/>
-                                    </h:commandLink>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('recover_pass')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
+                                    <div class="panel-5">
+                                        <h3>Digite o e-mail que você deseja recuperar.</h3>
+                                        <h:messages styleClass="msg"/>
+                                        <h:inputText id="email-recovery" pt:placeholder="E-mail" class="email-recovery" value="#{loginAuthBean.email}"/>
+                                        <br/>
+                                        <h:commandLink styleClass="forward" action="#{loginAuthBean.sendPassToEmail}">
+                                            <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                            <f:ajax execute="email-recovery" render="@form"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="backward" action="#{loginAuthBean.recoverAccount('recover_pass')}">
+                                            <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
+                                            <f:ajax execute="@this" render="@form" />
+                                        </h:commandLink>
+                                    </div>
                                 </ui:fragment>
 
                                 <ui:fragment rendered="#{loginAuthBean.loginStatus.equals('change_password')}">
-                                    <h3>Digite sua nova senha</h3>
-                                    <h:messages styleClass="msg"/>                                    
-                                    <h:inputSecret pt:placeholder="Nova senha" value="#{loginAuthBean.password}"/><br/>                                    
-                                    <h:inputSecret pt:placeholder="Confirme a senha" value="#{loginAuthBean.passwordConfirm}"/><br/>
-                                    <h:commandLink styleClass="forward" action="#{loginAuthBean.changePassword}">
-                                        <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
-                                    </h:commandLink>
-                                    <h:commandLink action="#{loginAuthBean.recoverAccount('login')}">
-                                        <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
-                                        <f:ajax execute="@this" render="@form" />
-                                    </h:commandLink>
+                                    <div class="panel-6">
+                                        <h3>Digite sua nova senha</h3>
+                                        <h:messages styleClass="msg"/>                                    
+                                        <h:inputSecret class="new-password" pt:placeholder="Nova senha" value="#{loginAuthBean.password}"/><br/>                                    
+                                        <h:inputSecret pt:placeholder="Confirme a senha" value="#{loginAuthBean.passwordConfirm}"/><br/>
+                                        <h:commandLink styleClass="forward" action="#{loginAuthBean.changePassword}">
+                                            <i class="fa fa-chevron-circle-right pull-right fa-2x fa-fw black"></i>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="backward" action="#{loginAuthBean.recoverAccount('login')}">
+                                            <i class="fa fa-chevron-circle-left pull-left fa-2x fa-fw black"></i>
+                                            <f:ajax execute="@this" render="@form" />
+                                        </h:commandLink>
+                                    </div>
                                 </ui:fragment>
                             </h:form>
                         </div>
