@@ -1,3 +1,10 @@
+var wsocket = '';
+
+$(document).ready(function(){
+    var collaboratorsIds = "1,2,3";
+    wsocket = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + encodeURIComponent(collaboratorsIds));
+});
+
 tinyMCE.init({
     // General options
     selector: "#docs-textarea",
@@ -34,10 +41,24 @@ tinyMCE.init({
     resize: false,
     statusbar: false,
     table_default_styles: {
-        width: '100%'
+        width: '60%'
+    },
+    setup: function (ed) {
+        var timer;
+        ed.on('keyup', function (e) {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                $(".save-text").click();
+            }, 2000);
+        });
+        ed.on('change', function (e) {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                $(".save-text").click();
+            }, 2000);
+        });
     }
 });
-
 
 function getContent() {
     $("#text").val(tinyMCE.activeEditor.getContent());
@@ -46,7 +67,10 @@ function getContent() {
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
-        console.log($("#text").val());
-        tinyMCE.activeEditor.setContent($("#text").val());
+        if ($(data.source).hasClass("save-text")) {
+            var bookmark = tinyMCE.activeEditor.selection.getBookmark(2, true);
+            tinyMCE.activeEditor.setContent($("#text").val());
+            tinyMCE.activeEditor.selection.moveToBookmark(bookmark);
+        }
     }
 });

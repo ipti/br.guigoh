@@ -27,8 +27,8 @@
                 <div class="main-container">
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <textarea id="docs-textarea"></textarea>
-                    <h:commandLink onclick="return getContent()">
-                        <f:ajax listener="#{docsCreateBean.save()}" execute="text" render="text"/>
+                    <h:commandLink class="save-text" onclick="return getContent()">
+                        <f:ajax listener="#{docsCreateBean.save()}" execute="text"/>
                     </h:commandLink>
                 </div>
                 <div class="clear"></div>

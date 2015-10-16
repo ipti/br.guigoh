@@ -82,7 +82,7 @@ function messengerFriends() {
                     $(this).text(changeNameLength($(this).text(), 26));
                 })
             }
-            wsocket = new WebSocket("ws://" + window.location.host + "/socket/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
+            wsocket = new WebSocket("ws://" + window.location.host + "/socket/messenger/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
             wsocket.onopen = persistBoxesAfterPageReload;
             wsocket.onmessage = onMessageReceived;
         }

@@ -27,7 +27,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value = "/socket/{user}/{friends}")
+@ServerEndpoint(value = "/socket/messenger/{user}/{friends}")
 public class MessengerEndpoint {
 
     private static final String ADMIN = "AD";
