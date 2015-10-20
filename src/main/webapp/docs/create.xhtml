@@ -25,8 +25,13 @@
                     </div>
                 </div>
                 <div class="main-container">
+                    <div class="toolbar">
+                        
+                    </div>
+                    <div class="editor" contenteditable="true">
+                        <div><br/></div>
+                    </div>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
-                    <textarea id="docs-textarea"></textarea>
                     <h:commandLink class="save-text" onclick="return getContent()">
                         <f:ajax listener="#{docsCreateBean.save()}" execute="text"/>
                     </h:commandLink>
@@ -37,8 +42,6 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="../resources/lib/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript" src="../resources/lib/tinymce/langs/pt_BR.js"></script>
         <script type="text/javascript" src="/resources/common/js/docs-create.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
