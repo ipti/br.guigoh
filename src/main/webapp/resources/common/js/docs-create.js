@@ -62,7 +62,7 @@ $(document).on("keydown keyup", ".editor", function (e) {
     if (e.keyCode == "8" && $(".editor").children().length == 1 && $(".editor").children().text() == "") {
         e.preventDefault();
     }
-    if (((e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40") && e.type == "keyup") 
+    if (((e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40")) 
             || (e.keyCode == "8" && e.type == "keydown")) {
         var initialRange = window.getSelection().anchorOffset;
         var finalRange = window.getSelection().extentOffset;
