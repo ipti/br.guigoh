@@ -23,3 +23,7 @@
     outline: none;
     padding: 0 10px;
 }
+
+.marker {
+    border-right: 1px solid green;
+}

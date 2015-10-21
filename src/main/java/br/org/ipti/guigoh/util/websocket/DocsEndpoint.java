@@ -25,7 +25,7 @@ import javax.websocket.server.ServerEndpoint;
  */
 @ServerEndpoint(value = "/socket/docs/{user}/{collaborators}")
 public class DocsEndpoint {
-    
+
     @OnOpen
     public void onOpen(final Session session, @PathParam("user") final String user, @PathParam("collaborators") final String collaborators) throws IOException, EncodeException, Exception {
         session.getUserProperties().put("user", user);
@@ -33,22 +33,24 @@ public class DocsEndpoint {
     }
 
     @OnMessage
-    public void onMessage(final Session session, final String textMessage) throws Exception {
-        JsonObject obj = Json.createReader(new StringReader(textMessage))
+    public void onMessage(final Session session, final String jsonString) throws Exception {
+        JsonObject obj = Json.createReader(new StringReader(jsonString))
                 .readObject();
         String[] collaborators = session.getUserProperties().get("collaborators").toString().split(",");
-        for (Session s : session.getOpenSessions()) {
-            if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
-                String json = Json.createObjectBuilder()
-                        .add("char", obj.getString("char"))
-                        .add("senderId", obj.getString("senderId")).build().toString();
-                s.getBasicRemote().sendObject(json);
-            }
+        switch (obj.getString("type")) {
+            case "NEW_CODE":
+            case "FAKE_CODE":
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
+                        s.getBasicRemote().sendObject(jsonString);
+                    }
+                }
+                break;
         }
     }
 
     @OnClose
     public void onClose(final Session session) throws IOException, EncodeException {
-        
+
     }
 }

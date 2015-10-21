@@ -1,4 +1,4 @@
-var wsocket = '';
+var websocketMessenger = '';
 var friends = [];
 var focus = false;
 var sound = true;
@@ -82,14 +82,14 @@ function messengerFriends() {
                     $(this).text(changeNameLength($(this).text(), 26));
                 })
             }
-            wsocket = new WebSocket("ws://" + window.location.host + "/socket/messenger/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
-            wsocket.onopen = persistBoxesAfterPageReload;
-            wsocket.onmessage = onMessageReceived;
+            websocketMessenger = new WebSocket("ws://" + window.location.host + "/socket/messenger/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
+            websocketMessenger.onopen = persistBoxesAfterPageReload;
+            websocketMessenger.onmessage = onMessageReceivedForMessenger;
         }
     });
 }
 
-function onMessageReceived(evt) {
+function onMessageReceivedForMessenger(evt) {
     var msg = JSON.parse(evt.data); // native API
     if (typeof msg.status !== 'undefined') {
         if (msg.status === "online" && friends.indexOf(msg.id) === -1) {
@@ -157,7 +157,7 @@ function showBox(id, name, himself, message, date, recent) {
     if (!$('#box-' + id).length) {
         $('.messenger-boxes').append(createBox(id, name));
         json = '{"senderId":"' + id + '", "receiverId":"' + logged_social_profile_id + '", "type":"LAST_MSGS"}';
-        wsocket.send(json);
+        websocketMessenger.send(json);
     } else if (message !== undefined) {
         var friendId;
         if (himself !== null) {
@@ -212,7 +212,7 @@ function sendMessage(input) {
     if (message !== "") {
         var json = '{"message":"' + message + '", "senderId":"' + logged_social_profile_id + '",'
                 + '"receiverId":"' + id + '", "type":"NEW_MSG"}';
-        wsocket.send(json);
+        websocketMessenger.send(json);
         var messageContainer = loadMessageBlock(id, message, "", true, "right");
         $('#box-' + id + ' .messages').append(messageContainer);
         $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));
@@ -272,7 +272,7 @@ function focusChat(id) {
     if (box.find(".friend-message.new").length) {
         messagesViewed(box);
         json = '{"senderId":"' + box.attr("socialprofileid") + '", "receiverId":"' + logged_social_profile_id + '", "type":"MSG_SENT"}';
-        wsocket.send(json);
+        websocketMessenger.send(json);
     }
 }
 

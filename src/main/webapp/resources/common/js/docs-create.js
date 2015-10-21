@@ -1,37 +1,75 @@
-var wsocket = '';
+var websocketDocs = '';
 var savedSelection;
+var keys = {
+    enter: "13",
+    left: "37",
+    up: "38",
+    right: "39",
+    down: "40",
+    backspace: "8",
+}
 
 $(document).ready(function () {
     var collaboratorsIds = "246";
-    wsocket = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + encodeURIComponent(collaboratorsIds));
-    wsocket.onmessage = onMessageReceived;
+    websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + encodeURIComponent(collaboratorsIds));
+    websocketDocs.onmessage = onMessageReceivedForDocs;
 });
 
-function onMessageReceived(evt) {
+function onMessageReceivedForDocs(evt) {
     var msg = JSON.parse(evt.data); // native API
-    if (typeof msg.char !== 'undefined') {
-
+    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+    var element = $(".editor").children().get(msg.index);
+    var str = $(element).html();
+    if (msg.type === "NEW_CODE") {
+        switch (msg.keyCode) {
+            case keys.enter:
+                break;
+            default:
+                //        savedSelection = saveSelection($(".editor").children().index(msg.index));
+                //        if (savedSelection) {
+                $(element).html(str.substring(0, msg.offset) + String.fromCharCode(msg.keyCode) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.offset, str.length));
+                //            restoreSelection(element, savedSelection);
+                //        }
+                break;
+        }
+    } else if (msg.type === "FAKE_CODE") {
+        switch (msg.keyCode) {
+            case keys.left:
+            case keys.right:
+                $(element).html(str.substring(0, msg.offset) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.offset, str.length));
+                break;
+            case keys.up:
+                break;
+            case keys.down:
+                break;
+        }
     }
 }
 
-$(document).on("mousedown mouseup keyup keydown", ".editor", function (e) {
-    var node = document.getSelection().anchorNode;
-    var element = node.nodeType === 3 ? node.parentNode : node;
-    insertMarker(element);
+$(document).on("keydown keyup", ".editor", function (e) {
+    if (e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40") {
+        var node = document.getSelection().anchorNode;
+        if (node !== null) {
+            var element = node.nodeType === 3 ? node.parentNode : node;
+            sendMarker(element, e.keyCode, "FAKE_CODE");
+        }
+    }
 });
 
-function insertMarker(element) {
-    $(".marker[socialprofileid=" + logged_social_profile_id + "]").remove();
-    savedSelection = saveSelection(element);
-    if (savedSelection) {
-        var str = $(element).html();
-        $(element).html(str.substring(0, savedSelection.start) + addMarker(logged_social_profile_id) + str.substring(savedSelection.start, str.length));
-        restoreSelection(element, savedSelection);
+$(document).on("mouseup keypress", ".editor", function (e) {
+    var node = document.getSelection().anchorNode;
+    if (node !== null) {
+        var element = node.nodeType === 3 ? node.parentNode : node;
+        sendMarker(element, e.keyCode, "NEW_CODE");
     }
-}
+});
 
-function addMarker(socialProfileId) {
-    return "<span socialprofileid='" + socialProfileId + "' class='marker'></span>";
+function sendMarker(element, keyCode, type) {
+    var offset = getCaretCharacterOffsetWithin(element);
+    var index = $(element).index();
+    var json = '{"keyCode":"' + keyCode + '", "senderId":"' + logged_social_profile_id + '",'
+            + '"senderName":"' + logged_social_profile_name + '", "offset":"' + offset + '", "index":"' + index + '", "type":"' + type + '"}';
+    websocketDocs.send(json);
 }
 
 function getContent() {
@@ -39,15 +77,23 @@ function getContent() {
     return true;
 }
 
-jsf.ajax.addOnEvent(function (data) {
-    if (data.status === "success") {
-        if ($(data.source).hasClass("save-text")) {
-//            var bookmark = tinyMCE.activeEditor.selection.getBookmark(2, true);
-//            tinyMCE.activeEditor.setContent($("#text").val());
-//            tinyMCE.activeEditor.selection.moveToBookmark(bookmark);
-        }
+function getCaretCharacterOffsetWithin(element) {
+    var caretOffset = 0;
+    if (typeof window.getSelection != "undefined") {
+        var range = window.getSelection().getRangeAt(0);
+        var preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+    } else if (typeof document.selection != "undefined" && document.selection.type != "Control") {
+        var textRange = document.selection.createRange();
+        var preCaretTextRange = document.body.createTextRange();
+        preCaretTextRange.moveToElementText(element);
+        preCaretTextRange.setEndPoint("EndToEnd", textRange);
+        caretOffset = preCaretTextRange.text.length;
     }
-});
+    return caretOffset;
+}
 
 if (window.getSelection && document.createRange) {
     saveSelection = function (containerEl) {
