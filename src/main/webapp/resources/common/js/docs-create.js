@@ -17,82 +17,88 @@ $(document).ready(function () {
 
 function onMessageReceivedForDocs(evt) {
     var msg = JSON.parse(evt.data); // native API
-    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
     var element = $(".editor").children().get(msg.index);
-    var str = $(element).html();
-    if (msg.type === "NEW_CODE") {
-        switch (msg.keyCode) {
-            case keys.enter:
-                break;
-            default:
-                //        savedSelection = saveSelection($(".editor").children().index(msg.index));
-                //        if (savedSelection) {
-                $(element).html(str.substring(0, msg.offset) + String.fromCharCode(msg.keyCode) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.offset, str.length));
-                //            restoreSelection(element, savedSelection);
-                //        }
-                break;
-        }
-    } else if (msg.type === "FAKE_CODE") {
-        switch (msg.keyCode) {
-            case keys.left:
-            case keys.right:
-                $(element).html(str.substring(0, msg.offset) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.offset, str.length));
-                break;
-            case keys.up:
-                break;
-            case keys.down:
-                break;
+    var str = $(element).text();
+    if (str !== undefined) {
+        if (msg.type === "NEW_CODE") {
+            switch (msg.keyCode) {
+                case keys.enter:
+                    break;
+                case keys.left:
+                case keys.right:
+                case keys.up:
+                case keys.down:
+                    var text = $(".marker[socialprofileid=" + msg.senderId + "]").text();
+                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+                    $(element).html(str.substring(0, msg.initialRange) + text + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.finalRange, str.length));
+                    break;
+                case keys.backspace:
+                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+                    if (msg.initialRange == msg.finalRange) {
+                        $(element).html(str.substring(0, msg.initialRange - 1) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.finalRange, str.length));
+                    } else {
+                        $(element).html(str.substring(0, msg.initialRange) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.finalRange, str.length));
+                    }
+                    break;
+                default:
+                    $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
+                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+                    if (msg.initialRange !== msg.finalRange) {
+                        $(element).html(str.substring(0, msg.initialRange) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'>" + str.substring(msg.initialRange, msg.finalRange) + "</span>" + str.substring(msg.finalRange, str.length));
+                    } else {
+                        //        savedSelection = saveSelection($(".editor").children().index(msg.index));
+                        //        if (savedSelection) {
+                        $(element).html(str.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + "<span socialprofileid='" + msg.senderId + "' class='marker' title='" + msg.senderName + "'></span>" + str.substring(msg.finalRange, str.length));
+                        //            restoreSelection(element, savedSelection);
+                        //        }
+                    }
+                    break;
+            }
         }
     }
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
-    if (e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40") {
+    if (e.keyCode == "8" && $(".editor").children().length == 1 && $(".editor").children().text() == "") {
+        e.preventDefault();
+    }
+    if (e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40" || (e.keyCode == "8" && e.type == "keydown")) {
+        var initialRange = window.getSelection().anchorOffset;
+        var finalRange = window.getSelection().extentOffset;
         var node = document.getSelection().anchorNode;
         if (node !== null) {
             var element = node.nodeType === 3 ? node.parentNode : node;
-            sendMarker(element, e.keyCode, "FAKE_CODE");
+            sendMarker(element, e.keyCode, initialRange, finalRange, "NEW_CODE");
         }
     }
 });
 
 $(document).on("mouseup keypress", ".editor", function (e) {
+    var initialRange = window.getSelection().anchorOffset;
+    var finalRange = window.getSelection().extentOffset;
     var node = document.getSelection().anchorNode;
     if (node !== null) {
         var element = node.nodeType === 3 ? node.parentNode : node;
-        sendMarker(element, e.keyCode, "NEW_CODE");
+        sendMarker(element, e.keyCode, initialRange, finalRange, "NEW_CODE");
     }
 });
 
-function sendMarker(element, keyCode, type) {
-    var offset = getCaretCharacterOffsetWithin(element);
+function sendMarker(element, keyCode, initialRange, finalRange, type) {
+    if (finalRange < initialRange) {
+        var aux = initialRange;
+        initialRange = finalRange;
+        finalRange = aux;
+    }
     var index = $(element).index();
     var json = '{"keyCode":"' + keyCode + '", "senderId":"' + logged_social_profile_id + '",'
-            + '"senderName":"' + logged_social_profile_name + '", "offset":"' + offset + '", "index":"' + index + '", "type":"' + type + '"}';
+            + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
+            + '"finalRange":"' + finalRange + '", "index":"' + index + '", "type":"' + type + '"}';
     websocketDocs.send(json);
 }
 
 function getContent() {
     $("#text").val($(".editor").html());
     return true;
-}
-
-function getCaretCharacterOffsetWithin(element) {
-    var caretOffset = 0;
-    if (typeof window.getSelection != "undefined") {
-        var range = window.getSelection().getRangeAt(0);
-        var preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(element);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length;
-    } else if (typeof document.selection != "undefined" && document.selection.type != "Control") {
-        var textRange = document.selection.createRange();
-        var preCaretTextRange = document.body.createTextRange();
-        preCaretTextRange.moveToElementText(element);
-        preCaretTextRange.setEndPoint("EndToEnd", textRange);
-        caretOffset = preCaretTextRange.text.length;
-    }
-    return caretOffset;
 }
 
 if (window.getSelection && document.createRange) {

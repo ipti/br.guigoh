@@ -39,7 +39,6 @@ public class DocsEndpoint {
         String[] collaborators = session.getUserProperties().get("collaborators").toString().split(",");
         switch (obj.getString("type")) {
             case "NEW_CODE":
-            case "FAKE_CODE":
                 for (Session s : session.getOpenSessions()) {
                     if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
                         s.getBasicRemote().sendObject(jsonString);

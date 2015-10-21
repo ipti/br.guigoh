@@ -27,8 +27,8 @@ public class AuthorizeListener implements PhaseListener {
         FacesContext context = event.getFacesContext();
         // Obtém a página que atualmente está interagindo com o ciclo
         // Se for a página 'login.jsp' seta a variável como true
-        boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("login") > -1;
-        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("create") > -1;
+        boolean isLoginPage = context.getViewRoot().getViewId().lastIndexOf("/login/auth.xhtml") > -1;
+        boolean isRegisterPage = context.getViewRoot().getViewId().lastIndexOf("/login/create.xhtml") > -1;
         // Obtém a sessão atual
         // Resgata o nome do usuário logado
         Users user = new Users();
