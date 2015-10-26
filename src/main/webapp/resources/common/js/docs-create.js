@@ -21,7 +21,7 @@ function onMessageReceivedForDocs(evt) {
     var finalElement = $(".editor").children().get(msg.finalIndex);
     var initialStr = $(initialElement).text();
     var finalStr = $(finalElement).text();
-    var savedSelection = saveSelection($(".editor")[0]);
+//    var savedSelection = saveSelection($(".editor")[0]);
 
     msg.initialIndex = Number(msg.initialIndex);
     msg.finalIndex = Number(msg.finalIndex);
@@ -84,7 +84,8 @@ function onMessageReceivedForDocs(evt) {
                         $(initialElement).remove();
                     }
                     break;
-                default: // MOUSE CLICK
+                default: // MOUSE CLICK AND LETTER TYPE 
+                    ////FALTA FAZER REPLACE DE LETRA NO HIGHLIGHT DE VARIOS INDEXES! 
                     $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
                     if (msg.initialIndex < msg.finalIndex) {
@@ -95,11 +96,19 @@ function onMessageReceivedForDocs(evt) {
                         $(finalElement).html(addMarker(msg.senderId, msg.senderName, finalStr.substring(0, msg.finalRange)) + finalStr.substring(msg.finalRange, finalStr.length));
                     } else if (msg.initialIndex == msg.finalIndex) {
                         if (msg.initialRange < msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange, initialStr.length));
+                            if (msg.keyCode !== "undefined") {
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                            } else {
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange, initialStr.length));
+                            }
                         } else if (msg.initialRange == msg.finalRange) {
                             $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
                         } else {
-                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.initialRange, initialStr.length));
+                            if (msg.keyCode !== "undefined") {
+                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange, initialStr.length));
+                            } else {
+                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.initialRange, initialStr.length));
+                            }
                         }
                     } else {
                         $(initialElement).html(addMarker(msg.senderId, msg.senderName, initialStr.substring(0, msg.initialRange)) + initialStr.substring(msg.initialRange, initialStr.length));
@@ -117,11 +126,11 @@ function onMessageReceivedForDocs(evt) {
             })
         }
     }
-    restoreSelection($(".editor")[0], savedSelection);
+//    restoreSelection($(".editor")[0], savedSelection);
 }
 
 function addMarker(id, name, text) {
-    return "<span socialprofileid='" + id + "' class='marker' title='" + name + "'>" + text + "</span>"
+    return "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + text + "</span>";
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
@@ -142,14 +151,14 @@ $(document).on("mouseup", function (e) {
 });
 
 function sendCollaboratorChange(e) {
-    var initialRange = window.getSelection().anchorOffset;
-    var finalRange = window.getSelection().extentOffset;
+    var initialRange = getCharOffsetRelativeTo(document.getSelection().anchorNode.parentNode, document.getSelection().anchorNode, document.getSelection().anchorOffset);
+    var finalRange = getCharOffsetRelativeTo(document.getSelection().extentNode.parentNode, document.getSelection().extentNode, document.getSelection().extentOffset);
     var initialNode = document.getSelection().anchorNode;
     var finalNode = document.getSelection().extentNode;
     if (initialNode !== null && finalNode !== null) {
         var initialElement = initialNode.nodeType === 3 ? initialNode.parentNode : initialNode;
         var finalElement = finalNode.nodeType === 3 ? finalNode.parentNode : finalNode;
-        if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length){
+        if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var json = '{"keyCode":"' + e.keyCode + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
                     + '"finalRange":"' + finalRange + '", "initialIndex":"' + $(initialElement).index() + '",'
@@ -162,6 +171,13 @@ function sendCollaboratorChange(e) {
 function getContent() {
     $("#text").val($(".editor").html());
     return true;
+}
+
+function getCharOffsetRelativeTo(container, node, offset) {
+    var range = document.createRange();
+    range.selectNodeContents(container);
+    range.setEnd(node, offset);
+    return range.toString().length;
 }
 
 //AJEITAR CURSOR
