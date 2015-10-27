@@ -7,6 +7,8 @@ var keys = {
     right: "39",
     down: "40",
     backspace: "8",
+    delete: "46",
+    space: "32",
 }
 
 $(document).ready(function () {
@@ -22,7 +24,6 @@ function onMessageReceivedForDocs(evt) {
     var initialStr = $(initialElement).text();
     var finalStr = $(finalElement).text();
 //    var savedSelection = saveSelection($(".editor")[0]);
-
     msg.initialIndex = Number(msg.initialIndex);
     msg.finalIndex = Number(msg.finalIndex);
     msg.initialRange = Number(msg.initialRange);
@@ -31,14 +32,59 @@ function onMessageReceivedForDocs(evt) {
     if (initialStr !== undefined && finalStr !== undefined) {
         if (msg.type === "NEW_CODE") {
             switch (msg.keyCode) {
-                case keys.enter:
-                    var textAfterMarker = $(initialElement).first().contents().filter(function () {
-                        return this.nodeType === 3 && this.nodeValue.trim() !== '' && $(this).nextAll('.marker').length === 0;
-                    });
+                case keys.space:
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    $("<div>" + addMarker(msg.senderId, msg.senderName, "") + textAfterMarker.text() + "</div>").insertAfter(initialElement);
-                    textAfterMarker.remove();
-
+                    if (msg.initialIndex < msg.finalIndex) {
+                        var text = $(finalElement).html();
+                        var baseText = $(initialElement).html();
+                        var space;
+                        $(initialElement).append(space + addMarker(msg.senderId, msg.senderName, "") + text);
+                        $(initialElement).nextUntil($(finalElement)).each(function () {
+                            $(this).remove();
+                        });
+                        $(finalElement).remove();
+                    } else if (msg.initialIndex == msg.finalIndex) {
+                        var baseText = $(initialElement).html();
+                        var space;
+                        if (msg.initialRange < msg.finalRange) {
+                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                        } else if (msg.initialRange == msg.finalRange) {
+                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                        } else {
+                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
+                        }
+                    } else {
+                        var baseText = $(finalElement).html();
+                        var space;
+                        var text = $(initialElement).html();
+                        $(finalElement).append(space + addMarker(msg.senderId, msg.senderName, "") + text);
+                        $(finalElement).nextUntil($(initialElement)).each(function () {
+                            $(this).remove();
+                        });
+                        $(initialElement).remove();
+                    }
+                    break;
+                case keys.enter:
+                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+                    if (msg.initialIndex < msg.finalIndex) {
+                        var text = $(finalElement).html();
+                        $(initialElement).nextUntil($(finalElement)).each(function () {
+                            $(this).remove();
+                        });
+                        $(finalElement).remove();
+                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text + "</div>").insertAfter(initialElement);
+                    } else if (msg.initialIndex == msg.finalIndex) {
+                        var text = $(initialElement).html();
+                        $(initialElement).html(text.substring(0, msg.initialRange < msg.finalRange ? msg.initialRange : msg.finalRange));
+                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text.substring(msg.initialRange < msg.finalRange ? msg.initialRange : msg.finalRange) + "</div>").insertAfter(initialElement);
+                    } else {
+                        var text = $(initialElement).html();
+                        $(finalElement).nextUntil($(initialElement)).each(function () {
+                            $(this).remove();
+                        });
+                        $(initialElement).remove();
+                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text + "</div>").insertAfter(finalElement);
+                    }
                     break;
                 case keys.left:
                 case keys.right:
@@ -46,12 +92,13 @@ function onMessageReceivedForDocs(evt) {
                 case keys.down:
                     $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
                     break;
                 case keys.backspace:
+                case keys.delete:
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
                     if (msg.initialIndex < msg.finalIndex) {
-                        var text = $(finalElement).text();
+                        var text = $(finalElement).html();
                         $(initialElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
                         $(initialElement).nextUntil($(finalElement)).each(function () {
                             $(this).remove();
@@ -59,24 +106,32 @@ function onMessageReceivedForDocs(evt) {
                         $(finalElement).remove();
                     } else if (msg.initialIndex == msg.finalIndex) {
                         if (msg.initialRange < msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
                         } else if (msg.initialRange == msg.finalRange) {
-                            if (msg.initialRange == 0 && msg.initialIndex !== 0) {
-                                var text = $(initialElement).text();
+                            if (msg.keyCode == keys.backspace && msg.initialRange == 0 && msg.initialIndex !== 0) {
+                                var text = $(initialElement).html();
                                 if ($(initialElement).prev().text() == "") {
                                     $(initialElement).prev().html(addMarker(msg.senderId, msg.senderName, "") + text);
                                 } else {
                                     $(initialElement).prev().append(addMarker(msg.senderId, msg.senderName, "") + text);
                                 }
                                 $(initialElement).remove();
+                            } else if (msg.keyCode == keys.delete && msg.initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
+                                var text = $(initialElement).next().html();
+                                $(initialElement).next().remove();
+                                $(initialElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
                             } else {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                                if (msg.keyCode == keys.backspace) {
+                                    $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                                } else {
+                                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange + 1));
+                                }
                             }
                         } else {
-                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange, initialStr.length));
+                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
                         }
                     } else {
-                        var text = $(initialElement).text();
+                        var text = $(initialElement).html();
                         $(finalElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
                         $(finalElement).nextUntil($(initialElement)).each(function () {
                             $(this).remove();
@@ -84,38 +139,57 @@ function onMessageReceivedForDocs(evt) {
                         $(initialElement).remove();
                     }
                     break;
-                default: // MOUSE CLICK AND LETTER TYPE 
-                    ////FALTA FAZER REPLACE DE LETRA NO HIGHLIGHT DE VARIOS INDEXES! 
-                    $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
+                default: // MOUSE CLICK AND LETTER KEYPRESS 
+                    if (msg.keyCode === "undefined") {
+                        $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
+                    }
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
                     if (msg.initialIndex < msg.finalIndex) {
-                        $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, initialStr.length)));
-                        $(initialElement).nextUntil($(finalElement)).each(function () {
-                            $(this).html(addMarker(msg.senderId, msg.senderName, $(this).text()));
-                        });
-                        $(finalElement).html(addMarker(msg.senderId, msg.senderName, finalStr.substring(0, msg.finalRange)) + finalStr.substring(msg.finalRange, finalStr.length));
+                        if (msg.keyCode !== "undefined") {
+                            var text = $(finalElement).html();
+                            $(initialElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
+                            $(initialElement).nextUntil($(finalElement)).each(function () {
+                                $(this).remove();
+                            });
+                            $(finalElement).remove();
+                        } else {
+                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange)));
+                            $(initialElement).nextUntil($(finalElement)).each(function () {
+                                $(this).html(addMarker(msg.senderId, msg.senderName, $(this).html()));
+                            });
+                            $(finalElement).html(addMarker(msg.senderId, msg.senderName, finalStr.substring(0, msg.finalRange)) + finalStr.substring(msg.finalRange));
+                        }
                     } else if (msg.initialIndex == msg.finalIndex) {
                         if (msg.initialRange < msg.finalRange) {
                             if (msg.keyCode !== "undefined") {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
                             } else {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange, initialStr.length));
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange));
                             }
                         } else if (msg.initialRange == msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange, initialStr.length));
+                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
                         } else {
                             if (msg.keyCode !== "undefined") {
-                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange, initialStr.length));
+                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
                             } else {
-                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.initialRange, initialStr.length));
+                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.initialRange));
                             }
                         }
                     } else {
-                        $(initialElement).html(addMarker(msg.senderId, msg.senderName, initialStr.substring(0, msg.initialRange)) + initialStr.substring(msg.initialRange, initialStr.length));
-                        $(finalElement).nextUntil($(initialElement)).each(function () {
-                            $(this).html(addMarker(msg.senderId, msg.senderName, $(this).text()));
-                        });
-                        $(finalElement).html(finalStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, finalStr.substring(msg.finalRange, finalStr.length)));
+                        if (msg.keyCode !== "undefined") {
+                            var text = $(initialElement).html();
+                            $(finalElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
+                            $(finalElement).nextUntil($(initialElement)).each(function () {
+                                $(this).remove();
+                            });
+                            $(initialElement).remove();
+                        } else {
+                            $(initialElement).html(addMarker(msg.senderId, msg.senderName, initialStr.substring(0, msg.initialRange)) + initialStr.substring(msg.initialRange));
+                            $(finalElement).nextUntil($(initialElement)).each(function () {
+                                $(this).html(addMarker(msg.senderId, msg.senderName, $(this).html()));
+                            });
+                            $(finalElement).html(finalStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, finalStr.substring(msg.finalRange)));
+                        }
                     }
                     break;
             }
@@ -134,10 +208,11 @@ function addMarker(id, name, text) {
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
-    if (e.keyCode == "8" && $(".editor").children().length == 1 && $(".editor").children().text() == "") {
+    if (e.keyCode == keys.backspace && $(".editor").children().length == 1 && $(".editor").children().text() == "") {
         e.preventDefault();
-    } else if (((e.keyCode == "37" || e.keyCode == "38" || e.keyCode == "39" || e.keyCode == "40") && e.type == "keyup")
-            || (e.keyCode == "8" && e.type == "keydown")) {
+    } else if (((e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down) && e.type == "keyup")
+            || (e.keyCode == keys.backspace && e.type == "keydown")
+            || (e.keyCode == keys.delete && e.type == "keydown")) {
         sendCollaboratorChange(e);
     }
 });
@@ -151,13 +226,13 @@ $(document).on("mouseup", function (e) {
 });
 
 function sendCollaboratorChange(e) {
-    var initialRange = getCharOffsetRelativeTo(document.getSelection().anchorNode.parentNode, document.getSelection().anchorNode, document.getSelection().anchorOffset);
-    var finalRange = getCharOffsetRelativeTo(document.getSelection().extentNode.parentNode, document.getSelection().extentNode, document.getSelection().extentOffset);
     var initialNode = document.getSelection().anchorNode;
     var finalNode = document.getSelection().extentNode;
     if (initialNode !== null && finalNode !== null) {
         var initialElement = initialNode.nodeType === 3 ? initialNode.parentNode : initialNode;
         var finalElement = finalNode.nodeType === 3 ? finalNode.parentNode : finalNode;
+        var initialRange = getCharOffsetRelativeTo(initialElement, document.getSelection().anchorNode, document.getSelection().anchorOffset);
+        var finalRange = getCharOffsetRelativeTo(finalElement, document.getSelection().extentNode, document.getSelection().extentOffset);
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var json = '{"keyCode":"' + e.keyCode + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
