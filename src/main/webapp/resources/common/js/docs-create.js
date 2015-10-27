@@ -9,6 +9,7 @@ var keys = {
     backspace: "8",
     delete: "46",
     space: "32",
+    nonBreakingSpace: "160",
 }
 
 $(document).ready(function () {
@@ -36,28 +37,32 @@ function onMessageReceivedForDocs(evt) {
                     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
                     if (msg.initialIndex < msg.finalIndex) {
                         var text = $(finalElement).html();
-                        var baseText = $(initialElement).html();
-                        var space;
-                        $(initialElement).append(space + addMarker(msg.senderId, msg.senderName, "") + text);
+                        $(initialElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
                         $(initialElement).nextUntil($(finalElement)).each(function () {
                             $(this).remove();
                         });
                         $(finalElement).remove();
                     } else if (msg.initialIndex == msg.finalIndex) {
-                        var baseText = $(initialElement).html();
                         var space;
                         if (msg.initialRange < msg.finalRange) {
+                            space = initialStr.substring(msg.finalRange) == "" ? "&nbsp;" : " ";
                             $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
                         } else if (msg.initialRange == msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                            var text = initialStr.substring(0, msg.initialRange)
+                            if (text.charCodeAt(text.length - 1) == Number(keys.nonBreakingSpace) && text.charCodeAt(text.length - 2) != Number(keys.space)) {
+                                space = " &nbsp;";
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                            } else {
+                                space = "&nbsp;";
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                            }
                         } else {
+                            space = initialStr.substring(msg.initialRange) == "" ? "&nbsp;" : " ";
                             $(initialElement).html(initialStr.substring(0, msg.finalRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
                         }
                     } else {
-                        var baseText = $(finalElement).html();
-                        var space;
                         var text = $(initialElement).html();
-                        $(finalElement).append(space + addMarker(msg.senderId, msg.senderName, "") + text);
+                        $(finalElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
                         $(finalElement).nextUntil($(initialElement)).each(function () {
                             $(this).remove();
                         });
@@ -139,7 +144,9 @@ function onMessageReceivedForDocs(evt) {
                         $(initialElement).remove();
                     }
                     break;
-                default: // MOUSE CLICK AND LETTER KEYPRESS 
+                default: 
+                    // MOUSE CLICK AND LETTER KEYPRESS 
+                    // When keyCode is "undefined", jquery trigger event was "mouseup"
                     if (msg.keyCode === "undefined") {
                         $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
                     }
@@ -167,7 +174,16 @@ function onMessageReceivedForDocs(evt) {
                                 $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange));
                             }
                         } else if (msg.initialRange == msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                            if (msg.keyCode !== "undefined") {
+                                var text = initialStr.substring(0, msg.initialRange);
+                                if (text.charCodeAt(text.length - 1) == Number(keys.nonBreakingSpace) && text.charCodeAt(text.length - 2) != Number(keys.space)) {
+                                    $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + " " + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                                } else {
+                                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                                }
+                            } else {
+                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                            }
                         } else {
                             if (msg.keyCode !== "undefined") {
                                 $(initialElement).html(initialStr.substring(0, msg.finalRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
