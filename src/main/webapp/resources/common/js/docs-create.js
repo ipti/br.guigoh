@@ -78,7 +78,7 @@ $(document).on("keydown keyup", ".editor", function (e) {
             || (e.keyCode == keys.delete && e.type == "keydown")
             || (e.keyCode == keys.home && e.type == "keydown")
             || (e.keyCode == keys.end && e.type == "keydown")) {
-        if (e.shiftKey){
+        if (e.shiftKey && (e.keyCode == keys.home || e.keyCode == keys.end)){
             e.keyCode = "{16}" + e.keyCode;
         }
         sendCollaboratorChange(e);
