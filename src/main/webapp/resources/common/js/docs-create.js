@@ -10,7 +10,12 @@ var keys = {
     delete: "46",
     space: "32",
     nonBreakingSpace: "160",
+    shiftHome: "{16}36",
+    shiftEnd: "{16}35",
+    home: "36",
+    end: "35",
 }
+var previousInitialTextLength;
 
 $(document).ready(function () {
     var collaboratorsIds = logged_social_profile_id == 26 ? "246" : "26";
@@ -41,6 +46,14 @@ function onMessageReceivedForDocs(evt) {
                 case keys.delete:
                     backspaceAndDeleteAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
+                case keys.home:
+                case keys.end:
+                    homeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement);
+                    break;
+                case keys.shiftHome:
+                case keys.shiftEnd:
+                    shiftHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, msg.initialRange);
+                    break;
                 default:
                     // MOUSE CLICK AND LETTER KEYPRESS 
                     // When keyCode is "undefined", jquery trigger event was "mouseup"
@@ -48,10 +61,10 @@ function onMessageReceivedForDocs(evt) {
                     break;
             }
             $(".editor div").each(function () {
-                if ($(this).text() == "") {
+                if ($(this).html() == "") {
                     $(this).append("<br>");
                 }
-            })
+            });
         }
     }
     restoreSelection($(".editor")[0], savedSelection);
@@ -62,8 +75,18 @@ $(document).on("keydown keyup", ".editor", function (e) {
         e.preventDefault();
     } else if (((e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down) && e.type == "keyup")
             || (e.keyCode == keys.backspace && e.type == "keydown")
-            || (e.keyCode == keys.delete && e.type == "keydown")) {
+            || (e.keyCode == keys.delete && e.type == "keydown")
+            || (e.keyCode == keys.home && e.type == "keydown")
+            || (e.keyCode == keys.end && e.type == "keydown")) {
+        if (e.shiftKey){
+            e.keyCode = "{16}" + e.keyCode;
+        }
         sendCollaboratorChange(e);
+    }
+    if (e.type == "keydown") {
+        $(".marker").attr("contenteditable", "true");
+    } else {
+        $(".marker").attr("contenteditable", "false");
     }
 });
 
@@ -208,6 +231,12 @@ function mouseClickAndLetterKeyPressAction(keyCode, senderId, senderName, initia
     if (keyCode === "undefined") {
         $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     }
+    if (keyCode == keys.space) {
+        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialStr.charCodeAt(initialRange - 1) == Number(keys.space))
+                || ($(initialElement).index() > $(finalElement).index() && finalStr.charCodeAt(finalRange - 1) == Number(keys.space))) {
+            keyCode = keys.nonBreakingSpace;
+        }
+    }
     $(".marker[socialprofileid=" + senderId + "]").remove();
     if ($(initialElement).index() < $(finalElement).index()) {
         if (keyCode !== "undefined") {
@@ -314,22 +343,43 @@ function arrowAction(senderId, senderName, initialElement, initialRange, finalRa
 function enterAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var text = $(finalElement).html();
+        var text = $(finalElement).text();
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
         $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(initialElement);
     } else if ($(initialElement).index() == $(finalElement).index()) {
-        var text = $(initialElement).html();
+        var text = $(initialElement).text();
         $(initialElement).html(text.substring(0, initialRange < finalRange ? initialRange : finalRange));
         $("<div>" + addMarker(senderId, senderName, "") + text.substring(initialRange < finalRange ? initialRange : finalRange) + "</div>").insertAfter(initialElement);
     } else {
-        var text = $(initialElement).html();
+        var text = $(initialElement).text();
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
         $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(finalElement);
+    }
+}
+
+function homeAndEndAction(keyCode, senderId, senderName, initialElement) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if (keyCode == keys.home) {
+        $(initialElement).html(addMarker(senderId, senderName, "") + $(initialElement).html());
+    } else {
+        $(initialElement).append(addMarker(senderId, senderName, ""));
+    }
+}
+
+function shiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, initialRange) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialStr = $(initialElement).html();
+    if (keyCode == keys.shiftHome) {
+        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+    } else {
+        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
     }
 }

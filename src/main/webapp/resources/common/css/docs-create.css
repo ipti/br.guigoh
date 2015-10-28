@@ -14,6 +14,7 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     font-size: 12px;
+    font-family: Arial;
 }
 
 .editor div:first-child {
