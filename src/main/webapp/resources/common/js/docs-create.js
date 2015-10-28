@@ -22,205 +22,39 @@ function onMessageReceivedForDocs(evt) {
     var msg = JSON.parse(evt.data); // native API
     var initialElement = $(".editor").children().get(msg.initialIndex);
     var finalElement = $(".editor").children().get(msg.finalIndex);
-    var initialStr = $(initialElement).text();
-    var finalStr = $(finalElement).text();
-//    var savedSelection = saveSelection($(".editor")[0]);
-    msg.initialIndex = Number(msg.initialIndex);
-    msg.finalIndex = Number(msg.finalIndex);
     msg.initialRange = Number(msg.initialRange);
     msg.finalRange = Number(msg.finalRange);
-
-    if (initialStr !== undefined && finalStr !== undefined) {
+    var savedSelection = saveSelection($(".editor")[0]);
+    if ($(initialElement).text() !== undefined && $(finalElement).text() !== undefined) {
         if (msg.type === "NEW_CODE") {
             switch (msg.keyCode) {
-                case keys.space:
-                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    if (msg.initialIndex < msg.finalIndex) {
-                        var text = $(finalElement).html();
-                        $(initialElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
-                        $(initialElement).nextUntil($(finalElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(finalElement).remove();
-                    } else if (msg.initialIndex == msg.finalIndex) {
-                        var space;
-                        if (msg.initialRange < msg.finalRange) {
-                            space = initialStr.substring(msg.finalRange) == "" ? "&nbsp;" : " ";
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                        } else if (msg.initialRange == msg.finalRange) {
-                            var text = initialStr.substring(0, msg.initialRange)
-                            if (text.charCodeAt(text.length - 1) == Number(keys.nonBreakingSpace) && text.charCodeAt(text.length - 2) != Number(keys.space)) {
-                                space = " &nbsp;";
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                            } else {
-                                space = "&nbsp;";
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                            }
-                        } else {
-                            space = initialStr.substring(msg.initialRange) == "" ? "&nbsp;" : " ";
-                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + space + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
-                        }
-                    } else {
-                        var text = $(initialElement).html();
-                        $(finalElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
-                        $(finalElement).nextUntil($(initialElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(initialElement).remove();
-                    }
-                    break;
                 case keys.enter:
-                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    if (msg.initialIndex < msg.finalIndex) {
-                        var text = $(finalElement).html();
-                        $(initialElement).nextUntil($(finalElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(finalElement).remove();
-                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text + "</div>").insertAfter(initialElement);
-                    } else if (msg.initialIndex == msg.finalIndex) {
-                        var text = $(initialElement).html();
-                        $(initialElement).html(text.substring(0, msg.initialRange < msg.finalRange ? msg.initialRange : msg.finalRange));
-                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text.substring(msg.initialRange < msg.finalRange ? msg.initialRange : msg.finalRange) + "</div>").insertAfter(initialElement);
-                    } else {
-                        var text = $(initialElement).html();
-                        $(finalElement).nextUntil($(initialElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(initialElement).remove();
-                        $("<div>" + addMarker(msg.senderId, msg.senderName, "") + text + "</div>").insertAfter(finalElement);
-                    }
+                    enterAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
                 case keys.left:
                 case keys.right:
                 case keys.up:
                 case keys.down:
-                    $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
-                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
+                    arrowAction(msg.senderId, msg.senderName, initialElement, msg.initialRange, msg.finalRange);
                     break;
                 case keys.backspace:
                 case keys.delete:
-                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    if (msg.initialIndex < msg.finalIndex) {
-                        var text = $(finalElement).html();
-                        $(initialElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
-                        $(initialElement).nextUntil($(finalElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(finalElement).remove();
-                    } else if (msg.initialIndex == msg.finalIndex) {
-                        if (msg.initialRange < msg.finalRange) {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                        } else if (msg.initialRange == msg.finalRange) {
-                            if (msg.keyCode == keys.backspace && msg.initialRange == 0 && msg.initialIndex !== 0) {
-                                var text = $(initialElement).html();
-                                if ($(initialElement).prev().text() == "") {
-                                    $(initialElement).prev().html(addMarker(msg.senderId, msg.senderName, "") + text);
-                                } else {
-                                    $(initialElement).prev().append(addMarker(msg.senderId, msg.senderName, "") + text);
-                                }
-                                $(initialElement).remove();
-                            } else if (msg.keyCode == keys.delete && msg.initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
-                                var text = $(initialElement).next().html();
-                                $(initialElement).next().remove();
-                                $(initialElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
-                            } else {
-                                if (msg.keyCode == keys.backspace) {
-                                    $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                                } else {
-                                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange + 1));
-                                }
-                            }
-                        } else {
-                            $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
-                        }
-                    } else {
-                        var text = $(initialElement).html();
-                        $(finalElement).append(addMarker(msg.senderId, msg.senderName, "") + text);
-                        $(finalElement).nextUntil($(initialElement)).each(function () {
-                            $(this).remove();
-                        });
-                        $(initialElement).remove();
-                    }
+                    backspaceAndDeleteAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
-                default: 
+                default:
                     // MOUSE CLICK AND LETTER KEYPRESS 
                     // When keyCode is "undefined", jquery trigger event was "mouseup"
-                    if (msg.keyCode === "undefined") {
-                        $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
-                    }
-                    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-                    if (msg.initialIndex < msg.finalIndex) {
-                        if (msg.keyCode !== "undefined") {
-                            var text = $(finalElement).html();
-                            $(initialElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
-                            $(initialElement).nextUntil($(finalElement)).each(function () {
-                                $(this).remove();
-                            });
-                            $(finalElement).remove();
-                        } else {
-                            $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange)));
-                            $(initialElement).nextUntil($(finalElement)).each(function () {
-                                $(this).html(addMarker(msg.senderId, msg.senderName, $(this).html()));
-                            });
-                            $(finalElement).html(addMarker(msg.senderId, msg.senderName, finalStr.substring(0, msg.finalRange)) + finalStr.substring(msg.finalRange));
-                        }
-                    } else if (msg.initialIndex == msg.finalIndex) {
-                        if (msg.initialRange < msg.finalRange) {
-                            if (msg.keyCode !== "undefined") {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                            } else {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.finalRange));
-                            }
-                        } else if (msg.initialRange == msg.finalRange) {
-                            if (msg.keyCode !== "undefined") {
-                                var text = initialStr.substring(0, msg.initialRange);
-                                if (text.charCodeAt(text.length - 1) == Number(keys.nonBreakingSpace) && text.charCodeAt(text.length - 2) != Number(keys.space)) {
-                                    $(initialElement).html(initialStr.substring(0, msg.initialRange - 1) + " " + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                                } else {
-                                    $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                                }
-                            } else {
-                                $(initialElement).html(initialStr.substring(0, msg.initialRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.finalRange));
-                            }
-                        } else {
-                            if (msg.keyCode !== "undefined") {
-                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + initialStr.substring(msg.initialRange));
-                            } else {
-                                $(initialElement).html(initialStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, initialStr.substring(msg.initialRange, msg.finalRange)) + initialStr.substring(msg.initialRange));
-                            }
-                        }
-                    } else {
-                        if (msg.keyCode !== "undefined") {
-                            var text = $(initialElement).html();
-                            $(finalElement).append(String.fromCharCode(msg.keyCode) + addMarker(msg.senderId, msg.senderName, "") + text);
-                            $(finalElement).nextUntil($(initialElement)).each(function () {
-                                $(this).remove();
-                            });
-                            $(initialElement).remove();
-                        } else {
-                            $(initialElement).html(addMarker(msg.senderId, msg.senderName, initialStr.substring(0, msg.initialRange)) + initialStr.substring(msg.initialRange));
-                            $(finalElement).nextUntil($(initialElement)).each(function () {
-                                $(this).html(addMarker(msg.senderId, msg.senderName, $(this).html()));
-                            });
-                            $(finalElement).html(finalStr.substring(0, msg.finalRange) + addMarker(msg.senderId, msg.senderName, finalStr.substring(msg.finalRange)));
-                        }
-                    }
+                    mouseClickAndLetterKeyPressAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
             }
             $(".editor div").each(function () {
-                if ($(this).html() == "") {
+                if ($(this).text() == "") {
                     $(this).append("<br>");
                 }
             })
         }
     }
-//    restoreSelection($(".editor")[0], savedSelection);
-}
-
-function addMarker(id, name, text) {
-    return "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + text + "</span>";
+    restoreSelection($(".editor")[0], savedSelection);
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
@@ -243,12 +77,12 @@ $(document).on("mouseup", function (e) {
 
 function sendCollaboratorChange(e) {
     var initialNode = document.getSelection().anchorNode;
-    var finalNode = document.getSelection().extentNode;
+    var finalNode = document.getSelection().focusNode;
     if (initialNode !== null && finalNode !== null) {
         var initialElement = initialNode.nodeType === 3 ? initialNode.parentNode : initialNode;
         var finalElement = finalNode.nodeType === 3 ? finalNode.parentNode : finalNode;
-        var initialRange = getCharOffsetRelativeTo(initialElement, document.getSelection().anchorNode, document.getSelection().anchorOffset);
-        var finalRange = getCharOffsetRelativeTo(finalElement, document.getSelection().extentNode, document.getSelection().extentOffset);
+        var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
+        var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var json = '{"keyCode":"' + e.keyCode + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
@@ -257,6 +91,10 @@ function sendCollaboratorChange(e) {
             websocketDocs.send(json);
         }
     }
+}
+
+function addMarker(id, name, text) {
+    return "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + text + "</span>";
 }
 
 function getContent() {
@@ -269,6 +107,18 @@ function getCharOffsetRelativeTo(container, node, offset) {
     range.selectNodeContents(container);
     range.setEnd(node, offset);
     return range.toString().length;
+}
+
+function moveCaret(charCount) {
+    var sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            var textNode = sel.focusNode;
+            var newOffset = charCount;
+            sel.collapse(textNode, Math.min(textNode.length, newOffset));
+        }
+    }
 }
 
 //AJEITAR CURSOR
@@ -350,4 +200,136 @@ if (window.getSelection && document.createRange) {
         textRange.moveStart("character", savedSel.start);
         textRange.select();
     };
+}
+
+function mouseClickAndLetterKeyPressAction(keyCode, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+    var initialStr = $(initialElement).text();
+    var finalStr = $(finalElement).text();
+    if (keyCode === "undefined") {
+        $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    }
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        if (keyCode !== "undefined") {
+            var text = $(finalElement).html();
+            $(initialElement).append(String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + text);
+            $(initialElement).nextUntil($(finalElement)).each(function () {
+                $(this).remove();
+            });
+            $(finalElement).remove();
+        } else {
+            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+            $(initialElement).nextUntil($(finalElement)).each(function () {
+                $(this).html(addMarker(senderId, senderName, $(this).html()));
+            });
+            $(finalElement).html(addMarker(senderId, senderName, finalStr.substring(0, finalRange)) + finalStr.substring(finalRange));
+        }
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialRange < finalRange) {
+            if (keyCode !== "undefined") {
+                $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            } else {
+                $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(finalRange));
+            }
+        } else if (initialRange == finalRange) {
+            $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+        } else {
+            if (keyCode !== "undefined") {
+                $(initialElement).html(initialStr.substring(0, finalRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+            } else {
+                $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(initialRange));
+            }
+        }
+    } else {
+        if (keyCode !== "undefined") {
+            var text = $(initialElement).html();
+            $(finalElement).append(String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + text);
+            $(finalElement).nextUntil($(initialElement)).each(function () {
+                $(this).remove();
+            });
+            $(initialElement).remove();
+        } else {
+            $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+            $(finalElement).nextUntil($(initialElement)).each(function () {
+                $(this).html(addMarker(senderId, senderName, $(this).html()));
+            });
+            $(finalElement).html(finalStr.substring(0, finalRange) + addMarker(senderId, senderName, finalStr.substring(finalRange)));
+        }
+    }
+}
+
+function backspaceAndDeleteAction(keyCode, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+    var initialStr = $(initialElement).text();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        var text = $(finalElement).html();
+        $(initialElement).append(addMarker(senderId, senderName, "") + text);
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialRange < finalRange) {
+            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+        } else if (initialRange == finalRange) {
+            if (keyCode == keys.backspace && initialRange == 0 && $(initialElement).index() !== 0) {
+                var text = $(initialElement).html();
+                if ($(initialElement).prev().text() == "") {
+                    $(initialElement).prev().html(addMarker(senderId, senderName, "") + text);
+                } else {
+                    $(initialElement).prev().append(addMarker(senderId, senderName, "") + text);
+                }
+                $(initialElement).remove();
+            } else if (keyCode == keys.delete && initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
+                var text = $(initialElement).next().html();
+                $(initialElement).next().remove();
+                $(initialElement).append(addMarker(senderId, senderName, "") + text);
+            } else {
+                if (keyCode == keys.backspace) {
+                    $(initialElement).html(initialStr.substring(0, initialRange - 1) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+                } else {
+                    $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange + 1));
+                }
+            }
+        } else {
+            $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+        }
+    } else {
+        var text = $(initialElement).html();
+        $(finalElement).append(addMarker(senderId, senderName, "") + text);
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+    }
+}
+
+function arrowAction(senderId, senderName, initialElement, initialRange, finalRange) {
+    var initialStr = $(initialElement).text();
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+}
+
+function enterAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        var text = $(finalElement).html();
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+        $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(initialElement);
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        var text = $(initialElement).html();
+        $(initialElement).html(text.substring(0, initialRange < finalRange ? initialRange : finalRange));
+        $("<div>" + addMarker(senderId, senderName, "") + text.substring(initialRange < finalRange ? initialRange : finalRange) + "</div>").insertAfter(initialElement);
+    } else {
+        var text = $(initialElement).html();
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+        $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(finalElement);
+    }
 }
