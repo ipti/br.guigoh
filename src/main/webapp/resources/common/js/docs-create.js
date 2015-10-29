@@ -10,14 +10,21 @@ var keys = {
     delete: "46",
     space: "32",
     nonBreakingSpace: "160",
-    shiftHome: "{16}36",
-    shiftEnd: "{16}35",
+    ctrl: "17",
+    shift: "16",
+    ctrlHome: "17+36",
+    ctrlEnd: "17+35",
+    shiftHome: "16+36",
+    shiftEnd: "16+35",
+    ctrlShiftHome: "17+16+36",
+    ctrlShiftEnd: "17+16+35",
     home: "36",
     end: "35",
     tab: "9",
     emphasizedSpace: "8195",
+    a: "65",
+    ctrlA: "17+65",
 }
-var previousInitialTextLength;
 
 $(document).ready(function () {
     var collaboratorsIds = logged_social_profile_id == 26 ? "246" : "26";
@@ -52,9 +59,20 @@ function onMessageReceivedForDocs(evt) {
                 case keys.end:
                     homeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement);
                     break;
+                case keys.ctrlHome:
+                case keys.ctrlEnd:
+                    ctrlHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement);
+                    break;
                 case keys.shiftHome:
                 case keys.shiftEnd:
                     shiftHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, msg.initialRange);
+                    break;
+                case keys.ctrlShiftHome:
+                case keys.ctrlShiftEnd:
+                    ctrlShiftHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, msg.initialRange);
+                    break;
+                case keys.ctrlA:
+                    ctrlAAction(msg.senderId, msg.senderName);
                     break;
                 default:
                     // MOUSE CLICK AND LETTER KEYPRESS 
@@ -80,9 +98,18 @@ $(document).on("keydown keyup", ".editor", function (e) {
             || (e.keyCode == keys.delete && e.type == "keydown")
             || (e.keyCode == keys.home && e.type == "keydown")
             || (e.keyCode == keys.end && e.type == "keydown")
-            || (e.keyCode == keys.tab && e.type == "keydown")) {
-        if (e.shiftKey && (e.keyCode == keys.home || e.keyCode == keys.end)) {
-            e.keyCode = "{16}" + e.keyCode;
+            || (e.keyCode == keys.tab && e.type == "keydown")
+            || (e.keyCode == keys.a && e.type == "keydown" && e.ctrlKey)) {
+        if (e.keyCode == keys.home || e.keyCode == keys.end) {
+            if (e.shiftKey) {
+                e.keyCode = keys.shift + "+" + e.keyCode;
+            }
+            if (e.ctrlKey) {
+                e.keyCode = keys.ctrl + "+" + e.keyCode;
+            }
+        }
+        if (e.keyCode == keys.a && e.ctrlKey) {
+            e.keyCode = keys.ctrl + "+" + e.keyCode;
         }
         sendCollaboratorChange(e);
     }
@@ -94,6 +121,14 @@ $(document).on("keydown keyup", ".editor", function (e) {
 });
 
 $(document).on("keypress", ".editor", function (e) {
+    sendCollaboratorChange(e);
+});
+
+$(document).on("paste", ".editor", function (e) {
+    console.log(e);
+});
+
+$(document).on("cut", ".editor", function (e) {
     sendCollaboratorChange(e);
 });
 
@@ -109,6 +144,7 @@ function sendCollaboratorChange(e) {
         var finalElement = finalNode.nodeType === 3 ? finalNode.parentNode : finalNode;
         var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
         var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
+        e.keyCode = checkKeyCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var json = '{"keyCode":"' + e.keyCode + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
@@ -116,7 +152,7 @@ function sendCollaboratorChange(e) {
                     + '"finalIndex":"' + $(finalElement).index() + '", "type":"NEW_CODE"}';
             websocketDocs.send(json);
         }
-        checkLocalActions(e, initialElement, finalElement, initialRange, finalRange);
+        changeLocalActions(e, initialElement, finalElement, initialRange, finalRange);
     }
 }
 
@@ -129,7 +165,19 @@ function getContent() {
     return true;
 }
 
-function checkLocalActions(e, initialElement, finalElement, initialRange, finalRange) {
+function checkKeyCodeToSend(e, initialElement, finalElement, initialRange, finalRange) {
+    if (e.type == "cut") {
+        if (initialRange == finalRange && initialElement == finalElement) {
+            return undefined;
+        } else {
+            return keys.delete;
+        }
+    } else {
+        return e.keyCode;
+    }
+}
+
+function changeLocalActions(e, initialElement, finalElement, initialRange, finalRange) {
     if (e.keyCode == keys.tab) {
         e.preventDefault();
         var initialStr = $(initialElement).html();
@@ -416,6 +464,16 @@ function homeAndEndAction(keyCode, senderId, senderName, initialElement) {
     }
 }
 
+function ctrlHomeAndEndAction(keyCode, senderId, senderName, initialElement, finalElement) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if (keyCode == keys.ctrlHome) {
+        $(".editor").children().first().prepend(addMarker(senderId, senderName, ""));
+    } else {
+        $(".editor").children().last().append(addMarker(senderId, senderName, ""));
+    }
+}
+
 function shiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, initialRange) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
@@ -425,4 +483,29 @@ function shiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, in
     } else {
         $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
     }
+}
+
+function ctrlShiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, initialRange) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialStr = $(initialElement).html();
+    if (keyCode == keys.ctrlShiftHome) {
+        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+        $(initialElement).prevAll().each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html()));
+        });
+    } else {
+        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+        $(initialElement).nextAll().each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html()));
+        });
+    }
+}
+
+function ctrlAAction(senderId, senderName) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    $(".editor").children().each(function(){
+        $(this).html(addMarker(senderId, senderName, $(this).html()));
+    })
 }
