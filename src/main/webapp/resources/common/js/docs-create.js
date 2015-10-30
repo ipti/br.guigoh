@@ -6,6 +6,18 @@ var keys = {
     up: "38",
     right: "39",
     down: "40",
+    ctrlLeft: "17+37",
+    ctrlUp: "17+38",
+    ctrlRight: "17+39",
+    ctrlDown: "17+40",
+    shiftLeft: "16+37",
+    shiftUp: "16+38",
+    shiftRight: "16+39",
+    shiftDown: "16+40",
+    ctrlShiftLeft: "17+16+37",
+    ctrlShiftUp: "17+16+38",
+    ctrlShiftRight: "17+16+39",
+    ctrlShiftDown: "17+16+40",
     backspace: "8",
     delete: "46",
     space: "32",
@@ -24,6 +36,12 @@ var keys = {
     emphasizedSpace: "8195",
     a: "65",
     ctrlA: "17+65",
+    insert: "45",
+    pageUp: "33",
+    pageDown: "34",
+    shiftPageUp: "16+33",
+    shiftPageDown: "16+34",
+    paste: "paste",
 }
 
 $(document).ready(function () {
@@ -41,7 +59,7 @@ function onMessageReceivedForDocs(evt) {
 //    var savedSelection = saveSelection($(".editor")[0]);
     if ($(initialElement).text() !== undefined && $(finalElement).text() !== undefined) {
         if (msg.type === "NEW_CODE") {
-            switch (msg.keyCode) {
+            switch (msg.code) {
                 case keys.enter:
                     enterAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
@@ -49,35 +67,56 @@ function onMessageReceivedForDocs(evt) {
                 case keys.right:
                 case keys.up:
                 case keys.down:
-                    arrowAction(msg.senderId, msg.senderName, initialElement, msg.initialRange, msg.finalRange);
+                case keys.ctrlLeft:
+                case keys.ctrlRight:
+                case keys.ctrlUp:
+                case keys.ctrlDown:
+                case keys.shiftLeft:
+                case keys.shiftRight:
+                case keys.shiftUp:
+                case keys.shiftDown:
+                case keys.ctrlShiftLeft:
+                case keys.ctrlShiftRight:
+                case keys.ctrlShiftUp:
+                case keys.ctrlShiftDown:
+                    arrowAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
                 case keys.backspace:
                 case keys.delete:
-                    backspaceAndDeleteAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
+                    backspaceAndDeleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
                     break;
                 case keys.home:
                 case keys.end:
-                    homeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement);
+                    homeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement);
                     break;
                 case keys.ctrlHome:
                 case keys.ctrlEnd:
-                    ctrlHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement);
+                case keys.pageUp:
+                case keys.pageDown:
+                    ctrlHomeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement);
                     break;
                 case keys.shiftHome:
                 case keys.shiftEnd:
-                    shiftHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, msg.initialRange);
+                    shiftHomeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement, msg.initialRange);
                     break;
                 case keys.ctrlShiftHome:
                 case keys.ctrlShiftEnd:
-                    ctrlShiftHomeAndEndAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, msg.initialRange);
+                case keys.shiftPageUp:
+                case keys.shiftPageDown:
+                    ctrlShiftHomeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement, msg.initialRange);
                     break;
                 case keys.ctrlA:
                     ctrlAAction(msg.senderId, msg.senderName);
                     break;
                 default:
-                    // MOUSE CLICK AND LETTER KEYPRESS 
-                    // When keyCode is "undefined", jquery trigger event was "mouseup"
-                    mouseClickAndLetterKeyPressAction(msg.keyCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
+                    if (msg.code.indexOf("paste") > -1) {
+                        // PASTE
+                        pasteAction(msg.code.replace("paste+", ""), msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
+                    } else {
+                        // MOUSE CLICK AND LETTER KEYPRESS 
+                        // When keyCode is "undefined", jquery trigger event was "mouseup"
+                        mouseClickAndLetterKeyPressAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialRange, msg.finalRange);
+                    }
                     break;
             }
             $(".editor div").each(function () {
@@ -91,7 +130,7 @@ function onMessageReceivedForDocs(evt) {
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
-    if (e.keyCode == keys.backspace && $(".editor").children().length == 1 && $(".editor").children().text() == "") {
+    if ((e.keyCode == keys.backspace && $(".editor").children().length == 1 && $(".editor").children().text() == "") || e.keyCode == keys.insert) {
         e.preventDefault();
     } else if (((e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down) && e.type == "keyup")
             || (e.keyCode == keys.backspace && e.type == "keydown")
@@ -99,8 +138,11 @@ $(document).on("keydown keyup", ".editor", function (e) {
             || (e.keyCode == keys.home && e.type == "keydown")
             || (e.keyCode == keys.end && e.type == "keydown")
             || (e.keyCode == keys.tab && e.type == "keydown")
-            || (e.keyCode == keys.a && e.type == "keydown" && e.ctrlKey)) {
-        if (e.keyCode == keys.home || e.keyCode == keys.end) {
+            || (e.keyCode == keys.a && e.type == "keydown" && e.ctrlKey)
+            || (e.keyCode == keys.pageDown && e.type == "keydown" && ((!e.shiftKey && !e.ctrlKey) || (e.shiftKey && !e.ctrlKey)))
+            || (e.keyCode == keys.pageUp && e.type == "keydown" && ((!e.shiftKey && !e.ctrlKey) || (e.shiftKey && !e.ctrlKey)))) {
+        if (e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down
+                || e.keyCode == keys.home || e.keyCode == keys.end) {
             if (e.shiftKey) {
                 e.keyCode = keys.shift + "+" + e.keyCode;
             }
@@ -111,12 +153,10 @@ $(document).on("keydown keyup", ".editor", function (e) {
         if (e.keyCode == keys.a && e.ctrlKey) {
             e.keyCode = keys.ctrl + "+" + e.keyCode;
         }
+        if ((e.keyCode == keys.pageDown || e.keyCode == keys.pageUp) && e.shiftKey) {
+            e.keyCode = keys.shift + "+" + e.keyCode;
+        }
         sendCollaboratorChange(e);
-    }
-    if (e.type == "keydown") {
-        $(".marker").attr("contenteditable", "true");
-    } else {
-        $(".marker").attr("contenteditable", "false");
     }
 });
 
@@ -125,7 +165,7 @@ $(document).on("keypress", ".editor", function (e) {
 });
 
 $(document).on("paste", ".editor", function (e) {
-    console.log(e);
+    sendCollaboratorChange(e);
 });
 
 $(document).on("cut", ".editor", function (e) {
@@ -137,22 +177,35 @@ $(document).on("mouseup", function (e) {
 });
 
 function sendCollaboratorChange(e) {
-    var initialNode = document.getSelection().anchorNode;
-    var finalNode = document.getSelection().focusNode;
+    var initialNode = window.getSelection().anchorNode;
+    var finalNode = window.getSelection().focusNode;
     if (initialNode !== null && finalNode !== null) {
-        var initialElement = initialNode.nodeType === 3 ? initialNode.parentNode : initialNode;
-        var finalElement = finalNode.nodeType === 3 ? finalNode.parentNode : finalNode;
+        var initialElement = getEditorChild(initialNode);
+        var finalElement = getEditorChild(finalNode);
         var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
         var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
-        e.keyCode = checkKeyCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
+        console.log(initialRange, finalRange);
+        var code = checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
-            var json = '{"keyCode":"' + e.keyCode + '", "senderId":"' + logged_social_profile_id + '",'
+            var json = '{"code":"' + code + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
                     + '"finalRange":"' + finalRange + '", "initialIndex":"' + $(initialElement).index() + '",'
                     + '"finalIndex":"' + $(finalElement).index() + '", "type":"NEW_CODE"}';
             websocketDocs.send(json);
         }
         changeLocalActions(e, initialElement, finalElement, initialRange, finalRange);
+    }
+}
+
+function getEditorChild(node) {
+    if (node.nodeType === 3) {
+        return getEditorChild(node.parentNode);
+    } else {
+        if (node.parentNode.className === "editor") {
+            return node;
+        } else {
+            return getEditorChild(node.parentNode);
+        }
     }
 }
 
@@ -165,13 +218,15 @@ function getContent() {
     return true;
 }
 
-function checkKeyCodeToSend(e, initialElement, finalElement, initialRange, finalRange) {
+function checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange) {
     if (e.type == "cut") {
         if (initialRange == finalRange && initialElement == finalElement) {
             return undefined;
         } else {
             return keys.delete;
         }
+    } else if (e.type == "paste") {
+        return keys.paste + "+" + e.originalEvent.clipboardData.getData('Text');
     } else {
         return e.keyCode;
     }
@@ -313,26 +368,26 @@ if (window.getSelection && document.createRange) {
     };
 }
 
-function mouseClickAndLetterKeyPressAction(keyCode, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
     var initialStr = $(initialElement).text();
     var finalStr = $(finalElement).text();
-    if (keyCode === "undefined") {
+    if (code === "undefined") {
         $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     }
-    if (keyCode == keys.space) {
+    if (code == keys.space) {
         if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialStr.charCodeAt(initialRange - 1) == Number(keys.space))
                 || ($(initialElement).index() > $(finalElement).index() && finalStr.charCodeAt(finalRange - 1) == Number(keys.space))) {
-            keyCode = keys.nonBreakingSpace;
+            code = keys.nonBreakingSpace;
         }
     }
-    if (keyCode == keys.tab) {
-        keyCode = keys.emphasizedSpace;
+    if (code == keys.tab) {
+        code = keys.emphasizedSpace;
     }
     $(".marker[socialprofileid=" + senderId + "]").remove();
     if ($(initialElement).index() < $(finalElement).index()) {
-        if (keyCode !== "undefined") {
+        if (code !== "undefined") {
             var text = $(finalElement).html();
-            $(initialElement).append(String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + text);
+            $(initialElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + text);
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).remove();
             });
@@ -346,24 +401,24 @@ function mouseClickAndLetterKeyPressAction(keyCode, senderId, senderName, initia
         }
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange) {
-            if (keyCode !== "undefined") {
-                $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            if (code !== "undefined") {
+                $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
             } else {
                 $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(finalRange));
             }
         } else if (initialRange == finalRange) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
         } else {
-            if (keyCode !== "undefined") {
-                $(initialElement).html(initialStr.substring(0, finalRange) + String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+            if (code !== "undefined") {
+                $(initialElement).html(initialStr.substring(0, finalRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
             } else {
                 $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(initialRange));
             }
         }
     } else {
-        if (keyCode !== "undefined") {
+        if (code !== "undefined") {
             var text = $(initialElement).html();
-            $(finalElement).append(String.fromCharCode(keyCode) + addMarker(senderId, senderName, "") + text);
+            $(finalElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + text);
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).remove();
             });
@@ -378,7 +433,7 @@ function mouseClickAndLetterKeyPressAction(keyCode, senderId, senderName, initia
     }
 }
 
-function backspaceAndDeleteAction(keyCode, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+function backspaceAndDeleteAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
     var initialStr = $(initialElement).text();
     $(".marker[socialprofileid=" + senderId + "]").remove();
     if ($(initialElement).index() < $(finalElement).index()) {
@@ -392,7 +447,7 @@ function backspaceAndDeleteAction(keyCode, senderId, senderName, initialElement,
         if (initialRange < finalRange) {
             $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
         } else if (initialRange == finalRange) {
-            if (keyCode == keys.backspace && initialRange == 0 && $(initialElement).index() !== 0) {
+            if (code == keys.backspace && initialRange == 0 && $(initialElement).index() !== 0) {
                 var text = $(initialElement).html();
                 if ($(initialElement).prev().text() == "") {
                     $(initialElement).prev().html(addMarker(senderId, senderName, "") + text);
@@ -400,12 +455,12 @@ function backspaceAndDeleteAction(keyCode, senderId, senderName, initialElement,
                     $(initialElement).prev().append(addMarker(senderId, senderName, "") + text);
                 }
                 $(initialElement).remove();
-            } else if (keyCode == keys.delete && initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
+            } else if (code == keys.delete && initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
                 var text = $(initialElement).next().html();
                 $(initialElement).next().remove();
                 $(initialElement).append(addMarker(senderId, senderName, "") + text);
             } else {
-                if (keyCode == keys.backspace) {
+                if (code == keys.backspace) {
                     $(initialElement).html(initialStr.substring(0, initialRange - 1) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
                 } else {
                     $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange + 1));
@@ -424,11 +479,30 @@ function backspaceAndDeleteAction(keyCode, senderId, senderName, initialElement,
     }
 }
 
-function arrowAction(senderId, senderName, initialElement, initialRange, finalRange) {
+function arrowAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
     var initialStr = $(initialElement).text();
+    var finalStr = $(finalElement).text();
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+    if ($(initialElement).index() < $(finalElement).index()) {
+        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html()));
+        });
+        $(finalElement).html(addMarker(senderId, senderName, finalStr.substring(0, finalRange)) + finalStr.substring(finalRange));
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialRange < finalRange || initialRange == finalRange) {
+            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(finalRange));
+        } else {
+            $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, initialStr.substring(finalRange, initialRange)) + initialStr.substring(initialRange));
+        }
+    } else {
+        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html()));
+        });
+        $(finalElement).html(finalStr.substring(0, finalRange) + addMarker(senderId, senderName, finalStr.substring(finalRange)));
+    }
 }
 
 function enterAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
@@ -454,42 +528,42 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
     }
 }
 
-function homeAndEndAction(keyCode, senderId, senderName, initialElement) {
+function homeAndEndAction(code, senderId, senderName, initialElement) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    if (keyCode == keys.home) {
+    if (code == keys.home) {
         $(initialElement).html(addMarker(senderId, senderName, "") + $(initialElement).html());
     } else {
         $(initialElement).append(addMarker(senderId, senderName, ""));
     }
 }
 
-function ctrlHomeAndEndAction(keyCode, senderId, senderName, initialElement, finalElement) {
+function ctrlHomeAndEndAction(code, senderId, senderName) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    if (keyCode == keys.ctrlHome) {
+    if (code == keys.ctrlHome || code == keys.pageUp) {
         $(".editor").children().first().prepend(addMarker(senderId, senderName, ""));
     } else {
         $(".editor").children().last().append(addMarker(senderId, senderName, ""));
     }
 }
 
-function shiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, initialRange) {
+function shiftHomeAndEndAction(code, senderId, senderName, initialElement, initialRange) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialStr = $(initialElement).html();
-    if (keyCode == keys.shiftHome) {
+    if (code == keys.shiftHome) {
         $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
     } else {
         $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
     }
 }
 
-function ctrlShiftHomeAndEndAction(keyCode, senderId, senderName, initialElement, initialRange) {
+function ctrlShiftHomeAndEndAction(code, senderId, senderName, initialElement, initialRange) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialStr = $(initialElement).html();
-    if (keyCode == keys.ctrlShiftHome) {
+    if (code == keys.ctrlShiftHome || code == keys.shiftPageUp) {
         $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
         $(initialElement).prevAll().each(function () {
             $(this).html(addMarker(senderId, senderName, $(this).html()));
@@ -505,7 +579,33 @@ function ctrlShiftHomeAndEndAction(keyCode, senderId, senderName, initialElement
 function ctrlAAction(senderId, senderName) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    $(".editor").children().each(function(){
+    $(".editor").children().each(function () {
         $(this).html(addMarker(senderId, senderName, $(this).html()));
     })
+}
+
+function pasteAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+    var initialStr = $(initialElement).text();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        var text = $(finalElement).html();
+        $(initialElement).append(code + addMarker(senderId, senderName, "") + text);
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialRange < finalRange || initialRange == finalRange) {
+            $(initialElement).html(initialStr.substring(0, initialRange) + code + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+        } else {
+            $(initialElement).html(initialStr.substring(0, finalRange) + code + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+        }
+    } else {
+        var text = $(initialElement).html();
+        $(finalElement).append(code + addMarker(senderId, senderName, "") + text);
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+    }
 }
