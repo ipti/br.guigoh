@@ -166,6 +166,7 @@ $(document).on("keypress", ".editor", function (e) {
 
 $(document).on("paste", ".editor", function (e) {
     sendCollaboratorChange(e);
+
 });
 
 $(document).on("cut", ".editor", function (e) {
@@ -180,13 +181,12 @@ function sendCollaboratorChange(e) {
     var initialNode = window.getSelection().anchorNode;
     var finalNode = window.getSelection().focusNode;
     if (initialNode !== null && finalNode !== null) {
-        var initialElement = getEditorChild(initialNode);
-        var finalElement = getEditorChild(finalNode);
-        var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
-        var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
-        console.log(initialRange, finalRange);
-        var code = checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
+            var initialElement = getEditorChild(initialNode);
+            var finalElement = getEditorChild(finalNode);
+            var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
+            var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
+            var code = checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
             var json = '{"code":"' + code + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
                     + '"finalRange":"' + finalRange + '", "initialIndex":"' + $(initialElement).index() + '",'
@@ -226,7 +226,17 @@ function checkCodeToSend(e, initialElement, finalElement, initialRange, finalRan
             return keys.delete;
         }
     } else if (e.type == "paste") {
-        return keys.paste + "+" + e.originalEvent.clipboardData.getData('Text');
+        var htmlArray = $.parseHTML(e.originalEvent.clipboardData.getData("text/html"));
+        if (htmlArray !== null) {
+            var htmlString = "";
+            htmlArray.splice(0, 1);
+            for (var i in htmlArray) {
+                htmlString += htmlArray[i].outerHTML;
+            }
+            return keys.paste + "+" + htmlString.replace(/'/g, "").replace(/"/g, "'");
+        } else {
+            return keys.paste + "+" + e.originalEvent.clipboardData.getData("text").replace(/'/g, "").replace(/"/g, "'");;
+        }
     } else {
         return e.keyCode;
     }
@@ -369,14 +379,12 @@ if (window.getSelection && document.createRange) {
 }
 
 function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
-    var initialStr = $(initialElement).text();
-    var finalStr = $(finalElement).text();
     if (code === "undefined") {
         $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     }
     if (code == keys.space) {
-        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialStr.charCodeAt(initialRange - 1) == Number(keys.space))
-                || ($(initialElement).index() > $(finalElement).index() && finalStr.charCodeAt(finalRange - 1) == Number(keys.space))) {
+        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialText.charCodeAt(initialRange - 1) == Number(keys.space))
+                || ($(initialElement).index() > $(finalElement).index() && finalText.charCodeAt(finalRange - 1) == Number(keys.space))) {
             code = keys.nonBreakingSpace;
         }
     }
@@ -384,51 +392,53 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
         code = keys.emphasizedSpace;
     }
     $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
+    var initialText = $(initialElement).text();
+    var finalText = $(finalElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
         if (code !== "undefined") {
-            var text = $(finalElement).html();
-            $(initialElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + text);
+            $(initialElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + finalHtml);
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).remove();
             });
             $(finalElement).remove();
         } else {
-            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+            $(initialElement).html(initialText.substring(0, initialRange) + addMarker(senderId, senderName, initialText.substring(initialRange)));
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).html(addMarker(senderId, senderName, $(this).html()));
             });
-            $(finalElement).html(addMarker(senderId, senderName, finalStr.substring(0, finalRange)) + finalStr.substring(finalRange));
+            $(finalElement).html(addMarker(senderId, senderName, finalText.substring(0, finalRange)) + finalText.substring(finalRange));
         }
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange) {
             if (code !== "undefined") {
-                $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+                $(initialElement).html(initialText.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialText.substring(finalRange));
             } else {
-                $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(finalRange));
+                $(initialElement).html(initialText.substring(0, initialRange) + addMarker(senderId, senderName, initialText.substring(initialRange, finalRange)) + initialText.substring(finalRange));
             }
         } else if (initialRange == finalRange) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            $(initialElement).html(initialHtml.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange));
         } else {
             if (code !== "undefined") {
-                $(initialElement).html(initialStr.substring(0, finalRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+                $(initialElement).html(initialText.substring(0, finalRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialText.substring(initialRange));
             } else {
-                $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(initialRange));
+                $(initialElement).html(initialText.substring(0, finalRange) + addMarker(senderId, senderName, initialText.substring(initialRange, finalRange)) + initialText.substring(initialRange));
             }
         }
     } else {
         if (code !== "undefined") {
-            var text = $(initialElement).html();
-            $(finalElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + text);
+            $(finalElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml);
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).remove();
             });
             $(initialElement).remove();
         } else {
-            $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+            $(initialElement).html(addMarker(senderId, senderName, initialText.substring(0, initialRange)) + initialText.substring(initialRange));
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).html(addMarker(senderId, senderName, $(this).html()));
             });
-            $(finalElement).html(finalStr.substring(0, finalRange) + addMarker(senderId, senderName, finalStr.substring(finalRange)));
+            $(finalElement).html(finalText.substring(0, finalRange) + addMarker(senderId, senderName, finalText.substring(finalRange)));
         }
     }
 }
@@ -585,6 +595,7 @@ function ctrlAAction(senderId, senderName) {
 }
 
 function pasteAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
+    code = code.replace(/'/g, '"');
     var initialStr = $(initialElement).text();
     $(".marker[socialprofileid=" + senderId + "]").remove();
     if ($(initialElement).index() < $(finalElement).index()) {
@@ -606,6 +617,5 @@ function pasteAction(code, senderId, senderName, initialElement, finalElement, i
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
-        $(initialElement).remove();
     }
 }
