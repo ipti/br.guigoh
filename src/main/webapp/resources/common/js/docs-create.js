@@ -166,7 +166,6 @@ $(document).on("keypress", ".editor", function (e) {
 
 $(document).on("paste", ".editor", function (e) {
     sendCollaboratorChange(e);
-
 });
 
 $(document).on("cut", ".editor", function (e) {
@@ -184,8 +183,9 @@ function sendCollaboratorChange(e) {
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var initialElement = getEditorChild(initialNode);
             var finalElement = getEditorChild(finalNode);
-            var initialRange = getCharOffsetRelativeTo(initialElement, initialNode, document.getSelection().anchorOffset);
-            var finalRange = getCharOffsetRelativeTo(finalElement, finalNode, document.getSelection().focusOffset);
+            var initialRange = getOffset(initialElement);
+            var finalRange = getOffset(finalElement);
+            console.log(initialRange, finalRange);
             var code = checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
             var json = '{"code":"' + code + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
@@ -226,17 +226,18 @@ function checkCodeToSend(e, initialElement, finalElement, initialRange, finalRan
             return keys.delete;
         }
     } else if (e.type == "paste") {
-        var htmlArray = $.parseHTML(e.originalEvent.clipboardData.getData("text/html"));
-        if (htmlArray !== null) {
-            var htmlString = "";
-            htmlArray.splice(0, 1);
-            for (var i in htmlArray) {
-                htmlString += htmlArray[i].outerHTML;
-            }
-            return keys.paste + "+" + htmlString.replace(/'/g, "").replace(/"/g, "'");
-        } else {
-            return keys.paste + "+" + e.originalEvent.clipboardData.getData("text").replace(/'/g, "").replace(/"/g, "'");;
-        }
+//        var htmlArray = (event.originalEvent || event).clipboardData.getData('text/html');
+//        console.log(htmlArray);
+//        if (htmlArray !== null) {
+//            var htmlString = "";
+//            htmlArray.splice(0, 1);
+//            for (var i in htmlArray) {
+//                htmlString += htmlArray[i].outerHTML;
+//            }
+//            return keys.paste + "+" + htmlString.replace(/'/g, "").replace(/"/g, "'");
+//        } else {
+//            return keys.paste + "+" + e.originalEvent.clipboardData.getData("text").replace(/'/g, "").replace(/"/g, "'");;
+//        }
     } else {
         return e.keyCode;
     }
@@ -273,12 +274,44 @@ function changeLocalActions(e, initialElement, finalElement, initialRange, final
     }
 }
 
-function getCharOffsetRelativeTo(container, node, offset) {
-    var range = document.createRange();
-    range.selectNodeContents(container);
-    range.setEnd(node, offset);
-    return range.toString().length;
+function getOffset(element) {
+    
+    var marker = $("<span class='offset-marker-" + logged_social_profile_id + "'></span>");
+    
+    var sel = document.getSelection();
+    
+    if (!sel.rangeCount)
+        return; // No ranges.
+    
+    if (!sel.isCollapsed)
+        return; // We work only with collapsed selections.
+    
+    if (sel.rangeCount > 1)
+        throw new Error("can't handle multiple ranges");
+    
+    var range = sel.getRangeAt(0);
+    var saved = rangy.serializeSelection();
+    
+    $(element)[0].normalize();
+    
+    range.insertNode(marker[0]);
+    var offset = $(element).html().indexOf(marker[0].outerHTML);
+    marker.remove();
+    
+    // Normalizing before and after ensures that the DOM is in the same shape before 
+    // and after the insertion and removal of the marker.
+    $(element)[0].normalize();
+    rangy.deserializeSelection(saved);
+    
+    return offset;
 }
+
+//function getCharOffsetRelativeTo(container, node, offset) {
+//    var range = document.createRange();
+//    range.selectNodeContents(container);
+//    range.setEnd(node, offset);
+//    return range.toString().length;
+//}
 
 function moveCaret(charCount, invertedSelection) {
     invertedSelection = invertedSelection == null ? false : invertedSelection;
