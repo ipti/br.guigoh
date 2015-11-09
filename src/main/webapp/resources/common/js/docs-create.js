@@ -122,6 +122,10 @@ function onMessageReceivedForDocs(evt) {
             $(".editor div").each(function () {
                 if ($(this).html() == "") {
                     $(this).append("<br>");
+                } else {
+                    if ($(this).find(".marker").length) {
+                        $(this).find("br").remove();
+                    }
                 }
             });
         }
@@ -183,9 +187,9 @@ function sendCollaboratorChange(e) {
         if ($(initialNode).closest(".editor").length && $(finalNode).closest(".editor").length) {
             var initialElement = getEditorChild(initialNode);
             var finalElement = getEditorChild(finalNode);
-            var initialRange = getOffset(initialElement);
-            var finalRange = getOffset(finalElement);
-            console.log(initialRange, finalRange);
+            var range = getOffset(initialElement, finalElement)
+            var initialRange = range.initial;
+            var finalRange = range.final;
             var code = checkCodeToSend(e, initialElement, finalElement, initialRange, finalRange);
             var json = '{"code":"' + code + '", "senderId":"' + logged_social_profile_id + '",'
                     + '"senderName":"' + logged_social_profile_name + '", "initialRange":"' + initialRange + '",'
@@ -274,36 +278,32 @@ function changeLocalActions(e, initialElement, finalElement, initialRange, final
     }
 }
 
-function getOffset(element) {
-    
-    var marker = $("<span class='offset-marker-" + logged_social_profile_id + "'></span>");
-    
+function getOffset(initialElement, finalElement) {
+    var marker = $("<span id='offset-marker-" + logged_social_profile_id + "'></span>");
     var sel = document.getSelection();
-    
-    if (!sel.rangeCount)
-        return; // No ranges.
-    
-    if (!sel.isCollapsed)
-        return; // We work only with collapsed selections.
-    
-    if (sel.rangeCount > 1)
-        throw new Error("can't handle multiple ranges");
-    
-    var range = sel.getRangeAt(0);
+
+    var range = document.createRange();
+    range.setStart(sel.anchorNode, sel.anchorOffset);
     var saved = rangy.serializeSelection();
-    
-    $(element)[0].normalize();
-    
+
+    $(initialElement)[0].normalize();
     range.insertNode(marker[0]);
-    var offset = $(element).html().indexOf(marker[0].outerHTML);
+    var initialOffset = $(initialElement).html().indexOf(marker[0].outerHTML);
     marker.remove();
-    
-    // Normalizing before and after ensures that the DOM is in the same shape before 
-    // and after the insertion and removal of the marker.
-    $(element)[0].normalize();
+
+    $(initialElement)[0].normalize();
+
+    range.setStart(sel.focusNode, sel.focusOffset);
+
+    $(finalElement)[0].normalize();
+    range.insertNode(marker[0]);
+    var finalOffset = $(finalElement).html().indexOf(marker[0].outerHTML);
+    marker.remove();
+
+    $(finalElement)[0].normalize();
     rangy.deserializeSelection(saved);
-    
-    return offset;
+
+    return {initial: initialOffset, final: finalOffset};
 }
 
 //function getCharOffsetRelativeTo(container, node, offset) {
@@ -415,20 +415,18 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
     if (code === "undefined") {
         $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     }
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     if (code == keys.space) {
-        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialText.charCodeAt(initialRange - 1) == Number(keys.space))
-                || ($(initialElement).index() > $(finalElement).index() && finalText.charCodeAt(finalRange - 1) == Number(keys.space))) {
+        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialHtml.charCodeAt(initialRange - 6) == Number(keys.space))
+                || ($(initialElement).index() > $(finalElement).index() && finalHtml.charCodeAt(finalRange - 6) == Number(keys.space))) {
             code = keys.nonBreakingSpace;
         }
     }
     if (code == keys.tab) {
         code = keys.emphasizedSpace;
     }
-    $(".marker[socialprofileid=" + senderId + "]").remove();
-    var initialHtml = $(initialElement).html();
-    var finalHtml = $(finalElement).html();
-    var initialText = $(initialElement).text();
-    var finalText = $(finalElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
         if (code !== "undefined") {
             $(initialElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + finalHtml);
@@ -437,26 +435,26 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
             });
             $(finalElement).remove();
         } else {
-            $(initialElement).html(initialText.substring(0, initialRange) + addMarker(senderId, senderName, initialText.substring(initialRange)));
+            $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange)));
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).html(addMarker(senderId, senderName, $(this).html()));
             });
-            $(finalElement).html(addMarker(senderId, senderName, finalText.substring(0, finalRange)) + finalText.substring(finalRange));
+            $(finalElement).html(addMarker(senderId, senderName, finalHtml.substring(0, finalRange)) + finalHtml.substring(finalRange));
         }
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange) {
             if (code !== "undefined") {
-                $(initialElement).html(initialText.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialText.substring(finalRange));
+                $(initialElement).html(initialHtml.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(finalRange));
             } else {
-                $(initialElement).html(initialText.substring(0, initialRange) + addMarker(senderId, senderName, initialText.substring(initialRange, finalRange)) + initialText.substring(finalRange));
+                $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange, finalRange)) + initialHtml.substring(finalRange));
             }
         } else if (initialRange == finalRange) {
             $(initialElement).html(initialHtml.substring(0, initialRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange));
         } else {
             if (code !== "undefined") {
-                $(initialElement).html(initialText.substring(0, finalRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialText.substring(initialRange));
+                $(initialElement).html(initialHtml.substring(0, finalRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange));
             } else {
-                $(initialElement).html(initialText.substring(0, finalRange) + addMarker(senderId, senderName, initialText.substring(initialRange, finalRange)) + initialText.substring(initialRange));
+                $(initialElement).html(initialHtml.substring(0, finalRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange, finalRange)) + initialHtml.substring(initialRange));
             }
         }
     } else {
@@ -467,54 +465,52 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
             });
             $(initialElement).remove();
         } else {
-            $(initialElement).html(addMarker(senderId, senderName, initialText.substring(0, initialRange)) + initialText.substring(initialRange));
+            $(initialElement).html(addMarker(senderId, senderName, initialHtml.substring(0, initialRange)) + initialHtml.substring(initialRange));
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).html(addMarker(senderId, senderName, $(this).html()));
             });
-            $(finalElement).html(finalText.substring(0, finalRange) + addMarker(senderId, senderName, finalText.substring(finalRange)));
+            $(finalElement).html(finalHtml.substring(0, finalRange) + addMarker(senderId, senderName, finalHtml.substring(finalRange)));
         }
     }
 }
 
 function backspaceAndDeleteAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
-    var initialStr = $(initialElement).text();
     $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var text = $(finalElement).html();
-        $(initialElement).append(addMarker(senderId, senderName, "") + text);
+        var finalHtml = $(finalElement).html();
+        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalRange));
         } else if (initialRange == finalRange) {
             if (code == keys.backspace && initialRange == 0 && $(initialElement).index() !== 0) {
-                var text = $(initialElement).html();
                 if ($(initialElement).prev().text() == "") {
-                    $(initialElement).prev().html(addMarker(senderId, senderName, "") + text);
+                    $(initialElement).prev().html(addMarker(senderId, senderName, "") + initialHtml);
                 } else {
-                    $(initialElement).prev().append(addMarker(senderId, senderName, "") + text);
+                    $(initialElement).prev().append(addMarker(senderId, senderName, "") + initialHtml);
                 }
                 $(initialElement).remove();
-            } else if (code == keys.delete && initialRange == initialStr.length && !$(initialElement).is(':last-child')) {
-                var text = $(initialElement).next().html();
+            } else if (code == keys.delete && initialRange == initialHtml.length && !$(initialElement).is(':last-child')) {
+                var nextHtml = $(initialElement).next().html();
                 $(initialElement).next().remove();
-                $(initialElement).append(addMarker(senderId, senderName, "") + text);
+                $(initialElement).append(addMarker(senderId, senderName, "") + nextHtml);
             } else {
                 if (code == keys.backspace) {
-                    $(initialElement).html(initialStr.substring(0, initialRange - 1) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+                    $(initialElement).html(initialHtml.substring(0, initialRange - 1) + addMarker(senderId, senderName, "") + initialHtml.substring(finalRange));
                 } else {
-                    $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialStr.substring(finalRange + 1));
+                    $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalRange + 1));
                 }
             }
         } else {
-            $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+            $(initialElement).html(initialHtml.substring(0, finalRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange));
         }
     } else {
-        var text = $(initialElement).html();
-        $(finalElement).append(addMarker(senderId, senderName, "") + text);
+        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
@@ -523,51 +519,51 @@ function backspaceAndDeleteAction(code, senderId, senderName, initialElement, fi
 }
 
 function arrowAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
-    var initialStr = $(initialElement).text();
-    var finalStr = $(finalElement).text();
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
-        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+        $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange)));
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).html(addMarker(senderId, senderName, $(this).html()));
         });
-        $(finalElement).html(addMarker(senderId, senderName, finalStr.substring(0, finalRange)) + finalStr.substring(finalRange));
+        $(finalElement).html(addMarker(senderId, senderName, finalHtml.substring(0, finalRange)) + finalHtml.substring(finalRange));
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange || initialRange == finalRange) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange, finalRange)) + initialStr.substring(finalRange));
+            console.log(initialHtml);
+            $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange, finalRange)) + initialHtml.substring(finalRange));
         } else {
-            $(initialElement).html(initialStr.substring(0, finalRange) + addMarker(senderId, senderName, initialStr.substring(finalRange, initialRange)) + initialStr.substring(initialRange));
+            $(initialElement).html(initialHtml.substring(0, finalRange) + addMarker(senderId, senderName, initialHtml.substring(finalRange, initialRange)) + initialHtml.substring(initialRange));
         }
     } else {
-        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+        $(initialElement).html(addMarker(senderId, senderName, initialHtml.substring(0, initialRange)) + initialHtml.substring(initialRange));
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).html(addMarker(senderId, senderName, $(this).html()));
         });
-        $(finalElement).html(finalStr.substring(0, finalRange) + addMarker(senderId, senderName, finalStr.substring(finalRange)));
+        $(finalElement).html(finalHtml.substring(0, finalRange) + addMarker(senderId, senderName, finalHtml.substring(finalRange)));
     }
 }
 
 function enterAction(senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var text = $(finalElement).text();
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
-        $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(initialElement);
+        $("<div>" + addMarker(senderId, senderName, "") + finalHtml + "</div>").insertAfter(initialElement);
     } else if ($(initialElement).index() == $(finalElement).index()) {
-        var text = $(initialElement).text();
-        $(initialElement).html(text.substring(0, initialRange < finalRange ? initialRange : finalRange));
-        $("<div>" + addMarker(senderId, senderName, "") + text.substring(initialRange < finalRange ? initialRange : finalRange) + "</div>").insertAfter(initialElement);
+        $(initialElement).html(initialHtml.substring(0, initialRange < finalRange ? initialRange : finalRange));
+        $("<div>" + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange < finalRange ? initialRange : finalRange) + "</div>").insertAfter(initialElement);
     } else {
-        var text = $(initialElement).text();
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
-        $("<div>" + addMarker(senderId, senderName, "") + text + "</div>").insertAfter(finalElement);
+        $("<div>" + addMarker(senderId, senderName, "") + initialHtml + "</div>").insertAfter(finalElement);
     }
 }
 
@@ -594,25 +590,25 @@ function ctrlHomeAndEndAction(code, senderId, senderName) {
 function shiftHomeAndEndAction(code, senderId, senderName, initialElement, initialRange) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    var initialStr = $(initialElement).html();
+    var initialHtml = $(initialElement).html();
     if (code == keys.shiftHome) {
-        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+        $(initialElement).html(addMarker(senderId, senderName, initialHtml.substring(0, initialRange)) + initialHtml.substring(initialRange));
     } else {
-        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+        $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange)));
     }
 }
 
 function ctrlShiftHomeAndEndAction(code, senderId, senderName, initialElement, initialRange) {
     $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
-    var initialStr = $(initialElement).html();
+    var initialHtml = $(initialElement).html();
     if (code == keys.ctrlShiftHome || code == keys.shiftPageUp) {
-        $(initialElement).html(addMarker(senderId, senderName, initialStr.substring(0, initialRange)) + initialStr.substring(initialRange));
+        $(initialElement).html(addMarker(senderId, senderName, initialHtml.substring(0, initialRange)) + initialHtml.substring(initialRange));
         $(initialElement).prevAll().each(function () {
             $(this).html(addMarker(senderId, senderName, $(this).html()));
         });
     } else {
-        $(initialElement).html(initialStr.substring(0, initialRange) + addMarker(senderId, senderName, initialStr.substring(initialRange)));
+        $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange)));
         $(initialElement).nextAll().each(function () {
             $(this).html(addMarker(senderId, senderName, $(this).html()));
         });
