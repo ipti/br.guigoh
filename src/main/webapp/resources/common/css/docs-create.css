@@ -15,15 +15,11 @@
     border-bottom-right-radius: 10px;
     font-size: 12px;
     font-family: Arial;
-}
-
-.editor div:first-child {
-    padding-top: 5px
+    padding: 5px 10px 0
 }
 
 .editor div {
     outline: none;
-    padding: 0 10px;
 }
 
 .marker {

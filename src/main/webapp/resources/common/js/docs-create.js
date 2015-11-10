@@ -119,12 +119,15 @@ function onMessageReceivedForDocs(evt) {
                     }
                     break;
             }
-            $(".editor div").each(function () {
+            $(".editor > div").each(function () {
                 if ($(this).html() == "") {
                     $(this).append("<br>");
                 } else {
                     if ($(this).find(".marker").length) {
                         $(this).find("br").remove();
+                    }
+                    if ($(this).text() == "") {
+                        $(this).children().append("<br>");
                     }
                 }
             });
@@ -230,18 +233,17 @@ function checkCodeToSend(e, initialElement, finalElement, initialRange, finalRan
             return keys.delete;
         }
     } else if (e.type == "paste") {
-//        var htmlArray = (event.originalEvent || event).clipboardData.getData('text/html');
-//        console.log(htmlArray);
-//        if (htmlArray !== null) {
-//            var htmlString = "";
-//            htmlArray.splice(0, 1);
-//            for (var i in htmlArray) {
-//                htmlString += htmlArray[i].outerHTML;
-//            }
-//            return keys.paste + "+" + htmlString.replace(/'/g, "").replace(/"/g, "'");
-//        } else {
-//            return keys.paste + "+" + e.originalEvent.clipboardData.getData("text").replace(/'/g, "").replace(/"/g, "'");;
-//        }
+        var htmlArray = $.parseHTML((event.originalEvent || event).clipboardData.getData('text/html'));
+        if (htmlArray !== null) {
+            var htmlString = "";
+            htmlArray.splice(0, 1);
+            for (var i in htmlArray) {
+                htmlString += htmlArray[i].outerHTML;
+            }
+            return keys.paste + "+" + htmlString.replace(/'/g, "").replace(/"/g, "'");
+        } else {
+            return keys.paste + "+" + e.originalEvent.clipboardData.getData("text").replace(/'/g, "").replace(/"/g, "'");
+        }
     } else {
         return e.keyCode;
     }
@@ -250,10 +252,10 @@ function checkCodeToSend(e, initialElement, finalElement, initialRange, finalRan
 function changeLocalActions(e, initialElement, finalElement, initialRange, finalRange) {
     if (e.keyCode == keys.tab) {
         e.preventDefault();
-        var initialStr = $(initialElement).html();
-        var finalStr = $(finalElement).html();
+        var initialHtml = $(initialElement).html();
+        var finalHtml = $(finalElement).html();
         if ($(initialElement).index() < $(finalElement).index()) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keys.emphasizedSpace) + finalStr.substring(finalRange));
+            $(initialElement).html(initialHtml.substring(0, initialRange) + String.fromCharCode(keys.emphasizedSpace) + finalHtml.substring(finalRange));
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).remove();
             });
@@ -261,14 +263,51 @@ function changeLocalActions(e, initialElement, finalElement, initialRange, final
             moveCaret(initialRange + 1);
         } else if ($(initialElement).index() == $(finalElement).index()) {
             if ((initialRange < finalRange) || (initialRange == finalRange)) {
-                $(initialElement).html(initialStr.substring(0, initialRange) + String.fromCharCode(keys.emphasizedSpace) + initialStr.substring(finalRange));
+                $(initialElement).html(initialHtml.substring(0, initialRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(finalRange));
                 moveCaret(initialRange + 1);
             } else {
-                $(initialElement).html(initialStr.substring(0, finalRange) + String.fromCharCode(keys.emphasizedSpace) + initialStr.substring(initialRange));
+                $(initialElement).html(initialHtml.substring(0, finalRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(initialRange));
                 moveCaret(finalRange + 1, true);
             }
         } else {
-            $(finalElement).html(finalStr.substring(0, finalRange) + String.fromCharCode(keys.emphasizedSpace) + initialStr.substring(initialRange));
+            $(finalElement).html(finalHtml.substring(0, finalRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(initialRange));
+            $(finalElement).nextUntil($(initialElement)).each(function () {
+                $(this).remove();
+            });
+            $(initialElement).remove();
+            moveCaret(finalRange + 1, true);
+        }
+    } else if (e.type == "paste") {
+        e.preventDefault();
+        var htmlArray = $.parseHTML((event.originalEvent || event).clipboardData.getData('text/html'));
+        var htmlString = "";
+        if (htmlArray !== null) {
+            htmlArray.splice(0, 1);
+            for (var i in htmlArray) {
+                htmlString += htmlArray[i].outerHTML;
+            }
+        } else {
+            htmlString = e.originalEvent.clipboardData.getData("text");
+        }
+        var initialHtml = $(initialElement).html();
+        var finalHtml = $(finalElement).html();
+        if ($(initialElement).index() < $(finalElement).index()) {
+            $(initialElement).html(initialHtml.substring(0, initialRange) + htmlString + finalHtml.substring(finalRange));
+            $(initialElement).nextUntil($(finalElement)).each(function () {
+                $(this).remove();
+            });
+            $(finalElement).remove();
+            moveCaret(initialRange + 1);
+        } else if ($(initialElement).index() == $(finalElement).index()) {
+            if ((initialRange < finalRange) || (initialRange == finalRange)) {
+                $(initialElement).html(initialHtml.substring(0, initialRange) + htmlString + initialHtml.substring(finalRange));
+                moveCaret(initialRange + 1);
+            } else {
+                $(initialElement).html(initialHtml.substring(0, finalRange) + htmlString + initialHtml.substring(initialRange));
+                moveCaret(finalRange + 1, true);
+            }
+        } else {
+            $(finalElement).html(finalHtml.substring(0, finalRange) + htmlString + initialHtml.substring(initialRange));
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).remove();
             });
@@ -305,13 +344,6 @@ function getOffset(initialElement, finalElement) {
 
     return {initial: initialOffset, final: finalOffset};
 }
-
-//function getCharOffsetRelativeTo(container, node, offset) {
-//    var range = document.createRange();
-//    range.selectNodeContents(container);
-//    range.setEnd(node, offset);
-//    return range.toString().length;
-//}
 
 function moveCaret(charCount, invertedSelection) {
     invertedSelection = invertedSelection == null ? false : invertedSelection;
@@ -531,7 +563,6 @@ function arrowAction(senderId, senderName, initialElement, finalElement, initial
         $(finalElement).html(addMarker(senderId, senderName, finalHtml.substring(0, finalRange)) + finalHtml.substring(finalRange));
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange || initialRange == finalRange) {
-            console.log(initialHtml);
             $(initialElement).html(initialHtml.substring(0, initialRange) + addMarker(senderId, senderName, initialHtml.substring(initialRange, finalRange)) + initialHtml.substring(finalRange));
         } else {
             $(initialElement).html(initialHtml.substring(0, finalRange) + addMarker(senderId, senderName, initialHtml.substring(finalRange, initialRange)) + initialHtml.substring(initialRange));
@@ -549,22 +580,33 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
+    $(initialElement).html(initialHtml.substring(0, initialRange) + "<span class='initial-marker-" + senderId + "'></span>" + initialHtml.substring(initialRange));
+    $(finalElement).html(finalHtml.substring(0, finalRange) + "<span class='final-marker-" + senderId + "'></span>" + finalHtml.substring(finalRange));
     if ($(initialElement).index() < $(finalElement).index()) {
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
-        $("<div>" + addMarker(senderId, senderName, "") + finalHtml + "</div>").insertAfter(initialElement);
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(initialElement);
     } else if ($(initialElement).index() == $(finalElement).index()) {
+        if ($(initialElement).next().find(".final-marker-" + senderId)[0] !== undefined && $(initialElement).next().find(".final-marker-" + senderId)[0].nextSibling !== null) {
+            $(initialElement).clone().html(addMarker(senderId, senderName, "") + $(initialElement).html()).insertAfter(initialElement);
+            var textAfter = $(initialElement).next().find(".final-marker-" + senderId)[0].nextSibling.nodeValue;
+            $(initialElement).next().find(".final-marker-" + senderId).parent().text(textAfter);
+        } else {
+            $(initialElement).clone().insertAfter(initialElement);
+            $(initialElement.each());
+        }
         $(initialElement).html(initialHtml.substring(0, initialRange < finalRange ? initialRange : finalRange));
-        $("<div>" + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange < finalRange ? initialRange : finalRange) + "</div>").insertAfter(initialElement);
     } else {
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
-        $("<div>" + addMarker(senderId, senderName, "") + initialHtml + "</div>").insertAfter(finalElement);
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(finalElement);
     }
+    $(".initial-marker-" + senderId).remove();
+    $(".final-marker-" + senderId).remove();
 }
 
 function homeAndEndAction(code, senderId, senderName, initialElement) {
@@ -624,25 +666,24 @@ function ctrlAAction(senderId, senderName) {
 }
 
 function pasteAction(code, senderId, senderName, initialElement, finalElement, initialRange, finalRange) {
-    code = code.replace(/'/g, '"');
-    var initialStr = $(initialElement).text();
     $(".marker[socialprofileid=" + senderId + "]").remove();
+    code = code.replace(/'/g, '"');
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var text = $(finalElement).html();
-        $(initialElement).append(code + addMarker(senderId, senderName, "") + text);
+        $(initialElement).append(code + addMarker(senderId, senderName, "") + finalHtml);
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialRange < finalRange || initialRange == finalRange) {
-            $(initialElement).html(initialStr.substring(0, initialRange) + code + addMarker(senderId, senderName, "") + initialStr.substring(finalRange));
+            $(initialElement).html(initialHtml.substring(0, initialRange) + code + addMarker(senderId, senderName, "") + initialHtml.substring(finalRange));
         } else {
-            $(initialElement).html(initialStr.substring(0, finalRange) + code + addMarker(senderId, senderName, "") + initialStr.substring(initialRange));
+            $(initialElement).html(initialHtml.substring(0, finalRange) + code + addMarker(senderId, senderName, "") + initialHtml.substring(initialRange));
         }
     } else {
-        var text = $(initialElement).html();
-        $(finalElement).append(code + addMarker(senderId, senderName, "") + text);
+        $(finalElement).append(code + addMarker(senderId, senderName, "") + initialHtml);
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });

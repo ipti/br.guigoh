@@ -285,6 +285,10 @@ div.select {
     margin: -15px 0 5px 0;
 }
 
+.panel-login .msg {
+    width: 285px;
+}
+
 .error{
     color:red !important;
 }
