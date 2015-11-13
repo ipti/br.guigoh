@@ -127,9 +127,7 @@ function onMessageReceivedForDocs(json) {
                     break;
             }
             $(".editor > div").each(function () {
-                if ($(this).text() == "") {
-                    insertBrOnDeepestChild(this);
-                }
+                insertBrOnDeepestChild(this);
             });
         }
     }
@@ -137,25 +135,32 @@ function onMessageReceivedForDocs(json) {
 }
 
 function insertBrOnDeepestChild(element) {
-    if ($(element).children().not(".marker, br").length == 0) {
-        if ($(element).find("br").length && !$(element).find("br").is(':last-child')) {
-            $(element).find("br").remove();
-            $(element).append("<br>");
-        }
+    if ($(element).html() == "") {
+        $(element).append("<br>");
     } else {
-        var target = $(element).children().not(".marker, br"),
-                next = target;
+        if ($(element).text() == "") {
+            if ($(element).children().not(".marker, br").length == 0) {
+                if ($(element).find("br").length && !$(element).find("br").is(':last-child')) {
+                    $(element).find("br").remove();
+                    $(element).append("<br>");
+                } else if ($(element).find("br").length) {
+                }
+            } else {
+                var target = $(element).children().not(".marker, br"),
+                        next = target;
 
-        while (next.length) {
-            if (next.parent().find("br").length) {
-                next.parent().find("br").remove();
+                while (next.length) {
+                    if (next.parent().find("br").length) {
+                        next.parent().find("br").remove();
+                    }
+                    target = next;
+                    next = next.children().not("br");
+                }
+                if (target.children("br").length == 0) {
+                    target.find("br").remove();
+                    target.append("<br>");
+                }
             }
-            target = next;
-            next = next.children().not("br");
-        }
-        if (target.children("br").length == 0) {
-            target.find("br").remove();
-            target.append("<br>");
         }
     }
 }
