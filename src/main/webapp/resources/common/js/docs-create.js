@@ -126,7 +126,7 @@ function onMessageReceivedForDocs(json) {
                     }
                     break;
             }
-            $(".editor > div").each(function () {
+            $(".editor").children().each(function () {
                 insertBrOnDeepestChild(this);
             });
         }
@@ -140,11 +140,8 @@ function insertBrOnDeepestChild(element) {
     } else {
         if ($(element).text() == "") {
             if ($(element).children().not(".marker, br").length == 0) {
-                if ($(element).find("br").length && !$(element).find("br").is(':last-child')) {
-                    $(element).find("br").remove();
-                    $(element).append("<br>");
-                } else if ($(element).find("br").length) {
-                }
+                $(element).find("br").remove();
+                $(element).append("<br>");
             } else {
                 var target = $(element).children().not(".marker, br"),
                         next = target;
@@ -161,6 +158,8 @@ function insertBrOnDeepestChild(element) {
                     target.append("<br>");
                 }
             }
+        } else {
+            $(element).find("br").remove();
         }
     }
 }
@@ -554,7 +553,6 @@ if (window.getSelection && document.createRange) {
  * @returns void
  */
 
-//ajeitar digitada com highlight em mais de uma div
 function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
     if (code === "undefined") {
         $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
@@ -573,7 +571,7 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
     }
     if ($(initialElement).index() < $(finalElement).index()) {
         if (code !== "undefined") {
-            $(initialElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + finalHtml);
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + finalHtml);
             $(initialElement).nextUntil($(finalElement)).each(function () {
                 $(this).remove();
             });
@@ -603,7 +601,7 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
         }
     } else {
         if (code !== "undefined") {
-            $(finalElement).append(String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml);
+            $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml);
             $(finalElement).nextUntil($(initialElement)).each(function () {
                 $(this).remove();
             });
@@ -618,7 +616,6 @@ function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialEl
     }
 }
 
-//resolver esse método pra substring html tb
 function backspaceAndDeleteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
@@ -689,7 +686,6 @@ function arrowAction(senderId, senderName, initialElement, finalElement, initial
     }
 }
 
-//resolver pro resto dos casos
 function enterAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
@@ -703,8 +699,14 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
         $(finalElement).remove();
         $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(initialElement);
     } else if ($(initialElement).index() == $(finalElement).index()) {
-        $(initialElement).html(initialHtml.substring(0, initialHtmlRange < finalHtmlRange ? initialHtmlRange : finalHtmlRange));
-        var html = getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
+        var html;
+        if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+            html = getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
+        } else {
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
+            html = getHtmlSubstring(initialHtml, finalTextRange, initialText.length - finalTextRange);
+        }
         $(initialElement).clone().html(addMarker(senderId, senderName, "") + html).insertAfter(initialElement);
     } else {
         $(finalElement).nextUntil($(initialElement)).each(function () {
