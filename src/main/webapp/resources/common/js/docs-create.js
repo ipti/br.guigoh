@@ -64,6 +64,8 @@ function onMessageReceivedForDocs(json) {
     msg.initialTextRange = Number(msg.initialTextRange);
     msg.finalTextRange = Number(msg.finalTextRange);
 //    var savedSelection = saveSelection($(".editor")[0]);
+    $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
     if ($(initialElement).text() !== undefined && $(finalElement).text() !== undefined) {
         if (msg.type === "NEW_CODE") {
             switch (msg.code) {
@@ -89,10 +91,10 @@ function onMessageReceivedForDocs(json) {
                     arrowAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange);
                     break;
                 case keys.backspace:
-                    backspaceAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange);
+                    backspaceAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
                     break;
                 case keys.delete:
-                    deleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange);
+                    deleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
                     break;
                 case keys.home:
                 case keys.end:
@@ -275,6 +277,9 @@ function setLocalCaretPosition(el, sPos, senderId) {
          range.setStart(el.firstChild, sPos);
          range.setEnd  (el.firstChild, sPos);*/
         var charIndex = 0, range = document.createRange();
+        if (el.innerHTML == "") {
+            el.innerHTML = "<br>";
+        }
         range.setStart(el, 0);
         range.collapse(true);
         var nodeStack = [el], node, foundStart = false, stop = false;
@@ -535,8 +540,6 @@ if (window.getSelection && document.createRange) {
 
 //tratar quando da highlight e digita um caractere
 function keyPressAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     if (code == keys.space) {
@@ -573,8 +576,6 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
 }
 
 function mouseClickAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
@@ -600,69 +601,80 @@ function mouseClickAction(code, senderId, senderName, initialElement, finalEleme
     }
 }
 
-function backspaceAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange) {
-    $(".marker[socialprofileid=" + senderId + "]").remove();
+function backspaceAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var finalHtml = $(finalElement).html();
-        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
+        $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml.substring(finalHtmlRange));
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
+        setLocalCaretPosition(initialElement, initialTextRange, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            setLocalCaretPosition(initialElement, initialTextRange, senderId);
         } else if (initialHtmlRange == finalHtmlRange) {
             if (initialTextRange == 0 && $(initialElement).index() !== 0) {
+                var prevRange = $(initialElement).prev().text().length;
                 if ($(initialElement).prev().html() == "") {
                     $(initialElement).prev().html(addMarker(senderId, senderName, "") + initialHtml);
                 } else {
                     $(initialElement).prev().html($(initialElement).prev().html() + addMarker(senderId, senderName, "") + initialHtml);
                 }
+                setLocalCaretPosition(initialElement.previousSibling, prevRange, senderId);
                 $(initialElement).remove();
             } else {
-                //tratar essa porcaria
                 $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
-                var marker = $(initialElement).find(".marker");
-                if (marker.parent().text() == "") {
-                    if (!marker.parent().parent().hasClass("editor") && marker.parent().parent().text() != "") {
-                        var markerParent = marker.parent();
-                        markerParent.parent().append(marker);
-                        markerParent.remove();
-                    }
-                }
+                //remover tag quando nao houver mais letra dentro                
+//                var marker = $(initialElement).find(".marker");
+//                if (marker.parent().text() == "") {
+//                    if (!marker.parent().parent().hasClass("editor") && marker.parent().parent().text() != "") {
+//                        var markerParent = marker.parent();
+//                        markerParent.parent().append(marker);
+//                        markerParent.remove();
+//                    }
+//                }
+                setLocalCaretPosition(initialElement, initialTextRange - 1, senderId);
             }
         } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            setLocalCaretPosition(initialElement, finalTextRange, senderId);
         }
     } else {
-        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
+        $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
+        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
+        setLocalCaretPosition(finalElement, finalTextRange, senderId);
     }
 }
 
-function deleteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange) {
-    $(".marker[socialprofileid=" + senderId + "]").remove();
+function deleteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
     var initialText = $(initialElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
-        var finalHtml = $(finalElement).html();
-        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
+        $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml.substring(finalHtmlRange));
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
         $(finalElement).remove();
+        setLocalCaretPosition(initialElement, initialTextRange, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            setLocalCaretPosition(initialElement, initialTextRange, senderId);
         } else if (initialHtmlRange == finalHtmlRange) {
             if (initialTextRange == initialText.length && !$(initialElement).is(':last-child')) {
                 $(initialElement).html(initialHtml + addMarker(senderId, senderName, "") + $(initialElement).next().html());
                 $(initialElement).next().remove();
+                setLocalCaretPosition(initialElement, initialText.length, senderId);
             } else {
                 //tratar essa porcaria
                 //fazer direito (remover tag)
@@ -680,22 +692,24 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
                     }
                     $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + html);
                 }
+                setLocalCaretPosition(initialElement, initialTextRange, senderId);
             }
         } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            setLocalCaretPosition(initialElement, finalTextRange, senderId);
         }
     } else {
-        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
+        $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
+        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
+        setLocalCaretPosition(finalElement, finalTextRange, senderId);
     }
 }
 
 function enterAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     var initialText = $(initialElement).text();
@@ -705,7 +719,7 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
             $(this).remove();
         });
         $(finalElement).remove();
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml + "<br>").insertAfter(initialElement);
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(initialElement);
         setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         var html;
@@ -716,21 +730,19 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
             $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
             html = getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
         }
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + html + "<br>").insertAfter(initialElement);
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + html).insertAfter(initialElement);
         setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
     } else {
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
         $(initialElement).remove();
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml + "<br>").insertAfter(finalElement);
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(finalElement);
         setLocalCaretPosition(finalElement.nextSibling, 0, senderId);
     }
 }
 
 function arrowAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
@@ -755,8 +767,6 @@ function arrowAction(senderId, senderName, initialElement, finalElement, initial
 }
 
 function homeAndEndAction(code, senderId, senderName, initialElement) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     if (code == keys.home) {
         $(initialElement).html(addMarker(senderId, senderName, "") + $(initialElement).html());
     } else {
@@ -765,8 +775,6 @@ function homeAndEndAction(code, senderId, senderName, initialElement) {
 }
 
 function ctrlHomeAndEndAction(code, senderId, senderName) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     if (code == keys.ctrlHome || code == keys.pageUp) {
         $(".editor").children().first().prepend(addMarker(senderId, senderName, ""));
     } else {
@@ -775,8 +783,6 @@ function ctrlHomeAndEndAction(code, senderId, senderName) {
 }
 
 function shiftHomeAndEndAction(code, senderId, senderName, initialElement, initialHtmlRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     if (code == keys.shiftHome) {
         $(initialElement).html(addMarker(senderId, senderName, initialHtml, 0, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
@@ -786,8 +792,6 @@ function shiftHomeAndEndAction(code, senderId, senderName, initialElement, initi
 }
 
 function ctrlShiftHomeAndEndAction(code, senderId, senderName, initialElement, initialHtmlRange) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     if (code == keys.ctrlShiftHome || code == keys.shiftPageUp) {
         $(initialElement).html(addMarker(senderId, senderName, initialHtml, 0, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
@@ -803,16 +807,13 @@ function ctrlShiftHomeAndEndAction(code, senderId, senderName, initialElement, i
 }
 
 function ctrlAAction(senderId, senderName) {
-    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     $(".editor").children().each(function () {
         $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
     })
 }
 
-//ajeitar pra trazer só texto
+//ajeitar pra trazer só texto & tratar paste agora com unwrap
 function pasteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
-    $(".marker[socialprofileid=" + senderId + "]").remove();
     code = code.replace(/'/g, '"');
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
