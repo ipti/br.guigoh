@@ -89,8 +89,10 @@ function onMessageReceivedForDocs(json) {
                     arrowAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange);
                     break;
                 case keys.backspace:
+                    backspaceAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange);
+                    break;
                 case keys.delete:
-                    backspaceAndDeleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
+                    deleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange);
                     break;
                 case keys.home:
                 case keys.end:
@@ -121,8 +123,11 @@ function onMessageReceivedForDocs(json) {
                         pasteAction(msg.code.replace("paste+", ""), msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange);
                     } else {
                         // MOUSE CLICK AND LETTER KEYPRESS 
-                        // When keyCode is "undefined", jquery trigger event was "mouseup"
-                        mouseClickAndLetterKeyPressAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange);
+                        if (msg.code === "undefined") {
+                            mouseClickAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange)
+                        } else {
+                            keyPressAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange);
+                        }
                     }
                     break;
             }
@@ -134,45 +139,15 @@ function onMessageReceivedForDocs(json) {
 //    restoreSelection($(".editor")[0], savedSelection);
 }
 
-function insertBrOnDeepestChild(element) {
-    if ($(element).html() == "") {
-        $(element).append("<br>");
-    } else {
-        if ($(element).text() == "") {
-            if ($(element).children().not(".marker, br").length == 0) {
-                $(element).find("br").remove();
-                $(element).append("<br>");
-            } else {
-                var target = $(element).children().not(".marker, br"),
-                        next = target;
-
-                while (next.length) {
-                    if (next.parent().find("br").length) {
-                        next.parent().find("br").remove();
-                    }
-                    target = next;
-                    next = next.children().not("br");
-                }
-                if (target.children("br").length == 0) {
-                    target.find("br").remove();
-                    target.append("<br>");
-                }
-            }
-        } else {
-            $(element).find("br").remove();
-        }
-    }
-}
-
 $(document).on("keydown keyup", ".editor", function (e) {
-    if ((e.keyCode == keys.backspace && $(".editor").children().length == 1 && $(".editor").children().text() == "") || e.keyCode == keys.insert) {
+    if (e.keyCode == keys.insert) {
         e.preventDefault();
+    } else if (e.keyCode == keys.backspace && e.type == "keydown" || e.keyCode == keys.delete && e.type == "keydown" || e.keyCode == keys.tab && e.type == "keydown") {
+        e.preventDefault();
+        sendCollaboratorChange(e);
     } else if (((e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down) && e.type == "keyup")
-            || (e.keyCode == keys.backspace && e.type == "keydown")
-            || (e.keyCode == keys.delete && e.type == "keydown")
             || (e.keyCode == keys.home && e.type == "keydown")
             || (e.keyCode == keys.end && e.type == "keydown")
-            || (e.keyCode == keys.tab && e.type == "keydown")
             || (e.keyCode == keys.a && e.type == "keydown" && e.ctrlKey)
             || (e.keyCode == keys.pageDown && e.type == "keydown" && ((!e.shiftKey && !e.ctrlKey) || (e.shiftKey && !e.ctrlKey)))
             || (e.keyCode == keys.pageUp && e.type == "keydown" && ((!e.shiftKey && !e.ctrlKey) || (e.shiftKey && !e.ctrlKey)))) {
@@ -196,10 +171,12 @@ $(document).on("keydown keyup", ".editor", function (e) {
 });
 
 $(document).on("keypress", ".editor", function (e) {
+    e.preventDefault();
     sendCollaboratorChange(e);
 });
 
 $(document).on("paste", ".editor", function (e) {
+    e.preventDefault();
     sendCollaboratorChange(e);
 });
 
@@ -233,8 +210,8 @@ function sendCollaboratorChange(e) {
                 + '"finalTextRange":"' + finalTextRange + '", "initialIndex":"' + $(initialElement).index() + '",'
                 + '"finalIndex":"' + $(finalElement).index() + '", "type":"NEW_CODE"}';
         websocketDocs.send(json);
+        changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     }
-    changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange);
 }
 
 function getEditorChild(node) {
@@ -247,11 +224,6 @@ function getEditorChild(node) {
             return getEditorChild(node.parentNode);
         }
     }
-}
-
-function getContent() {
-    $("#text").val($(".editor").html());
-    return true;
 }
 
 function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
@@ -278,89 +250,93 @@ function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, fina
     }
 }
 
-function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
-    if (e.keyCode == keys.tab) {
-        e.preventDefault();
-        var initialHtml = $(initialElement).html();
-        var finalHtml = $(finalElement).html();
-        if ($(initialElement).index() < $(finalElement).index()) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(keys.emphasizedSpace) + finalHtml.substring(finalHtmlRange));
-            $(initialElement).nextUntil($(finalElement)).each(function () {
-                $(this).remove();
-            });
-            $(finalElement).remove();
-            moveCaret(initialHtmlRange + 1);
-        } else if ($(initialElement).index() == $(finalElement).index()) {
-            if ((initialHtmlRange < finalHtmlRange) || (initialHtmlRange == finalHtmlRange)) {
-                $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(finalHtmlRange));
-                moveCaret(initialHtmlRange + 1);
-            } else {
-                $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(initialHtmlRange));
-                moveCaret(finalHtmlRange + 1, true);
-            }
+function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    if (e.type == "paste") {
+
+    } else if (e.keyCode == keys.backspace) {
+        backspaceAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.keyCode == keys.delete) {
+        deleteAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.type == "keypress" || e.keyCode == keys.tab) {
+        if (e.keyCode == keys.enter) {
+            enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         } else {
-            $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + String.fromCharCode(keys.emphasizedSpace) + initialHtml.substring(initialHtmlRange));
-            $(finalElement).nextUntil($(initialElement)).each(function () {
-                $(this).remove();
-            });
-            $(initialElement).remove();
-            moveCaret(finalHtmlRange + 1, true);
+            keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
-    } else if (e.type == "paste") {
-        e.preventDefault();
-        var htmlArray = $.parseHTML((event.originalEvent || event).clipboardData.getData('text/html'));
-        var htmlString = "";
-        if (htmlArray !== null) {
-            htmlArray.splice(0, 1);
-            for (var i in htmlArray) {
-                htmlString += htmlArray[i].outerHTML;
-            }
-        } else {
-            htmlString = e.originalEvent.clipboardData.getData("text");
-        }
-        var initialHtml = $(initialElement).html();
-        var finalHtml = $(finalElement).html();
-        if ($(initialElement).index() < $(finalElement).index()) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + htmlString + finalHtml.substring(finalHtmlRange));
-            $(initialElement).nextUntil($(finalElement)).each(function () {
-                $(this).remove();
-            });
-            $(finalElement).remove();
-            moveCaret(initialHtmlRange + 1);
-        } else if ($(initialElement).index() == $(finalElement).index()) {
-            if ((initialHtmlRange < finalHtmlRange) || (initialHtmlRange == finalHtmlRange)) {
-                $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + htmlString + initialHtml.substring(finalHtmlRange));
-                moveCaret(initialHtmlRange + 1);
+    }
+    $(".editor").children().each(function () {
+        insertBrOnDeepestChild(this);
+    });
+}
+
+function setLocalCaretPosition(el, sPos, senderId) {
+    if (senderId == null) {
+        /*range = document.createRange();                    
+         range.setStart(el.firstChild, sPos);
+         range.setEnd  (el.firstChild, sPos);*/
+        var charIndex = 0, range = document.createRange();
+        range.setStart(el, 0);
+        range.collapse(true);
+        var nodeStack = [el], node, foundStart = false, stop = false;
+
+        while (!stop && (node = nodeStack.pop())) {
+            if (node.nodeType == 3) {
+                var nextCharIndex = charIndex + node.length;
+                if (!foundStart && sPos >= charIndex && sPos <= nextCharIndex) {
+                    range.setStart(node, sPos - charIndex);
+                    foundStart = true;
+                }
+                if (foundStart && sPos >= charIndex && sPos <= nextCharIndex) {
+                    range.setEnd(node, sPos - charIndex);
+                    stop = true;
+                }
+                charIndex = nextCharIndex;
             } else {
-                $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + htmlString + initialHtml.substring(initialHtmlRange));
-                moveCaret(finalHtmlRange + 1, true);
+                var i = node.childNodes.length;
+                while (i--) {
+                    nodeStack.push(node.childNodes[i]);
+                }
+            }
+        }
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+}
+
+function insertBrOnDeepestChild(element) {
+    if ($(element).html() == "") {
+        $(element).append("<br>");
+    } else {
+        if ($(element).text() == "") {
+            if ($(element).children().not(".marker, br").length == 0) {
+                $(element).find("br").remove();
+                $(element).append("<br>");
+            } else {
+                var target = $(element).children().not(".marker, br"),
+                        next = target;
+
+                while (next.length) {
+                    if (next.parent().find("br").length) {
+                        next.parent().find("br").remove();
+                    }
+                    target = next;
+                    next = next.children().not(".marker, br");
+                }
+                if (target.children("br").length == 0) {
+                    target.find("br").remove();
+                    target.append("<br>");
+                }
             }
         } else {
-            $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + htmlString + initialHtml.substring(initialHtmlRange));
-            $(finalElement).nextUntil($(initialElement)).each(function () {
-                $(this).remove();
-            });
-            $(initialElement).remove();
-            moveCaret(finalHtmlRange + 1, true);
+            $(element).find("br").remove();
         }
     }
 }
 
-function moveCaret(charCount, invertedSelection) {
-    invertedSelection = invertedSelection == null ? false : invertedSelection;
-    var sel;
-    if (window.getSelection) {
-        sel = window.getSelection();
-        if (sel.rangeCount > 0) {
-            var textNode = invertedSelection ? sel.focusNode : sel.anchorNode;
-            var nodeLength = textNode.length;
-            var newOffset = charCount;
-            if (nodeLength == undefined) {
-                nodeLength = 1;
-            }
-            sel.collapse(textNode, Math.min(nodeLength, newOffset));
-        }
-    }
+function getContent() {
+    $("#text").val($(".editor").html());
+    return true;
 }
 
 function getHtmlOffset(initialElement, finalElement) {
@@ -431,24 +407,28 @@ function getHtmlSubstring(str, start, count) {
 }
 
 function addMarker(id, name, html, initialHtmlRange, finalHtmlRange) {
-    var marker = "";
-    if (html != "" && initialHtmlRange != finalHtmlRange) {
-        var parsedHtml = $.parseHTML(html.substring(initialHtmlRange, finalHtmlRange));
-        for (var i = 0; i < parsedHtml.length; i++) {
-            if (parsedHtml[i].nodeType == 3) {
-                marker += "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + parsedHtml[i].nodeValue + "</span>";
-            } else if (parsedHtml[i].nodeType == 1) {
-                parsedHtml[i].innerHTML = "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + parsedHtml[i].innerHTML + "</span>";
-                marker += parsedHtml[i].outerHTML;
-                if (i == parsedHtml.length - 1) {
-                    marker = marker.substring(0, marker.length - (3 + parsedHtml[i].nodeName.length));
+    if (id != null) {
+        var marker = "";
+        if (html != "" && initialHtmlRange != finalHtmlRange) {
+            var parsedHtml = $.parseHTML(html.substring(initialHtmlRange, finalHtmlRange));
+            for (var i = 0; i < parsedHtml.length; i++) {
+                if (parsedHtml[i].nodeType == 3) {
+                    marker += "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + parsedHtml[i].nodeValue + "</span>";
+                } else if (parsedHtml[i].nodeType == 1) {
+                    parsedHtml[i].innerHTML = "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'>" + parsedHtml[i].innerHTML + "</span>";
+                    marker += parsedHtml[i].outerHTML;
+                    if (i == parsedHtml.length - 1) {
+                        marker = marker.substring(0, marker.length - (3 + parsedHtml[i].nodeName.length));
+                    }
                 }
             }
+        } else {
+            marker = "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'></span>";
         }
+        return marker;
     } else {
-        marker = "<span contenteditable='false' socialprofileid='" + id + "' class='marker' title='" + name + "'></span>";
+        return "";
     }
-    return marker;
 }
 
 //ajeitar cursor
@@ -554,72 +534,118 @@ if (window.getSelection && document.createRange) {
  */
 
 //tratar quando da highlight e digita um caractere
-function mouseClickAndLetterKeyPressAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange)  {
-    if (code === "undefined") {
-        $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
-    }
+function keyPressAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     if (code == keys.space) {
-        if ((($(initialElement).index() < $(finalElement).index() || $(initialElement).index() == $(finalElement).index()) && initialHtml.charCodeAt(initialHtmlRange - 6) == Number(keys.space))
-                || ($(initialElement).index() > $(finalElement).index() && finalHtml.charCodeAt(finalHtmlRange - 6) == Number(keys.space))) {
-            code = keys.nonBreakingSpace;
-        }
+        code = keys.nonBreakingSpace;
     }
     if (code == keys.tab) {
         code = keys.emphasizedSpace;
     }
     if ($(initialElement).index() < $(finalElement).index()) {
-        if (code !== "undefined") {
-            $(initialElement).html(initialHtml + String.fromCharCode(code));
-            $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
-            $(initialElement).nextUntil($(finalElement)).each(function () {
-                $(this).remove();
-            });
-            $(finalElement).remove();
-        } else {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, initialHtml, initialHtmlRange, initialHtml.length));
-            $(initialElement).nextUntil($(finalElement)).each(function () {
-                $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
-            });
-            $(finalElement).html(addMarker(senderId, senderName, finalHtml, 0, finalHtmlRange) + finalHtml.substring(finalHtmlRange));
-        }
+        $(initialElement).html(initialHtml + String.fromCharCode(code));
+        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+        setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
-        if (initialHtmlRange < finalHtmlRange) {
-            if (code !== "undefined") {
-                $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
-            } else {
-                $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, initialHtml, initialHtmlRange, finalHtmlRange) + initialHtml.substring(finalHtmlRange));
-            }
-        } else if (initialHtmlRange == finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "", initialHtmlRange, finalHtmlRange) + initialHtml.substring(initialHtmlRange));
+        if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
         } else {
-            if (code !== "undefined") {
-                $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
-            } else {
-                $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, initialHtml, finalHtmlRange, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
-            }
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            setLocalCaretPosition(initialElement, finalTextRange + 1, senderId);
         }
     } else {
-        if (code !== "undefined") {
-            $(finalElement).html(finalHtml + String.fromCharCode(code));
-            $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
-            $(finalElement).nextUntil($(initialElement)).each(function () {
-                $(this).remove();
-            });
-            $(initialElement).remove();
-        } else {
-            $(initialElement).html(addMarker(senderId, senderName, initialHtml, 0, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
-            $(finalElement).nextUntil($(initialElement)).each(function () {
-                $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
-            });
-            $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, finalHtml, finalHtmlRange, finalHtml.length));
-        }
+        $(finalElement).html(finalHtml + String.fromCharCode(code));
+        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+        setLocalCaretPosition(finalElement, finalTextRange + 1, senderId);
     }
 }
 
-function backspaceAndDeleteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+function mouseClickAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, initialHtml, initialHtmlRange, initialHtml.length));
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
+        });
+        $(finalElement).html(addMarker(senderId, senderName, finalHtml, 0, finalHtmlRange) + finalHtml.substring(finalHtmlRange));
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialHtmlRange < finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, initialHtml, initialHtmlRange, finalHtmlRange) + initialHtml.substring(finalHtmlRange));
+        } else if (initialHtmlRange == finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + String.fromCharCode(code) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+        } else {
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, initialHtml, finalHtmlRange, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
+        }
+    } else {
+        $(initialElement).html(addMarker(senderId, senderName, initialHtml, 0, initialHtmlRange) + initialHtml.substring(initialHtmlRange));
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
+        });
+        $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, finalHtml, finalHtmlRange, finalHtml.length));
+    }
+}
+
+function backspaceAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange) {
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        var finalHtml = $(finalElement).html();
+        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialHtmlRange < finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+        } else if (initialHtmlRange == finalHtmlRange) {
+            if (initialTextRange == 0 && $(initialElement).index() !== 0) {
+                if ($(initialElement).prev().html() == "") {
+                    $(initialElement).prev().html(addMarker(senderId, senderName, "") + initialHtml);
+                } else {
+                    $(initialElement).prev().html($(initialElement).prev().html() + addMarker(senderId, senderName, "") + initialHtml);
+                }
+                $(initialElement).remove();
+            } else {
+                //tratar essa porcaria
+                $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+                var marker = $(initialElement).find(".marker");
+                if (marker.parent().text() == "") {
+                    if (!marker.parent().parent().hasClass("editor") && marker.parent().parent().text() != "") {
+                        var markerParent = marker.parent();
+                        markerParent.parent().append(marker);
+                        markerParent.remove();
+                    }
+                }
+            }
+        } else {
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+        }
+    } else {
+        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+    }
+}
+
+function deleteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
     var initialHtml = $(initialElement).html();
     var initialText = $(initialElement).text();
@@ -634,23 +660,25 @@ function backspaceAndDeleteAction(code, senderId, senderName, initialElement, fi
         if (initialHtmlRange < finalHtmlRange) {
             $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
         } else if (initialHtmlRange == finalHtmlRange) {
-            if (code == keys.backspace && initialTextRange == 0 && $(initialElement).index() !== 0) {
-                if ($(initialElement).prev().html() == "") {
-                    $(initialElement).prev().html(addMarker(senderId, senderName, "") + initialHtml);
-                } else {
-                    $(initialElement).prev().html($(initialElement).prev().html() + addMarker(senderId, senderName, "") + initialHtml);
-                }
-                $(initialElement).remove();
-            } else if (code == keys.delete && initialTextRange == initialText.length && !$(initialElement).is(':last-child')) {
+            if (initialTextRange == initialText.length && !$(initialElement).is(':last-child')) {
                 $(initialElement).html(initialHtml + addMarker(senderId, senderName, "") + $(initialElement).next().html());
                 $(initialElement).next().remove();
             } else {
+                //tratar essa porcaria
                 //fazer direito (remover tag)
-                if (code == keys.backspace) {
-                    $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
-                } else {
-                    //deletar proximo caractere
+                var parsedHtml = $.parseHTML(getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange));
+                if (parsedHtml[0].nodeType == 3) {
                     $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange + 1));
+                } else if (parsedHtml[0].nodeType == 1) {
+                    parsedHtml[0].innerHTML = parsedHtml[0].innerHTML.substring(1, parsedHtml[0].innerHTML.length);
+                    if (parsedHtml[0].innerHTML == "") {
+                        parsedHtml.splice(0, 1);
+                    }
+                    var html = "";
+                    for (var i = 0; i < parsedHtml.length; i++) {
+                        html += (parsedHtml[i].nodeType == 3) ? parsedHtml[i].nodeValue : parsedHtml[i].outerHTML;
+                    }
+                    $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + html);
                 }
             }
         } else {
@@ -662,6 +690,41 @@ function backspaceAndDeleteAction(code, senderId, senderName, initialElement, fi
             $(this).remove();
         });
         $(initialElement).remove();
+    }
+}
+
+function enterAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    $(".marker[socialprofileid=" + senderId + "]").contents().unwrap();
+    $(".marker[socialprofileid=" + senderId + "]").remove();
+    var initialHtml = $(initialElement).html();
+    var finalHtml = $(finalElement).html();
+    var initialText = $(initialElement).text();
+    if ($(initialElement).index() < $(finalElement).index()) {
+        $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+        $(initialElement).nextUntil($(finalElement)).each(function () {
+            $(this).remove();
+        });
+        $(finalElement).remove();
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml + "<br>").insertAfter(initialElement);
+        setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        var html;
+        if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+            html = getHtmlSubstring(initialHtml, finalTextRange, initialText.length - finalTextRange);
+        } else {
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
+            html = getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
+        }
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + html + "<br>").insertAfter(initialElement);
+        setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
+    } else {
+        $(finalElement).nextUntil($(initialElement)).each(function () {
+            $(this).remove();
+        });
+        $(initialElement).remove();
+        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml + "<br>").insertAfter(finalElement);
+        setLocalCaretPosition(finalElement.nextSibling, 0, senderId);
     }
 }
 
@@ -688,36 +751,6 @@ function arrowAction(senderId, senderName, initialElement, finalElement, initial
             $(this).html(addMarker(senderId, senderName, $(this).html(), 0, $(this).html().length));
         });
         $(finalElement).html(finalHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, finalHtml, finalHtmlRange, finalHtml.length));
-    }
-}
-
-function enterAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
-    $(".marker[socialprofileid=" + senderId + "]").remove();
-    var initialHtml = $(initialElement).html();
-    var finalHtml = $(finalElement).html();
-    var initialText = $(initialElement).text();
-    if ($(initialElement).index() < $(finalElement).index()) {
-        $(initialElement).nextUntil($(finalElement)).each(function () {
-            $(this).remove();
-        });
-        $(finalElement).remove();
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(initialElement);
-    } else if ($(initialElement).index() == $(finalElement).index()) {
-        var html;
-        if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
-            html = getHtmlSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
-        } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
-            html = getHtmlSubstring(initialHtml, finalTextRange, initialText.length - finalTextRange);
-        }
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + html).insertAfter(initialElement);
-    } else {
-        $(finalElement).nextUntil($(initialElement)).each(function () {
-            $(this).remove();
-        });
-        $(initialElement).remove();
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml).insertAfter(finalElement);
     }
 }
 
@@ -777,6 +810,7 @@ function ctrlAAction(senderId, senderName) {
     })
 }
 
+//ajeitar pra trazer só texto
 function pasteAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange) {
     $(".marker[socialprofileid=" + senderId + "]").remove();
     code = code.replace(/'/g, '"');
