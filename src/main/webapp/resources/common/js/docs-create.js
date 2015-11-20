@@ -356,7 +356,7 @@ function getContent() {
 }
 
 function getHtmlOffset(initialElement, finalElement) {
-    var marker = $("<span id='offset-marker-" + logged_social_profile_id + "'></span>");
+    var marker = $("<span contenteditable='false' id='offset-marker-" + logged_social_profile_id + "'></span>");
     var sel = document.getSelection();
 
     var range = document.createRange();
@@ -448,13 +448,37 @@ function replaceCode(code) {
     } else if (code == keys.tab) {
         return String.fromCharCode(keys.emphasizedSpace);
     } else if (code == keys.lowerThan) {
-        console.log(1);
         return "&lt;";
     } else if (code == keys.greaterThan) {
         return "&gt;";
     } else {
         return String.fromCharCode(code);
     }
+}
+
+function insertDeleteMarkerOnTextNodes(htmlArray, senderId) {
+    var markedHtml = "";
+    htmlArray = $.grep(htmlArray, function (n) {
+        return (n);
+    });
+    for (var i = 0; i < htmlArray.length; i++) {
+        if (!htmlArray[i].match(/(<[^>]*>)/)) {
+            htmlArray[i] = "<span contenteditable='false' class='delete-marker-" + senderId + "'>" + htmlArray[i] + "</span>";
+        }
+        markedHtml += htmlArray[i];
+    }
+    return markedHtml;
+}
+
+function deleteMarkerAndEmptyParents(element, senderId) {
+    $(element).find(".delete-marker-" + senderId).each(function () {
+        $(this).parentsUntil(".editor").each(function () {
+            if ($(this).clone().children(".delete-marker-" + senderId).remove().end().text() == "") {
+                $(this).remove();
+            }
+        });
+        $(this).remove();
+    });
 }
 
 //ajeitar cursor
@@ -565,8 +589,12 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
     var finalHtml = $(finalElement).html();
     code = replaceCode(code);
     if ($(initialElement).index() < $(finalElement).index()) {
-        $(initialElement).html(initialHtml + code);
-        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml);
+        $(initialElement).append($(finalElement).html());
+        var html = $(initialElement).html();
+        var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(initialElement).html(html.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
+        deleteMarkerAndEmptyParents(initialElement, senderId);
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
@@ -574,15 +602,25 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
         setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            var htmlArray = initialHtml.substring(initialHtmlRange, finalHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
         } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + code + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            var htmlArray = initialHtml.substring(finalHtmlRange, initialHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(initialHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, finalTextRange + 1, senderId);
         }
     } else {
-        $(finalElement).html(finalHtml + code);
-        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml);
+        $(finalElement).append($(initialElement).html());
+        var html = $(finalElement).html();
+        var htmlArray = html.substring(finalHtmlRange, finalHtml.length + initialHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(finalElement).html(html.substring(0, finalHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(finalHtml.length + initialHtmlRange));
+        deleteMarkerAndEmptyParents(finalElement, senderId);
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
