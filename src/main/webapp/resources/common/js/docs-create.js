@@ -1,49 +1,12 @@
 var websocketDocs = '';
 var savedSelection;
 var keys = {
-    enter: "13",
-    left: "37",
-    up: "38",
-    right: "39",
-    down: "40",
-    ctrlLeft: "17+37",
-    ctrlUp: "17+38",
-    ctrlRight: "17+39",
-    ctrlDown: "17+40",
-    shiftLeft: "16+37",
-    shiftUp: "16+38",
-    shiftRight: "16+39",
-    shiftDown: "16+40",
-    ctrlShiftLeft: "17+16+37",
-    ctrlShiftUp: "17+16+38",
-    ctrlShiftRight: "17+16+39",
-    ctrlShiftDown: "17+16+40",
-    backspace: "8",
-    delete: "46",
-    space: "32",
-    nonBreakingSpace: "160",
-    ctrl: "17",
-    shift: "16",
-    ctrlHome: "17+36",
-    ctrlEnd: "17+35",
-    shiftHome: "16+36",
-    shiftEnd: "16+35",
-    ctrlShiftHome: "17+16+36",
-    ctrlShiftEnd: "17+16+35",
-    home: "36",
-    end: "35",
-    tab: "9",
-    emphasizedSpace: "8195",
-    a: "65",
-    ctrlA: "17+65",
-    insert: "45",
-    pageUp: "33",
-    pageDown: "34",
-    shiftPageUp: "16+33",
-    shiftPageDown: "16+34",
-    paste: "paste",
-    lowerThan: "60",
-    greaterThan: "62",
+    enter: "13", left: "37", up: "38", right: "39", down: "40", ctrlLeft: "17+37", ctrlUp: "17+38", ctrlRight: "17+39", ctrlDown: "17+40",
+    shiftLeft: "16+37", shiftUp: "16+38", shiftRight: "16+39", shiftDown: "16+40", ctrlShiftLeft: "17+16+37", ctrlShiftUp: "17+16+38",
+    ctrlShiftRight: "17+16+39", ctrlShiftDown: "17+16+40", backspace: "8", delete: "46", space: "32", nonBreakingSpace: "160", ctrl: "17",
+    shift: "16", ctrlHome: "17+36", ctrlEnd: "17+35", shiftHome: "16+36", shiftEnd: "16+35", ctrlShiftHome: "17+16+36", ctrlShiftEnd: "17+16+35",
+    home: "36", end: "35", tab: "9", emphasizedSpace: "8195", a: "65", ctrlA: "17+65", insert: "45", pageUp: "33", pageDown: "34",
+    shiftPageUp: "16+33", shiftPageDown: "16+34", paste: "paste", lowerThan: "60", greaterThan: "62", ampersand: "38", semicolon: "59"
 }
 
 $(document).ready(function () {
@@ -190,6 +153,10 @@ $(document).on("cut", ".editor", function (e) {
 
 $(document).on("mouseup", function (e) {
     sendCollaboratorChange(e);
+});
+
+$(document).on("dragover drop", function (e) {
+    e.preventDefault();
 });
 
 function sendCollaboratorChange(e) {
@@ -474,27 +441,39 @@ function deleteMarkerAndEmptyParents(element, senderId) {
     $(element).find(".delete-marker-" + senderId).each(function () {
         $(this).parentsUntil(".editor").each(function () {
             if ($(this).clone().children(".delete-marker-" + senderId).remove().end().text() == "") {
-                $(this).remove();
+                if (!$(this).parent().hasClass("editor")) {
+                    $(this).remove();
+                }
             }
         });
         $(this).remove();
     });
 }
 
-function findFirstTextPositionAfterElement(html, range, inside) {
-    if (html.charAt(range) == "<" && !inside) {
-        inside = true;
-        return findFirstTextPositionAfterElement(html, range + 1, inside);
-    } else if (html.charAt(range) == ">" && inside) {
-        inside = false;
-        return findFirstTextPositionAfterElement(html, range + 1, inside);
+function findFirstTextPositionAfterElement(html, range, insideElement, insideSpecialCharacter) {
+    if (html.charCodeAt(range) == keys.lowerThan && !insideElement) {
+        return findFirstTextPositionAfterElement(html, range + 1, true, false);
+    } else if (html.charCodeAt(range) == keys.greaterThan && insideElement) {
+        return findFirstTextPositionAfterElement(html, range + 1, false, false);
     } else {
-        if (!inside) {
-            console.log(1);
+        if (!insideElement) {
+            if (html.charCodeAt(range) == keys.ampersand && !insideSpecialCharacter) {
+                return findFirstTextPositionAfterElement(html, range + 1, false, true);
+            } else if (html.charCodeAt(range) != keys.semicolon && insideSpecialCharacter) {
+                return findFirstTextPositionAfterElement(html, range + 1, false, true);
+            }
             return range;
         } else {
-            return findFirstTextPositionAfterElement(html, range + 1, inside);
+            return findFirstTextPositionAfterElement(html, range + 1, true, false);
         }
+    }
+}
+
+function findInitialHtmlRangeForSpecialCharacter(html, range) {
+    if (html.charCodeAt(range - 1) == keys.ampersand) { 
+        return range;
+    } else {
+        return findInitialHtmlRangeForSpecialCharacter(html, range - 1);
     }
 }
 
@@ -674,6 +653,7 @@ function mouseClickAction(code, senderId, senderName, initialElement, finalEleme
 function backspaceAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
+    var initialText = $(initialElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
         $(initialElement).append($(finalElement).html());
         var html = $(initialElement).html();
@@ -708,6 +688,9 @@ function backspaceAction(code, senderId, senderName, initialElement, finalElemen
                 setLocalCaretPosition(prevElement, prevRange, senderId);
                 $(initialElement).remove();
             } else {
+                if (initialHtml.charCodeAt(initialHtmlRange - 1) == keys.semicolon && initialHtml.substring(initialHtmlRange - 1, finalHtmlRange) != initialText.substring(initialTextRange - 1, finalTextRange)) {
+                    initialHtmlRange = findInitialHtmlRangeForSpecialCharacter(initialHtml, initialHtmlRange);
+                }
                 var htmlArray = initialHtml.substring(initialHtmlRange - 1, finalHtmlRange).split(/(<[^>]*>)/);
                 var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
                 $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange));
@@ -765,7 +748,7 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
                 $(initialElement).next().remove();
                 setLocalCaretPosition(initialElement, initialText.length, senderId);
             } else {
-                finalHtmlRange = findFirstTextPositionAfterElement(initialHtml, finalHtmlRange, false);
+                finalHtmlRange = findFirstTextPositionAfterElement(initialHtml, finalHtmlRange, false, false);
                 var htmlArray = initialHtml.substring(initialHtmlRange, finalHtmlRange + 1).split(/(<[^>]*>)/);
                 var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
                 $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange + 1));
