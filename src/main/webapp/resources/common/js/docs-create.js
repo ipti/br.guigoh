@@ -481,6 +481,23 @@ function deleteMarkerAndEmptyParents(element, senderId) {
     });
 }
 
+function findFirstTextPositionAfterElement(html, range, inside) {
+    if (html.charAt(range) == "<" && !inside) {
+        inside = true;
+        return findFirstTextPositionAfterElement(html, range + 1, inside);
+    } else if (html.charAt(range) == ">" && inside) {
+        inside = false;
+        return findFirstTextPositionAfterElement(html, range + 1, inside);
+    } else {
+        if (!inside) {
+            console.log(1);
+            return range;
+        } else {
+            return findFirstTextPositionAfterElement(html, range + 1, inside);
+        }
+    }
+}
+
 //ajeitar cursor
 if (window.getSelection && document.createRange) {
     saveSelection = function (containerEl) {
@@ -583,7 +600,6 @@ if (window.getSelection && document.createRange) {
  * @returns void
  */
 
-//tratar quando da highlight e digita um caractere
 function keyPressAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
@@ -658,10 +674,13 @@ function mouseClickAction(code, senderId, senderName, initialElement, finalEleme
 function backspaceAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
-    var initialText = $(initialElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
-        $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
-        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml.substring(finalHtmlRange));
+        $(initialElement).append($(finalElement).html());
+        var html = $(initialElement).html();
+        var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(initialElement).html(html.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
+        deleteMarkerAndEmptyParents(initialElement, senderId);
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
@@ -669,7 +688,10 @@ function backspaceAction(code, senderId, senderName, initialElement, finalElemen
         setLocalCaretPosition(initialElement, initialTextRange, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            var htmlArray = initialHtml.substring(initialHtmlRange, finalHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, initialTextRange, senderId);
         } else if (initialHtmlRange == finalHtmlRange) {
             if (initialTextRange == 0 && $(initialElement).index() !== 0) {
@@ -679,19 +701,33 @@ function backspaceAction(code, senderId, senderName, initialElement, finalElemen
                 } else {
                     $(initialElement).prev().html($(initialElement).prev().html() + addMarker(senderId, senderName, "") + initialHtml);
                 }
-                setLocalCaretPosition(initialElement.previousSibling, prevRange, senderId);
+                var prevElement = initialElement;
+                do {
+                    prevElement = prevElement.previousSibling;
+                } while (prevElement && prevElement.nodeType !== 1);
+                setLocalCaretPosition(prevElement, prevRange, senderId);
                 $(initialElement).remove();
             } else {
-                $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+                var htmlArray = initialHtml.substring(initialHtmlRange - 1, finalHtmlRange).split(/(<[^>]*>)/);
+                var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+                $(initialElement).html(initialHtml.substring(0, initialHtmlRange - 1) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange));
+                deleteMarkerAndEmptyParents(initialElement, senderId);
                 setLocalCaretPosition(initialElement, initialTextRange - 1, senderId);
             }
         } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            var htmlArray = initialHtml.substring(finalHtmlRange, initialHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(initialHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, finalTextRange, senderId);
         }
     } else {
-        $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
-        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+        $(finalElement).append($(initialElement).html());
+        var html = $(finalElement).html();
+        var htmlArray = html.substring(finalHtmlRange, finalHtml.length + initialHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(finalElement).html(html.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + html.substring(finalHtml.length + initialHtmlRange));
+        deleteMarkerAndEmptyParents(finalElement, senderId);
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
@@ -705,8 +741,12 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
     var finalHtml = $(finalElement).html();
     var initialText = $(initialElement).text();
     if ($(initialElement).index() < $(finalElement).index()) {
-        $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
-        $(initialElement).append(addMarker(senderId, senderName, "") + finalHtml.substring(finalHtmlRange));
+        $(initialElement).append($(finalElement).html());
+        var html = $(initialElement).html();
+        var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(initialElement).html(html.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
+        deleteMarkerAndEmptyParents(initialElement, senderId);
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
@@ -714,7 +754,10 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
         setLocalCaretPosition(initialElement, initialTextRange, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange));
+            var htmlArray = initialHtml.substring(initialHtmlRange, finalHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, initialTextRange, senderId);
         } else if (initialHtmlRange == finalHtmlRange) {
             if (initialTextRange == initialText.length && !$(initialElement).is(':last-child')) {
@@ -722,31 +765,27 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
                 $(initialElement).next().remove();
                 setLocalCaretPosition(initialElement, initialText.length, senderId);
             } else {
-                //tratar essa porcaria
-                //fazer direito (remover tag)
-                var parsedHtml = $.parseHTML(getBrokenElementsAfterSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange));
-                if (parsedHtml[0].nodeType == 3) {
-                    $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(finalHtmlRange + 1));
-                } else if (parsedHtml[0].nodeType == 1) {
-                    parsedHtml[0].innerHTML = parsedHtml[0].innerHTML.substring(1, parsedHtml[0].innerHTML.length);
-                    if (parsedHtml[0].innerHTML == "") {
-                        parsedHtml.splice(0, 1);
-                    }
-                    var html = "";
-                    for (var i = 0; i < parsedHtml.length; i++) {
-                        html += (parsedHtml[i].nodeType == 3) ? parsedHtml[i].nodeValue : parsedHtml[i].outerHTML;
-                    }
-                    $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + html);
-                }
+                finalHtmlRange = findFirstTextPositionAfterElement(initialHtml, finalHtmlRange, false);
+                var htmlArray = initialHtml.substring(initialHtmlRange, finalHtmlRange + 1).split(/(<[^>]*>)/);
+                var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+                $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(finalHtmlRange + 1));
+                deleteMarkerAndEmptyParents(initialElement, senderId);
                 setLocalCaretPosition(initialElement, initialTextRange, senderId);
             }
         } else {
-            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+            var htmlArray = initialHtml.substring(finalHtmlRange, initialHtmlRange).split(/(<[^>]*>)/);
+            var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+            $(initialElement).html(initialHtml.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + initialHtml.substring(initialHtmlRange));
+            deleteMarkerAndEmptyParents(initialElement, senderId);
             setLocalCaretPosition(initialElement, finalTextRange, senderId);
         }
     } else {
-        $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
-        $(finalElement).append(addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange));
+        $(finalElement).append($(initialElement).html());
+        var html = $(finalElement).html();
+        var htmlArray = html.substring(finalHtmlRange, finalHtml.length + initialHtmlRange).split(/(<[^>]*>)/);
+        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
+        $(finalElement).html(html.substring(0, finalHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + html.substring(finalHtml.length + initialHtmlRange));
+        deleteMarkerAndEmptyParents(finalElement, senderId);
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
