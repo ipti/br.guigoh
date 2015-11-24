@@ -219,6 +219,7 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
     } else if (e.type == "keypress" || e.keyCode == keys.tab) {
         if (e.keyCode == keys.enter) {
             enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+            insertBrOnDeepestChild(initialElement);
         } else {
             keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
@@ -324,47 +325,6 @@ function getTextOffset(container, node, offset) {
     return range.toString().length;
 }
 
-function getBrokenElementsAfterSubstring(str, start, count) {
-
-    var div = document.createElement('div');
-    div.innerHTML = str;
-
-    walk(div, track);
-
-    function track(el) {
-        if (count > 0) {
-            var len = el.data.length;
-            if (start <= len) {
-                el.data = el.substringData(start, len);
-                start = 0;
-            } else {
-                start -= len;
-                el.data = '';
-            }
-            len = el.data.length;
-            count -= len;
-            if (count <= 0) {
-                el.data = el.substringData(0, el.data.length + count);
-            }
-
-        } else {
-            el.data = '';
-        }
-    }
-
-    function walk(el, fn) {
-        var node = el.firstChild;
-        do {
-            if (node.nodeType === 3) {
-                fn(node);
-            } else if (node.nodeType === 1 && node.childNodes && node.childNodes[0]) {
-                walk(node, fn);
-            }
-        } while (node = node.nextSibling);
-    }
-    return div.innerHTML;
-}
-
 function addMarker(id, name, html, initialHtmlRange, finalHtmlRange) {
     if (id != null) {
         var marker = "";
@@ -451,6 +411,46 @@ function findInitialHtmlRangeForSpecialCharacters(html, range) {
     } else {
         return findInitialHtmlRangeForSpecialCharacters(html, range - 1);
     }
+}
+
+function getBrokenElementsAfterSubstring(element, range, senderId) {
+    var html = $(element).html();
+    var htmlArray = html.substring(range).split(/(<[^>]*>)/);
+    htmlArray = $.grep(htmlArray, function (n) {
+        return (n);
+    });
+    var firstSubstringText = true;
+    var brokenFirstElements = "";
+    var markedHtml = "";
+    for (var i = 0; i < htmlArray.length; i++) {
+        if (!htmlArray[i].match(/(<[^>]*>)/) && firstSubstringText) {
+            htmlArray[i] = "<span contenteditable='false' class='broken-marker-" + senderId + "'>" + htmlArray[i] + "</span>";
+            firstSubstringText = false;
+        }
+        if (!firstSubstringText) {
+            markedHtml += htmlArray[i];
+        } else {
+            brokenFirstElements += htmlArray[i];
+        }
+    }
+    if (markedHtml == "" && htmlArray.length != 0) {
+        markedHtml = "<span contenteditable='false' class='broken-marker-" + senderId + "'></span>";
+        for (var i = 0; i < htmlArray.length; i++) {
+            markedHtml += htmlArray[i];
+        }
+        $(element).html(html.substring(0, range) + markedHtml);
+    } else {
+        $(element).html(html.substring(0, range) + brokenFirstElements + markedHtml);
+    }
+    $(element).find(".broken-marker-" + senderId).parentsUntil(".editor").each(function () {
+        if (!$(this).parent().hasClass("editor")) {
+            $(this)[0].innerHTML = "";
+            markedHtml = $(this)[0].outerHTML.substring(0, $(this)[0].outerHTML.length - (3 + $(this)[0].nodeName.length)) + markedHtml;
+        }
+    });
+    $(element).find(".broken-marker-" + senderId).contents().unwrap();
+    $(element).find(".broken-marker-" + senderId).remove();
+    return markedHtml;
 }
 
 //ajeitar cursor
@@ -756,42 +756,54 @@ function deleteAction(code, senderId, senderName, initialElement, finalElement, 
 function enterAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
-    var initialText = $(initialElement).text();
+    var html;
     if ($(initialElement).index() < $(finalElement).index()) {
-        
-//        $(initialElement).append($(finalElement).html());
-//        var html = $(initialElement).html();
-//        var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
-//        var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
-//        $(initialElement).html(html.substring(0, initialHtmlRange) + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
-//        deleteMarkerAndEmptyParents(initialElement, senderId);
-        
         $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
+        $(initialElement).find('*').each(function(){
+            if ($(this).text() == "") {
+                $(this).remove();
+            }
+        });
         $(initialElement).nextUntil($(finalElement)).each(function () {
             $(this).remove();
         });
-        $(finalElement).remove();
-        $(initialElement).clone().html(addMarker(senderId, senderName, "") + finalHtml.substring(finalHtmlRange)).insertAfter(initialElement);
-        setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
+        html = getBrokenElementsAfterSubstring(finalElement, finalHtmlRange, senderId);
+        $(finalElement).html(addMarker(senderId, senderName, "") + html);
+        $(finalElement).find(".broken-marker-" + senderId).contents().unwrap();
+        $(finalElement).find(".broken-marker-" + senderId).remove();
+        setLocalCaretPosition(finalElement, 0, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
-        var html;
         if (initialHtmlRange < finalHtmlRange || initialHtmlRange == finalHtmlRange) {
+            html = getBrokenElementsAfterSubstring(initialElement, finalHtmlRange, senderId);
             $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
-            html = getBrokenElementsAfterSubstring(initialHtml, finalTextRange, initialText.length - finalTextRange);
         } else {
+            html = getBrokenElementsAfterSubstring(initialElement, initialHtmlRange, senderId);
             $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
-            html = getBrokenElementsAfterSubstring(initialHtml, initialTextRange, initialText.length - initialTextRange);
         }
+        $(initialElement).find('*').each(function(){
+            if ($(this).text() == "") {
+                $(this).remove();
+            }
+        });
         $(initialElement).clone().html(addMarker(senderId, senderName, "") + html).insertAfter(initialElement);
+        $(initialElement).next().find(".broken-marker-" + senderId).contents().unwrap();
+        $(initialElement).next().find(".broken-marker-" + senderId).remove();
         setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
     } else {
         $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
+        $(finalElement).find('*').each(function(){
+            if ($(this).text() == "") {
+                $(this).remove();
+            }
+        });
         $(finalElement).nextUntil($(initialElement)).each(function () {
             $(this).remove();
         });
-        $(initialElement).remove();
-        $(finalElement).clone().html(addMarker(senderId, senderName, "") + initialHtml.substring(initialHtmlRange)).insertAfter(finalElement);
-        setLocalCaretPosition(finalElement.nextSibling, 0, senderId);
+        html = getBrokenElementsAfterSubstring(initialElement, initialHtmlRange, senderId);
+        $(initialElement).html(addMarker(senderId, senderName, "") + html);
+        $(initialElement).find(".broken-marker-" + senderId).contents().unwrap();
+        $(initialElement).find(".broken-marker-" + senderId).remove();
+        setLocalCaretPosition(initialElement, 0, senderId);
     }
 }
 
