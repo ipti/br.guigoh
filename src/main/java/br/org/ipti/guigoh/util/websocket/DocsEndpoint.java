@@ -34,8 +34,7 @@ public class DocsEndpoint {
 
     @OnMessage
     public void onMessage(final Session session, final String jsonString) throws Exception {
-        JsonObject obj = Json.createReader(new StringReader(jsonString))
-                .readObject();
+        JsonObject obj = Json.createReader(new StringReader(jsonString)).readObject();
         String[] collaborators = session.getUserProperties().get("collaborators").toString().split(",");
         switch (obj.getString("type")) {
             case "NEW_CODE":
