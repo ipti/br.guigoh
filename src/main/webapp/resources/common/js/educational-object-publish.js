@@ -2,6 +2,11 @@ var stepOne = stepTwo = stepThree = false;
 var formData = new FormData();
 
 $(document).ready(function () {
+    $.post("../ping.html");
+    window.setInterval(function () {
+        $.post("../ping.html");
+    }, 1500000);
+    
     $(".menu-icon-two").parent().addClass("active");
 
     $(".active-bar").css("width", "20%");
