@@ -8,6 +8,7 @@ var keys = {
     home: "36", end: "35", tab: "9", emphasizedSpace: "8195", a: "65", ctrlA: "17+65", insert: "45", pageUp: "33", pageDown: "34",
     shiftPageUp: "16+33", shiftPageDown: "16+34", paste: "paste", lowerThan: "60", greaterThan: "62", ampersand: "38", semicolon: "59"
 }
+var stack = new stack();
 
 $(document).ready(function () {
     var collaboratorsIds = logged_social_profile_id == 26 ? "246" : "26";
@@ -180,6 +181,35 @@ function sendCollaboratorChange(e) {
                 + '"finalIndex":"' + $(finalElement).index() + '", "type":"NEW_CODE"}';
         websocketDocs.send(json);
         changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        if (code != undefined) {
+            stack.push(json);
+            console.log(stack);
+        }
+    }
+}
+
+function stack() {
+    this.list = new Array();
+
+    this.push = function (obj) {
+        if (this.list.length >= 50) {
+            this.list.splice(0, 1);
+        }
+        this.list[this.list.length] = obj;
+    }
+
+    this.pop = function () {
+        if (this.list.length > 0) {
+            var obj = this.list[this.list.length - 1];
+            this.list.splice(this.list.length - 1, 1);
+            return obj;
+        }
+    }
+
+    this.read = function () {
+        if (this.list.length > 0) {
+            return this.list[this.list.length - 1];
+        }
     }
 }
 
@@ -759,7 +789,7 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
     var html;
     if ($(initialElement).index() < $(finalElement).index()) {
         $(initialElement).html(initialHtml.substring(0, initialHtmlRange));
-        $(initialElement).find('*').each(function(){
+        $(initialElement).find('*').each(function () {
             if ($(this).text() == "") {
                 $(this).remove();
             }
@@ -780,7 +810,7 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
             html = getBrokenElementsAfterSubstring(initialElement, initialHtmlRange, senderId);
             $(initialElement).html(initialHtml.substring(0, finalHtmlRange));
         }
-        $(initialElement).find('*').each(function(){
+        $(initialElement).find('*').each(function () {
             if ($(this).text() == "") {
                 $(this).remove();
             }
@@ -791,7 +821,7 @@ function enterAction(senderId, senderName, initialElement, finalElement, initial
         setLocalCaretPosition(initialElement.nextSibling, 0, senderId);
     } else {
         $(finalElement).html(finalHtml.substring(0, finalHtmlRange));
-        $(finalElement).find('*').each(function(){
+        $(finalElement).find('*').each(function () {
             if ($(this).text() == "") {
                 $(this).remove();
             }
