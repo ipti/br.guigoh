@@ -2,11 +2,7 @@ var stepOne = stepTwo = stepThree = false;
 var formData = new FormData();
 
 $(document).ready(function () {
-    $.post("../ping.html");
-    window.setInterval(function () {
-        $.post("../ping.html");
-    }, 1500000);
-    
+
     $(".menu-icon-two").parent().addClass("active");
 
     $(".active-bar").css("width", "20%");
@@ -138,33 +134,37 @@ $(document).ready(function () {
         var number = $(this).attr("id") === "browse-media-1" ? "one" : ($(this).attr("id") === "browse-media-2" ? "two" : "three");
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
-            var media = $(this);
-            var exists = false;
-            $('.browse-media').not(this).each(function () {
-                if ($(this).val() === media.val()) {
-                    exists = true;
-                }
-            });
-            if (!exists) {
-                if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
-                        || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
-                        || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
-                    $(".add-media").each(function () {
-                        if (!$(this).children().first().hasClass("fa-paperclip")) {
-                            $(this).css("color", "#9c9c9c");
+            if (file.size <= 104857600) { // 100MB
+                var media = $(this);
+                var exists = false;
+                $('.browse-media').not(this).each(function () {
+                    if ($(this).val() === media.val()) {
+                        exists = true;
+                    }
+                });
+                if (!exists) {
+                    if (file.type.split("/")[1] === 'mp4' || file.type.split("/")[1] === 'wmv' || file.type.split("/")[1] === 'mpeg'
+                            || file.type.split("/")[1] === 'avi' || file.type.split("/")[1] === 'wav' || file.type.split("/")[1] === 'mp3'
+                            || file.type.split("/")[1] === 'wma' || file.type.split("/")[1] === 'ogg' || file.type.split("/")[1] === 'pdf') {
+                        $(".add-media").each(function () {
+                            if (!$(this).children().first().hasClass("fa-paperclip")) {
+                                $(this).css("color", "#9c9c9c");
+                            }
+                        });
+                        $(".add-media-" + number).css("color", "#333");
+                        $(".add-media-" + number).children("span").text(changeNameLength(file.name, 53));
+                        if (!$(".add-media-" + number).children(".remove-media").length) {
+                            $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
                         }
-                    });
-                    $(".add-media-" + number).css("color", "#333");
-                    $(".add-media-" + number).children("span").text(changeNameLength(file.name, 53));
-                    if (!$(".add-media-" + number).children(".remove-media").length) {
-                        $(".add-media-" + number).append("<i class='remove-media fa fa-times'/>");
+                        if (!$(".add-media-" + number).children(".fa-paperclip").length) {
+                            $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
+                        }
+                    } else {
+                        $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
                     }
-                    if (!$(".add-media-" + number).children(".fa-paperclip").length) {
-                        $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
-                    }
-                } else {
-                    $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
                 }
+            } else {
+                $('.error').text("Adicione uma mídia com um tamanho inferior a 100 MB.");
             }
         }
     });
