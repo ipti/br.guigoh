@@ -24,11 +24,11 @@
                 <p class="description">#{localeBean.getString("Então, compartilhe já o seu conhecimento!")}</p>
                 <div id="submit-container">
                     <div id="submit-educational-object">
-                        <a href="publish.xhtml">
+                        <h:link outcome="publish.xhtml" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">
                             <img src="../resources/common/images/icon-lamp-publish.png"/>
                             <p>#{localeBean.getString("Publicar um")}</p>
                             <p>#{localeBean.getString("Objeto Educacional")}</p>
-                        </a>
+                        </h:link>
                     </div>
                 </div>
                 <div id="step-by-step-info">

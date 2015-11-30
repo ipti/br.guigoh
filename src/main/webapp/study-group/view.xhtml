@@ -125,7 +125,7 @@
                     <div class="reply-container">
                         <img class="column-list-image" src="#{studyGroupViewBean.mySocialProfile.photo}"/>
                         <div class="illusory-textarea">
-                            <h:inputTextarea class="message-textarea" id="message-textarea" pt:placeholder="#{localeBean.getString('Junte-se à conversa...')}" value="#{studyGroupViewBean.message}"/>
+                            <h:inputTextarea class="message-textarea" id="message-textarea" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}" pt:placeholder="#{localeBean.getString('Junte-se à conversa...')}" value="#{studyGroupViewBean.message}"/>
                             <hr/>
                             <h:panelGroup layout="block" id="file-list">
                                 <ui:repeat value="#{studyGroupViewBean.fileList}" var="file">
@@ -138,12 +138,12 @@
                                     </div>
                                 </ui:repeat>
                             </h:panelGroup>
-                            <h:commandLink class="publish-link">
+                            <h:commandLink class="publish-link" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">
                                 <img src="../resources/common/images/send.png"/>
                                 <f:ajax execute="message-textarea" listener="#{studyGroupViewBean.replyTopic()}" render="@form"/>
                             </h:commandLink>
-                            <img class="attach-link" src="../resources/common/images/attach.png"/>
-                            <h:inputFile class="hidden file-input" value="#{studyGroupViewBean.file}">
+                            <img class="attach-link" src="../resources/common/images/attach.png" />
+                            <h:inputFile class="hidden file-input" value="#{studyGroupViewBean.file}" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">
                                 <f:ajax event="change" listener="#{studyGroupViewBean.addMedia()}" render="file-list"/>
                             </h:inputFile>
                         </div>

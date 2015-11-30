@@ -79,8 +79,8 @@
                             <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
                         </h:outputText>
                     </div>
-                    <h:panelGroup layout="block" class="object-like" id="object-like">
-                        <h:commandLink class="like-object" onclick="return likeObject('.like-object')">
+                    <h:panelGroup layout="block" class="object-like" id="object-like" >
+                        <h:commandLink class="like-object" onclick="return likeObject('.like-object')" disabled="#{educationalObjectViewBean.mySocialProfile.roleId.name == 'Visitante'}">
                             <ui:fragment rendered="#{educationalObjectViewBean.like}">
                                 <span class='like-count active'>#{educationalObjectViewBean.likes}</span>
                                 <div title="#{localeBean.getString('Você curtiu esse Objeto Educacional')}" class="like-icon active"/>
@@ -141,9 +141,9 @@
                     <span>#{localeBean.getString('Comentários')} (#{educationalObjectViewBean.educationalObject.educationalObjectMessageCollection.size()})</span>
                 </h:panelGroup>
                 <div class="illusory-textarea">
-                    <h:inputTextarea class="message-textarea" pt:maxlength="200" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}"/>
+                    <h:inputTextarea class="message-textarea" pt:maxlength="200" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}" disabled="#{educationalObjectViewBean.mySocialProfile.roleId.name == 'Visitante'}"/>
                     <hr/>
-                    <h:commandLink class="publish-link">
+                    <h:commandLink class="publish-link" disabled="#{educationalObjectViewBean.mySocialProfile.roleId.name == 'Visitante'}">
                         <img src="../resources/common/images/send.png"/>
                         <f:ajax execute="message-textarea" listener="#{educationalObjectViewBean.publishMessage}" render="comment-label messages-container message-textarea"/>
                     </h:commandLink>

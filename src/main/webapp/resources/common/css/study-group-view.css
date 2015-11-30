@@ -143,7 +143,7 @@
     border-right: 8px solid white;
 }
 
-.message-textarea {
+.message-textarea, .message-textarea:disabled {
     width: calc(100% - 20px);
     height: 100px;
     resize: none;
@@ -152,13 +152,14 @@
     line-height: 17px;
     font-size: 12px;
     border-radius: 4px;
+    background-color: white;
 }
 
 .illusory-textarea hr {
     margin: 0 10px;
 }
 
-.illusory-textarea a {
+.illusory-textarea a, .illusory-textarea span {
     float: right;
     margin-right: 20px;
     margin-top: 4px;

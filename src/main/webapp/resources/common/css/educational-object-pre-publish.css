@@ -51,7 +51,7 @@
     width: 100%
 }
 
-#submit-container a{
+#submit-container a, #submit-educational-object span{
     text-decoration: none;
     padding: 25px 15px 25px 25px;
     display: block;

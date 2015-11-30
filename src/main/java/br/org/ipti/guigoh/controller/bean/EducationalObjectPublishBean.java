@@ -73,8 +73,13 @@ public class EducationalObjectPublishBean implements Serializable {
     private InterestsJpaController interestsJpaController;
     private AuthorRoleJpaController authorRoleJpaController;
 
-    public void init() {
+    public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
+            SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
+            SocialProfile mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+            if (mySocialProfile.getRoleId() != null && mySocialProfile.getRoleId().getName().equals("Visitante")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("../home.xhtml");
+            }
             initGlobalVariables();
         }
     }

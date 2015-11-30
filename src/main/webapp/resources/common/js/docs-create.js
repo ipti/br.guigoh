@@ -6,7 +6,8 @@ var keys = {
     ctrlShiftRight: "17+16+39", ctrlShiftDown: "17+16+40", backspace: "8", delete: "46", space: "32", nonBreakingSpace: "160", ctrl: "17",
     shift: "16", ctrlHome: "17+36", ctrlEnd: "17+35", shiftHome: "16+36", shiftEnd: "16+35", ctrlShiftHome: "17+16+36", ctrlShiftEnd: "17+16+35",
     home: "36", end: "35", tab: "9", emphasizedSpace: "8195", a: "65", ctrlA: "17+65", insert: "45", pageUp: "33", pageDown: "34",
-    shiftPageUp: "16+33", shiftPageDown: "16+34", paste: "paste", lowerThan: "60", greaterThan: "62", ampersand: "38", semicolon: "59"
+    shiftPageUp: "16+33", shiftPageDown: "16+34", paste: "paste", lowerThan: "60", greaterThan: "62", ampersand: "38", semicolon: "59",
+    z: "90", y: "89", ctrlZ: "17+90", ctrlY: "17+89"
 }
 var stack = new stack();
 
@@ -25,10 +26,7 @@ function onMessageReceivedForDocs(json) {
     var msg = JSON.parse(json.data); // native API
     var initialElement = $(".editor").children().get(msg.initialIndex);
     var finalElement = $(".editor").children().get(msg.finalIndex);
-    msg.initialHtmlRange = Number(msg.initialHtmlRange);
-    msg.finalHtmlRange = Number(msg.finalHtmlRange);
-    msg.initialTextRange = Number(msg.initialTextRange);
-    msg.finalTextRange = Number(msg.finalTextRange);
+    msg.code = msg.code.toString();
 //    var savedSelection = saveSelection($(".editor")[0]);
     $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
     $(".marker[socialprofileid=" + msg.senderId + "]").remove();
@@ -85,6 +83,12 @@ function onMessageReceivedForDocs(json) {
                 case keys.ctrlA:
                     ctrlAAction(msg.senderId, msg.senderName);
                     break;
+                case keys.ctrlZ:
+                    undoAction(msg.code, msg.oldCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
+                    break;
+                case keys.ctrlY:
+                    redoAction(msg.code, msg.oldCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
+                    break;
                 default:
                     if (msg.code.indexOf("paste") > -1) {
                         pasteAction(msg.code.replace("paste+", ""), msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
@@ -108,7 +112,12 @@ function onMessageReceivedForDocs(json) {
 $(document).on("keydown keyup", ".editor", function (e) {
     if (e.keyCode == keys.insert) {
         e.preventDefault();
-    } else if (e.keyCode == keys.backspace && e.type == "keydown" || e.keyCode == keys.delete && e.type == "keydown" || e.keyCode == keys.tab && e.type == "keydown") {
+    } else if (e.keyCode == keys.backspace && e.type == "keydown" || e.keyCode == keys.delete && e.type == "keydown"
+            || e.keyCode == keys.tab && e.type == "keydown" || e.keyCode == keys.z && e.type == "keydown" && e.ctrlKey
+            || e.keyCode == keys.y && e.type == "keydown" && e.ctrlKey) {
+        if (e.keyCode == keys.z && e.ctrlKey || e.keyCode == keys.y && e.ctrlKey) {
+            e.keyCode = keys.ctrl + "+" + e.keyCode;
+        }
         e.preventDefault();
         sendCollaboratorChange(e);
     } else if (((e.keyCode == keys.left || e.keyCode == keys.right || e.keyCode == keys.up || e.keyCode == keys.down) && e.type == "keyup")
@@ -174,17 +183,26 @@ function sendCollaboratorChange(e) {
         var initialTextRange = getTextOffset(initialElement, initialNode, selection.anchorOffset);
         var finalTextRange = getTextOffset(finalElement, finalNode, selection.focusOffset);
         var code = checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange);
-        var json = '{"code":"' + code + '", "senderId":"' + logged_social_profile_id + '",'
-                + '"senderName":"' + logged_social_profile_name + '", "initialHtmlRange":"' + initialHtmlRange + '",'
-                + '"finalHtmlRange":"' + finalHtmlRange + '", "initialTextRange":"' + initialTextRange + '",'
-                + '"finalTextRange":"' + finalTextRange + '", "initialIndex":"' + $(initialElement).index() + '",'
-                + '"finalIndex":"' + $(finalElement).index() + '", "type":"NEW_CODE"}';
-        websocketDocs.send(json);
-        changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        var json = {
+            code: code == undefined ? "undefined" : code,
+            senderId: logged_social_profile_id,
+            senderName: logged_social_profile_name,
+            initialHtmlRange: initialHtmlRange,
+            finalHtmlRange: finalHtmlRange,
+            initialTextRange: initialTextRange,
+            finalTextRange: finalTextRange,
+            initialIndex: $(initialElement).index(),
+            finalIndex: $(finalElement).index(),
+            type: "NEW_CODE"
+        }
+        websocketDocs.send(JSON.stringify(json));
         if (code != undefined) {
+            json.type = "UNDO";
+            json.oldCode = "teste";
             stack.push(json);
             console.log(stack);
         }
+        changeLocalActions(e, json.oldCode, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     }
 }
 
@@ -239,7 +257,7 @@ function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, fina
     }
 }
 
-function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+function changeLocalActions(e, oldCode, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     if (e.type == "paste") {
         pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     } else if (e.keyCode == keys.backspace) {
@@ -253,6 +271,10 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
         } else {
             keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
+    } else if (e.keyCode == keys.ctrlZ) {
+        undoAction(e.keyCode, oldCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.keyCode == keys.ctrlY) {
+        redoAction(e.keyCode, oldCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     }
 }
 
@@ -943,5 +965,37 @@ function pasteAction(code, senderId, senderName, initialElement, finalElement, i
         });
         $(initialElement).remove();
         setLocalCaretPosition(finalElement, finalTextRange + code.length, senderId);
+    }
+}
+
+function undoAction(code, oldCode, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    if ($(initialElement).index() < $(finalElement).index()) {
+        
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialHtmlRange < finalHtmlRange) {
+            
+        } else if (initialHtmlRange == finalHtmlRange) {
+            
+        } else {
+            
+        }
+    } else {
+        
+    }
+}
+
+function redoAction(code, oldCode, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    if ($(initialElement).index() < $(finalElement).index()) {
+        
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        if (initialHtmlRange < finalHtmlRange) {
+            
+        } else if (initialHtmlRange == finalHtmlRange) {
+            
+        } else {
+            
+        }
+    } else {
+        
     }
 }

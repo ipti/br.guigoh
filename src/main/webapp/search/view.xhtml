@@ -43,19 +43,19 @@
                                             </div>
                                             <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
                                                 <h:commandLink>
-                                                    <img class="user-friend-status remove" src="../resources/common/images/remove-friend.png"/>
+                                                    <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
                                                     <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                                 </h:commandLink>
                                             </ui:fragment>
                                             <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
                                                 <h:commandLink>
-                                                    <img class="user-friend-status pending" src="../resources/common/images/pending-friend.png" />
+                                                    <img class="user-friend-status pending" src="../resources/common/images/pending-friend-gray.png" />
                                                     <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                                 </h:commandLink>
                                             </ui:fragment>
                                             <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
                                                 <h:commandLink>
-                                                    <img class="user-friend-status add" src="../resources/common/images/add-friend.png"/>
+                                                    <img class="user-friend-status add" src="../resources/common/images/add-friend-gray.png"/>
                                                     <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                                 </h:commandLink>
                                             </ui:fragment>

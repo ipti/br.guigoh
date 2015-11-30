@@ -86,7 +86,7 @@ public class LoginCreateBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já existe.", null));
             } else {
                 if (user.getUsername() != null && user.getPassword() != null && !socialProfile.getName().equals("")
-                        && !lastName.equals("") && socialProfile.getLanguageId() != null && user.getSecretQuestionId() != null
+                        && !lastName.equals("") && socialProfile.getLanguageId() != null && user.getSecretQuestionId() != null && socialProfile.getRoleId() != null
                         && !(user.getSecretAnswer().equals("")) && socialProfile.getCountryId() != null && socialProfile.getStateId() != null && socialProfile.getCityId() != null) {
                     if (usernameConfirm.equals(user.getUsername())) {
                         if (passwordConfirm.equals(user.getPassword())) {
