@@ -606,26 +606,26 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     code = replaceCode(code);
+    var stackCode = "";
     var stackOldCode = "";
-    var stackElement = "";
     var stackElementIndex = "";
     var stackRange = 0;
     if ($(initialElement).index() < $(finalElement).index()) {
+        stackElementIndex = $(initialElement).index();
+        stackOldCode += $(initialElement)[0].outerHTML;
         $(initialElement).append($(finalElement).html());
         var html = $(initialElement).html();
         var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
         var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
         $(initialElement).html(html.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
         deleteMarkerAndEmptyParents(initialElement, senderId);
-        stackOldCode += initialHtml.substring(initialHtmlRange) + "</" + $(initialElement)[0].nodeName.toLowerCase() + ">";
         $(initialElement).nextUntil($(finalElement)).each(function () {
-            stackOldCode += "<" + $(this)[0].nodeName.toLowerCase() + ">" + $(this).html() + "</" + $(this)[0].nodeName.toLowerCase() + ">";
+            stackOldCode += $(this)[0].outerHTML;
             $(this).remove();
         });
-        stackOldCode += "<" + $(finalElement)[0].nodeName.toLowerCase() + ">" + finalHtml.substring(0, finalHtmlRange);
-        stackRange = initialHtmlRange;
-        stackElement = initialElement;
-        stackElementIndex = $(initialElement).index();
+        stackOldCode += $(finalElement)[0].outerHTML;
+        stackCode = $(initialElement)[0].outerHTML;
+        stackRange = initialTextRange;
         $(finalElement).remove();
         setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
@@ -657,12 +657,12 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
     }
     var stackElement = {
         operation: "keyPress",
-        code : code,
+        code : stackCode,
         oldCode: stackOldCode,
-        element: stackElement,
         elementIndex: stackElementIndex,
-        range: stackRange
+        range: stackRange,
     }
+    console.log(stackElement);
     undoStack.push(stackElement);
 }
 
@@ -982,11 +982,11 @@ function pasteAction(code, senderId, senderName, initialElement, finalElement, i
     }
 }
 
-//tirar esse +3 e pegar o range da tag
 function undoAction(senderId, senderName) {
     var action = undoStack.read();
+    var element = $(".editor").children().get(action.elementIndex);
     if (action.operation == "keyPress") {
-        $(action.element)[0].outerHTML = $(action.element)[0].outerHTML.substring(0, action.range + 3) + addMarker(senderId, senderName, "") + action.oldCode + $(action.element)[0].outerHTML.substring(action.range + 3 + 1);
+        $(element)[0].outerHTML = action.oldCode;
         redoStack.push(action);
         undoStack.pop();
         setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, senderId);
@@ -994,17 +994,12 @@ function undoAction(senderId, senderName) {
 }
 
 function redoAction(senderId, senderName) {
-    if ($(initialElement).index() < $(finalElement).index()) {
-
-    } else if ($(initialElement).index() == $(finalElement).index()) {
-        if (initialHtmlRange < finalHtmlRange) {
-
-        } else if (initialHtmlRange == finalHtmlRange) {
-
-        } else {
-
-        }
-    } else {
-
+    var action = redoStack.read();
+    var element = $(".editor").children().get(action.elementIndex);
+    if (action.operation == "keyPress") {
+        $(element)[0].outerHTML = action.code;
+        undoStack.push(action);
+        redoStack.pop();
+        setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, senderId);
     }
 }

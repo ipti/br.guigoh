@@ -46,12 +46,12 @@ import javax.persistence.EntityManagerFactory;
  * @author ipti008
  */
 public class SocialProfileJpaController implements Serializable {
-    
+
     private transient EntityManagerFactory emf = PersistenceUnit.getEMF();
 
     public SocialProfileJpaController() {
     }
-    
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -97,7 +97,8 @@ public class SocialProfileJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfileVisibility socialProfileVisibility = socialProfile.getSocialProfileVisibility();
             if (socialProfileVisibility != null) {
                 socialProfileVisibility = em.getReference(socialProfileVisibility.getClass(), socialProfileVisibility.getSocialProfileId());
@@ -344,7 +345,8 @@ public class SocialProfileJpaController implements Serializable {
     public void edit(SocialProfile socialProfile) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfile persistentSocialProfile = em.find(SocialProfile.class, socialProfile.getTokenId());
             SocialProfileVisibility socialProfileVisibilityOld = persistentSocialProfile.getSocialProfileVisibility();
             SocialProfileVisibility socialProfileVisibilityNew = socialProfile.getSocialProfileVisibility();
@@ -770,7 +772,8 @@ public class SocialProfileJpaController implements Serializable {
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfile socialProfile;
             try {
                 socialProfile = em.getReference(SocialProfile.class, id);
@@ -956,7 +959,7 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -967,34 +970,38 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List findAllSocialProfileAuthorization(Integer subnetworkdId) {
         EntityManager em = getEntityManager();
         try {
             Query y = em.createNativeQuery("select s.*,a.* from social_profile s "
                     + "join authorization a on s.token_id = a.token_id "
-                    + "where s.subnetwork_id = "+ subnetworkdId, "SocialProfileAuthorization");
+                    + "where s.subnetwork_id = " + subnetworkdId, "SocialProfileAuthorization");
             return y.getResultList();
-        
+
         } finally {
             em.close();
         }
     }
-    
-    public List<SocialProfile> findSocialProfiles(String name, String token, boolean includeSessionUser){
+
+    public List<SocialProfile> findSocialProfiles(String name, String token, boolean includeSessionUser, boolean includeVisitors) {
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
-            if (!includeSessionUser){
-                partialQuery = "and token_id <> '" + token + "' ";
+            String partialJoin = "";
+            if (!includeSessionUser) {
+                partialQuery += "and token_id <> '" + token + "' ";
             }
-            List<SocialProfile> socialProfileList = (List<SocialProfile>) 
-                    em.createNativeQuery("select distinct sp.* from social_profile sp "
-                            + "left join city c on c.id = sp.city_id "
-                            + "left join subnetwork sn on sn.id = sp.subnetwork_id "
-                            + "where (upper(sp.name) like '%" + name.toUpperCase() + "%' "
-                            + "or upper(c.name) like '%" + name.toUpperCase() + "%' "
-                            + "or upper(sn.description) like '%" + name.toUpperCase() + "%') " + partialQuery, SocialProfile.class).getResultList();
+            if (!includeVisitors) {
+                partialQuery += "and (role_id is null or r.name <> 'Visitante') ";
+            }
+            List<SocialProfile> socialProfileList = (List<SocialProfile>) em.createNativeQuery("select distinct sp.* from social_profile sp "
+                    + "left join city c on c.id = sp.city_id "
+                    + "left join subnetwork sn on sn.id = sp.subnetwork_id "
+                    + "left join role r on r.id = sp.role_id "
+                    + "where (upper(sp.name) like '%" + name.toUpperCase() + "%' "
+                    + "or upper(c.name) like '%" + name.toUpperCase() + "%' "
+                    + "or upper(sn.description) like '%" + name.toUpperCase() + "%') " + partialQuery, SocialProfile.class).getResultList();
             return socialProfileList;
         } finally {
             em.close();

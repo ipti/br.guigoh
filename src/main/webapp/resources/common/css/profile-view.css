@@ -117,6 +117,10 @@
     left: 60px !important;
 }
 
+.profile-options.admin.visitor {
+    left: 25px !important;
+}
+
 .profile-options > img {
     left: 35px;
 }

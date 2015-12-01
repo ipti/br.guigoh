@@ -99,27 +99,30 @@
                 </div>
                 <ui:fragment rendered="#{!profileViewBean.himself}">
                     <h:panelGroup layout="block" id="profile-options" class="profile-options #{profileViewBean.mySocialProfile.users.userAuthorization.roles == 'AD' 
-                                                 and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'
-                                                 and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD' ? 'admin': ''}">
-                        <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'AC'}">
-                            <h:commandLink>
-                                <img class="friend-status" src="../resources/common/images/remove-friend-gray.png"/>
-                                <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
-                            </h:commandLink>
+                                                                                               and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'
+                                                                                               and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD' ? 'admin': ''} 
+                                  #{profileViewBean.mySocialProfile.roleId.name == 'Visitante' ? 'visitor': ''}">
+                        <ui:fragment rendered="#{profileViewBean.mySocialProfile.roleId.name != 'Visitante' and profileViewBean.socialProfile.roleId.name != 'Visitante'}">
+                            <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'AC'}">
+                                <h:commandLink>
+                                    <img class="friend-status" src="../resources/common/images/remove-friend-gray.png"/>
+                                    <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'PE'}">
+                                <h:commandLink>
+                                    <img class="friend-status" src="../resources/common/images/pending-friend-gray.png"/>
+                                    <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{profileViewBean.isFriend().status eq null}">
+                                <h:commandLink>
+                                    <img class="friend-status" src="../resources/common/images/add-friend-gray.png"/>
+                                    <f:ajax listener="#{profileViewBean.addFriend}" render="profile-options"/>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <img class="open-chat" src="../resources/common/images/chat.png"/>
                         </ui:fragment>
-                        <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'PE'}">
-                            <h:commandLink>
-                                <img class="friend-status" src="../resources/common/images/pending-friend-gray.png"/>
-                                <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
-                            </h:commandLink>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{profileViewBean.isFriend().status eq null}">
-                            <h:commandLink>
-                                <img class="friend-status" src="../resources/common/images/add-friend-gray.png"/>
-                                <f:ajax listener="#{profileViewBean.addFriend}" render="profile-options"/>
-                            </h:commandLink>
-                        </ui:fragment>
-                        <img class="open-chat" src="../resources/common/images/chat.png"/>
                         <ui:fragment rendered="#{profileViewBean.mySocialProfile.users.userAuthorization.roles == 'AD' 
                                                  and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'
                                                  and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD'}">
@@ -405,24 +408,24 @@
                 <div id="profile-container-objects" class="profile-container">
                     <div class="profile-column-left">
                         <ui:repeat value="#{profileViewBean.educationalObjectList}" var="educationalObject">
-                                <div class="item-box-container">
-                                    <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
-                                    <p class="item-box-title">
-                                        <ui:repeat value="#{educationalObject.authorCollection}" var="author">
-                                            <ui:fragment rendered="#{author.email == profileViewBean.socialProfile.users.username}">
-                                                #{author.authorRoleFk.name}/
-                                            </ui:fragment>
-                                        </ui:repeat>
-                                    </p>
-                                    <p class="item-box-aux">#{localeBean.getString('em')}</p>
-                                    <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
-                                    <div class="item-box-date">
-                                        <img src="../resources/common/images/clock.png"/>
-                                        <h:outputText value="#{educationalObject.date}">
-                                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
-                                        </h:outputText>
-                                    </div>
+                            <div class="item-box-container">
+                                <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="item-box-img" src="#{educationalObject.image}"/></a>
+                                <p class="item-box-title">
+                                    <ui:repeat value="#{educationalObject.authorCollection}" var="author">
+                                        <ui:fragment rendered="#{author.email == profileViewBean.socialProfile.users.username}">
+                                            #{author.authorRoleFk.name}/
+                                        </ui:fragment>
+                                    </ui:repeat>
+                                </p>
+                                <p class="item-box-aux">#{localeBean.getString('em')}</p>
+                                <a class="item-box-title-bold" href="/educational-object/view.xhtml?id=#{educationalObject.id}"><p>#{educationalObject.name}</p></a>
+                                <div class="item-box-date">
+                                    <img src="../resources/common/images/clock.png"/>
+                                    <h:outputText value="#{educationalObject.date}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
                                 </div>
+                            </div>
                         </ui:repeat>
                     </div>
                     <div class="profile-column-right">
