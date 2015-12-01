@@ -97,6 +97,14 @@
     cursor: pointer;
 }
 
+.user-chat:hover span{
+    color: #333;
+}
+
+.user-chat:hover img{
+
+}
+
 .user-chat img {
     width: 15px;
     float: left;
