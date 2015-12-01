@@ -1,7 +1,19 @@
 $(document).ready(function () {
     $(".menu-icon-five").parent().addClass("active");
-    
+
     $(".general-search input").focus();
+});
+
+$(document).on("mouseenter", "#visitorPermissionWarning, .user-chat.disabled, .user-friend-status", function (e) {
+    if (!$(e.target).parent().hasClass("friend-situation") || ($(e.target).parent().hasClass("friend-situation") && $(e.target).parent().is("span"))) {
+        var top = e.pageY + 10 + 'px';
+        var left = e.pageX + 'px';
+        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+    }
+});
+
+$(document).on("mouseleave", "#visitorPermissionWarning, .user-chat.disabled, .user-friend-status", function (e) {
+    $('#visitorPermissionWarning').hide();
 });
 
 $(".general-search").on('keypress', function (e) {
@@ -10,15 +22,17 @@ $(".general-search").on('keypress', function (e) {
     }
 });
 
-$(document).on("click", ".user-chat", function(){
-    var id = $(this).closest(".result-box").find(".social-profile-id").text();
-    var name = $(this).closest(".result-box").find(".social-profile-name").text();
-    openMessengerBox(id, name);
+$(document).on("click", ".user-chat", function () {
+    if (!$(this).hasClass("disabled")) {
+        var id = $(this).closest(".result-box").find(".social-profile-id").text();
+        var name = $(this).closest(".result-box").find(".social-profile-name").text();
+        openMessengerBox(id, name);
+    }
 });
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
-        $.each($(".result-name a, .user-job"), function(){
+        $.each($(".result-name a, .user-job"), function () {
             var limit = $(this).hasClass("user-job") ? 25 : 22;
             $(this).text(changeNameLength($(this).text(), limit));
         });

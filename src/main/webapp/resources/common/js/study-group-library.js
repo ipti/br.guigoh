@@ -27,7 +27,7 @@ $(window).scroll(function () {
 });
 
 $('#visitorPermissionWarning, span.new-topic').hover(function (e) {
-    var top = e.pageY + 'px';
+    var top = e.pageY + 10 + 'px';
     var left = e.pageX + 'px'
     $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
 },

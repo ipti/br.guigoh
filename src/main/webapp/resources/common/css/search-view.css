@@ -111,11 +111,19 @@
     font-weight: bold;
 }
 
+.user-chat.disabled {
+    cursor: not-allowed;
+}
+
 .user-friend-status {
     float: right;
     width: 25px;
     margin: 9px 0 0 0;
     padding: 4px 7px;
+}
+
+span.friend-situation > img {
+    cursor: not-allowed;
 }
 
 .result-date {

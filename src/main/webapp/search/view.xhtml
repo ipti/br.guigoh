@@ -37,29 +37,27 @@
                                             <p class="result-name">
                                                 <a href="/profile/view.xhtml?id=#{socialProfile.socialProfileId}" title="#{socialProfile.name}">#{socialProfile.name}</a></p>
                                             <p class="user-job" title="#{socialProfile.occupationsId.name}">#{socialProfile.occupationsId.name}</p>
-                                            <ui:fragment rendered="#{searchViewBean.mySocialProfile.roleId.name != 'Visitante'}">
-                                                <div class="user-chat">
-                                                    <img src="../resources/common/images/chat.png"/>
-                                                    <span>#{localeBean.getString("Bate-papo")}</span>
-                                                </div>
-                                                <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
-                                                    <h:commandLink>
-                                                        <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
-                                                        <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                                    </h:commandLink>
-                                                </ui:fragment>
-                                                <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
-                                                    <h:commandLink>
-                                                        <img class="user-friend-status pending" src="../resources/common/images/pending-friend-gray.png" />
-                                                        <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                                    </h:commandLink>
-                                                </ui:fragment>
-                                                <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
-                                                    <h:commandLink>
-                                                        <img class="user-friend-status add" src="../resources/common/images/add-friend-gray.png"/>
-                                                        <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
-                                                    </h:commandLink>
-                                                </ui:fragment>
+                                            <div class="user-chat #{searchViewBean.mySocialProfile.roleId.name == 'Visitante' ? 'disabled' : ''}">
+                                                <img src="../resources/common/images/chat.png"/>
+                                                <span>#{localeBean.getString("Bate-papo")}</span>
+                                            </div>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
+                                                <h:commandLink class="friend-situation" disabled="#{searchViewBean.mySocialProfile.roleId.name == 'Visitante'}">
+                                                               <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
+                                                    <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'PE'}">
+                                                <h:commandLink class="friend-situation" disabled="#{searchViewBean.mySocialProfile.roleId.name == 'Visitante'}">
+                                                    <img class="user-friend-status pending" src="../resources/common/images/pending-friend-gray.png" />
+                                                    <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
+                                                <h:commandLink class="friend-situation" disabled="#{searchViewBean.mySocialProfile.roleId.name == 'Visitante'}">
+                                                    <img class="user-friend-status add" src="../resources/common/images/add-friend-gray.png"/>
+                                                    <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
+                                                </h:commandLink>
                                             </ui:fragment>
                                         </div>
                                     </div>

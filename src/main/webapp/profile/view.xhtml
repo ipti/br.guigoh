@@ -100,28 +100,27 @@
                 <ui:fragment rendered="#{!profileViewBean.himself}">
                     <h:panelGroup layout="block" id="profile-options" class="profile-options #{profileViewBean.mySocialProfile.users.userAuthorization.roles == 'AD' 
                                                                                                and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'
-                                                                                               and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD' ? 'admin': ''} 
-                                  #{profileViewBean.mySocialProfile.roleId.name == 'Visitante' ? 'visitor': ''}">
-                        <ui:fragment rendered="#{profileViewBean.mySocialProfile.roleId.name != 'Visitante' and profileViewBean.socialProfile.roleId.name != 'Visitante'}">
+                                                                                               and profileViewBean.socialProfile.users.userAuthorization.roles != 'AD' ? 'admin': ''}">
+                        <ui:fragment rendered="#{profileViewBean.socialProfile.roleId.name != 'Visitante'}">
                             <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'AC'}">
-                                <h:commandLink>
+                                <h:commandLink class="friend-situation" disabled="#{profileViewBean.mySocialProfile.roleId.name == 'Visitante'}">
                                     <img class="friend-status" src="../resources/common/images/remove-friend-gray.png"/>
                                     <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
                                 </h:commandLink>
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'PE'}">
-                                <h:commandLink>
+                                <h:commandLink class="friend-situation" disabled="#{profileViewBean.mySocialProfile.roleId.name == 'Visitante'}">
                                     <img class="friend-status" src="../resources/common/images/pending-friend-gray.png"/>
                                     <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
                                 </h:commandLink>
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.isFriend().status eq null}">
-                                <h:commandLink>
+                                <h:commandLink class="friend-situation" disabled="#{profileViewBean.mySocialProfile.roleId.name == 'Visitante'}">
                                     <img class="friend-status" src="../resources/common/images/add-friend-gray.png"/>
                                     <f:ajax listener="#{profileViewBean.addFriend}" render="profile-options"/>
                                 </h:commandLink>
                             </ui:fragment>
-                            <img class="open-chat" src="../resources/common/images/chat.png"/>
+                            <img class="open-chat #{profileViewBean.mySocialProfile.roleId.name == 'Visitante' ? 'disabled' : ''}" src="../resources/common/images/chat.png"/>
                         </ui:fragment>
                         <ui:fragment rendered="#{profileViewBean.mySocialProfile.users.userAuthorization.roles == 'AD' 
                                                  and profileViewBean.socialProfile.users.userAuthorization.status != 'IC'

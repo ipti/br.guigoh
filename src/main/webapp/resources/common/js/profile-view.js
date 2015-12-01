@@ -17,6 +17,17 @@ $(document).ready(function () {
     });
 });
 
+$('#visitorPermissionWarning, .open-chat.disabled, .friend-status').hover(function (e) {
+    if (!$(e.target).parent().hasClass("friend-situation") || ($(e.target).parent().hasClass("friend-situation") && $(e.target).parent().is("span"))) {
+        var top = e.pageY + 10 + 'px';
+        var left = e.pageX + 'px'
+        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+    }
+},
+        function () {
+            $('#visitorPermissionWarning').hide();
+        });
+
 $(document).on("keypress", '.editable-field', function (e) {
     if (e.keyCode === 13) {
         $(this).closest('.editable-container').find('.edit-button').click();
@@ -28,9 +39,11 @@ $(document).on("click", ".add-new, .edit-pencil", function () {
 });
 
 $('.open-chat').click(function () {
-    var id = $("#social-profile-id").val();
-    var name = $("#social-profile-name").val();
-    openMessengerBox(id, name);
+    if (!$(this).hasClass("disabled")) {
+        var id = $("#social-profile-id").val();
+        var name = $("#social-profile-name").val();
+        openMessengerBox(id, name);
+    }
 });
 
 $('.edit-photo').click(function () {

@@ -113,12 +113,12 @@
     left: 75px;
 }
 
-.profile-options.admin {
-    left: 60px !important;
+span.friend-situation > img {
+    cursor: not-allowed;
 }
 
-.profile-options.admin.visitor {
-    left: 25px !important;
+.profile-options.admin {
+    left: 60px !important;
 }
 
 .profile-options > img {
@@ -130,6 +130,10 @@
     height: 20px;
     position: absolute;
     cursor: pointer;
+}
+
+.open-chat.disabled {
+    cursor: not-allowed !important;
 }
 
 .block {

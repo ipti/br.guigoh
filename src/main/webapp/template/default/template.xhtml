@@ -107,22 +107,20 @@ and open the template in the editor.
             Usuários visitantes não têm acesso a esta funcionalidade.
             <span class="alert-icon"><i class="fa fa-exclamation-triangle"></i></span>
         </div>
-        <ui:fragment rendered="#{templateBean.socialProfile.roleId.name != 'Visitante'}">
-            <div class="messenger-container">
-                <div class="messenger"> 
-                    <span id="messenger-menu" class="messenger-menu-collapsed">#{localeBean.getString('Bate-papo')} <strong>(0)</strong>
-                        <img id="online-icon" src="../../resources/common/images/online-dot.png"></img>
-                    </span>
+        <div class="messenger-container">
+            <div class="messenger #{templateBean.socialProfile.roleId.name == 'Visitante' ? 'disabled' : ''}"> 
+                <span id="messenger-menu" class="messenger-menu-collapsed">#{localeBean.getString('Bate-papo')} <strong>(0)</strong>
+                    <img id="online-icon" src="../../resources/common/images/online-dot.png"></img>
+                </span>
 
-                    <ul id="messenger-friends"></ul>
-                    <audio id="new-message-sound" controls="controls" style="display: none">
-                        <source src="../../resources/common/medias/new-message-sound.mp3" type="audio/mpeg"/>
-                        <source src="../../resources/common/medias/new-message-sound.ogg" type="audio/ogg"/>
-                    </audio>
-                </div>
-                <div class="messenger-boxes"></div>
+                <ul id="messenger-friends"></ul>
+                <audio id="new-message-sound" controls="controls" style="display: none">
+                    <source src="../../resources/common/medias/new-message-sound.mp3" type="audio/mpeg"/>
+                    <source src="../../resources/common/medias/new-message-sound.ogg" type="audio/ogg"/>
+                </audio>
             </div>
-        </ui:fragment>
+            <div class="messenger-boxes"></div>
+        </div>
         <!-- BEGIN PAGE SCRIPTS -->
         <script src="/resources/lib/jquery-1.11.3/jquery-1.11.3.min.js"></script>
         <script src="/resources/lib/jquery-1.11.3/jquery-migrate-1.2.1.min.js"></script>

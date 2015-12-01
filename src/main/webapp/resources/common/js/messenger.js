@@ -14,13 +14,15 @@ $(document).ready(function () {
         $(box).remove();
     });
     $(".messenger").on('click', 'span', (function () {
-        $("#messenger-friends").toggle();
-        if ($("#messenger-friends").is(":visible")) {
-            if ($("#messenger-friends").children().length) {
-                $("#messenger-menu").removeClass("messenger-menu-collapsed");
+        if (!$(this).parent().hasClass("disabled")) {
+            $("#messenger-friends").toggle();
+            if ($("#messenger-friends").is(":visible")) {
+                if ($("#messenger-friends").children().length) {
+                    $("#messenger-menu").removeClass("messenger-menu-collapsed");
+                }
+            } else {
+                $("#messenger-menu").addClass("messenger-menu-collapsed");
             }
-        } else {
-            $("#messenger-menu").addClass("messenger-menu-collapsed");
         }
     }));
     $(document).on('click', '.messenger-title', function () {
@@ -290,7 +292,7 @@ function organizeBoxes(box) {
     }
 }
 
-function showNewMessageDate(id, date){
+function showNewMessageDate(id, date) {
     var box = $("#box-" + id);
     box.find(".message .message-date:empty:first").text(date);
     $('#box-' + id + ' .messages').scrollTop($('#box-' + id + ' .messages').prop("scrollHeight"));

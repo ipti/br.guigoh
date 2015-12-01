@@ -3,6 +3,15 @@ $(document).ready(function () {
     $("." + locale).css("font-weight", "bold");
 });
 
+$('#visitorPermissionWarning, .messenger.disabled').hover(function (e) {
+    var top = e.pageY - 60 + 'px';
+    var left = e.pageX - 200 + 'px'
+    $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+},
+        function () {
+            $('#visitorPermissionWarning').hide();
+        });
+
 $(document).on('click', function (e) {
     if ($(e.target).closest($(".down-arrow")).length > 0) {
         $("#logged-user-menu-box").toggle();
@@ -37,7 +46,7 @@ function changeNameLength(name, limit) {
 }
 
 function changeFileNameLength(name, limit) {
-    return (name.length > limit) ? name.substring(0, (limit/2) - 3) + "..." + name.substring(name.length - limit/2, name.length) : name;
+    return (name.length > limit) ? name.substring(0, (limit / 2) - 3) + "..." + name.substring(name.length - limit / 2, name.length) : name;
 }
 
 function eventExceptions(data) {

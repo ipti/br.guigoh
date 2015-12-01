@@ -5,8 +5,8 @@ $(document).ready(function () {
 });
 
 $('#visitorPermissionWarning, #submit-educational-object > span').hover(function (e) {
-    var top = e.pageY + 'px';
-    var left = e.pageX + 'px'
+    var top = e.pageY + 10 + 'px';
+    var left = e.pageX + 10 + 'px'
     $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
 },
         function () {
