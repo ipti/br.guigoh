@@ -9,7 +9,8 @@ var keys = {
     shiftPageUp: "16+33", shiftPageDown: "16+34", paste: "paste", lowerThan: "60", greaterThan: "62", ampersand: "38", semicolon: "59",
     z: "90", y: "89", ctrlZ: "17+90", ctrlY: "17+89"
 }
-var stack = new stack();
+var undoStack = new stack();
+var redoStack = new stack();
 
 $(document).ready(function () {
     var collaboratorsIds = logged_social_profile_id == 26 ? "246" : "26";
@@ -84,10 +85,10 @@ function onMessageReceivedForDocs(json) {
                     ctrlAAction(msg.senderId, msg.senderName);
                     break;
                 case keys.ctrlZ:
-                    undoAction(msg.code, msg.oldCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
+                    undoAction(msg.senderId, msg.senderName);
                     break;
                 case keys.ctrlY:
-                    redoAction(msg.code, msg.oldCode, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
+                    redoAction(msg.senderId, msg.senderName);
                     break;
                 default:
                     if (msg.code.indexOf("paste") > -1) {
@@ -196,13 +197,7 @@ function sendCollaboratorChange(e) {
             type: "NEW_CODE"
         }
         websocketDocs.send(JSON.stringify(json));
-        if (code != undefined) {
-            json.type = "UNDO";
-            json.oldCode = "teste";
-            stack.push(json);
-            console.log(stack);
-        }
-        changeLocalActions(e, json.oldCode, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     }
 }
 
@@ -257,7 +252,7 @@ function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, fina
     }
 }
 
-function changeLocalActions(e, oldCode, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     if (e.type == "paste") {
         pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     } else if (e.keyCode == keys.backspace) {
@@ -272,9 +267,9 @@ function changeLocalActions(e, oldCode, initialElement, finalElement, initialHtm
             keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
     } else if (e.keyCode == keys.ctrlZ) {
-        undoAction(e.keyCode, oldCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        undoAction(null, null);
     } else if (e.keyCode == keys.ctrlY) {
-        redoAction(e.keyCode, oldCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        redoAction(null, null);
     }
 }
 
@@ -595,11 +590,11 @@ if (window.getSelection && document.createRange) {
  *          - The initial element and final element are the same, but the user highlighted  more than one letter, from right to left;
  *          - The initial element is after final element;
  * Mostly of these methods are 'if' conditioned in that structure.
- * @param {String} code             : Code sent by a collaborator. Can be a simple keycode number or a text/html.
- * @param {String} senderId         : Sender unique id.
- * @param {String} senderName       : Sender name. Passed via Json to avoid a sql search in websocket's callback.
- * @param {String} initialElement   : DOM element of the initial index (where the sender action started).
- * @param {String} finalElement     : DOM element of the final index (where the sender action finished).
+ * @param {String} code                 : Code sent by a collaborator. Can be a simple keycode number or a text/html.
+ * @param {String} senderId             : Sender unique id.
+ * @param {String} senderName           : Sender name. Passed via Json to avoid a sql search in websocket's callback.
+ * @param {String} initialElement       : DOM element of the initial index (where the sender action started).
+ * @param {String} finalElement         : DOM element of the final index (where the sender action finished).
  * @param {String} initialHtmlRange     : Collaborator's initial caret offset (counting html structure, not only text).
  * @param {String} finalHtmlRange       : Collaborator's final caret offset (counting html structure, not only text).
  * @param {String} initialTextRange     : Collaborator's initial caret offset (counting only text).
@@ -611,6 +606,10 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     code = replaceCode(code);
+    var stackOldCode = "";
+    var stackElement = "";
+    var stackElementIndex = "";
+    var stackRange = 0;
     if ($(initialElement).index() < $(finalElement).index()) {
         $(initialElement).append($(finalElement).html());
         var html = $(initialElement).html();
@@ -618,9 +617,15 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
         var markedHtml = insertDeleteMarkerOnTextNodes(htmlArray, senderId);
         $(initialElement).html(html.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
         deleteMarkerAndEmptyParents(initialElement, senderId);
+        stackOldCode += initialHtml.substring(initialHtmlRange) + "</" + $(initialElement)[0].nodeName.toLowerCase() + ">";
         $(initialElement).nextUntil($(finalElement)).each(function () {
+            stackOldCode += "<" + $(this)[0].nodeName.toLowerCase() + ">" + $(this).html() + "</" + $(this)[0].nodeName.toLowerCase() + ">";
             $(this).remove();
         });
+        stackOldCode += "<" + $(finalElement)[0].nodeName.toLowerCase() + ">" + finalHtml.substring(0, finalHtmlRange);
+        stackRange = initialHtmlRange;
+        stackElement = initialElement;
+        stackElementIndex = $(initialElement).index();
         $(finalElement).remove();
         setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
@@ -650,6 +655,15 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
         $(initialElement).remove();
         setLocalCaretPosition(finalElement, finalTextRange + 1, senderId);
     }
+    var stackElement = {
+        operation: "keyPress",
+        code : code,
+        oldCode: stackOldCode,
+        element: stackElement,
+        elementIndex: stackElementIndex,
+        range: stackRange
+    }
+    undoStack.push(stackElement);
 }
 
 function mouseClickAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
@@ -968,34 +982,29 @@ function pasteAction(code, senderId, senderName, initialElement, finalElement, i
     }
 }
 
-function undoAction(code, oldCode, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
-    if ($(initialElement).index() < $(finalElement).index()) {
-        
-    } else if ($(initialElement).index() == $(finalElement).index()) {
-        if (initialHtmlRange < finalHtmlRange) {
-            
-        } else if (initialHtmlRange == finalHtmlRange) {
-            
-        } else {
-            
-        }
-    } else {
-        
+//tirar esse +3 e pegar o range da tag
+function undoAction(senderId, senderName) {
+    var action = undoStack.read();
+    if (action.operation == "keyPress") {
+        $(action.element)[0].outerHTML = $(action.element)[0].outerHTML.substring(0, action.range + 3) + addMarker(senderId, senderName, "") + action.oldCode + $(action.element)[0].outerHTML.substring(action.range + 3 + 1);
+        redoStack.push(action);
+        undoStack.pop();
+        setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, senderId);
     }
 }
 
-function redoAction(code, oldCode, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+function redoAction(senderId, senderName) {
     if ($(initialElement).index() < $(finalElement).index()) {
-        
+
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            
+
         } else if (initialHtmlRange == finalHtmlRange) {
-            
+
         } else {
-            
+
         }
     } else {
-        
+
     }
 }

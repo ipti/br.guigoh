@@ -151,6 +151,10 @@
     margin-top: 18px;
 }
 
+.object-like > span {
+    cursor: not-allowed
+}
+
 .like-count {
     position: absolute;
     width: 50px;
@@ -299,6 +303,10 @@
     font-size: 12px;
     border-radius: 4px;
     background-color: white;
+}
+
+.message-textarea:disabled {
+    cursor: not-allowed;
 }
 
 .illusory-textarea hr {

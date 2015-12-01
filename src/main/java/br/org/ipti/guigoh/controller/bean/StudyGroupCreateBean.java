@@ -56,6 +56,9 @@ public class StudyGroupCreateBean implements Serializable {
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
+            if (mySocialProfile.getRoleId() != null && mySocialProfile.getRoleId().getName().equals("Visitante")) {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("../home.xhtml");
+            }
         }
     }
 

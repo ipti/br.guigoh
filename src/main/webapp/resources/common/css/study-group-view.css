@@ -155,6 +155,10 @@
     background-color: white;
 }
 
+.message-textarea:disabled {
+    cursor: not-allowed;
+}
+
 .illusory-textarea hr {
     margin: 0 10px;
 }

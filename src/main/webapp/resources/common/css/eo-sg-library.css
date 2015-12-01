@@ -56,6 +56,10 @@
     background: #333;
 }
 
+span.new-topic {
+    cursor: not-allowed;
+}
+
 .column-button {
     width: 600px;
     margin: -35px 0 20px 0px;

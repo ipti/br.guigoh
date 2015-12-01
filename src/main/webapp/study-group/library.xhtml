@@ -38,7 +38,7 @@
                             <f:ajax event="keyup" listener="#{studyGroupLibraryBean.searchTopicEvent()}" render="column"></f:ajax>
                         </h:inputText>
                     </ui:fragment>
-                    <h:link class="new-topic" outcome="../study-group/create.xhtml?id=#{studyGroupLibraryBean.interestId}" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">#{localeBean.getString('Novo Tópico').toUpperCase()}</h:link>
+                    <h:link class="new-topic" outcome="create.xhtml?id=#{studyGroupLibraryBean.interestId}" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">#{localeBean.getString('Novo Tópico').toUpperCase()}</h:link>
                 </div>
                 <h:panelGroup layout="block" class="column" id="column">
                     <ui:repeat value="#{studyGroupLibraryBean.discussionTopicList}" var="discussionTopic">

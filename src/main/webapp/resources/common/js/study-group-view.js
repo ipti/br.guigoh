@@ -21,11 +21,22 @@ $(document).ready(function () {
     $(document).on('click', '.attach-link', function () {
         $('.file-input').click();
     });
-    
-    setTimeout(function(){
+
+    setTimeout(function () {
         $('.increase-views').click();
     }, 3000);
 });
+
+$('#visitorPermissionWarning, .illusory-textarea').hover(function (e) {
+    if ($(e.target).children(".message-textarea").length == 0 || $(e.target).children(".message-textarea").is(":disabled")) {
+        var top = e.pageY + 'px';
+        var left = e.pageX + 'px'
+        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+    }
+},
+        function () {
+            $('#visitorPermissionWarning').hide();
+        });
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {

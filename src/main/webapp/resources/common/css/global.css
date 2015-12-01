@@ -832,6 +832,35 @@ section {
     float: right;
 }
 
+#visitorPermissionWarning {
+    display: none;
+    width: 200px;
+    border-top: 5px solid #999C95;
+    border-left: 1px solid #999C95;
+    border-right: 1px solid #999C95;
+    border-bottom: 1px solid #999C95;
+    background: #DCDFD6;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.alert-icon {
+    background: gray;
+    color: #e6eadf;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    font-size: 12px;
+    top: -15px;
+    width: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }
