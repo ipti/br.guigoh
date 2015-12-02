@@ -5,6 +5,8 @@ $(document).ready(function () {
 
     $(".media-type li").first().addClass("active");
     $(".media").first().addClass("active");
+    
+    $('.message-textarea').on('DOMMouseScroll mousewheel', preventScrolling);
 
     maxLength = 200;
     $(document).on('keypress', '.message-textarea', function (e) {
@@ -28,7 +30,7 @@ $(document).ready(function () {
 });
 
 $('span.like-object, .illusory-textarea').mousemove(function (e) {
-    if ($(e.target).children(".message-textarea").length == 0 || $(e.target).children(".message-textarea").is(":disabled")) {
+    if ($(this).children(".message-textarea").length == 0 || $(this).children(".message-textarea").is(":disabled")) {
         $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
     }
 });

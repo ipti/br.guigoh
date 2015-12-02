@@ -28,7 +28,7 @@ $(document).ready(function () {
 });
 
 $('.illusory-textarea').mousemove(function (e) {
-    if ($(e.target).children(".message-textarea").length == 0 || $(e.target).children(".message-textarea").is(":disabled")) {
+    if ($(this).children(".message-textarea").length == 0 || $(this).children(".message-textarea").is(":disabled")) {
         $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
     }
 });
