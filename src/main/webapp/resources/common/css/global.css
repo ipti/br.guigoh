@@ -471,7 +471,8 @@ aside h3 {
     border: 1px solid #C1C1C1;
     cursor: default;
     right: 96px;
-    top: 90px
+    top: 90px;
+    z-index: 1;
 }
 
 #logged-user-menu-box a{
