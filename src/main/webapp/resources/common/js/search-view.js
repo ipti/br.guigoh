@@ -4,15 +4,13 @@ $(document).ready(function () {
     $(".general-search input").focus();
 });
 
-$(document).on("mouseenter", "#visitorPermissionWarning, .user-chat.disabled, .user-friend-status", function (e) {
+$(document).on("mousemove", ".user-chat.disabled, .user-friend-status", function (e) {
     if (!$(e.target).parent().hasClass("friend-situation") || ($(e.target).parent().hasClass("friend-situation") && $(e.target).parent().is("span"))) {
-        var top = e.pageY + 10 + 'px';
-        var left = e.pageX + 'px';
-        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+        $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
     }
 });
 
-$(document).on("mouseleave", "#visitorPermissionWarning, .user-chat.disabled, .user-friend-status", function (e) {
+$(document).on("mouseleave", ".user-chat.disabled, .user-friend-status", function (e) {
     $('#visitorPermissionWarning').hide();
 });
 

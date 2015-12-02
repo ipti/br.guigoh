@@ -671,6 +671,10 @@ aside h3 {
     padding: 7px 9px 3px 15px;
 }
 
+.messenger.disabled > .messenger-menu-collapsed {
+    cursor: not-allowed !important;
+}
+
 .close-chat {
     float: right;
     cursor: pointer;

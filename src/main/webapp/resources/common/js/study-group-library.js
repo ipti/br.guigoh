@@ -26,14 +26,13 @@ $(window).scroll(function () {
     }
 });
 
-$('#visitorPermissionWarning, span.new-topic').hover(function (e) {
-    var top = e.pageY + 10 + 'px';
-    var left = e.pageX + 'px'
-    $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
-},
-        function () {
-            $('#visitorPermissionWarning').hide();
-        });
+$('span.new-topic').mousemove(function (e) {
+    $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
+});
+
+$('span.new-topic').mouseleave(function (e) {
+    $('#visitorPermissionWarning').hide();
+});
 
 jsf.ajax.addOnEvent(function (data) {
     if ($(data.source).hasClass("load-more-topics")
