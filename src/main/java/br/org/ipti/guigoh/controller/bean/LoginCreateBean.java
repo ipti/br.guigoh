@@ -98,7 +98,7 @@ public class LoginCreateBean implements Serializable {
                             socialProfile.setTokenId(user.getToken());
                             socialProfile.setPhoto("/resources/common/images/avatar.png");
                             socialProfile.setName(socialProfile.getName() + " " + lastName);
-                            String accountActivation = "Ativação de Conta";
+                            String accountActivation = "Guigoh - Ativação de Conta";
                             String mailtext = "Olá!\n\nObrigado pelo seu interesse em se registrar no Guigoh.\n\nPara concluir o processo será preciso que você clique no link abaixo para ativar sua conta.\n\n";
                             mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                             MailService.sendMail(mailtext, accountActivation, emailactivation.getUsername());
