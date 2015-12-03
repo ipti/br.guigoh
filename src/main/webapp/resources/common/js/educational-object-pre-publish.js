@@ -4,11 +4,10 @@ $(document).ready(function () {
     $(".educational_object").last().css("border-bottom", "0px solid #d3d3d3");
 });
 
-$('#visitorPermissionWarning, #submit-educational-object > span').hover(function (e) {
-    var top = e.pageY + 10 + 'px';
-    var left = e.pageX + 10 + 'px'
-    $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
-},
-        function () {
-            $('#visitorPermissionWarning').hide();
-        });
+$('#submit-educational-object > span').mousemove(function (e) {
+    $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
+});
+
+$('#submit-educational-object > span').mouseleave(function (e) {
+    $('#visitorPermissionWarning').hide();
+});

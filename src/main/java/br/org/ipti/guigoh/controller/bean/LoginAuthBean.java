@@ -176,8 +176,8 @@ public class LoginAuthBean implements Serializable {
 //                        if (networksList.size() > 2 | networksList.get(0).getType().equals(PUBLIC)) {
 //                            authorization.setStatus(FIRST_ACCESS);
 //                        } else if (networksList.get(0).getType().equals(PRIVATE)) {
-                    String newUserAccount = "Novo cadastro de usuário";
-                    String mailtext = "Um novo usuário se cadastrou no Guigoh e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
+                    String newUserAccount = "Guigoh - Novo cadastro: " + userConfirm.getSocialProfile().getName();
+                    String mailtext = userConfirm.getSocialProfile().getName() + " se cadastrou no Guigoh e requer autorização.\n\nVisite a página de administrador para visualizar os cadastros com autorização pendente.";
                 //mailtext = trans.getWord(mailtext);
                     //mailtext += "http://rts.guigoh.com:8080/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + emailactivation.getUsername();
                     //mailtext += "http://artecomciencia.guigoh.com/login/auth.xhtml?code=" + emailactivation.getCode() + "&user=" + user.getUsername();

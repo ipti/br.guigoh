@@ -471,7 +471,8 @@ aside h3 {
     border: 1px solid #C1C1C1;
     cursor: default;
     right: 96px;
-    top: 90px
+    top: 90px;
+    z-index: 1;
 }
 
 #logged-user-menu-box a{
@@ -669,6 +670,10 @@ aside h3 {
     color: #fdfdfd;
     display: block;
     padding: 7px 9px 3px 15px;
+}
+
+.messenger.disabled > .messenger-menu-collapsed {
+    cursor: not-allowed !important;
 }
 
 .close-chat {

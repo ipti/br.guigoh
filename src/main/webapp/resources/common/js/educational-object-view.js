@@ -5,6 +5,8 @@ $(document).ready(function () {
 
     $(".media-type li").first().addClass("active");
     $(".media").first().addClass("active");
+    
+    $('.message-textarea').on('DOMMouseScroll mousewheel', preventScrolling);
 
     maxLength = 200;
     $(document).on('keypress', '.message-textarea', function (e) {
@@ -27,17 +29,15 @@ $(document).ready(function () {
     });
 });
 
-$('#visitorPermissionWarning, span.like-object, .illusory-textarea').hover(function (e) {
-    if ($(e.target).children(".message-textarea").length == 0 || $(e.target).children(".message-textarea").is(":disabled")) {
-        var top = e.pageY + 10 + 'px';
-        var left = e.pageX + 'px'
-        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+$('span.like-object, .illusory-textarea').mousemove(function (e) {
+    if ($(this).children(".message-textarea").length == 0 || $(this).children(".message-textarea").is(":disabled")) {
+        $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
     }
-},
-        function () {
-            $('#visitorPermissionWarning').hide();
-        });
+});
 
+$('span.like-object, .illusory-textarea').mouseleave(function (e) {
+        $('#visitorPermissionWarning').hide();
+});
 
 $(window).scroll(function () {
     if ($(window).scrollTop() + $(window).height() === $(document).height()) {

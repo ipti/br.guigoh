@@ -3,14 +3,13 @@ $(document).ready(function () {
     $("." + locale).css("font-weight", "bold");
 });
 
-$('#visitorPermissionWarning, .messenger.disabled').hover(function (e) {
-    var top = e.pageY - 60 + 'px';
-    var left = e.pageX - 200 + 'px'
-    $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
-},
-        function () {
-            $('#visitorPermissionWarning').hide();
-        });
+$('.messenger.disabled').mousemove(function (e) {
+        $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY - 85 + 'px', left: e.pageX - 210 + 'px'}).show();
+});
+
+$('.messenger.disabled').mouseleave(function (e) {
+        $('#visitorPermissionWarning').hide();
+});
 
 $(document).on('click', function (e) {
     if ($(e.target).closest($(".down-arrow")).length > 0) {

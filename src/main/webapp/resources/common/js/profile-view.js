@@ -17,16 +17,15 @@ $(document).ready(function () {
     });
 });
 
-$('#visitorPermissionWarning, .open-chat.disabled, .friend-status').hover(function (e) {
+$('.open-chat.disabled, .friend-status').mousemove(function (e) {
     if (!$(e.target).parent().hasClass("friend-situation") || ($(e.target).parent().hasClass("friend-situation") && $(e.target).parent().is("span"))) {
-        var top = e.pageY + 10 + 'px';
-        var left = e.pageX + 'px'
-        $('#visitorPermissionWarning').css({position: 'absolute', top: top, left: left}).show();
+        $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY + 10 + 'px', left: e.pageX + 'px'}).show();
     }
-},
-        function () {
-            $('#visitorPermissionWarning').hide();
-        });
+});
+
+$('.open-chat.disabled, .friend-status').mouseleave(function (e) {
+    $('#visitorPermissionWarning').hide();
+});
 
 $(document).on("keypress", '.editable-field', function (e) {
     if (e.keyCode === 13) {
