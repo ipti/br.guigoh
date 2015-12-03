@@ -85,10 +85,10 @@ function onMessageReceivedForDocs(json) {
                     ctrlAAction(msg.senderId, msg.senderName);
                     break;
                 case keys.ctrlZ:
-                    undoAction(msg.senderId, msg.senderName);
+                    undoAction();
                     break;
                 case keys.ctrlY:
-                    redoAction(msg.senderId, msg.senderName);
+                    redoAction();
                     break;
                 default:
                     if (msg.code.indexOf("paste") > -1) {
@@ -253,6 +253,8 @@ function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, fina
 }
 
 function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    var insertOnStack = true;
+    var editorPreviousHtml = $(".editor").html();
     if (e.type == "paste") {
         pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     } else if (e.keyCode == keys.backspace) {
@@ -267,9 +269,21 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
             keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
     } else if (e.keyCode == keys.ctrlZ) {
-        undoAction(null, null);
+        undoAction();
+        insertOnStack = false;
     } else if (e.keyCode == keys.ctrlY) {
-        redoAction(null, null);
+        redoAction();
+        insertOnStack = false;
+    } else if (e.keyCode == undefined) {
+        insertOnStack = false;
+    }
+    
+    if (insertOnStack) {
+        var stackElement = {
+            previousEditor: editorPreviousHtml,
+            currentEditor: $(".editor").html()
+        }
+        undoStack.push(stackElement);
     }
 }
 
@@ -606,13 +620,7 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
     var initialHtml = $(initialElement).html();
     var finalHtml = $(finalElement).html();
     code = replaceCode(code);
-    var stackCode = "";
-    var stackOldCode = "";
-    var stackElementIndex = "";
-    var stackRange = 0;
     if ($(initialElement).index() < $(finalElement).index()) {
-        stackElementIndex = $(initialElement).index();
-        stackOldCode += $(initialElement)[0].outerHTML;
         $(initialElement).append($(finalElement).html());
         var html = $(initialElement).html();
         var htmlArray = html.substring(initialHtmlRange, initialHtml.length + finalHtmlRange).split(/(<[^>]*>)/);
@@ -620,12 +628,8 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
         $(initialElement).html(html.substring(0, initialHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(initialHtml.length + finalHtmlRange));
         deleteMarkerAndEmptyParents(initialElement, senderId);
         $(initialElement).nextUntil($(finalElement)).each(function () {
-            stackOldCode += $(this)[0].outerHTML;
             $(this).remove();
         });
-        stackOldCode += $(finalElement)[0].outerHTML;
-        stackCode = $(initialElement)[0].outerHTML;
-        stackRange = initialTextRange;
         $(finalElement).remove();
         setLocalCaretPosition(initialElement, initialTextRange + 1, senderId);
     } else if ($(initialElement).index() == $(finalElement).index()) {
@@ -643,8 +647,6 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
             setLocalCaretPosition(initialElement, finalTextRange + 1, senderId);
         }
     } else {
-        stackElementIndex = $(finalElement).index();
-        stackOldCode += $(finalElement)[0].outerHTML;
         $(finalElement).append($(initialElement).html());
         var html = $(finalElement).html();
         var htmlArray = html.substring(finalHtmlRange, finalHtml.length + initialHtmlRange).split(/(<[^>]*>)/);
@@ -652,24 +654,11 @@ function keyPressAction(code, senderId, senderName, initialElement, finalElement
         $(finalElement).html(html.substring(0, finalHtmlRange) + code + addMarker(senderId, senderName, "") + markedHtml + html.substring(finalHtml.length + initialHtmlRange));
         deleteMarkerAndEmptyParents(finalElement, senderId);
         $(finalElement).nextUntil($(initialElement)).each(function () {
-            stackOldCode += $(this)[0].outerHTML;
             $(this).remove();
         });
-        stackOldCode += $(initialElement)[0].outerHTML;
-        stackCode = $(finalElement)[0].outerHTML;
-        stackRange = finalTextRange;
         $(initialElement).remove();
         setLocalCaretPosition(finalElement, finalTextRange + 1, senderId);
     }
-    var stackElement = {
-        operation: "keyPress",
-        code: stackCode,
-        oldCode: stackOldCode,
-        elementIndex: stackElementIndex,
-        range: stackRange,
-    }
-    undoStack.push(stackElement);
-    redoStack = new stack();
 }
 
 function mouseClickAction(code, senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
@@ -988,37 +977,22 @@ function pasteAction(code, senderId, senderName, initialElement, finalElement, i
     }
 }
 
-function undoAction(senderId, senderName) {
+function undoAction() {
     var action = undoStack.read();
     if (action != undefined) {
-        var element = $(".editor").children().get(action.elementIndex);
-        if (action.operation == "keyPress") {
-            $(element)[0].outerHTML = action.oldCode;
-            redoStack.push(action);
-            undoStack.pop();
-            setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, senderId);
-        }
+        $(".editor").html(action.previousEditor);
+        redoStack.push(action);
+        undoStack.pop();
+        setLocalCaretPosition($(".editor").children().get(0), 0, null);
     }
 }
 
-function redoAction(senderId, senderName) {
+function redoAction() {
     var action = redoStack.read();
     if (action != undefined) {
-        if (action.operation == "keyPress") {
-            var length = $(action.oldCode).length;
-            for (var i = action.elementIndex; i < action.elementIndex + length; i++) {
-                if (i == action.elementIndex) {
-                    var element = $(".editor").children().get(action.elementIndex);
-                    $(element)[0].outerHTML = action.code;
-                } else {
-                    var element = $(".editor").children().get(action.elementIndex + 1);
-                    $(element)[0].outerHTML = "";
-                }
-
-            }
-            undoStack.push(action);
-            redoStack.pop();
-            setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, senderId);
-        }
+        $(".editor").html(action.currentEditor);
+        undoStack.push(action);
+        redoStack.pop();
+        setLocalCaretPosition($(".editor").children().get(0), 0, null);
     }
 }
