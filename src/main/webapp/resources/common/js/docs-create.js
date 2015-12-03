@@ -20,27 +20,27 @@ $(document).ready(function () {
 
 /**
  * For each action done by a collaborator, this method will get the necessary params to replicate to every active participant
- * @param {JSON} senderId, senderName, initialIndex, finalIndex, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange, code
+ * @param {JSON} senderId, senderName, initialIndex, finalIndex, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange, code, type
  * @returns void
  */
 function onMessageReceivedForDocs(json) {
     var msg = JSON.parse(json.data); // native API
-    var initialElement = $(".editor").children().get(msg.initialIndex);
-    var finalElement = $(".editor").children().get(msg.finalIndex);
-    msg.code = msg.code.toString();
+    if (msg.type === "NEW_CODE") {
+        var initialElement = $(".editor").children().get(msg.initialIndex);
+        var finalElement = $(".editor").children().get(msg.finalIndex);
+        msg.code = msg.code.toString();
 //    var savedSelection = saveSelection($(".editor")[0]);
-    $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
-    $(".marker[socialprofileid=" + msg.senderId + "]").remove();
-    if ($(initialElement).text() !== undefined && $(finalElement).text() !== undefined) {
-        if (msg.type === "NEW_CODE") {
+        $(".marker[socialprofileid=" + msg.senderId + "]").contents().unwrap();
+        $(".marker[socialprofileid=" + msg.senderId + "]").remove();
+        if ($(initialElement).text() !== undefined && $(finalElement).text() !== undefined) {
             switch (msg.code) {
                 case keys.enter:
                     enterAction(msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
                     break;
-                case keys.left:
-                case keys.right:
-                case keys.up:
-                case keys.down:
+                case "caret" + keys.left:
+                case "caret" + keys.right:
+                case "caret" + keys.up:
+                case "caret" + keys.down:
                 case keys.ctrlLeft:
                 case keys.ctrlRight:
                 case keys.ctrlUp:
@@ -61,14 +61,14 @@ function onMessageReceivedForDocs(json) {
                 case keys.delete:
                     deleteAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement, msg.initialHtmlRange, msg.finalHtmlRange, msg.initialTextRange, msg.finalTextRange);
                     break;
-                case keys.home:
-                case keys.end:
+                case "caret" + keys.home:
+                case "caret" + keys.end:
                     homeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement);
                     break;
                 case keys.ctrlHome:
                 case keys.ctrlEnd:
-                case keys.pageUp:
-                case keys.pageDown:
+                case "caret" + keys.pageUp:
+                case "caret" + keys.pageDown:
                     ctrlHomeAndEndAction(msg.code, msg.senderId, msg.senderName, initialElement, finalElement);
                     break;
                 case keys.shiftHome:
@@ -106,8 +106,11 @@ function onMessageReceivedForDocs(json) {
                 insertBrOnDeepestChild(this);
             });
         }
-    }
 //    restoreSelection($(".editor")[0], savedSelection);
+    } else if (msg.type === "STACK"){
+        undoStack.push(msg);
+        redoStack = new stack();
+    }
 }
 
 $(document).on("keydown keyup", ".editor", function (e) {
@@ -135,12 +138,19 @@ $(document).on("keydown keyup", ".editor", function (e) {
             if (e.ctrlKey) {
                 e.keyCode = keys.ctrl + "+" + e.keyCode;
             }
+            if (!e.ctrlKey && !e.shiftKey) {
+                e.keyCode = "caret" + e.keyCode
+            }
         }
         if (e.keyCode == keys.a && e.ctrlKey) {
             e.keyCode = keys.ctrl + "+" + e.keyCode;
         }
-        if ((e.keyCode == keys.pageDown || e.keyCode == keys.pageUp) && e.shiftKey) {
-            e.keyCode = keys.shift + "+" + e.keyCode;
+        if ((e.keyCode == keys.pageDown || e.keyCode == keys.pageUp)) {
+            if (e.shiftKey) {
+                e.keyCode = keys.shift + "+" + e.keyCode;
+            } else {
+                e.keyCode = "caret" + e.keyCode;
+            }
         }
         sendCollaboratorChange(e);
     }
@@ -267,7 +277,7 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
         elementIndex = $(finalElement).index();
         range = finalTextRange;
     }
-    
+
     if (e.type == "paste") {
         pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     } else if (e.keyCode == keys.backspace) {
@@ -296,10 +306,12 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
             previousEditor: editorPreviousHtml,
             currentEditor: $(".editor").html(),
             elementIndex: elementIndex,
-            range: range
+            range: range,
+            type: "STACK"
         }
         undoStack.push(stackElement);
         redoStack = new stack();
+        websocketDocs.send(JSON.stringify(stackElement));
     }
 }
 
@@ -917,7 +929,7 @@ function homeAndEndAction(code, senderId, senderName, initialElement) {
 }
 
 function ctrlHomeAndEndAction(code, senderId, senderName) {
-    if (code == keys.ctrlHome || code == keys.pageUp) {
+    if (code == keys.ctrlHome || code == "page" + keys.pageUp) {
         $(".editor").children().first().prepend(addMarker(senderId, senderName, ""));
     } else {
         $(".editor").children().last().append(addMarker(senderId, senderName, ""));
@@ -1012,3 +1024,12 @@ function redoAction() {
         setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, null);
     }
 }
+
+
+/*
+ * known todo's
+ * 1: fix collaborator cursor marker disappearing when undo/redo
+ * 2: fix user caret position when undo/redo (including highlight if word changed is larger than 1 letter)
+ * 3: Remove unique redo/undo stack to every collaborators and create multiple stacks (each stack for every collaborator)
+ * 4: change only editor diffs in undo/redo, and not all $(".editor").html()
+ */

@@ -145,7 +145,7 @@ public class MessengerEndpoint {
         int count = 0;
         for (Session s : session.getOpenSessions()) {
             UserAuthorization authorization = userAuthorizationJpaController.findUserAuthorization(socialProfileJpaController.findSocialProfileBySocialProfileId(Integer.parseInt((String) s.getUserProperties().get("user"))).getTokenId());
-            if (authorization.getRoles().equals(ADMIN)) {
+            if (s.isOpen() && authorization.getRoles().equals(ADMIN)) {
                 json = Json.createObjectBuilder()
                         .add("onlineUsers", session.getOpenSessions().size()).build().toString();
                 s.getBasicRemote().sendObject(json);

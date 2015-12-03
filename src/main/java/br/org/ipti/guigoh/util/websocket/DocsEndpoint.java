@@ -6,11 +6,7 @@
 package br.org.ipti.guigoh.util.websocket;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.math.BigDecimal;
 import java.util.Arrays;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -34,16 +30,11 @@ public class DocsEndpoint {
 
     @OnMessage
     public void onMessage(final Session session, final String jsonString) throws Exception {
-        JsonObject obj = Json.createReader(new StringReader(jsonString)).readObject();
         String[] collaborators = session.getUserProperties().get("collaborators").toString().split(",");
-        switch (obj.getString("type")) {
-            case "NEW_CODE":
-                for (Session s : session.getOpenSessions()) {
-                    if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
-                        s.getBasicRemote().sendObject(jsonString);
-                    }
-                }
-                break;
+        for (Session s : session.getOpenSessions()) {
+            if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
+                s.getBasicRemote().sendObject(jsonString);
+            }
         }
     }
 
