@@ -205,7 +205,7 @@ function stack() {
     this.list = new Array();
 
     this.push = function (obj) {
-        if (this.list.length >= 50) {
+        if (this.list.length >= 500) {
             this.list.splice(0, 1);
         }
         this.list[this.list.length] = obj;
