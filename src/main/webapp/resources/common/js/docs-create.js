@@ -255,6 +255,19 @@ function checkCodeToSend(e, initialElement, finalElement, initialHtmlRange, fina
 function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
     var insertOnStack = true;
     var editorPreviousHtml = $(".editor").html();
+    var elementIndex;
+    var range;
+    if ($(initialElement).index() < $(finalElement).index()) {
+        elementIndex = $(initialElement).index();
+        range = initialTextRange;
+    } else if ($(initialElement).index() == $(finalElement).index()) {
+        elementIndex = $(initialElement).index();
+        range = initialTextRange <= finalTextRange ? initialTextRange : finalTextRange;
+    } else {
+        elementIndex = $(finalElement).index();
+        range = finalTextRange;
+    }
+    
     if (e.type == "paste") {
         pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
     } else if (e.keyCode == keys.backspace) {
@@ -277,13 +290,16 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
     } else if (e.keyCode == undefined) {
         insertOnStack = false;
     }
-    
+
     if (insertOnStack) {
         var stackElement = {
             previousEditor: editorPreviousHtml,
-            currentEditor: $(".editor").html()
+            currentEditor: $(".editor").html(),
+            elementIndex: elementIndex,
+            range: range
         }
         undoStack.push(stackElement);
+        redoStack = new stack();
     }
 }
 
@@ -983,7 +999,7 @@ function undoAction() {
         $(".editor").html(action.previousEditor);
         redoStack.push(action);
         undoStack.pop();
-        setLocalCaretPosition($(".editor").children().get(0), 0, null);
+        setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, null);
     }
 }
 
@@ -993,6 +1009,6 @@ function redoAction() {
         $(".editor").html(action.currentEditor);
         undoStack.push(action);
         redoStack.pop();
-        setLocalCaretPosition($(".editor").children().get(0), 0, null);
+        setLocalCaretPosition($(".editor").children().get(action.elementIndex), action.range, null);
     }
 }
