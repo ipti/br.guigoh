@@ -3,6 +3,11 @@ var formData = new FormData();
 
 $(document).ready(function () {
 
+    $.post("../ping.html");
+    window.setInterval(function () {
+        $.post("../ping.html");
+    }, 1500000);
+    
     $(".menu-icon-two").parent().addClass("active");
 
     $(".active-bar").css("width", "20%");
@@ -116,11 +121,12 @@ $(document).ready(function () {
                             });
                         } else {
                             $('.error').text("Escolha uma imagem de tamanho mínimo de " + widthMin + "x" + heightMin + ".");
-                            $('#browse-image').val("");
+                            $(this).val("");
                         }
                     });
                 } else {
                     $('.error').text("Apenas imagens são aceitas.");
+                    $(this).val("");
                 }
             };
             reader.readAsDataURL(file);
@@ -134,7 +140,7 @@ $(document).ready(function () {
         var number = $(this).attr("id") === "browse-media-1" ? "one" : ($(this).attr("id") === "browse-media-2" ? "two" : "three");
         for (var i = 0; i < e.originalEvent.target.files.length; i++) {
             var file = e.originalEvent.target.files[i];
-            if (file.size <= 104857600) { // 100MB
+            if (file.size <= 209715200) { // 200MB
                 var media = $(this);
                 var exists = false;
                 $('.browse-media').not(this).each(function () {
@@ -159,12 +165,15 @@ $(document).ready(function () {
                         if (!$(".add-media-" + number).children(".fa-paperclip").length) {
                             $(".add-media-" + number).children(".fa-plus-circle").removeClass("fa-plus-circle").addClass("fa-paperclip");
                         }
+                        $('.error').text("");
                     } else {
                         $('.error').text("Adicione uma mídia com formato suportado pelo Guigoh.");
+                        $(this).val("");
                     }
                 }
             } else {
-                $('.error').text("Adicione uma mídia com um tamanho inferior a 100 MB.");
+                $('.error').text("Adicione uma mídia com um tamanho inferior a 200 MB.");
+                $(this).val("");
             }
         }
     });
