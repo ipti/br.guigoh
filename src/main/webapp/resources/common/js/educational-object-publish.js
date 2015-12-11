@@ -374,6 +374,7 @@ $("#upload-progress-bar").progressbar({
     },
     complete: function () {
         $(".upload-progress-label").text("100%");
+        $("#wait-more").show();
     }
 });
 
