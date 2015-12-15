@@ -26,3 +26,11 @@
     border: 1px solid lightgreen;
     background: lightgreen;
 }
+
+.unpressed {
+    box-shadow: 3px 3px 1px gray;
+}
+
+strong {
+    font-weight: 700;
+}

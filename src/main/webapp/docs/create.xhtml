@@ -28,9 +28,7 @@
                     <div class="toolbar">
                     </div>
                     <div class="editor" contenteditable="true" >
-                        <p>teste</p>
-                        <p>rato</p>
-                        <p>roeu</p>
+                        <p><br/></p>
                     </div>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <h:commandLink class="save-text" onclick="return getContent()">
@@ -43,7 +41,8 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/docs-create.js"></script>
+        <script type="text/javascript" src="/resources/common/js/docs-create-core.js"></script>
+        <script type="text/javascript" src="/resources/common/js/docs-create-actions.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>
