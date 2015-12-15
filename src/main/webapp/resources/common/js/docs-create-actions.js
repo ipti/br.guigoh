@@ -409,11 +409,12 @@ function redoAction() {
 }
 
 function boldAction(senderId, senderName, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange) {
+    var initialHtml = $(initialElement).html();
     if ($(initialElement).index() < $(finalElement).index()) {
         
     } else if ($(initialElement).index() == $(finalElement).index()) {
         if (initialHtmlRange < finalHtmlRange) {
-            
+            $(initialElement).html(initialHtml.substring(0, initialHtmlRange) + "<strong>" + initialHtml.substring(initialHtmlRange, finalHtmlRange) + "</strong>" + initialHtml.substring(finalHtmlRange));
         } else if (initialHtmlRange == finalHtmlRange) {
             
         } else {

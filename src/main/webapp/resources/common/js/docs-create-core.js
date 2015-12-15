@@ -292,29 +292,33 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
         range = finalTextRange;
     }
 
-    if (e.type == "paste") {
-        pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-    } else if (e.keyCode == keys.backspace) {
-        backspaceAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-    } else if (e.keyCode == keys.delete) {
-        deleteAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-    } else if (e.type == "keypress" || e.keyCode == keys.tab) {
-        if (e.keyCode == keys.enter) {
-            enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-            insertBrOnDeepestChild(initialElement);
-        } else {
-            keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    if ($(e.target).hasClass("editor-plugin")) {
+        if ($(e.target).attr("id") === "bold") {
+            boldAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange)
         }
-    } else if (e.keyCode == keys.ctrlZ) {
-        undoAction();
-        insertOnStack = false;
-    } else if (e.keyCode == keys.ctrlY) {
-        redoAction();
-        insertOnStack = false;
-    } else if (e.keyCode == undefined) {
-        insertOnStack = false;
-    } else if ($(e.target).attr("id") === "bold") {
-        boldAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else {
+        if (e.type == "paste") {
+            pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        } else if (e.keyCode == keys.backspace) {
+            backspaceAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        } else if (e.keyCode == keys.delete) {
+            deleteAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+        } else if (e.type == "keypress" || e.keyCode == keys.tab) {
+            if (e.keyCode == keys.enter) {
+                enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+                insertBrOnDeepestChild(initialElement);
+            } else {
+                keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+            }
+        } else if (e.keyCode == keys.ctrlZ) {
+            undoAction();
+            insertOnStack = false;
+        } else if (e.keyCode == keys.ctrlY) {
+            redoAction();
+            insertOnStack = false;
+        } else if (e.keyCode == undefined) {
+            insertOnStack = false;
+        }
     }
 
     if (insertOnStack) {
