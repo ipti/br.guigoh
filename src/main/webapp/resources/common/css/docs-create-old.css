@@ -1,0 +1,36 @@
+.toolbar {
+    height: 100px;
+    background-color: rgb(240,240,240);
+    border-top: 1px solid #C1C1C1;
+    border-left: 1px solid #C1C1C1;
+    border-right: 1px solid #C1C1C1;
+}
+
+.editor {
+    background: white;
+    border: 1px solid #C1C1C1;
+    height: 500px;
+    outline: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: 12px;
+    font-family: Arial;
+    padding: 5px 10px 0
+}
+
+.editor div {
+    outline: none;
+}
+
+.marker {
+    border: 1px solid lightgreen;
+    background: lightgreen;
+}
+
+.unpressed {
+    box-shadow: 3px 3px 1px gray;
+}
+
+strong {
+    font-weight: 700;
+}

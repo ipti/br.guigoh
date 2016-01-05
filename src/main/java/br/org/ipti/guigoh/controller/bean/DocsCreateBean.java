@@ -27,6 +27,7 @@ public class DocsCreateBean implements Serializable {
     }
     
     public void save(){
+        System.out.println(text);
     }
 
     public String getText() {

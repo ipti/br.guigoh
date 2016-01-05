@@ -7,7 +7,7 @@
     <ui:define name="title">Docs</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/docs-create.css"></link>
+        <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/docs-create-old.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata">
@@ -25,9 +25,13 @@
                     </div>
                 </div>
                 <div class="main-container">
-                    <textarea></textarea>
+                    <div class="toolbar">
+                    </div>
+                    <div class="editor" contenteditable="true" >
+                        <p><br/></p>
+                    </div>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
-                    <h:commandLink class="save-text">
+                    <h:commandLink class="save-text" onclick="return getContent()">
                         <f:ajax listener="#{docsCreateBean.save()}" execute="text"/>
                     </h:commandLink>
                 </div>
@@ -37,9 +41,8 @@
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/lib/tinymce/tinymce.min.js"></script>
-        <script type='text/javascript' src='/resources/lib/tinymce/langs/pt_BR.js'></script>
-        <script type="text/javascript" src="/resources/common/js/docs-create.js"></script>
+        <script type="text/javascript" src="/resources/common/js/docs-create-core-old.js"></script>
+        <script type="text/javascript" src="/resources/common/js/docs-create-actions-old.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>
