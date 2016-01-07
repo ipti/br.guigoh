@@ -13,7 +13,8 @@
     <ui:define name="metadata">
         <f:metadata>
             <f:event type="preRenderView" listener="#{templateBean.init()}"/>
-            <f:event type="preRenderComponent" listener="#{docsCreateBean.init()}"/>
+            <f:viewParam name="id" value="#{docsCreateBean.docId}"/>
+            <f:event type="preRenderView" listener="#{docsCreateBean.init()}"/>
         </f:metadata>
     </ui:define>
     <ui:define name="content">
@@ -24,13 +25,31 @@
                         <h1>Docs</h1>
                     </div>
                 </div>
+                <div class="doc-saved">
+                    <img src="../resources/common/images/save.png"></img>
+                    <span>Documento salvo</span>
+                </div>
                 <div class="main-container">
+                    <h:inputText id="title" class="doc-title" pt:placeholder="Título do Documento..." value="#{docsCreateBean.title}"></h:inputText>
                     <textarea></textarea>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <h:commandLink class="save-text">
-                        <f:ajax listener="#{docsCreateBean.save()}" execute="text"/>
+                        <f:ajax listener="#{docsCreateBean.save()}" execute="title text" render="title"/>
                     </h:commandLink>
                 </div>
+                <aside class="collaborators">
+                    <span class="creator-label">Proprietário</span>
+                    <div class="creator-user">
+
+                    </div>
+                    <span class="guests-label">Convidados</span>
+                    <div class="inactive-user">
+                        inativo1
+                    </div>
+                    <div class="inactive-user">
+                        inativo2
+                    </div>
+                </aside>
                 <div class="clear"></div>
             </h:form>
         </section>

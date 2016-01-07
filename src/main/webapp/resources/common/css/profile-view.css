@@ -604,14 +604,14 @@ span.friend-situation > img {
     background: #333;
 }
 
-.profile-object-number {
+.profile-object-number, .profile-document-number {
     color: #404095;
     font-weight: bold;
     line-height: 12px;
     text-align: center;
 }
 
-.profile-object-number span {
+.profile-object-number span, .profile-document-number span {
     font-size: 80px;
     line-height: 100px;
 }
@@ -634,7 +634,7 @@ span.friend-situation > img {
     height: 100px;
 }
 
-.item-box-title {
+.item-box-title, .item-box-doc-title {
     height: 18px;
     padding-top: 10px;
 }

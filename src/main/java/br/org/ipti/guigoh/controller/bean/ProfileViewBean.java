@@ -6,6 +6,7 @@ package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.entity.Country;
+import br.org.ipti.guigoh.model.entity.Doc;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.EducationsLocation;
@@ -20,6 +21,7 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.State;
 import br.org.ipti.guigoh.model.jpa.controller.CityJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.CountryJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.DocJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationsLocationJpaController;
@@ -79,6 +81,7 @@ public class ProfileViewBean implements Serializable {
     private List<Country> countryList;
     private List<Scholarity> scholarityList;
     private List<EducationalObject> educationalObjectList;
+    private List<Doc> docList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private FriendsJpaController friendsJpaController;
@@ -94,6 +97,7 @@ public class ProfileViewBean implements Serializable {
     private CountryJpaController countryJpaController;
     private ScholarityJpaController scholarityJpaController;
     private ExperiencesLocationJpaController experiencesLocationJpaController;
+    private DocJpaController docJpaController;
 
     private Part uploadedPhoto;
 
@@ -469,6 +473,7 @@ public class ProfileViewBean implements Serializable {
         educationsLocationJpaController = new EducationsLocationJpaController();
         experiencesJpaController = new ExperiencesJpaController();
         experiencesLocationJpaController = new ExperiencesLocationJpaController();
+        docJpaController = new DocJpaController();
 
         if (socialProfileId == null) {
             socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
@@ -476,6 +481,7 @@ public class ProfileViewBean implements Serializable {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
         }
         educationalObjectList = educationalObjectJpaController.findParticipationInEducationalObjects(socialProfile.getUsers().getUsername());
+        docList = docJpaController.findBySocialProfileId(socialProfile.getSocialProfileId());
         editFieldList = new ArrayList<>();
         interestList = interestsJpaController.findInterestsEntities();
         countryList = countryJpaController.findCountryEntities();
@@ -608,5 +614,13 @@ public class ProfileViewBean implements Serializable {
 
     public void setEducationalObjectList(List<EducationalObject> educationalObjectList) {
         this.educationalObjectList = educationalObjectList;
+    }
+
+    public List<Doc> getDocList() {
+        return docList;
+    }
+
+    public void setDocList(List<Doc> docList) {
+        this.docList = docList;
     }
 }

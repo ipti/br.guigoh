@@ -1,0 +1,60 @@
+.main-container {
+    width: 700px;
+    float: left;
+}
+
+.collaborators {
+    width: 180px;
+}
+
+.creator-label, .guests-label {
+    font-size: 12px;
+    color: #404095;
+    margin: 5px 0;
+    display: block;
+}
+
+.doc-title {
+    width: 691px;
+    margin-bottom: 10px;
+    border: 1px solid #CACACA;
+    height: 30px;
+    padding: 0 5px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    border-radius: 5px;
+    font-size: 12px;
+    text-indent: 5px;
+    font-style: italic;
+}
+
+.mce-tinymce {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.doc-saved {
+    visibility: hidden;
+    transition: visibility 0s, opacity 0.5s linear;
+    opacity: 0;
+    position: relative;
+    width: 700px;
+}
+
+.doc-saved.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.doc-saved img {
+    position: absolute;
+    right: 115px;
+    bottom: 5px;
+    width: 35px;
+}
+
+.doc-saved span {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    font-size: 12px;
+}

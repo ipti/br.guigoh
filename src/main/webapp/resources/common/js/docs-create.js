@@ -1,8 +1,9 @@
+var saveTimer;
+
 $(document).ready(function () {
-    var saveTimer;
     tinymce.init({
         selector: 'textarea',
-        height: 500,
+        height: 400,
         width: 700,
         statusbar: false,
         plugins: [
@@ -17,8 +18,34 @@ $(document).ready(function () {
                 saveTimer = setTimeout(function () {
                     $("#text").val(tinyMCE.activeEditor.getContent());
                     $(".save-text").click();
+                    $(".doc-saved").addClass("visible");
+                    setTimeout(function () {
+                        $(".doc-saved").removeClass("visible");
+                    }, 3000);
                 }, 3000);
             });
+        },
+        init_instance_callback: function (editor) {
+            editor.setContent($("#text").val());
         }
     });
-})
+});
+
+$("#title").keyup(function (e) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+        $("#text").val(tinyMCE.activeEditor.getContent());
+        $(".save-text").click();
+        $(".doc-saved").addClass("visible");
+        setTimeout(function () {
+            $(".doc-saved").removeClass("visible");
+        }, 3000);
+    }, 3000);
+});
+
+$("#title").focus(function () {
+    var save_this = $(this);
+    window.setTimeout(function () {
+        save_this.select();
+    }, 100);
+});

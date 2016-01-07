@@ -53,6 +53,16 @@ entities = {
     @EntityResult(entityClass = UserAuthorization.class)
 })
 public class SocialProfile implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileFk")
+    private Collection<DocGuest> docGuestCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creatorSocialProfileFk")
+    private Collection<Doc> docCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorSocialProfileFk")
+    private Collection<Doc> docCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorSocialProfileFk")
+    private Collection<DocHistory> docHistoryCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileFk")
+    private Collection<DocMessage> docMessageCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfile")
     private Collection<EducationalObjectLike> educationalObjectLikeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfileFk")
@@ -515,6 +525,51 @@ public class SocialProfile implements Serializable {
 
     public void setEducationalObjectLikeCollection(Collection<EducationalObjectLike> educationalObjectLikeCollection) {
         this.educationalObjectLikeCollection = educationalObjectLikeCollection;
+    }
+
+    @XmlTransient
+    public Collection<DocGuest> getDocGuestCollection() {
+        return docGuestCollection;
+    }
+
+    public void setDocGuestCollection(Collection<DocGuest> docGuestCollection) {
+        this.docGuestCollection = docGuestCollection;
+    }
+
+    @XmlTransient
+    public Collection<Doc> getDocCollection() {
+        return docCollection;
+    }
+
+    public void setDocCollection(Collection<Doc> docCollection) {
+        this.docCollection = docCollection;
+    }
+
+    @XmlTransient
+    public Collection<Doc> getDocCollection1() {
+        return docCollection1;
+    }
+
+    public void setDocCollection1(Collection<Doc> docCollection1) {
+        this.docCollection1 = docCollection1;
+    }
+
+    @XmlTransient
+    public Collection<DocHistory> getDocHistoryCollection() {
+        return docHistoryCollection;
+    }
+
+    public void setDocHistoryCollection(Collection<DocHistory> docHistoryCollection) {
+        this.docHistoryCollection = docHistoryCollection;
+    }
+
+    @XmlTransient
+    public Collection<DocMessage> getDocMessageCollection() {
+        return docMessageCollection;
+    }
+
+    public void setDocMessageCollection(Collection<DocMessage> docMessageCollection) {
+        this.docMessageCollection = docMessageCollection;
     }
     
 }

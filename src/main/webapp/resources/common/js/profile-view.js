@@ -121,6 +121,8 @@ $('.tab').click(function () {
         $('.profile-container').hide();
         if ($(this).hasClass("tab-about")) {
             $('#profile-container-about').show();
+        } else if ($(this).hasClass("tab-docs")) {
+            $('#profile-container-docs').show();
         } else if ($(this).hasClass("tab-objects")) {
             $('#profile-container-objects').show();
         } else if ($(this).hasClass("tab-resume")) {

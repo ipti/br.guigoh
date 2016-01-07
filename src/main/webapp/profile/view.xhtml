@@ -135,6 +135,7 @@
                 <div class="profile-tabs">
                     <ul>
                         <li id="profile-tab-about" class="active"><span class="tab tab-about">#{localeBean.getString('Sobre')}</span></li>
+                        <li id="profile-tab-docs"><span class="tab tab-docs">#{localeBean.getString('Documentos')}</span></li>
                         <li id="profile-tab-objects"><span class="tab tab-objects">#{localeBean.getString('Objetos Educacionais')}</span></li>
                         <li id="profile-tab-resume"><span class="tab tab-resume">#{localeBean.getString('Currículo')}</span></li>
                     </ul>
@@ -401,6 +402,31 @@
                                 </h:commandLink>
                             </h:panelGroup>
                         </p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div id="profile-container-docs" class="profile-container">
+                    <div class="profile-column-left">
+                        <ui:repeat value="#{profileViewBean.docList}" var="doc">
+                            <div class="item-box-container">
+                                <a href="/docs/create.xhtml?id=#{doc.id}"><img class="item-box-img" src="../resources/common/images/doc.png"/></a>
+                                <p class="item-box-doc-title">
+                                    <ui:fragment rendered="#{doc.creatorSocialProfileFk == profileViewBean.mySocialProfile}">#{localeBean.getString('Proprietário')}</ui:fragment>
+                                    <ui:fragment rendered="#{doc.creatorSocialProfileFk != profileViewBean.mySocialProfile}">#{localeBean.getString('Convidado')}</ui:fragment>
+                                </p>
+                                <p class="item-box-aux">#{localeBean.getString('em')}</p>
+                                <a class="item-box-title-bold" href="/docs/create.xhtml?id=#{doc.id}"><p>#{doc.title}</p></a>
+                                <div class="item-box-date">
+                                    <img src="../resources/common/images/clock.png"/>
+                                    <h:outputText value="#{doc.date}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT-3"></f:convertDateTime>
+                                    </h:outputText>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                    <div class="profile-column-right">
+                        <p class="profile-document-number"><span>#{profileViewBean.docList.size()}</span><br />#{profileViewBean.docList.size() == 1 ? localeBean.getString('Participação') : localeBean.getString('Participações')} #{localeBean.getString('em')}<br />#{localeBean.getString('Documentos')}</p>
                     </div>
                     <div class="clear"></div>
                 </div>

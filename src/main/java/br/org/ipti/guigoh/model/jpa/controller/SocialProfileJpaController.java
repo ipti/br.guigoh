@@ -1,14 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package br.org.ipti.guigoh.model.jpa.controller;
 
-import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
-import br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException;
-import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
-import br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException;
-import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -25,32 +21,40 @@ import br.org.ipti.guigoh.model.entity.Country;
 import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.entity.Availability;
 import br.org.ipti.guigoh.model.entity.Role;
-import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.entity.Experiences;
 import java.util.ArrayList;
 import java.util.Collection;
-import br.org.ipti.guigoh.model.entity.Experiences;
 import br.org.ipti.guigoh.model.entity.Educations;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicWarnings;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.DiscussionTopicMsg;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
-import br.org.ipti.guigoh.model.entity.EducationalObjectLike;
 import br.org.ipti.guigoh.model.entity.EducationalObjectMessage;
+import br.org.ipti.guigoh.model.entity.EducationalObjectLike;
+import br.org.ipti.guigoh.model.entity.DocGuest;
+import br.org.ipti.guigoh.model.entity.Doc;
+import br.org.ipti.guigoh.model.entity.DocHistory;
+import br.org.ipti.guigoh.model.entity.DocMessage;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.PreexistingEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
+import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author ipti008
+ * @author iptipc008
  */
 public class SocialProfileJpaController implements Serializable {
 
-    private transient EntityManagerFactory emf = PersistenceUnit.getEMF();
-
     public SocialProfileJpaController() {
     }
+    
+    private transient EntityManagerFactory emf = PersistenceUnit.getEMF();
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -80,6 +84,21 @@ public class SocialProfileJpaController implements Serializable {
         }
         if (socialProfile.getEducationalObjectLikeCollection() == null) {
             socialProfile.setEducationalObjectLikeCollection(new ArrayList<EducationalObjectLike>());
+        }
+        if (socialProfile.getDocGuestCollection() == null) {
+            socialProfile.setDocGuestCollection(new ArrayList<DocGuest>());
+        }
+        if (socialProfile.getDocCollection() == null) {
+            socialProfile.setDocCollection(new ArrayList<Doc>());
+        }
+        if (socialProfile.getDocCollection1() == null) {
+            socialProfile.setDocCollection1(new ArrayList<Doc>());
+        }
+        if (socialProfile.getDocHistoryCollection() == null) {
+            socialProfile.setDocHistoryCollection(new ArrayList<DocHistory>());
+        }
+        if (socialProfile.getDocMessageCollection() == null) {
+            socialProfile.setDocMessageCollection(new ArrayList<DocMessage>());
         }
         List<String> illegalOrphanMessages = null;
         Users usersOrphanCheck = socialProfile.getUsers();
@@ -202,6 +221,36 @@ public class SocialProfileJpaController implements Serializable {
                 attachedEducationalObjectLikeCollection.add(educationalObjectLikeCollectionEducationalObjectLikeToAttach);
             }
             socialProfile.setEducationalObjectLikeCollection(attachedEducationalObjectLikeCollection);
+            Collection<DocGuest> attachedDocGuestCollection = new ArrayList<DocGuest>();
+            for (DocGuest docGuestCollectionDocGuestToAttach : socialProfile.getDocGuestCollection()) {
+                docGuestCollectionDocGuestToAttach = em.getReference(docGuestCollectionDocGuestToAttach.getClass(), docGuestCollectionDocGuestToAttach.getId());
+                attachedDocGuestCollection.add(docGuestCollectionDocGuestToAttach);
+            }
+            socialProfile.setDocGuestCollection(attachedDocGuestCollection);
+            Collection<Doc> attachedDocCollection = new ArrayList<Doc>();
+            for (Doc docCollectionDocToAttach : socialProfile.getDocCollection()) {
+                docCollectionDocToAttach = em.getReference(docCollectionDocToAttach.getClass(), docCollectionDocToAttach.getId());
+                attachedDocCollection.add(docCollectionDocToAttach);
+            }
+            socialProfile.setDocCollection(attachedDocCollection);
+            Collection<Doc> attachedDocCollection1 = new ArrayList<Doc>();
+            for (Doc docCollection1DocToAttach : socialProfile.getDocCollection1()) {
+                docCollection1DocToAttach = em.getReference(docCollection1DocToAttach.getClass(), docCollection1DocToAttach.getId());
+                attachedDocCollection1.add(docCollection1DocToAttach);
+            }
+            socialProfile.setDocCollection1(attachedDocCollection1);
+            Collection<DocHistory> attachedDocHistoryCollection = new ArrayList<DocHistory>();
+            for (DocHistory docHistoryCollectionDocHistoryToAttach : socialProfile.getDocHistoryCollection()) {
+                docHistoryCollectionDocHistoryToAttach = em.getReference(docHistoryCollectionDocHistoryToAttach.getClass(), docHistoryCollectionDocHistoryToAttach.getId());
+                attachedDocHistoryCollection.add(docHistoryCollectionDocHistoryToAttach);
+            }
+            socialProfile.setDocHistoryCollection(attachedDocHistoryCollection);
+            Collection<DocMessage> attachedDocMessageCollection = new ArrayList<DocMessage>();
+            for (DocMessage docMessageCollectionDocMessageToAttach : socialProfile.getDocMessageCollection()) {
+                docMessageCollectionDocMessageToAttach = em.getReference(docMessageCollectionDocMessageToAttach.getClass(), docMessageCollectionDocMessageToAttach.getId());
+                attachedDocMessageCollection.add(docMessageCollectionDocMessageToAttach);
+            }
+            socialProfile.setDocMessageCollection(attachedDocMessageCollection);
             em.persist(socialProfile);
             if (socialProfileVisibility != null) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibility.getSocialProfile();
@@ -324,6 +373,51 @@ public class SocialProfileJpaController implements Serializable {
                     oldSocialProfileOfEducationalObjectLikeCollectionEducationalObjectLike = em.merge(oldSocialProfileOfEducationalObjectLikeCollectionEducationalObjectLike);
                 }
             }
+            for (DocGuest docGuestCollectionDocGuest : socialProfile.getDocGuestCollection()) {
+                SocialProfile oldSocialProfileFkOfDocGuestCollectionDocGuest = docGuestCollectionDocGuest.getSocialProfileFk();
+                docGuestCollectionDocGuest.setSocialProfileFk(socialProfile);
+                docGuestCollectionDocGuest = em.merge(docGuestCollectionDocGuest);
+                if (oldSocialProfileFkOfDocGuestCollectionDocGuest != null) {
+                    oldSocialProfileFkOfDocGuestCollectionDocGuest.getDocGuestCollection().remove(docGuestCollectionDocGuest);
+                    oldSocialProfileFkOfDocGuestCollectionDocGuest = em.merge(oldSocialProfileFkOfDocGuestCollectionDocGuest);
+                }
+            }
+            for (Doc docCollectionDoc : socialProfile.getDocCollection()) {
+                SocialProfile oldCreatorSocialProfileFkOfDocCollectionDoc = docCollectionDoc.getCreatorSocialProfileFk();
+                docCollectionDoc.setCreatorSocialProfileFk(socialProfile);
+                docCollectionDoc = em.merge(docCollectionDoc);
+                if (oldCreatorSocialProfileFkOfDocCollectionDoc != null) {
+                    oldCreatorSocialProfileFkOfDocCollectionDoc.getDocCollection().remove(docCollectionDoc);
+                    oldCreatorSocialProfileFkOfDocCollectionDoc = em.merge(oldCreatorSocialProfileFkOfDocCollectionDoc);
+                }
+            }
+            for (Doc docCollection1Doc : socialProfile.getDocCollection1()) {
+                SocialProfile oldEditorSocialProfileFkOfDocCollection1Doc = docCollection1Doc.getEditorSocialProfileFk();
+                docCollection1Doc.setEditorSocialProfileFk(socialProfile);
+                docCollection1Doc = em.merge(docCollection1Doc);
+                if (oldEditorSocialProfileFkOfDocCollection1Doc != null) {
+                    oldEditorSocialProfileFkOfDocCollection1Doc.getDocCollection1().remove(docCollection1Doc);
+                    oldEditorSocialProfileFkOfDocCollection1Doc = em.merge(oldEditorSocialProfileFkOfDocCollection1Doc);
+                }
+            }
+            for (DocHistory docHistoryCollectionDocHistory : socialProfile.getDocHistoryCollection()) {
+                SocialProfile oldEditorSocialProfileFkOfDocHistoryCollectionDocHistory = docHistoryCollectionDocHistory.getEditorSocialProfileFk();
+                docHistoryCollectionDocHistory.setEditorSocialProfileFk(socialProfile);
+                docHistoryCollectionDocHistory = em.merge(docHistoryCollectionDocHistory);
+                if (oldEditorSocialProfileFkOfDocHistoryCollectionDocHistory != null) {
+                    oldEditorSocialProfileFkOfDocHistoryCollectionDocHistory.getDocHistoryCollection().remove(docHistoryCollectionDocHistory);
+                    oldEditorSocialProfileFkOfDocHistoryCollectionDocHistory = em.merge(oldEditorSocialProfileFkOfDocHistoryCollectionDocHistory);
+                }
+            }
+            for (DocMessage docMessageCollectionDocMessage : socialProfile.getDocMessageCollection()) {
+                SocialProfile oldSocialProfileFkOfDocMessageCollectionDocMessage = docMessageCollectionDocMessage.getSocialProfileFk();
+                docMessageCollectionDocMessage.setSocialProfileFk(socialProfile);
+                docMessageCollectionDocMessage = em.merge(docMessageCollectionDocMessage);
+                if (oldSocialProfileFkOfDocMessageCollectionDocMessage != null) {
+                    oldSocialProfileFkOfDocMessageCollectionDocMessage.getDocMessageCollection().remove(docMessageCollectionDocMessage);
+                    oldSocialProfileFkOfDocMessageCollectionDocMessage = em.merge(oldSocialProfileFkOfDocMessageCollectionDocMessage);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -345,8 +439,7 @@ public class SocialProfileJpaController implements Serializable {
     public void edit(SocialProfile socialProfile) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             SocialProfile persistentSocialProfile = em.find(SocialProfile.class, socialProfile.getTokenId());
             SocialProfileVisibility socialProfileVisibilityOld = persistentSocialProfile.getSocialProfileVisibility();
             SocialProfileVisibility socialProfileVisibilityNew = socialProfile.getSocialProfileVisibility();
@@ -386,6 +479,16 @@ public class SocialProfileJpaController implements Serializable {
             Collection<EducationalObjectMessage> educationalObjectMessageCollectionNew = socialProfile.getEducationalObjectMessageCollection();
             Collection<EducationalObjectLike> educationalObjectLikeCollectionOld = persistentSocialProfile.getEducationalObjectLikeCollection();
             Collection<EducationalObjectLike> educationalObjectLikeCollectionNew = socialProfile.getEducationalObjectLikeCollection();
+            Collection<DocGuest> docGuestCollectionOld = persistentSocialProfile.getDocGuestCollection();
+            Collection<DocGuest> docGuestCollectionNew = socialProfile.getDocGuestCollection();
+            Collection<Doc> docCollectionOld = persistentSocialProfile.getDocCollection();
+            Collection<Doc> docCollectionNew = socialProfile.getDocCollection();
+            Collection<Doc> docCollection1Old = persistentSocialProfile.getDocCollection1();
+            Collection<Doc> docCollection1New = socialProfile.getDocCollection1();
+            Collection<DocHistory> docHistoryCollectionOld = persistentSocialProfile.getDocHistoryCollection();
+            Collection<DocHistory> docHistoryCollectionNew = socialProfile.getDocHistoryCollection();
+            Collection<DocMessage> docMessageCollectionOld = persistentSocialProfile.getDocMessageCollection();
+            Collection<DocMessage> docMessageCollectionNew = socialProfile.getDocMessageCollection();
             List<String> illegalOrphanMessages = null;
             if (socialProfileVisibilityOld != null && !socialProfileVisibilityOld.equals(socialProfileVisibilityNew)) {
                 if (illegalOrphanMessages == null) {
@@ -464,6 +567,46 @@ public class SocialProfileJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain EducationalObjectLike " + educationalObjectLikeCollectionOldEducationalObjectLike + " since its socialProfile field is not nullable.");
+                }
+            }
+            for (DocGuest docGuestCollectionOldDocGuest : docGuestCollectionOld) {
+                if (!docGuestCollectionNew.contains(docGuestCollectionOldDocGuest)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain DocGuest " + docGuestCollectionOldDocGuest + " since its socialProfileFk field is not nullable.");
+                }
+            }
+            for (Doc docCollectionOldDoc : docCollectionOld) {
+                if (!docCollectionNew.contains(docCollectionOldDoc)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Doc " + docCollectionOldDoc + " since its creatorSocialProfileFk field is not nullable.");
+                }
+            }
+            for (Doc docCollection1OldDoc : docCollection1Old) {
+                if (!docCollection1New.contains(docCollection1OldDoc)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Doc " + docCollection1OldDoc + " since its editorSocialProfileFk field is not nullable.");
+                }
+            }
+            for (DocHistory docHistoryCollectionOldDocHistory : docHistoryCollectionOld) {
+                if (!docHistoryCollectionNew.contains(docHistoryCollectionOldDocHistory)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain DocHistory " + docHistoryCollectionOldDocHistory + " since its editorSocialProfileFk field is not nullable.");
+                }
+            }
+            for (DocMessage docMessageCollectionOldDocMessage : docMessageCollectionOld) {
+                if (!docMessageCollectionNew.contains(docMessageCollectionOldDocMessage)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain DocMessage " + docMessageCollectionOldDocMessage + " since its socialProfileFk field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -569,6 +712,41 @@ public class SocialProfileJpaController implements Serializable {
             }
             educationalObjectLikeCollectionNew = attachedEducationalObjectLikeCollectionNew;
             socialProfile.setEducationalObjectLikeCollection(educationalObjectLikeCollectionNew);
+            Collection<DocGuest> attachedDocGuestCollectionNew = new ArrayList<DocGuest>();
+            for (DocGuest docGuestCollectionNewDocGuestToAttach : docGuestCollectionNew) {
+                docGuestCollectionNewDocGuestToAttach = em.getReference(docGuestCollectionNewDocGuestToAttach.getClass(), docGuestCollectionNewDocGuestToAttach.getId());
+                attachedDocGuestCollectionNew.add(docGuestCollectionNewDocGuestToAttach);
+            }
+            docGuestCollectionNew = attachedDocGuestCollectionNew;
+            socialProfile.setDocGuestCollection(docGuestCollectionNew);
+            Collection<Doc> attachedDocCollectionNew = new ArrayList<Doc>();
+            for (Doc docCollectionNewDocToAttach : docCollectionNew) {
+                docCollectionNewDocToAttach = em.getReference(docCollectionNewDocToAttach.getClass(), docCollectionNewDocToAttach.getId());
+                attachedDocCollectionNew.add(docCollectionNewDocToAttach);
+            }
+            docCollectionNew = attachedDocCollectionNew;
+            socialProfile.setDocCollection(docCollectionNew);
+            Collection<Doc> attachedDocCollection1New = new ArrayList<Doc>();
+            for (Doc docCollection1NewDocToAttach : docCollection1New) {
+                docCollection1NewDocToAttach = em.getReference(docCollection1NewDocToAttach.getClass(), docCollection1NewDocToAttach.getId());
+                attachedDocCollection1New.add(docCollection1NewDocToAttach);
+            }
+            docCollection1New = attachedDocCollection1New;
+            socialProfile.setDocCollection1(docCollection1New);
+            Collection<DocHistory> attachedDocHistoryCollectionNew = new ArrayList<DocHistory>();
+            for (DocHistory docHistoryCollectionNewDocHistoryToAttach : docHistoryCollectionNew) {
+                docHistoryCollectionNewDocHistoryToAttach = em.getReference(docHistoryCollectionNewDocHistoryToAttach.getClass(), docHistoryCollectionNewDocHistoryToAttach.getId());
+                attachedDocHistoryCollectionNew.add(docHistoryCollectionNewDocHistoryToAttach);
+            }
+            docHistoryCollectionNew = attachedDocHistoryCollectionNew;
+            socialProfile.setDocHistoryCollection(docHistoryCollectionNew);
+            Collection<DocMessage> attachedDocMessageCollectionNew = new ArrayList<DocMessage>();
+            for (DocMessage docMessageCollectionNewDocMessageToAttach : docMessageCollectionNew) {
+                docMessageCollectionNewDocMessageToAttach = em.getReference(docMessageCollectionNewDocMessageToAttach.getClass(), docMessageCollectionNewDocMessageToAttach.getId());
+                attachedDocMessageCollectionNew.add(docMessageCollectionNewDocMessageToAttach);
+            }
+            docMessageCollectionNew = attachedDocMessageCollectionNew;
+            socialProfile.setDocMessageCollection(docMessageCollectionNew);
             socialProfile = em.merge(socialProfile);
             if (socialProfileVisibilityNew != null && !socialProfileVisibilityNew.equals(socialProfileVisibilityOld)) {
                 SocialProfile oldSocialProfileOfSocialProfileVisibility = socialProfileVisibilityNew.getSocialProfile();
@@ -747,6 +925,61 @@ public class SocialProfileJpaController implements Serializable {
                     }
                 }
             }
+            for (DocGuest docGuestCollectionNewDocGuest : docGuestCollectionNew) {
+                if (!docGuestCollectionOld.contains(docGuestCollectionNewDocGuest)) {
+                    SocialProfile oldSocialProfileFkOfDocGuestCollectionNewDocGuest = docGuestCollectionNewDocGuest.getSocialProfileFk();
+                    docGuestCollectionNewDocGuest.setSocialProfileFk(socialProfile);
+                    docGuestCollectionNewDocGuest = em.merge(docGuestCollectionNewDocGuest);
+                    if (oldSocialProfileFkOfDocGuestCollectionNewDocGuest != null && !oldSocialProfileFkOfDocGuestCollectionNewDocGuest.equals(socialProfile)) {
+                        oldSocialProfileFkOfDocGuestCollectionNewDocGuest.getDocGuestCollection().remove(docGuestCollectionNewDocGuest);
+                        oldSocialProfileFkOfDocGuestCollectionNewDocGuest = em.merge(oldSocialProfileFkOfDocGuestCollectionNewDocGuest);
+                    }
+                }
+            }
+            for (Doc docCollectionNewDoc : docCollectionNew) {
+                if (!docCollectionOld.contains(docCollectionNewDoc)) {
+                    SocialProfile oldCreatorSocialProfileFkOfDocCollectionNewDoc = docCollectionNewDoc.getCreatorSocialProfileFk();
+                    docCollectionNewDoc.setCreatorSocialProfileFk(socialProfile);
+                    docCollectionNewDoc = em.merge(docCollectionNewDoc);
+                    if (oldCreatorSocialProfileFkOfDocCollectionNewDoc != null && !oldCreatorSocialProfileFkOfDocCollectionNewDoc.equals(socialProfile)) {
+                        oldCreatorSocialProfileFkOfDocCollectionNewDoc.getDocCollection().remove(docCollectionNewDoc);
+                        oldCreatorSocialProfileFkOfDocCollectionNewDoc = em.merge(oldCreatorSocialProfileFkOfDocCollectionNewDoc);
+                    }
+                }
+            }
+            for (Doc docCollection1NewDoc : docCollection1New) {
+                if (!docCollection1Old.contains(docCollection1NewDoc)) {
+                    SocialProfile oldEditorSocialProfileFkOfDocCollection1NewDoc = docCollection1NewDoc.getEditorSocialProfileFk();
+                    docCollection1NewDoc.setEditorSocialProfileFk(socialProfile);
+                    docCollection1NewDoc = em.merge(docCollection1NewDoc);
+                    if (oldEditorSocialProfileFkOfDocCollection1NewDoc != null && !oldEditorSocialProfileFkOfDocCollection1NewDoc.equals(socialProfile)) {
+                        oldEditorSocialProfileFkOfDocCollection1NewDoc.getDocCollection1().remove(docCollection1NewDoc);
+                        oldEditorSocialProfileFkOfDocCollection1NewDoc = em.merge(oldEditorSocialProfileFkOfDocCollection1NewDoc);
+                    }
+                }
+            }
+            for (DocHistory docHistoryCollectionNewDocHistory : docHistoryCollectionNew) {
+                if (!docHistoryCollectionOld.contains(docHistoryCollectionNewDocHistory)) {
+                    SocialProfile oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory = docHistoryCollectionNewDocHistory.getEditorSocialProfileFk();
+                    docHistoryCollectionNewDocHistory.setEditorSocialProfileFk(socialProfile);
+                    docHistoryCollectionNewDocHistory = em.merge(docHistoryCollectionNewDocHistory);
+                    if (oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory != null && !oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory.equals(socialProfile)) {
+                        oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory.getDocHistoryCollection().remove(docHistoryCollectionNewDocHistory);
+                        oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory = em.merge(oldEditorSocialProfileFkOfDocHistoryCollectionNewDocHistory);
+                    }
+                }
+            }
+            for (DocMessage docMessageCollectionNewDocMessage : docMessageCollectionNew) {
+                if (!docMessageCollectionOld.contains(docMessageCollectionNewDocMessage)) {
+                    SocialProfile oldSocialProfileFkOfDocMessageCollectionNewDocMessage = docMessageCollectionNewDocMessage.getSocialProfileFk();
+                    docMessageCollectionNewDocMessage.setSocialProfileFk(socialProfile);
+                    docMessageCollectionNewDocMessage = em.merge(docMessageCollectionNewDocMessage);
+                    if (oldSocialProfileFkOfDocMessageCollectionNewDocMessage != null && !oldSocialProfileFkOfDocMessageCollectionNewDocMessage.equals(socialProfile)) {
+                        oldSocialProfileFkOfDocMessageCollectionNewDocMessage.getDocMessageCollection().remove(docMessageCollectionNewDocMessage);
+                        oldSocialProfileFkOfDocMessageCollectionNewDocMessage = em.merge(oldSocialProfileFkOfDocMessageCollectionNewDocMessage);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
@@ -772,8 +1005,7 @@ public class SocialProfileJpaController implements Serializable {
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             SocialProfile socialProfile;
             try {
                 socialProfile = em.getReference(SocialProfile.class, id);
@@ -844,6 +1076,41 @@ public class SocialProfileJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the EducationalObjectLike " + educationalObjectLikeCollectionOrphanCheckEducationalObjectLike + " in its educationalObjectLikeCollection field has a non-nullable socialProfile field.");
+            }
+            Collection<DocGuest> docGuestCollectionOrphanCheck = socialProfile.getDocGuestCollection();
+            for (DocGuest docGuestCollectionOrphanCheckDocGuest : docGuestCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the DocGuest " + docGuestCollectionOrphanCheckDocGuest + " in its docGuestCollection field has a non-nullable socialProfileFk field.");
+            }
+            Collection<Doc> docCollectionOrphanCheck = socialProfile.getDocCollection();
+            for (Doc docCollectionOrphanCheckDoc : docCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the Doc " + docCollectionOrphanCheckDoc + " in its docCollection field has a non-nullable creatorSocialProfileFk field.");
+            }
+            Collection<Doc> docCollection1OrphanCheck = socialProfile.getDocCollection1();
+            for (Doc docCollection1OrphanCheckDoc : docCollection1OrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the Doc " + docCollection1OrphanCheckDoc + " in its docCollection1 field has a non-nullable editorSocialProfileFk field.");
+            }
+            Collection<DocHistory> docHistoryCollectionOrphanCheck = socialProfile.getDocHistoryCollection();
+            for (DocHistory docHistoryCollectionOrphanCheckDocHistory : docHistoryCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the DocHistory " + docHistoryCollectionOrphanCheckDocHistory + " in its docHistoryCollection field has a non-nullable editorSocialProfileFk field.");
+            }
+            Collection<DocMessage> docMessageCollectionOrphanCheck = socialProfile.getDocMessageCollection();
+            for (DocMessage docMessageCollectionOrphanCheckDocMessage : docMessageCollectionOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This SocialProfile (" + socialProfile + ") cannot be destroyed since the DocMessage " + docMessageCollectionOrphanCheckDocMessage + " in its docMessageCollection field has a non-nullable socialProfileFk field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -959,7 +1226,7 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-
+    
     public SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         EntityManager em = getEntityManager();
         try {
