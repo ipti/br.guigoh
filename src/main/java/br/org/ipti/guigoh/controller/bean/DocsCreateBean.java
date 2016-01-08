@@ -6,14 +6,20 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.Doc;
+import br.org.ipti.guigoh.model.entity.DocGuest;
 import br.org.ipti.guigoh.model.entity.DocHistory;
+import br.org.ipti.guigoh.model.entity.SocialProfile;
+import br.org.ipti.guigoh.model.jpa.controller.DocGuestJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DocHistoryJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DocJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.util.CookieService;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -26,22 +32,38 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class DocsCreateBean implements Serializable {
 
-    private String text;
-    private String title;
+    private String text, title;
     private Integer docId;
 
     private Date date;
+
+    private SocialProfile ownerSocialProfile, mySocialProfile;
+
+    private List<DocGuest> guestList;
 
     private DocJpaController docJpaController;
     private DocHistoryJpaController docHistoryJpaController;
     private SocialProfileJpaController socialProfileJpaController;
     private UtilJpaController utilJpaController;
+    private DocGuestJpaController docGuestJpaController;
 
-    public void init() {
+    public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             initGlobalVariables();
             date = utilJpaController.getTimestampServerTime();
         }
+    }
+
+    public void addGuest(SocialProfile socialProfile) throws Exception {
+        if (docId == null) {
+            save();
+        }
+        DocGuest docGuest = new DocGuest();
+        docGuest.setDocFk(docJpaController.findDoc(docId));
+        docGuest.setSocialProfileFk(socialProfile);
+        docGuest.setPermission("RW");
+        docGuestJpaController.create(docGuest);
+        guestList.add(docGuest);
     }
 
     public void save() throws Exception {
@@ -80,17 +102,27 @@ public class DocsCreateBean implements Serializable {
         }
     }
 
-    private void initGlobalVariables() {
+    private void initGlobalVariables() throws IOException {
         docJpaController = new DocJpaController();
+        docGuestJpaController = new DocGuestJpaController();
         docHistoryJpaController = new DocHistoryJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
         utilJpaController = new UtilJpaController();
         
         if (docId != null) {
             Doc doc = docJpaController.findDoc(docId);
+            if (doc != null) {
             title = doc.getTitle();
             text = doc.getDoc();
+            ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
+            guestList = docGuestJpaController.findByDocId(docId);
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+            }
+        } else {
+            ownerSocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         }
+        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
     }
 
     public String getText() {
@@ -115,5 +147,29 @@ public class DocsCreateBean implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public SocialProfile getOwnerSocialProfile() {
+        return ownerSocialProfile;
+    }
+
+    public void setOwnerSocialProfile(SocialProfile ownerSocialProfile) {
+        this.ownerSocialProfile = ownerSocialProfile;
+    }
+
+    public List<DocGuest> getGuestList() {
+        return guestList;
+    }
+
+    public void setGuestList(List<DocGuest> guestList) {
+        this.guestList = guestList;
+    }
+
+    public SocialProfile getMySocialProfile() {
+        return mySocialProfile;
+    }
+
+    public void setMySocialProfile(SocialProfile mySocialProfile) {
+        this.mySocialProfile = mySocialProfile;
     }
 }

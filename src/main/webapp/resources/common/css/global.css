@@ -752,6 +752,8 @@ aside h3 {
 
 .modal-title {
     padding: 0 0 10px 15px;
+    color: #404095;
+    font-size: 24px;
 }
 
 .modal-buttons {

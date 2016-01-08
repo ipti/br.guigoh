@@ -184,7 +184,7 @@ span.friend-situation > img {
     color: #333;
 }
 
-#profile-container-objects, #profile-container-resume {
+#profile-container-docs, #profile-container-objects, #profile-container-resume {
     display: none;
 }
 

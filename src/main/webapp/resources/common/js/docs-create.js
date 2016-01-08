@@ -21,13 +21,17 @@ $(document).ready(function () {
                     $(".doc-saved").addClass("visible");
                     setTimeout(function () {
                         $(".doc-saved").removeClass("visible");
-                    }, 3000);
+                    }, 5000);
                 }, 3000);
             });
         },
         init_instance_callback: function (editor) {
             editor.setContent($("#text").val());
         }
+    });
+
+    $(".creator-user span, .guest-user span").each(function () {
+        $(this).text(changeNameLength($(this).text(), 15));
     });
 });
 
@@ -39,7 +43,7 @@ $("#title").keyup(function (e) {
         $(".doc-saved").addClass("visible");
         setTimeout(function () {
             $(".doc-saved").removeClass("visible");
-        }, 3000);
+        }, 5000);
     }, 3000);
 });
 
@@ -48,4 +52,8 @@ $("#title").focus(function () {
     window.setTimeout(function () {
         save_this.select();
     }, 100);
+});
+
+$(".add-guest").click(function () {
+    document.getElementById("open-add-guest-modal").click();
 });
