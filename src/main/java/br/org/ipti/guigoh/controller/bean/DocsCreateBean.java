@@ -32,7 +32,7 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class DocsCreateBean implements Serializable {
 
-    private String text, title;
+    private String text, title, userSearch;
     private Integer docId;
 
     private Date date;
@@ -40,6 +40,7 @@ public class DocsCreateBean implements Serializable {
     private SocialProfile ownerSocialProfile, mySocialProfile;
 
     private List<DocGuest> guestList;
+    private List<SocialProfile> socialProfileList, chosenSocialProfileList;
 
     private DocJpaController docJpaController;
     private DocHistoryJpaController docHistoryJpaController;
@@ -54,16 +55,34 @@ public class DocsCreateBean implements Serializable {
         }
     }
 
-    public void addGuest(SocialProfile socialProfile) throws Exception {
-        if (docId == null) {
-            save();
+//    public void addGuest(SocialProfile socialProfile) throws Exception {
+//        if (docId == null) {
+//            save();
+//        }
+//        DocGuest docGuest = new DocGuest();
+//        docGuest.setDocFk(docJpaController.findDoc(docId));
+//        docGuest.setSocialProfileFk(socialProfile);
+//        docGuest.setPermission("RW");
+//        docGuestJpaController.create(docGuest);
+//        guestList.add(docGuest);
+//    }
+
+    public void selectUser(SocialProfile socialProfile) {
+        System.out.println("a");
+        socialProfileList.remove(socialProfile);
+        chosenSocialProfileList.add(socialProfile);
+    }
+    
+    public void findUsers() {
+        if (!userSearch.equals("")) {
+            List<Integer> excludedSocialProfileIdList = new ArrayList<>();
+            chosenSocialProfileList.stream().forEach((socialProfile) -> {
+                excludedSocialProfileIdList.add(socialProfile.getSocialProfileId());
+            });
+            socialProfileList = socialProfileJpaController.findSocialProfiles(userSearch, mySocialProfile.getTokenId(), false, false, excludedSocialProfileIdList);
+        } else {
+            socialProfileList = new ArrayList<>();
         }
-        DocGuest docGuest = new DocGuest();
-        docGuest.setDocFk(docJpaController.findDoc(docId));
-        docGuest.setSocialProfileFk(socialProfile);
-        docGuest.setPermission("RW");
-        docGuestJpaController.create(docGuest);
-        guestList.add(docGuest);
     }
 
     public void save() throws Exception {
@@ -108,14 +127,14 @@ public class DocsCreateBean implements Serializable {
         docHistoryJpaController = new DocHistoryJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
         utilJpaController = new UtilJpaController();
-        
+
         if (docId != null) {
             Doc doc = docJpaController.findDoc(docId);
             if (doc != null) {
-            title = doc.getTitle();
-            text = doc.getDoc();
-            ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
-            guestList = docGuestJpaController.findByDocId(docId);
+                title = doc.getTitle();
+                text = doc.getDoc();
+                ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
+                guestList = docGuestJpaController.findByDocId(docId);
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
             }
@@ -123,6 +142,8 @@ public class DocsCreateBean implements Serializable {
             ownerSocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
         }
         mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+
+        chosenSocialProfileList = new ArrayList<>();
     }
 
     public String getText() {
@@ -171,5 +192,29 @@ public class DocsCreateBean implements Serializable {
 
     public void setMySocialProfile(SocialProfile mySocialProfile) {
         this.mySocialProfile = mySocialProfile;
+    }
+
+    public String getUserSearch() {
+        return userSearch;
+    }
+
+    public void setUserSearch(String userSearch) {
+        this.userSearch = userSearch;
+    }
+
+    public List<SocialProfile> getSocialProfileList() {
+        return socialProfileList;
+    }
+
+    public void setSocialProfileList(List<SocialProfile> socialProfileList) {
+        this.socialProfileList = socialProfileList;
+    }
+
+    public List<SocialProfile> getChosenSocialProfileList() {
+        return chosenSocialProfileList;
+    }
+
+    public void setChosenSocialProfileList(List<SocialProfile> chosenSocialProfileList) {
+        this.chosenSocialProfileList = chosenSocialProfileList;
     }
 }

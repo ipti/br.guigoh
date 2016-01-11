@@ -18,8 +18,8 @@
         </f:metadata>
     </ui:define>
     <ui:define name="content">
-        <section id="content">
-            <h:form prependId="false">
+        <h:form prependId="false">
+            <section id="content">
                 <div class="title-container">
                     <div class="title">
                         <h1>Docs</h1>
@@ -60,27 +60,49 @@
                     </h:panelGroup>
                 </aside>
                 <div class="clear"></div>
-            </h:form>
-        </section>
-        <a id="open-add-guest-modal" href="#add-guest-modal"></a>
-        <div id="add-guest-modal" class="add-guest-modal">
-            <div>
-                <h1 class="modal-title">#{localeBean.getString('Adicionar colaboradores')}</h1>
-                <hr/>
-                <a href="#close" title="Close" id="close-add-guest-modal" class="close-add-guest-modal">X</a>
-                <div class="users-container">
-                    
-                </div>
-                <hr/>
-                <div class="modal-buttons">
-                    <span class="add-guest-button">
-                        #{localeBean.getString('Adicionar')}
-                    </span>
-                    <a href="#close" title="Close" class="add-guest-button cancel">#{localeBean.getString('Cancelar')}</a>
+            </section>
+            <a id="open-add-guest-modal" href="#add-guest-modal"></a>
+            <div id="add-guest-modal" class="add-guest-modal">
+                <div>
+                    <h1 class="modal-title">#{localeBean.getString('Adicionar colaboradores')}</h1>
+                    <hr/>
+                    <a href="#close" title="Close" id="close-add-guest-modal" class="close-add-guest-modal">X</a>
+                    <div class="modal-users-container">
+                        <h:inputText id="guest-user-search" class="guest-user-search" pt:placeholder="Procure usuários para colaborar com o seu documento" value="#{docsCreateBean.userSearch}">
+                            <f:ajax listener="#{docsCreateBean.findUsers()}" event="keyup" render="users-container"/>
+                        </h:inputText>
+                        <h:panelGroup layout="block" id="users-container" class="users-container">
+                            <ui:repeat value="#{docsCreateBean.socialProfileList}" var="socialProfile">
+                                <h:panelGroup layout="block" class="user-container">
+                                    <f:ajax listener="#{docsCreateBean.selectUser(socialProfile)}" event="click" render="users-container chosen-users-container"/>
+                                    <div class="user">
+                                        <img class="image" src="#{socialProfile.photo}"></img>
+                                        <p class="result-name" title="#{socialProfile.name}">#{socialProfile.name}</p>
+                                        <p class="subresult" title="#{socialProfile.cityId.name}">#{socialProfile.cityId.name}/#{socialProfile.stateId.acronyms}</p>
+                                        <p class="subresult" title="#{socialProfile.subnetworkId.description}">#{socialProfile.subnetworkId.description}</p>
+                                        <p class="subresult" title="#{socialProfile.roleId.name}">#{socialProfile.roleId.name}</p>
+                                    </div>
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" id="chosen-users-container" class="chosen-users-container">
+                            <ui:repeat value="#{docsCreateBean.chosenSocialProfileList}" var="chosenSocialProfile">
+
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </div>
                     <div class="clear"></div>
+                    <hr/>
+                    <div class="modal-buttons">
+                        <span class="add-guest-button">
+                            #{localeBean.getString('Adicionar')}
+                        </span>
+                        <a href="#close" title="Close" class="add-guest-button cancel">#{localeBean.getString('Cancelar')}</a>
+                        <div class="clear"></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">

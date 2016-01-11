@@ -53,7 +53,7 @@ public class SocialProfileJpaController implements Serializable {
 
     public SocialProfileJpaController() {
     }
-    
+
     private transient EntityManagerFactory emf = PersistenceUnit.getEMF();
 
     public EntityManager getEntityManager() {
@@ -439,7 +439,8 @@ public class SocialProfileJpaController implements Serializable {
     public void edit(SocialProfile socialProfile) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfile persistentSocialProfile = em.find(SocialProfile.class, socialProfile.getTokenId());
             SocialProfileVisibility socialProfileVisibilityOld = persistentSocialProfile.getSocialProfileVisibility();
             SocialProfileVisibility socialProfileVisibilityNew = socialProfile.getSocialProfileVisibility();
@@ -1005,7 +1006,8 @@ public class SocialProfileJpaController implements Serializable {
     public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfile socialProfile;
             try {
                 socialProfile = em.getReference(SocialProfile.class, id);
@@ -1226,7 +1228,7 @@ public class SocialProfileJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public SocialProfile findSocialProfileBySocialProfileId(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -1251,7 +1253,7 @@ public class SocialProfileJpaController implements Serializable {
         }
     }
 
-    public List<SocialProfile> findSocialProfiles(String name, String token, boolean includeSessionUser, boolean includeVisitors) {
+    public List<SocialProfile> findSocialProfiles(String name, String token, boolean includeSessionUser, boolean includeVisitors, List<Integer> excludedSocialProfileIdList) {
         EntityManager em = getEntityManager();
         try {
             String partialQuery = "";
@@ -1261,6 +1263,11 @@ public class SocialProfileJpaController implements Serializable {
             }
             if (!includeVisitors) {
                 partialQuery += "and (role_id is null or r.name <> 'Visitante') ";
+            }
+            if (excludedSocialProfileIdList != null && !excludedSocialProfileIdList.isEmpty()) {
+                for (Integer socialProfileId : excludedSocialProfileIdList) {
+                    partialQuery += "and social_profile_id <> '" + socialProfileId + "' ";
+                }
             }
             List<SocialProfile> socialProfileList = (List<SocialProfile>) em.createNativeQuery("select distinct sp.* from social_profile sp "
                     + "left join city c on c.id = sp.city_id "

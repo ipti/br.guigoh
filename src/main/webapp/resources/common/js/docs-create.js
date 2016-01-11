@@ -33,6 +33,7 @@ $(document).ready(function () {
     $(".creator-user span, .guest-user span").each(function () {
         $(this).text(changeNameLength($(this).text(), 15));
     });
+    
 });
 
 $("#title").keyup(function (e) {
@@ -56,4 +57,13 @@ $("#title").focus(function () {
 
 $(".add-guest").click(function () {
     document.getElementById("open-add-guest-modal").click();
+});
+
+jsf.ajax.addOnEvent(function (data) {
+    if (data.status === "success") {
+        $.each($(".result-name, .subresult"), function () {
+            var limit = $(this).hasClass("subresult") ? 25 : 21;
+            $(this).text(changeNameLength($(this).text(), limit));
+        });
+    }
 });
