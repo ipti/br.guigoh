@@ -14,6 +14,7 @@ import br.org.ipti.guigoh.model.jpa.controller.DocHistoryJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DocJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.IOException;
 import java.io.Serializable;
@@ -55,24 +56,39 @@ public class DocsCreateBean implements Serializable {
         }
     }
 
-//    public void addGuest(SocialProfile socialProfile) throws Exception {
-//        if (docId == null) {
-//            save();
-//        }
-//        DocGuest docGuest = new DocGuest();
-//        docGuest.setDocFk(docJpaController.findDoc(docId));
-//        docGuest.setSocialProfileFk(socialProfile);
-//        docGuest.setPermission("RW");
-//        docGuestJpaController.create(docGuest);
-//        guestList.add(docGuest);
-//    }
+    public void addGuest() throws Exception {
+        if (docId == null) {
+            save();
+        } else {
+            for (SocialProfile socialProfile : chosenSocialProfileList) {
+                DocGuest docGuest = new DocGuest();
+                docGuest.setDocFk(docJpaController.findDoc(docId));
+                docGuest.setSocialProfileFk(socialProfile);
+                docGuest.setPermission("RW");
+                docGuestJpaController.create(docGuest);
+                guestList.add(docGuest);
+            }
+            chosenSocialProfileList = new ArrayList<>();
+            socialProfileList = new ArrayList<>();
+            userSearch = "";
+        }
+    }
 
     public void selectUser(SocialProfile socialProfile) {
-        System.out.println("a");
         socialProfileList.remove(socialProfile);
         chosenSocialProfileList.add(socialProfile);
     }
-    
+
+    public void removeChosenUser(SocialProfile socialProfile) {
+        chosenSocialProfileList.remove(socialProfile);
+        findUsers();
+    }
+
+    public void removeGuest(DocGuest guest) throws RollbackFailureException, Exception {
+        guestList.remove(guest);
+        docGuestJpaController.destroy(guest.getId());
+    }
+
     public void findUsers() {
         if (!userSearch.equals("")) {
             List<Integer> excludedSocialProfileIdList = new ArrayList<>();
@@ -117,7 +133,14 @@ public class DocsCreateBean implements Serializable {
             doc.setStatus('A');
             docJpaController.create(doc);
 
-            docId = doc.getId();
+            for (SocialProfile socialProfile : chosenSocialProfileList) {
+                DocGuest docGuest = new DocGuest();
+                docGuest.setDocFk(docJpaController.findDoc(doc.getId()));
+                docGuest.setSocialProfileFk(socialProfile);
+                docGuest.setPermission("RW");
+                docGuestJpaController.create(docGuest);
+            }
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/docs/create.xhtml?id=" + doc.getId());
         }
     }
 
@@ -127,19 +150,24 @@ public class DocsCreateBean implements Serializable {
         docHistoryJpaController = new DocHistoryJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
         utilJpaController = new UtilJpaController();
-
         if (docId != null) {
             Doc doc = docJpaController.findDoc(docId);
             if (doc != null) {
-                title = doc.getTitle();
-                text = doc.getDoc();
-                ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
-                guestList = docGuestJpaController.findByDocId(docId);
+                if (doc.getDocGuestCollection().contains(docGuestJpaController.findByUserTokenId(docId, CookieService.getCookie("token")))
+                        || doc.getCreatorSocialProfileFk().getTokenId().equals(CookieService.getCookie("token"))) {
+                    title = doc.getTitle();
+                    text = doc.getDoc();
+                    ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
+                    guestList = docGuestJpaController.findByDocId(docId);
+                } else {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+                }
             } else {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
             }
         } else {
             ownerSocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+            guestList = new ArrayList<>();
         }
         mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
 

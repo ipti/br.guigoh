@@ -46,14 +46,20 @@
                         <i class="user-situation fa fa-pencil" />
                     </div>
                     <span class="guests-label">Convidados</span>
-                    <ui:repeat value="#{docsCreateBean.guestList}" var="guest">
-                        <div class="guest-user">
-                            <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
-                            <span>#{guest.socialProfileFk.name}</span>
-                            <img class="online-icon" src="../resources/common/images/online-dot.png"/>
-                            <i class="user-situation fa fa-eye"/>
-                        </div>
-                    </ui:repeat>
+                    <h:panelGroup layout="block" id="guests">
+                        <ui:repeat value="#{docsCreateBean.guestList}" var="guest">
+                            <div class="guest-user">
+                                <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
+                                <span title="#{guest.socialProfileFk.name}">#{guest.socialProfileFk.name}</span>
+                                <h:commandLink class="remove-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
+                                    <i class="fa fa-remove"/>
+                                    <f:ajax listener="#{docsCreateBean.removeGuest(guest)}" render="guests"/>
+                                </h:commandLink>
+                                <img class="online-icon" src="../resources/common/images/online-dot.png"/>
+                                <i class="user-situation fa fa-eye"/>
+                            </div>
+                        </ui:repeat>
+                    </h:panelGroup>
                     <h:panelGroup layout="block" class="add-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
                         <i class="fa fa-plus-circle"/>
                         <span>Adicionar</span>
@@ -67,14 +73,14 @@
                     <h1 class="modal-title">#{localeBean.getString('Adicionar colaboradores')}</h1>
                     <hr/>
                     <a href="#close" title="Close" id="close-add-guest-modal" class="close-add-guest-modal">X</a>
-                    <div class="modal-users-container">
+                    <h:panelGroup layout="block" id="modal-users-container" class="modal-users-container">
                         <h:inputText id="guest-user-search" class="guest-user-search" pt:placeholder="Procure usuários para colaborar com o seu documento" value="#{docsCreateBean.userSearch}">
                             <f:ajax listener="#{docsCreateBean.findUsers()}" event="keyup" render="users-container"/>
                         </h:inputText>
                         <h:panelGroup layout="block" id="users-container" class="users-container">
                             <ui:repeat value="#{docsCreateBean.socialProfileList}" var="socialProfile">
                                 <h:panelGroup layout="block" class="user-container">
-                                    <f:ajax listener="#{docsCreateBean.selectUser(socialProfile)}" event="click" render="users-container chosen-users-container"/>
+                                    <f:ajax listener="#{docsCreateBean.selectUser(socialProfile)}" event="click" render="users-container chosen-users-container chosen-user-container-title"/>
                                     <div class="user">
                                         <img class="image" src="#{socialProfile.photo}"></img>
                                         <p class="result-name" title="#{socialProfile.name}">#{socialProfile.name}</p>
@@ -85,18 +91,33 @@
                                 </h:panelGroup>
                             </ui:repeat>
                         </h:panelGroup>
+                        <h:panelGroup layout="block" id="chosen-user-container-title">
+                            <ui:fragment rendered="#{!docsCreateBean.chosenSocialProfileList.isEmpty()}">
+                                <h1>Convidados</h1>
+                            </ui:fragment>
+                        </h:panelGroup>
                         <h:panelGroup layout="block" id="chosen-users-container" class="chosen-users-container">
                             <ui:repeat value="#{docsCreateBean.chosenSocialProfileList}" var="chosenSocialProfile">
-
+                                <h:panelGroup layout="block" class="user-container">
+                                    <f:ajax event="click" listener="#{docsCreateBean.removeChosenUser(chosenSocialProfile)}" execute="guest-user-search" render="users-container chosen-users-container chosen-user-container-title"/>
+                                    <div class="user">
+                                        <img class="image" src="#{chosenSocialProfile.photo}"></img>
+                                        <p class="result-name" title="#{chosenSocialProfile.name}">#{chosenSocialProfile.name}</p>
+                                        <p class="subresult" title="#{chosenSocialProfile.cityId.name}">#{chosenSocialProfile.cityId.name}/#{chosenSocialProfile.stateId.acronyms}</p>
+                                        <p class="subresult" title="#{chosenSocialProfile.subnetworkId.description}">#{chosenSocialProfile.subnetworkId.description}</p>
+                                        <p class="subresult" title="#{chosenSocialProfile.roleId.name}">#{chosenSocialProfile.roleId.name}</p>
+                                    </div>
+                                </h:panelGroup>
                             </ui:repeat>
                         </h:panelGroup>
-                    </div>
+                    </h:panelGroup>
                     <div class="clear"></div>
                     <hr/>
                     <div class="modal-buttons">
-                        <span class="add-guest-button">
+                        <h:commandLink class="add-guest-button" onclick="return fillText();">
+                            <f:ajax listener="#{docsCreateBean.addGuest()}" render="guests title text modal-users-container" execute="title text"/>
                             #{localeBean.getString('Adicionar')}
-                        </span>
+                        </h:commandLink>
                         <a href="#close" title="Close" class="add-guest-button cancel">#{localeBean.getString('Cancelar')}</a>
                         <div class="clear"></div>
                     </div>

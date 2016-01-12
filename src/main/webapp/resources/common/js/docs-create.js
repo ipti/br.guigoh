@@ -4,7 +4,7 @@ $(document).ready(function () {
     tinymce.init({
         selector: 'textarea',
         height: 400,
-        width: 700,
+        width: 650,
         statusbar: false,
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
@@ -31,10 +31,14 @@ $(document).ready(function () {
     });
 
     $(".creator-user span, .guest-user span").each(function () {
-        $(this).text(changeNameLength($(this).text(), 15));
+        $(this).text(changeNameLength($(this).text(), 20));
     });
-    
 });
+
+function fillText() {
+    $("#text").val(tinyMCE.activeEditor.getContent());
+    return true;
+}
 
 $("#title").keyup(function (e) {
     clearTimeout(saveTimer);
@@ -61,9 +65,18 @@ $(".add-guest").click(function () {
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
-        $.each($(".result-name, .subresult"), function () {
-            var limit = $(this).hasClass("subresult") ? 25 : 21;
-            $(this).text(changeNameLength($(this).text(), limit));
-        });
+        if ($(data.source).hasClass("guest-user-search") || $(data.source).hasClass("user-container")) {
+            $.each($(".result-name, .subresult"), function () {
+                var limit = $(this).hasClass("subresult") ? 25 : 21;
+                $(this).text(changeNameLength($(this).text(), limit));
+            });
+        } else if ($(data.source).hasClass("add-guest-button") || $(data.source).hasClass("remove-guest")) {
+            if ($(data.source).hasClass("add-guest-button")) {
+                document.getElementById("close-add-guest-modal").click();
+            }
+            $(".creator-user span, .guest-user span").each(function () {
+                $(this).text(changeNameLength($(this).text(), 20));
+            });
+        }
     }
 });

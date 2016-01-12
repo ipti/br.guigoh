@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.transaction.UserTransaction;
 
 /**
@@ -39,7 +40,8 @@ public class DocGuestJpaController implements Serializable {
     public void create(DocGuest docGuest) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             Doc docFk = docGuest.getDocFk();
             if (docFk != null) {
                 docFk = em.getReference(docFk.getClass(), docFk.getId());
@@ -77,7 +79,8 @@ public class DocGuestJpaController implements Serializable {
     public void edit(DocGuest docGuest) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             DocGuest persistentDocGuest = em.find(DocGuest.class, docGuest.getId());
             Doc docFkOld = persistentDocGuest.getDocFk();
             Doc docFkNew = docGuest.getDocFk();
@@ -133,7 +136,8 @@ public class DocGuestJpaController implements Serializable {
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             DocGuest docGuest;
             try {
                 docGuest = em.getReference(DocGuest.class, id);
@@ -212,7 +216,7 @@ public class DocGuestJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<DocGuest> findByDocId(Integer docId) {
         EntityManager em = getEntityManager();
         try {
@@ -222,6 +226,20 @@ public class DocGuestJpaController implements Serializable {
                 return new ArrayList<>();
             }
             return docGuestList;
+        } finally {
+            em.close();
+        }
+    }
+
+    public DocGuest findByUserTokenId(Integer docId, String tokenId) {
+        EntityManager em = getEntityManager();
+        try {
+            DocGuest docGuest = (DocGuest) em.createNativeQuery("select dg.* from doc_guest dg "
+                    + "join social_profile sp on sp.social_profile_id = dg.social_profile_fk "
+                    + "where dg.doc_fk = '" + docId + "' and sp.token_id = '" + tokenId + "'", DocGuest.class).getSingleResult();
+            return docGuest;
+        } catch (NoResultException e) {
+            return null;
         } finally {
             em.close();
         }
