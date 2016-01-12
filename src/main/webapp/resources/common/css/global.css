@@ -268,7 +268,7 @@ aside h3 {
 }
 
 .header-logo {
-    width: 225px;
+    width: 215px;
     border-right: 1px solid #C1C1C1;
     float: left;
     height: 100%;
@@ -278,16 +278,16 @@ aside h3 {
     width: 190px;
     position: absolute;
     bottom: 0;
-    padding: 19px 35px 0 0;
+    padding: 19px 25px 0 0;
 }
 
 .nav-main {
-    width: 505px;
+    width: 550px;
     float: left;
 }
 
 .nav-main li {
-    width: 100px;
+    width: 90px;
     height: 110px;
     border-right: 1px solid #C1C1C1;
     float: left;
@@ -339,47 +339,53 @@ aside h3 {
 
 .menu-icon-one {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: 20px -45px;
+    background-position: 15px -45px;
 }
 
 .menu-icon-two {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: -105px -45px;
+    background-position: -110px -45px;
 }
 
 .menu-icon-three {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: -235px -45px;
+    background-position: -240px -45px;
 }
 
 .menu-icon-four {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: -360px -45px;
+    background-position: -365px -45px;
 }
 
 .menu-icon-five {
+}
+
+.menu-icon-six {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: -487px -45px;
+    background-position: -492px -45px;
 }
 
 .menu-icons.active > .menu-icon-one, .menu-icon-one:hover {
-    background-position: 20px -164px;
+    background-position: 15px -164px;
 }
 
 .menu-icons.active > .menu-icon-two, .menu-icon-two:hover {
-    background-position: -105px -164px;
+    background-position: -110px -164px;
 }
 
 .menu-icons.active > .menu-icon-three, .menu-icon-three:hover {
-    background-position: -235px -164px;
+    background-position: -240px -164px;
 }
 
 .menu-icons.active > .menu-icon-four, .menu-icon-four:hover, #pending-friends:hover + .menu-text {
-    background-position: -360px -164px;
+    background-position: -365px -164px;
 }
 
 .menu-icons.active > .menu-icon-five, .menu-icon-five:hover {
-    background-position: -487px -164px;
+}
+
+.menu-icons.active > .menu-icon-six, .menu-icon-six:hover {
+    background-position: -492px -164px;
 }
 
 .header-profile {

@@ -33,8 +33,9 @@
                     <h:inputText id="title" class="doc-title" pt:placeholder="Título do Documento..." value="#{docsCreateBean.title}"></h:inputText>
                     <textarea></textarea>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
+                    <h:inputHidden id="doc-id" value="#{docsCreateBean.docId}"/>
                     <h:commandLink class="save-text">
-                        <f:ajax listener="#{docsCreateBean.save()}" execute="title text" render="title"/>
+                        <f:ajax listener="#{docsCreateBean.save()}" execute="title text" render="doc-id title"/>
                     </h:commandLink>
                 </div>
                 <aside class="collaborators">

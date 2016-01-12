@@ -33,7 +33,14 @@ $(document).ready(function () {
     $(".creator-user span, .guest-user span").each(function () {
         $(this).text(changeNameLength($(this).text(), 20));
     });
+//    if (getURLParam("id") !== undefined) {
+//        websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + getURLParam("id"));
+//        websocketDocs.onmessage = onMessageReceivedForDocs;
+//    }
 });
+
+function onMessageReceivedForDocs(evt) {
+}
 
 function fillText() {
     $("#text").val(tinyMCE.activeEditor.getContent());
@@ -73,10 +80,24 @@ jsf.ajax.addOnEvent(function (data) {
         } else if ($(data.source).hasClass("add-guest-button") || $(data.source).hasClass("remove-guest")) {
             if ($(data.source).hasClass("add-guest-button")) {
                 document.getElementById("close-add-guest-modal").click();
+                if (getParameterByName("id") == "") {
+                    window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
+                }
             }
             $(".creator-user span, .guest-user span").each(function () {
                 $(this).text(changeNameLength($(this).text(), 20));
             });
+        } else if ($(data.source).hasClass("save-text")) {
+            if (getParameterByName("id") == "") {
+                window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
+            }
         }
     }
 });
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}

@@ -59,19 +59,19 @@ public class DocsCreateBean implements Serializable {
     public void addGuest() throws Exception {
         if (docId == null) {
             save();
-        } else {
-            for (SocialProfile socialProfile : chosenSocialProfileList) {
-                DocGuest docGuest = new DocGuest();
-                docGuest.setDocFk(docJpaController.findDoc(docId));
-                docGuest.setSocialProfileFk(socialProfile);
-                docGuest.setPermission("RW");
-                docGuestJpaController.create(docGuest);
-                guestList.add(docGuest);
-            }
-            chosenSocialProfileList = new ArrayList<>();
-            socialProfileList = new ArrayList<>();
-            userSearch = "";
         }
+        for (SocialProfile socialProfile : chosenSocialProfileList) {
+            DocGuest docGuest = new DocGuest();
+            docGuest.setDocFk(docJpaController.findDoc(docId));
+            docGuest.setSocialProfileFk(socialProfile);
+            docGuest.setPermission("RW");
+            docGuestJpaController.create(docGuest);
+            guestList.add(docGuest);
+        }
+        chosenSocialProfileList = new ArrayList<>();
+        socialProfileList = new ArrayList<>();
+        userSearch = "";
+
     }
 
     public void selectUser(SocialProfile socialProfile) {
@@ -132,15 +132,8 @@ public class DocsCreateBean implements Serializable {
             doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
             doc.setStatus('A');
             docJpaController.create(doc);
-
-            for (SocialProfile socialProfile : chosenSocialProfileList) {
-                DocGuest docGuest = new DocGuest();
-                docGuest.setDocFk(docJpaController.findDoc(doc.getId()));
-                docGuest.setSocialProfileFk(socialProfile);
-                docGuest.setPermission("RW");
-                docGuestJpaController.create(docGuest);
-            }
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/docs/create.xhtml?id=" + doc.getId());
+            
+            docId = doc.getId();
         }
     }
 
