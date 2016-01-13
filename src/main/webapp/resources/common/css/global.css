@@ -592,7 +592,7 @@ aside h3 {
     border-bottom: 1px solid #ccc;
 }
 
-.friend-online {
+.friend-online, .friend-offline {
     float: right;
     margin: 6px 6px 0 0;
 }

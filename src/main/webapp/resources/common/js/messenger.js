@@ -107,12 +107,16 @@ function onMessageReceivedForMessenger(evt) {
                 var friend = $(this);
                 $(this).remove();
                 $("#messenger-friends").prepend(friend);
+            } else {
+                $(this).find(".friend-name").append("<img class='friend-offline' src='../../resources/common/images/offline-dot.png' />");
             }
         });
         $.each($(".messenger-boxes .box"), function () {
             $(this).find(".friend-online").remove();
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
                 $(this).find(".messenger-title").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
+            } else {
+                $(this).find(".messenger-title").append("<img class='friend-offline' src='../../resources/common/images/offline-dot.png' />");
             }
 
         });
@@ -177,8 +181,8 @@ function showBox(id, name, himself, message, date, recent) {
 
 function createBox(id, name) {
     var boxesQuantity = $(".box").length;
-    var position = "style='left: " + ((243 * boxesQuantity) + (20 * (boxesQuantity + 1))) + "px'"
-    var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "";
+    var position = "style='left: " + ((243 * boxesQuantity) + (20 * (boxesQuantity + 1))) + "px'";
+    var online = $("#messenger-friends li[socialprofileid=" + id + "]").find(".friend-online").length ? "<img class='friend-online' src='../../resources/common/images/online-dot.png' />" : "<img class='friend-online' src='../../resources/common/images/offline-dot.png' />";
     var box = "<div class='box' id='box-" + id + "' socialprofileid='" + id + "' " + position + ">"
             + "<div class='messenger-title'><span class='messenger-user-name' title='" + name + "'>" + changeNameLength(name, 23) + "</span>"
             + "<img src='../../resources/common/images/close-chat.png' class='close-chat' socialprofileid='" + id + "'/>"

@@ -40,23 +40,25 @@
                 </div>
                 <aside class="collaborators">
                     <span class="creator-label">Proprietário</span>
-                    <div class="creator-user">
+                    <div class="collaborator-user creator-user">
+                        <h:outputText class="hidden user-id" value="#{docsCreateBean.ownerSocialProfile.socialProfileId}"/>
                         <img class="creator-photo" src="#{docsCreateBean.ownerSocialProfile.photo}"/>
                         <span>#{docsCreateBean.ownerSocialProfile.name}</span>
-                        <img class="online-icon" src="../resources/common/images/online-dot.png"/>
+                        <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
                         <i class="user-situation fa fa-pencil" />
                     </div>
                     <span class="guests-label">Convidados</span>
                     <h:panelGroup layout="block" id="guests">
                         <ui:repeat value="#{docsCreateBean.guestList}" var="guest">
-                            <div class="guest-user">
+                            <div class="collaborator-user guest-user">
+                                <h:outputText class="hidden user-id" value="#{guest.socialProfileFk.socialProfileId}"/>
                                 <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
                                 <span title="#{guest.socialProfileFk.name}">#{guest.socialProfileFk.name}</span>
                                 <h:commandLink class="remove-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
                                     <i class="fa fa-remove"/>
                                     <f:ajax listener="#{docsCreateBean.removeGuest(guest)}" render="guests"/>
                                 </h:commandLink>
-                                <img class="online-icon" src="../resources/common/images/online-dot.png"/>
+                                <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
                                 <i class="user-situation fa fa-eye"/>
                             </div>
                         </ui:repeat>
@@ -116,7 +118,7 @@
                     <hr/>
                     <div class="modal-buttons">
                         <h:commandLink class="add-guest-button" onclick="return fillText();">
-                            <f:ajax listener="#{docsCreateBean.addGuest()}" render="guests title text modal-users-container" execute="title text"/>
+                            <f:ajax listener="#{docsCreateBean.addGuest()}" render="doc-id guests title text modal-users-container" execute="title text"/>
                             #{localeBean.getString('Adicionar')}
                         </h:commandLink>
                         <a href="#close" title="Close" class="add-guest-button cancel">#{localeBean.getString('Cancelar')}</a>

@@ -33,13 +33,35 @@ $(document).ready(function () {
     $(".creator-user span, .guest-user span").each(function () {
         $(this).text(changeNameLength($(this).text(), 20));
     });
-//    if (getURLParam("id") !== undefined) {
-//        websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + getURLParam("id"));
-//        websocketDocs.onmessage = onMessageReceivedForDocs;
-//    }
+    
+    if (getParameterByName("id") != "") {
+        connectWebSocket();
+    }
+    
+    if (logged_social_profile_id != $(".creator-user").find(".user-id").text()) {
+        $(".doc-title").attr("readonly", "true");
+    }
 });
 
 function onMessageReceivedForDocs(evt) {
+    var msg = JSON.parse(evt.data); // native API
+    console.log(msg);
+    if (typeof msg.status !== 'undefined') {
+        $(".collaborator-user").each(function () {
+            if ($(this).find(".user-id").text() == msg.id) {
+                if (msg.status == "online") {
+                    $(this).find(".status-icon").attr("src", "../resources/common/images/online-dot.png");
+                } else {
+                    $(this).find(".status-icon").attr("src", "../resources/common/images/offline-dot.png");
+                }
+            }
+        });
+    }
+}
+
+function connectWebSocket() {
+    websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + getParameterByName("id"));
+    websocketDocs.onmessage = onMessageReceivedForDocs;
 }
 
 function fillText() {
@@ -82,6 +104,7 @@ jsf.ajax.addOnEvent(function (data) {
                 document.getElementById("close-add-guest-modal").click();
                 if (getParameterByName("id") == "") {
                     window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
+                    connectWebSocket();
                 }
             }
             $(".creator-user span, .guest-user span").each(function () {
@@ -90,6 +113,7 @@ jsf.ajax.addOnEvent(function (data) {
         } else if ($(data.source).hasClass("save-text")) {
             if (getParameterByName("id") == "") {
                 window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
+                connectWebSocket();
             }
         }
     }
