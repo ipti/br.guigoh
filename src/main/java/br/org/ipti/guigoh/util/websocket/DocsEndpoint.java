@@ -46,9 +46,8 @@ public class DocsEndpoint {
 
     @OnMessage
     public void onMessage(final Session session, final String jsonString) throws Exception {
-        String[] collaborators = session.getUserProperties().get("collaborators").toString().split(",");
         for (Session s : session.getOpenSessions()) {
-            if (s.isOpen() && Arrays.asList(collaborators).contains(s.getUserProperties().get("user").toString())) {
+            if (s.isOpen() && s.getUserProperties().get("doc").equals(session.getUserProperties().get("doc")) && !s.equals(session)) {
                 s.getBasicRemote().sendObject(jsonString);
             }
         }
