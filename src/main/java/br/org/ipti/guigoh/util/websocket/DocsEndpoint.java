@@ -6,8 +6,10 @@
 package br.org.ipti.guigoh.util.websocket;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -46,22 +48,45 @@ public class DocsEndpoint {
 
     @OnMessage
     public void onMessage(final Session session, final String jsonString) throws Exception {
-        for (Session s : session.getOpenSessions()) {
-            if (s.isOpen() && s.getUserProperties().get("doc").equals(session.getUserProperties().get("doc")) && !s.equals(session)) {
-                s.getBasicRemote().sendObject(jsonString);
-            }
+        JsonObject obj = Json.createReader(new StringReader(jsonString))
+                .readObject();
+        switch (obj.getString("action")) {
+            case "UPDATE":
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && s.getUserProperties().get("doc").equals(session.getUserProperties().get("doc")) && !s.equals(session)) {
+                        s.getBasicRemote().sendObject(jsonString);
+                    }
+                }
+                break;
+            case "KICK":
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && s.getUserProperties().get("doc").equals(obj.getString("doc"))
+                            && !session.getUserProperties().get("user").equals(s.getUserProperties().get("user"))) {
+                        s.getBasicRemote().sendObject(jsonString);
+                    }
+                }
+                break;
         }
     }
 
     @OnClose
     public void onClose(final Session session) throws IOException, EncodeException {
+        int count = 0;
+        for (Session s : session.getOpenSessions()) {
+            if (s.isOpen() && session.getUserProperties().get("doc").equals(s.getUserProperties().get("doc"))
+                    && s.getUserProperties().get("user").equals(session.getUserProperties().get("user"))) {
+                count++;
+            }
+        }
         for (Session s : session.getOpenSessions()) {
             if (s.isOpen() && session.getUserProperties().get("doc").equals(s.getUserProperties().get("doc"))
                     && !session.getUserProperties().get("user").equals(s.getUserProperties().get("user"))) {
-                String json = Json.createObjectBuilder()
-                        .add("status", "offline")
-                        .add("id", session.getUserProperties().get("user").toString()).build().toString();
-                s.getBasicRemote().sendObject(json);
+                if (count == 0) {
+                    String json = Json.createObjectBuilder()
+                            .add("status", "offline")
+                            .add("id", session.getUserProperties().get("user").toString()).build().toString();
+                    s.getBasicRemote().sendObject(json);
+                }
             }
         }
     }

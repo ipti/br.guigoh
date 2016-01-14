@@ -125,7 +125,7 @@
     background-color: #333;
 }
 
-.add-guest-modal {
+.add-guest-modal, .kicked-user-modal {
     position: fixed;
     top: 0;
     right: 0;
@@ -140,7 +140,7 @@
     pointer-events: none;
 }
 
-.add-guest-modal:target {
+.add-guest-modal:target, .kicked-user-modal:target {
     opacity:1;
     pointer-events: auto;
 }
@@ -149,6 +149,15 @@
     width: 60%;
     position: relative;
     margin: 1% auto;
+    padding: 20px 0;
+    border-radius: 15px;
+    background: #e6eadf;
+}
+
+.kicked-user-modal > div {
+    width: 40%;
+    position: relative;
+    margin: 15% auto;
     padding: 20px 0;
     border-radius: 15px;
     background: #e6eadf;
@@ -184,7 +193,7 @@
     overflow-y: scroll;
 }
 
-.add-guest-button {
+.add-guest-button, .return-to-home {
     float: right;
     color: #e6eadf;
     background-color: gray;
@@ -197,11 +206,11 @@
     cursor: pointer;
 }
 
-.add-guest-button:hover {
+.add-guest-button:hover, .return-to-home:hover {
     background: black;
 }
 
-.add-guest-button.cancel {
+.add-guest-button.cancel, .return-to-home {
     margin-right: 10px;
 }
 

@@ -27,10 +27,10 @@
                 </div>
                 <div class="doc-saved">
                     <img src="../resources/common/images/save.png"></img>
-                    <span>Documento salvo</span>
+                    <span>#{localeBean.getString('Documento salvo')}</span>
                 </div>
                 <div class="main-container">
-                    <h:inputText id="title" class="doc-title" pt:placeholder="Título do Documento..." value="#{docsCreateBean.title}"></h:inputText>
+                    <h:inputText id="title" class="doc-title" pt:placeholder="#{localeBean.getString('Título do documento')}..." value="#{docsCreateBean.title}"></h:inputText>
                     <textarea></textarea>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <h:inputHidden id="doc-id" value="#{docsCreateBean.docId}"/>
@@ -39,7 +39,7 @@
                     </h:commandLink>
                 </div>
                 <aside class="collaborators">
-                    <span class="creator-label">Proprietário</span>
+                    <span class="creator-label">#{localeBean.getString('Proprietário')}</span>
                     <div class="collaborator-user creator-user">
                         <h:outputText class="hidden user-id" value="#{docsCreateBean.ownerSocialProfile.socialProfileId}"/>
                         <img class="creator-photo" src="#{docsCreateBean.ownerSocialProfile.photo}"/>
@@ -47,7 +47,7 @@
                         <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
                         <i class="user-situation fa fa-pencil" />
                     </div>
-                    <span class="guests-label">Convidados</span>
+                    <span class="guests-label">#{localeBean.getString('Convidados')}</span>
                     <h:panelGroup layout="block" id="guests">
                         <ui:repeat value="#{docsCreateBean.guestList}" var="guest">
                             <div class="collaborator-user guest-user">
@@ -65,7 +65,7 @@
                     </h:panelGroup>
                     <h:panelGroup layout="block" class="add-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
                         <i class="fa fa-plus-circle"/>
-                        <span>Adicionar</span>
+                        <span>#{localeBean.getString('Adicionar')}</span>
                     </h:panelGroup>
                 </aside>
                 <div class="clear"></div>
@@ -77,7 +77,7 @@
                     <hr/>
                     <a href="#close" title="Close" id="close-add-guest-modal" class="close-add-guest-modal">X</a>
                     <h:panelGroup layout="block" id="modal-users-container" class="modal-users-container">
-                        <h:inputText id="guest-user-search" class="guest-user-search" pt:placeholder="Procure usuários para colaborar com o seu documento" value="#{docsCreateBean.userSearch}">
+                        <h:inputText id="guest-user-search" class="guest-user-search" pt:placeholder="#{localeBean.getString('Procure usuários para colaborar com o seu documento')}" value="#{docsCreateBean.userSearch}">
                             <f:ajax listener="#{docsCreateBean.findUsers()}" event="keyup" render="users-container"/>
                         </h:inputText>
                         <h:panelGroup layout="block" id="users-container" class="users-container">
@@ -96,7 +96,7 @@
                         </h:panelGroup>
                         <h:panelGroup layout="block" id="chosen-user-container-title">
                             <ui:fragment rendered="#{!docsCreateBean.chosenSocialProfileList.isEmpty()}">
-                                <h1>Convidados</h1>
+                                <h1>#{localeBean.getString('Convidados')}</h1>
                             </ui:fragment>
                         </h:panelGroup>
                         <h:panelGroup layout="block" id="chosen-users-container" class="chosen-users-container">
@@ -126,12 +126,28 @@
                     </div>
                 </div>
             </div>
+            <a id="open-kicked-user-modal" href="#kicked-user-modal"></a>
+            <div id="kicked-user-modal" class="kicked-user-modal">
+                <div>
+                    <h1 class="modal-title">#{localeBean.getString('Você foi removido pelo proprietário.')}</h1>
+                    <hr/>
+                    <div class="modal-buttons">
+                        <a href="../home.xhtml" class="return-to-home">#{localeBean.getString('Sair')}</a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
         </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
         <script type="text/javascript" src="/resources/lib/tinymce/tinymce.min.js"></script>
-        <script type='text/javascript' src='/resources/lib/tinymce/langs/pt_BR.js'></script>
+        <ui:fragment rendered="#{localeBean.acronym eq 'ptBR'}">
+            <script type='text/javascript' src='/resources/lib/tinymce/langs/pt_BR.js'></script>
+        </ui:fragment>
+        <ui:fragment rendered="#{localeBean.acronym eq 'frFR'}">
+            <script type='text/javascript' src='/resources/lib/tinymce/langs/fr_FR.js'></script>
+        </ui:fragment>
         <script type="text/javascript" src="/resources/common/js/docs-create.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
