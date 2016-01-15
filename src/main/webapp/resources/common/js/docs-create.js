@@ -2,9 +2,8 @@ var saveTimer;
 
 $(document).ready(function () {
     tinymce.init({
-        selector: 'textarea',
-        height: 400,
-        width: 650,
+        selector: '#editor',
+        height: 450,
         statusbar: false,
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
@@ -48,6 +47,9 @@ $(document).ready(function () {
     if (getParameterByName("id") != "") {
         connectWebSocket();
     }
+
+    $(document).on('DOMMouseScroll mousewheel', '.chat-messages', preventScrolling);
+    $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
 });
 
 function onMessageReceivedForDocs(evt) {
@@ -75,6 +77,16 @@ function onMessageReceivedForDocs(evt) {
         if (Number(msg.user) === logged_social_profile_id) {
             document.getElementById("open-kicked-user-modal").click();
         }
+    } else if (typeof msg.dateToHimself !== 'undefined') {
+        $(".chat-message .chat-message-date:empty:first").text(msg.dateToHimself);
+        $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
+    } else if (typeof msg.chatMessage !== 'undefined') {
+        loadChatMessageBlock(msg.user, msg.userName, msg.chatMessage, msg.date);
+    } else if (typeof msg.previousMessages !== 'undefined') {
+        var previousMessages = JSON.parse(msg.previousMessages);
+        $.each(previousMessages, function () {
+            loadChatMessageBlock(this.user, this.userName, this.chatMessage, this.date);
+        });
     }
 }
 
@@ -127,7 +139,7 @@ jsf.ajax.addOnEvent(function (data) {
         } else if ($(data.source).hasClass("add-guest-button") || $(data.source).hasClass("remove-guest")) {
             if ($(data.source).hasClass("add-guest-button")) {
                 document.getElementById("close-add-guest-modal").click();
-                if (getParameterByName("id") == "") {
+                if ($(data.source).hasClass("add") && getParameterByName("id") == "") {
                     window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
                     connectWebSocket();
                 }
@@ -143,6 +155,8 @@ jsf.ajax.addOnEvent(function (data) {
                 window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
                 connectWebSocket();
             }
+        } else if ($(data.source).hasClass("close-add-guest-modal")) {
+            document.getElementById("close-add-guest-modal").click();
         }
     }
 });
@@ -152,4 +166,32 @@ function getParameterByName(name) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+$(document).on('keypress', '.chat-send-message', function (e) {
+    if (e.keyCode == 13 && !e.shiftKey)
+    {
+        e.preventDefault();
+        var message = $(this).val();
+        message = message.replace(new RegExp('\r?\n', 'g'), ' ').trim();
+        if (message !== "") {
+            var json = '{"message":"' + message + '", "doc":"' + $("#doc-id").val() + '",'
+                    + '"user":"' + logged_social_profile_id + '", "action":"MESSAGE"}';
+            websocketDocs.send(json);
+            loadChatMessageBlock(logged_social_profile_id, logged_social_profile_name, message, "", "right");
+            $(this).val("");
+        }
+    }
+});
+
+function loadChatMessageBlock(id, name, message, date, direction) {
+    direction = (direction !== undefined) ? direction : (id === logged_social_profile_id ? "right" : "left");
+    var classe = (direction === "right" ? "chat-your-message" : "chat-friend-message");
+    var container = "<div class='chat-message " + classe + "'>"
+            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-sender'>" + name + "</div>"
+            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-text'>" + message + "</p></div>"
+            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-date'>" + date + "</p></div>"
+            + "</div>";
+    $('.chat-messages').append(container);
+    $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
 }

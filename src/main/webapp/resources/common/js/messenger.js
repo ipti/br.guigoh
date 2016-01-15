@@ -83,6 +83,7 @@ function messengerFriends() {
                 $('.friend-name').each(function () {
                     $(this).text(changeNameLength($(this).text(), 26));
                 })
+                $('.friend-name').append("<img class='friend-offline' src='../../resources/common/images/offline-dot.png' />");
             }
             websocketMessenger = new WebSocket("ws://" + window.location.host + "/socket/messenger/" + logged_social_profile_id + "/" + encodeURIComponent(friendsIds));
             websocketMessenger.onopen = persistBoxesAfterPageReload;
@@ -101,24 +102,19 @@ function onMessageReceivedForMessenger(evt) {
         }
         $('#messenger-menu strong').text('(' + friends.length + ')');
         $.each($("#messenger-friends li"), function () {
-            $(this).find(".friend-online").remove();
+            $(this).find(".friend-online").removeClass("friend-online").addClass("friend-offline").attr("src", "../../resources/common/images/offline-dot.png");
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
-                $(this).find(".friend-name").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
+                $(this).find(".friend-offline").removeClass("friend-offline").addClass("friend-online").attr("src", "../../resources/common/images/online-dot.png");
                 var friend = $(this);
                 $(this).remove();
                 $("#messenger-friends").prepend(friend);
-            } else {
-                $(this).find(".friend-name").append("<img class='friend-offline' src='../../resources/common/images/offline-dot.png' />");
             }
         });
         $.each($(".messenger-boxes .box"), function () {
-            $(this).find(".friend-online").remove();
+            $(this).find(".friend-online").removeClass("friend-online").addClass("friend-offline").attr("src", "../../resources/common/images/offline-dot.png");
             if (friends.indexOf($(this).attr("socialprofileid")) !== -1) {
-                $(this).find(".messenger-title").append("<img class='friend-online' src='../../resources/common/images/online-dot.png' />");
-            } else {
-                $(this).find(".messenger-title").append("<img class='friend-offline' src='../../resources/common/images/offline-dot.png' />");
+                $(this).find(".friend-offline").removeClass("friend-offline").addClass("friend-online").attr("src", "../../resources/common/images/online-dot.png");
             }
-
         });
     } else if (typeof msg.message !== 'undefined') {
         if (msg.himself === true) {

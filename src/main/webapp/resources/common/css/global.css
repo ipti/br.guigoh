@@ -697,7 +697,7 @@ aside h3 {
     height: 45px;
     margin: 0 7px;
     border-radius: 10px;
-    border: 1px solid #ccc
+    border: 1px solid #9a9a9a
 }
 
 .send-message {
@@ -710,7 +710,7 @@ aside h3 {
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;  
     outline: none;
-    text-indent: 3px;
+    padding: 0 3px 0 5px;
     font-size: 11px;
 }
 

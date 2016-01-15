@@ -390,7 +390,7 @@ public class DocJpaController implements Serializable {
     public List<Doc> findBySocialProfileId(Integer socialProfileId) {
         EntityManager em = getEntityManager();
         try {
-            List<Doc> docList = (List<Doc>) em.createNativeQuery("select d.* from doc d "
+            List<Doc> docList = (List<Doc>) em.createNativeQuery("select distinct d.* from doc d "
                     + "left join doc_guest dg on d.id = dg.doc_fk "
                     + "where d.creator_social_profile_fk = '" + socialProfileId + "' or dg.social_profile_fk = '" + socialProfileId + "'", Doc.class).getResultList();
             if (docList == null) {

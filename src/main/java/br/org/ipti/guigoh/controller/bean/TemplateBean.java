@@ -48,7 +48,6 @@ public class TemplateBean implements Serializable {
     private void getLoggedSocialProfile() {
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
-        socialProfile.setName(socialProfile.getName().split(" ")[0]);
     }
     
     public void loadPendingFriendsQuantity() {

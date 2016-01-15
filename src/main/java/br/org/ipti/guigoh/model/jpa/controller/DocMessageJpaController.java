@@ -16,6 +16,7 @@ import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -212,4 +213,17 @@ public class DocMessageJpaController implements Serializable {
         }
     }
     
+    public List<DocMessage> getPreviousMessages(Integer docId){
+        EntityManager em = getEntityManager();
+        try {
+            List<DocMessage> docMessageList = (List<DocMessage>) em.createNativeQuery("select * from doc_message "
+                    + "where doc_fk = '" + docId + "' order by date desc", DocMessage.class).getResultList();
+            if (docMessageList == null){
+                docMessageList = new ArrayList<>();
+            }
+            return docMessageList;
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -87,7 +87,7 @@ and open the template in the editor.
                         <div class="header-profile">
                             <div class="greetings">
                                 <p>#{localeBean.getString('Olá, ')}</p>
-                                <p><a class="logged-user" href="/profile/view.xhtml?id=#{templateBean.socialProfile.socialProfileId}">#{templateBean.socialProfile.name}</a></p>
+                                <p><a class="logged-user" href="/profile/view.xhtml?id=#{templateBean.socialProfile.socialProfileId}">#{templateBean.socialProfile.name.split(' ')[0]}</a></p>
                                 <div class="down-arrow pull-right"/>
                                 <div id="logged-user-menu-box">
                                     <div class="options">

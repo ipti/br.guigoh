@@ -68,10 +68,13 @@ public class DocsCreateBean implements Serializable {
             docGuestJpaController.create(docGuest);
             guestList.add(docGuest);
         }
+        resetModal();
+    }
+    
+    public void resetModal() {
         chosenSocialProfileList = new ArrayList<>();
         socialProfileList = new ArrayList<>();
         userSearch = "";
-
     }
 
     public void selectUser(SocialProfile socialProfile) {
