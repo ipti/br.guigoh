@@ -169,6 +169,29 @@
                             #{localeBean.getString('Processando mídias. Aguarde alguns instantes...')}
                         </div>
                     </div>
+                    <div id="success-container" class="wizard-container five">
+                        <p class="container-title">#{localeBean.getString('Sucesso')}!</p>
+                        <p class="container-description">#{localeBean.getString('Seu Objeto Educacional foi submetido com êxito. Mas paciência!')}</p>
+                        <p class="container-description">#{localeBean.getString('Uma equipe de revisores irá avaliar a integridade de sua publicação e, a partir daí, aprovar ou rejeitar o Objeto Educacional na plataforma.')}</p>
+                        <div class="submit-container">
+                            <div class="submit-educational-object">
+                                <a href="publish.xhtml">
+                                    <img src="../resources/common/images/icon-lamp-publish.png"/>
+                                    <p>#{localeBean.getString("Publicar outro")}</p>
+                                    <p>#{localeBean.getString("Objeto Educacional")}</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="back-to-home-container">
+                            <div class="back-to-home">
+                                <a href="../home.xhtml">
+                                    <img src="../resources/common/images/icon-lamp-publish.png"/>
+                                    <p>#{localeBean.getString("Voltar para a página")}</p>
+                                    <p>#{localeBean.getString("inicial")}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
                 <div id="image-cropping-modal" class="image-cropping-modal">

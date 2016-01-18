@@ -7,27 +7,29 @@ $(document).ready(function () {
     window.setInterval(function () {
         $.post("../ping.html");
     }, 1500000);
-    
+
     $(".menu-icon-two").parent().addClass("active");
 
     $(".active-bar").css("width", "20%");
 
     $(".number-container span").click(function () {
-        checkValidation($(".wizard-container.active"));
-        var validated = $(this).parent().hasClass("one")
-                || ($(this).parent().hasClass("two") && stepOne)
-                || ($(this).parent().hasClass("three") && stepOne && stepTwo)
-                || ($(this).parent().hasClass("four") && stepOne && stepTwo && stepThree);
-        if (validated) {
-            $(".number").removeClass("active").removeClass("completed");
-            $(".wizard-container").removeClass("active");
-            $(this).parent().children(".number").addClass("active");
-            $(this).parent().prevAll(".number-container").children(".number").addClass("completed");
-            $(".active-bar").css("width", 20 * $(this).parent().children(".number").text() + "%");
-            $(this).parent().hasClass("one") ? $(".wizard-container.one").addClass("active")
-                    : $(this).parent().hasClass("two") ? $(".wizard-container.two").addClass("active")
-                    : $(this).parent().hasClass("three") ? $(".wizard-container.three").addClass("active")
-                    : $(".wizard-container.four").addClass("active");
+        if (!$(".wizard-container.five").hasClass("active")) {
+            checkValidation($(".wizard-container.active"));
+            var validated = $(this).parent().hasClass("one")
+                    || ($(this).parent().hasClass("two") && stepOne)
+                    || ($(this).parent().hasClass("three") && stepOne && stepTwo)
+                    || ($(this).parent().hasClass("four") && stepOne && stepTwo && stepThree);
+            if (validated) {
+                $(".number").removeClass("active").removeClass("completed");
+                $(".wizard-container").removeClass("active");
+                $(this).parent().children(".number").addClass("active");
+                $(this).parent().prevAll(".number-container").children(".number").addClass("completed");
+                $(".active-bar").css("width", 20 * $(this).parent().children(".number").text() + "%");
+                $(this).parent().hasClass("one") ? $(".wizard-container.one").addClass("active")
+                        : $(this).parent().hasClass("two") ? $(".wizard-container.two").addClass("active")
+                        : $(this).parent().hasClass("three") ? $(".wizard-container.three").addClass("active")
+                        : $(".wizard-container.four").addClass("active");
+            }
         }
     });
 
@@ -363,6 +365,12 @@ jsf.ajax.addOnEvent(function (data) {
                     checkErrorBorder(this, "input");
                 }
             });
+        }
+        if ($(data.source).hasClass("submit-object")) {
+            $(".active-bar").css("width", "100%");
+            $(".number").addClass("completed");
+            $(".wizard-container.four").removeClass("active");
+            $(".wizard-container.five").addClass("active");
         }
     }
 });

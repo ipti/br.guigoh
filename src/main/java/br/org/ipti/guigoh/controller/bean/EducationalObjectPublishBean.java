@@ -215,7 +215,6 @@ public class EducationalObjectPublishBean implements Serializable {
         if (mediaFile3 != null) {
             submitFile(mediaFile3);
         }
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
     }
 
     private void submitFile(Part media) throws IOException, Exception {

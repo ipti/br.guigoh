@@ -529,3 +529,40 @@ div.select {
 .ui-progressbar {
     position: relative;
 }
+
+.submit-container, .back-to-home-container{
+    width: 100%
+}
+
+.submit-container a, .submit-educational-object > span, .back-to-home-container a, .back-to-home > span {
+    text-decoration: none;
+    padding: 25px 15px 25px 25px;
+    display: block;
+}
+
+.submit-educational-object > span, .back-to-home > span {
+    cursor: not-allowed;
+}
+
+.submit-educational-object, .back-to-home {
+    margin: 30px auto 30px;
+    border-radius: 8px;
+    background-color: #a9a9a9;
+    font-weight: bold;
+    font-size: 14px;
+    width: 50%;
+    line-height: 20px;
+}
+
+.submit-educational-object:hover, .back-to-home:hover {
+    background-color: #333;
+}
+
+.submit-educational-object img, .back-to-home img{
+    float: left;
+    margin: -10px 13px 0 -10px;
+}
+
+.submit-educational-object p, .back-to-home p{
+    color: white;
+}
