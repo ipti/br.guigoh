@@ -4,8 +4,10 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
+import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
@@ -14,6 +16,9 @@ import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -49,7 +54,7 @@ public class TemplateBean implements Serializable {
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         socialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
     }
-    
+
     public void loadPendingFriendsQuantity() {
         FriendsJpaController friendsJpaController = new FriendsJpaController();
         pendingFriendsCount = friendsJpaController.findPendingFriendsByToken(socialProfile.getTokenId()).size();
@@ -68,6 +73,24 @@ public class TemplateBean implements Serializable {
         }
     }
 
+    public String getAuthorsSubnetwork(Collection<Author> authors) {
+        UsersJpaController usersJpaController = new UsersJpaController();
+        List<String> subnetworkList = new ArrayList<>();
+        String subnetwork = "";
+        for (Author author : authors) {
+            Users user = usersJpaController.findUsers(author.getEmail());
+            if (user != null && !subnetworkList.contains(user.getSocialProfile().getSubnetworkId().getDescription())) {
+                subnetworkList.add(user.getSocialProfile().getSubnetworkId().getDescription());
+                subnetwork += user.getSocialProfile().getSubnetworkId().getDescription() + " / ";
+            }
+        }
+        if (!subnetwork.equals("")) {
+            return subnetwork.substring(0, subnetwork.length() - 3);
+        } else {
+            return subnetwork;
+        }
+    }
+
     private void getRegisteredUsersQuantity() {
         UsersJpaController usersJpaController = new UsersJpaController();
         registeredUsersCount = usersJpaController.getUsersCount();
@@ -77,7 +100,7 @@ public class TemplateBean implements Serializable {
         socialProfile = new SocialProfile();
 
         admin = reviser = false;
-        
+
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestId = interestsJpaController.findInterestsEntities(1, 0).get(0).getId();
     }

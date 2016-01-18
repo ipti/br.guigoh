@@ -27,6 +27,9 @@ $(document).ready(function () {
         length = maxLength - length;
         $('.max-length').text("(" + length + ")");
     });
+    var subnetworks = $('.subnetworks').text();
+    subnetworks = subnetworks.split(" / ").join("<br/>");
+    $('.subnetworks').html(subnetworks);
 });
 
 $('span.like-object, .illusory-textarea').mousemove(function (e) {

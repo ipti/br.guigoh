@@ -127,6 +127,7 @@
                                     <ui:fragment rendered="#{status.index == (educationalObjectViewBean.educationalObject.authorCollection.size() - 1)}">.</ui:fragment>
                                 </ui:repeat>
                             </div>
+                            <div class="subnetworks">#{templateBean.getAuthorsSubnetwork(educationalObjectViewBean.educationalObject.authorCollection)}</div>
                         </div>
                         <div class="cc">
                             <img class="cc-icon pull-left" src="../resources/common/images/cc.png"/>

@@ -22,6 +22,9 @@
                         <div class="column-list-item">
                             <a href="/educational-object/view.xhtml?id=#{educationalObject.id}"><img class="column-list-image" src="#{educationalObject.image}"/></a>
                             <h2 class="column-object-title"><a href="/educational-object/view.xhtml?id=#{educationalObject.id}">#{educationalObject.name}</a></h2>
+                            <p class="column-object-subnetwork">
+                                #{templateBean.getAuthorsSubnetwork(educationalObject.authorCollection)}
+                            </p>
                             <small class="column-object-author"> #{localeBean.getString("Publicado por")} 
                                 <a href="/profile/view.xhtml?id=#{educationalObject.socialProfileId.socialProfileId}">#{educationalObject.socialProfileId.name}</a>
                             </small>

@@ -361,3 +361,8 @@
     margin-top: 5px;
     white-space: pre-wrap;
 }
+
+.subnetworks {
+    font-size: 12px;
+    margin-top: 10px;
+}

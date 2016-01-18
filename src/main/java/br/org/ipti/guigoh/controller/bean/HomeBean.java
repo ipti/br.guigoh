@@ -4,12 +4,18 @@
  */
 package br.org.ipti.guigoh.controller.bean;
 
+import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.NewActivity;
+import br.org.ipti.guigoh.model.entity.Subnetwork;
+import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.DiscussionTopicJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;

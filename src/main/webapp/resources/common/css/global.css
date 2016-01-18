@@ -109,6 +109,13 @@ hr {
     text-decoration: none;
 }
 
+.column-object-subnetwork {
+    font-size: 12px;
+    font-weight: normal;
+    color: gray;
+    line-height: 18px;
+}
+
 .column-object-author {
     font-size: 12px;
     font-weight: normal;
@@ -132,7 +139,7 @@ hr {
 }
 
 .column-object-description {
-    padding-top: 24px;
+    padding-top: 15px;
     line-height: 17px;
     float: left;
     width: 80%;
