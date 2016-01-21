@@ -18,7 +18,7 @@
         </f:metadata>
     </ui:define>
     <ui:define name="content">
-        <h:form prependId="false">
+        <h:form prependId="false" enctype="multipart/form-data">
             <section id="content">
                 <div class="title-container">
                     <div class="title">
@@ -37,6 +37,7 @@
                     <h:commandLink class="save-text">
                         <f:ajax listener="#{docsCreateBean.save()}" execute="title text" render="doc-id title"/>
                     </h:commandLink>
+                    <input accept="image/x-png, image/jpeg" type="file" id="image"/>
                 </div>
                 <aside>
                     <div class="collaborators">

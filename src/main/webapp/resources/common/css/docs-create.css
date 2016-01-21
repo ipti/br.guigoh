@@ -380,6 +380,6 @@ aside {
     color: gray;
 }
 
-.chat-send-message {
-    
+#image {
+    display: none;
 }

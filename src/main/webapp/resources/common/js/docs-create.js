@@ -1,4 +1,5 @@
 var saveTimer;
+var imageFieldName;
 
 $(document).ready(function () {
     tinymce.init({
@@ -8,9 +9,10 @@ $(document).ready(function () {
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks fullscreen',
-            'insertdatetime media table contextmenu paste'
+            'insertdatetime table contextmenu paste'
         ],
         toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        relative_urls: false,
         setup: function (ed) {
             ed.on('keyup change', function (e) {
                 if (tinymce.activeEditor.getBody().getAttribute('contenteditable') != "false") {
@@ -37,7 +39,24 @@ $(document).ready(function () {
                 $(".doc-title").attr("readonly", "true");
                 tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
             }
+        },
+        file_browser_callback: function (field_name, url, type, win) {
+            if (type == 'image') {
+                $("#image").click();
+                imageFieldName = win.document.getElementById(field_name);
+            }
         }
+    });
+
+    $("#image").change(function () {
+        if (this.files && this.files[0]) {
+            var FR = new FileReader();
+            FR.onload = function (e) {
+                imageFieldName.value = e.target.result;
+            };
+            FR.readAsDataURL(this.files[0]);
+        }
+        $("#image").val("");
     });
 
     $(".creator-user span, .guest-user span").each(function () {
