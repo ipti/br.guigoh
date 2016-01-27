@@ -177,6 +177,8 @@ public class SocialProfile implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "socialProfile")
     private Collection<Educations> educationsCollection;
 
+    private transient String docPermission;
+    
     public SocialProfile() {
     }
 
@@ -570,6 +572,14 @@ public class SocialProfile implements Serializable {
 
     public void setDocMessageCollection(Collection<DocMessage> docMessageCollection) {
         this.docMessageCollection = docMessageCollection;
+    }
+
+    public String getDocPermission() {
+        return docPermission;
+    }
+
+    public void setDocPermission(String docPermission) {
+        this.docPermission = docPermission;
     }
     
 }

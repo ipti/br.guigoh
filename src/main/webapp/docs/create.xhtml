@@ -42,7 +42,7 @@
                 <aside>
                     <div class="collaborators">
                         <span class="creator-label">#{localeBean.getString('Proprietário')}</span>
-                        <div class="collaborator-user creator-user">
+                        <div class="collaborator-user creator-user #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}">
                             <h:outputText class="hidden user-id" value="#{docsCreateBean.ownerSocialProfile.socialProfileId}"/>
                             <img class="creator-photo" src="#{docsCreateBean.ownerSocialProfile.photo}"/>
                             <span>#{docsCreateBean.ownerSocialProfile.name}</span>
@@ -51,7 +51,7 @@
                         </div>
                         <span class="guests-label">#{localeBean.getString('Convidados')}</span>
                         <h:panelGroup layout="block" id="guests">
-                            <ui:repeat value="#{docsCreateBean.guestList}" var="guest">
+                            <ui:repeat value="#{docsCreateBean.guestList}" var="guest" varStatus="status">
                                 <div class="collaborator-user guest-user">
                                     <h:outputText class="hidden user-id" value="#{guest.socialProfileFk.socialProfileId}"/>
                                     <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
@@ -61,7 +61,18 @@
                                         <f:ajax listener="#{docsCreateBean.removeGuest(guest)}" render="guests"/>
                                     </h:commandLink>
                                     <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
-                                    <i class="user-situation fa fa-eye"/>
+                                    <ui:fragment rendered="#{guest.permission == 'RW'}">
+                                        <h:panelGroup layout="block">
+                                            <i class="fa fa-pencil user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
+                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'R', false)}"  render="guests"/>
+                                        </h:panelGroup>
+                                    </ui:fragment>
+                                    <ui:fragment rendered="#{guest.permission == 'R'}">
+                                        <h:panelGroup layout="block">
+                                            <i class="fa fa-eye user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
+                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'RW', false)}" render="guests"/>
+                                        </h:panelGroup>
+                                    </ui:fragment>
                                 </div>
                             </ui:repeat>
                         </h:panelGroup>
@@ -95,7 +106,7 @@
                         X
                     </h:commandLink>
                     <h:panelGroup layout="block" id="modal-users-container" class="modal-users-container">
-                        <h:inputText id="guest-user-search" class="guest-user-search" pt:placeholder="#{localeBean.getString('Procure usuários para colaborar com o seu documento')}" value="#{docsCreateBean.userSearch}">
+                        <h:inputText id="guest-user-search" class="guest-user-search" autocomplete="off" pt:placeholder="#{localeBean.getString('Procure usuários para colaborar com o seu documento')}" value="#{docsCreateBean.userSearch}">
                             <f:ajax listener="#{docsCreateBean.findUsers()}" event="keyup" render="users-container"/>
                         </h:inputText>
                         <h:panelGroup layout="block" id="users-container" class="users-container">
@@ -115,10 +126,11 @@
                         <h:panelGroup layout="block" id="chosen-user-container-title">
                             <ui:fragment rendered="#{!docsCreateBean.chosenSocialProfileList.isEmpty()}">
                                 <h1>#{localeBean.getString('Convidados')}</h1>
+                                <span></span>
                             </ui:fragment>
                         </h:panelGroup>
                         <h:panelGroup layout="block" id="chosen-users-container" class="chosen-users-container">
-                            <ui:repeat value="#{docsCreateBean.chosenSocialProfileList}" var="chosenSocialProfile">
+                            <ui:repeat value="#{docsCreateBean.chosenSocialProfileList}" var="chosenSocialProfile" varStatus="status">
                                 <h:panelGroup layout="block" class="user-container">
                                     <f:ajax event="click" listener="#{docsCreateBean.removeChosenUser(chosenSocialProfile)}" execute="guest-user-search" render="users-container chosen-users-container chosen-user-container-title"/>
                                     <div class="user">
@@ -127,6 +139,18 @@
                                         <p class="subresult" title="#{chosenSocialProfile.cityId.name}">#{chosenSocialProfile.cityId.name}/#{chosenSocialProfile.stateId.acronyms}</p>
                                         <p class="subresult" title="#{chosenSocialProfile.subnetworkId.description}">#{chosenSocialProfile.subnetworkId.description}</p>
                                         <p class="subresult" title="#{chosenSocialProfile.roleId.name}">#{chosenSocialProfile.roleId.name}</p>
+                                        <ui:fragment rendered="#{chosenSocialProfile.docPermission == 'RW'}">
+                                            <h:panelGroup layout="block" class="user-permission">
+                                                <i class="fa fa-pencil"/>
+                                                <f:ajax event="click" listener="#{docsCreateBean.changePermission(status.index, 'R', true)}"  render="chosen-users-container"/>
+                                            </h:panelGroup>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{chosenSocialProfile.docPermission == 'R'}">
+                                            <h:panelGroup layout="block" class="user-permission">
+                                                <i class="fa fa-eye"/>
+                                                <f:ajax event="click" listener="#{docsCreateBean.changePermission(status.index, 'RW', true)}" render="chosen-users-container"/>
+                                            </h:panelGroup>
+                                        </ui:fragment>
                                     </div>
                                 </h:panelGroup>
                             </ui:repeat>
@@ -136,7 +160,7 @@
                     <hr/>
                     <div class="modal-buttons">
                         <h:commandLink class="add-guest-button add" onclick="return fillText();">
-                            <f:ajax listener="#{docsCreateBean.addGuest()}" render="doc-id guests title text modal-users-container" execute="title text"/>
+                            <f:ajax listener="#{docsCreateBean.addGuests()}" render="doc-id guests title text modal-users-container" execute="title text"/>
                             #{localeBean.getString('Adicionar')}
                         </h:commandLink>
                         <h:commandLink class="add-guest-button cancel">

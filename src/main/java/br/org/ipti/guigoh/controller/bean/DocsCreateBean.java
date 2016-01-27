@@ -56,7 +56,7 @@ public class DocsCreateBean implements Serializable {
         }
     }
 
-    public void addGuest() throws Exception {
+    public void addGuests() throws Exception {
         if (docId == null) {
             save();
         }
@@ -64,7 +64,7 @@ public class DocsCreateBean implements Serializable {
             DocGuest docGuest = new DocGuest();
             docGuest.setDocFk(docJpaController.findDoc(docId));
             docGuest.setSocialProfileFk(socialProfile);
-            docGuest.setPermission("RW");
+            docGuest.setPermission(socialProfile.getDocPermission());
             docGuestJpaController.create(docGuest);
             guestList.add(docGuest);
         }
@@ -79,7 +79,17 @@ public class DocsCreateBean implements Serializable {
 
     public void selectUser(SocialProfile socialProfile) {
         socialProfileList.remove(socialProfile);
+        socialProfile.setDocPermission("RW");
         chosenSocialProfileList.add(socialProfile);
+    }
+    
+    public void changePermission(int index, String permission, boolean modal) throws RollbackFailureException, Exception{
+        if (modal) {
+            chosenSocialProfileList.get(index).setDocPermission(permission);
+        } else {
+            guestList.get(index).setPermission(permission);
+            docGuestJpaController.edit(guestList.get(index));
+        }
     }
 
     public void removeChosenUser(SocialProfile socialProfile) {
@@ -97,6 +107,9 @@ public class DocsCreateBean implements Serializable {
             List<Integer> excludedSocialProfileIdList = new ArrayList<>();
             chosenSocialProfileList.stream().forEach((socialProfile) -> {
                 excludedSocialProfileIdList.add(socialProfile.getSocialProfileId());
+            });
+            guestList.stream().forEach((docGuest) -> {
+                excludedSocialProfileIdList.add(docGuest.getSocialProfileFk().getSocialProfileId());
             });
             socialProfileList = socialProfileJpaController.findSocialProfiles(userSearch, mySocialProfile.getTokenId(), false, false, excludedSocialProfileIdList);
         } else {

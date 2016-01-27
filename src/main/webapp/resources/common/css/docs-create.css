@@ -84,7 +84,16 @@ aside {
     font-size: 11px;
 }
 
-.status-icon {
+.creator-user .status-icon {
+    float: right;
+    margin-top: 12px;
+}
+
+.creator-user.owner .status-icon{
+    margin-right: 17px;
+}
+
+.guest-user .status-icon {
     float: right;
     margin-top: 12px;
 }
@@ -94,19 +103,19 @@ aside {
     margin-left: 5px;
     margin-top: 5px;
     color: red;
-    display: none;
-}
-
-.guest-user:hover .remove-guest{
-    display: block;
 }
 
 .user-situation {
     float: right;
-    margin-top: 8px;
-    margin-right: 8px;
+    margin-top: 3px;
+    padding: 5px;
+    margin-right: 3px;
     width: 15px;
     height: 15px;
+}
+
+.guest-user .user-situation.owner:hover {
+    box-shadow: 0px 0px 3px #000;
 }
 
 .add-guest {
@@ -244,6 +253,7 @@ aside {
     border: 1px solid #C1C1C1;
     margin-bottom: 20px;
     cursor: pointer;
+    position: relative;
 }
 
 .user:hover {
@@ -269,6 +279,17 @@ aside {
     font-size: 11px;
     color: gray;
     line-height: 18px;
+}
+
+.user-permission i {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 5px;
+}
+
+.user-permission i:hover {
+    box-shadow: 0px 0px 3px #000;
 }
 
 #chosen-user-container-title h1 {
