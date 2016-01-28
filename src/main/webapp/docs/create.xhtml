@@ -44,6 +44,7 @@
                         <span class="creator-label">#{localeBean.getString('Proprietário')}</span>
                         <div class="collaborator-user creator-user #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}">
                             <h:outputText class="hidden user-id" value="#{docsCreateBean.ownerSocialProfile.socialProfileId}"/>
+                            <h:outputText class="hidden user-permission" value="RW"/>
                             <img class="creator-photo" src="#{docsCreateBean.ownerSocialProfile.photo}"/>
                             <span>#{docsCreateBean.ownerSocialProfile.name}</span>
                             <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
@@ -54,6 +55,7 @@
                             <ui:repeat value="#{docsCreateBean.guestList}" var="guest" varStatus="status">
                                 <div class="collaborator-user guest-user">
                                     <h:outputText class="hidden user-id" value="#{guest.socialProfileFk.socialProfileId}"/>
+                                    <h:outputText class="hidden user-permission" value="#{guest.permission}"/>
                                     <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
                                     <span title="#{guest.socialProfileFk.name}">#{guest.socialProfileFk.name}</span>
                                     <h:commandLink class="remove-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
@@ -62,13 +64,13 @@
                                     </h:commandLink>
                                     <img class="status-icon" src="../resources/common/images/offline-dot.png"/>
                                     <ui:fragment rendered="#{guest.permission == 'RW'}">
-                                        <h:panelGroup layout="block">
+                                        <h:panelGroup layout="block" class="user-situation-container read-and-write">
                                             <i class="fa fa-pencil user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
                                             <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'R', false)}"  render="guests"/>
                                         </h:panelGroup>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{guest.permission == 'R'}">
-                                        <h:panelGroup layout="block">
+                                        <h:panelGroup layout="block" class="user-situation-container read">
                                             <i class="fa fa-eye user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
                                             <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'RW', false)}" render="guests"/>
                                         </h:panelGroup>

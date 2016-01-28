@@ -16,16 +16,30 @@ $(document).ready(function () {
         setup: function (ed) {
             ed.on('keyup change', function (e) {
                 if (tinymce.activeEditor.getBody().getAttribute('contenteditable') != "false") {
+                    $(".collaborator-user").each(function () {
+                        if (logged_social_profile_id == $(this).find(".user-id").text()) {
+                            $(this).find(".user-situation").css("color", "darkgoldenrod");
+                        }
+                    });
+                    var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_ON"}';
+                    websocketDocs.send(json);
                     if (getParameterByName("id") != "") {
                         var text = tinyMCE.activeEditor.getContent();
-                        var json = '{"doc":"' + $("#doc-id").val() + '", "text":"' + text.replace(/"/g, "'").replace(/\n/g, "\\n") + '", "action":"UPDATE"}';
+                        json = '{"doc":"' + $("#doc-id").val() + '", "text":"' + text.replace(/"/g, "'").replace(/\n/g, "\\n") + '", "action":"UPDATE"}';
                         websocketDocs.send(json);
                     }
                     clearTimeout(saveTimer);
                     saveTimer = setTimeout(function () {
+                        $(".collaborator-user").each(function () {
+                            if (logged_social_profile_id == $(this).find(".user-id").text()) {
+                                $(this).find(".user-situation").css("color", "rgb(51, 51, 51)");
+                            }
+                        });
                         $("#text").val(tinyMCE.activeEditor.getContent());
                         $(".save-text").click();
                         $(".doc-saved").addClass("visible");
+                        json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_OFF"}';
+                        websocketDocs.send(json);
                         setTimeout(function () {
                             $(".doc-saved").removeClass("visible");
                         }, 5000);
@@ -35,10 +49,14 @@ $(document).ready(function () {
         },
         init_instance_callback: function (editor) {
             editor.setContent($("#text").val());
-            if (logged_social_profile_id != $(".creator-user").find(".user-id").text()) {
-                $(".doc-title").attr("readonly", "true");
-                tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
-            }
+            $(".guest-user").each(function () {
+                if (logged_social_profile_id == $(this).find(".user-id").text()) {
+                    $(".doc-title").attr("readonly", "true");
+                    if ($(this).find(".user-permission").text() == "R") {
+                        tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+                    }
+                }
+            });
         },
         file_browser_callback: function (field_name, url, type, win) {
             if (type == 'image') {
@@ -106,6 +124,48 @@ function onMessageReceivedForDocs(evt) {
         $.each(previousMessages, function () {
             loadChatMessageBlock(this.user, this.userName, this.chatMessage, this.date);
         });
+    } else if (msg.action === 'PERMISSION') {
+        $(".guest-user").each(function () {
+            if ($(this).children(".user-id").text() === msg.user) {
+                if ($(this).children(".user-situation-container").hasClass("read-and-write")) {
+                    $(this).children(".user-situation-container").addClass("read").removeClass("read-and-write");
+                    $(this).children(".user-situation-container").children("i").removeClass("fa-pencil").addClass("fa-eye");
+                    $(this).children(".user-permission").text("R");
+                    tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+                } else {
+                    $(this).children(".user-situation-container").removeClass("read").addClass("read-and-write");
+                    $(this).children(".user-situation-container").children("i").addClass("fa-pencil").removeClass("fa-eye");
+                    $(this).children(".user-permission").text("RW");
+                    tinymce.activeEditor.getBody().setAttribute('contenteditable', true);
+                }
+            }
+        });
+    } else if (msg.action === "EDITING_ON") {
+        var loggedUserPermission;
+        $(".collaborator-user").each(function () {
+            if ($(this).children(".user-id").text() == msg.user) {
+                $(this).find(".user-situation").css("color", "darkgoldenrod");
+            }
+            if ($(this).children(".user-id").text() == logged_social_profile_id) {
+                loggedUserPermission = $(this).children(".user-permission").text();
+            }
+        });
+        if (logged_social_profile_id != msg.user && loggedUserPermission == "RW") {
+            tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+        }
+    } else if (msg.action === "EDITING_OFF") {
+        var loggedUserPermission;
+        $(".collaborator-user").each(function () {
+            if ($(this).children(".user-id").text() == msg.user) {
+                $(this).find(".user-situation").css("color", "rgb(51, 51, 51)");
+            }
+            if ($(this).children(".user-id").text() == logged_social_profile_id) {
+                loggedUserPermission = $(this).children(".user-permission").text();
+            }
+        });
+        if (logged_social_profile_id != msg.user && loggedUserPermission == "RW") {
+            tinymce.activeEditor.getBody().setAttribute('contenteditable', true);
+        }
     }
 }
 
@@ -174,8 +234,16 @@ jsf.ajax.addOnEvent(function (data) {
                 window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
                 connectWebSocket();
             }
+            $(".guest-user").each(function () {
+                if (logged_social_profile_id == $(this).find(".user-id").text()) {
+                    $(".doc-title").attr("readonly", "true");
+                }
+            });
         } else if ($(data.source).hasClass("close-add-guest-modal")) {
             document.getElementById("close-add-guest-modal").click();
+        } else if ($(data.source).hasClass("user-situation-container")) {
+            var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + $(data.source).parent().children(".user-id").text() + '", "action":"PERMISSION"}';
+            websocketDocs.send(json);
         }
     }
 });

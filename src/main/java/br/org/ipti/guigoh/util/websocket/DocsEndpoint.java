@@ -71,6 +71,7 @@ public class DocsEndpoint {
                     }
                 }
                 break;
+            case "PERMISSION":
             case "KICK":
                 for (Session s : session.getOpenSessions()) {
                     if (s.isOpen() && s.getUserProperties().get("doc").equals(obj.getString("doc"))
@@ -106,6 +107,14 @@ public class DocsEndpoint {
                                     .add("dateToHimself", date).build()
                                     .toString());
                         }
+                    }
+                }
+                break;
+            case "EDITING_ON":
+            case "EDITING_OFF":
+                for (Session s : session.getOpenSessions()) {
+                    if (s.isOpen() && s.getUserProperties().get("doc").equals(obj.getString("doc")) && !session.equals(s)) {
+                        s.getBasicRemote().sendObject(jsonString);
                     }
                 }
                 break;
