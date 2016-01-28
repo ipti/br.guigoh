@@ -11,9 +11,16 @@ $(document).ready(function () {
             'searchreplace visualblocks fullscreen',
             'insertdatetime table contextmenu paste'
         ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image history',
         relative_urls: false,
         setup: function (ed) {
+            ed.addButton('history', {
+                title: 'Exibir histórico',
+                image: '../resources/common/images/history.png',
+                onclick: function () {
+                    //fazer histórico
+                }
+            });
             ed.on('keyup change', function (e) {
                 if (tinymce.activeEditor.getBody().getAttribute('contenteditable') != "false") {
                     $(".collaborator-user").each(function () {
