@@ -66,13 +66,13 @@
                                     <ui:fragment rendered="#{guest.permission == 'RW'}">
                                         <h:panelGroup layout="block" class="user-situation-container read-and-write">
                                             <i class="fa fa-pencil user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
-                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'R', false)}"  render="guests"/>
+                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'R', false)}"/>
                                         </h:panelGroup>
                                     </ui:fragment>
                                     <ui:fragment rendered="#{guest.permission == 'R'}">
                                         <h:panelGroup layout="block" class="user-situation-container read">
                                             <i class="fa fa-eye user-situation #{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId ? 'owner' : ''}"/>
-                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'RW', false)}" render="guests"/>
+                                            <f:ajax disabled="#{docsCreateBean.ownerSocialProfile.socialProfileId != docsCreateBean.mySocialProfile.socialProfileId}" event="click" listener="#{docsCreateBean.changePermission(status.index, 'RW', false)}"/>
                                         </h:panelGroup>
                                     </ui:fragment>
                                 </div>

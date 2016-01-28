@@ -21,7 +21,7 @@ $(document).ready(function () {
                     //fazer histórico
                 }
             });
-            ed.on('keyup change', function (e) {
+            ed.on('keyup change undo redo', function (e) {
                 if (tinymce.activeEditor.getBody().getAttribute('contenteditable') != "false") {
                     $(".collaborator-user").each(function () {
                         if (logged_social_profile_id == $(this).find(".user-id").text()) {
@@ -249,6 +249,15 @@ jsf.ajax.addOnEvent(function (data) {
         } else if ($(data.source).hasClass("close-add-guest-modal")) {
             document.getElementById("close-add-guest-modal").click();
         } else if ($(data.source).hasClass("user-situation-container")) {
+            if ($(data.source).hasClass("read-and-write")) {
+                $(data.source).addClass("read").removeClass("read-and-write");
+                $(data.source).children("i").removeClass("fa-pencil").addClass("fa-eye");
+                $(data.source).parent().children(".user-permission").text("R");
+            } else {
+                $(data.source).removeClass("read").addClass("read-and-write");
+                $(data.source).children("i").addClass("fa-pencil").removeClass("fa-eye");
+                $(data.source).parent().children(".user-permission").text("RW");
+            }
             var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + $(data.source).parent().children(".user-id").text() + '", "action":"PERMISSION"}';
             websocketDocs.send(json);
         }
