@@ -212,4 +212,14 @@ public class DocHistoryJpaController implements Serializable {
         }
     }
     
+    public List<DocHistory> findByDocId(Integer docId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<DocHistory> docHistoryList = (List<DocHistory>) em.createNativeQuery("select * from doc_history "
+                    + "where doc_fk = '" + docId + "' order by date desc", DocHistory.class).getResultList();
+            return docHistoryList;
+        } finally {
+            em.close();
+        }
+    }
 }

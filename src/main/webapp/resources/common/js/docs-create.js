@@ -18,7 +18,7 @@ $(document).ready(function () {
                 title: 'Exibir histórico',
                 image: '../resources/common/images/history.png',
                 onclick: function () {
-                    //fazer histórico
+                    $(".load-history").click();
                 }
             });
             ed.on('keyup change undo redo', function (e) {
@@ -260,6 +260,15 @@ jsf.ajax.addOnEvent(function (data) {
             }
             var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + $(data.source).parent().children(".user-id").text() + '", "action":"PERMISSION"}';
             websocketDocs.send(json);
+        } else if ($(data.source).hasClass("load-history")) {
+            if ($(".doc-history").length) {
+                document.getElementById("open-history-modal").click();
+            }
+        } else if ($(data.source).hasClass("restore")) {
+            tinyMCE.activeEditor.setContent($("#text").val());
+            document.getElementById("close-history-modal").click();
+            json = '{"doc":"' + $("#doc-id").val() + '", "text":"' + $("#text").val() + '", "action":"UPDATE"}';
+            websocketDocs.send(json);
         }
     }
 });
@@ -298,3 +307,17 @@ function loadChatMessageBlock(id, name, message, date, direction) {
     $('.chat-messages').append(container);
     $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
 }
+
+$(document).on("click", ".doc-collapsed", function () {
+    if ($(this).find(".fa-plus-circle").length) {
+        $(".modal-history-container").find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
+        $(".history-button.restore, .doc-history").hide();
+        $(this).find(".fa-plus-circle").addClass("fa-minus-circle").removeClass("fa-plus-circle");
+        $(this).next().show();
+        $(this).next().next().show();
+    } else {
+        $(this).find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
+        $(this).next().hide();
+        $(this).next().next().hide();
+    }
+});

@@ -184,6 +184,48 @@
                     </div>
                 </div>
             </div>
+            <h:commandLink class="load-history">
+                <f:ajax listener="#{docsCreateBean.loadDocHistory}" render="history-modal"/>
+            </h:commandLink>
+            <a id="open-history-modal" href="#history-modal"></a>
+            <h:panelGroup layout="block" id="history-modal" class="history-modal">
+                <div>
+                    <h1 class="modal-title">#{localeBean.getString('Histórico')}</h1>
+                    <hr/>
+                    <a href="#close" title="Close" id="close-history-modal" class="close-history-modal">X</a>
+                    <div id="modal-history-container" class="modal-history-container">
+                        <div>
+                            <ui:repeat var="docHistory" value="#{docsCreateBean.docHistoryList}">
+                                <div class="doc-collapsed">
+                                    <div>
+                                        <i class="fa fa-plus-circle"/>
+                                        <h:outputText styleClass="doc-date" value="#{docHistory.date}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"></f:convertDateTime>
+                                        </h:outputText>
+                                        <span class="doc-author">#{docHistory.editorSocialProfileFk.name}</span>
+                                    </div>
+                                </div>
+                                <div class="doc-history">
+                                    <div>
+                                        <h:outputText escape="false" value="#{docHistory.doc}"></h:outputText>
+                                    </div>
+                                </div>
+                                <h:commandLink class="history-button restore" onclick="return fillText();">
+                                    #{localeBean.getString('Restaurar')}
+                                    <f:ajax listener="#{docsCreateBean.restoreDocHistory(docHistory)}" render="text"/>
+                                </h:commandLink>
+                                <div class="clear"></div>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <hr/>
+                    <div class="modal-buttons">
+                        <a href="#close" class="history-button cancel">#{localeBean.getString('Voltar')}</a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </h:panelGroup>
         </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->

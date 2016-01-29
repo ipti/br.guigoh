@@ -14,6 +14,7 @@ import br.org.ipti.guigoh.model.jpa.controller.DocHistoryJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.DocJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class DocsCreateBean implements Serializable {
 
     private List<DocGuest> guestList;
     private List<SocialProfile> socialProfileList, chosenSocialProfileList;
+    private List<DocHistory> docHistoryList;
 
     private DocJpaController docJpaController;
     private DocHistoryJpaController docHistoryJpaController;
@@ -70,11 +72,35 @@ public class DocsCreateBean implements Serializable {
         }
         resetModal();
     }
-    
+
     public void resetModal() {
         chosenSocialProfileList = new ArrayList<>();
         socialProfileList = new ArrayList<>();
         userSearch = "";
+    }
+
+    public void loadDocHistory() {
+        if (docId != null) {
+            docHistoryList = docHistoryJpaController.findByDocId(docId);
+        }
+    }
+
+    public void restoreDocHistory(DocHistory docHistory) throws NonexistentEntityException, RollbackFailureException, Exception {
+        String docHistoryText = docHistory.getDoc();
+        Doc doc = docJpaController.findDoc(docId);
+        
+        docHistory.setDate(doc.getDate());
+        docHistory.setDoc(doc.getDoc());
+        docHistory.setDocFk(doc);
+        docHistory.setEditorSocialProfileFk(doc.getEditorSocialProfileFk());
+        docHistoryJpaController.create(docHistory);
+        
+        doc.setDoc(docHistoryText);
+        doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
+        doc.setDate(utilJpaController.getTimestampServerTime());
+        docJpaController.edit(doc);
+        
+        text = doc.getDoc();
     }
 
     public void selectUser(SocialProfile socialProfile) {
@@ -82,8 +108,8 @@ public class DocsCreateBean implements Serializable {
         socialProfile.setDocPermission("RW");
         chosenSocialProfileList.add(socialProfile);
     }
-    
-    public void changePermission(int index, String permission, boolean modal) throws RollbackFailureException, Exception{
+
+    public void changePermission(int index, String permission, boolean modal) throws RollbackFailureException, Exception {
         if (modal) {
             chosenSocialProfileList.get(index).setDocPermission(permission);
         } else {
@@ -128,7 +154,6 @@ public class DocsCreateBean implements Serializable {
                 DocHistory docHistory = new DocHistory();
                 docHistory.setDate(doc.getDate());
                 docHistory.setDoc(doc.getDoc());
-                docHistory.setTitle(doc.getTitle());
                 docHistory.setDocFk(doc);
                 docHistory.setEditorSocialProfileFk(doc.getEditorSocialProfileFk());
                 docHistoryJpaController.create(docHistory);
@@ -148,7 +173,7 @@ public class DocsCreateBean implements Serializable {
             doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
             doc.setStatus('A');
             docJpaController.create(doc);
-            
+
             docId = doc.getId();
         }
     }
@@ -254,4 +279,13 @@ public class DocsCreateBean implements Serializable {
     public void setChosenSocialProfileList(List<SocialProfile> chosenSocialProfileList) {
         this.chosenSocialProfileList = chosenSocialProfileList;
     }
+
+    public List<DocHistory> getDocHistoryList() {
+        return docHistoryList;
+    }
+
+    public void setDocHistoryList(List<DocHistory> docHistoryList) {
+        this.docHistoryList = docHistoryList;
+    }
+
 }

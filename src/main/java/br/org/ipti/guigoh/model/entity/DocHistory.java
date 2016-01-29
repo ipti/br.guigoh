@@ -37,11 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DocHistory.findByDoc", query = "SELECT d FROM DocHistory d WHERE d.doc = :doc"),
     @NamedQuery(name = "DocHistory.findByDate", query = "SELECT d FROM DocHistory d WHERE d.date = :date")})
 public class DocHistory implements Serializable {
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "title")
-    private String title;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -142,13 +137,4 @@ public class DocHistory implements Serializable {
     public String toString() {
         return "br.org.ipti.guigoh.model.entity.DocHistory[ id=" + id + " ]";
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
 }
