@@ -221,7 +221,7 @@
                             </ui:repeat>
                             <h:panelGroup layout="block" class="load-more" rendered="#{docsCreateBean.docHistoryList.size() gt docsCreateBean.limit}">
                                 <h:commandLink class="load-more-history" value="#{localeBean.getString('Carregar mais')}">
-                                    <f:ajax listener="#{docsCreateBean.loadDocHistory(docsCreateBean.limit + 5)}" render="modal-history-container"/>
+                                    <f:ajax listener="#{docsCreateBean.loadDocHistory(docsCreateBean.limit + 10)}" render="modal-history-container"/>
                                 </h:commandLink>
                             </h:panelGroup>
                         </div>
