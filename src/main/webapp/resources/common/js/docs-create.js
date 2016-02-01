@@ -269,6 +269,8 @@ jsf.ajax.addOnEvent(function (data) {
             document.getElementById("close-history-modal").click();
             json = '{"doc":"' + $("#doc-id").val() + '", "text":"' + $("#text").val() + '", "action":"UPDATE"}';
             websocketDocs.send(json);
+        } else if ($(data.source).hasClass("load-more-history")) {
+            $('#modal-history-container').scrollTop($('#modal-history-container').prop("scrollHeight"));
         }
     }
 });
@@ -309,15 +311,15 @@ function loadChatMessageBlock(id, name, message, date, direction) {
 }
 
 $(document).on("click", ".doc-collapsed", function () {
+    $(this).next().slideToggle( "slow" );
     if ($(this).find(".fa-plus-circle").length) {
         $(".modal-history-container").find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
-        $(".history-button.restore, .doc-history").hide();
-        $(this).find(".fa-plus-circle").addClass("fa-minus-circle").removeClass("fa-plus-circle");
-        $(this).next().show();
+        $(".history-button.restore").not($(this).next().next()).hide();
+        $(".doc-history").not($(this).next()).hide();
         $(this).next().next().show();
+        $(this).find(".fa-plus-circle").addClass("fa-minus-circle").removeClass("fa-plus-circle");
     } else {
-        $(this).find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
-        $(this).next().hide();
         $(this).next().next().hide();
+        $(this).find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
     }
 });

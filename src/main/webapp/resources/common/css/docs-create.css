@@ -490,3 +490,7 @@ aside {
     float: right;
     margin: 9px 0 0 0;
 }
+
+.load-more { 
+    margin-top: 5px;
+}

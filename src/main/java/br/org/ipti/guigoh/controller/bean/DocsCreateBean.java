@@ -35,7 +35,7 @@ import javax.faces.view.ViewScoped;
 public class DocsCreateBean implements Serializable {
 
     private String text, title, userSearch;
-    private Integer docId;
+    private Integer docId, limit;
 
     private Date date;
 
@@ -79,9 +79,10 @@ public class DocsCreateBean implements Serializable {
         userSearch = "";
     }
 
-    public void loadDocHistory() {
+    public void loadDocHistory(Integer limit) {
         if (docId != null) {
             docHistoryList = docHistoryJpaController.findByDocId(docId);
+            this.limit = limit;
         }
     }
 
@@ -193,6 +194,8 @@ public class DocsCreateBean implements Serializable {
                     text = doc.getDoc();
                     ownerSocialProfile = docJpaController.findDoc(docId).getCreatorSocialProfileFk();
                     guestList = docGuestJpaController.findByDocId(docId);
+                    docHistoryList = docHistoryJpaController.findByDocId(docId);
+                    limit = 10;
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
                 }
@@ -286,6 +289,14 @@ public class DocsCreateBean implements Serializable {
 
     public void setDocHistoryList(List<DocHistory> docHistoryList) {
         this.docHistoryList = docHistoryList;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
 }
