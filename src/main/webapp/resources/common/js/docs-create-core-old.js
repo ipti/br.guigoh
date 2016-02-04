@@ -13,18 +13,10 @@ var undoStack = new stack();
 var redoStack = new stack();
 
 $(document).ready(function () {
-    $(".toolbar").append(insertPlugins());
     var collaboratorsIds = logged_social_profile_id == 26 ? "246" : "26";
-    websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs/" + logged_social_profile_id + "/" + encodeURIComponent(collaboratorsIds));
+    websocketDocs = new WebSocket("ws://" + window.location.host + "/socket/docs-old/" + logged_social_profile_id + "/" + encodeURIComponent(collaboratorsIds));
     websocketDocs.onmessage = onMessageReceivedForDocs;
 });
-
-function insertPlugins() {
-    var bold = "<button type='button' id='bold' class='editor-plugin unpressed'>B</button>";
-    var italic = "<button type='button' id='italic' class='editor-plugin unpressed'>I</button>";
-    var plugins = bold + italic;
-    return plugins;
-}
 
 /**
  * For each action done by a collaborator, this method will get the necessary params to replicate to every active participant
@@ -292,34 +284,29 @@ function changeLocalActions(e, initialElement, finalElement, initialHtmlRange, f
         range = finalTextRange;
     }
 
-    if ($(e.target).hasClass("editor-plugin")) {
-        if ($(e.target).attr("id") === "bold") {
-            boldAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange)
+    if (e.type == "paste") {
+        pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.keyCode == keys.backspace) {
+        backspaceAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.keyCode == keys.delete) {
+        deleteAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+    } else if (e.type == "keypress" || e.keyCode == keys.tab) {
+        if (e.keyCode == keys.enter) {
+            enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
+            insertBrOnDeepestChild(initialElement);
+        } else {
+            keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
         }
-    } else {
-        if (e.type == "paste") {
-            pasteAction(e.originalEvent.clipboardData.getData("text").replace("paste+", ""), null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-        } else if (e.keyCode == keys.backspace) {
-            backspaceAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-        } else if (e.keyCode == keys.delete) {
-            deleteAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-        } else if (e.type == "keypress" || e.keyCode == keys.tab) {
-            if (e.keyCode == keys.enter) {
-                enterAction(null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-                insertBrOnDeepestChild(initialElement);
-            } else {
-                keyPressAction(e.keyCode, null, null, initialElement, finalElement, initialHtmlRange, finalHtmlRange, initialTextRange, finalTextRange);
-            }
-        } else if (e.keyCode == keys.ctrlZ) {
-            undoAction();
-            insertOnStack = false;
-        } else if (e.keyCode == keys.ctrlY) {
-            redoAction();
-            insertOnStack = false;
-        } else if (e.keyCode == undefined) {
-            insertOnStack = false;
-        }
+    } else if (e.keyCode == keys.ctrlZ) {
+        undoAction();
+        insertOnStack = false;
+    } else if (e.keyCode == keys.ctrlY) {
+        redoAction();
+        insertOnStack = false;
+    } else if (e.keyCode == undefined) {
+        insertOnStack = false;
     }
+
 
     if (insertOnStack) {
         var stackElement = {
