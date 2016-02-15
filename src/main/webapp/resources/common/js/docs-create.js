@@ -28,9 +28,10 @@ $(document).ready(function () {
                             $(this).find(".user-situation").css("color", "darkgoldenrod");
                         }
                     });
-                    var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_ON"}';
-                    websocketDocs.send(json);
+                    var json = "";
                     if (getParameterByName("id") != "") {
+                        json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_ON"}';
+                        websocketDocs.send(json);
                         var text = tinyMCE.activeEditor.getContent();
                         json = '{"doc":"' + $("#doc-id").val() + '", "text":"' + text.replace(/"/g, "'").replace(/\n/g, "\\n") + '", "action":"UPDATE"}';
                         websocketDocs.send(json);
@@ -45,8 +46,10 @@ $(document).ready(function () {
                         $("#text").val(tinyMCE.activeEditor.getContent());
                         $(".save-text").click();
                         $(".doc-saved").addClass("visible");
-                        json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_OFF"}';
-                        websocketDocs.send(json);
+                        if (getParameterByName("id") != "") {
+                            json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_OFF"}';
+                            websocketDocs.send(json);
+                        }
                         setTimeout(function () {
                             $(".doc-saved").removeClass("visible");
                         }, 5000);
@@ -311,7 +314,7 @@ function loadChatMessageBlock(id, name, message, date, direction) {
 }
 
 $(document).on("click", ".doc-collapsed", function () {
-    $(this).next().slideToggle( "slow" );
+    $(this).next().slideToggle("slow");
     if ($(this).find(".fa-plus-circle").length) {
         $(".modal-history-container").find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
         $(".history-button.restore").not($(this).next().next()).hide();
