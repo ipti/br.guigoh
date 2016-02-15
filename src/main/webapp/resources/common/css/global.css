@@ -365,6 +365,8 @@ aside h3 {
 }
 
 .menu-icon-five {
+    background: url('../images/menu-icons.png') no-repeat;
+    background-position: -110px -45px;
 }
 
 .menu-icon-six {
@@ -389,6 +391,7 @@ aside h3 {
 }
 
 .menu-icons.active > .menu-icon-five, .menu-icon-five:hover {
+    background-position: -110px -164px;
 }
 
 .menu-icons.active > .menu-icon-six, .menu-icon-six:hover {
