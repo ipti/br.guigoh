@@ -36,6 +36,7 @@ public class DocsCreateBean implements Serializable {
 
     private String text, title, userSearch;
     private Integer docId, limit;
+    private Character publicAccess;
 
     private Date date;
 
@@ -77,6 +78,13 @@ public class DocsCreateBean implements Serializable {
         chosenSocialProfileList = new ArrayList<>();
         socialProfileList = new ArrayList<>();
         userSearch = "";
+    }
+    
+    public void changeDocStatus() throws NonexistentEntityException, RollbackFailureException, Exception {
+        Doc doc = docJpaController.findDoc(docId);
+        publicAccess = (publicAccess == 'Y') ? 'N' : 'Y';
+        doc.setPublicAccess(publicAccess);
+        docJpaController.edit(doc);
     }
 
     public void loadDocHistory(Integer limit) {
@@ -173,9 +181,11 @@ public class DocsCreateBean implements Serializable {
             doc.setTitle(title);
             doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
             doc.setStatus('A');
+            doc.setPublicAccess('N');
             docJpaController.create(doc);
 
             docId = doc.getId();
+            publicAccess = doc.getPublicAccess();
         }
     }
 
@@ -196,6 +206,7 @@ public class DocsCreateBean implements Serializable {
                     guestList = docGuestJpaController.findByDocId(docId);
                     docHistoryList = docHistoryJpaController.findByDocId(docId);
                     limit = 10;
+                    publicAccess = doc.getPublicAccess();
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
                 }
@@ -299,4 +310,11 @@ public class DocsCreateBean implements Serializable {
         this.limit = limit;
     }
 
+    public Character getPublicAccess() {
+        return publicAccess;
+    }
+
+    public void setPublicAccess(Character publicAccess) {
+        this.publicAccess = publicAccess;
+    }
 }

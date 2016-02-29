@@ -2,6 +2,7 @@ var saveTimer;
 var imageFieldName;
 
 $(document).ready(function () {
+    $(".menu-icon-four").parent().addClass("active");
     tinymce.init({
         selector: '#editor',
         height: 450,
@@ -324,5 +325,13 @@ $(document).on("click", ".doc-collapsed", function () {
     } else {
         $(this).next().next().hide();
         $(this).find(".fa-minus-circle").addClass("fa-plus-circle").removeClass("fa-minus-circle");
+    }
+});
+
+$(document).on("click", ".doc-status", function() {
+    if ($(this).children().hasClass("fa-lock")) {
+        $(this).children().removeClass("fa-lock").addClass("fa-unlock-alt");
+    } else {
+        $(this).children().addClass("fa-lock").removeClass("fa-unlock-alt");
     }
 });

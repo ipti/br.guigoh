@@ -494,3 +494,11 @@ aside {
 .load-more { 
     margin-top: 5px;
 }
+
+.doc-status {
+    color: #9a9a9a;
+}
+
+.doc-status:hover {
+    color: #333;
+}

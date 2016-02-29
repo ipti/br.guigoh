@@ -360,13 +360,14 @@ aside h3 {
 }
 
 .menu-icon-four {
-    background: url('../images/menu-icons.png') no-repeat;
-    background-position: -365px -45px;
+    background: url('../images/menu-icon-docs.png') no-repeat;
+    background-size: 55px;
+    background-position: 20px 15px;
 }
 
 .menu-icon-five {
     background: url('../images/menu-icons.png') no-repeat;
-    background-position: -110px -45px;
+    background-position: -365px -45px;
 }
 
 .menu-icon-six {
@@ -386,12 +387,14 @@ aside h3 {
     background-position: -240px -164px;
 }
 
-.menu-icons.active > .menu-icon-four, .menu-icon-four:hover, #pending-friends:hover + .menu-text {
-    background-position: -365px -164px;
+.menu-icons.active > .menu-icon-four, .menu-icon-four:hover {
+    background: url('../images/menu-icon-docs-hover.png') 50px no-repeat;
+    background-size: 55px;
+    background-position: 20px 15px;
 }
 
-.menu-icons.active > .menu-icon-five, .menu-icon-five:hover {
-    background-position: -110px -164px;
+.menu-icons.active > .menu-icon-five, .menu-icon-five:hover, #pending-friends:hover + .menu-text  {
+    background-position: -365px -164px;
 }
 
 .menu-icons.active > .menu-icon-six, .menu-icon-six:hover {

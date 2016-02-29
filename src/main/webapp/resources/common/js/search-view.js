@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".menu-icon-five").parent().addClass("active");
+    $(".menu-icon-six").parent().addClass("active");
 
     $(".general-search input").focus();
 });

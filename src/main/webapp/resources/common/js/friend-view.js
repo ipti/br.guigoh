@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(".menu-icon-four").parent().addClass("active");
+    $(".menu-icon-five").parent().addClass("active");
     
     $.each($(".user-name a, .user-job"), function () {
         var limit = $(this).hasClass("user-job") ? 25 : 22;

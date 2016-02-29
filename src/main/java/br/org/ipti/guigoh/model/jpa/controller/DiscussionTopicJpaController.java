@@ -285,7 +285,10 @@ public class DiscussionTopicJpaController implements Serializable {
                     + "union "
                     + "select eo.id, eol.social_profile_fk, eo.name, eol.date as data, 'EOL' as type from educational_object_like eol "
                     + "join educational_object eo on eo.id = eol.educational_object_fk "
-                    + "where eo.status = 'AC') "
+                    + "where eo.status = 'AC' "
+                    + "union "
+                    + "select doc.id, doc.creator_social_profile_fk, doc.title, doc.date as data, 'DOC' as type from doc doc "
+                    + "where doc.status = 'A' and doc.public_access = 'Y') "
                     + "as news order by data desc limit " + quantity).getResultList();
             List<NewActivity> newActivityList = new ArrayList<>();
             SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Doc.findById", query = "SELECT d FROM Doc d WHERE d.id = :id"),
     @NamedQuery(name = "Doc.findByDoc", query = "SELECT d FROM Doc d WHERE d.doc = :doc"),
     @NamedQuery(name = "Doc.findByDate", query = "SELECT d FROM Doc d WHERE d.date = :date"),
-    @NamedQuery(name = "Doc.findByStatus", query = "SELECT d FROM Doc d WHERE d.status = :status")})
+    @NamedQuery(name = "Doc.findByStatus", query = "SELECT d FROM Doc d WHERE d.status = :status"),})
 public class Doc implements Serializable {
     @Size(max = 100)
     @NotNull
@@ -62,6 +62,10 @@ public class Doc implements Serializable {
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "public_access")
+    private Character publicAccess;
     @Basic(optional = false)
     @NotNull
     @Column(name = "status")
@@ -166,6 +170,14 @@ public class Doc implements Serializable {
 
     public void setDocMessageCollection(Collection<DocMessage> docMessageCollection) {
         this.docMessageCollection = docMessageCollection;
+    }
+
+    public Character getPublicAccess() {
+        return publicAccess;
+    }
+
+    public void setPublicAccess(Character publicAccess) {
+        this.publicAccess = publicAccess;
     }
 
     @Override

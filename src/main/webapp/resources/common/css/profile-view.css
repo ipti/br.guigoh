@@ -629,9 +629,11 @@ span.friend-situation > img {
 
 .item-box-img {
     float: left;
-    margin-right: 20px;
+    margin-right: 15px;
     width: 100px;
-    height: 100px;
+    margin-top: 12px;
+    margin-left: 5px;
+    height: 79px;
 }
 
 .item-box-title, .item-box-doc-title {
