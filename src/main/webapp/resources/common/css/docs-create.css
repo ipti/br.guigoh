@@ -17,7 +17,7 @@ aside {
 }
 
 .doc-title {
-    width: 100%;
+    width: 60%;
     margin-bottom: 10px;
     border: 1px solid #CACACA;
     height: 30px;
@@ -118,7 +118,7 @@ aside {
     box-shadow: 0px 0px 3px #000;
 }
 
-.add-guest {
+.add-guest, .add-image {
     text-decoration: none;
     font-size: 12px;
     float: right;
@@ -129,8 +129,45 @@ aside {
     cursor: pointer;
 }
 
-.add-guest:hover {
+.add-image {
+    margin-top: 4px;
+}
+
+.add-guest:hover, .add-image:hover {
     background-color: #333;
+}
+
+.image-error {
+    float: left;
+    margin-top: -25px;
+    color: red;
+    font-size: 13px;
+}
+
+.doc-image {
+    float: right;
+}
+
+.doc-image > * {
+    float: left;
+}
+
+.doc-image img{
+    width: 31px;
+    height: 31px;
+    margin: 2px 5px 0 0;
+}
+
+.doc-image span {
+    font-size: 12px;
+    margin-top: 6px;
+    margin-right: 8px;
+}
+
+.remove-image {
+    text-decoration: none;
+    color: red;
+    margin-top: 5px;
 }
 
 .add-guest-modal, .kicked-user-modal, .history-modal {

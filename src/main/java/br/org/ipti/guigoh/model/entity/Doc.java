@@ -46,6 +46,9 @@ public class Doc implements Serializable {
     @NotNull
     @Column(name = "title")
     private String title;
+    @Size(max = 200)
+    @Column(name = "image")
+    private String image;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -212,5 +215,12 @@ public class Doc implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

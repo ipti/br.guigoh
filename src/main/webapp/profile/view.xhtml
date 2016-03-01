@@ -409,7 +409,7 @@
                     <div class="profile-column-left">
                         <ui:repeat value="#{profileViewBean.docList}" var="doc">
                             <div class="item-box-container">
-                                <a href="/docs/create.xhtml?id=#{doc.id}"><img class="item-box-img" src="../resources/common/images/doc.png"/></a>
+                                <a href="/docs/create.xhtml?id=#{doc.id}"><img class="item-box-img" src="#{doc.image}"/></a>
                                 <p class="item-box-doc-title">
                                     <ui:fragment rendered="#{doc.creatorSocialProfileFk == profileViewBean.socialProfile}">#{localeBean.getString('Proprietário')}</ui:fragment>
                                     <ui:fragment rendered="#{doc.creatorSocialProfileFk != profileViewBean.socialProfile}">#{localeBean.getString('Convidado')}</ui:fragment>

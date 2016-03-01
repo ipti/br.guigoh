@@ -17,6 +17,8 @@ import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.UploadService;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -34,11 +37,15 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class DocsCreateBean implements Serializable {
 
-    private String text, title, userSearch;
+    private String text, title, userSearch, imageName, imageURL;
+    private Boolean hasImage;
     private Integer docId, limit;
     private Character publicAccess;
 
     private Date date;
+
+    private Part uploadedPhoto;
+    private Integer[] cropCoordinates;
 
     private SocialProfile ownerSocialProfile, mySocialProfile;
 
@@ -74,12 +81,37 @@ public class DocsCreateBean implements Serializable {
         resetModal();
     }
 
+    public void uploadImage() throws IOException, NonexistentEntityException, RollbackFailureException, Exception {
+        if (docId == null) {
+            save();
+        }
+        String basePath = File.separator + "home" + File.separator + "www" + File.separator
+                + "com.guigoh.cdn" + File.separator + "guigoh" + File.separator + "docs" + File.separator
+                + docId + File.separator;
+        String linkPath = "http://cdn.guigoh.com/guigoh/docs/" + docId + "/" + uploadedPhoto.getSubmittedFileName();
+        UploadService.uploadFile(uploadedPhoto, basePath, cropCoordinates);
+        Doc doc = docJpaController.findDoc(docId);
+        doc.setImage(linkPath);
+        docJpaController.edit(doc);
+        hasImage = true;
+        imageName = uploadedPhoto.getSubmittedFileName();
+        imageURL = linkPath;
+    }
+
+    public void removeImage() throws NonexistentEntityException, RollbackFailureException, Exception {
+        Doc doc = docJpaController.findDoc(docId);
+        doc.setImage(null);
+        docJpaController.edit(doc);
+        hasImage = false;
+        imageName = imageURL = "";
+    }
+
     public void resetModal() {
         chosenSocialProfileList = new ArrayList<>();
         socialProfileList = new ArrayList<>();
         userSearch = "";
     }
-    
+
     public void changeDocStatus() throws NonexistentEntityException, RollbackFailureException, Exception {
         Doc doc = docJpaController.findDoc(docId);
         publicAccess = (publicAccess == 'Y') ? 'N' : 'Y';
@@ -97,18 +129,18 @@ public class DocsCreateBean implements Serializable {
     public void restoreDocHistory(DocHistory docHistory) throws NonexistentEntityException, RollbackFailureException, Exception {
         String docHistoryText = docHistory.getDoc();
         Doc doc = docJpaController.findDoc(docId);
-        
+
         docHistory.setDate(doc.getDate());
         docHistory.setDoc(doc.getDoc());
         docHistory.setDocFk(doc);
         docHistory.setEditorSocialProfileFk(doc.getEditorSocialProfileFk());
         docHistoryJpaController.create(docHistory);
-        
+
         doc.setDoc(docHistoryText);
         doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
         doc.setDate(utilJpaController.getTimestampServerTime());
         docJpaController.edit(doc);
-        
+
         text = doc.getDoc();
     }
 
@@ -182,6 +214,7 @@ public class DocsCreateBean implements Serializable {
             doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
             doc.setStatus('A');
             doc.setPublicAccess('N');
+            doc.setImage("/resources/common/images/doc.png");
             docJpaController.create(doc);
 
             docId = doc.getId();
@@ -207,6 +240,12 @@ public class DocsCreateBean implements Serializable {
                     docHistoryList = docHistoryJpaController.findByDocId(docId);
                     limit = 10;
                     publicAccess = doc.getPublicAccess();
+                    hasImage = doc.getImage() != null;
+                    if (doc.getImage() != null) {
+                        String[] urlChunks = doc.getImage().split("/");
+                        imageName = urlChunks[urlChunks.length - 1];
+                        imageURL = doc.getImage();
+                    }
                 } else {
                     FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
                 }
@@ -216,10 +255,13 @@ public class DocsCreateBean implements Serializable {
         } else {
             ownerSocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
             guestList = new ArrayList<>();
+            hasImage = false;
         }
         mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
 
         chosenSocialProfileList = new ArrayList<>();
+
+        cropCoordinates = new Integer[6];
     }
 
     public String getText() {
@@ -316,5 +358,45 @@ public class DocsCreateBean implements Serializable {
 
     public void setPublicAccess(Character publicAccess) {
         this.publicAccess = publicAccess;
+    }
+
+    public Part getUploadedPhoto() {
+        return uploadedPhoto;
+    }
+
+    public void setUploadedPhoto(Part uploadedPhoto) {
+        this.uploadedPhoto = uploadedPhoto;
+    }
+
+    public Integer[] getCropCoordinates() {
+        return cropCoordinates;
+    }
+
+    public void setCropCoordinates(Integer[] cropCoordinates) {
+        this.cropCoordinates = cropCoordinates;
+    }
+
+    public Boolean getHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(Boolean hasImage) {
+        this.hasImage = hasImage;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

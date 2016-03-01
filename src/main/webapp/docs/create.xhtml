@@ -7,6 +7,7 @@
     <ui:define name="title">Docs</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/lib/jcrop-0.9.12/css/jquery.Jcrop.min.css"></link>
         <link type="text/css" rel="stylesheet" media="all" href="/resources/common/css/docs-create.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
@@ -24,25 +25,46 @@
                     <div class="title">
                         <h1>Docs 
                             <h:panelGroup id="access">
-                                <h:commandLink class="doc-status">
-                                    <ui:fragment rendered="#{docsCreateBean.publicAccess == 'Y'}">
-                                        <i class="fa fa-unlock-alt"></i>
-                                    </ui:fragment>
-                                    <ui:fragment rendered="#{docsCreateBean.publicAccess == 'N'}">
-                                        <i class="fa fa-lock"></i>
-                                    </ui:fragment>
-                                    <f:ajax listener="#{docsCreateBean.changeDocStatus()}" render="access"/>
-                                </h:commandLink>
+                                <ui:fragment rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
+                                    <h:commandLink class="doc-status">
+                                        <ui:fragment rendered="#{docsCreateBean.publicAccess == 'Y'}">
+                                            <i class="fa fa-unlock-alt"></i>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{docsCreateBean.publicAccess == 'N'}">
+                                            <i class="fa fa-lock"></i>
+                                        </ui:fragment>
+                                        <f:ajax listener="#{docsCreateBean.changeDocStatus()}" render="access"/>
+                                    </h:commandLink>
+                                </ui:fragment>
                             </h:panelGroup>
                         </h1>
                     </div>
                 </div>
+                <p class="image-error"></p>
                 <div class="doc-saved">
                     <img src="../resources/common/images/save.png"></img>
                     <span>#{localeBean.getString('Documento salvo')}</span>
                 </div>
                 <div class="main-container">
                     <h:inputText id="title" class="doc-title" pt:placeholder="#{localeBean.getString('Título do documento')}..." value="#{docsCreateBean.title}"></h:inputText>
+                    <h:panelGroup id="image-container" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
+                        <ui:fragment rendered="#{!docsCreateBean.hasImage}">
+                            <div class="add-image">
+                                <i class="fa fa-image"/>
+                                <span>#{localeBean.getString('Adicionar imagem')}</span>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{docsCreateBean.hasImage}">
+                            <span class="doc-image">
+                                <img src="#{docsCreateBean.imageURL}"/>
+                                <span>#{docsCreateBean.imageName}</span>
+                                <h:commandLink class="remove-image">
+                                    <i class="fa fa-remove"/>
+                                    <f:ajax listener="#{docsCreateBean.removeImage()}" render="image-container"/>
+                                </h:commandLink>
+                            </span>
+                        </ui:fragment>
+                    </h:panelGroup>
                     <textarea id="editor"></textarea>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <h:inputHidden id="doc-id" value="#{docsCreateBean.docId}"/>
@@ -174,7 +196,7 @@
                     <hr/>
                     <div class="modal-buttons">
                         <h:commandLink class="add-guest-button add" onclick="return fillText();">
-                            <f:ajax listener="#{docsCreateBean.addGuests()}" render="doc-id guests title text modal-users-container" execute="title text"/>
+                            <f:ajax listener="#{docsCreateBean.addGuests()}" render="doc-id guests title text modal-users-container access" execute="title text"/>
                             #{localeBean.getString('Adicionar')}
                         </h:commandLink>
                         <h:commandLink class="add-guest-button cancel">
@@ -246,6 +268,31 @@
                     </div>
                 </div>
             </h:panelGroup>
+            <a id="open-image-cropping-modal" href="#image-cropping-modal"></a>
+            <div id="image-cropping-modal" class="image-cropping-modal">
+                <div>
+                    <h1 class="modal-title">#{localeBean.getString('Cortar foto')}</h1>
+                    <hr/>
+                    <a href="#close" title="Close" id="close-image-cropping-modal" class="close-image-cropping-modal">X</a>
+                    <div class="photo-container">
+                        <img class="original-uploaded-image"/>
+                    </div>
+                    <hr/>
+                    <div class="modal-buttons">
+                        <h:commandLink styleClass="upload-photo image-cropping-button">
+                            <f:ajax listener="#{docsCreateBean.uploadImage()}" execute="browse-image original-uploaded-image-tracker-x original-uploaded-image-tracker-y original-uploaded-image-tracker-w original-uploaded-image-tracker-h doc-id title text" render="doc-id title text image-container access"/>
+                            #{localeBean.getString('Cortar e salvar')}
+                        </h:commandLink>
+                        <a href="#close" title="Close" class="image-cropping-button cancel">#{localeBean.getString('Cancelar')}</a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <h:inputFile id="browse-image" pt:accept="image/x-png, image/jpeg" styleClass="hidden" value="#{docsCreateBean.uploadedPhoto}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-x" value="#{docsCreateBean.cropCoordinates[0]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-y" value="#{docsCreateBean.cropCoordinates[1]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-w" value="#{docsCreateBean.cropCoordinates[2]}"/>
+            <h:inputHidden id="original-uploaded-image-tracker-h" value="#{docsCreateBean.cropCoordinates[3]}"/>
         </h:form>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
@@ -257,6 +304,7 @@
         <ui:fragment rendered="#{localeBean.acronym eq 'frFR'}">
             <script type='text/javascript' src='/resources/lib/tinymce/langs/fr_FR.js'></script>
         </ui:fragment>
+        <script type="text/javascript" src="../resources/lib/jcrop-0.9.12/js/jquery.Jcrop.min.js"></script>
         <script type="text/javascript" src="/resources/common/js/docs-create.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
