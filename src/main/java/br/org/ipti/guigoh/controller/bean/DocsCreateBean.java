@@ -228,6 +228,12 @@ public class DocsCreateBean implements Serializable {
         docHistoryJpaController = new DocHistoryJpaController();
         socialProfileJpaController = new SocialProfileJpaController();
         utilJpaController = new UtilJpaController();
+        
+        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
+        if (mySocialProfile.getRoleId() != null && mySocialProfile.getRoleId().getName().equals("Visitante")) {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("../home.xhtml");
+        }
+        
         if (docId != null) {
             Doc doc = docJpaController.findDoc(docId);
             if (doc != null) {
@@ -257,8 +263,6 @@ public class DocsCreateBean implements Serializable {
             guestList = new ArrayList<>();
             hasImage = false;
         }
-        mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
-
         chosenSocialProfileList = new ArrayList<>();
 
         cropCoordinates = new Integer[6];

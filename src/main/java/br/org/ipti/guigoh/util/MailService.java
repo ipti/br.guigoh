@@ -25,6 +25,7 @@ public class MailService {
 
         SimpleEmail email = new SimpleEmail();
         email.setHostName(smtp);
+        email.setStartTLSEnabled(true);
         email.setCharset("UTF-8");
         email.setSmtpPort(smtpPort);
         email.setAuthentication(userAuthentication, passwordUserAuthentication);

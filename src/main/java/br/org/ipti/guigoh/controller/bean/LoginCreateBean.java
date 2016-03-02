@@ -125,6 +125,7 @@ public class LoginCreateBean implements Serializable {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao realizar o cadastro. Tente novamente.", null));
         }
     }

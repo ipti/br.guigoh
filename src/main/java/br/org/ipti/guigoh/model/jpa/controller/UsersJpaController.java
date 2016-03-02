@@ -341,4 +341,15 @@ public class UsersJpaController implements Serializable {
         }
     }
     
+    public int getUsersQuantity() {
+        EntityManager em = getEntityManager();
+        try {
+            Long usersQuantity = (Long) em.createNativeQuery("select count(*) from users u "
+                    + "join user_authorization ua on u.token = ua.token_id "
+                    + "where u.status = 'CA' and ua.status = 'AC'").getSingleResult();
+            return usersQuantity.intValue();
+        } finally {
+            em.close();
+        }
+    }
 }

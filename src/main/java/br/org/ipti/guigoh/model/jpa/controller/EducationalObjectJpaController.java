@@ -505,6 +505,17 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public int getEducationalObjectsQuantity() {
+        EntityManager em = getEntityManager();
+        try {
+            Long usersQuantity = (Long) em.createNativeQuery("select count(*) from educational_object "
+                    + "where status = 'AC'").getSingleResult();
+            return usersQuantity.intValue();
+        } finally {
+            em.close();
+        }
+    }
 
     public List<EducationalObject> getPendingEducationalObjects() {
         EntityManager em = getEntityManager();

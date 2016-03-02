@@ -8,6 +8,7 @@ import br.org.ipti.guigoh.model.entity.Author;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
@@ -33,7 +34,7 @@ public class TemplateBean implements Serializable {
     private UserAuthorization authorization;
 
     private Boolean admin, reviser;
-    private Integer registeredUsersCount, interestId, pendingFriendsCount;
+    private Integer registeredUsersCount, registeredEducationalObjectsCount, interestId, pendingFriendsCount;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -41,6 +42,7 @@ public class TemplateBean implements Serializable {
             getLoggedSocialProfile();
             checkUserAuthorization();
             getRegisteredUsersQuantity();
+            getRegisteredEducationalObjectsQuantity();
             loadPendingFriendsQuantity();
         }
     }
@@ -79,7 +81,7 @@ public class TemplateBean implements Serializable {
         String subnetwork = "";
         for (Author author : authors) {
             Users user = usersJpaController.findUsers(author.getEmail());
-            if (user != null && !subnetworkList.contains(user.getSocialProfile().getSubnetworkId().getDescription())) {
+            if (user != null && user.getSocialProfile().getSubnetworkId() != null && !subnetworkList.contains(user.getSocialProfile().getSubnetworkId().getDescription())) {
                 subnetworkList.add(user.getSocialProfile().getSubnetworkId().getDescription());
                 subnetwork += user.getSocialProfile().getSubnetworkId().getDescription() + " / ";
             }
@@ -93,7 +95,12 @@ public class TemplateBean implements Serializable {
 
     private void getRegisteredUsersQuantity() {
         UsersJpaController usersJpaController = new UsersJpaController();
-        registeredUsersCount = usersJpaController.getUsersCount();
+        registeredUsersCount = usersJpaController.getUsersQuantity();
+    }
+    
+    private void getRegisteredEducationalObjectsQuantity() {
+        EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
+        registeredEducationalObjectsCount = educationalObjectJpaController.getEducationalObjectsQuantity();
     }
 
     private void initGlobalVariables() {
@@ -159,5 +166,13 @@ public class TemplateBean implements Serializable {
 
     public void setPendingFriendsCount(Integer pendingFriendsCount) {
         this.pendingFriendsCount = pendingFriendsCount;
+    }
+
+    public Integer getRegisteredEducationalObjectsCount() {
+        return registeredEducationalObjectsCount;
+    }
+
+    public void setRegisteredEducationalObjectsCount(Integer registeredEducationalObjectsCount) {
+        this.registeredEducationalObjectsCount = registeredEducationalObjectsCount;
     }
 }

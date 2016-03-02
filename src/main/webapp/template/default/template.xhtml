@@ -28,8 +28,10 @@ and open the template in the editor.
                 <h:form prependId="false">
                     <div class="header-top">
                         <p>
+                            <h:outputText styleClass="registered-objects-quantity" value="#{templateBean.registeredEducationalObjectsCount} #{localeBean.getString('objetos educacionais publicados')}"></h:outputText>
+                            <span class="header-top-separator">|</span>
                             <ui:fragment rendered="#{templateBean.admin}">
-                                <h:outputText styleClass="registered-users-quantity"  value="#{templateBean.registeredUsersCount} #{localeBean.getString('usuários cadastrados')}"></h:outputText>
+                                <h:outputText styleClass="registered-users-quantity"  value="#{templateBean.registeredUsersCount} #{localeBean.getString('usuários ativos')}"></h:outputText>
                                 <span class="header-top-separator">|</span>
                                 <span id="registered-users-online">0 online</span>
                                 <span class="header-top-separator">|</span>
