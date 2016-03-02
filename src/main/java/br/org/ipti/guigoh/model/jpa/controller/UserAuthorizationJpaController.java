@@ -241,7 +241,8 @@ public class UserAuthorizationJpaController implements Serializable {
         try {
             List<UserAuthorization> pendingUserList = (List<UserAuthorization>) em.createNativeQuery("select * from user_authorization ua "
                     + "join social_profile sp on sp.token_id = ua.token_id "
-                    + "where status = 'PC' order by sp.social_profile_id DESC", 
+                    + "join users u on u.token = ua.token_id "
+                    + "where ua.status = 'PC' and u.status = 'CA' order by sp.social_profile_id DESC", 
                     UserAuthorization.class).getResultList();
             return pendingUserList;
         } finally {
