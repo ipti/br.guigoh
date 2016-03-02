@@ -7,7 +7,7 @@
     <ui:define name="title">#{localeBean.getString("Administração")}</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
-        <link type="text/css" rel="StyleSheet" media="all" href="/resources/common/css/admin-view.css"></link>
+        <link type="text/css" rel="StyleSheet" media="all" href="../resources/common/css/admin-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata">
@@ -35,9 +35,11 @@
                         <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
                             <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PU')}" render="user-pending"></f:ajax>
                         </h:inputText>
+                        <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo usuário, o mesmo receberá um aviso através do e-mail cadastrado.')}</p>
+                        <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
                     </ui:fragment>
                     <div class="clear"></div>
-                    <h:panelGroup layout="block" id="user-pending">
+                    <h:panelGroup layout="block" class="panel-container" id="user-pending">
                         <ui:repeat value="#{adminViewBean.pendingUserAuthorizationList}" var="pendingUser" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.pendingUsersLimit}">
                                 <div class="col">
@@ -51,11 +53,11 @@
                                         <p class="subresult" title="#{pendingUser.users.socialProfile.subnetworkId.description}">#{pendingUser.users.socialProfile.subnetworkId.description}</p>
                                         <p class="subresult" title="#{pendingUser.users.socialProfile.roleId.name}">#{pendingUser.users.socialProfile.roleId.name}</p>
                                         <div class="container-action">
-                                            <h:commandLink>
+                                            <h:commandLink class="user-action">
                                                 <i class="fa fa-times"></i>
-                                                <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" render="user-deactivated user-pendingUser"/>
+                                                <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" render="user-deactivated user-pending"/>
                                             </h:commandLink>
-                                            <h:commandLink>
+                                            <h:commandLink class="user-action">
                                                 <i class="fa fa-check"></i>
                                                 <f:ajax listener="#{adminViewBean.acceptUser(pendingUser)}" render="user-pending"/>
                                             </h:commandLink>
@@ -126,9 +128,11 @@
                         <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
                             <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PO')}" render="object-pending"></f:ajax>
                         </h:inputText>
+                        <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo objeto, o publicador receberá um aviso através do e-mail cadastrado.')}</p>
+                        <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
                     </ui:fragment>
                     <div class="clear"></div>
-                    <h:panelGroup layout="block" id="object-pending">
+                    <h:panelGroup layout="block" class="panel-container" id="object-pending">
                         <ui:repeat value="#{adminViewBean.pendingEducationalObjectList}" var="pendingObject" varStatus="status">
                             <ui:fragment rendered="#{status.index lt adminViewBean.pendingObjectsLimit}">
                                 <div class="col">
@@ -141,11 +145,11 @@
                                         <p class="subresult" title="#{pendingObject.socialProfileId.subnetworkId.description}">#{pendingObject.socialProfileId.subnetworkId.description}</p>
                                         <p class="subresult" title="#{pendingObject.themeId.name}">#{pendingObject.themeId.name}</p>
                                         <div class="container-action">
-                                            <h:commandLink>
+                                            <h:commandLink class="object-action">
                                                 <i class="fa fa-times"></i>
                                                 <f:ajax listener="#{adminViewBean.rejectEducationalObject(pendingObject)}" render="object-deactivated object-pending"/>
                                             </h:commandLink>
-                                            <h:commandLink>
+                                            <h:commandLink class="object-action">
                                                 <i class="fa fa-check"></i>
                                                 <f:ajax listener="#{adminViewBean.acceptEducationalObject(pendingObject)}" render="object-pending"/>
                                             </h:commandLink>

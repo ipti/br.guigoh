@@ -4,7 +4,7 @@ $(document).ready(function () {
         var limit = $(this).hasClass("subresult") ? 25 : 21;
         $(this).text(changeNameLength($(this).text(), limit));
     });
-    
+
     $('.tab').click(function () {
         if (!$(this).parent().hasClass('active')) {
             $(this).closest("ul").find(".tab").parent().removeClass('active');
@@ -25,9 +25,11 @@ $(document).ready(function () {
 
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
-        $.each($(".result-name a, .subresult"), function () {
-            var limit = $(this).hasClass("subresult") ? 25 : 21;
-            $(this).text(changeNameLength($(this).text(), limit));
-        });
+        if ($(data.source).hasClass("user-action") || $(data.source).hasClass("object-action")) {
+            $.each($(".result-name a, .subresult"), function () {
+                var limit = $(this).hasClass("subresult") ? 25 : 21;
+                $(this).text(changeNameLength($(this).text(), limit));
+            });
+        }
     }
 });

@@ -53,6 +53,7 @@ public class AdminViewBean implements Serializable {
     public void acceptUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
         userAuthorization.setStatus("AC");
         userAuthorizationJpaController.edit(userAuthorization);
+        pendingUserAuthorizationList.remove(userAuthorization);
         String mailSubject = "Cadastro aceito";
         String mailText = "Bem-vindo!\n\nSeu cadastro no Arte com Ciência foi aceito por um administrador.\n\n"
                 + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
@@ -62,12 +63,13 @@ public class AdminViewBean implements Serializable {
         mailText += "http://artecomciencia.guigoh.com/login/auth.xhtml";
         MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
-        pendingUserAuthorizationList.remove(userAuthorization);
     }
 
     public void rejectUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
         userAuthorization.setStatus("IC");
         userAuthorizationJpaController.edit(userAuthorization);
+        pendingUserAuthorizationList.remove(userAuthorization);
+        deactivatedUserAuthorizationList.add(userAuthorization);
         String mailSubject = "Cadastro negado";
         String mailText = "Seu cadastro no Arte com Ciência foi negado por um administrador.";
         trans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
@@ -75,8 +77,6 @@ public class AdminViewBean implements Serializable {
         mailText = trans.getWord(mailText);
         MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
-        pendingUserAuthorizationList.remove(userAuthorization);
-        deactivatedUserAuthorizationList.add(userAuthorization);
     }
 
     public void activateUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
