@@ -6,7 +6,11 @@
     position: relative;
 }
 
-.admin-tabs.object {
+.admin-general-tab {
+    padding: 0 30px;
+}
+
+.admin-tabs.object{
     margin-top: 30px;
 }
 
@@ -17,6 +21,10 @@
     float: left;
     height: 30px;
     margin-top: 15px;
+}
+
+.admin-tabs li:first-child {
+    margin-left: 30px;
 }
 
 .admin-tabs span {
@@ -69,7 +77,7 @@
     font-weight: bold;
 }
 
-#object-container-deactivated, #user-container-deactivated {
+#object-container-deactivated, #user-container-deactivated, .admin-general-tab-permission, #reviser-container {
     display: none;
 }
 
@@ -88,7 +96,7 @@
 }
 
 .result-box {
-    width: 283px;
+    width: 270px;
     height: 90px;
     border: 1px solid #C1C1C1;
     margin-bottom: 20px;
@@ -164,4 +172,217 @@
     float: left;
     font-size: 12px;
     color: gray;
+}
+
+.tab-title {
+    color: #404095;
+    font-size: 20px;
+    margin: 30px 0px 15px 30px;
+    float: left;
+    width: 100%;
+}
+
+.admin {
+    float: left;
+    width: 50%;
+    margin-top: 10px;
+}
+
+.admin a img {
+    width: 31px;
+    height: 31px;
+    float: left;
+    margin-right: 5px;
+}
+
+.admin span a {
+    float: left;
+    font-size: 12px;
+    margin-top: 4px;
+    color: #333;
+    text-decoration: none;
+}
+
+.add-admin {
+    text-decoration: none;
+    font-size: 12px;
+    float: left;
+    color: #e6eadf;
+    background-color: #9a9a9a;
+    padding: 3px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.add-admin:hover{
+    background-color: #333;
+}
+
+.add-admin-modal, .password-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.add-admin-modal:target, .password-modal:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.add-admin-modal > div {
+    width: 60%;
+    position: relative;
+    margin: 1% auto;
+    padding: 20px 0;
+    border-radius: 15px;
+    background: #e6eadf;
+}
+
+.password-modal > div {
+    width: 20%;
+    position: relative;
+    margin: 1% auto;
+    padding: 20px 0;
+    border-radius: 15px;
+    background: #e6eadf;
+}
+
+.close-add-admin-modal, .close-password-modal {
+    background: gray; 
+    color: #e6eadf;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.close-add-admin-modal:hover, .close-password-modal:hover{ 
+    background: black;
+}
+
+.modal-users-container, .modal-password-container {
+    display: block;
+    margin: 15px;
+}
+
+.users-container {
+    max-height: 210px;
+    overflow-y: scroll;
+}
+
+.add-admin-button, .password-button{
+    float: right;
+    color: #e6eadf;
+    background-color: gray;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.add-admin-button:hover, .password-button:hover{
+    background: black;
+}
+
+.add-admin-button.cancel{
+    margin-right: 10px;
+}
+
+.admin-user-search, .password-search {
+    background: url(../images/magnifying-glass.png) no-repeat 97% 5px #fff;
+    background-size: 17px;
+    width: 400px;
+    margin-bottom: 10px;
+    border: 1px solid #CACACA;
+    height: 30px;
+    padding: 0 5px;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.32);
+    border-radius: 5px;
+    font-size: 12px;
+    text-indent: 5px;
+    font-style: italic;
+}
+
+.password-search {
+    width: 200px !important;
+}
+
+.user-container {
+    float: left;
+    width: 34%;
+}
+
+.user-container:nth-child(3n) {
+    float: left;
+    width: 32%;
+}
+
+.user {
+    width: 283px;
+    height: 89px;
+    border: 1px solid #C1C1C1;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.user:hover {
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+}
+
+.image {
+    height: 90px;
+    width: 90px;
+    margin-right: 15px;
+    float: left;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+.result-name {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 4px;
+    color: #333;
+}
+
+.subresult {
+    font-size: 11px;
+    color: gray;
+    line-height: 18px;
+}
+
+#chosen-user-container-title h1 {
+    color: #404095;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.chosen-users-container {
+    max-height: 210px;
+    overflow-y: scroll;
+}
+
+.modal-title {
+    margin-bottom: 0px !important;
 }

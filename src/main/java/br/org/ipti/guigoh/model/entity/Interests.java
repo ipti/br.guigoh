@@ -38,6 +38,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Interests.findById", query = "SELECT i FROM Interests i WHERE i.id = :id"),
     @NamedQuery(name = "Interests.findByName", query = "SELECT i FROM Interests i WHERE i.name = :name")})
 public class Interests implements Serializable {
+
+    @JoinTable(name = "user_reviser", joinColumns = {
+        @JoinColumn(name = "interests_id_fk", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "token_id_fk", referencedColumnName = "token")})
+    @ManyToMany
+    private Collection<Users> usersCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "themeId")
     private Collection<EducationalObject> educationalObjectCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "themeId")
@@ -123,6 +129,15 @@ public class Interests implements Serializable {
 
     public void setEducationalObjectCollection(Collection<EducationalObject> educationalObjectCollection) {
         this.educationalObjectCollection = educationalObjectCollection;
+    }
+
+    @XmlTransient
+    public Collection<Users> getUsersCollection() {
+        return usersCollection;
+    }
+
+    public void setUsersCollection(Collection<Users> usersCollection) {
+        this.usersCollection = usersCollection;
     }
     
 }

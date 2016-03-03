@@ -44,7 +44,7 @@ and open the template in the editor.
                             <span class="header-top-separator">|</span>
                             <h:commandLink styleClass="locale frFR" action="#{localeBean.changeLocale(url, 'frFR')}" value="FRA"/>
                             <!--<a href="#">Ajuda do Guigoh</a>-->
-                            <ui:fragment rendered="#{templateBean.admin || templateBean.reviser}">
+                            <ui:fragment rendered="#{templateBean.admin}">
                                 <span class="header-top-separator">|</span>
                                 <h:commandLink action="/admin/view.xhtml?faces-redirect=true" >#{localeBean.getString('Admin')}</h:commandLink>
                             </ui:fragment>

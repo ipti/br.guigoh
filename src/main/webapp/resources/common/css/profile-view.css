@@ -82,7 +82,7 @@
 
 .profile-name {
     float: left;
-    width: 300px;
+    max-width: 300px;
 }
 
 .profile-name h1 {

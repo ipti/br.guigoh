@@ -15,6 +15,10 @@ import java.util.Collection;
 import br.org.ipti.guigoh.model.entity.DiscussionTopic;
 import br.org.ipti.guigoh.model.entity.EducationalObject;
 import br.org.ipti.guigoh.model.entity.Interests;
+import br.org.ipti.guigoh.model.entity.Users;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
+import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,17 +39,19 @@ public class InterestsJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Interests interests) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void create(Interests interests) throws RollbackFailureException, Exception {
         if (interests.getDiscussionTopicCollection() == null) {
             interests.setDiscussionTopicCollection(new ArrayList<DiscussionTopic>());
         }
         if (interests.getEducationalObjectCollection() == null) {
             interests.setEducationalObjectCollection(new ArrayList<EducationalObject>());
         }
+        if (interests.getUsersCollection() == null) {
+            interests.setUsersCollection(new ArrayList<Users>());
+        }
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             Collection<DiscussionTopic> attachedDiscussionTopicCollection = new ArrayList<DiscussionTopic>();
             for (DiscussionTopic discussionTopicCollectionDiscussionTopicToAttach : interests.getDiscussionTopicCollection()) {
                 discussionTopicCollectionDiscussionTopicToAttach = em.getReference(discussionTopicCollectionDiscussionTopicToAttach.getClass(), discussionTopicCollectionDiscussionTopicToAttach.getId());
@@ -58,6 +64,12 @@ public class InterestsJpaController implements Serializable {
                 attachedEducationalObjectCollection.add(educationalObjectCollectionEducationalObjectToAttach);
             }
             interests.setEducationalObjectCollection(attachedEducationalObjectCollection);
+            Collection<Users> attachedUsersCollection = new ArrayList<Users>();
+            for (Users usersCollectionUsersToAttach : interests.getUsersCollection()) {
+                usersCollectionUsersToAttach = em.getReference(usersCollectionUsersToAttach.getClass(), usersCollectionUsersToAttach.getUsername());
+                attachedUsersCollection.add(usersCollectionUsersToAttach);
+            }
+            interests.setUsersCollection(attachedUsersCollection);
             em.persist(interests);
             for (DiscussionTopic discussionTopicCollectionDiscussionTopic : interests.getDiscussionTopicCollection()) {
                 Interests oldThemeIdOfDiscussionTopicCollectionDiscussionTopic = discussionTopicCollectionDiscussionTopic.getThemeId();
@@ -77,12 +89,16 @@ public class InterestsJpaController implements Serializable {
                     oldThemeIdOfEducationalObjectCollectionEducationalObject = em.merge(oldThemeIdOfEducationalObjectCollectionEducationalObject);
                 }
             }
+            for (Users usersCollectionUsers : interests.getUsersCollection()) {
+                usersCollectionUsers.getInterestsCollection().add(interests);
+                usersCollectionUsers = em.merge(usersCollectionUsers);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             throw ex;
         } finally {
@@ -92,16 +108,17 @@ public class InterestsJpaController implements Serializable {
         }
     }
 
-    public void edit(Interests interests) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException, br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException, br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void edit(Interests interests) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             Interests persistentInterests = em.find(Interests.class, interests.getId());
             Collection<DiscussionTopic> discussionTopicCollectionOld = persistentInterests.getDiscussionTopicCollection();
             Collection<DiscussionTopic> discussionTopicCollectionNew = interests.getDiscussionTopicCollection();
             Collection<EducationalObject> educationalObjectCollectionOld = persistentInterests.getEducationalObjectCollection();
             Collection<EducationalObject> educationalObjectCollectionNew = interests.getEducationalObjectCollection();
+            Collection<Users> usersCollectionOld = persistentInterests.getUsersCollection();
+            Collection<Users> usersCollectionNew = interests.getUsersCollection();
             List<String> illegalOrphanMessages = null;
             for (DiscussionTopic discussionTopicCollectionOldDiscussionTopic : discussionTopicCollectionOld) {
                 if (!discussionTopicCollectionNew.contains(discussionTopicCollectionOldDiscussionTopic)) {
@@ -120,7 +137,7 @@ public class InterestsJpaController implements Serializable {
                 }
             }
             if (illegalOrphanMessages != null) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException(illegalOrphanMessages);
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Collection<DiscussionTopic> attachedDiscussionTopicCollectionNew = new ArrayList<DiscussionTopic>();
             for (DiscussionTopic discussionTopicCollectionNewDiscussionTopicToAttach : discussionTopicCollectionNew) {
@@ -136,6 +153,13 @@ public class InterestsJpaController implements Serializable {
             }
             educationalObjectCollectionNew = attachedEducationalObjectCollectionNew;
             interests.setEducationalObjectCollection(educationalObjectCollectionNew);
+            Collection<Users> attachedUsersCollectionNew = new ArrayList<Users>();
+            for (Users usersCollectionNewUsersToAttach : usersCollectionNew) {
+                usersCollectionNewUsersToAttach = em.getReference(usersCollectionNewUsersToAttach.getClass(), usersCollectionNewUsersToAttach.getUsername());
+                attachedUsersCollectionNew.add(usersCollectionNewUsersToAttach);
+            }
+            usersCollectionNew = attachedUsersCollectionNew;
+            interests.setUsersCollection(usersCollectionNew);
             interests = em.merge(interests);
             for (DiscussionTopic discussionTopicCollectionNewDiscussionTopic : discussionTopicCollectionNew) {
                 if (!discussionTopicCollectionOld.contains(discussionTopicCollectionNewDiscussionTopic)) {
@@ -159,18 +183,30 @@ public class InterestsJpaController implements Serializable {
                     }
                 }
             }
+            for (Users usersCollectionOldUsers : usersCollectionOld) {
+                if (!usersCollectionNew.contains(usersCollectionOldUsers)) {
+                    usersCollectionOldUsers.getInterestsCollection().remove(interests);
+                    usersCollectionOldUsers = em.merge(usersCollectionOldUsers);
+                }
+            }
+            for (Users usersCollectionNewUsers : usersCollectionNew) {
+                if (!usersCollectionOld.contains(usersCollectionNewUsers)) {
+                    usersCollectionNewUsers.getInterestsCollection().add(interests);
+                    usersCollectionNewUsers = em.merge(usersCollectionNewUsers);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = interests.getId();
                 if (findInterests(id) == null) {
-                    throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException("The interests with id " + id + " no longer exists.");
+                    throw new NonexistentEntityException("The interests with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -181,17 +217,16 @@ public class InterestsJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException, br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException, br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             Interests interests;
             try {
                 interests = em.getReference(Interests.class, id);
                 interests.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException("The interests with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The interests with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
             Collection<DiscussionTopic> discussionTopicCollectionOrphanCheck = interests.getDiscussionTopicCollection();
@@ -209,7 +244,12 @@ public class InterestsJpaController implements Serializable {
                 illegalOrphanMessages.add("This Interests (" + interests + ") cannot be destroyed since the EducationalObject " + educationalObjectCollectionOrphanCheckEducationalObject + " in its educationalObjectCollection field has a non-nullable themeId field.");
             }
             if (illegalOrphanMessages != null) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.IllegalOrphanException(illegalOrphanMessages);
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Collection<Users> usersCollection = interests.getUsersCollection();
+            for (Users usersCollectionUsers : usersCollection) {
+                usersCollectionUsers.getInterestsCollection().remove(interests);
+                usersCollectionUsers = em.merge(usersCollectionUsers);
             }
             em.remove(interests);
             em.getTransaction().commit();
@@ -217,7 +257,7 @@ public class InterestsJpaController implements Serializable {
             try {
                 em.getTransaction().rollback();
             } catch (Exception re) {
-                throw new br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
             throw ex;
         } finally {
@@ -226,7 +266,6 @@ public class InterestsJpaController implements Serializable {
             }
         }
     }
-
     public List<Interests> findInterestsEntities() {
         return findInterestsEntities(true, -1, -1);
     }

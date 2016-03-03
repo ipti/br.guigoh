@@ -28,12 +28,12 @@ import javax.inject.Named;
 @Named
 public class TemplateBean implements Serializable {
 
-    private static final String ADMIN = "AD", REVISER = "RE";
+    private static final String ADMIN = "AD";
 
     private SocialProfile socialProfile;
     private UserAuthorization authorization;
 
-    private Boolean admin, reviser;
+    private Boolean admin;
     private Integer registeredUsersCount, registeredEducationalObjectsCount, interestId, pendingFriendsCount;
 
     public void init() {
@@ -69,9 +69,6 @@ public class TemplateBean implements Serializable {
             if (authorization.getRoles().equals(ADMIN)) {
                 admin = true;
             }
-            if (authorization.getRoles().equals(REVISER)) {
-                reviser = true;
-            }
         }
     }
 
@@ -106,7 +103,7 @@ public class TemplateBean implements Serializable {
     private void initGlobalVariables() {
         socialProfile = new SocialProfile();
 
-        admin = reviser = false;
+        admin = false;
 
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestId = interestsJpaController.findInterestsEntities(1, 0).get(0).getId();
@@ -134,14 +131,6 @@ public class TemplateBean implements Serializable {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
-    }
-
-    public Boolean getReviser() {
-        return reviser;
-    }
-
-    public void setReviser(Boolean reviser) {
-        this.reviser = reviser;
     }
 
     public Integer getRegisteredUsersCount() {

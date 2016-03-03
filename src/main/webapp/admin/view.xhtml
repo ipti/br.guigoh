@@ -20,198 +20,324 @@
         <section id="content">
             <h:form prependId="false">
                 <div class="title">
-                    <h1>#{localeBean.getString('Administração do Guigoh')}</h1>
+                    <h1>#{localeBean.getString('Administração')}</h1>
                 </div>
                 <div class="admin-tabs">
                     <ul>
-                        <li id="admin-tab-user-pending" class="active"><span class="tab tab-user-pending">#{localeBean.getString('Pendentes')}</span></li>
-                        <li id="admin-tab-user-deactivated"><span class="tab tab-user-deactivated">#{localeBean.getString('Desativados')}</span></li>
+                        <li id="admin-general-tab-validation" class="active"><span class="tab tab-validation"><i class="fa fa-check-circle-o"></i> #{localeBean.getString('Validações')}</span></li>
+                        <li id="admin-general-tab-permission"><span class="tab tab-permission"><i class="fa fa-sitemap"></i> #{localeBean.getString('Permissões')}</span></li>
                     </ul>
-                    <div class="user-icon"></div>
-                    <legend class="user-label">#{localeBean.getString('Usuários')}</legend>
                 </div>
-                <div id="user-container-pending" class="container">
-                    <ui:fragment rendered="#{adminViewBean.hasPendingUsers}">
-                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
-                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PU')}" render="user-pending"></f:ajax>
-                        </h:inputText>
-                        <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo usuário, o mesmo receberá um aviso através do e-mail cadastrado.')}</p>
-                        <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
-                    </ui:fragment>
-                    <div class="clear"></div>
-                    <h:panelGroup layout="block" class="panel-container" id="user-pending">
-                        <ui:repeat value="#{adminViewBean.pendingUserAuthorizationList}" var="pendingUser" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt adminViewBean.pendingUsersLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/profile/view.xhtml?id=#{pendingUser.users.socialProfile.socialProfileId}"><img class="image" src="#{pendingUser.users.socialProfile.photo}"></img></a>
-                                        <p class="result-name">
-                                            <a class="name" href="/profile/view.xhtml?id=#{pendingUser.users.socialProfile.socialProfileId}" title="#{pendingUser.users.socialProfile.name}">#{pendingUser.users.socialProfile.name}</a>
-                                        </p>
-                                        <p class="subresult" title="#{pendingUser.users.username}">#{pendingUser.users.username}</p>
-                                        <p class="subresult" title="#{pendingUser.users.socialProfile.cityId.name}">#{pendingUser.users.socialProfile.cityId.name}/#{pendingUser.users.socialProfile.stateId.acronyms}</p>
-                                        <p class="subresult" title="#{pendingUser.users.socialProfile.subnetworkId.description}">#{pendingUser.users.socialProfile.subnetworkId.description}</p>
-                                        <p class="subresult" title="#{pendingUser.users.socialProfile.roleId.name}">#{pendingUser.users.socialProfile.roleId.name}</p>
-                                        <div class="container-action">
-                                            <h:commandLink class="user-action">
-                                                <i class="fa fa-times"></i>
-                                                <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" render="user-deactivated user-pending"/>
-                                            </h:commandLink>
-                                            <h:commandLink class="user-action">
-                                                <i class="fa fa-check"></i>
-                                                <f:ajax listener="#{adminViewBean.acceptUser(pendingUser)}" render="user-pending"/>
-                                            </h:commandLink>
+                <div class="admin-general-tab admin-general-tab-validation">
+                    <h3 class="tab-title">#{localeBean.getString('Validações')}</h3>
+                    <div class="admin-tabs">
+                        <ul>
+                            <li id="admin-tab-user-pending" class="active"><span class="tab tab-user-pending">#{localeBean.getString('Pendentes')}</span></li>
+                            <li id="admin-tab-user-deactivated"><span class="tab tab-user-deactivated">#{localeBean.getString('Desativados')}</span></li>
+                        </ul>
+                        <div class="user-icon"></div>
+                        <legend class="user-label">#{localeBean.getString('Usuários')}</legend>
+                    </div>
+                    <div id="user-container-pending" class="container">
+                        <ui:fragment rendered="#{adminViewBean.hasPendingUsers}">
+                            <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
+                                <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PU')}" render="user-pending"></f:ajax>
+                            </h:inputText>
+                            <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo usuário, o mesmo receberá um aviso em seu e-mail.')}</p>
+                            <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
+                        </ui:fragment>
+                        <div class="clear"></div>
+                        <h:panelGroup layout="block" class="panel-container" id="user-pending">
+                            <ui:repeat value="#{adminViewBean.pendingUserAuthorizationList}" var="pendingUser" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt adminViewBean.pendingUsersLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/profile/view.xhtml?id=#{pendingUser.users.socialProfile.socialProfileId}"><img class="image" src="#{pendingUser.users.socialProfile.photo}"></img></a>
+                                            <p class="result-name">
+                                                <a class="name" href="/profile/view.xhtml?id=#{pendingUser.users.socialProfile.socialProfileId}" title="#{pendingUser.users.socialProfile.name}">#{pendingUser.users.socialProfile.name}</a>
+                                            </p>
+                                            <p class="subresult" title="#{pendingUser.users.username}">#{pendingUser.users.username}</p>
+                                            <p class="subresult" title="#{pendingUser.users.socialProfile.cityId.name}">#{pendingUser.users.socialProfile.cityId.name}/#{pendingUser.users.socialProfile.stateId.acronyms}</p>
+                                            <p class="subresult" title="#{pendingUser.users.socialProfile.subnetworkId.description}">#{pendingUser.users.socialProfile.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{pendingUser.users.socialProfile.roleId.name}">#{pendingUser.users.socialProfile.roleId.name}</p>
+                                            <div class="container-action">
+                                                <h:commandLink class="user-action">
+                                                    <i class="fa fa-times"></i>
+                                                    <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" render="user-deactivated user-pending"/>
+                                                </h:commandLink>
+                                                <h:commandLink class="user-action">
+                                                    <i class="fa fa-check"></i>
+                                                    <f:ajax listener="#{adminViewBean.acceptUser(pendingUser)}" render="user-pending"/>
+                                                </h:commandLink>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.pendingUserAuthorizationList.size() gt adminViewBean.pendingUsersLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{adminViewBean.increaseLimit('PU')}" render="user-pending"/>
-                            </h:commandLink>
-                            <hr/>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.pendingUserAuthorizationList.size() gt adminViewBean.pendingUsersLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{adminViewBean.increaseLimit('PU')}" render="user-pending"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
                         </h:panelGroup>
-                    </h:panelGroup>
-                </div>
-                <div id="user-container-deactivated" class="container">
-                    <ui:fragment rendered="#{adminViewBean.hasDeactivatedUsers}">
-                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
-                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DU')}" render="user-deactivated"></f:ajax>
-                        </h:inputText>
-                    </ui:fragment>
-                    <div class="clear"></div>
-                    <h:panelGroup layout="block" id="user-deactivated">
-                        <ui:repeat value="#{adminViewBean.deactivatedUserAuthorizationList}" var="deactivatedUser" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedUsersLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/profile/view.xhtml?id=#{deactivatedUser.users.socialProfile.socialProfileId}"><img class="image" src="#{deactivatedUser.users.socialProfile.photo}"></img></a>
-                                        <p class="result-name">
-                                            <a class="name" href="/profile/view.xhtml?id=#{deactivatedUser.users.socialProfile.socialProfileId}" title="#{deactivatedUser.users.socialProfile.name}">#{deactivatedUser.users.socialProfile.name}</a>
-                                        </p>
-                                        <p class="subresult" title="#{deactivatedUser.users.username}">#{deactivatedUser.users.username}</p>
-                                        <p class="subresult" title="#{deactivatedUser.users.socialProfile.cityId.name}">#{deactivatedUser.users.socialProfile.cityId.name}/#{deactivatedUser.users.socialProfile.stateId.acronyms}</p>
-                                        <p class="subresult" title="#{deactivatedUser.users.socialProfile.subnetworkId.description}">#{deactivatedUser.users.socialProfile.subnetworkId.description}</p>
-                                        <p class="subresult" title="#{deactivatedUser.users.socialProfile.roleId.name}">#{deactivatedUser.users.socialProfile.roleId.name}</p>
-                                        <div class="container-action">
-                                            <h:commandLink>
-                                                <i class="fa fa-check"></i>
-                                                <f:ajax listener="#{adminViewBean.activateUser(deactivatedUser)}" render="user-deactivated"/>
-                                            </h:commandLink>
+                    </div>
+                    <div id="user-container-deactivated" class="container">
+                        <ui:fragment rendered="#{adminViewBean.hasDeactivatedUsers}">
+                            <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
+                                <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DU')}" render="user-deactivated"></f:ajax>
+                            </h:inputText>
+                        </ui:fragment>
+                        <div class="clear"></div>
+                        <h:panelGroup layout="block" id="user-deactivated">
+                            <ui:repeat value="#{adminViewBean.deactivatedUserAuthorizationList}" var="deactivatedUser" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedUsersLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/profile/view.xhtml?id=#{deactivatedUser.users.socialProfile.socialProfileId}"><img class="image" src="#{deactivatedUser.users.socialProfile.photo}"></img></a>
+                                            <p class="result-name">
+                                                <a class="name" href="/profile/view.xhtml?id=#{deactivatedUser.users.socialProfile.socialProfileId}" title="#{deactivatedUser.users.socialProfile.name}">#{deactivatedUser.users.socialProfile.name}</a>
+                                            </p>
+                                            <p class="subresult" title="#{deactivatedUser.users.username}">#{deactivatedUser.users.username}</p>
+                                            <p class="subresult" title="#{deactivatedUser.users.socialProfile.cityId.name}">#{deactivatedUser.users.socialProfile.cityId.name}/#{deactivatedUser.users.socialProfile.stateId.acronyms}</p>
+                                            <p class="subresult" title="#{deactivatedUser.users.socialProfile.subnetworkId.description}">#{deactivatedUser.users.socialProfile.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{deactivatedUser.users.socialProfile.roleId.name}">#{deactivatedUser.users.socialProfile.roleId.name}</p>
+                                            <div class="container-action">
+                                                <h:commandLink>
+                                                    <i class="fa fa-check"></i>
+                                                    <f:ajax listener="#{adminViewBean.activateUser(deactivatedUser)}" render="user-deactivated"/>
+                                                </h:commandLink>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.deactivatedUserAuthorizationList.size() gt adminViewBean.deactivatedUsersLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{adminViewBean.increaseLimit('DU')}" render="user-deactivated"/>
-                            </h:commandLink>
-                            <hr/>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.deactivatedUserAuthorizationList.size() gt adminViewBean.deactivatedUsersLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{adminViewBean.increaseLimit('DU')}" render="user-deactivated"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
                         </h:panelGroup>
-                    </h:panelGroup>
-                </div>
-                <div class="clear"></div>
-                <div class="admin-tabs object">
-                    <ul>
-                        <li id="admin-tab-object-pending" class="active"><span class="tab tab-object-pending">#{localeBean.getString('Pendentes')}</span></li>
-                        <li id="admin-tab-object-deactivated"><span class="tab tab-object-deactivated">#{localeBean.getString('Desativados')}</span></li>
-                    </ul>
-                    <div class="object-icon"></div>
-                    <legend class="user-label">#{localeBean.getString('Objetos Educacionais')}</legend>
-                </div>
-                <div id="object-container-pending" class="container">
-                    <ui:fragment rendered="#{adminViewBean.hasPendingObjects}">
-                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
-                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PO')}" render="object-pending"></f:ajax>
-                        </h:inputText>
-                        <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo objeto, o publicador receberá um aviso através do e-mail cadastrado.')}</p>
-                        <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
-                    </ui:fragment>
+                    </div>
                     <div class="clear"></div>
-                    <h:panelGroup layout="block" class="panel-container" id="object-pending">
-                        <ui:repeat value="#{adminViewBean.pendingEducationalObjectList}" var="pendingObject" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt adminViewBean.pendingObjectsLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/educational-object/view.xhtml?id=#{pendingObject.id}"><img class="image" src="#{pendingObject.image}"></img></a>
-                                        <p class="result-name">
-                                            <a class="name" href="/educational-object/view.xhtml?id=#{pendingObject.id}" title="#{pendingObject.name}">#{pendingObject.name}</a>
-                                        </p>
-                                        <p class="subresult" title="#{pendingObject.socialProfileId.name}">#{pendingObject.socialProfileId.name}</p>
-                                        <p class="subresult" title="#{pendingObject.socialProfileId.subnetworkId.description}">#{pendingObject.socialProfileId.subnetworkId.description}</p>
-                                        <p class="subresult" title="#{pendingObject.themeId.name}">#{pendingObject.themeId.name}</p>
-                                        <div class="container-action">
-                                            <h:commandLink class="object-action">
-                                                <i class="fa fa-times"></i>
-                                                <f:ajax listener="#{adminViewBean.rejectEducationalObject(pendingObject)}" render="object-deactivated object-pending"/>
-                                            </h:commandLink>
-                                            <h:commandLink class="object-action">
-                                                <i class="fa fa-check"></i>
-                                                <f:ajax listener="#{adminViewBean.acceptEducationalObject(pendingObject)}" render="object-pending"/>
-                                            </h:commandLink>
+                    <div class="admin-tabs object">
+                        <ul>
+                            <li id="admin-tab-object-pending" class="active"><span class="tab tab-object-pending">#{localeBean.getString('Pendentes')}</span></li>
+                            <li id="admin-tab-object-deactivated"><span class="tab tab-object-deactivated">#{localeBean.getString('Desativados')}</span></li>
+                        </ul>
+                        <div class="object-icon"></div>
+                        <legend class="user-label">#{localeBean.getString('Objetos Educacionais')}</legend>
+                    </div>
+                    <div id="object-container-pending" class="container">
+                        <ui:fragment rendered="#{adminViewBean.hasPendingObjects}">
+                            <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
+                                <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PO')}" render="object-pending"></f:ajax>
+                            </h:inputText>
+                            <p class="obs">#{localeBean.getString('Ao aceitar ou rejeitar um novo objeto, o publicador receberá um aviso em seu e-mail.')}</p>
+                            <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
+                        </ui:fragment>
+                        <div class="clear"></div>
+                        <h:panelGroup layout="block" class="panel-container" id="object-pending">
+                            <ui:repeat value="#{adminViewBean.pendingEducationalObjectList}" var="pendingObject" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt adminViewBean.pendingObjectsLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/educational-object/view.xhtml?id=#{pendingObject.id}"><img class="image" src="#{pendingObject.image}"></img></a>
+                                            <p class="result-name">
+                                                <a class="name" href="/educational-object/view.xhtml?id=#{pendingObject.id}" title="#{pendingObject.name}">#{pendingObject.name}</a>
+                                            </p>
+                                            <p class="subresult" title="#{pendingObject.socialProfileId.name}">#{pendingObject.socialProfileId.name}</p>
+                                            <p class="subresult" title="#{pendingObject.socialProfileId.subnetworkId.description}">#{pendingObject.socialProfileId.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{pendingObject.themeId.name}">#{pendingObject.themeId.name}</p>
+                                            <div class="container-action">
+                                                <h:commandLink class="object-action">
+                                                    <i class="fa fa-times"></i>
+                                                    <f:ajax listener="#{adminViewBean.rejectEducationalObject(pendingObject)}" render="object-deactivated object-pending"/>
+                                                </h:commandLink>
+                                                <h:commandLink class="object-action">
+                                                    <i class="fa fa-check"></i>
+                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(pendingObject)}" render="object-pending"/>
+                                                </h:commandLink>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
-                        </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.pendingEducationalObjectList.size() gt adminViewBean.pendingObjectsLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{adminViewBean.increaseLimit('PO')}" render="object-pending"/>
-                            </h:commandLink>
-                            <hr/>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.pendingEducationalObjectList.size() gt adminViewBean.pendingObjectsLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{adminViewBean.increaseLimit('PO')}" render="object-pending"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
                         </h:panelGroup>
-                    </h:panelGroup>
-                </div>
-                <div id="object-container-deactivated" class="container">
-                    <ui:fragment rendered="#{adminViewBean.hasDeactivatedObjects}">
-                        <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
-                            <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DO')}" render="object-deactivated"></f:ajax>
-                        </h:inputText>
-                    </ui:fragment>
-                    <div class="clear"></div>
-                    <h:panelGroup layout="block" id="object-deactivated">
-                        <ui:repeat value="#{adminViewBean.deactivatedEducationalObjectList}" var="deactivatedObject" varStatus="status">
-                            <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedObjectsLimit}">
-                                <div class="col">
-                                    <div class="result-box">
-                                        <a href="/educational-object/view.xhtml?id=#{deactivatedObject.id}"><img class="image" src="#{deactivatedObject.image}"></img></a>
-                                        <p class="result-name">
-                                            <a class="name" href="/educational-object/view.xhtml?id=#{deactivatedObject.id}" title="#{deactivatedObject.name}">#{deactivatedObject.name}</a>
-                                        </p>
-                                        <p class="subresult" title="#{deactivatedObject.socialProfileId.name}">#{deactivatedObject.socialProfileId.name}</p>
-                                        <p class="subresult" title="#{deactivatedObject.socialProfileId.subnetworkId.description}">#{deactivatedObject.socialProfileId.subnetworkId.description}</p>
-                                        <p class="subresult" title="#{deactivatedObject.themeId.name}">#{deactivatedObject.themeId.name}</p>
-                                        <div class="container-action">
-                                            <h:commandLink>
-                                                <i class="fa fa-check"></i>
-                                                <f:ajax listener="#{adminViewBean.acceptEducationalObject(deactivatedObject)}" render="object-deactivated"/>
-                                            </h:commandLink>
+                    </div>
+                    <div id="object-container-deactivated" class="container">
+                        <ui:fragment rendered="#{adminViewBean.hasDeactivatedObjects}">
+                            <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
+                                <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DO')}" render="object-deactivated"></f:ajax>
+                            </h:inputText>
+                        </ui:fragment>
+                        <div class="clear"></div>
+                        <h:panelGroup layout="block" id="object-deactivated">
+                            <ui:repeat value="#{adminViewBean.deactivatedEducationalObjectList}" var="deactivatedObject" varStatus="status">
+                                <ui:fragment rendered="#{status.index lt adminViewBean.deactivatedObjectsLimit}">
+                                    <div class="col">
+                                        <div class="result-box">
+                                            <a href="/educational-object/view.xhtml?id=#{deactivatedObject.id}"><img class="image" src="#{deactivatedObject.image}"></img></a>
+                                            <p class="result-name">
+                                                <a class="name" href="/educational-object/view.xhtml?id=#{deactivatedObject.id}" title="#{deactivatedObject.name}">#{deactivatedObject.name}</a>
+                                            </p>
+                                            <p class="subresult" title="#{deactivatedObject.socialProfileId.name}">#{deactivatedObject.socialProfileId.name}</p>
+                                            <p class="subresult" title="#{deactivatedObject.socialProfileId.subnetworkId.description}">#{deactivatedObject.socialProfileId.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{deactivatedObject.themeId.name}">#{deactivatedObject.themeId.name}</p>
+                                            <div class="container-action">
+                                                <h:commandLink>
+                                                    <i class="fa fa-check"></i>
+                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(deactivatedObject)}" render="object-deactivated"/>
+                                                </h:commandLink>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ui:fragment>
+                                </ui:fragment>
+                            </ui:repeat>
+                            <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.deactivatedEducationalObjectList.size() gt adminViewBean.deactivatedObjectsLimit}">
+                                <hr/>
+                                <h:commandLink value="#{localeBean.getString('Carregar mais')}">
+                                    <f:ajax listener="#{adminViewBean.increaseLimit('DO')}" render="object-deactivated"/>
+                                </h:commandLink>
+                                <hr/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="admin-general-tab admin-general-tab-permission">
+                    <h3 class="tab-title">#{localeBean.getString('Permissões')}</h3>
+                    <div class="admin-tabs">
+                        <ul>
+                            <li id="admin-tab-administrators" class="active"><span class="tab tab-administrators">#{localeBean.getString('Administradores')}</span></li>
+                            <li id="admin-tab-revisers"><span class="tab tab-revisers">#{localeBean.getString('Revisores')}</span></li>
+                        </ul>
+                    </div>
+                    <h:panelGroup layout="block" id="admin-container" class="container">
+                        <ui:repeat var="admin" value="#{adminViewBean.adminList}">
+                            <div class="admin">
+                                <a href="../profile/view.xhtml?id=#{admin.users.socialProfile.socialProfileId}"><img src="#{admin.users.socialProfile.photo}"/></a>
+                                <span><a  href="../profile/view.xhtml?id=#{admin.users.socialProfile.socialProfileId}">#{admin.users.socialProfile.name}</a></span>
+                            </div>
                         </ui:repeat>
-                        <h:panelGroup layout="block" class="load-more search" rendered="#{adminViewBean.deactivatedEducationalObjectList.size() gt adminViewBean.deactivatedObjectsLimit}">
-                            <hr/>
-                            <h:commandLink value="#{localeBean.getString('Carregar mais')}">
-                                <f:ajax listener="#{adminViewBean.increaseLimit('DO')}" render="object-deactivated"/>
-                            </h:commandLink>
-                            <hr/>
+                        <div class="clear"></div>
+                        <h:panelGroup layout="block" class="add-admin">
+                            <i class="fa fa-plus-circle"/>
+                            <span>#{localeBean.getString('Adicionar')}</span>
                         </h:panelGroup>
                     </h:panelGroup>
+                    <div id="reviser-container" class="container">
+                        revisores
+                    </div>
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
+
+                <!-- MODAL -->
+                <a id="open-password-modal" href="#password-modal"></a>
+                <div id="password-modal" class="password-modal">
+                    <div>
+                        <h1 class="modal-title">#{localeBean.getString('Senha')}</h1>
+                        <hr/>
+                        <a href="#close" id="close-password-modal"/>
+                        <h:commandLink class="close-password-modal">
+                            <f:ajax listener="#{adminViewBean.resetModal()}" render="modal-password-container"/>
+                            X
+                        </h:commandLink>
+                        <h:panelGroup layout="block" id="modal-password-container" class="modal-password-container">
+                            <h:inputSecret id="password-search" class="password-search" autocomplete="off" pt:placeholder="#{localeBean.getString('Digite a senha de acesso')}" value="#{adminViewBean.search}"></h:inputSecret>
+                        </h:panelGroup>
+                        <h:inputHidden id="password" value="#{adminViewBean.correctPassword}"></h:inputHidden>
+                        <div class="clear"></div>
+                        <hr/>
+                        <div class="modal-buttons">
+                            <h:commandLink class="password-button add">
+                                <f:ajax listener="#{adminViewBean.searchEvent('PW')}" execute="password-search" render="modal-password-container password"/>
+                                #{localeBean.getString('Entrar')}
+                            </h:commandLink>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <a id="open-add-admin-modal" href="#add-admin-modal"></a>
+                <div id="add-admin-modal" class="add-admin-modal">
+                    <div>
+                        <h1 class="modal-title">#{localeBean.getString('Adicionar administradores')}</h1>
+                        <hr/>
+                        <a href="#close" id="close-add-admin-modal"/>
+                        <h:commandLink class="close-add-admin-modal">
+                            <f:ajax listener="#{adminViewBean.resetModal()}" render="modal-users-container"/>
+                            X
+                        </h:commandLink>
+                        <h:panelGroup layout="block" id="modal-users-container" class="modal-users-container">
+                            <h:inputText id="admin-user-search" class="admin-user-search" autocomplete="off" pt:placeholder="#{localeBean.getString('Procure administradores para colaborar com a plataforma')}" value="#{adminViewBean.search}">
+                                <f:ajax listener="#{adminViewBean.searchEvent('AD')}" event="keyup" render="users-container"/>
+                            </h:inputText>
+                            <h:panelGroup layout="block" id="users-container" class="users-container">
+                                <ui:repeat value="#{adminViewBean.socialProfileList}" var="socialProfile">
+                                    <h:panelGroup layout="block" class="user-container">
+                                        <f:ajax listener="#{adminViewBean.selectUser(socialProfile)}" event="click" render="users-container chosen-users-container chosen-user-container-title"/>
+                                        <div class="user">
+                                            <img class="image" src="#{socialProfile.photo}"></img>
+                                            <p class="result-name" title="#{socialProfile.name}">#{socialProfile.name}</p>
+                                            <p class="subresult" title="#{socialProfile.cityId.name}">#{socialProfile.cityId.name}/#{socialProfile.stateId.acronyms}</p>
+                                            <p class="subresult" title="#{socialProfile.subnetworkId.description}">#{socialProfile.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{socialProfile.roleId.name}">#{socialProfile.roleId.name}</p>
+                                        </div>
+                                    </h:panelGroup>
+                                </ui:repeat>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" id="chosen-user-container-title">
+                                <ui:fragment rendered="#{!adminViewBean.chosenSocialProfileList.isEmpty()}">
+                                    <h1>#{localeBean.getString('Escolhidos')}</h1>
+                                    <span></span>
+                                </ui:fragment>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" id="chosen-users-container" class="chosen-users-container">
+                                <ui:repeat value="#{adminViewBean.chosenSocialProfileList}" var="chosenSocialProfile" varStatus="status">
+                                    <h:panelGroup layout="block" class="user-container">
+                                        <f:ajax event="click" listener="#{adminViewBean.removeChosenUser(chosenSocialProfile)}" execute="admin-user-search" render="users-container chosen-users-container chosen-user-container-title"/>
+                                        <div class="user">
+                                            <img class="image" src="#{chosenSocialProfile.photo}"></img>
+                                            <p class="result-name" title="#{chosenSocialProfile.name}">#{chosenSocialProfile.name}</p>
+                                            <p class="subresult" title="#{chosenSocialProfile.cityId.name}">#{chosenSocialProfile.cityId.name}/#{chosenSocialProfile.stateId.acronyms}</p>
+                                            <p class="subresult" title="#{chosenSocialProfile.subnetworkId.description}">#{chosenSocialProfile.subnetworkId.description}</p>
+                                            <p class="subresult" title="#{chosenSocialProfile.roleId.name}">#{chosenSocialProfile.roleId.name}</p>
+                                        </div>
+                                    </h:panelGroup>
+                                </ui:repeat>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <div class="clear"></div>
+                        <hr/>
+                        <div class="modal-buttons">
+                            <h:commandLink class="add-admin-button add">
+                                <f:ajax listener="#{adminViewBean.addAdmins()}" render="modal-users-container admin-container"/>
+                                #{localeBean.getString('Adicionar')}
+                            </h:commandLink>
+                            <h:commandLink class="add-admin-button cancel">
+                                <f:ajax listener="#{adminViewBean.resetModal()}" render="modal-users-container"/>
+                                #{localeBean.getString('Cancelar')}
+                            </h:commandLink>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
             </h:form>
         </section>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/admin-view.js"></script>
+        <script type="text/javascript" src="../resources/common/js/admin-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -303,4 +303,17 @@ public class UserAuthorizationJpaController implements Serializable {
             em.close();
         }
     }
+    
+    
+    public List<UserAuthorization> getAllAdmins(){
+        EntityManager em = getEntityManager();
+        try {
+            List<UserAuthorization> userAuthorizationList = (List<UserAuthorization>) 
+                    em.createNativeQuery("select distinct ua.* from user_authorization ua "
+                            + "where roles = 'AD'", UserAuthorization.class).getResultList();
+            return userAuthorizationList;
+        } finally {
+            em.close();
+        }
+    }
 }

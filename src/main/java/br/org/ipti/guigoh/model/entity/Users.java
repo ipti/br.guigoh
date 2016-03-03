@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,6 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByAlias", query = "SELECT u FROM Users u WHERE u.alias = :alias"),
     @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status")})
 public class Users implements Serializable {
+
+    @ManyToMany(mappedBy = "usersCollection")
+    private Collection<Interests> interestsCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private UserAuthorization userAuthorization;
     private static final long serialVersionUID = 1L;
@@ -239,6 +243,15 @@ public class Users implements Serializable {
 
     public void setUserAuthorization(UserAuthorization userAuthorization) {
         this.userAuthorization = userAuthorization;
+    }
+
+    @XmlTransient
+    public Collection<Interests> getInterestsCollection() {
+        return interestsCollection;
+    }
+
+    public void setInterestsCollection(Collection<Interests> interestsCollection) {
+        this.interestsCollection = interestsCollection;
     }
     
 }
