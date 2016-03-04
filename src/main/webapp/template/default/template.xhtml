@@ -48,6 +48,10 @@ and open the template in the editor.
                                 <span class="header-top-separator">|</span>
                                 <h:commandLink action="/admin/view.xhtml?faces-redirect=true" >#{localeBean.getString('Admin')}</h:commandLink>
                             </ui:fragment>
+                            <ui:fragment rendered="#{templateBean.reviser and !templateBean.admin}">
+                                <span class="header-top-separator">|</span>
+                                <h:commandLink action="/review/view.xhtml?faces-redirect=true" >#{localeBean.getString('Revisão')}</h:commandLink>
+                            </ui:fragment>
                         </p>
 
                     </div>

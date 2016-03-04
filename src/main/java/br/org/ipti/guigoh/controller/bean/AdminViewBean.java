@@ -5,10 +5,13 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.EducationalObject;
+import br.org.ipti.guigoh.model.entity.Interests;
 import br.org.ipti.guigoh.util.CookieService;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
+import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
@@ -33,18 +36,21 @@ public class AdminViewBean implements Serializable {
 
     private Integer pendingUsersLimit, deactivatedUsersLimit, pendingObjectsLimit, deactivatedObjectsLimit;
     private Boolean hasPendingUsers, hasDeactivatedUsers, hasPendingObjects, hasDeactivatedObjects, correctPassword;
-    private String search;
+    private String search, insertType;
 
     private SocialProfile mySocialProfile;
+    private Interests interestSelected;
     private Translator trans;
 
     private List<UserAuthorization> pendingUserAuthorizationList, deactivatedUserAuthorizationList, adminList;
     private List<EducationalObject> pendingEducationalObjectList, deactivatedEducationalObjectList;
     private List<SocialProfile> socialProfileList, chosenSocialProfileList;
+    private List<Interests> interestList;
 
     private SocialProfileJpaController socialProfileJpaController;
     private UserAuthorizationJpaController userAuthorizationJpaController;
     private EducationalObjectJpaController educationalObjectJpaController;
+    private InterestsJpaController interestsJpaController;
 
     public void init() throws IOException {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -85,6 +91,16 @@ public class AdminViewBean implements Serializable {
         userAuthorization.setStatus("AC");
         userAuthorizationJpaController.edit(userAuthorization);
         deactivatedUserAuthorizationList.remove(userAuthorization);
+        String mailSubject = "Cadastro ativado";
+        String mailText = "Olá!\n\nSua conta do Arte com Ciência foi ativada por um administrador.\n\n"
+                + "Clique no link abaixo para começar a utilizar sua conta.\n\n";
+        trans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
+        mailSubject = trans.getWord(mailSubject);
+        System.out.println(mailText);
+        mailText = trans.getWord(mailText);
+        mailText += "http://artecomciencia.guigoh.com/login/auth.xhtml";
+        MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
+        trans.setLocale(CookieService.getCookie("locale"));
     }
 
     public void rejectEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
@@ -150,15 +166,22 @@ public class AdminViewBean implements Serializable {
                 }
                 break;
             case "AD":
+            case "RE":
                 if (!search.equals("")) {
                     List<Integer> excludedSocialProfileIdList = new ArrayList<>();
                     chosenSocialProfileList.stream().forEach((socialProfile) -> {
                         excludedSocialProfileIdList.add(socialProfile.getSocialProfileId());
                     });
-                    adminList.stream().forEach((admin) -> {
-                        excludedSocialProfileIdList.add(admin.getUsers().getSocialProfile().getSocialProfileId());
-                    });
-                    socialProfileList = socialProfileJpaController.findSocialProfiles(search, mySocialProfile.getTokenId(), false, false, excludedSocialProfileIdList);
+                    if (type.equals("AD")) {
+                        adminList.stream().forEach((admin) -> {
+                            excludedSocialProfileIdList.add(admin.getUsers().getSocialProfile().getSocialProfileId());
+                        });
+                    } else {
+                        interestSelected.getUsersCollection().stream().forEach((reviser) -> {
+                            excludedSocialProfileIdList.add(reviser.getSocialProfile().getSocialProfileId());
+                        });
+                    }
+                    socialProfileList = socialProfileJpaController.findSocialProfiles(search, mySocialProfile.getTokenId(), true, false, excludedSocialProfileIdList);
                 } else {
                     socialProfileList = new ArrayList<>();
                 }
@@ -169,7 +192,10 @@ public class AdminViewBean implements Serializable {
                 } else {
                     correctPassword = false;
                 }
-                search = "";
+                if (correctPassword) {
+                    search = "";
+                    insertType = "AD";
+                }
                 break;
         }
     }
@@ -189,20 +215,44 @@ public class AdminViewBean implements Serializable {
         chosenSocialProfileList.remove(socialProfile);
         searchEvent("AD");
     }
-    
-    public void addAdmins() throws NonexistentEntityException, RollbackFailureException, Exception{
-        for (SocialProfile socialProfile : chosenSocialProfileList) {
-            socialProfile.getUsers().getUserAuthorization().setRoles("AD");
-            userAuthorizationJpaController.edit(socialProfile.getUsers().getUserAuthorization());
-            adminList.add(socialProfile.getUsers().getUserAuthorization());
+
+    public void addUsers(String role) throws NonexistentEntityException, RollbackFailureException, Exception {
+        if (role.equals("AD")) {
+            for (SocialProfile socialProfile : chosenSocialProfileList) {
+                socialProfile.getUsers().getUserAuthorization().setRoles("AD");
+                userAuthorizationJpaController.edit(socialProfile.getUsers().getUserAuthorization());
+                adminList.add(socialProfile.getUsers().getUserAuthorization());
+            }
+            resetModal();
+        } else if (role.equals("RE")) {
+            for (SocialProfile socialProfile : chosenSocialProfileList) {
+                interestSelected.getUsersCollection().add(socialProfile.getUsers());
+                interestsJpaController.edit(interestSelected);
+            }
+            resetModal();
         }
-        resetModal();
+    }
+
+    public void removeAdmin(UserAuthorization admin) throws NonexistentEntityException, RollbackFailureException, Exception {
+        admin.setRoles("DE");
+        userAuthorizationJpaController.edit(admin);
+        adminList.remove(admin);
+    }
+
+    public void removeReviser(Users user) throws NonexistentEntityException, RollbackFailureException, Exception {
+        interestSelected.getUsersCollection().remove(user);
+        interestsJpaController.edit(interestSelected);
+    }
+
+    public void loadRevisersByInterest(Interests interest) {
+        interestSelected = interest;
     }
 
     private void initGlobalVariables() throws IOException {
         socialProfileJpaController = new SocialProfileJpaController();
         userAuthorizationJpaController = new UserAuthorizationJpaController();
         educationalObjectJpaController = new EducationalObjectJpaController();
+        interestsJpaController = new InterestsJpaController();
 
         mySocialProfile = socialProfileJpaController.findSocialProfile(CookieService.getCookie("token"));
 
@@ -216,12 +266,15 @@ public class AdminViewBean implements Serializable {
             pendingEducationalObjectList = educationalObjectJpaController.getPendingEducationalObjects();
             deactivatedEducationalObjectList = educationalObjectJpaController.getInactiveEducationalObjects();
             adminList = userAuthorizationJpaController.getAllAdmins();
+            interestList = interestsJpaController.findInterestsEntities();
+
+            interestSelected = interestList.get(0);
 
             hasPendingUsers = !pendingUserAuthorizationList.isEmpty();
             hasDeactivatedUsers = !deactivatedUserAuthorizationList.isEmpty();
             hasPendingObjects = !pendingEducationalObjectList.isEmpty();
             hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
-            
+
             chosenSocialProfileList = socialProfileList = new ArrayList<>();
 
             trans = new Translator();
@@ -374,5 +427,29 @@ public class AdminViewBean implements Serializable {
 
     public void setCorrectPassword(Boolean correctPassword) {
         this.correctPassword = correctPassword;
+    }
+
+    public List<Interests> getInterestList() {
+        return interestList;
+    }
+
+    public void setInterestList(List<Interests> interestList) {
+        this.interestList = interestList;
+    }
+
+    public Interests getInterestSelected() {
+        return interestSelected;
+    }
+
+    public void setInterestSelected(Interests interestSelected) {
+        this.interestSelected = interestSelected;
+    }
+
+    public String getInsertType() {
+        return insertType;
+    }
+
+    public void setInsertType(String insertType) {
+        this.insertType = insertType;
     }
 }

@@ -203,7 +203,7 @@
     text-decoration: none;
 }
 
-.add-admin {
+.add-admin, .add-reviser {
     text-decoration: none;
     font-size: 12px;
     float: left;
@@ -215,7 +215,7 @@
     margin-top: 15px;
 }
 
-.add-admin:hover{
+.add-admin:hover, .add-reviser:hover{
     background-color: #333;
 }
 
@@ -304,7 +304,7 @@
     background: black;
 }
 
-.add-admin-button.cancel{
+.add-admin-button.cancel, .password-button-cancel{
     margin-right: 10px;
 }
 
@@ -385,4 +385,95 @@
 
 .modal-title {
     margin-bottom: 0px !important;
+}
+
+.remove-admin {
+    color: red;
+    font-size: 16px;
+    margin-right: 20px;
+    float: right;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.password-error {
+    font-size: 12px;
+    color: red;
+    float: left;
+    margin: 5px 0 5px 15px;
+    display: none;
+}
+
+.interest-menu {
+    float: left;
+    width: 20%;
+    border: 1px solid #c1c1c1;
+    margin-right: 7%;
+}
+
+.interest-menu > * {
+    display: block;
+    text-decoration: none;
+    padding: 0 5px;
+    font-size: 12px;
+    color: gray;
+    cursor: pointer;
+}
+
+.interest-menu > *:hover {
+    background-color: #c1c1c1;
+    color: #333;
+}
+
+.interest-menu > *.active {
+    background-color: gray;
+    color: #e6eadf;
+}
+
+.interest {
+    border-bottom: 1px solid #c1c1c1;
+}
+
+#revisers {
+    float: left;
+    width: 70%;
+}
+
+.interest-title {
+    color: #404095;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.reviser{
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.reviser a img {
+    width: 31px;
+    height: 31px;
+    float: left;
+    margin-right: 5px;
+}
+
+.reviser span a {
+    float: left;
+    font-size: 12px;
+    margin-top: 4px;
+    color: #333;
+    text-decoration: none;
+}
+
+.reviser > div {
+    float: left;
+    width: 50%;
+}
+
+.remove-reviser-button {
+    color: red;
+    font-size: 16px;
+    float: right;
+    margin-top: 3px;
 }

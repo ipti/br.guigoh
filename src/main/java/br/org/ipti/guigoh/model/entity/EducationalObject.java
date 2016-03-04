@@ -64,6 +64,9 @@ public class EducationalObject implements Serializable {
     @Size(max = 150)
     @Column(name = "image")
     private String image;
+    @Size(max = 500)
+    @Column(name = "inactive_reason")
+    private String inactiveReason;
     @Basic(optional = false)
     @NotNull
     @Column(name = "date")
@@ -170,6 +173,14 @@ public class EducationalObject implements Serializable {
 
     public void setThemeId(Interests themeId) {
         this.themeId = themeId;
+    }
+
+    public String getInactiveReason() {
+        return inactiveReason;
+    }
+
+    public void setInactiveReason(String inactiveReason) {
+        this.inactiveReason = inactiveReason;
     }
 
     @Override

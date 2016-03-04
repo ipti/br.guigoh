@@ -33,7 +33,7 @@ public class TemplateBean implements Serializable {
     private SocialProfile socialProfile;
     private UserAuthorization authorization;
 
-    private Boolean admin;
+    private Boolean admin, reviser;
     private Integer registeredUsersCount, registeredEducationalObjectsCount, interestId, pendingFriendsCount;
 
     public void init() {
@@ -69,6 +69,9 @@ public class TemplateBean implements Serializable {
             if (authorization.getRoles().equals(ADMIN)) {
                 admin = true;
             }
+            if (!authorization.getUsers().getInterestsCollection().isEmpty()) {
+                reviser = true;
+            }
         }
     }
 
@@ -103,7 +106,7 @@ public class TemplateBean implements Serializable {
     private void initGlobalVariables() {
         socialProfile = new SocialProfile();
 
-        admin = false;
+        admin = reviser = false;
 
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestId = interestsJpaController.findInterestsEntities(1, 0).get(0).getId();
@@ -163,5 +166,13 @@ public class TemplateBean implements Serializable {
 
     public void setRegisteredEducationalObjectsCount(Integer registeredEducationalObjectsCount) {
         this.registeredEducationalObjectsCount = registeredEducationalObjectsCount;
+    }
+
+    public Boolean getReviser() {
+        return reviser;
+    }
+
+    public void setReviser(Boolean reviser) {
+        this.reviser = reviser;
     }
 }

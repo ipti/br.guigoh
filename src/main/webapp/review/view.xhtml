@@ -88,8 +88,6 @@
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DU')}" render="user-deactivated"></f:ajax>
                             </h:inputText>
-                            <p class="obs">#{localeBean.getString('Ao ativar um usuário, o mesmo receberá um aviso em seu e-mail.')}</p>
-                            <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
                         </ui:fragment>
                         <div class="clear"></div>
                         <h:panelGroup layout="block" id="user-deactivated">
@@ -182,8 +180,6 @@
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DO')}" render="object-deactivated"></f:ajax>
                             </h:inputText>
-                            <p class="obs">#{localeBean.getString('Ao ativar um objeto, o publicador receberá um aviso em seu e-mail.')}</p>
-                            <p class="obs">#{localeBean.getString('O processo de envio do e-mail poderá demorar alguns segundos.')}</p>
                         </ui:fragment>
                         <div class="clear"></div>
                         <h:panelGroup layout="block" id="object-deactivated">
