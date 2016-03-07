@@ -20,7 +20,7 @@ public class MailService {
     private final static int smtpPort = 587;
     private final static boolean authentication = false;
 
-    public static void sendMail(String message, String subject, String receiver)
+    public static void sendMail(String message, String subject, String[] receiver)
             throws EmailException {
 
         SimpleEmail email = new SimpleEmail();

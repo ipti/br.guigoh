@@ -22,7 +22,9 @@ import br.org.ipti.guigoh.model.jpa.controller.TagsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UtilJpaController;
 import br.org.ipti.guigoh.util.CookieService;
+import br.org.ipti.guigoh.util.MailService;
 import br.org.ipti.guigoh.util.UploadService;
+import br.org.ipti.guigoh.util.translator.Translator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,6 +61,7 @@ public class EducationalObjectPublishBean implements Serializable {
     private List<Author> authorList;
 
     private Author author;
+    private Translator trans;
 
     private String tag;
     private String imageSrc;
@@ -215,6 +218,25 @@ public class EducationalObjectPublishBean implements Serializable {
         if (mediaFile3 != null) {
             submitFile(mediaFile3);
         }
+        if (!educationalObject.getThemeId().getUsersCollection().isEmpty()) {
+            String[] emails = new String[educationalObject.getThemeId().getUsersCollection().size()];
+            int i = 0;
+            for (Users user : educationalObject.getThemeId().getUsersCollection()) {
+                emails[i] = user.getUsername();
+                i++;
+            }
+            String mailSubject = "Novo Objeto Educacional";
+            String mailText = "Um novo objeto educacional foi publicado no Arte com Ciência.";
+            trans.setLocale(educationalObject.getSocialProfileId().getLanguageId().getAcronym());
+            mailSubject = trans.getWord(mailSubject);
+            mailText = trans.getWord(mailText);
+            mailText += "\n\n" + educationalObject.getName() + "\n" + educationalObject.getSocialProfileId().getName();
+            mailText += "\n" + educationalObject.getName() + "\n" + educationalObject.getSocialProfileId().getName();
+            mailText += (educationalObject.getSocialProfileId().getSubnetworkId() != null ? "\n" + educationalObject.getSocialProfileId().getSubnetworkId().getDescription() : "");
+            mailText += "\n" + educationalObject.getThemeId().getName();
+            MailService.sendMail(mailText, mailSubject, emails);
+            trans.setLocale(CookieService.getCookie("locale"));
+        }
     }
 
     private void submitFile(Part media) throws IOException, Exception {
@@ -246,6 +268,9 @@ public class EducationalObjectPublishBean implements Serializable {
 
         educationalObject = new EducationalObject();
         author = new Author();
+        trans = new Translator();
+
+        trans.setLocale(CookieService.getCookie("locale"));
 
         cropCoordinates = new Integer[6];
     }

@@ -59,7 +59,7 @@ public class ReviewViewBean implements Serializable {
         mailSubject = trans.getWord(mailSubject);
         mailText = trans.getWord(mailText);
         mailText += "\n\n" + educationalObject.getName() + "\n\n" + educationalObject.getInactiveReason(); 
-        MailService.sendMail(mailText, mailSubject, educationalObject.getSocialProfileId().getUsers().getUsername());
+        MailService.sendMail(mailText, mailSubject, new String[] {educationalObject.getSocialProfileId().getUsers().getUsername()});
         trans.setLocale(CookieService.getCookie("locale"));
         hasPendingObjects = !pendingEducationalObjectList.isEmpty();
         hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
@@ -77,7 +77,7 @@ public class ReviewViewBean implements Serializable {
         mailSubject = trans.getWord(mailSubject);
         mailText = trans.getWord(mailText);
         mailText += "\n\n" + educationalObject.getName();
-        MailService.sendMail(mailText, mailSubject, educationalObject.getSocialProfileId().getUsers().getUsername());
+        MailService.sendMail(mailText, mailSubject, new String[] {educationalObject.getSocialProfileId().getUsers().getUsername()});
         trans.setLocale(CookieService.getCookie("locale"));
         hasPendingObjects = !pendingEducationalObjectList.isEmpty();
         hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
