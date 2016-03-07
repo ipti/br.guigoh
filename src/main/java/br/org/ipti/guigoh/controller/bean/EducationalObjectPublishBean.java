@@ -231,7 +231,6 @@ public class EducationalObjectPublishBean implements Serializable {
             mailSubject = trans.getWord(mailSubject);
             mailText = trans.getWord(mailText);
             mailText += "\n\n" + educationalObject.getName() + "\n" + educationalObject.getSocialProfileId().getName();
-            mailText += "\n" + educationalObject.getName() + "\n" + educationalObject.getSocialProfileId().getName();
             mailText += (educationalObject.getSocialProfileId().getSubnetworkId() != null ? "\n" + educationalObject.getSocialProfileId().getSubnetworkId().getDescription() : "");
             mailText += "\n" + educationalObject.getThemeId().getName();
             MailService.sendMail(mailText, mailSubject, emails);
