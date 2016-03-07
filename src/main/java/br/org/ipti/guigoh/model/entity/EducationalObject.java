@@ -64,7 +64,7 @@ public class EducationalObject implements Serializable {
     @Size(max = 150)
     @Column(name = "image")
     private String image;
-    @Size(max = 500)
+    @Size(max = 200)
     @Column(name = "inactive_reason")
     private String inactiveReason;
     @Basic(optional = false)

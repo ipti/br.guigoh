@@ -71,6 +71,7 @@ public class AdminViewBean implements Serializable {
         mailText += "http://artecomciencia.guigoh.com/login/auth.xhtml";
         MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
+        hasPendingUsers = !pendingUserAuthorizationList.isEmpty();
     }
 
     public void rejectUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
@@ -83,8 +84,11 @@ public class AdminViewBean implements Serializable {
         trans.setLocale(userAuthorization.getUsers().getSocialProfile().getLanguageId().getAcronym());
         mailSubject = trans.getWord(mailSubject);
         mailText = trans.getWord(mailText);
+        mailText += "\n\n" + userAuthorization.getInactiveReason(); 
         MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
+        hasPendingUsers = !pendingUserAuthorizationList.isEmpty();
+        hasDeactivatedUsers = !deactivatedUserAuthorizationList.isEmpty();
     }
 
     public void activateUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
@@ -101,6 +105,7 @@ public class AdminViewBean implements Serializable {
         mailText += "http://artecomciencia.guigoh.com/login/auth.xhtml";
         MailService.sendMail(mailText, mailSubject, userAuthorization.getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
+        hasDeactivatedUsers = !deactivatedUserAuthorizationList.isEmpty();
     }
 
     public void rejectEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
@@ -108,7 +113,16 @@ public class AdminViewBean implements Serializable {
         educationalObjectJpaController.edit(educationalObject);
         pendingEducationalObjectList.remove(educationalObject);
         deactivatedEducationalObjectList.add(educationalObject);
-
+        String mailSubject = "Objeto Educacional negado";
+        String mailText = "Seu objeto educacional no Arte com Ciência foi negado por um administrador.";
+        trans.setLocale(educationalObject.getSocialProfileId().getLanguageId().getAcronym());
+        mailSubject = trans.getWord(mailSubject);
+        mailText = trans.getWord(mailText);
+        mailText += "\n\n" + educationalObject.getName() + "\n\n" + educationalObject.getInactiveReason(); 
+        MailService.sendMail(mailText, mailSubject, educationalObject.getSocialProfileId().getUsers().getUsername());
+        trans.setLocale(CookieService.getCookie("locale"));
+        hasPendingObjects = !pendingEducationalObjectList.isEmpty();
+        hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
     }
 
     public void acceptEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
@@ -116,6 +130,16 @@ public class AdminViewBean implements Serializable {
         educationalObjectJpaController.edit(educationalObject);
         deactivatedEducationalObjectList.remove(educationalObject);
         pendingEducationalObjectList.remove(educationalObject);
+        String mailSubject = "Objeto Educacional aceito";
+        String mailText = "Seu objeto educacional no Arte com Ciência foi aceito por um administrador.";
+        trans.setLocale(educationalObject.getSocialProfileId().getLanguageId().getAcronym());
+        mailSubject = trans.getWord(mailSubject);
+        mailText = trans.getWord(mailText);
+        mailText += "\n\n" + educationalObject.getName();
+        MailService.sendMail(mailText, mailSubject, educationalObject.getSocialProfileId().getUsers().getUsername());
+        trans.setLocale(CookieService.getCookie("locale"));
+        hasPendingObjects = !pendingUserAuthorizationList.isEmpty();
+        hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
     }
 
     public void increaseLimit(String type) {

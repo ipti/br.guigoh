@@ -54,7 +54,7 @@ public class UserAuthorization implements Serializable {
     @Size(min = 1, max = 60)
     @Column(name = "network")
     private String network;
-    @Size(max = 500)
+    @Size(max = 200)
     @Column(name = "inactive_reason")
     private String inactiveReason;
     @JoinColumn(name = "token_id", referencedColumnName = "token", insertable = false, updatable = false)

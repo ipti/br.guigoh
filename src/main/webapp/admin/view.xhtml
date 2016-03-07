@@ -38,7 +38,7 @@
                         <div class="user-icon"></div>
                         <legend class="user-label">#{localeBean.getString('Usuários')}</legend>
                     </div>
-                    <div id="user-container-pending" class="container">
+                    <h:panelGroup id="user-container-pending" class="container">
                         <ui:fragment rendered="#{adminViewBean.hasPendingUsers}">
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PU')}" render="user-pending"></f:ajax>
@@ -61,14 +61,22 @@
                                             <p class="subresult" title="#{pendingUser.users.socialProfile.subnetworkId.description}">#{pendingUser.users.socialProfile.subnetworkId.description}</p>
                                             <p class="subresult" title="#{pendingUser.users.socialProfile.roleId.name}">#{pendingUser.users.socialProfile.roleId.name}</p>
                                             <div class="container-action">
-                                                <h:commandLink class="user-action">
+                                                <span class="reject-button">
                                                     <i class="fa fa-times"></i>
-                                                    <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" render="user-deactivated user-pending"/>
-                                                </h:commandLink>
+                                                </span>
                                                 <h:commandLink class="user-action">
                                                     <i class="fa fa-check"></i>
-                                                    <f:ajax listener="#{adminViewBean.acceptUser(pendingUser)}" render="user-pending"/>
+                                                    <f:ajax listener="#{adminViewBean.acceptUser(pendingUser)}" render="user-container-pending"/>
                                                 </h:commandLink>
+                                                <div class="reason-container">
+                                                    <a class="close-reason-container">X</a>
+                                                    <span class="reason-error">#{localeBean.getString('Campo obrigatório')}</span>
+                                                    <h:inputTextarea value="#{pendingUser.inactiveReason}" pt:placeholder="#{localeBean.getString('Justificativa')}..." pt:maxlength="200" class="close-reason-textarea" id="close-reason-textarea"></h:inputTextarea>
+                                                    <h:commandLink class="reject" onclick="return isRejectJustified(this);" value="#{localeBean.getString('Rejeitar')}">
+                                                        <f:ajax listener="#{adminViewBean.rejectUser(pendingUser)}" execute="close-reason-textarea" render="user-container-deactivated user-container-pending"/>
+                                                    </h:commandLink>
+                                                    <span class="max-length"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -82,8 +90,8 @@
                                 <hr/>
                             </h:panelGroup>
                         </h:panelGroup>
-                    </div>
-                    <div id="user-container-deactivated" class="container">
+                    </h:panelGroup>
+                    <h:panelGroup id="user-container-deactivated" class="container">
                         <ui:fragment rendered="#{adminViewBean.hasDeactivatedUsers}">
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar usuários')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DU')}" render="user-deactivated"></f:ajax>
@@ -106,10 +114,17 @@
                                             <p class="subresult" title="#{deactivatedUser.users.socialProfile.subnetworkId.description}">#{deactivatedUser.users.socialProfile.subnetworkId.description}</p>
                                             <p class="subresult" title="#{deactivatedUser.users.socialProfile.roleId.name}">#{deactivatedUser.users.socialProfile.roleId.name}</p>
                                             <div class="container-action">
+                                                <span class="deactivate-reason">
+                                                    <i class="fa fa-exclamation-triangle"/>
+                                                </span>
                                                 <h:commandLink>
                                                     <i class="fa fa-check"></i>
-                                                    <f:ajax listener="#{adminViewBean.activateUser(deactivatedUser)}" render="user-deactivated"/>
+                                                    <f:ajax listener="#{adminViewBean.activateUser(deactivatedUser)}" render="user-container-deactivated"/>
                                                 </h:commandLink>
+                                                <div class="reason-container">
+                                                    <a class="close-reason-container">X</a>
+                                                    <span class="reason">#{deactivatedUser.inactiveReason}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +138,7 @@
                                 <hr/>
                             </h:panelGroup>
                         </h:panelGroup>
-                    </div>
+                    </h:panelGroup>
                     <div class="clear"></div>
                     <div class="admin-tabs object">
                         <ul>
@@ -133,7 +148,7 @@
                         <div class="object-icon"></div>
                         <legend class="user-label">#{localeBean.getString('Objetos Educacionais')}</legend>
                     </div>
-                    <div id="object-container-pending" class="container">
+                    <h:panelGroup id="object-container-pending" class="container">
                         <ui:fragment rendered="#{adminViewBean.hasPendingObjects}">
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('PO')}" render="object-pending"></f:ajax>
@@ -155,14 +170,22 @@
                                             <p class="subresult" title="#{pendingObject.socialProfileId.subnetworkId.description}">#{pendingObject.socialProfileId.subnetworkId.description}</p>
                                             <p class="subresult" title="#{pendingObject.themeId.name}">#{pendingObject.themeId.name}</p>
                                             <div class="container-action">
-                                                <h:commandLink class="object-action">
+                                                <span class="reject-button">
                                                     <i class="fa fa-times"></i>
-                                                    <f:ajax listener="#{adminViewBean.rejectEducationalObject(pendingObject)}" render="object-deactivated object-pending"/>
-                                                </h:commandLink>
+                                                </span>
                                                 <h:commandLink class="object-action">
                                                     <i class="fa fa-check"></i>
-                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(pendingObject)}" render="object-pending"/>
+                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(pendingObject)}" render="object-container-pending"/>
                                                 </h:commandLink>
+                                                <div class="reason-container">
+                                                    <a class="close-reason-container">X</a>
+                                                    <span class="reason-error">#{localeBean.getString('Campo obrigatório')}</span>
+                                                    <h:inputTextarea value="#{pendingObject.inactiveReason}" pt:placeholder="#{localeBean.getString('Justificativa')}..." pt:maxlength="200" class="close-reason-textarea" id="close-reason-textarea"></h:inputTextarea>
+                                                    <h:commandLink class="reject" onclick="return isRejectJustified(this);" value="#{localeBean.getString('Rejeitar')}">
+                                                        <f:ajax listener="#{adminViewBean.rejectEducationalObject(pendingObject)}" execute="close-reason-textarea" render="object-container-deactivated object-container-pending"/>
+                                                    </h:commandLink>
+                                                    <span class="max-length"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -176,8 +199,8 @@
                                 <hr/>
                             </h:panelGroup>
                         </h:panelGroup>
-                    </div>
-                    <div id="object-container-deactivated" class="container">
+                    </h:panelGroup>
+                    <h:panelGroup id="object-container-deactivated" class="container">
                         <ui:fragment rendered="#{adminViewBean.hasDeactivatedObjects}">
                             <h:inputText class="admin-search pull-right" value="#{adminViewBean.search}" pt:placeholder="#{localeBean.getString('Buscar objetos educacionais')}">
                                 <f:ajax event="keyup" listener="#{adminViewBean.searchEvent('DO')}" render="object-deactivated"></f:ajax>
@@ -199,10 +222,17 @@
                                             <p class="subresult" title="#{deactivatedObject.socialProfileId.subnetworkId.description}">#{deactivatedObject.socialProfileId.subnetworkId.description}</p>
                                             <p class="subresult" title="#{deactivatedObject.themeId.name}">#{deactivatedObject.themeId.name}</p>
                                             <div class="container-action">
+                                                <span class="deactivate-reason">
+                                                    <i class="fa fa-exclamation-triangle"/>
+                                                </span>
                                                 <h:commandLink>
                                                     <i class="fa fa-check"></i>
-                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(deactivatedObject)}" render="object-deactivated"/>
+                                                    <f:ajax listener="#{adminViewBean.acceptEducationalObject(deactivatedObject)}" render="object-container-deactivated"/>
                                                 </h:commandLink>
+                                                <div class="reason-container">
+                                                    <a class="close-reason-container">X</a>
+                                                    <span class="reason">#{deactivatedObject.inactiveReason}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -216,7 +246,7 @@
                                 <hr/>
                             </h:panelGroup>
                         </h:panelGroup>
-                    </div>
+                    </h:panelGroup>
                     <div class="clear"></div>
                 </div>
                 <div class="admin-general-tab admin-general-tab-permission">

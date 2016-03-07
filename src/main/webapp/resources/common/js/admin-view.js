@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $.each($(".result-name a, .subresult"), function () {
-        var limit = $(this).hasClass("subresult") ? 25 : 20;
+        var limit = $(this).hasClass("subresult") ? 21 : 20;
         $(this).text(changeNameLength($(this).text(), limit));
     });
 
@@ -29,6 +29,8 @@ $(document).ready(function () {
             }
         }
     });
+
+    $('.max-length').text("(200)");
 });
 
 $(document).on("click", ".add-admin", function () {
@@ -56,16 +58,22 @@ $(document).on("click", ".interest", function () {
     $(this).addClass("active");
 });
 
+$(document).on("click", ".reject-button, .deactivate-reason", function () {
+    $(".reason-container").not($(this).parent().find(".reason-container")).hide();
+    $(this).parent().find(".reason-container").toggle();
+});
+
+$(document).on("click", ".close-reason-container", function () {
+    $(this).parent().toggle();
+});
+
 jsf.ajax.addOnEvent(function (data) {
     if (data.status === "success") {
-        if ($(data.source).hasClass("user-action") || $(data.source).hasClass("object-action")
-                || $(data.source).parent().hasClass("load-more") || $(data.source).hasClass("admin-user-search")
-                || $(data.source).hasClass("user-container")) {
-            $.each($(".result-name, .result-name a, .subresult"), function () {
-                var limit = $(this).hasClass("subresult") ? 25 : 20;
-                $(this).text(changeNameLength($(this).text(), limit));
-            });
-        } else if ($(data.source).hasClass("close-add-admin-modal") || $(data.source).hasClass("add-admin-button")) {
+        $.each($(".modal-users-container .result-name, .result-name a, .subresult"), function () {
+            var limit = $(this).hasClass("subresult") ? 21 : 20;
+            $(this).text(changeNameLength($(this).text(), limit));
+        });
+        if ($(data.source).hasClass("close-add-admin-modal") || $(data.source).hasClass("add-admin-button")) {
             document.getElementById("close-add-admin-modal").click();
         } else if ($(data.source).hasClass("close-password-modal") || $(data.source).hasClass("password-button-cancel")
                 || $(data.source).hasClass("remove-admin-button")) {
@@ -95,3 +103,21 @@ jsf.ajax.addOnEvent(function (data) {
         }
     }
 });
+
+$(document).on('keyup', '.close-reason-textarea', function (e) {
+    var length = $(this).val().length;
+    length = 200 - length;
+    $(this).parent().find(".max-length").text("(" + length + ")");
+});
+
+function isRejectJustified(data) {
+    if ($(data).parent().find("textarea").val() == "") {
+        $(data).parent().find(".reason-error").show();
+        $(data).parent().find("textarea").css("border", "1px solid red");
+        return false;
+    } else {
+        $(data).parent().find(".reason-error").hide();
+        $(data).parent().find("textarea").css("border", "0");
+        return true;
+    }
+}
