@@ -28,7 +28,7 @@ import javax.inject.Named;
 
 /**
  *
- * @author Joe
+ * @author ipti
  */
 @ViewScoped
 @Named
@@ -93,6 +93,7 @@ public class AdminViewBean implements Serializable {
 
     public void activateUser(UserAuthorization userAuthorization) throws NonexistentEntityException, RollbackFailureException, Exception {
         userAuthorization.setStatus("AC");
+        userAuthorization.setInactiveReason(null);
         userAuthorizationJpaController.edit(userAuthorization);
         deactivatedUserAuthorizationList.remove(userAuthorization);
         String mailSubject = "Cadastro ativado";
@@ -127,6 +128,7 @@ public class AdminViewBean implements Serializable {
 
     public void acceptEducationalObject(EducationalObject educationalObject) throws NonexistentEntityException, RollbackFailureException, Exception {
         educationalObject.setStatus("AC");
+        educationalObject.setInactiveReason(null);
         educationalObjectJpaController.edit(educationalObject);
         deactivatedEducationalObjectList.remove(educationalObject);
         pendingEducationalObjectList.remove(educationalObject);
@@ -138,7 +140,7 @@ public class AdminViewBean implements Serializable {
         mailText += "\n\n" + educationalObject.getName();
         MailService.sendMail(mailText, mailSubject, educationalObject.getSocialProfileId().getUsers().getUsername());
         trans.setLocale(CookieService.getCookie("locale"));
-        hasPendingObjects = !pendingUserAuthorizationList.isEmpty();
+        hasPendingObjects = !pendingEducationalObjectList.isEmpty();
         hasDeactivatedObjects = !deactivatedEducationalObjectList.isEmpty();
     }
 

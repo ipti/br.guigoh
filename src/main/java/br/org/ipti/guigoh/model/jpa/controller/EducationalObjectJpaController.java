@@ -66,7 +66,8 @@ public class EducationalObjectJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             SocialProfile socialProfileId = educationalObject.getSocialProfileId();
             if (socialProfileId != null) {
                 socialProfileId = em.getReference(socialProfileId.getClass(), socialProfileId.getTokenId());
@@ -179,7 +180,8 @@ public class EducationalObjectJpaController implements Serializable {
     public void edit(EducationalObject educationalObject) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             EducationalObject persistentEducationalObject = em.find(EducationalObject.class, educationalObject.getId());
             SocialProfile socialProfileIdOld = persistentEducationalObject.getSocialProfileId();
             SocialProfile socialProfileIdNew = educationalObject.getSocialProfileId();
@@ -386,7 +388,8 @@ public class EducationalObjectJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();em.getTransaction().begin();
+            em = getEntityManager();
+            em.getTransaction().begin();
             EducationalObject educationalObject;
             try {
                 educationalObject = em.getReference(EducationalObject.class, id);
@@ -505,7 +508,7 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public int getEducationalObjectsQuantity() {
         EntityManager em = getEntityManager();
         try {
@@ -544,6 +547,32 @@ public class EducationalObjectJpaController implements Serializable {
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select * from educational_object "
                     + "where status = 'DE' order by date desc", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<EducationalObject> getPendingEducationalObjectsForReviewers(String tokenId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select eo.* from educational_object eo "
+                    + "join user_reviser ur on ur.interests_id_fk = eo.theme_id "
+                    + "where status = 'PE' and ur.token_id_fk = '" + tokenId + "' "
+                    + "order by date desc", EducationalObject.class).getResultList();
+            return educationalObjectList;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<EducationalObject> getInactiveEducationalObjectsForReviewers(String tokenId) {
+        EntityManager em = getEntityManager();
+        try {
+            List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select eo.* from educational_object eo "
+                    + "join user_reviser ur on ur.interests_id_fk = eo.theme_id "
+                    + "where status = 'DE' and ur.token_id_fk = '" + tokenId + "' "
+                    + "order by date desc", EducationalObject.class).getResultList();
             return educationalObjectList;
         } finally {
             em.close();
@@ -620,12 +649,12 @@ public class EducationalObjectJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public List<EducationalObject> findParticipationInEducationalObjects(String email) {
         EntityManager em = getEntityManager();
         try {
             List<EducationalObject> educationalObjectList = (List<EducationalObject>) em.createNativeQuery("select eo.* from educational_object eo "
-                    + "join educational_object_author eoa on eoa.educational_object_id = eo.id " 
+                    + "join educational_object_author eoa on eoa.educational_object_id = eo.id "
                     + "join author a on a.id = eoa.author_id where eo.status = 'AC' and a.email = '" + email + "' order by date desc", EducationalObject.class).getResultList();
             return educationalObjectList;
 
