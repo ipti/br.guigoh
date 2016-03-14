@@ -85,9 +85,11 @@
 }
 
 #educational-object-info p:first-of-type{
-    font-weight: bold;
-    font-size: 14px;
     margin: 15px 19px 15px 19px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    color: #333;
 }
 
 #educational-object-info p{

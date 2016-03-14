@@ -6,6 +6,7 @@ $(document).ready(function () {
     tinymce.init({
         selector: '#editor',
         height: 450,
+        width: 600,
         statusbar: false,
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
@@ -98,7 +99,7 @@ $(document).ready(function () {
 
     $(document).on('DOMMouseScroll mousewheel', '.chat-messages', preventScrolling);
     $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
-    
+
     $(".doc-image > span").text(changeFileNameLength($(".doc-image > span").text(), 20));
 });
 
@@ -345,8 +346,10 @@ $(document).on("click", ".doc-status", function () {
     }
 });
 
-$(document).on("click", ".add-image", function () {
-    $('#browse-image').click();
+$(document).on("click", ".add-image, .change-image", function () {
+    if (logged_social_profile_id == $(".creator-user").find(".user-id").text()) {
+        $('#browse-image').click();
+    }
 });
 
 $('#browse-image').change(function (e) {

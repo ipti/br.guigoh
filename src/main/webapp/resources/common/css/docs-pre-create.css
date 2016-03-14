@@ -1,0 +1,156 @@
+.topbar-info {
+    width: 65%;
+    float: left;
+}
+
+.welcome {
+    float: left;
+}
+
+.welcome > p {
+    color: #333;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: bold;
+}
+
+#docs-info{
+    width: 260px;
+    float: right;
+    font-size: 12px;
+    background-color: #dbded3;
+    border-top: 5px solid #9a9c97;
+}
+
+#docs-info p:first-of-type{
+    margin: 15px 19px 15px 19px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    color: #333;
+}
+
+#docs-info p{
+    margin: 5px 19px 0px 19px;
+    line-height: 18px;    
+}
+
+#docs-info p:last-of-type{
+    margin: 5px 19px 50px 19px;
+}
+
+#create-new-doc > span {
+    cursor: not-allowed;
+}
+
+#create-new-doc{
+    border-radius: 8px;
+    float: right;
+    background-color: #a9a9a9;
+    width: 55px;
+    height: 45px;
+}
+
+#create-new-doc:hover {
+    background-color: #333;
+}
+
+#create-new-doc > span, #create-new-doc > a {
+    display: block;
+    padding: 2px;
+}
+
+#create-new-doc img{
+    margin: 3px 12px;
+}
+
+.docs-container {
+    background-color: #a9a9a9;
+    width: 65%;
+    float: left;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+.title-container {
+    font-size: 11px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 10px 45px 10px;
+    margin: 0 10px;
+}
+
+.title-container > span {
+    float: left;
+    line-height: 18px;
+}
+
+.body-container {
+    margin: 0 10px 10px;
+    background-color: #e6eadf;
+    border-radius: 8px;
+    padding-top: 3px;
+}
+
+.doc {
+    margin: 0 10px;
+    border-bottom: 1px solid #ccc;
+    min-height: 30px;
+    display: flex;
+}
+
+.doc > span, .doc > a, .doc > div, .doc > div > a {
+    float: left;
+    color: gray;
+}
+
+.doc-date {
+    font-size: 10px;
+    width: 15%;
+}
+
+.doc-name {
+    font-size: 12px;
+    width: 40%;
+    font-weight: bold;
+    margin-top: 3px;
+    line-height: 18px;
+    text-decoration: none;
+}
+
+.doc-participants {
+    width: 30%;
+    font-size: 11px;
+    line-height: 18px;
+}
+
+.doc-participants > a {
+    width: 100%;
+}
+
+.doc-participants > a:last-child {
+    margin-bottom: 3px;
+}
+
+.show-in-profile-container {
+    background: white;
+    border-radius: 8px;
+    width: 25px;
+    height: 25px;
+    margin: 5px auto;
+    cursor: pointer;
+}
+
+.show-in-profile-container i {
+    font-size: 15px;
+    margin-top: 8px;
+    color: #bbd037;
+    float: left;
+    margin: 5px;
+}
+
+.doc-status {
+    text-align: center;
+    width: 15%;
+}
