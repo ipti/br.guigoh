@@ -60,8 +60,10 @@
     padding: 2px;
 }
 
-#create-new-doc img{
-    margin: 3px 12px;
+#create-new-doc i{
+    font-size: 28px;
+    color: white;
+    margin: 7px 15px;
 }
 
 .docs-container {

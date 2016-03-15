@@ -90,7 +90,7 @@ $(document).ready(function () {
     });
 
     $(".creator-user span, .guest-user span").each(function () {
-        $(this).text(changeNameLength($(this).text(), 20));
+        $(this).text(changeNameLength($(this).text(), 17));
     });
 
     if (getParameterByName("id") != "") {
@@ -241,7 +241,7 @@ jsf.ajax.addOnEvent(function (data) {
                 websocketDocs.send(json);
             }
             $(".creator-user span, .guest-user span").each(function () {
-                $(this).text(changeNameLength($(this).text(), 20));
+                $(this).text(changeNameLength($(this).text(), 17));
             });
         } else if ($(data.source).hasClass("save-text")) {
             if (getParameterByName("id") == "") {
@@ -315,10 +315,11 @@ $(document).on('keypress', '.chat-send-message', function (e) {
 function loadChatMessageBlock(id, name, message, date, direction) {
     direction = (direction !== undefined) ? direction : (id === logged_social_profile_id ? "right" : "left");
     var classe = (direction === "right" ? "chat-your-message" : "chat-friend-message");
+    var sender = (direction === "right" ? "" : "<p title='" + name + "' class='chat-message-sender float-" + direction + "'>" + changeNameLength(name, 13) + "</p>");
     var container = "<div class='chat-message " + classe + "'>"
-            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-sender'>" + name + "</div>"
+            + "<div class='chat-message-inner-container'><img class='float-" + direction + "' src='../../resources/common/images/triangle-" + direction + ".png'/></div>"
             + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-text'>" + message + "</p></div>"
-            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-date'>" + date + "</p></div>"
+            + "<div class='chat-message-inner-container'><p class='float-" + direction + " chat-message-date'>" + date + "</p>" + sender + "</div>"
             + "</div>";
     $('.chat-messages').append(container);
     $('.chat-messages').scrollTop($('.chat-messages').prop("scrollHeight"));
