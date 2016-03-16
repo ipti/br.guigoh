@@ -108,6 +108,7 @@ aside {
 
 .user-situation {
     float: right;
+    color: gray;
     margin-top: 3px;
     padding: 5px;
     margin-right: 3px;
@@ -117,13 +118,14 @@ aside {
 
 .guest-user .user-situation.owner:hover {
     cursor: pointer;
+    color: #333;
 }
 
 .add-guest{
     text-decoration: none;
     font-size: 10px;
     float: right;
-    color: #333;
+    color: whitesmoke;
     text-transform: uppercase;
     background-color: #9a9a9a;
     padding: 3px 10px;
@@ -133,10 +135,10 @@ aside {
     margin-top: 15px;
 }
 
-.add-guest i {
-    font-size: 16px;
+.add-guest img {
     float: left;
-    margin: 3px 5px 0 0;
+    margin: 1px 5px 0 0;
+    width: 20px;
 }
 
 .add-image {
@@ -149,12 +151,10 @@ aside {
     cursor: pointer;
 }
 
-.add-image > i {
-    font-size: 20px;
-    text-align: center;
-    margin: 10px 0 0 0;
-    width: 70px;
-    color: whitesmoke;
+.add-image > img {
+    margin: 5px auto 2px;
+    width: 28px;
+    display: block;
 }
 
 .add-image > span {
@@ -162,13 +162,13 @@ aside {
     line-height: 15px;
     text-align: center;
     float: left;
+    color: whitesmoke;
     text-transform: uppercase;
     font-weight: bold;
 }
 
 .add-guest:hover, .add-image:hover {
     background-color: #333;
-    color: whitesmoke;
 }
 
 .image-error {

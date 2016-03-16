@@ -127,19 +127,28 @@ html {
     width: 25px;
 }
 
-.attach-link, .publish-topic {
+.attach-link {
     float: right;
     margin-right: 20px;
     margin-top: 4px;
     cursor: pointer;
 }
 
-.attach-link:hover {
-    
+.publish-topic {
+    float: right;
+    margin-right: 20px;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    background: url('../images/send.png') no-repeat;
+    background-size: 25px;
+    width: 25px;
+    height: 25px;
 }
 
-.publish-topic img:hover {
-    
+.publish-topic:hover {
+    background: url('../images/send-hv.png') no-repeat;
+    background-size: 25px;
 }
 
 .file-container {

@@ -260,8 +260,17 @@ div.select {
 
 .logo-ipti {
     position: absolute;
-    bottom: 17px;
-    right: 35px;
+    bottom: 12px;
+    right: 33px;
+    background: url('../images/logo-ipti.png') no-repeat;
+    width: 93px;
+    background-size: 84px;
+    height: 88px;
+}
+
+.logo-ipti:hover {
+    background: url('../images/logo-ipti-hv.png') no-repeat;
+    background-size: 84px;
 }
 
 .header-logo {

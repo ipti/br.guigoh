@@ -145,7 +145,7 @@
                     <h:inputTextarea class="message-textarea" pt:maxlength="200" id="message-textarea" pt:placeholder="#{localeBean.getString('Inserir um comentário...')}" value="#{educationalObjectViewBean.message}" disabled="#{educationalObjectViewBean.mySocialProfile.roleId.name == 'Visitante'}"/>
                     <hr/>
                     <h:commandLink class="publish-link" disabled="#{educationalObjectViewBean.mySocialProfile.roleId.name == 'Visitante'}">
-                        <img src="../resources/common/images/send.png"/>
+                        <span class="send-icon"/>
                         <f:ajax execute="message-textarea" listener="#{educationalObjectViewBean.publishMessage}" render="comment-label messages-container message-textarea"/>
                     </h:commandLink>
                     <span class="max-length"></span>

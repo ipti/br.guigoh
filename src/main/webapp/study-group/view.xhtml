@@ -139,7 +139,6 @@
                                 </ui:repeat>
                             </h:panelGroup>
                             <h:commandLink class="publish-link" disabled="#{templateBean.socialProfile.roleId.name == 'Visitante'}">
-                                <img src="../resources/common/images/send.png"/>
                                 <f:ajax execute="message-textarea" listener="#{studyGroupViewBean.replyTopic()}" render="@form"/>
                             </h:commandLink>
                             <img class="attach-link" src="../resources/common/images/attach.png" />

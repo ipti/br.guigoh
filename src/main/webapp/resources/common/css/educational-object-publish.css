@@ -233,6 +233,11 @@ div.select {
     top: 6px;
 }
 
+.add-tag img {
+    width: 21px;
+    height: 21px;
+}
+
 .tags {
     float: left;
     margin-top: -30px;
@@ -560,6 +565,7 @@ div.select {
 
 .submit-educational-object img, .back-to-home img{
     float: left;
+    width: 60px;
     margin: -10px 13px 0 -10px;
 }
 

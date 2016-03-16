@@ -105,19 +105,39 @@
 
 .user-friend-status {
     float: right;
-    width: 25px;
-    margin: 7px 0 0 0;
+    background-size: 25px!important;
+    width: 20px;
+    height: 20px;
+    margin: 12px 0px 0 0;
     padding: 4px 7px;
 }
 
 .user-friend-status.accept {
     margin-left: 12px;
-    float: none;
+    float: left;
+    background: url('/resources/common/images/add-friend-gray.png') no-repeat;
+}
+
+.user-friend-status.accept:hover {
+    background: url('/resources/common/images/add-friend-hv.png') no-repeat;
 }
 
 .user-friend-status.reject {
     margin-left: -1px;
     border-top-left-radius: 0 !important;
+    background: url('/resources/common/images/remove-friend-gray.png') no-repeat;
+}
+
+.user-friend-status.reject:hover {
+    background: url('/resources/common/images/remove-friend-hv.png') no-repeat;
+}
+
+.user-friend-status.remove {
+    background: url('/resources/common/images/remove-friend-gray.png') no-repeat;
+}
+
+.user-friend-status.remove:hover {
+    background: url('/resources/common/images/remove-friend-hv.png') no-repeat;
 }
 
 section a {

@@ -313,14 +313,24 @@
     margin: 0 10px;
 }
 
-.illusory-textarea a, .illusory-textarea span {
+.illusory-textarea a, .illusory-textarea > span {
     float: right;
     margin-right: 20px;
     margin-top: 1px;
 }
 
-.illusory-textarea img {
+.send-icon {
+    float: right;
     width: 20px;
+    height: 20px;
+    background: url('../images/send.png') no-repeat;
+    background-size: 20px;
+    margin-top: 2px;
+}
+
+.send-icon:hover {
+    background: url('../images/send-hv.png') no-repeat;
+    background-size: 20px;
 }
 
 .messages-container {

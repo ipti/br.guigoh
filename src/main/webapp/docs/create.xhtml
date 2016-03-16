@@ -45,7 +45,7 @@
                     <h:panelGroup id="image-container">
                         <ui:fragment rendered="#{!docsCreateBean.hasImage}">
                             <div class="add-image">
-                                <i class="fa fa-image"/>
+                                <img src="../resources/common/images/send-doc-image.png"/>
                                 <span>#{localeBean.getString('Enviar imagem')}</span>
                             </div>
                         </ui:fragment>
@@ -116,7 +116,7 @@
                                 </ui:repeat>
                             </h:panelGroup>
                             <h:panelGroup layout="block" class="add-guest" rendered="#{docsCreateBean.ownerSocialProfile.socialProfileId == docsCreateBean.mySocialProfile.socialProfileId}">
-                                <i class="fa fa-plus"/>
+                                <img src="../resources/common/images/add-guest.png"/>
                                 <span>#{localeBean.getString('Adicionar')}</span>
                             </h:panelGroup>
                             <div class="clear"></div>

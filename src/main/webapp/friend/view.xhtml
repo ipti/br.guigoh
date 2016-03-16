@@ -37,11 +37,11 @@
                                 </div>
                                 <div class="user-friend-status-container">
                                     <h:commandLink class="accept-user">
-                                        <img class="user-friend-status accept" src="../resources/common/images/add-friend-gray.png"/>
+                                        <span class="user-friend-status accept" />
                                         <f:ajax listener="#{friendViewBean.acceptFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>
                                     <h:commandLink class="reject-user">
-                                        <img class="user-friend-status reject" src="../resources/common/images/remove-friend-gray.png"/>
+                                        <span class="user-friend-status reject" />
                                         <f:ajax listener="#{friendViewBean.removeFriend(pending.tokenFriend2.socialProfile.socialProfileId)}" render="@form"/>
                                     </h:commandLink>
                                 </div>
@@ -74,7 +74,7 @@
                                         <span>#{localeBean.getString('Bate-papo')}</span>
                                     </div>
                                     <h:commandLink>
-                                        <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
+                                        <span class="user-friend-status remove" />
                                         <f:ajax listener="#{friendViewBean.removeFriend(friend.tokenFriend2.socialProfile.socialProfileId)}" render="friend-container"/>
                                     </h:commandLink>
                                 </div>

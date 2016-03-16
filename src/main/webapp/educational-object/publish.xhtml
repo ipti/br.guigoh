@@ -56,7 +56,7 @@
                             <h:inputText class="tag-input" id="tag-input" autocomplete="off"  value="#{educationalObjectPublishBean.tag}" pt:placeholder="#Hashtags"/>
                             <h:commandLink class="add-tag" onclick="return checkTagEmpty('.tag-input')">
                                 <f:ajax listener="#{educationalObjectPublishBean.addTag()}" execute="tag-input" render="tags-container tags"/>
-                                <img src="../resources/common/images/arrow-select.png"/>
+                                <img src="../resources/common/images/add-hashtag-bt.png"/>
                             </h:commandLink>
                         </h:panelGroup>
                         <h:panelGroup layout="block" class="tags" id="tags">

@@ -43,7 +43,7 @@
                                             </div>
                                             <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq 'AC'}">
                                                 <h:commandLink class="friend-situation" disabled="#{searchViewBean.mySocialProfile.roleId.name == 'Visitante'}">
-                                                               <img class="user-friend-status remove" src="../resources/common/images/remove-friend-gray.png"/>
+                                                               <span class="user-friend-status remove"/>
                                                     <f:ajax listener="#{searchViewBean.removeFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                                 </h:commandLink>
                                             </ui:fragment>
@@ -55,7 +55,7 @@
                                             </ui:fragment>
                                             <ui:fragment rendered="#{searchViewBean.isFriend(socialProfile.tokenId).status eq null}">
                                                 <h:commandLink class="friend-situation" disabled="#{searchViewBean.mySocialProfile.roleId.name == 'Visitante'}">
-                                                    <img class="user-friend-status add" src="../resources/common/images/add-friend-gray.png"/>
+                                                    <span class="user-friend-status add"/>
                                                     <f:ajax listener="#{searchViewBean.addFriend(socialProfile.socialProfileId)}" render="user-list"/>
                                                 </h:commandLink>
                                             </ui:fragment>
