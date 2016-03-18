@@ -7,20 +7,56 @@
     <ui:define name="title">Docs</ui:define>
     <!-- BEGIN PAGE STYLES -->
     <ui:define name="styles">
+        <link type="text/css" rel="stylesheet" media="all" href="../resources/common/css/docs-view.css"></link>
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata"> 
-        <f:event type="preRenderView" listener="#{templateBean.init()}"/>
-        <f:event type="preRenderView" listener="#{homeBean.init()}"/>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+            <f:viewParam name="id" value="#{docsViewBean.docId}"/>
+            <f:event type="preRenderView" listener="#{docsViewBean.init()}"/>
+        </f:metadata>
     </ui:define>
     <ui:define name="content">
         <section id="content">
-            <h1>Docs</h1>
+            <h1>#{docsViewBean.doc.title}</h1>
+            <div class="main-container">
+                <div class="doc-panel">
+                    <div class="doc-topbar"></div>
+                    <div class="doc-container">
+                        <h:outputText escape="false" value="#{docsViewBean.doc.doc}"></h:outputText>
+                    </div>
+                </div>
+            </div>
+            <aside>
+                <div class="collaborators">
+                    <div class="collaborators-container">
+                        <span class="container-title">#{localeBean.getString('Equipe')}</span>
+                        <span class="creator-label">#{localeBean.getString('Proprietário')}</span>
+                        <div class="collaborator-user creator-user">
+                            <img class="creator-photo" src="#{docsViewBean.doc.creatorSocialProfileFk.photo}"/>
+                            <span>#{docsViewBean.doc.creatorSocialProfileFk.name}</span>
+                        </div>
+                        <hr class="collaborators-separator"/>
+                        <span class="guests-label">#{localeBean.getString('Convidados')}</span>
+                        <div id="guests">
+                            <ui:repeat value="#{docsViewBean.doc.docGuestCollection}" var="guest">
+                                <div class="collaborator-user guest-user">
+                                    <img class="guest-photo" src="#{guest.socialProfileFk.photo}"/>
+                                    <span title="#{guest.socialProfileFk.name}">#{guest.socialProfileFk.name}</span>
+                                </div>
+                            </ui:repeat>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </aside>
+            <div class="clear"></div>
         </section>
     </ui:define>
     <!-- BEGIN PAGE SCRIPTS -->
     <ui:define name="scripts">
-        <script type="text/javascript" src="/resources/common/js/home.js"></script>
+        <script type="text/javascript" src="/resources/common/js/docs-view.js"></script>
     </ui:define>
     <!-- END PAGE SCRIPTS -->
 </ui:composition>

@@ -40,21 +40,7 @@ $(document).ready(function () {
                     }
                     clearTimeout(saveTimer);
                     saveTimer = setTimeout(function () {
-                        $(".collaborator-user").each(function () {
-                            if (logged_social_profile_id == $(this).find(".user-id").text()) {
-                                $(this).find(".user-situation").css("color", "rgb(51, 51, 51)");
-                            }
-                        });
-                        $("#text").val(tinyMCE.activeEditor.getContent());
-                        $(".save-text").click();
-                        $(".doc-saved").addClass("visible");
-                        if (getParameterByName("id") != "") {
-                            json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_OFF"}';
-                            websocketDocs.send(json);
-                        }
-                        setTimeout(function () {
-                            $(".doc-saved").removeClass("visible");
-                        }, 5000);
+                        saveDocument();
                     }, 3000);
                 }
             });
@@ -171,7 +157,7 @@ function onMessageReceivedForDocs(evt) {
         var loggedUserPermission;
         $(".collaborator-user").each(function () {
             if ($(this).children(".user-id").text() == msg.user) {
-                $(this).find(".user-situation").css("color", "rgb(51, 51, 51)");
+                $(this).find(".user-situation").css("color", "gray");
             }
             if ($(this).children(".user-id").text() == logged_social_profile_id) {
                 loggedUserPermission = $(this).children(".user-permission").text();
@@ -210,6 +196,29 @@ $("#title").keyup(function (e) {
         }, 3000);
     }
 });
+
+$(document).on("click", ".doc-save", function () {
+    clearTimeout(saveTimer);
+    saveDocument();
+});
+
+function saveDocument() {
+    $(".collaborator-user").each(function () {
+        if (logged_social_profile_id == $(this).find(".user-id").text()) {
+            $(this).find(".user-situation").css("color", "gray");
+        }
+    });
+    $("#text").val(tinyMCE.activeEditor.getContent());
+    $(".save-text").click();
+    $(".doc-saved").addClass("visible");
+    if (getParameterByName("id") != "") {
+        json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + logged_social_profile_id + '", "action":"EDITING_OFF"}';
+        websocketDocs.send(json);
+    }
+    setTimeout(function () {
+        $(".doc-saved").removeClass("visible");
+    }, 5000);
+}
 
 $("#title").focus(function () {
     var save_this = $(this);

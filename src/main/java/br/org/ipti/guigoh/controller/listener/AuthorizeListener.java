@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -66,6 +67,8 @@ public class AuthorizeListener implements PhaseListener {
                     }
                 } else {
                     if (!isLoginPage) {
+                        HttpServletRequest httpServletRequest = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                        CookieService.addCookie("page-to-redirect", httpServletRequest.getRequestURL().toString());
                         FacesContext.getCurrentInstance().getExternalContext().redirect("/login/auth.xhtml");
                     }
 

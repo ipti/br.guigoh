@@ -48,7 +48,7 @@ public class TemplateBean implements Serializable {
     }
 
     public void logout() throws IOException {
-        CookieService.eraseCookie();
+        CookieService.eraseCookies();
         FacesContext.getCurrentInstance().getExternalContext().redirect("/login/auth.xhtml");
     }
 

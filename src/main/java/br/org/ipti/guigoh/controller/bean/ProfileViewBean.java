@@ -481,7 +481,7 @@ public class ProfileViewBean implements Serializable {
             socialProfile = socialProfileJpaController.findSocialProfileBySocialProfileId(socialProfileId);
         }
         educationalObjectList = educationalObjectJpaController.findParticipationInEducationalObjects(socialProfile.getUsers().getUsername());
-        docList = docJpaController.findBySocialProfileId(socialProfile.getSocialProfileId());
+        docList = docJpaController.findBySocialProfileId(socialProfile.getSocialProfileId(), true);
         editFieldList = new ArrayList<>();
         interestList = interestsJpaController.findInterestsEntities();
         countryList = countryJpaController.findCountryEntities();

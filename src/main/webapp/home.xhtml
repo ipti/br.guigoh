@@ -10,8 +10,10 @@
     </ui:define>
     <!-- END PAGE STYLES -->
     <ui:define name="metadata"> 
-        <f:event type="preRenderView" listener="#{templateBean.init()}"/>
-        <f:event type="preRenderView" listener="#{homeBean.init()}"/>
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{templateBean.init()}"/>
+            <f:event type="preRenderView" listener="#{homeBean.init()}"/>
+        </f:metadata>
     </ui:define>
     <ui:define name="content">
         <section id="content">

@@ -62,7 +62,9 @@ public class LoginAuthBean implements Serializable {
                 case "AC":
                     CookieService.addCookie("user", registeredUser.getUsername());
                     CookieService.addCookie("token", registeredUser.getToken());
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/home.xhtml");
+                    String url = CookieService.getCookie("page-to-redirect") == null ? "/home.xhtml": CookieService.getCookie("page-to-redirect");
+                    CookieService.eraseCookie("page-to-redirect");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(url);
                     break;
                 case "PC":
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, trans.getWord("Sua conta já foi solicitada. Aguarde a confirmação do administrador."), null));

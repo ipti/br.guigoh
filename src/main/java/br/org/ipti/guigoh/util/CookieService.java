@@ -46,8 +46,23 @@ public class CookieService {
         }
         return value;
     }
+    
+    public static void eraseCookie(String name) {
+        request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().trim().equalsIgnoreCase(name)) {
+                    cookie.setValue("");
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
+        }
+    }
 
-    public static void eraseCookie() {
+    public static void eraseCookies() {
         request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         Cookie[] cookies = request.getCookies();

@@ -17,6 +17,7 @@ aside {
 }
 
 .doc-title {
+    float: left;
     width: 50%;
     margin: 11px 0 20px 10px;
     border: 1px solid #CACACA;
@@ -50,15 +51,15 @@ aside {
 
 .doc-saved img {
     position: absolute;
-    right: 115px;
-    bottom: 20px;
+    left: 80px;
+    bottom: 0px;
     width: 35px;
 }
 
 .doc-saved span {
     position: absolute;
-    bottom: 25px;
-    right: 0;
+    bottom: 5px;
+    left: 125px;
     font-size: 12px;
 }
 
@@ -161,6 +162,37 @@ aside {
     font-size: 10px;
     line-height: 15px;
     text-align: center;
+    float: left;
+    color: whitesmoke;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.doc-save {
+    float: left;
+    border-radius: 8px;
+    background-color: #a9a9a9;
+    width: 130px;
+    height: 34px;
+    margin: 11px 0 0 77px;
+    cursor: pointer;
+}
+
+.doc-save:hover {
+    background-color: #333;
+}
+
+.doc-save > img {
+    margin: 3px 5px;
+    width: 30px;
+    float: left;
+}
+
+.doc-save > span {
+    font-size: 10px;
+    line-height: 15px;
+    width: 80px;
+    margin-top: 2px;
     float: left;
     color: whitesmoke;
     text-transform: uppercase;

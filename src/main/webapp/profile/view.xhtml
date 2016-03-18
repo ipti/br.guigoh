@@ -104,7 +104,7 @@
                         <ui:fragment rendered="#{profileViewBean.socialProfile.roleId.name != 'Visitante'}">
                             <ui:fragment rendered="#{profileViewBean.isFriend().status eq 'AC'}">
                                 <h:commandLink class="friend-situation" disabled="#{profileViewBean.mySocialProfile.roleId.name == 'Visitante'}">
-                                    <img class="friend-status" src="../resources/common/images/remove-friend-gray.png"/>
+                                    <span class="friend-status remove" />
                                     <f:ajax listener="#{profileViewBean.removeFriend}" render="profile-options"/>
                                 </h:commandLink>
                             </ui:fragment>
@@ -116,7 +116,7 @@
                             </ui:fragment>
                             <ui:fragment rendered="#{profileViewBean.isFriend().status eq null}">
                                 <h:commandLink class="friend-situation" disabled="#{profileViewBean.mySocialProfile.roleId.name == 'Visitante'}">
-                                    <img class="friend-status" src="../resources/common/images/add-friend-gray.png"/>
+                                    <span class="friend-status add" />
                                     <f:ajax listener="#{profileViewBean.addFriend}" render="profile-options"/>
                                 </h:commandLink>
                             </ui:fragment>
@@ -409,13 +409,13 @@
                     <div class="profile-column-left">
                         <ui:repeat value="#{profileViewBean.docList}" var="doc">
                             <div class="item-box-container">
-                                <a href="/docs/create.xhtml?id=#{doc.id}"><img class="item-box-img" src="#{doc.image}"/></a>
+                                <a href="/docs/view.xhtml?id=#{doc.id}"><img class="item-box-img" src="#{doc.image}"/></a>
                                 <p class="item-box-doc-title">
                                     <ui:fragment rendered="#{doc.creatorSocialProfileFk == profileViewBean.socialProfile}">#{localeBean.getString('Proprietário')}</ui:fragment>
                                     <ui:fragment rendered="#{doc.creatorSocialProfileFk != profileViewBean.socialProfile}">#{localeBean.getString('Convidado')}</ui:fragment>
                                 </p>
                                 <p class="item-box-aux">#{localeBean.getString('em')}</p>
-                                <a class="item-box-title-bold" href="/docs/create.xhtml?id=#{doc.id}"><p>#{doc.title}</p></a>
+                                <a class="item-box-title-bold" href="/docs/view.xhtml?id=#{doc.id}"><p>#{doc.title}</p></a>
                                 <div class="item-box-date">
                                     <img src="../resources/common/images/clock.png"/>
                                     <h:outputText value="#{doc.date}">

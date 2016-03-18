@@ -65,6 +65,11 @@
                         <img src="../resources/common/images/save.png"></img>
                         <span>#{localeBean.getString('Documento salvo')}</span>
                     </div>
+                    <div class="doc-save">
+                        <img src="../resources/common/images/save-and-close-doc.png"/>
+                        <span>#{localeBean.getString('Salvar documento')}</span>
+                    </div>
+                    <div class="clear"></div>
                     <textarea id="editor"></textarea>
                     <h:inputHidden id="text" value="#{docsCreateBean.text}"/>
                     <h:inputHidden id="doc-id" value="#{docsCreateBean.docId}"/>

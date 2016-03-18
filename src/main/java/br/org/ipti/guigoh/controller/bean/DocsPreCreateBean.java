@@ -42,7 +42,7 @@ public class DocsPreCreateBean implements Serializable{
         docJpaController = new DocJpaController();
         SocialProfileJpaController socialProfileJpaController = new SocialProfileJpaController();
         
-        docList = docJpaController.findBySocialProfileId(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")).getSocialProfileId());
+        docList = docJpaController.findBySocialProfileId(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")).getSocialProfileId(), false);
         Collections.reverse(docList);
     }
 
