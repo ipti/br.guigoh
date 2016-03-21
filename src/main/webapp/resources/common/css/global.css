@@ -61,6 +61,10 @@ hr {
 
 /** Coluna principal **/
 
+.language-selected {
+    cursor: pointer;
+}
+
 .column {
     width: 600px;
     float: left;
@@ -116,6 +120,12 @@ hr {
     line-height: 18px;
 }
 
+.column-object-subnetwork .subnetwork {
+    line-height: 18px;
+    display: block;
+    width: 100%;
+}
+
 .column-object-author {
     font-size: 12px;
     font-weight: normal;
@@ -141,8 +151,8 @@ hr {
 .column-object-description {
     padding-top: 15px;
     line-height: 17px;
-    float: left;
-    width: 80%;
+    float: right;
+    width: 490px;
 }
 
 .column-object-description span:first-child {
@@ -267,7 +277,11 @@ aside h3 {
     position: relative;
 }
 
-.header-top, .header-top a{
+.header-top {
+    position: relative;
+}
+
+.header-top, .header-top > p > a{
     color: white;
     text-align: right;
     font-size: 10px;
@@ -494,17 +508,36 @@ aside h3 {
     z-index: 1;
 }
 
-#logged-user-menu-box a{
+#language-menu-box {
+    display: none;
+    text-align: left;
+    text-transform: uppercase;
+    width: 100px;
+    height: 80px;
+    background: white;
+    position: absolute;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    border: 1px solid #C1C1C1;
+    cursor: default;
+    right: 30px;
+    top: 45px;
+    z-index: 1;
+}
+
+#logged-user-menu-box a, #language-menu-box a{
     color: gray;
     text-decoration: none;
     margin-left: 15px;
 }
 
-#logged-user-menu-box .options {
+#logged-user-menu-box .options, #language-menu-box .options {
     margin-top: 7px;
+    font-weight: bold;
 }
 
-#logged-user-menu-box a:hover{
+#logged-user-menu-box a:hover, #language-menu-box a:hover{
     text-decoration: underline;
     cursor: pointer;
 }
@@ -527,11 +560,35 @@ aside h3 {
     border-bottom: 10px solid #C1C1C1;
 }
 
+#language-menu-box:before {
+    content:"";
+    position: absolute;
+    right: 22px;
+    bottom: 80px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #C1C1C1;
+}
+
 #logged-user-menu-box:after {
     content:"";
     position: absolute;
     right: 24px;
     bottom: 70px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
+}
+
+#language-menu-box:after {
+    content:"";
+    position: absolute;
+    right: 24px;
+    bottom: 80px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;

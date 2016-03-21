@@ -4,6 +4,7 @@
  */
 package br.org.ipti.guigoh.model.jpa.controller;
 
+import br.org.ipti.guigoh.model.entity.City;
 import br.org.ipti.guigoh.model.jpa.util.PersistenceUnit;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.NonexistentEntityException;
 import br.org.ipti.guigoh.model.jpa.controller.exceptions.RollbackFailureException;
@@ -44,8 +45,12 @@ public class SubnetworkJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
+            City cityFk = subnetwork.getCityFk();
+            if (cityFk != null) {
+                cityFk = em.getReference(cityFk.getClass(), cityFk.getId());
+                subnetwork.setCityFk(cityFk);
+            }
             Collection<SocialProfile> attachedSocialProfileCollection = new ArrayList<SocialProfile>();
             for (SocialProfile socialProfileCollectionSocialProfileToAttach : subnetwork.getSocialProfileCollection()) {
                 socialProfileCollectionSocialProfileToAttach = em.getReference(socialProfileCollectionSocialProfileToAttach.getClass(), socialProfileCollectionSocialProfileToAttach.getTokenId());
@@ -53,6 +58,10 @@ public class SubnetworkJpaController implements Serializable {
             }
             subnetwork.setSocialProfileCollection(attachedSocialProfileCollection);
             em.persist(subnetwork);
+            if (cityFk != null) {
+                cityFk.getSubnetworkCollection().add(subnetwork);
+                cityFk = em.merge(cityFk);
+            }
             for (SocialProfile socialProfileCollectionSocialProfile : subnetwork.getSocialProfileCollection()) {
                 Subnetwork oldSubnetworkIdOfSocialProfileCollectionSocialProfile = socialProfileCollectionSocialProfile.getSubnetworkId();
                 socialProfileCollectionSocialProfile.setSubnetworkId(subnetwork);
@@ -80,11 +89,16 @@ public class SubnetworkJpaController implements Serializable {
     public void edit(Subnetwork subnetwork) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             Subnetwork persistentSubnetwork = em.find(Subnetwork.class, subnetwork.getId());
+            City cityFkOld = persistentSubnetwork.getCityFk();
+            City cityFkNew = subnetwork.getCityFk();
             Collection<SocialProfile> socialProfileCollectionOld = persistentSubnetwork.getSocialProfileCollection();
             Collection<SocialProfile> socialProfileCollectionNew = subnetwork.getSocialProfileCollection();
+            if (cityFkNew != null) {
+                cityFkNew = em.getReference(cityFkNew.getClass(), cityFkNew.getId());
+                subnetwork.setCityFk(cityFkNew);
+            }
             Collection<SocialProfile> attachedSocialProfileCollectionNew = new ArrayList<SocialProfile>();
             for (SocialProfile socialProfileCollectionNewSocialProfileToAttach : socialProfileCollectionNew) {
                 socialProfileCollectionNewSocialProfileToAttach = em.getReference(socialProfileCollectionNewSocialProfileToAttach.getClass(), socialProfileCollectionNewSocialProfileToAttach.getTokenId());
@@ -93,6 +107,14 @@ public class SubnetworkJpaController implements Serializable {
             socialProfileCollectionNew = attachedSocialProfileCollectionNew;
             subnetwork.setSocialProfileCollection(socialProfileCollectionNew);
             subnetwork = em.merge(subnetwork);
+            if (cityFkOld != null && !cityFkOld.equals(cityFkNew)) {
+                cityFkOld.getSubnetworkCollection().remove(subnetwork);
+                cityFkOld = em.merge(cityFkOld);
+            }
+            if (cityFkNew != null && !cityFkNew.equals(cityFkOld)) {
+                cityFkNew.getSubnetworkCollection().add(subnetwork);
+                cityFkNew = em.merge(cityFkNew);
+            }
             for (SocialProfile socialProfileCollectionOldSocialProfile : socialProfileCollectionOld) {
                 if (!socialProfileCollectionNew.contains(socialProfileCollectionOldSocialProfile)) {
                     socialProfileCollectionOldSocialProfile.setSubnetworkId(null);
@@ -135,14 +157,18 @@ public class SubnetworkJpaController implements Serializable {
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
+            em = getEntityManager();em.getTransaction().begin();
             Subnetwork subnetwork;
             try {
                 subnetwork = em.getReference(Subnetwork.class, id);
                 subnetwork.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The subnetwork with id " + id + " no longer exists.", enfe);
+            }
+            City cityFk = subnetwork.getCityFk();
+            if (cityFk != null) {
+                cityFk.getSubnetworkCollection().remove(subnetwork);
+                cityFk = em.merge(cityFk);
             }
             Collection<SocialProfile> socialProfileCollection = subnetwork.getSocialProfileCollection();
             for (SocialProfile socialProfileCollectionSocialProfile : socialProfileCollection) {

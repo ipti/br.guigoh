@@ -35,6 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "City.findById", query = "SELECT c FROM City c WHERE c.id = :id"),
     @NamedQuery(name = "City.findByName", query = "SELECT c FROM City c WHERE c.name = :name")})
 public class City implements Serializable {
+
+    @OneToMany(mappedBy = "cityFk")
+    private Collection<Subnetwork> subnetworkCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -142,6 +145,15 @@ public class City implements Serializable {
     @Override
     public String toString() {
         return "br.org.ipti.guigoh.model.entity.City[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Subnetwork> getSubnetworkCollection() {
+        return subnetworkCollection;
+    }
+
+    public void setSubnetworkCollection(Collection<Subnetwork> subnetworkCollection) {
+        this.subnetworkCollection = subnetworkCollection;
     }
     
 }

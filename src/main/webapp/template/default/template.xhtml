@@ -37,12 +37,9 @@ and open the template in the editor.
                                 <span class="header-top-separator">|</span>
                             </ui:fragment>
                             <!--<a href="#">SELECT LANGUAGE</a>-->
-                            <ui:param name="url" value="#{request.servletPath}"/>
-                            <h:commandLink styleClass="locale ptBR" action="#{localeBean.changeLocale(url, 'ptBR')}" value="PORT"/>
-                            <span class="header-top-separator">|</span>
-                            <h:commandLink styleClass="locale enUS" action="#{localeBean.changeLocale(url, 'enUS')}" value="ENG"/>
-                            <span class="header-top-separator">|</span>
-                            <h:commandLink styleClass="locale frFR" action="#{localeBean.changeLocale(url, 'frFR')}" value="FRA"/>
+                            <span>#{localeBean.getString('Idioma')}: </span>
+                            <ui:param name="languageSelected" value="#{templateBean.socialProfile.languageId.description}"/>
+                            <span class="language-selected">#{localeBean.getString(languageSelected)} <i class="fa fa-chevron-down"></i></span>
                             <!--<a href="#">Ajuda do Guigoh</a>-->
                             <ui:fragment rendered="#{templateBean.admin}">
                                 <span class="header-top-separator">|</span>
@@ -53,7 +50,14 @@ and open the template in the editor.
                                 <h:commandLink action="/review/view.xhtml?faces-redirect=true" >#{localeBean.getString('Revisão')}</h:commandLink>
                             </ui:fragment>
                         </p>
-
+                        <div id="language-menu-box">
+                            <div class="options">
+                                <ui:param name="url" value="#{request.servletPath}"/>
+                                <ui:repeat value="#{templateBean.languageList}" var="language">
+                                    <h:commandLink action="#{localeBean.changeLocale(url, language.acronym)}" value="#{localeBean.getString(language.description)}"></h:commandLink><br/>
+                                </ui:repeat>
+                            </div>
+                        </div>
                     </div>
                     <div class="header-navbar">
                         <div class="header-logo">

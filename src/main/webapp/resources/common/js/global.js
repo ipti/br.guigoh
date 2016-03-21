@@ -1,8 +1,3 @@
-$(document).ready(function () {
-    var locale = $("#localeAcronym").val();
-    $("." + locale).css("font-weight", "bold");
-});
-
 $('.messenger.disabled').mousemove(function (e) {
         $('#visitorPermissionWarning').css({position: 'absolute', top: e.pageY - 85 + 'px', left: e.pageX - 210 + 'px'}).show();
 });
@@ -16,6 +11,12 @@ $(document).on('click', function (e) {
         $("#logged-user-menu-box").toggle();
     } else if ($(e.target).closest("#logged-user-menu-box").length === 0) {
         $("#logged-user-menu-box").hide();
+    } 
+    
+    if ($(e.target).closest($(".language-selected")).length > 0) {
+        $("#language-menu-box").toggle();
+    } else if ($(e.target).closest(".language-selected").length === 0) {
+        $("#language-menu-box").hide();
     }
 });
 

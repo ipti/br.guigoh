@@ -5,12 +5,14 @@
 package br.org.ipti.guigoh.controller.bean;
 
 import br.org.ipti.guigoh.model.entity.Author;
+import br.org.ipti.guigoh.model.entity.Language;
 import br.org.ipti.guigoh.model.entity.SocialProfile;
 import br.org.ipti.guigoh.model.entity.UserAuthorization;
 import br.org.ipti.guigoh.model.entity.Users;
 import br.org.ipti.guigoh.model.jpa.controller.EducationalObjectJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.FriendsJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.InterestsJpaController;
+import br.org.ipti.guigoh.model.jpa.controller.LanguageJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.SocialProfileJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UserAuthorizationJpaController;
 import br.org.ipti.guigoh.model.jpa.controller.UsersJpaController;
@@ -32,6 +34,8 @@ public class TemplateBean implements Serializable {
 
     private SocialProfile socialProfile;
     private UserAuthorization authorization;
+    
+    private List<Language> languageList;
 
     private Boolean admin, reviser;
     private Integer registeredUsersCount, registeredEducationalObjectsCount, interestId, pendingFriendsCount;
@@ -83,21 +87,19 @@ public class TemplateBean implements Serializable {
             Users user = usersJpaController.findUsers(author.getEmail());
             if (user != null && user.getSocialProfile().getSubnetworkId() != null && !subnetworkList.contains(user.getSocialProfile().getSubnetworkId().getDescription())) {
                 subnetworkList.add(user.getSocialProfile().getSubnetworkId().getDescription());
-                subnetwork += user.getSocialProfile().getSubnetworkId().getDescription() + " / ";
+                subnetwork += "<span class='subnetwork'>" + user.getSocialProfile().getSubnetworkId().getDescription()
+                        + " - " + user.getSocialProfile().getSubnetworkId().getCityFk().getName()
+                        + "/" + user.getSocialProfile().getSubnetworkId().getCityFk().getStateId().getAcronyms() + "</span>";
             }
         }
-        if (!subnetwork.equals("")) {
-            return subnetwork.substring(0, subnetwork.length() - 3);
-        } else {
-            return subnetwork;
-        }
+        return subnetwork;
     }
 
     private void getRegisteredUsersQuantity() {
         UsersJpaController usersJpaController = new UsersJpaController();
         registeredUsersCount = usersJpaController.getUsersQuantity();
     }
-    
+
     private void getRegisteredEducationalObjectsQuantity() {
         EducationalObjectJpaController educationalObjectJpaController = new EducationalObjectJpaController();
         registeredEducationalObjectsCount = educationalObjectJpaController.getEducationalObjectsQuantity();
@@ -110,6 +112,9 @@ public class TemplateBean implements Serializable {
 
         InterestsJpaController interestsJpaController = new InterestsJpaController();
         interestId = interestsJpaController.findInterestsEntities(1, 0).get(0).getId();
+        
+        LanguageJpaController languageJpaController = new LanguageJpaController();
+        languageList = languageJpaController.findLanguageEntities();
     }
 
     public SocialProfile getSocialProfile() {
@@ -174,5 +179,13 @@ public class TemplateBean implements Serializable {
 
     public void setReviser(Boolean reviser) {
         this.reviser = reviser;
+    }
+
+    public List<Language> getLanguageList() {
+        return languageList;
+    }
+
+    public void setLanguageList(List<Language> languageList) {
+        this.languageList = languageList;
     }
 }

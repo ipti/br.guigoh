@@ -376,3 +376,10 @@
     font-size: 12px;
     margin-top: 10px;
 }
+
+.subnetwork {
+    display: block;
+    width: 100%;
+    line-height: 17px;
+    margin-bottom: 5px;
+}
