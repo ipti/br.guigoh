@@ -63,6 +63,7 @@ hr {
 
 .language-selected {
     cursor: pointer;
+    position: relative;
 }
 
 .column {
@@ -277,11 +278,7 @@ aside h3 {
     position: relative;
 }
 
-.header-top {
-    position: relative;
-}
-
-.header-top, .header-top > p > a{
+.header-top, .header-top > div > a{
     color: white;
     text-align: right;
     font-size: 10px;
@@ -521,8 +518,8 @@ aside h3 {
     border-radius: 10px;
     border: 1px solid #C1C1C1;
     cursor: default;
-    right: 30px;
-    top: 45px;
+    right: -25px;
+    top: 25px;
     z-index: 1;
 }
 

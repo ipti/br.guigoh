@@ -27,7 +27,7 @@ and open the template in the editor.
             <header>
                 <h:form prependId="false">
                     <div class="header-top">
-                        <p>
+                        <div>
                             <h:outputText styleClass="registered-objects-quantity" value="#{templateBean.registeredEducationalObjectsCount} #{localeBean.getString('objetos educacionais publicados')}"></h:outputText>
                             <span class="header-top-separator">|</span>
                             <ui:fragment rendered="#{templateBean.admin}">
@@ -39,7 +39,18 @@ and open the template in the editor.
                             <!--<a href="#">SELECT LANGUAGE</a>-->
                             <span>#{localeBean.getString('Idioma')}: </span>
                             <ui:param name="languageSelected" value="#{templateBean.socialProfile.languageId.description}"/>
-                            <span class="language-selected">#{localeBean.getString(languageSelected)} <i class="fa fa-chevron-down"></i></span>
+                            <span class="language-selected">
+                                #{localeBean.getString(languageSelected)} 
+                                <i class="fa fa-chevron-down"></i>
+                                <div id="language-menu-box">
+                                    <div class="options">
+                                        <ui:param name="url" value="#{request.servletPath}"/>
+                                        <ui:repeat value="#{templateBean.languageList}" var="language">
+                                            <h:commandLink action="#{localeBean.changeLocale(url, language.acronym)}" value="#{localeBean.getString(language.description)}"></h:commandLink><br/>
+                                        </ui:repeat>
+                                    </div>
+                                </div>
+                            </span>
                             <!--<a href="#">Ajuda do Guigoh</a>-->
                             <ui:fragment rendered="#{templateBean.admin}">
                                 <span class="header-top-separator">|</span>
@@ -49,14 +60,6 @@ and open the template in the editor.
                                 <span class="header-top-separator">|</span>
                                 <h:commandLink action="/review/view.xhtml?faces-redirect=true" >#{localeBean.getString('Revisão')}</h:commandLink>
                             </ui:fragment>
-                        </p>
-                        <div id="language-menu-box">
-                            <div class="options">
-                                <ui:param name="url" value="#{request.servletPath}"/>
-                                <ui:repeat value="#{templateBean.languageList}" var="language">
-                                    <h:commandLink action="#{localeBean.changeLocale(url, language.acronym)}" value="#{localeBean.getString(language.description)}"></h:commandLink><br/>
-                                </ui:repeat>
-                            </div>
                         </div>
                     </div>
                     <div class="header-navbar">
