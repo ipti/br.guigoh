@@ -285,7 +285,7 @@ aside {
 }
 
 .add-guest-modal > div {
-    width: 60%;
+    width: 950px;
     position: relative;
     margin: 1% auto;
     padding: 20px 0;
@@ -294,7 +294,7 @@ aside {
 }
 
 .kicked-user-modal > div {
-    width: 40%;
+    width: 600px;
     position: relative;
     margin: 15% auto;
     padding: 20px 0;
@@ -303,7 +303,7 @@ aside {
 }
 
 .history-modal > div {
-    width: 50%;
+    width: 800px;
     position: relative;
     margin: 1% auto;
     padding: 20px 0;

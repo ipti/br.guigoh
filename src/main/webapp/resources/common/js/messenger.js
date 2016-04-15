@@ -15,13 +15,13 @@ $(document).ready(function () {
     });
     $(".messenger").on('click', 'span', (function () {
         if (!$(this).parent().hasClass("disabled")) {
-            $("#messenger-friends").toggle();
-            if ($("#messenger-friends").is(":visible")) {
-                if ($("#messenger-friends").children().length) {
+            if ($("#messenger-friends").children().length) {
+                $("#messenger-friends").toggle();
+                if ($("#messenger-friends").is(":visible")) {
                     $("#messenger-menu").removeClass("messenger-menu-collapsed");
+                } else {
+                    $("#messenger-menu").addClass("messenger-menu-collapsed");
                 }
-            } else {
-                $("#messenger-menu").addClass("messenger-menu-collapsed");
             }
         }
     }));

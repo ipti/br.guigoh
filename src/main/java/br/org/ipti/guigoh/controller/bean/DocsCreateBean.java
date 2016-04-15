@@ -214,7 +214,6 @@ public class DocsCreateBean implements Serializable {
             doc.setEditorSocialProfileFk(socialProfileJpaController.findSocialProfile(CookieService.getCookie("token")));
             doc.setStatus('A');
             doc.setPublicAccess('N');
-            doc.setImage("/resources/common/images/doc.png");
             docJpaController.create(doc);
 
             docId = doc.getId();

@@ -240,11 +240,11 @@ jsf.ajax.addOnEvent(function (data) {
             });
         } else if ($(data.source).hasClass("add-guest-button") || $(data.source).hasClass("remove-guest")) {
             if ($(data.source).hasClass("add-guest-button")) {
-                document.getElementById("close-add-guest-modal").click();
-                if ($(data.source).hasClass("add") && getParameterByName("id") == "") {
+                if ($(data.source).hasClass("add") && getParameterByName("id") === "") {
                     window.history.pushState("", "Docs", "/docs/create.xhtml?id=" + $("#doc-id").val());
                     connectWebSocket();
                 }
+                document.getElementById("close-add-guest-modal").click();
             } else if ($(data.source).hasClass("remove-guest")) {
                 var json = '{"doc":"' + $("#doc-id").val() + '", "user":"' + $(data.source).parent().children(".user-id").text() + '", "action":"KICK"}';
                 websocketDocs.send(json);
